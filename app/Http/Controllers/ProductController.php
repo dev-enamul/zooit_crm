@@ -13,4 +13,8 @@ class ProductController extends Controller
     public function create(){
         return view('product.product_create');
     }
+
+    public function sold_unsold(){
+        return view('product.sold_unsold');
+    }
 }

@@ -48,28 +48,39 @@
                                     </div>
                                 </div>
                            </div>
-
+                           <div class="table-box" style="overflow-x: scroll;">
                             <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th>Action</th>
+                                        {{-- <th>Action</th> --}}
                                         <th>S/N</th>
                                         <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Mobile</th>
-                                        <th>Address</th> 
-                                        <th>Project</th>
-                                        <th>Unit</th> 
+                                        <th>CUS ID</th>
+                                        <th>Cus. Name</th>
+                                        <th>Cus. Mobile Number</th> 
+                                        <th>Project Name</th>
+                                        <th>Unit Name</th> 
                                         <th>Unit Qty</th> 
-                                        <th>Unit Value</th> 
-                                        <th>Total Value</th> 
-                                        <th>Booking</th> 
-                                        <th>Freelancer</th> 
+                                        <th>Unit Facility</th> 
+                                        <th>Type No</th> 
+                                        <th>Floor No</th> 
+                                        <th>Unit No</th> 
+                                        <th>Lottery</th>
+                                        <th>Declaration Price</th>
+                                        <th>Sold Price</th>
+                                        <th>Discount Amount</th>
+                                        <th>Installment Qty.</th>
+                                        <th>Collection Amount</th>
+                                        <th>DUE Amount</th>
+                                        <th>FL</th>
+                                        <th> Executive</th>
+                                        <th>Area In Charge</th>
+                                        <th>Deed Status</th>
                                     </tr>
                                 </thead>
                                 <tbody> 
                                     <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                        {{-- <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
@@ -77,24 +88,35 @@
                                                     <a class="dropdown-item" href="salse_details.html">Salse Details</a>  
                                                 </div>
                                             </div> 
-                                        </td>
+                                        </td> --}}
                                         <td>1</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td><a href="customer_profile.html">Md Enamul Haque</a></td>
-                                        <td>01796351081</td>
-                                        <td>2/1, Mohammadpur, Dhaka-1230</td>
-                                        <td>Musafir Plaza</td>
-                                        <td>Shop</td> 
-                                        <td>4</td> 
-                                        <td>$3555</td> 
-                                        <td>$3555656</td> 
-                                        <td>$100000</td> 
-                                     
-                                        <td>Md Jamil [FL154]</td>  
+                                        <td>2023-04-01</td>
+                                        <td>CUS001</td>
+                                        <td>John Doe</td>
+                                        <td>1234567890</td>
+                                        <td>Project A</td>
+                                        <td>Unit 101</td>
+                                        <td>1</td>
+                                        <td>2 BHK</td>
+                                        <td>A1</td>
+                                        <td>2nd Floor</td>
+                                        <td>101</td>
+                                        <td>Yes</td>
+                                        <td>1,000,000</td>
+                                        <td>950,000</td>
+                                        <td>25,000</td>
+                                        <td>12</td>
+                                        <td>200,000</td>
+                                        <td>150,000</td>
+                                        <td>FL01</td>
+                                        <td>Sr. Executive 001 - Alice</td>
+                                        <td>Area In Charge 001 - Bob</td>
+                                        <td>Completed</td>
                                     </tr> 
 
                                 </tbody>
                             </table>
+                            </div> 
                         </div>
                     </div>
                 </div> <!-- end col -->
@@ -126,57 +148,7 @@
                         <option value="">Suvo Hasan #FL1545 01796351081</option>  
                     </select> 
                 </div>
-            </div> 
- 
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="join_date" class="form-label">Join Date </label>
-                    <input class="form-control" id="join_date" name="join_date" default="All" type="text" value="" />   
-                </div>
             </div>  
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="last_cold_calling" class="form-label">Last Cold Calling </label>
-                    <input class="form-control" name="last_cold_calling" default="All" id="last_cold_calling" type="text" value="" />   
-                </div>
-            </div> 
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="possible_purchase_date" class="form-label">Possible Purchase Date</label>
-                    <input class="form-control daterangepicker-4" name="possible_purchase_date" default="All" id="possible_purchase_date" type="text" value="" />   
-                </div>
-            </div> 
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="last_lead_date" class="form-label">Last Lead Date </label>
-                    <input class="form-control" name="last_lead_date" id="last_lead_date" default="All" type="text" value="" />   
-                </div>
-            </div> 
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="presentation_date" class="form-label">Presentation Date</label>
-                    <input class="form-control daterangepicker-4" name="presentation_date" default="All" id="presentation_date" type="text" value="" />   
-                </div>
-            </div> 
-   
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="profession" class="form-label">Profession</label>
-                    <select class="select2" name="profession" id="profession">
-                        <option value="">All Profession</option>
-                        <option value="">Doctors</option>
-                        <option value="">Lawyers</option> 
-                        <option value="">Banker</option>
-                        <option value="">Teacher</option>
-                        <option value="">Engineer</option>
-                    </select>  
-                </div>
-            </div> 
 
             <div class="col-md-12">
                 <div class="mb-3">

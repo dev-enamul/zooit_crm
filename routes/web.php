@@ -5,9 +5,13 @@ use App\Http\Controllers\ComissionReportController;
 use App\Http\Controllers\CommissionReportController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DepositReportController;
+use App\Http\Controllers\DepositController;
+use App\Http\Controllers\DepositTargetController;
+use App\Http\Controllers\DtaReportController;
+use App\Http\Controllers\DueReportController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmpPositionController;
+use App\Http\Controllers\FieldTargetController;
 use App\Http\Controllers\FollowupAnalysisController;
 use App\Http\Controllers\FollowupController;
 use App\Http\Controllers\FreelancerController;
@@ -19,6 +23,7 @@ use App\Http\Controllers\NegotiationController;
 use App\Http\Controllers\PresentationAnalysisController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProspectingController;
@@ -56,6 +61,7 @@ Route::get('employees/tree',[EmployeeController::class,'tree'])->name('employees
 
 // Product 
 Route::resource('product', ProductController::class);  
+Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
 
 // Freelancer 
 Route::resource('freelancer', FreelancerController::class); 
@@ -96,6 +102,10 @@ Route::resource('negotiation-analysis', NegotiationAnalysisController::class);
 // Salse
 Route::resource('salse', SalseController::class); 
 
+
+// Salse
+Route::resource('deposit', DepositController::class); 
+
 // Rejection
 Route::resource('rejection', RejectionController::class);
 
@@ -116,18 +126,27 @@ Route::resource('special-comission', SpecialComissionController::class);
 
 //Reports 
 Route::get('salse-commission-summary',[CommissionReportController::class,'salse_comission_summary'])->name('salse.commission.summery');
-Route::get('target-report',[TargetReportController::class,'target_sheet'])->name('target.sheet');
-Route::get('deposit-report-salse-executive',[DepositReportController::class,'salse_executive'])->name('deposit.report.salse.executive');
-Route::get('deposit-report-asm-dsm',[DepositReportController::class,'asm_dsm'])->name('deposit.report.asm.dsm');
-Route::get('deposit-report-area-incharge',[DepositReportController::class,'area_incharge'])->name('deposit.report.area.incharge');
+  
+
+Route::get('dt-achivement',[DtaReportController::class,'dt_achivement'])->name('dt.achivement');
+Route::get('daily-deposit',[DtaReportController::class,'daily_deposit'])->name('daily.deposit');
+Route::get('deposit-report',[DtaReportController::class,'deposit_report'])->name('deposit.report');  
+Route::get('due-report',[DueReportController::class,'due_report'])->name('due.report');
+Route::get('floor-wise-sold-unsold-report',[ProductReportController::class,'floor_wise_sold'])->name('floor.wise.sold.report');
+// Route::get('project-wise-sold-unsold-report',[ProductReportController::class,'project_wise_sold'])->name('project.wise.sold.report');
 
 
-// target
-Route::get('target-achive',[TargetController::class,'target_achive'])->name('target.achive');
-Route::get('today-target',[TargetController::class,'today_target'])->name('today.target'); 
 
+// field target
+Route::get('target-achive',[FieldTargetController::class,'target_achive'])->name('target.achive');
+Route::get('today-target',[FieldTargetController::class,'today_target'])->name('today.target');  
 // task 
 Route::get('task-complete',[TaskController::class,'task_complete'])->name('task.complete'); 
+
+// deposit target 
+Route::get('deposit-target',[DepositTargetController::class,'target'])->name('deposit.target');
+Route::get('deposit-target-asign',[DepositTargetController::class,'target_asign'])->name('deposit.target.asign');
+Route::get('deposit-target-asign-list',[DepositTargetController::class,'target_asign_list'])->name('deposit.target.asign.list'); 
 
 // Training
 Route::resource('training', TrainingController::class);

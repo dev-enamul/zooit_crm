@@ -75,6 +75,7 @@
                                                     <a class="dropdown-item" href="#">Edit</a>
                                                     <a class="dropdown-item" href="#">Delete</a>
                                                     <a class="dropdown-item" href="prospecting.html">Prospecting</a>
+                                                    <a class="dropdown-item" href="prospecting.html">Change Permissin </a>
                                                 </div>
                                             </div> 
                                         </td> 

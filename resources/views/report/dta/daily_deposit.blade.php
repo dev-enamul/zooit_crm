@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Deposit Report for ASM and DSM")
+@section('title',"Daily Total Deposit")
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -9,8 +9,8 @@
             <div class="row">
                 <div class="col-12"> 
                     <div class="text-center">
-                        <h4 class="mb-sm-0">Way Housing Pvt. Ltd</h4> 
-                        <p class="m-0">Project, Unit - Salse Executive & ASM/DSM Wise Deposit Report</p>
+                        <h4 class="mb-sm-0">{{ config('app.name', 'ZOOM IT') }}</h4> 
+                        <p class="m-0">Daily Deposit - Marketing Executive</p>
                         <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                                         </button>
         
                                         <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
+                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
                                         </button> 
                                     </div> 
                                 </div>
@@ -48,94 +48,42 @@
                                 <thead>
                                     <tr class="align-middle"> 
                                         <th>SL.</th>
-                                        <th>CUS ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Booking Date</th>
-                                        <th>Project Name</th>
-                                        <th>Unit Name</th>
-                                        <th>Unit Qty</th>
-                                        <th>Franchise Partner Name & ID</th>
-                                        <th>Co-Ordinator Applicant Name & ID</th>
-                                        <th>Co-Ordinator Name & ID</th> 
-                                        <th>Ex. Co-Ordinator Name & ID</th>
-                                        <th>Sales Executive Name & ID</th>
-                                        <th>ASM/DSM Name & ID</th>
-                                        <th>Declaration Price</th>
-                                        <th>Discount Amount</th>
-                                        <th>Sales Value </th>
-                                        <th>Deposit Amount</th>
-                                        <th>Total Deposit Amount</th>
-                                        <th>Total Due Amount</th>
-                                        <th>Remarks</th> 
+                                        <th>Date</th>
+                                        <th>Regular Deposit</th>
+                                        <th>Resale Deposit</th>
+                                        <th>Only Cash</th>
+                                        <th>Crowd Funding</th>
+                                        <th>Block Factory</th>
+                                        <th>Franchise Partner</th>
+                                        <th>S.T.I Deposit</th>
+                                        <th>Total Cash</th>
                                     </tr>
                                 </thead>
                                 <tbody> 
                                     <tr class=""> 
                                         <td>1</td>
-                                        <td>#231</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>11, Dec-2023</td>
-                                        <td>City Plaza</td>
-                                        <td>Shop</td>
-                                        <td>5</td>
-                                        <td>MD Jahid Hasan (#5333)</td>
-                                        <td>MD Mehedi Hasan (#6755)</td>
-                                        <td>Md Rahim (#5645)</td> 
-                                        <td>MD Jahid Hasan (#5333)</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>5000000</td>
-                                        <td>1000000</td>
-                                        <td>4000000</td>
-                                        <td>10000</td>
-                                        <td>3500000</td>
-                                        <td>1500000</td>
-                                        <td>Remarks</td>  
-                                    </tr>  
+                                        <td>2023-04-01</td>
+                                        <td>20,000</td>
+                                        <td>5,000</td>
+                                        <td>15,000</td>
+                                        <td>8,000</td>
+                                        <td>10,000</td>
+                                        <td>5,000</td>
+                                        <td>7,000</td>
+                                        <td>65,000</td>
+                                    </tr>   
+
                                     <tr class=""> 
-                                        <td>2</td>
-                                        <td>#232</td>
-                                        <td>John Doe</td>
-                                        <td>12, Dec-2023</td>
-                                        <td>Main Street Apartments</td>
-                                        <td>Unit B</td>
-                                        <td>3</td>
-                                        <td>Jane Smith (#1234)</td>
-                                        <td>Michael Johnson (#5678)</td>
-                                        <td>David Brown (#9876)</td> 
-                                        <td>MD Jahid Hasan (#5333)</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>6000000</td>
-                                        <td>1200000</td>
-                                        <td>4800000</td>
-                                        <td>15000</td>
-                                        <td>4650000</td>
-                                        <td>1500000</td>
-                                        <td>Additional Remarks</td>  
-                                    </tr>  
-                                    <tr class=""> 
-                                        <td>3</td>
-                                        <td>#233</td>
-                                        <td>Jane Smith</td>
-                                        <td>13, Dec-2023</td>
-                                        <td>Ocean View Residency</td>
-                                        <td>Apartment 302</td>
-                                        <td>1</td>
-                                        <td>Michael Johnson (#5678)</td>
-                                        <td>Emily Davis (#3456)</td>
-                                        <td>Sophia Wilson (#8765)</td> 
-                                        <td>MD Jahid Hasan (#5333)</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>7000000</td>
-                                        <td>1400000</td>
-                                        <td>5600000</td>
-                                        <td>20000</td>
-                                        <td>5580000</td>
-                                        <td>2000000</td>
-                                        <td>More Remarks</td>  
-                                    </tr>  
+                                        <td colspan="2">Total</td> 
+                                        <td>20,000</td>
+                                        <td>5,000</td>
+                                        <td>15,000</td>
+                                        <td>8,000</td>
+                                        <td>10,000</td>
+                                        <td>5,000</td>
+                                        <td>7,000</td>
+                                        <td>65,000</td>
+                                    </tr>
                                 </tbody>
                             </table>
                            </div>
@@ -160,17 +108,67 @@
     </div>
     <div class="offcanvas-body">
         <div class="row">   
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="duration" class="form-label">Duration </label>
-                    <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />   
+                    <label for="duration" class="form-label">Month </label>
+                    {{-- <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />    --}}
+                    <input type="month" name="month" class="form-control" id="">
                 </div>
             </div>  
-
+            
             <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="position" class="form-label">Employee Position </label>
+                    <select class="select2" name="position" id="position" > 
+                        <option value="1">Salse Executive</option>
+                        <option value="2">Area InCharge</option> 
+                        <option value="2">Zonal Manager</option> 
+                    </select>  
+                </div>
+            </div>
+
+            <div class="col-md-6"> 
                 <div class="mb-3">
                     <label for="division" class="form-label">Division </label>
                     <select class="select2" name="division" id="division" >
+                        <option value="">All</option>
+                        <option value="1">Dhaka</option>
+                        <option value="2">Chittagong</option>
+                        <option value="3">Khulna</option>
+                        <option value="4">Rajshahi</option>
+                        <option value="5">Barisal</option>
+                        <option value="6">Sylhet</option>
+                        <option value="7">Rangpur</option>
+                        <option value="8">Mymensingh</option>
+                        <option value="9">Jessore</option>
+                        <option value="10">Comilla</option> 
+                    </select>  
+                </div>
+            </div>
+ 
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="area" class="form-label">Area </label>
+                    <select class="select2" name="area" id="area" >
+                        <option value="">All</option>
+                        <option value="1">Dhaka</option>
+                        <option value="2">Chittagong</option>
+                        <option value="3">Khulna</option>
+                        <option value="4">Rajshahi</option>
+                        <option value="5">Barisal</option>
+                        <option value="6">Sylhet</option>
+                        <option value="7">Rangpur</option>
+                        <option value="8">Mymensingh</option>
+                        <option value="9">Jessore</option>
+                        <option value="10">Comilla</option> 
+                    </select>  
+                </div>
+            </div>
+ 
+            <div class="col-md-6"> 
+                <div class="mb-3">
+                    <label for="zone" class="form-label">Zone </label>
+                    <select class="select2" name="zone" id="zone" >
                         <option value="">All</option>
                         <option value="1">Dhaka</option>
                         <option value="2">Chittagong</option>

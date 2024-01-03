@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TargetController extends Controller
+class DepositController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('deposit.deposit_list');
     }
 
     /**
@@ -19,7 +19,7 @@ class TargetController extends Controller
      */
     public function create()
     {
-        //
+        return view('deposit.deposit_create');
     }
 
     /**
@@ -60,14 +60,5 @@ class TargetController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-
-    public function target_achive(){
-        return view('target.target_achive');
-    }
-
-    public function today_target(){
-        return view('target.today_target');
     }
 }

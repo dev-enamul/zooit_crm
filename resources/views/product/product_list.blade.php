@@ -71,11 +71,11 @@
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <img class="rounded avatar-2xs p-0" src="../assets/images/users/avatar-6.png" alt="Header Avatar">
                                                 </a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <!-- <a class="dropdown-item" href="freelancer_profile.html">View Profile</a> -->
+                                                <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="#">Edit</a>
                                                     <a class="dropdown-item" href="#">Delete</a>
-                                                    <!-- <a class="dropdown-item" href="profession_permission.html">Update Permission</a> -->
+                                                    <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a>
+                                                    <a class="dropdown-item" href="{{route('salse.index')}}">Salse History</a>  
                                                 </div>
                                             </div> 
                                         </td> 
@@ -99,6 +99,7 @@
                                                     <!-- <a class="dropdown-item" href="freelancer_profile.html">View Profile</a> -->
                                                     <a class="dropdown-item" href="#">Edit</a>
                                                     <a class="dropdown-item" href="#">Delete</a>
+                                                    <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a> 
                                                     <!-- <a class="dropdown-item" href="profession_permission.html">Update Permission</a> -->
                                                 </div>
                                             </div> 

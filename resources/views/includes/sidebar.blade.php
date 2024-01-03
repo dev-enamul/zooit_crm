@@ -92,58 +92,36 @@
                 </li> 
                 @endif  
                 
-                @if (in_array($user, ['1','3','4','5']))
+                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-people-arrows"></i>
                         <span>Leads</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('lead.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Leads</a></li> 
-                        <li><a href="{{route('lead.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Leads</a></li> 
+                        <li><a href="{{route('lead.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Lead</a></li> 
+                        <li><a href="{{route('lead.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead List</a></li> 
+                        <li><a href="{{route('lead-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead Analysis Form</a></li> 
+                        <li><a href="{{route('lead-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis List</a></li> 
                     </ul>
                 </li>
                 @endif
-
-                @if (in_array($user, ['1','2','3','4','5']))
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-google-analytics"></i>
-                        <span>Lead Analysis</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('lead-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Lead Analysis</a></li> 
-                        <li><a href="{{route('lead-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analyses</a></li> 
-                    </ul>
-                </li>
-                @endif
-                 
+  
                 @if (in_array($user, ['2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-teach"></i>
-                        <span>Presentation</span>
+                        <span>Visit & Presentation</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('presentation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Presentation</a></li> 
-                        <li><a href="{{route('presentation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Presentations</a></li> 
+                        <li><a href="{{route('presentation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Presentation List</a></li>
+                        <li><a href="{{route('presentation_analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Visit Analysis Form</a></li> 
+                        <li><a href="{{route('presentation_analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Visit Analysis List</a></li>  
                     </ul>
                 </li>
                 @endif 
-
-                @if (in_array($user, ['2','3','4','5']))
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-car"></i>
-                        <span>Visit Analysis</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('presentation_analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Visit Analysis</a></li> 
-                        <li><a href="{{route('presentation_analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Visit Analyses</a></li> 
-                    </ul>
-                </li> 
-                @endif
-
+ 
                 @if (in_array($user, ['2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
@@ -152,23 +130,12 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('followup.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Follow Up</a></li> 
-                        <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Ups</a></li> 
+                        <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
+                        <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis Form</a></li> 
+                        <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analyses</a></li>  
                     </ul>
                 </li>
-                @endif
-
-                @if (in_array($user, ['2','3','4','5']))
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-google-analytics"></i>
-                        <span>Follow Up Analysis</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Analyses</a></li> 
-                        <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analyses</a></li> 
-                    </ul>
-                </li>
-                @endif
+                @endif 
 
                 @if (in_array($user, ['2','3','4','5']))
                 <li>
@@ -178,24 +145,13 @@
                     </a> 
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('negotiation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Negotiations</a></li> 
-                        <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiations</a></li> 
+                        <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
+                        <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
+                        <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analyses List</a></li>  
                     </ul>
                 </li>
                 @endif
-
-                @if (in_array($user, ['2','3','4','5']))
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Negotiation Analysis</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Entry Analysis</a></li> 
-                        <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Analyses</a></li> 
-                    </ul>
-                </li>
-                @endif
-                
+ 
                 @if (in_array($user, ['2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
@@ -221,29 +177,47 @@
                     </ul>
                 </li> 
                 @endif 
-                @if (in_array($user, ['1','2','3','4'])) 
 
-                    <li class="menu-title">Progress</li> 
+                @if (in_array($user, ['5']))
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="fas fa-user-times"></i>
+                        <span>Deposit</span>
+                    </a>  
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('deposit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Deposit</a></li> 
+                        <li><a href="{{route('deposit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit List</a></li> 
+                    </ul>
+                </li> 
+                @endif
+
+                @if (in_array($user, ['1','2','3','4','5']))  
+                    <li class="menu-title">Progress</li>  
                     <li>
-                        <a href="{{route('target.achive')}}" class="">
-                            <i class="fas fa-crown"></i>
-                            <span>Target Achivement</span>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="mdi mdi-teach"></i>
+                            <span>Field Target & Task</span>
                         </a>
+                        <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Achivement</a></li> 
+                            <li><a href="{{route('today.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Today Task & Target</a></li> 
+                            <li><a href="{{route('task.complete')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
+                        </ul>
                     </li> 
+
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="mdi mdi-teach"></i>
+                            <span>Deposit Target</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target</a></li> 
+                            <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Asign List</a></li>
+                        </ul>
+                    </li> 
+                @endif
+                @if (in_array($user, ['1','2','3','4']))  
                     
-                    <li>
-                        <a href="{{route('task.complete')}}" class="">
-                            <i class=" fas fa-check"></i>
-                            <span>Task Complete</span>
-                        </a>
-                    </li> 
-
-                    <li>
-                        <a href="{{route('today.target')}}" class="">
-                            <i class="fas fa-walking"></i>
-                            <span>Today Task & Target</span>
-                        </a>
-                    </li> 
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
                             <i class="mdi mdi-teach"></i>
@@ -261,7 +235,34 @@
                             <span>Meeting Schedule</span>
                         </a>
                     </li>  
-                @endif
+                @endif 
+
+                @if (in_array($user, ['3','4','5']))  
+                <li class="menu-title">Asign</li> 
+                <li>
+                    <a href="{{route('target.achive')}}" class="">
+                        <i class="fas fa-crown"></i>
+                        <span>Training Create</span>
+                    </a>
+                </li>  
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-teach"></i>
+                        <span>Training</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li> 
+                        <li><a href="{{route('training.attendance')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Attendance</a></li> 
+                        <li><a href="{{route('training.history')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training History</a></li> 
+                    </ul>
+                </li> 
+                <li>
+                    <a href="{{route('meeting.index')}}" class="">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Meeting Schedule</span>
+                    </a>
+                </li>  
+            @endif
 
                 @if (in_array($user, ['2','3','4','5']))
                 <li class="menu-title">Report</li> 
@@ -282,36 +283,30 @@
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-chart-bar"></i>
-                        <span>Target Sheet</span>
+                        <span>DT Achivement</span>
                     </a> 
                     <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('target.sheet')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sub Total</a></li> 
-                         
+                        <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Terget Vs Achivement</a></li> 
+                        <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Daily Deposit</a></li> 
+                        {{-- <li><a href="{{route('deposit.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Report</a></li>  --}}
+                        {{-- <li><a href="{{route('weekly.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Weekly Report</a></li>  --}}
                     </ul>
-                </li>
-
+                </li>  
+                
+                <li>
+                    <a href="{{route('due.report')}}" class="">
+                        <i class="fas fa-desktop"></i>
+                        <span>Due & Over Due</span>
+                    </a>
+                </li> 
 
                 <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Deposit Report</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('deposit.report.salse.executive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Salse Executive</a></li> 
-                        <li><a href="{{route('deposit.report.asm.dsm')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>ASM & DSM</a></li> 
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Area Incharge</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Ast. Zonal Manager</a></li>   
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Zonal Manager</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Senior Zonal Manager</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Zonal Co Ordinator</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Regional Manager</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Manager</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>A.G.M</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>D.G.M</a></li>
-                        <li><a href="{{route('deposit.report.area.incharge')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>G.M</a></li>
-                    </ul>
-                </li>
-
+                    <a href="{{route('floor.wise.sold.report')}}" class="">
+                        <i class="fas fa-desktop"></i>
+                        <span>Sold & Unsold Report</span>
+                    </a>
+                </li>  
+ 
                 @endif
  
                 @if (in_array($user, ['5'])) 

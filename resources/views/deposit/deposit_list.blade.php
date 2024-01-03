@@ -161,7 +161,58 @@
                     <label for="duration" class="form-label">Duration </label>
                     <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />   
                 </div>
-            </div>  
+            </div> 
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="zone" class="form-label">Zone </label>
+                    <select class="select2" name="zone" id="zone" >
+                        <option value="">All</option>
+                        <option value="1">Dhaka</option>
+                        <option value="2">Chittagong</option>
+                        <option value="3">Khulna</option>
+                        <option value="4">Rajshahi</option>
+                        <option value="5">Barisal</option>
+                        <option value="6">Sylhet</option>
+                        <option value="7">Rangpur</option>
+                        <option value="8">Mymensingh</option>
+                        <option value="9">Jessore</option>
+                        <option value="10">Comilla</option> 
+                    </select>  
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="area" class="form-label">Area </label>
+                    <select class="select2" name="area" id="area" >
+                        <option value="">All</option>
+                        <option value="1">Dhaka</option>
+                        <option value="2">Chittagong</option>
+                        <option value="3">Khulna</option>
+                        <option value="4">Rajshahi</option>
+                        <option value="5">Barisal</option>
+                        <option value="6">Sylhet</option>
+                        <option value="7">Rangpur</option>
+                        <option value="8">Mymensingh</option>
+                        <option value="9">Jessore</option>
+                        <option value="10">Comilla</option> 
+                    </select>  
+                </div>
+            </div>
+            
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label for="employee_hierachy" class="form-label">Employee Hierachy</label>
+                    <select class="select2" name="employee_hierachy" id="employee_hierachy" > 
+                        <option value="1">Marketing Executive</option>
+                        <option value="2">Salse Executive</option>
+                        <option value="3">ASM</option>
+                        <option value="4">DSM</option> 
+                    </select>  
+                </div>
+            </div>
+
 
             <div class="col-md-6">
                 <div class="mb-3">
