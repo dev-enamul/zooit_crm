@@ -12,5 +12,7 @@ class FreelancerController extends Controller
 
     public function create(){
         return view('freelancer.freelancer_create');
-    }
+    } 
+
+    
 }

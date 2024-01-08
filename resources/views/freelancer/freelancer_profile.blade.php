@@ -82,7 +82,66 @@
                                 </div> 
                             </div>
                         </div>  
-                    </div>  
+                    </div> 
+
+                    <div class="card overflow-hidden"> 
+                        <div class="card-body">
+                            <h4 class="card-title">Join Process</h4>
+                            <hr>
+                            <div class="timeline timeline-zigzag">
+                                 
+                                <div class="timeline-item">
+                                    <div class="timeline-pin">
+                                        <i class="marker marker-circle text-danger"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <p class="mb-0">
+                                            </p><p class="m-0 bold-lg">Join by Joe Pullizzi</p>
+                                            <p class="m-0 fs-10">30 Dec, 2023</p>
+                                            
+                                        <p></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item">
+                                    <div class="timeline-pin">
+                                        <i class="marker marker-circle text-info"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <p class="mb-0">
+                                            </p><p class="m-0 bold-lg">Approve By Area Incharge"</p>
+                                            <p class="m-0 fs-10">30 Dec, 2023</p>
+                                            Need Language Training
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-pin">
+                                        <i class="marker marker-circle text-danger"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <p class="mb-0">
+                                            </p><p class="m-0 bold-lg">Approve By Zonal Manager</p>
+                                            <p class="m-0 fs-10">30 Dec, 2023</p>
+                                            Good working but neet some training
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-pin">
+                                        <i class="marker marker-circle text-info"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <p class="mb-0">
+                                            </p><p class="m-0 bold-lg">Approve by Managing</p>
+                                            <p class="m-0 fs-10">30 Dec, 2023</p>
+                                            Everything Good. 
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div> 
         </div> 

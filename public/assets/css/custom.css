@@ -7,13 +7,15 @@
     --primary-hover:rgb(147 209 41);
     --secondary: rgba(27 65 99);
     --secondary-hover:rgba(27 65 99 .8); 
+    --bs-list-group-active-border-color: rgba(27 65 99);
+    --bs-list-group-active-bg: rgba(27 65 99);
   
 }
 
 :root {
     --bs-primary: rgb(132, 204, 22);
     --bs-success: rgba(27, 65, 99, 1);
-    --bs-form-valid-border-color:var(--bs-primary);
+    --bs-form-valid-border-color:var(--bs-primary); 
   }
   
 .row_success td{

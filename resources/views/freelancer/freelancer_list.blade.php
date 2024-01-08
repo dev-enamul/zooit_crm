@@ -86,7 +86,7 @@
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
+                                                    <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
                                                     <a class="dropdown-item" href="#">Edit</a>
                                                     <a class="dropdown-item" href="#">Delete</a>
                                                     <a class="dropdown-item" href="prospecting.html">Prospecting</a>

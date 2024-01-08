@@ -35,7 +35,10 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
-                            <li><a href="{{route('product.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products</a></li>                         
+                            <li><a href="{{route('product.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products</a></li>  
+                            
+                            <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
+                            <li><a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a></li>                         
                         </ul>
                     </li> 
                 @endif 
@@ -176,6 +179,29 @@
                         <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
                     </ul>
                 </li> 
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="fas fa-user-times"></i>
+                        <span>Salse Return</span>
+                    </a>  
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('return.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Return</a></li> 
+                        <li><a href="{{route('return.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Return List</a></li> 
+                    </ul>
+                </li> 
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="fas fa-user-times"></i>
+                        <span>Salse Transfer</span>
+                    </a>  
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('transfer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Transfer</a></li> 
+                        <li><a href="{{route('transfer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Transfer List</a></li> 
+                    </ul>
+                </li> 
+
                 @endif 
 
                 @if (in_array($user, ['5']))
@@ -274,11 +300,18 @@
                 </li> 
 
                 <li>
-                    <a href="{{route('salse.commission.summery')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Salse Comission</span>
-                    </a>
-                </li>  
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-chart-bar"></i>
+                        <span>Commission Report</span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{{route('salse.commission.summery')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Designation Wise Comission</a></li> 
+                        <li><a href="{{route('area.wise.commission')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Area Wise Commission</a></li> 
+                        <li><a href="{{route('monthly.target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Monthly TA</a></li> 
+                        {{-- <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>RSA Commission</a></li> --}}
+      
+                    </ul>
+                </li> 
                 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
@@ -326,6 +359,19 @@
                     <ul class="sub-menu" aria-expanded="false"> 
                         <li><a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a></li> 
                         <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Village</a></li> 
+                        <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Zone</a></li> 
+                        <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Area</a></li> 
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-chart-bar"></i>
+                        <span>Product</span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{{route('unit.type')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit & Down Payment</a></li> 
+                        <li><a href="{{route('unit.category')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit Category</a></li> 
                     </ul>
                 </li>
 
@@ -341,14 +387,28 @@
                         <i class="fas fa-desktop"></i>
                         <span>Employee Position</span>
                     </a>
-                </li> 
+                </li>  
 
                 <li>
-                    <a href="{{route('special-comission.index')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Special Comission</span>
-                    </a>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-chart-bar"></i>
+                        <span>Commission</span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{{route('comission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission</a></li> 
+                        <li><a href="{{route('special-comission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Special Commission</a></li> 
+                        <li><a href="{{route('commission-deducted-setting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission Deducation</a></li> 
+                    </ul>
                 </li>
+ 
+
+                <li>
+                    <a href="{{route('bank.index')}}" class="">
+                        <i class="fas fa-desktop"></i>
+                        <span>Bank</span>
+                    </a>
+                </li> 
+ 
                 @endif 
             </ul>
         </div> 

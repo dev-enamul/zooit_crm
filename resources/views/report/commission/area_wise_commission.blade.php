@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Summary of Salse Commision")
+@section('title',"Area Wise Commission")
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -10,7 +10,7 @@
                 <div class="col-12"> 
                     <div class="text-center">
                         <h4 class="mb-sm-0">Way Housing Pvt. Ltd</h4> 
-                        <p class="m-0">Summary of Salse Commission (For Executive, ASM, AL, ZM, RM, HOS & ED)</p>
+                        <p class="m-0">Area Wise Commission</p>
                         <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                                 </thead>
                                 <tbody> 
                                     <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
+                                        <td style="white-space: nowrap;">Ramgonge</td>
                                         <td>ED</td>
                                         <td>৳217</td>
                                         <td>৳532</td>
@@ -96,7 +96,7 @@
                                         
                                     </tr> 
                                     <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
+                                        <td style="white-space: nowrap;">Dhaka</td>
                                         <td>ED</td>
                                         <td>৳217</td>
                                         <td>৳532</td>
@@ -120,7 +120,7 @@
                                         
                                     </tr> 
                                     <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
+                                        <td style="white-space: nowrap;">Naogaon Team</td>
                                         <td>ED</td>
                                         <td>৳217</td>
                                         <td>৳532</td>
@@ -144,7 +144,7 @@
                                         
                                     </tr> 
                                     <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
+                                        <td style="white-space: nowrap;">Bogura Team</td>
                                         <td>ED</td>
                                         <td>৳217</td>
                                         <td>৳532</td>
@@ -164,9 +164,31 @@
                                         <td>-</td>
                                         <td>৳655</td>
                                         <td>90%</td>
-                                        <td>-</td>
-                                        
+                                        <td>-</td> 
                                     </tr> 
+
+                                    <tr class=""> 
+                                        <td colspan="2">Total</td> 
+                                        <td>৳217</td>
+                                        <td>৳532</td>
+                                        <td>৳434</td>
+                                        <td>৳217</td>
+                                        <td>৳976</td>
+                                        <td>৳433</td>
+                                        <td>৳434</td>
+                                        <td>৳7565</td> 
+                                        <td>৳987</td>
+                                        <td>৳655</td>
+                                        <td>৳7565</td>
+                                        <td>৳65554</td>
+                                        <td>৳34655</td>
+                                        <td>10%</td>
+                                        <td>৳655</td>
+                                        <td>-</td>
+                                        <td>৳655</td>
+                                        <td>90%</td>
+                                        <td>-</td> 
+                                    </tr>
                                 </tbody>
                             </table>
                            </div>
@@ -198,7 +220,7 @@
                     <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />   
                 </div>
             </div>  
-  
+
             <div class="col-md-12">
                 <div class="mb-3">
                     <label for="profession" class="form-label">Position</label>
@@ -211,17 +233,45 @@
                     </select>  
                 </div>
             </div> 
+   
 
-            <div class="col-md-12">
+            <div class="col-md-6"> 
                 <div class="mb-3">
-                    <label for="project" class="form-label">Project</label>
-                    <select class="select2" multiple name="project" id="project"> 
-                        <option value="">Popular City Plaza</option>
-                        <option value="">AH City Plaza</option>
+                    <label for="zone" class="form-label">Zone </label>
+                    <select class="select2" name="zone" id="zone" >
+                        <option value="">All</option>
+                        <option value="1">Dhaka</option>
+                        <option value="2">Chittagong</option>
+                        <option value="3">Khulna</option>
+                        <option value="4">Rajshahi</option>
+                        <option value="5">Barisal</option>
+                        <option value="6">Sylhet</option>
+                        <option value="7">Rangpur</option>
+                        <option value="8">Mymensingh</option>
+                        <option value="9">Jessore</option>
+                        <option value="10">Comilla</option> 
+                    </select>  
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="area" class="form-label">Area </label>
+                    <select class="select2" name="area" id="area" >
+                        <option value="">All</option>
+                        <option value="1">Dhaka</option>
+                        <option value="2">Chittagong</option>
+                        <option value="3">Khulna</option>
+                        <option value="4">Rajshahi</option>
+                        <option value="5">Barisal</option>
+                        <option value="6">Sylhet</option>
+                        <option value="7">Rangpur</option>
+                        <option value="8">Mymensingh</option>
+                        <option value="9">Jessore</option>
+                        <option value="10">Comilla</option> 
                     </select>  
                 </div>
             </div> 
-  
  
             <div class="text-end ">
                 <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>

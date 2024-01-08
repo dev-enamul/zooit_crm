@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Employee Position List')
+@section('title','Union List')
 
 @section('content')
 <div class="main-content">
@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Cold-Calling List</h4> 
+                        <h4 class="mb-sm-0">Unions</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Cold-Calling List</li>
+                                <li class="breadcrumb-item active">Union List</li>
                             </ol>
                         </div> 
                     </div>
@@ -35,17 +35,19 @@
                                         </button>
 
                                         <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button> 
-                                    </div> 
+                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
+                                        </button>  
+                                    </div>  
                                 </div>
 
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_profession">
-                                            <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Profession</span>
-                                        </button> 
-                                    </div>
+                                    <div class="d-flex">   
+                                        <div class="input-group">   
+                                            <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#create_modal">
+                                                <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Bank</span>
+                                            </button> 
+                                        </div>
+                                    </div>  
                                 </div>
                            </div>
 
@@ -53,10 +55,9 @@
                                 <thead>
                                     <tr>
                                         <th>Action</th>
-                                        <th>S/N</th>
-                                        <th>Profession Name</th>
-                                        <th>Total Employee</th> 
-                                        <th>Commision</th> 
+                                        <th>S/N</th> 
+                                        <th>Bank Name</th> 
+                                        <th>Account Number</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 
@@ -66,49 +67,56 @@
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a> 
-                                                    <a class="dropdown-item" href="profession_permission.html">Update Permission</a> 
+                                                    <a class="dropdown-item" href="#">Delete</a>  
                                                 </div>
                                             </div> 
                                         </td> 
                                         <td>1</td>
-                                        <td>Managing Derector</td> 
-                                        <th>23</th>
-                                        <th>2%</th> 
-                                    </tr>
-
+                                        <td>Sonali Bank</td> 
+                                        <td>1234567890</td>
+                                    </tr>  
                                     <tr>
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a> 
+                                                    <a class="dropdown-item" href="#">Delete</a>  
                                                 </div>
                                             </div> 
                                         </td> 
                                         <td>1</td>
-                                        <td>Sr. Marketing Executive</td> 
-                                        <th>10</th>
-                                        <th>4%</th> 
+                                        <td>Roket</td>
+                                        <td>1234567890</td>
                                     </tr>
-
                                     <tr>
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a> 
+                                                    <a class="dropdown-item" href="#">Delete</a>  
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>1</td>
-                                        <td>Area In Charge</td> 
-                                        <th>44</th>
-                                        <th>1%</th> 
+                                        <td>3</td>
+                                        <td>Janata Bank</td>
+                                        <td>5678901234</td>
                                     </tr>
-
+                                    <tr>
+                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-animated">
+                                                    <a class="dropdown-item" href="#">Edit</a>
+                                                    <a class="dropdown-item" href="#">Delete</a>  
+                                                </div>
+                                            </div> 
+                                        </td>  
+                                        <td>4</td>
+                                        <td>Rupali Bank</td>
+                                        <td>2345678901</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -117,39 +125,43 @@
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->
-    </div> 
+    </div>
     @include('includes.footer')
-</div> 
+</div>
 
-<div class="modal fade" id="create_profession">
+<div class="modal fade" id="create_modal">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header"> 
-                <h5 class="modal-title">Create new Position</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                <h5 class="modal-title">Create new Bank</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
             </div>
 
             <div class="modal-body">
-                <form action="">
+                <form action="">  
                     <div class="form-group mb-2">
-                        <label for="profession_name">Position Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="profession_name" name="profession_name" required>
-                    </div> 
+                        <label for="bank_name">Bank Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="bank_name" name="bank_name" placeholder="Enter Bank" required>
+                    </div>
 
                     <div class="form-group mb-2">
-                        <label for="working_area">Working Space<span class="text-danger">*</span></label>
-                        <select id="working_area" class="select2" multiple search name="working_area" required> 
-                            <option value="">Zone</option> 
-                            <option value="">Area</option>  
+                        <label for="account">Account Number<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="account" name="account" placeholder="Enter Account Number" required>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="bank_type">Bank Type <span class="text-danger">*</span></label>
+                        <select id="bank_type" class="select2" name="bank_type" required> 
+                            <option value="" selected>Mobile Banking</option> 
+                            <option value="" selected>Bank</option> 
                         </select> 
-                    </div> 
+                    </div>
+
 
                     <div class="form-group mb-2">
-                        <label for="permission">Permission <span class="text-danger">*</span></label>
-                        <select id="permission" class="select2" multiple search name="permission" required> 
-                            <option value="">Follow Up</option> 
-                            <option value="">Freelancer Join</option> 
-                            <option value="">Customer Join</option> 
-                            <option value="">Cold Calling</option>  
+                        <label for="permission">Status <span class="text-danger">*</span></label>
+                        <select id="permission" class="select2" name="permission" required> 
+                            <option value="" selected>Active</option> 
+                            <option value="">Inactive</option> 
                         </select> 
                     </div>
 
@@ -160,10 +172,10 @@
                 <div class="text-end">
                     <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
                 </div> 
-            </div>
-
-            <!-- <div class="modal-footer"><button class="btn btn-primary">Submit</button> <button class="btn btn-outline-danger">Reset</button></div> -->
+            </div> 
         </div>
     </div>
-</div>
+</div> 
+ 
+
 @endsection

@@ -8,8 +8,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Freelancer Entry</h4>
-
+                        <h4 class="mb-sm-0">Freelancer Entry</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
@@ -32,41 +31,15 @@
                                     <hr>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="full_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                                            <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
                                             <input type="text" name="full_name" class="form-control" id="full_name" placeholder="First name" value="" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
                                     </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="full_name" class="form-label">Last Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="First name" value="" required>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div> 
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="profession" id="profession" required>
-                                                <option value="">Select Profession</option>
-                                                <option value="">Doctors</option>
-                                                <option value="">Lawyers</option> 
-                                                <option value="">Banker</option>
-                                                <option value="">Teacher</option>
-                                                <option value="">Engineer</option>
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
+ 
+                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
@@ -530,7 +503,52 @@
                                             <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
                                         </div>
                                     </div> 
-                                  
+
+                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Official Information</h6>
+                                    <hr>  
+                                    <div class="col-md-6 new_position">
+                                        <div class="mb-3">
+                                            <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" name="position" id="position" required>
+                                                <option value="2">Area Incharge </option> 
+                                                <option value="1">Zonal Manager</option>
+                                                <option value="1">Salse Executive</option>  
+                                            </select>  
+                                        </div>
+                                    </div>  
+                                    
+                                    <div class="col-md-6 new_position">
+                                        <div class="mb-3">
+                                            <label for="zone" class="form-label">Zone <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" name="zone" id="zone" required>
+                                                <option value="2">Dhaka </option> 
+                                                <option value="1">Naogaon</option>
+                                                <option value="1">Rajshahi</option>  
+                                            </select>  
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 new_position">
+                                        <div class="mb-3">
+                                            <label for="area" class="form-label">Area <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" name="area" id="area" required>
+                                                <option value="2">Dhaka </option> 
+                                                <option value="1">Naogaon</option>
+                                                <option value="1">Rajshahi</option>  
+                                            </select>  
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-6 new_position">
+                                        <div class="mb-3">
+                                            <label for="reporting_boss" class="form-label">Reporting Boss <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" name="reporting_boss" id="reporting_boss" required>
+                                                <option value="2">Md Enamul Haque #8756765 </option> 
+                                                <option value="1">Jahid Hasa #786343</option>
+                                                <option value="1">Mehedi Hasan #675</option>  
+                                            </select>  
+                                        </div>
+                                    </div>
                                 </div>
                                   
                                 <div>

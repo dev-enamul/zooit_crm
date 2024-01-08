@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\ColdCallingController;
 use App\Http\Controllers\ComissionReportController;
+use App\Http\Controllers\CommissionControler;
+use App\Http\Controllers\CommissionDeductedController;
 use App\Http\Controllers\CommissionReportController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -15,6 +18,7 @@ use App\Http\Controllers\FieldTargetController;
 use App\Http\Controllers\FollowupAnalysisController;
 use App\Http\Controllers\FollowupController;
 use App\Http\Controllers\FreelancerController;
+use App\Http\Controllers\FreelancerProfileController;
 use App\Http\Controllers\LeadAnalysisController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MeetingController;
@@ -24,11 +28,15 @@ use App\Http\Controllers\PresentationAnalysisController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductReportController;
+use App\Http\Controllers\ProductUnitController;
 use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectSettingController;
 use App\Http\Controllers\ProspectingController;
 use App\Http\Controllers\RejectionController;
 use App\Http\Controllers\SalseController;
+use App\Http\Controllers\SalseReturnController;
+use App\Http\Controllers\SalseTransferController;
 use App\Http\Controllers\SpecialComissionController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\TargetReportController;
@@ -61,10 +69,19 @@ Route::get('employees/tree',[EmployeeController::class,'tree'])->name('employees
 
 // Product 
 Route::resource('product', ProductController::class);  
+Route::resource('unit', ProductUnitController::class);
 Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
 
 // Freelancer 
 Route::resource('freelancer', FreelancerController::class); 
+Route::get('freelancer-profile',[FreelancerProfileController::class,'freelancer_profile'])->name('freelancer.profile');
+Route::get('freelancer-hierarchy',[FreelancerProfileController::class,'freelancer_hierarchy'])->name('freelancer.hierarchy');
+Route::get('freelancer-book-reading',[FreelancerProfileController::class,'freelancer_book_reading'])->name('freelancer.book');
+Route::get('freelancer-field-work',[FreelancerProfileController::class,'freelancer_field_work'])->name('freelancer.field.work');
+Route::get('freelancer-wallet',[FreelancerProfileController::class,'freelancer_wallet'])->name('freelancer.wallet');
+Route::get('freelancer-salse',[FreelancerProfileController::class,'freelancer_sales'])->name('freelancer.salse');
+ 
+
 
 // Customer 
 Route::resource('customer', CustomerController::class); 
@@ -100,32 +117,44 @@ Route::resource('negotiation', NegotiationController::class);
 Route::resource('negotiation-analysis', NegotiationAnalysisController::class); 
 
 // Salse
-Route::resource('salse', SalseController::class); 
-
+Route::resource('salse', SalseController::class);  
 
 // Salse
 Route::resource('deposit', DepositController::class); 
 
 // Rejection
-Route::resource('rejection', RejectionController::class);
+Route::resource('rejection', RejectionController::class); 
 
+// Return
+Route::resource('return', SalseReturnController::class); 
+
+// Transfer
+Route::resource('transfer', SalseTransferController::class);
+
+// Settings ============================= 
 // Profession
-Route::resource('profession', ProfessionController::class);
-
+Route::resource('profession', ProfessionController::class); 
 // Location
 Route::resource('union', UnionController::class);
-Route::resource('village', VillageController::class);
-
- 
+Route::resource('village', VillageController::class);  
 // Emp Position
-Route::resource('employee-position', EmpPositionController::class);
-
-// Special Commision
+Route::resource('employee-position', EmpPositionController::class); 
+// Special 
+Route::resource('comission', CommissionControler::class);
 Route::resource('special-comission', SpecialComissionController::class);
+Route::resource('commission-deducted-setting', CommissionDeductedController::class);
+// Bank
+Route::resource('bank', BankController::class);  
+// Project 
+Route::get('unit-type',[ProjectSettingController::class,'unit_type'])->name('unit.type');
+Route::get('unit-category',[ProjectSettingController::class,'unit_category'])->name('unit.category');
+
 
 
 //Reports 
 Route::get('salse-commission-summary',[CommissionReportController::class,'salse_comission_summary'])->name('salse.commission.summery');
+Route::get('monthly-target-achive',[CommissionReportController::class,'monthly_target_achive'])->name('monthly.target.achive');
+Route::get('area-wise-commission',[CommissionReportController::class,'area_wise_commission'])->name('area.wise.commission');
   
 
 Route::get('dt-achivement',[DtaReportController::class,'dt_achivement'])->name('dt.achivement');

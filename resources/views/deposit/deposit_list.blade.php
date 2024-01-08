@@ -199,6 +199,37 @@
                         <option value="10">Comilla</option> 
                     </select>  
                 </div>
+            </div> 
+
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="project" class="form-label">Project </label>
+                    <select class="select2" name="project" id="project" >
+                        <option value="">All</option>
+                        <option value="1">Dhaka</option>
+                        <option value="2">Chittagong</option>
+                        <option value="3">Khulna</option>
+                        <option value="4">Rajshahi</option>
+                        <option value="5">Barisal</option>
+                        <option value="6">Sylhet</option>
+                        <option value="7">Rangpur</option>
+                        <option value="8">Mymensingh</option>
+                        <option value="9">Jessore</option>
+                        <option value="10">Comilla</option> 
+                    </select>  
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="unit" class="form-label">Unit </label>
+                    <select class="select2" name="unit" id="unit" >
+                        <option value="">All</option>
+                        <option value="1">Shop</option>
+                        <option value="2">Flat</option> 
+                    </select>  
+                </div>
             </div>
             
             <div class="col-md-12">

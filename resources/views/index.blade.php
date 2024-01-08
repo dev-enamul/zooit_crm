@@ -23,185 +23,264 @@
             <!--    end row -->
 
             <div class="row">
-                <div class="col-xxl-9">
-                 
-                    <h3 class="card-title">Today target achivement</h3>
-                    <div class="row">  
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Freelancer Join</p>
-                                           <small> <span class="text-primary" id="countdown">4: 3: 12 </span></small>
-                                            <h4 class="mb-0">10/20</h4>
-                                        </div>
-                                    </div> 
+                <div class="col-xxl-9"> 
+                    @if ($user==1)
+                    <div class="mb-3"> 
+                        <div class="accordion" id="accordionExample-general"> 
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-general" aria-expanded="false" aria-controls="collapseOne-general">
+                                        <b>Today target achivement</b>
+                                    </button>
+                                </h2>
+                                <div id="collapseOne-general" class="accordion-collapse collapse" data-bs-parent="#accordionExample-general" style="">
+                                    <div class="accordion-body">
+                                        <div class="row">  
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Freelancer Join</p>
+                                                               <small> <span class="text-primary" id="countdown">4: 3: 12 </span></small>
+                                                                <h4 class="mb-0">10/20</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Customer Join</p>
+                                                                <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">24/24</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Prospecting</p>
+                                                                <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">10/34</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Cold Calling</p>
+                                                                <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">10/23</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Lead</p>
+                                                                <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">33/43</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Lead Analyses</p>
+                                                                <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">21/45</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                        </div> 
+                                    </div>
                                 </div>
                             </div>
-                        </div> 
 
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Customer Join</p>
-                                            <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">24/24</h4>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo-general" aria-expanded="false" aria-controls="collapseTwo-general">
+                                        <b>This month achivement</b>
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo-general" class="accordion-collapse collapse" data-bs-parent="#accordionExample-general" style="">
+                                    <div class="accordion-body">
+                                        <div class="row">   
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Freelancer Join</p>
+                                                               <small> <span class="text-primary" id="countdown">4: 3: 12 </span></small>
+                                                                <h4 class="mb-0">10/20</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Customer Join</p>
+                                                                <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">24/24</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Prospecting</p>
+                                                                <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">10/34</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Cold Calling</p>
+                                                                <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">10/23</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Lead</p>
+                                                                <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">33/43</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                    
+                                            <div class="col-xl-2">
+                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
+                                                    <div class="card-body">
+                                                        <div class="d-flex"> 
+                                                            <div class="ms-3">
+                                                                <p class="text-primary mb-0">Lead Analyses</p>
+                                                                <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
+                                                                <h4 class="mb-0">21/45</h4>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </div>  
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
-                        </div> 
-
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Prospecting</p>
-                                            <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">10/34</h4>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Cold Calling</p>
-                                            <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">10/23</h4>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Lead</p>
-                                            <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">33/43</h4>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Lead Analyses</p>
-                                            <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">21/45</h4>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div> 
-
+                        
+                        </div>
                     </div> 
-
-                    <h3 class="card-title">This month achivement</h3>
-                    <div class="row">  
-                     
-
-                        <div class="col-xl-2">
+                    @else  
+                    <div class="row">   
+                        <div class="col-md-3">
                             <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
                                 <div class="card-body">
                                     <div class="d-flex"> 
                                         <div class="ms-3">
-                                            <p class="text-primary mb-0">Freelancer Join</p>
-                                           <small> <span class="text-primary" id="countdown">4: 3: 12 </span></small>
-                                            <h4 class="mb-0">10/20</h4>
+                                            <p class="text-secondary mb-0">Lead Analysis</p> 
+                                            <h4 class="mb-0">10</h4>
                                         </div>
                                     </div> 
                                 </div>
                             </div>
                         </div> 
 
-                        <div class="col-xl-2">
+                        <div class="col-md-3">
                             <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
                                 <div class="card-body">
                                     <div class="d-flex"> 
                                         <div class="ms-3">
-                                            <p class="text-primary mb-0">Customer Join</p>
-                                            <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">24/24</h4>
+                                            <p class="text-secondary mb-0">Follow up Analysis</p> 
+                                            <h4 class="mb-0">342</h4>
                                         </div>
                                     </div> 
                                 </div>
                             </div>
                         </div> 
 
-                        <div class="col-xl-2">
+                        <div class="col-md-3">
                             <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
                                 <div class="card-body">
                                     <div class="d-flex"> 
                                         <div class="ms-3">
-                                            <p class="text-primary mb-0">Prospecting</p>
-                                            <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">10/34</h4>
+                                            <p class="text-secondary mb-0">Negotiation Analysis</p> 
+                                            <h4 class="mb-0">2321</h4>
                                         </div>
                                     </div> 
                                 </div>
                             </div>
                         </div> 
 
-                        <div class="col-xl-2">
+                        <div class="col-md-3">
                             <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
                                 <div class="card-body">
                                     <div class="d-flex"> 
                                         <div class="ms-3">
-                                            <p class="text-primary mb-0">Cold Calling</p>
-                                            <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">10/23</h4>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Lead</p>
-                                            <small> <span class="text-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">33/43</h4>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="col-xl-2">
-                            <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                <div class="card-body">
-                                    <div class="d-flex"> 
-                                        <div class="ms-3">
-                                            <p class="text-primary mb-0">Lead Analyses</p>
-                                            <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
-                                            <h4 class="mb-0">21/45</h4>
+                                            <p class="text-secondary mb-0">Today Deposit TA</p> 
+                                            <h4 class="mb-0">122/2323</h4>
                                         </div>
                                     </div> 
                                 </div>
                             </div>
                         </div>  
-                    </div> 
+                    </div>
+                    @endif 
 
+                   
+  
                     <div class="row">
                         <div class="col-md-12">
                             <h3 class="card-title">Today Target</h3>

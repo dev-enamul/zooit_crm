@@ -5,25 +5,25 @@
 
     <div class="page-content">
         <div class="container-fluid">
-           
+           @include('includes.freelancer_profile_data')
+
             <div class="row"> 
                 <div class="col-md-3"> 
                     @include('includes.freelancer_menu')
                 </div> 
                 <div class="col-md-9"> 
-                    @include('includes.freelancer_profile_data')
                     <div class="card overflow-hidden"> 
                         <div class="card-body border-top">
                             <div class="d-flex justify-content-between mb-4">
                                 <h4 class="card-title">About</h4>
-                                {{-- <div>
+                                <div>
                                     <div class="btn btn-secondary cursor-pointer" title="Change Password"  data-bs-toggle="modal" data-bs-target="#change_password_modal">
                                         <i class="mdi mdi-key-change"></i> Change password 
                                     </div>  
                                     <a href="{{route('freelancer.create')}}" class="btn btn-primary cursor-pointer"> 
                                         <i class="mdi mdi-account-edit"></i> Edit Profile
                                     </a>  
-                                </div> --}}
+                                </div>
                                
                             </div> 
                             <p class="text-muted mb-4">Hi I'm Charlie Stone,has been the industry's standard dummy text To an English person, it will seem like simplified English, as a skeptical Cambridge.</p>
@@ -50,7 +50,7 @@
                                 </table>
                             </div>
                         </div>  
-                    </div> 
+                    </div>
         
                     <div class="row border-top">
                         <div class="col-md-6">
@@ -82,7 +82,7 @@
                                 </div> 
                             </div>
                         </div>  
-                    </div>  
+                    </div> 
                 </div>
             </div> 
         </div> 
