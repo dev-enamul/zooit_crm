@@ -81,7 +81,7 @@
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="amount" class="form-label">Declaration Price</label>
+                                            <label for="amount" class="form-label">Regular Price</label>
                                             <input type="number" value="43424" class="form-control" name="amount" id="amount"> 
                                         </div>
                                     </div>

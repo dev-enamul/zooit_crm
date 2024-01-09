@@ -448,7 +448,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="branch" class="form-label">Bank Other's Information</label>
+                                            <label for="branch" class="form-label">Account Holder Name</label>
                                             <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Other's Information">  
                                         </div>
                                     </div>

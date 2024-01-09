@@ -60,7 +60,7 @@
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i class="fas fa-handshake"></i>
-                        <span>Customers</span>
+                        <span>Customer Data</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Entry</a></li> 
@@ -135,7 +135,7 @@
                         <li><a href="{{route('followup.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Follow Up</a></li> 
                         <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
                         <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis Form</a></li> 
-                        <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analyses</a></li>  
+                        <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
                     </ul>
                 </li>
                 @endif 
@@ -150,7 +150,7 @@
                         <li><a href="{{route('negotiation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Negotiations</a></li> 
                         <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
                         <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
-                        <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analyses List</a></li>  
+                        <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analysis List</a></li>  
                     </ul>
                 </li>
                 @endif
