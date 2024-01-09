@@ -9,12 +9,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Follow Up Analyses Entry</h4>
+                        <h4 class="mb-sm-0">Salse Entry</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Follow Up Analyses Entry</li>
+                                <li class="breadcrumb-item active">Salse Entry</li>
                             </ol>
                         </div>
 
@@ -67,11 +67,36 @@
                                         </div>
                                     </div> 
 
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="select_type" class="form-label">Select Type <span class="text-danger">*</span></label>
+                                            <select class="select2" name="select_type" id="select_type" required>
+                                                <option value="">Select Type</option>
+                                                <option value="">On Choice</option>
+                                                <option value="1">Lottery</option> 
+                                            </select>  
+                                        </div>
+                                    </div> 
+
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="amount" class="form-label">Unit Value</label>
-                                            <input type="number" placeholder="Negotiation Amount" class="form-control" name="amount" id="amount"> 
+                                            <label for="amount" class="form-label">Declaration Price</label>
+                                            <input type="number" value="43424" class="form-control" name="amount" id="amount"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="amount" class="form-label">Sold Value</label>
+                                            <input type="number" value="675656400" class="form-control" name="amount" id="amount"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="amount" class="form-label">Discount</label>
+                                            <input type="number" value="45300" class="form-control" name="amount" id="amount" disabled> 
                                         </div>
                                     </div>
 
@@ -81,9 +106,67 @@
                                             <label for="qty" class="form-label"> Unit Qty.</label>
                                             <input type="text" placeholder="Product Qty." class="form-control" name="qty" id="qty"> 
                                         </div>
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="qty" class="form-label">Down Payment</label>
+                                            <input type="number" value="50000" class="form-control" name="down_payment" id="qty"> 
+                                        </div>
                                     </div>
 
-                                   <div class="col-md-3">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="qty" class="form-label">Down Payment Pay</label>
+                                            <input type="number" value="20000" class="form-control" name="down_payment" id="qty"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="qty" class="form-label">Down Payment Due</label>
+                                            <input type="number" value="30000" class="form-control" name="down_payment" id="qty" readonly> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="qty" class="form-label">Rest Down Payment Date</label>
+                                            <input type="text" name="dob" class="form-control datepicker w-100 p-1" id="dob" placeholder="Select date of birth" required> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="installment_type" class="form-label">Installment Type <span class="text-danger">*</span></label>
+                                            <select class="select2" name="installment_type" id="installment_type" required>
+                                                <option value="">Select Installment</option>
+                                                <option value="1">Weekly</option>
+                                                <option value="2">Monthly</option>
+                                                <option value="3">Bi-Weekly (Every 2 Weeks)</option>
+                                                <option value="4">Bi-Monthly (Every 2 Months)</option>
+                                                <option value="5">Quarterly (Every 3 Months)</option>
+                                                <option value="6">Semi-Annually (Every 6 Months)</option>
+                                                <option value="7">Annually (Yearly)</option>
+                                            </select>  
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="total_instalment" class="form-label"> Total Installment <span class="text-danger">*</span>.</label>
+                                            <input type="number"value="1" class="form-control" name="total_instalment" id="total_instalment" required> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="installment_value" class="form-label">Installment Amount <span class="text-danger">*</span>.</label>
+                                            <input type="number"value="12500" class="form-control" name="installment_value" id="installment_value" disabled> 
+                                        </div>
+                                    </div>
+
+                                   <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="facility" class="form-label">Unit Facility <span class="text-danger">*</span></label>
                                             <select class="select2" name="facility" id="facility" required>
@@ -106,23 +189,10 @@
                                             <label for="unit_no" class="form-label"> Unit No. <span class="text-danger">*</span></label>
                                             <input type="text" placeholder="Unit No" class="form-control" name="unit_no" id="unit_no" required> 
                                         </div>
-                                    </div>
+                                    </div> 
 
-                                    <div class="col-md-3">
-                                        <div class="mb-3">
-                                            <label for="booking_money" class="form-label"> Booking Money</label>
-                                             <input type="number" placeholder="Customer Expectation" class="form-control" name="booking_money" id="booking_money"> 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="booking_money" class="form-label"> Duration</label>
-                                            <input type="text" class="datepicker form-control w-100" placeholder="Select date" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
+                                     
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
                                             <select class="select2" name="type" id="type" required>
@@ -135,17 +205,7 @@
                                             </select>  
                                         </div>
                                     </div>
-
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="select_type" class="form-label">Flat Select Type <span class="text-danger">*</span></label>
-                                            <select class="select2" name="select_type" id="select_type" required>
-                                                <option value="">Select Type</option>
-                                                <option value="">On Choice</option>
-                                                <option value="1">Lottery</option> 
-                                            </select>  
-                                        </div>
-                                    </div> 
+ 
                                 </div>
                                   
                                 <div class="text-end ">

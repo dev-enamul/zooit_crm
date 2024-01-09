@@ -142,87 +142,28 @@
                                             </select>  
                                         </div>
                                     </div> 
-
+ 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="1" name="remark"></textarea>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
+                                            <label for="total_flat" class="form-label">Total Floor</label>
+                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Total Flat</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
+                                            <label for="address" class="form-label">Address</label>
+                                            <textarea class="form-control" id="address" rows="2" name="remark"></textarea> 
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Flat Price</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
+                                            <label for="address" class="form-label">Description</label>
+                                            <textarea class="form-control" id="address" rows="2" name="remark"></textarea>
+                                        
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Total Shop</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Shop Price</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Total Garage</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Garage Price</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Total Deiuxe/Studio Room</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Deiuxe/Studio Price</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Total Sea/Hall</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Sea/Hall Price</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
-                                        </div>
-                                    </div>
-
+                                    </div> 
                                 </div>
                                   
                                 <div>

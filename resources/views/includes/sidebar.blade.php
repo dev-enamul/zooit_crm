@@ -228,6 +228,8 @@
                             <li><a href="{{route('target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Achivement</a></li> 
                             <li><a href="{{route('today.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Today Task & Target</a></li> 
                             <li><a href="{{route('task.complete')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
+                            <li><a href="{{route('marketing.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Marketing Ex. Report</a></li> 
+                            <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Salse Ex Report</a></li> 
                         </ul>
                     </li> 
 
@@ -264,19 +266,14 @@
                 @endif 
 
                 @if (in_array($user, ['3','4','5']))  
-                <li class="menu-title">Asign</li> 
-                <li>
-                    <a href="{{route('target.achive')}}" class="">
-                        <i class="fas fa-crown"></i>
-                        <span>Training Create</span>
-                    </a>
-                </li>  
+                <li class="menu-title">Asign</li>  
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-teach"></i>
                         <span>Training</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('training.schedule.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Create</a></li> 
                         <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li> 
                         <li><a href="{{route('training.attendance')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Attendance</a></li> 
                         <li><a href="{{route('training.history')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training History</a></li> 

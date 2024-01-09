@@ -102,15 +102,16 @@
                                             <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="religion" id="religion" required>
                                                 <option value="">Select Region</option>
-                                                <option value="">Christianity</option>
-                                                <option value="">Islam</option>
-                                                <option value="">Hinduism</option>  
-                                                <option value="">Buddhism</option>
-                                                <option value="">Judaism</option>
-                                                <option value="">Sikhism</option>  
-                                                <option value="">Jainism</option>
-                                                <option value="">Bahá'í Faith</option>
-                                                <option value="">Confucianism</option> 
+                                                <option value="1">Christianity</option>
+                                                <option value="2">Islam</option>
+                                                <option value="3">Hinduism</option>
+                                                <option value="4">Buddhism</option>
+                                                <option value="5">Judaism</option>
+                                                <option value="6">Sikhism</option>
+                                                <option value="7">Jainism</option>
+                                                <option value="8">Bahá'í Faith</option>
+                                                <option value="9">Confucianism</option>
+                                                <option value="10">Others</option> 
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -122,15 +123,14 @@
                                         <div class="mb-3">
                                             <label for="blood_group" class="form-label">Blood Group <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="blood_group" id="blood_group" required>
-                                                <option value="">Select Blood Group</option>
-                                                <option value="">A positive (A+)</option> 
-                                                <option value="">A negative (A-)</option> 
-                                                <option value="">B positive (B+)</option> 
-                                                <option value="">B negative (B-)</option> 
-                                                <option value="">AB positive (AB+)</option> 
-                                                <option value="">AB negative (AB-)</option> 
-                                                <option value="">O positive (O+)</option> 
-                                                <option value="">O negative (O-)</option> 
+                                                <option value="1">A positive (A+)</option>
+                                                <option value="2">A negative (A-)</option>
+                                                <option value="3">B positive (B+)</option>
+                                                <option value="4">B negative (B-)</option>
+                                                <option value="5">AB positive (AB+)</option>
+                                                <option value="6">AB negative (AB-)</option>
+                                                <option value="7">O positive (O+)</option>
+                                                <option value="8">O negative (O-)</option>
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.

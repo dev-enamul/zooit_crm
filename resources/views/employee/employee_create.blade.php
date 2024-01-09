@@ -29,7 +29,7 @@
                                 <div class="row">
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Personal Information</h6>
                                     <hr>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
                                             <input type="text" name="full_name" class="form-control" id="full_name" placeholder="First name" value="" required>
@@ -38,9 +38,17 @@
                                             </div>
                                         </div>
                                     </div> 
+
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="profile_image" class="form-label">Profile Image </label>
+                                            <input type="file" name="profile_image" class="form-control" id="profile_image"  value="" >
+                                            
+                                        </div>
+                                    </div> 
  
                                      
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
                                             <select class="form-select" name="marital_status" id="marital_status" required>
@@ -541,7 +549,7 @@
 
                                     <div class="col-md-6 new_position">
                                         <div class="mb-3">
-                                            <label for="reporting_boss" class="form-label">Reporting Boss <span class="text-danger">*</span></label>
+                                            <label for="reporting_boss" class="form-label">Reporting Person <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="reporting_boss" id="reporting_boss" required>
                                                 <option value="2">Md Enamul Haque #8756765 </option> 
                                                 <option value="1">Jahid Hasa #786343</option>

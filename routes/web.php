@@ -168,7 +168,9 @@ Route::get('floor-wise-sold-unsold-report',[ProductReportController::class,'floo
 
 // field target
 Route::get('target-achive',[FieldTargetController::class,'target_achive'])->name('target.achive');
-Route::get('today-target',[FieldTargetController::class,'today_target'])->name('today.target');  
+Route::get('today-target',[FieldTargetController::class,'today_target'])->name('today.target'); 
+Route::get('marketing-field-report',[FieldTargetController::class,'marketing_field_report'])->name('marketing.field.report');
+Route::get('salse-field-report',[FieldTargetController::class,'salse_field_report'])->name('salse.field.report');
 // task 
 Route::get('task-complete',[TaskController::class,'task_complete'])->name('task.complete'); 
 
@@ -179,6 +181,7 @@ Route::get('deposit-target-asign-list',[DepositTargetController::class,'target_a
 
 // Training
 Route::resource('training', TrainingController::class);
+Route::get('training-schedule-create',[TrainingController::class,'training_schedule_create'])->name('training.schedule.create');
 Route::get('training-schedule',[TrainingController::class,'training_schedule'])->name('training.schedule');
 Route::get('training-attendance',[TrainingController::class,'training_attendance'])->name('training.attendance');
 Route::get('training-history',[TrainingController::class,'training_history'])->name('training.history');

@@ -61,6 +61,10 @@ class TrainingController extends Controller
     {
         //
     }
+    
+    public function training_schedule_create(){
+        return view('training.training_schedule_create');
+    }
 
     public function training_schedule(){
         return view('training.training_schedule');

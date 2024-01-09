@@ -66,5 +66,13 @@ class FieldTargetController extends Controller
 
     public function today_target(){
         return view('target.today_target');
+    } 
+
+    public function marketing_field_report(){
+        return view('target.marketing_field_report');
+    } 
+
+    public function salse_field_report(){
+        return view('target.salse_field_report');
     }
 }
