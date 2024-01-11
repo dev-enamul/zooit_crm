@@ -152,6 +152,13 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
+                                            <label for="total_flat" class="form-label">Google Map Location</label>
+                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
                                             <textarea class="form-control" id="address" rows="2" name="remark"></textarea> 
                                         </div>

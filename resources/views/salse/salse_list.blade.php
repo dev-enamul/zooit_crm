@@ -66,13 +66,13 @@
                                         <th>Floor No</th> 
                                         <th>Unit No</th> 
                                         <th>Lottery</th>
-                                        <th>Declaration Price</th>
+                                        <th>Regular Price</th>
                                         <th>Sold Price</th>
                                         <th>Discount Amount</th>
                                         <th>Installment Qty.</th>
                                         <th>Collection Amount</th>
                                         <th>DUE Amount</th>
-                                        <th>FL</th>
+                                        <th>FL Name & ID</th>
                                         <th> Executive</th>
                                         <th>Area In Charge</th>
                                         <th>Deed Status</th>

@@ -56,7 +56,7 @@
                     </li> 
                 @endif 
 
-                @if (in_array($user, ['1','3','4','5']))
+                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i class="fas fa-handshake"></i>
@@ -69,7 +69,7 @@
                 </li> 
                 @endif
 
-                @if (in_array($user, ['1','3','4','5']))
+                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-project-diagram"></i>
@@ -82,7 +82,7 @@
                 </li> 
                 @endif 
 
-                @if (in_array($user, ['1','3','4','5']))
+                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-directions"></i>
@@ -152,7 +152,18 @@
                         <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
                         <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analysis List</a></li>  
                     </ul>
-                </li>
+                </li> 
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="fas fa-user-times"></i>
+                        <span>Rejection</span>
+                    </a>  
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
+                        <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
+                    </ul>
+                </li> 
                 @endif
  
                 @if (in_array($user, ['2','3','4','5']))
@@ -169,16 +180,7 @@
                 @endif
 
                 @if (in_array($user, ['2','3','4','5']))
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="fas fa-user-times"></i>
-                        <span>Rejection</span>
-                    </a>  
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
-                        <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
-                    </ul>
-                </li> 
+                
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
@@ -316,7 +318,8 @@
                         <span>DT Achivement</span>
                     </a> 
                     <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Terget Vs Achivement</a></li> 
+                        <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Monthly T&A</a></li>
+                        <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Bank Day Wise T&A</a></li> 
                         <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Daily Deposit</a></li> 
                         {{-- <li><a href="{{route('deposit.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Report</a></li>  --}}
                         {{-- <li><a href="{{route('weekly.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Weekly Report</a></li>  --}}
@@ -405,6 +408,13 @@
                         <span>Bank</span>
                     </a>
                 </li> 
+
+                {{-- <li>
+                    <a href="{{route('negotiation.waiting.day')}}" class="">
+                        <i class="fas fa-desktop"></i>
+                        <span>Negotiation Waiting Day</span>
+                    </a>
+                </li> --}}
  
                 @endif 
             </ul>

@@ -116,6 +116,7 @@ Route::resource('negotiation', NegotiationController::class);
 // Negotation Analysis
 Route::resource('negotiation-analysis', NegotiationAnalysisController::class); 
 
+
 // Salse
 Route::resource('salse', SalseController::class);  
 

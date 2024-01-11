@@ -57,8 +57,7 @@
                                         <th rowspan="2">Project</th> 
                                         <th colspan="2">Existing</th>
                                         <th colspan="2">New Sales</th> 
-                                    </tr> 
-                                    
+                                    </tr>  
                                     <tr>  
                                         <th>Unit</th>
                                         <th>Deposit</th>
@@ -80,10 +79,10 @@
                                         <td>1</td>
                                         <td>Wahidul Islam Plaza, Ramgonj</td>
                                         <td class="align-middle">1</td> 
-                                        <td class="align-middle">2000000</td>
+                                        <td class="align-middle">1000000/2000000</td>
 
                                         <td class="align-middle">2</td> 
-                                        <td class="align-middle">3000000</td>  
+                                        <td class="align-middle">1000000/3000000</td>  
                                     </tr> 
 
                                     <tr> 
