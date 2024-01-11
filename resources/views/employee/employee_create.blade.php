@@ -359,7 +359,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name</label>
+                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
                                             <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father Name">  
                                         </div>
                                     </div> 
@@ -373,7 +373,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="mother_name" class="form-label">Mother's Name</label>
+                                            <label for="mother_name" class="form-label">Mother's Name <span class="text-danger">*</span></label>
                                             <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name">  
                                         </div>
                                     </div> 
@@ -404,7 +404,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="bank" class="form-label">Bank <span class="text-danger">*</span></label>
+                                            <label for="bank" class="form-label">Bank </label>
                                             <select class="form-select select2" name="bank" id="bank" required>
                                                 <option value="">Select Bank</option>
                                                 <option value="">Dhaka Bank </option>
@@ -431,14 +431,14 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="branch" class="form-label">Bank Other's Information</label>
+                                            <label for="branch" class="form-label">Account Holder Name</label>
                                             <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Other's Information">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="mobile_bank" class="form-label">Mobile Bank <span class="text-danger">*</span></label>
+                                            <label for="mobile_bank" class="form-label">Mobile Bank</label>
                                             <select class="form-select select2" name="mobile_bank" id="mobile_bank" required>
                                                 <option value="">Bksh</option>
                                                 <option value="">Roket </option>
@@ -458,14 +458,14 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">NID Number</label>
+                                            <label for="nid" class="form-label">NID Number </label>
                                             <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Upload NID</label>
+                                            <label for="nid" class="form-label">Upload NID </label>
                                             <input type="file" name="nid" id="nid" class="form-control" > 
                                         </div>
                                     </div>

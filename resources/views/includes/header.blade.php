@@ -230,8 +230,14 @@
                                         </a>
                                     </div>
                                 </div>
+                            </div> 
+  
+                            <div class="card-footer card-footer-bordered rounded-0">
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-label-danger">Sign out</a></a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </div>
-                            <div class="card-footer card-footer-bordered rounded-0"><a href="auth-login.html" class="btn btn-label-danger">Sign out</a></div>
                         </div>
                     </div>
                 </div>

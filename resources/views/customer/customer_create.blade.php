@@ -378,7 +378,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name</label>
+                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></spN></label>
                                             <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father Name">  
                                         </div>
                                     </div> 
@@ -392,7 +392,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="mother_name" class="form-label">Mother's Name</label>
+                                            <label for="mother_name" class="form-label">Mother's Name <span class="text-danger">*</span></label>
                                             <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name">  
                                         </div>
                                     </div> 
@@ -417,7 +417,7 @@
                                             <input type="text" name="mother_phone" class="form-control" id="mother_phone" placeholder="Spouse Mobile">  
                                         </div>
                                     </div> 
-                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> ID Detail</h6>
+                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> ID Detail [Must fill up Minimum 1 ID]</h6>
                                     <hr>
 
                                     <div class="col-md-6">

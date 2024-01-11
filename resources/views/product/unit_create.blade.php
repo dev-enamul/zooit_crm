@@ -85,74 +85,30 @@
                                         </div>
                                     </div>
  
-                                    <div class="col-md-6">
+
+                                    <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="regular_price" class="form-label">On Choice Price [6 Month Payment] <span class="text-danger">*</span></label>
-                                             <input type="number" class="form-control" name="regular_price" id="regular_price" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_price" class="form-label">Lottery Select Price [6 Month Payment] <span class="text-danger">*</span></label>
+                                            <label for="payment_duration" class="form-label">Payment Duration Month <span class="text-danger">*</span></label>
                                              <input type="number" class="form-control" name="regular_price" id="regular_price" required>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="regular_price" class="form-label">On Choice Price [12 Month Payment] <span class="text-danger">*</span></label>
+                                            <label for="regular_price" class="form-label">On Choice Price <span class="text-danger">*</span></label>
                                              <input type="number" class="form-control" name="regular_price" id="regular_price" required>
                                         </div>
                                     </div>
                                     
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="regular_price" class="form-label">Lottery Select Price [12 Month Payment] <span class="text-danger">*</span></label>
+                                            <label for="regular_price" class="form-label">Lottery Select Price <span class="text-danger">*</span></label>
                                              <input type="number" class="form-control" name="regular_price" id="regular_price" required>
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_price" class="form-label">On Choice Price [18 Month Payment] <span class="text-danger">*</span></label>
-                                             <input type="number" class="form-control" name="regular_price" id="regular_price" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_price" class="form-label">Lottery Select Price [18 Month Payment] <span class="text-danger">*</span></label>
-                                             <input type="number" class="form-control" name="regular_price" id="regular_price" required>
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_price" class="form-label">On Choice Price [24 Month Payment] <span class="text-danger">*</span></label>
-                                             <input type="number" class="form-control" name="regular_price" id="regular_price" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_price" class="form-label">Lottery Select Price [24 Month Payment] <span class="text-danger">*</span></label>
-                                             <input type="number" class="form-control" name="regular_price" id="regular_price" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_price" class="form-label">On Choice Price [36 Month Payment] <span class="text-danger">*</span></label>
-                                             <input type="number" class="form-control" name="regular_price" id="regular_price" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_price" class="form-label">Lottery Select Price [36 Month Payment] <span class="text-danger">*</span></label>
-                                             <input type="number" class="form-control" name="regular_price" id="regular_price" required>
-                                        </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary" type="button">+</button>
                                     </div>
 
                                     <div class="col-md-12">

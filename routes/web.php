@@ -44,6 +44,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VillageController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,6 +58,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
  
+Auth::routes();
+  
+Route::group([],function () {
 
 Route::get('/',[DashboardController::class,'index'])->name('index'); 
 
@@ -190,9 +194,7 @@ Route::get('training-details',[TrainingController::class,'training_details'])->n
 
 // Meeting  
 Route::resource('meeting',MeetingController::class);
+});
 
 
- 
-
- 
-
+  
