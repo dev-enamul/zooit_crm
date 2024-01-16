@@ -13,12 +13,25 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id')->nullable()->unique();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone', 15)->unique();
             $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->tinyInteger('user_type')->nullable()->comment('1= Employee, 2= Freelancer, 3= Customer');
+            $table->string('profile_image')->nullable();
+            $table->tinyInteger('marital_status')->nullable()->comment('1= Married, 2= Unmarried, 3 = Divorce');
+            $table->date('dob')->nullable();
+            $table->string('finger_id')->nullable();
+            $table->tinyInteger('region')->nullable()->comment('1 = Islam, 2 = Christianity, 3 = Hinduism, 4 = Buddhism, 5 = Judaism, 6 = Sikhism, 7 = Jainism, 8 = Bahá\'í Faith, 9 = Confucianism, 10 = Others');
+            $table->tinyInteger('blood_group')->nullable()->comment('1 = A+, 2 = A-, 3 = B+, 4 = B-, 5 = AB+, 6 = AB-, 7 = O+, 8 = O-');
+            $table->tinyInteger('gender')->nullable()->comment('1= "Male" 2= "Female"');
+            $table->foreignId('professions_id')->nullable()->constrained();
+            $table->foreignId('ref_id')->nullable()->constrained(table:'users', indexName:'id');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
+            $table->timestamps(); 
         });
     }
 
