@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
-            $table->id(); 
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('designation_id')->constrained()->nullable();  
-
-            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
-            $table->softDeletes();
+        Schema::create('unit_prices', function (Blueprint $table) {
+            $table->id();
+            $table->integer('payment_duration')->comment('Month wise');
+            $table->string('on_choice_price');
+            $table->string('lottery_price');
+            $table->foreignId('project_unit_id')->constrained();
             $table->timestamps();
+
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('unit_prices');
     }
 };

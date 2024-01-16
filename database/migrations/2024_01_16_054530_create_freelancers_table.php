@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('freelancers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); 
+            $table->foreignId('user_id')->constrained(); 
+            $table->foreignId('professions_id')->constrained()->nullable();
+            $table->foreignId('designation_id')->constrained()->nullable(); 
+
+            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->softDeletes();
+            $table->timestamps(); 
         });
     }
 

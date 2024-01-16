@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('unions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('upazila_id');
+            $table->foreignId('upazila_id')->constrained();
             $table->string('name');
             $table->string('bn_name');
             $table->string('url'); 

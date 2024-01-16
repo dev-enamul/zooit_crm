@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('upazilas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('district_id');
+            $table->foreignId('district_id')->constrained();
             $table->string('name');
             $table->string('bn_name');
             $table->string('url');

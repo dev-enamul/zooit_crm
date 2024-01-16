@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_families', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->constrained();
             $table->string('father_name')->nullable();
             $table->string('father_mobile')->nullable();
             $table->string('mother_name')->nullable();

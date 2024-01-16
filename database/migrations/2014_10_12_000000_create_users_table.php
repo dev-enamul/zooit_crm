@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id')->nullable()->unique();
+            $table->string('user_id')->nullable()->unique(); 
             $table->string('name');
             $table->string('phone', 15)->unique();
             $table->string('password');
@@ -24,9 +24,15 @@ return new class extends Migration
             $table->string('finger_id')->nullable();
             $table->tinyInteger('region')->nullable()->comment('1 = Islam, 2 = Christianity, 3 = Hinduism, 4 = Buddhism, 5 = Judaism, 6 = Sikhism, 7 = Jainism, 8 = Bahá\'í Faith, 9 = Confucianism, 10 = Others');
             $table->tinyInteger('blood_group')->nullable()->comment('1 = A+, 2 = A-, 3 = B+, 4 = B-, 5 = AB+, 6 = AB-, 7 = O+, 8 = O-');
-            $table->tinyInteger('gender')->nullable()->comment('1= "Male" 2= "Female"');
-            $table->foreignId('professions_id')->nullable()->constrained();
-            $table->foreignId('ref_id')->nullable()->constrained(table:'users', indexName:'id');
+            $table->tinyInteger('gender')->nullable()->comment('1= "Male" 2= "Female"'); 
+            
+
+            $table->unsignedBigInteger('approve_by')->nullable();
+            $table->foreign('approve_by')->references('id')->on('users');
+            $table->unsignedBigInteger('ref_id')->nullable();
+            $table->foreign('ref_id')->references('id')->on('users');
+
+            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

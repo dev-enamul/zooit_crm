@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('villages', function (Blueprint $table) {
+        Schema::create('project_units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('union_id')->constrained(); 
-            $table->string('word_no');
-           
+            $table->integer('floor');
+            $table->string('description')->nullable();
+            $table->foreignId('project_id')->constrained();
+            $table->foreignId('unit_categorie_id')->constrained();
+            $table->foreignId('unit_id')->constrained(); 
+
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('villages');
+        Schema::dropIfExists('project_units');
     }
 };

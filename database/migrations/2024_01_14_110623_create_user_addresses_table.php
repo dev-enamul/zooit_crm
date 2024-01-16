@@ -13,14 +13,17 @@ return new class extends Migration
     {
         Schema::create('user_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
-            $table->foreignId('division_id')->nullable();
-            $table->foreignId('district_id')->nullable();
-            $table->foreignId('upazila_id')->nullable();
-            $table->foreignId('union_id')->nullable();
-            $table->foreignId('village_id')->nullable();
+            $table->foreignId('user_id')->constrained()->nullable();
+            $table->foreignId('division_id')->constrained()->nullable();
+            $table->foreignId('district_id')->constrained()->nullable();
+            $table->foreignId('upazila_id')->constrained()->nullable();
+            $table->foreignId('union_id')->constrained()->nullable();
+            $table->foreignId('village_id')->constrained()->nullable();
             $table->string('address', 250)->nullable(); 
-            $table->foreignId('countrie_id')->nullable();
+            $table->foreignId('countrie_id')->constrained()->nullable();
+
+            $table->foreignId('zone_id')->constrained()->nullable();
+            $table->foreignId('area_id')->constrained()->nullable();
              
             $table->timestamps();
         });

@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('user_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id'); 
-            $table->foreignId('bank_id')->nullable(); 
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('bank_id')->constrained()->nullable();
             $table->string('branch')->nullable();
             $table->string('bank_account_number')->nullable();
             $table->string('bank_details')->nullable();
-            $table->unsignedInteger('mobile_bank_id')->nullable();
-            $table->foreign('mobile_bank_id')->references('id')->on('banks')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('mobile_bank_id')->nullable();  
+            $table->foreign('mobile_bank_id')->references('id')->on('banks')->onDelete('set null')->onUpdate('cascade');
             $table->string('mobile_bank_account_number')->nullable();
             $table->timestamps();
         });
