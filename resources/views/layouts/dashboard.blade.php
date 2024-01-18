@@ -15,9 +15,8 @@
     <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" /> 
 
     <link href="{{asset('assets/libs/daterangepicker/daterangepicker.css')}}" rel="stylesheet"> 
-   
- 
-
+    <link rel="stylesheet" href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}">
+    
     <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
     @yield('style')
 
@@ -27,10 +26,14 @@
     <div id="layout-wrapper">  
         @include('includes.header') 
         @include('includes.sidebar') 
-        @yield('content')
+        @yield('content') 
     </div>  
   
-    <!-- JAVASCRIPT -->
+    <!-- JAVASCRIPT --> 
+    <script>
+        var csrfToken = '{{ csrf_token() }}';
+    </script>
+    
     <script src="{{asset('assets/libs/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/libs/metismenu/metisMenu.min.js')}}"></script>
@@ -58,13 +61,35 @@
     {{-- chart  --}} 
     <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>   
     <script src="{{asset('assets/js/pages/apexcharts-column.init.js')}}"></script>
-
-   
-    <script src="{{asset('assets/js/app.js')}}"></script>
  
+    <!-- Sweet Alerts js -->
+    <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script> 
+    <script src="{{asset('assets/js/alert.js')}}"></script>
+
+    <script src="{{asset('assets/js/app.js')}}"></script> 
     @yield('script')
+
+    <script>
+        @if(session('success')) 
+            Toast.fire({ icon: "success", title: '{{ session('success') }}'}); 
+        @endif  
+
+        @if(session('error'))
+            Toast.fire({ icon: "error", title: '{{ session('success') }}' }); 
+        @endif 
+
+        @if(session('failed'))
+            Toast.fire({ icon: "error", title: '{{ session('success') }}' }); 
+        @endif 
+
+        @if(session('info'))
+            Toast.fire({ icon: "info", title: '{{ session('success') }}' }); 
+        @endif
+
+        @if(session('warning'))
+            Toast.fire({ icon: "warning", title: '{{ session('success') }}' }); 
+        @endif    
+    </script>
 </body>
-
-
-<!-- Mirrored from Zoom IT.in/Zoom IT/layout/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 11 Nov 2023 10:06:06 GMT -->
+ 
 </html>

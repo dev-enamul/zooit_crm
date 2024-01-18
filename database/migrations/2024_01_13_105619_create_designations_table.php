@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('designations', function (Blueprint $table) {
             $table->id();
             $table->string('title'); 
-            $table->foreignId('commission_id')->constrained();
+            $table->foreignId('commission_id')->nullable()->constrained();
+            $table->bigInteger('working_place')->nullable()->comment('1= Zone, 2= Area');
 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();

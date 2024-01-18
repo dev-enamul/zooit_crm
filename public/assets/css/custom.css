@@ -281,6 +281,10 @@ a{
     padding: 8px;
 }
 
+.swal2-success {
+    background-color: var(--primary) !important; 
+}
+
 
    
  

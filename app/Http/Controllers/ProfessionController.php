@@ -14,20 +14,10 @@ class ProfessionController extends Controller
         return view('profession.profession_list');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('profession.profession_create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
-        //
+      
     }
 
     /**

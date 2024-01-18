@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UnionSeeder::class); 
         $this->call(ZoneSeeder::class); 
         $this->call(AreaSeeder::class); 
+        $this->call(PermissionSeeder::class); 
     }
 }

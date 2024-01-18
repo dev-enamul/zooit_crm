@@ -10,10 +10,10 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\DepositTargetController;
+use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\DtaReportController;
 use App\Http\Controllers\DueReportController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\EmpPositionController;
+use App\Http\Controllers\EmployeeController; 
 use App\Http\Controllers\FieldTargetController;
 use App\Http\Controllers\FollowupAnalysisController;
 use App\Http\Controllers\FollowupController;
@@ -24,6 +24,7 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\NegotiationAnalysisController;
 use App\Http\Controllers\NegotiationController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PresentationAnalysisController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\ProductController;
@@ -60,7 +61,7 @@ use Illuminate\Support\Facades\Route;
  
 Auth::routes();
   
-Route::group([],function () {
+Route::group(['middleware' => 'auth'],function () {
 
 Route::get('/',[DashboardController::class,'index'])->name('index'); 
 
@@ -69,6 +70,8 @@ Route::get('profile',[ProfileController::class,'index'])->name('profile');
 
 // Employee 
 Route::resource('employee', EmployeeController::class); 
+Route::get('employee-permission/{id}',[EmployeeController::class,'employee_permission'])->name('employee.permission');
+Route::post('user-permission-update',[EmployeeController::class,'user_permission_update'])->name('user.permission.update');
 Route::get('employees/tree',[EmployeeController::class,'tree'])->name('employees.tree');
 
 // Product 
@@ -141,9 +144,13 @@ Route::resource('transfer', SalseTransferController::class);
 Route::resource('profession', ProfessionController::class); 
 // Location
 Route::resource('union', UnionController::class);
-Route::resource('village', VillageController::class);  
-// Emp Position
-Route::resource('employee-position', EmpPositionController::class); 
+Route::resource('village', VillageController::class); 
+
+// Emp Position & Permission 
+Route::resource('designation', DesignationController::class); 
+Route::get('designation-permission/{id}',[DesignationController::class,'designation_permission'])->name('designation.permission');
+Route::post('designation-permission-update',[DesignationController::class,'designation_permission_update'])->name('designation.permission.update');
+Route::resource('permission', PermissionController::class);
 // Special 
 Route::resource('comission', CommissionControler::class);
 Route::resource('special-comission', SpecialComissionController::class);

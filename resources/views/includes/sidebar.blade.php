@@ -11,7 +11,8 @@
                     </a>
                 </li> 
 
-                <li class="menu-title">Task</li>
+                <li class="menu-title">Task</li> 
+                
                 @if (in_array($user, ['5']))
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
@@ -383,11 +384,15 @@
                 </li> 
 
                 <li>
-                    <a href="{{route('employee-position.index')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Employee Position</span>
-                    </a>
-                </li>  
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-chart-bar"></i>
+                        <span>Position & Permission</span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{{route('designation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Employee Position</a></li> 
+                        <li><a href="{{route('permission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Permission</a></li> 
+                    </ul>
+                </li> 
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">

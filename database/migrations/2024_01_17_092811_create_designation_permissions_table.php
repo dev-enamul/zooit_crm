@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('unit_prices', function (Blueprint $table) {
+        Schema::create('designation_permissions', function (Blueprint $table) {
             $table->id();
-            $table->integer('payment_duration')->comment('Month wise');
-            $table->float('on_choice_price');
-            $table->float('lottery_price');
-            $table->foreignId('project_unit_id')->constrained();
+            $table->foreignId('designation_id')->constrained();
+            $table->foreignId('permission_id')->constrained();
             $table->timestamps();
-
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unit_prices');
+        Schema::dropIfExists('designation_permissions');
     }
 };

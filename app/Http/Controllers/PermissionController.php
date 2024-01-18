@@ -2,37 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Permission;
+use Brian2694\Toastr\Facades\Toastr as FacadesToastr;
+use Brian2694\Toastr\Toastr;
+use Illuminate\Http\Request; 
 
-class EmpPositionController extends Controller
+class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
-        return view('position.position_list');
+        $datas = Permission::latest()->get();
+        return view('setting.permission',compact('datas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('position.position_create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+     
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $input['slug'] = getSlug(Permission::class, $request->name);
+        Permission::create($input);  
+        return redirect()->back()->with('success','Permission Created');
     }
 
-    /**
-     * Display the specified resource.
-     */
+   
     public function show(string $id)
     {
         //
