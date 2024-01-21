@@ -19,13 +19,12 @@ class UsersSeeder extends Seeder
         $data = [
             [
                 'user_id' => "EMP-001",
-                'name' => "Employee 1",
-                'phone' => "01796351081",
+                'name' => "Super Admin",
+                'phone' => "01700000000",
                 'password' => bcrypt('123456'),
                 'user_type' => 1,
                 'profile_image' => "",
                 'marital_status' => 1,
-                
                 'finger_id' => "43435343",
                 'region' => 1,
                 'blood_group' => 1,
@@ -34,13 +33,12 @@ class UsersSeeder extends Seeder
                 'updated_by' => 1,
             ],[
                 'user_id' => "EMP-002",
-                'name' => "Employee 2",
-                'phone' => "01796351082",
+                'name' => "General Manager",
+                'phone' => "01700000001",
                 'password' => bcrypt('123456'),
                 'user_type' => 1,
                 'profile_image' => "",
-                'marital_status' => 1,
-                
+                'marital_status' => 1, 
                 'finger_id' => "43435343",
                 'region' => 1,
                 'blood_group' => 1,
@@ -49,8 +47,8 @@ class UsersSeeder extends Seeder
                 'updated_by' => 1,
             ],[
                 'user_id' => "EMP-003",
-                'name' => "Employee 3",
-                'phone' => "01796351083",
+                'name' => "Deputy General Manager",
+                'phone' => "01700000002",
                 'password' => bcrypt('123456'),
                 'user_type' => 1,
                 'profile_image' => "",
@@ -64,8 +62,8 @@ class UsersSeeder extends Seeder
                 'updated_by' => 1,
             ],[
                 'user_id' => "EMP-004",
-                'name' => "Employee 4",
-                'phone' => "01796351084",
+                'name' => "Assistant General Manager",
+                'phone' => "01700000003",
                 'password' => bcrypt('123456'),
                 'user_type' => 1,
                 'profile_image' => "",
@@ -79,8 +77,8 @@ class UsersSeeder extends Seeder
                 'updated_by' => 1,
             ],[
                 'user_id' => "EMP-005",
-                'name' => "Employee 5",
-                'phone' => "01796351085",
+                'name' => "Sales Manager",
+                'phone' => "01700000004",
                 'password' => bcrypt('123456'),
                 'user_type' => 1,
                 'profile_image' => "",
@@ -94,8 +92,8 @@ class UsersSeeder extends Seeder
                 'updated_by' => 1,
             ],[
                 'user_id' => "FL-001",
-                'name' => "Employee 6",
-                'phone' => "01796351086",
+                'name' => "Regional Manager",
+                'phone' => "01700000005",
                 'password' => bcrypt('123456'),
                 'user_type' => 1,
                 'profile_image' => "",
