@@ -7,6 +7,7 @@ use App\Http\Controllers\ComissionReportController;
 use App\Http\Controllers\CommissionControler;
 use App\Http\Controllers\CommissionDeductedController;
 use App\Http\Controllers\CommissionReportController;
+use App\Http\Controllers\Common\AreaController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
@@ -66,6 +67,12 @@ Route::post('login', [LoginController::class,'login'])->name('login');
 Route::group(['middleware' => 'auth'],function () { 
         Route::get('/',[DashboardController::class,'index'])->name('index');
   
+        # Common
+        //Area
+        Route::get('division-get-district',[AreaController::class,'divisionGetDistrict'])->name('division-get-district');
+        Route::get('district-get-upazila',[AreaController::class,'districtGetUpazila'])->name('district-get-upazila');
+        Route::get('upazila-get-union',[AreaController::class,'upazilaGetUnion'])->name('upazila-get-union');
+
         // Profile 
         Route::get('profile',[ProfileController::class,'index'])->name('profile');
 
@@ -79,6 +86,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::resource('product', ProductController::class);  
         Route::resource('unit', ProductUnitController::class);
         Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
+        Route::post('product-save',[ProductController::class,'save'])->name('product.save');
 
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class); 

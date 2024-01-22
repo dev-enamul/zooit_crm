@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('google_map')->nullable();
             $table->string('address')->nullable();
             $table->string('description')->nullable(); 
-            $table->foreignId('countrie_id')->constrained()->nullable();
+            $table->foreignId('country_id')->constrained()->nullable();
             $table->foreignId('division_id')->constrained()->nullable();
             $table->foreignId('district_id')->constrained()->nullable();
             $table->foreignId('upazila_id')->constrained()->nullable();

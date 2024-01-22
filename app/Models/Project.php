@@ -17,7 +17,7 @@ class Project extends Model
         'address',
         'description',
         'status',
-        'countrie_id',
+        'country_id',
         'division_id',
         'district_id',
         'upazila_id',
@@ -31,7 +31,7 @@ class Project extends Model
  
     public function country()
     {
-        return $this->belongsTo(Country::class, 'countrie_id');
+        return $this->belongsTo(Country::class, 'country_id');
     } 
     
     public function division()

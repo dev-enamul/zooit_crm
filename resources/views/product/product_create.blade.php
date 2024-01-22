@@ -26,13 +26,13 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form class="needs-validation" novalidate> 
+                            <form action="{{route('product.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                @csrf
                                 <div class="row">
-                                    
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="first_name" class="form-label">Product Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="first_name" class="form-control" id="first_name" placeholder="First name" value="" required>
+                                            <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="name" class="form-control" id="first_name" placeholder="name" value="" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -41,9 +41,31 @@
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="profile_image" class="form-label">Product Image</label>
-                                            <input type="file" name="profile_image" id="profile_image" class="form-control">  
+                                            <label for="image" class="form-label">Product Image</label>
+                                            <input type="file" name="image" id="image" class="form-control">  
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                                        <select class="form-select" name="country" id="country" required>
+                                            <option data-display="Select a country *" value="">
+                                                Select a country
+                                            </option>
+                                            @isset($countries)
+                                                @foreach ($countries as $country)
+                                                    <option value="{{ $country->id }}" {{ isset($country->id) && $country->id == $country->id ? 'selected' : '' }}>
+                                                        {{ $country->name }}
+                                                    </option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                
+                                        @if ($errors->has('country'))
+                                            <span class="text-danger" role="alert">
+                                                {{ $errors->first('country') }}
+                                            </span>
+                                        @endif
                                     </div>
 
                                     @include('common.area', [
@@ -55,30 +77,29 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Total Floor</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
+                                            <label for="total_floor" class="form-label">Total Floor</label>
+                                            <input type="number" name="total_floor" id="total_floor" class="form-control">  
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="total_flat" class="form-label">Google Map Location</label>
-                                            <input type="number" name="total_flat" id="total_flat" class="form-control">  
+                                            <label for="google_map" class="form-label">Google Map Location</label>
+                                            <input type="string" name="google_map" id="google_map" class="form-control">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="2" name="remark"></textarea> 
+                                            <textarea class="form-control" id="address" rows="2" name="address"></textarea> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="address" class="form-label">Description</label>
-                                            <textarea class="form-control" id="address" rows="2" name="remark"></textarea>
-                                        
+                                            <label for="description" class="form-label">Description</label>
+                                            <textarea class="form-control" id="description" rows="2" name="description"></textarea>
                                         </div>
                                     </div> 
                                 </div>
@@ -90,11 +111,9 @@
                         </div>
                     </div> 
                 </div>
-                <!-- end col -->
-
             </div>
-            <!-- end row -->
-        </div> <!-- container-fluid -->
+
+        </div>
     </div>
 
    @include('includes.footer')
