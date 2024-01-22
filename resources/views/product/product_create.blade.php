@@ -46,103 +46,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="division" class="form-label">Division <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="division" id="division" required>
-                                                <option value="">Select Division</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div> 
+                                    @include('common.area', [
+                                        'div'       => 'col-md-6',
+                                        'mb'        => 'mb-3',
+                                        'visible'   => ['division', 'district', 'upazila','union','village'],
+                                        'required'  => ['division', 'district', 'upazila','union','village'],
+                                    ])
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="district" class="form-label">District <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="district" id="district" required>
-                                                <option value="">Select District</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="upazila" class="form-label">Thana/Upazila <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="upazila" id="upazila" required>
-                                                <option value="">Select Thana/Upazila</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="union" class="form-label">Union <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="union" id="union" required>
-                                                <option value="">Select Union</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="village" class="form-label">Village</label>
-                                            <select class="form-select" name="village" id="village">
-                                                <option value="">Select Village</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select>  
-                                        </div>
-                                    </div> 
- 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="total_flat" class="form-label">Total Floor</label>

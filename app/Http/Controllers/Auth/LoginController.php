@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -23,5 +25,21 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'phone'    => 'required|exists:users,phone',
+            'password' => 'required|string',
+        ]);
+    
+        $credentials = $request->only('phone', 'password');
+    
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('index');
+        }
+    
+        return redirect()->route('login')->with('error', 'Invalid phone or password');
     }
 }

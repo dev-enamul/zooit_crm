@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\ColdCallingController;
 use App\Http\Controllers\ComissionReportController;
@@ -60,9 +61,11 @@ use Illuminate\Support\Facades\Route;
 */
  
 Auth::routes();
-  
+Route::post('login', [LoginController::class,'login'])->name('login');
+
 Route::group(['middleware' => 'auth'],function () { 
-        Route::get('/',[DashboardController::class,'index'])->name('index');  
+        Route::get('/',[DashboardController::class,'index'])->name('index');
+  
         // Profile 
         Route::get('profile',[ProfileController::class,'index'])->name('profile');
 
