@@ -13,25 +13,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
     use ImageUploadTrait;
 
     public function index(){
-        return view('product.product_list');
+        $projects = Project::where('status',1)->select('id','name','address','total_floor')->get();
+        return view('product.product_list',compact('projects'));
     }
 
     public function create(){
+        $title     = "Product Create";
         $divisions = Division::select('id', 'name')->get();
         $countries = Country::select('id','name')->get();
-        $villages  = Village::pluck('name');
-        return view('product.product_create', compact('divisions', 'countries', 'villages'));
+        $villages  = Village::select('id','name')->get();
+        return view('product.product_save', compact('divisions', 'countries', 'villages', 'title'));
     }
 
     public function save(Request $request, $id = null)
-    {
-        
+    { 
         $validator = Validator::make($request->all(), [
             'name'          => 'required|max:190',
             'country'       => 'required|exists:countries,id',
@@ -39,7 +41,7 @@ class ProductController extends Controller
             'district'      => 'required|exists:districts,id',
             'upazila'       => 'required|exists:upazilas,id',
             'union'         => 'required|exists:unions,id',
-            'village'       => 'required',  // Change this as needed
+            'village'       => 'required|exists:villages,id',  
             'total_floor'   => 'nullable|numeric|min:1',
             'google_map'    => 'nullable|string',
             'address'       => 'nullable|string|max:5000',
@@ -70,7 +72,7 @@ class ProductController extends Controller
                 $info->district_id      = $request->district;
                 $info->upazila_id       = $request->upazila;
                 $info->union_id         = $request->union;
-                $info->village_id       = 1;  #have_to_change 
+                $info->village_id       = $request->village; 
                 $info->status           = 1;
                 $info->updated_by       = $user_id;
                 DB::beginTransaction();
@@ -84,14 +86,14 @@ class ProductController extends Controller
                         $p_images->save();
                     }
                     DB::commit();
-                    return redirect()->route('product.index');
+                    return redirect()->route('product.index')->with('success', 'Project updated successfully');
                 } catch (Exception $e) {
                     DB::rollback();
-                    return $e;
+                    return redirect()->back()->withInput()->with('error', $e->getMessage());
                 }
             }
             else{
-                return  "No record found";
+                return  redirect()->back('error', 'Project not found');
             }
         }
 
@@ -106,7 +108,7 @@ class ProductController extends Controller
             'district_id'   => $request->district,
             'upazila_id'    => $request->upazila,
             'union_id'      => $request->union,
-            'village_id'    => 1,  #have_to_change     
+            'village_id'    => $request->village,   
             'status'        => 1,
             'created_by'    => $user_id,
         ];
@@ -121,12 +123,25 @@ class ProductController extends Controller
                         $p_images->save();
                     }
             DB::commit();
-            return redirect()->route('product.index');
+            
+            return redirect()->route('product.index')->with('success', 'Project created successfully');
         } catch (Exception $e) {
             DB::rollback();
-            return $e;
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
+
+    public function edit($id){
+        $title     = "Product Edit";
+        $divisions = Division::select('id', 'name')->get();
+        $countries = Country::select('id','name')->get();
+        $villages  = Village::select('id','name')->get();
+        $product   = Project::find($id);
+        return view('product.product_save', compact('divisions', 'countries', 'villages', 'title', 'product'));
+    }
+
+
+
 
     public function sold_unsold(){
         return view('product.sold_unsold');

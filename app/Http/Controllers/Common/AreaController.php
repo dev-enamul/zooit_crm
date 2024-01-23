@@ -7,6 +7,7 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\Union;
 use App\Models\Upazila;
+use App\Models\Village;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -55,6 +56,22 @@ class AreaController extends Controller
     
             $unions = Union::where('upazila_id', $upazila->id)->get(['name', 'id']);
             return response()->json($unions);
+        } catch (Exception $e) {
+            return response()->json(["error" => $e->getMessage()], 404);
+        }
+    }
+
+    public function unionGetVillage(Request $request)
+    {
+        try {
+            $union = Union::find($request->id);
+    
+            if (!$union) {
+                throw new Exception("Union not found");
+            }
+    
+            $villages = Village::where('union_id', $union->id)->get(['name', 'id']);
+            return response()->json($villages);
         } catch (Exception $e) {
             return response()->json(["error" => $e->getMessage()], 404);
         }

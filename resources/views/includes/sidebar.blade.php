@@ -33,8 +33,12 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
-                        <li><a href="{{route('product.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products</a></li>  
-                        
+                        <li class="{{ Route::is('product.index', 'product.edit') ? 'mm-active' : '' }}">
+                            <a href="{{ route('product.index') }}">
+                                <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products
+                            </a>
+                        </li>
+                                                
                         <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
                         <li><a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a></li>                         
                     </ul>
