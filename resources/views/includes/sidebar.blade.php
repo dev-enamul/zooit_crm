@@ -12,52 +12,45 @@
                 </li> 
 
                 <li class="menu-title">Task</li> 
+                 
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Employee</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
+                        <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employies</a></li> 
+                        <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li> 
+                    </ul>
+                </li> 
+
+ 
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Product</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
+                        <li><a href="{{route('product.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products</a></li>  
+                        
+                        <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
+                        <li><a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a></li>                         
+                    </ul>
+                </li>   
                 
-                @if (in_array($user, ['5']))
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="fas fa-network-wired"></i>
-                            <span>Employee</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
-                            <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employies</a></li> 
-                            <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li> 
-                        </ul>
-                    </li>
-                @endif 
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="fas fa-network-wired"></i>
+                        <span>FL Recruitment</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
+                        <li><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
+                    </ul>
+                </li>  
 
-
-                @if (in_array($user, ['5','4']))
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="fas fa-network-wired"></i>
-                            <span>Product</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
-                            <li><a href="{{route('product.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products</a></li>  
-                            
-                            <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
-                            <li><a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a></li>                         
-                        </ul>
-                    </li> 
-                @endif 
-
-                @if (in_array($user, ['1','2','3','4','5']))
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="fas fa-network-wired"></i>
-                            <span>FL Recruitment</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
-                            <li><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
-                        </ul>
-                    </li> 
-                @endif 
-
-                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i class="fas fa-handshake"></i>
@@ -68,9 +61,7 @@
                         <li><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer List</a></li> 
                     </ul>
                 </li> 
-                @endif
 
-                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-project-diagram"></i>
@@ -80,10 +71,8 @@
                         <li><a href="{{route('prospecting.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Prospectings</a></li> 
                         <li><a href="{{route('prospecting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospectings</a></li> 
                     </ul>
-                </li> 
-                @endif 
+                </li>
 
-                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-directions"></i>
@@ -94,9 +83,7 @@
                         <li><a href="{{route('cold-calling.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Callings</a></li> 
                     </ul>
                 </li> 
-                @endif  
                 
-                @if (in_array($user, ['1','2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-people-arrows"></i>
@@ -109,9 +96,7 @@
                         <li><a href="{{route('lead-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis List</a></li> 
                     </ul>
                 </li>
-                @endif
   
-                @if (in_array($user, ['2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-teach"></i>
@@ -124,9 +109,7 @@
                         <li><a href="{{route('presentation_analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Visit Analysis List</a></li>  
                     </ul>
                 </li>
-                @endif 
  
-                @if (in_array($user, ['2','3','4','5']))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-human-greeting"></i>
@@ -139,9 +122,7 @@
                         <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
                     </ul>
                 </li>
-                @endif 
-
-                @if (in_array($user, ['2','3','4','5']))
+ 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-file-contract"></i>
@@ -164,10 +145,8 @@
                         <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
                         <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
                     </ul>
-                </li> 
-                @endif
- 
-                @if (in_array($user, ['2','3','4','5']))
+                </li>  
+  
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class=" fas fa-check-double"></i>
@@ -177,11 +156,9 @@
                         <li><a href="{{route('salse.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Sales</a></li> 
                         <li><a href="{{route('salse.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Sales</a></li> 
                     </ul>
-                </li>
-                @endif
+                </li> 
 
-                @if (in_array($user, ['2','3','4','5']))
-                
+                 
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
@@ -204,10 +181,7 @@
                         <li><a href="{{route('transfer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Transfer List</a></li> 
                     </ul>
                 </li> 
-
-                @endif 
-
-                @if (in_array($user, ['5']))
+  
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-user-times"></i>
@@ -217,10 +191,8 @@
                         <li><a href="{{route('deposit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Deposit</a></li> 
                         <li><a href="{{route('deposit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit List</a></li> 
                     </ul>
-                </li> 
-                @endif
-
-                @if (in_array($user, ['1','2','3','4','5']))  
+                </li>  
+ 
                     <li class="menu-title">Progress</li>  
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
@@ -245,9 +217,7 @@
                             <li><a href="{{route('deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target</a></li> 
                             <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Asign List</a></li>
                         </ul>
-                    </li> 
-                @endif
-                @if (in_array($user, ['1','2','3','4']))  
+                    </li>  
                     
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
@@ -266,9 +236,7 @@
                             <span>Meeting Schedule</span>
                         </a>
                     </li>  
-                @endif 
-
-                @if (in_array($user, ['3','4','5']))  
+   
                 <li class="menu-title">Asign</li>  
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
@@ -287,10 +255,8 @@
                         <i class="fas fa-calendar-alt"></i>
                         <span>Meeting Schedule</span>
                     </a>
-                </li>  
-            @endif
-
-                @if (in_array($user, ['2','3','4','5']))
+                </li>   
+ 
                 <li class="menu-title">Report</li> 
                 <li>
                     <a href="salse_marketing_target_achivement.html" class="">
@@ -340,10 +306,7 @@
                         <span>Sold & Unsold Report</span>
                     </a>
                 </li>  
- 
-                @endif
- 
-                @if (in_array($user, ['5'])) 
+  
                 <li class="menu-title">Setting</li>  
                 <li>
                     <a href="{{route('profession.index')}}" class="">
@@ -412,16 +375,7 @@
                         <i class="fas fa-desktop"></i>
                         <span>Bank</span>
                     </a>
-                </li> 
-
-                {{-- <li>
-                    <a href="{{route('negotiation.waiting.day')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Negotiation Waiting Day</span>
-                    </a>
-                </li> --}}
- 
-                @endif 
+                </li>  
             </ul>
         </div> 
     </div>

@@ -36,5 +36,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AreaSeeder::class); 
         $this->call(PermissionSeeder::class); 
         $this->call(NegotiationWaitingDay::class);
+        $this->call(VillageSeeder::class);
     }
 }

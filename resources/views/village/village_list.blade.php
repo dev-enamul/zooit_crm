@@ -29,7 +29,7 @@
 
                             <div class="d-flex justify-content-between"> 
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                    {{-- <div class="dt-buttons btn-group flex-wrap mb-2">      
                                         <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
                                             <span><i class="fas fa-file-excel"></i> Excel</span>
                                         </button>
@@ -37,7 +37,7 @@
                                         <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
                                             <span><i class="fas fa-file-csv"></i> CSV</span>
                                         </button>  
-                                    </div> 
+                                    </div>  --}}
                                     <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#create_modal">
                                         <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Village</span>
                                     </button> 
@@ -62,24 +62,32 @@
                                         <th>Action</th>
                                         <th>S/N</th> 
                                         <th>Village</th>
-                                        <th>Status</th>  
+                                        <th>Union</th> 
+                                        <th>Upazilla</th> 
+                                        <th>District</th> 
+                                        <th>Division</th>     
                                     </tr>
                                 </thead>
                                 <tbody> 
+                                    @foreach($villages as $key => $item)
                                     <tr>
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>  
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('village.destroy',$item->id) }}')" >Delete</a>  
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>1</td>
-                                        <td>Dhaka</td>   
-                                        <th><span class="badge badge-label-success">Active</span></th> 
-                                    </tr>  
+                                        <td>{{$key+1}}</td>
+                                        <td>{{$item->name}}</td>  
+                                        <td>{{@$item->union->name}}</td>
+                                        <td>{{@$item->union->upazilla->name}}</td>
+                                        <td>{{@$item->union->upazilla->district->name}}</td>
+                                        <td>{{@$item->union->upazilla->district->division->name}}</td> 
+                                    </tr>   
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -100,75 +108,34 @@
             </div>
 
             <div class="modal-body">
-                <form action="">
+                <form action="{{route('village.store')}}" method="post"> 
+                    @csrf 
+                  <div class="row">
+                    @include('common.area', [
+                        'div'       => 'col-md-6',
+                        'mb'        => 'mb-3',
+                        'visible'   => ['division', 'district', 'upazila','union'],
+                        'required'  => ['division', 'district', 'upazila','union'],
+                    ])
+                  </div> 
 
                     <div class="form-group mb-2">
-                        <label for="division">Division <span class="text-danger">*</span></label>
-                        <select id="division" class="select2" search name="division" required> 
-                            <option value="">Select Division</option> 
-                            <option value="">Dhaka</option> 
-                            <option value="">Rangpur</option> 
-                            <option value="">Rajshahi</option>
-                            <option value="">Borisal</option>  
-                        </select> 
+                        <label for="word_no">Word No <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="word_no" name="word_no" placeholder="Enter Word No" required>
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="district">Districe <span class="text-danger">*</span></label>
-                        <select id="district" class="select2" search name="district" required> 
-                            <option value="">Select Districe</option> 
-                            <option value="">Dhaka</option> 
-                            <option value="">Rangpur</option> 
-                            <option value="">Rajshahi</option>
-                            <option value="">Borisal</option>  
-                        </select> 
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="thana">Thana / Upazila <span class="text-danger">*</span></label>
-                        <select id="thana" class="select2" search name="thana" required> 
-                            <option value="">Select Thana/Upazila</option> 
-                            <option value="">Dhaka</option> 
-                            <option value="">Rangpur</option> 
-                            <option value="">Rajshahi</option>
-                            <option value="">Borisal</option>  
-                        </select> 
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="union" class="form-label">Union</label>
-                        <select id="union" class="select2" name="union" search>
-                            <option value="">All Union</option> 
-                            <option value="">Mothorapur </option> 
-                            <option value="">Jabaripur</option> 
-                            <option value="">Badulgachhi</option> 
-                            <option value="">Akkelpur</option>
-                            <option value="">Sagorpur</option>  
-                        </select> 
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="union">Village <span class="text-danger">*</span></label>
+                        <label for="village">Village <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="village" name="village" placeholder="Enter Village" required>
                     </div>
-
-
-                    <div class="form-group mb-2">
-                        <label for="permission">Status <span class="text-danger">*</span></label>
-                        <select id="permission" class="select2" name="permission" required> 
-                            <option value="" selected>Active</option> 
-                            <option value="">Inactive</option> 
-                        </select> 
+                    
+                    <div class="modal-footer">
+                        <div class="text-end">
+                            <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                        </div> 
                     </div>
-
                 </form>
-            </div>
-
-            <div class="modal-footer">
-                <div class="text-end">
-                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-                </div> 
-            </div>
+            </div> 
 
             <!-- <div class="modal-footer"><button class="btn btn-primary">Submit</button> <button class="btn btn-outline-danger">Reset</button></div> -->
         </div>
