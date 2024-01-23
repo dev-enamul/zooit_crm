@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\CommissionDeductedSetting;
+use App\Models\NegotiationWaitingDay;
 use App\Models\TrainingCategory;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-    { 
+    {
         $this->call(UsersSeeder::class); 
         $this->call(CountriesSeeder::class); 
         $this->call(ProfessionsSeeder::class); 
@@ -34,5 +35,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ZoneSeeder::class); 
         $this->call(AreaSeeder::class); 
         $this->call(PermissionSeeder::class); 
+        $this->call(NegotiationWaitingDay::class);
     }
 }

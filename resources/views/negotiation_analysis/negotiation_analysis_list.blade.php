@@ -39,7 +39,10 @@
                                     </div> 
                                 </div>
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                    <div class="dt-buttons flex-wrap mb-2">     
+                                        <button class="btn btn-secondary mr-3" data-bs-toggle="modal" data-bs-target="#wayting_day_setting">
+                                            <span><i class="fas fa-cog"></i> Waiting Day</span>
+                                        </button>  
                                         <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button> 
@@ -95,7 +98,7 @@
     </div> 
     @include('includes.footer') 
 </div>
-
+ {{-- Modal ==================== --}}
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Filter Leads</h5>
@@ -256,12 +259,36 @@
 
         </div>
     </div>
-</div>
+</div> 
+
+<div class="modal fade" id="wayting_day_setting">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <h5 class="modal-title">Update Setting</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+            </div>
+            <form action=""> 
+                <div class="modal-body"> 
+                    <div class="form-group mb-2">
+                        <label for="waiting_day">Waiting Day<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="waiting_day" name="waiting_day" value="7" required>
+                    </div>   
+                </div>
+
+                <div class="modal-footer">
+                    <div class="text-end">
+                        <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                    </div> 
+                </div> 
+            </form>
+        </div>
+    </div>
+</div> 
 @endsection 
 
 @section('script')
 <script>
-    getDateRange('join_date'    );
+    getDateRange('join_date');
     getDateRange('last_cold_calling');
     getDateRange('possible_purchase_date');
     getDateRange('last_lead_date');
