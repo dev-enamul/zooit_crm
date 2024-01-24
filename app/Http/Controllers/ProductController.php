@@ -131,4 +131,8 @@ class ProductController extends Controller
     public function sold_unsold(){
         return view('product.sold_unsold');
     }
+
+    public function product_approve(){
+        return view('product.product_approve');
+    }
 }

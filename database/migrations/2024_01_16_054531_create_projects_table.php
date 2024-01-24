@@ -27,6 +27,7 @@ return new class extends Migration
              
 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->unsignedBigInteger('approved_by')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

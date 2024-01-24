@@ -87,6 +87,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::resource('unit', ProductUnitController::class);
         Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
         Route::post('product-save',[ProductController::class,'save'])->name('product.save');
+        Route::get('/product-approve',[ProductController::class,'product_approve'])->name('product.approve');
 
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class); 

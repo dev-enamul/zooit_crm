@@ -36,7 +36,9 @@
                         <li><a href="{{route('product.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products</a></li>  
                         
                         <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
-                        <li><a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a></li>                         
+                        <li><a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a></li>                        
+                        
+                        <li><a href="{{route('product.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Product Approve</a></li>
                     </ul>
                 </li>   
                 
