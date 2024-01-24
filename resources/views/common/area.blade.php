@@ -15,18 +15,18 @@
     <div class="{{ $div . ' ' . $mb }}">
         <label for="division" class="form-label">Division <span class="text-danger">{{ in_array('division', $required) ? '*' : '' }}</span></label>
         <select class="form-select select2" name="division" id="division" {{ in_array('division', $required) ? 'required' : '' }}>
-            <option data-display="Select a division {{ in_array('division', $required) ? '*' : '' }}" value="">
+            <option value="" data-display="Select a division {{ in_array('division', $required) ? '*' : '' }}">
                 Select a division {{ in_array('division', $required) ? '*' : '' }}
             </option>
             @isset($divisions)
                 @foreach ($divisions as $division)
-                    <option value="{{ $division->id }}" {{ isset($division_id) && $division_id == $division->id ? 'selected' : '' }}>
+                    <option value="{{ $division->id }}" {{ old('division', $selected['division_id'] ?? null) == $division->id ? 'selected' : '' }}>
                         {{ $division->name }}
                     </option>
                 @endforeach
             @endisset
         </select>
-
+        
         @if ($errors->has('division'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('division') }}
@@ -39,19 +39,18 @@
     <div class="{{ $div . ' ' . $mb }}">
         <label for="district" class="form-label">District <span class="text-danger">{{ in_array('district', $required) ? '*' : '' }}</span></label>
         <select class="form-select select2" name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
-            <option data-display="Select a district {{ in_array('district', $required) ? '*' : '' }}" value="">
+            <option value="" data-display="Select a district {{ in_array('district', $required) ? '*' : '' }}">
                 Select district {{ in_array('district', $required) ? '*' : '' }}
             </option>
             @isset($districts)
                 @foreach ($districts as $district)
-                    <option value="{{ $district->id }}" {{ isset($district_id) && $district_id == $district->id ? 'selected' : '' }}>
+                    <option value="{{ $district->id }}" {{ old('district', $selected['district_id'] ?? null) == $district->id ? 'selected' : '' }}>
                         {{ $district->name }}
                     </option>
                 @endforeach
             @endisset
         </select>
         
-
         @if ($errors->has('district'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('district') }}
@@ -64,18 +63,18 @@
     <div class="{{ $div . ' ' . $mb }}">
         <label for="upazila" class="form-label">Upazila <span class="text-danger">{{ in_array('upazila', $required) ? '*' : '' }}</span></label>
         <select class="form-select select2" name="upazila" id="upazila" {{ in_array('upazila', $required) ? 'required' : '' }}>
-            <option data-display="Select a upazila {{ in_array('upazila', $required) ? '*' : '' }}" value="">
-                Select a Upazila {{ in_array('upazila', $required) ? '*' : '' }}
+            <option value="" data-display="Select an Upazila {{ in_array('upazila', $required) ? '*' : '' }}">
+                Select an Upazila {{ in_array('upazila', $required) ? '*' : '' }}
             </option>
             @isset($upazilas)
                 @foreach ($upazilas as $upazila)
-                    <option value="{{ $upazila->id }}" {{ isset($upazila_id) && $upazila_id == $upazila->id ? 'selected' : '' }}>
+                    <option value="{{ $upazila->id }}" {{ old('upazila', $selected['upazila_id'] ?? null) == $upazila->id ? 'selected' : '' }}>
                         {{ $upazila->name }}
                     </option>
                 @endforeach
             @endisset
         </select>
-
+        
         @if ($errors->has('upazila'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('upazila') }}
@@ -88,18 +87,18 @@
     <div class="{{ $div . ' ' . $mb }}">
         <label for="union" class="form-label">Union <span class="text-danger">{{ in_array('union', $required) ? '*' : '' }}</span></label>
         <select class="form-select select2" name="union" id="union" {{ in_array('union', $required) ? 'required' : '' }}>
-            <option data-display="Select a union {{ in_array('union', $required) ? '*' : '' }}" value="">
+            <option value="" data-display="Select a Union {{ in_array('union', $required) ? '*' : '' }}">
                 Select a Union {{ in_array('union', $required) ? '*' : '' }}
             </option>
             @isset($unions)
                 @foreach ($unions as $union)
-                    <option value="{{ $union->id }}" {{ isset($union_id) && $union_id == $union->id ? 'selected' : '' }}>
+                    <option value="{{ $union->id }}" {{ old('union', $selected['union_id'] ?? null) == $union->id ? 'selected' : '' }}>
                         {{ $union->name }}
                     </option>
                 @endforeach
             @endisset
         </select>
-
+        
         @if ($errors->has('union'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('union') }}
@@ -112,18 +111,18 @@
     <div class="{{ $div . ' ' . $mb }}">
         <label for="village" class="form-label">Village <span class="text-danger">{{ in_array('village', $required) ? '*' : '' }}</span></label>
         <select class="form-select select2" name="village" id="village" {{ in_array('village', $required) ? 'required' : '' }}>
-            <option data-display="Select a village {{ in_array('village', $required) ? '*' : '' }}" value="">
+            <option value="" data-display="Select a Village {{ in_array('village', $required) ? '*' : '' }}">
                 Select a Village {{ in_array('village', $required) ? '*' : '' }}
             </option>
-            @isset($vilages)
+            @isset($villages)
                 @foreach ($villages as $village)
-                    <option value="{{ $village->id }}" {{ isset($village_id) && $village_id == $village->id ? 'selected' : '' }}>
+                    <option value="{{ $village->id }}" {{ old('village', $selected['village_id'] ?? null) == $village->id ? 'selected' : '' }}>
                         {{ $village->name }}
                     </option>
                 @endforeach
             @endisset
         </select>
-
+        
         @if ($errors->has('village'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('village') }}

@@ -42,10 +42,11 @@
                                 <form action="{{route('product.save',$product->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 <input type="hidden" name="id" value="{{$product->id}}">
                             @else 
-                                <form action="{{route('product.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('product.save')}}" method="POST" enctype="multipart/form-data" > 
                             @endif 
                                 @csrf
                                 <div class="row">
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
@@ -54,17 +55,18 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="image" class="form-label">Product Image</label>
-                                            <input type="file" name="image" id="image" class="form-control" value="{{ isset($product) && $product->images->isNotEmpty() ? $product->images->first()->name : old('image') }}">
+                                            <input type="file" name="image" id="image" class="form-control">
                                             @if (isset($product) && $product->images->isNotEmpty())
-                                                <img src="{{  asset('storage/' . $product->images->first()->name) }}" alt="" width="100" height="100">
+                                                <img src="{{ asset('storage/' . $product->images->first()->name) }}" alt="" width="100" height="100">
                                             @endif
                                         </div>
                                     </div>
-
+                                    
                                     <div class="col-md-6 mb-3">
                                         <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
                                         <select class="form-select" name="country" id="country" required>
@@ -73,13 +75,13 @@
                                             </option>
                                             @isset($countries)
                                                 @foreach ($countries as $country)
-                                                    <option value="{{ $country->id }}" {{ isset($product) && $product->country_id == $country->id ? 'selected' : '' }}>
+                                                    <option value="{{ $country->id }}" {{ old('country', isset($product) ? $product->country_id : null) == $country->id ? 'selected' : '' }}>
                                                         {{ $country->name }}
                                                     </option>
                                                 @endforeach
                                             @endisset
                                         </select>
-                                
+                                        
                                         @if ($errors->has('country'))
                                             <span class="text-danger" role="alert">
                                                 {{ $errors->first('country') }}
@@ -92,6 +94,7 @@
                                         'mb'        => 'mb-3',
                                         'visible'   => ['division', 'district', 'upazila','union','village'],
                                         'required'  => ['division', 'district', 'upazila','union','village'],
+                                        'selected'  => $selected ?? null,
                                     ])
 
                                     <div class="col-md-6">
@@ -120,7 +123,8 @@
                                             <label for="description" class="form-label">Description</label>
                                             <textarea class="form-control" id="description" rows="2" name="description">{{isset($product) ? $product->description : old('description')}}</textarea>
                                         </div>
-                                    </div> 
+                                    </div>
+                                     
                                 </div>
                                   
                                 <div>

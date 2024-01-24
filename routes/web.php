@@ -88,7 +88,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::resource('unit', ProductUnitController::class);
         Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
         Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
-        Route::post('product-save',[ProductController::class,'save'])->name('product.save');
+        Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
         Route::get('/product-approve',[ProductController::class,'product_approve'])->name('product.approve');
 
         // Freelancer 

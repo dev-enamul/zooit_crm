@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\District;
 use App\Models\Division;
 use App\Models\Project;
 use App\Models\ProjectImage;
+use App\Models\Union;
+use App\Models\Upazila;
 use App\Models\Village;
+use App\Traits\AreaTrait;
 use App\Traits\ImageUploadTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -18,6 +23,7 @@ use Yajra\DataTables\Facades\DataTables;
 class ProductController extends Controller
 {
     use ImageUploadTrait;
+    use AreaTrait;
 
     public function index(){
         $projects = Project::where('status',1)->select('id','name','address','total_floor')->get();
@@ -26,16 +32,19 @@ class ProductController extends Controller
 
     public function create(){
         $title     = "Product Create";
-        $divisions = Division::select('id', 'name')->get();
-        $countries = Country::select('id','name')->get();
-        $villages  = Village::select('id','name')->get();
-        return view('product.product_save', compact('divisions', 'countries', 'villages', 'title'));
+        $countries = $this->getCachedCountries();
+        $divisions = $this->getCachedDivisions();
+        $districts = $this->getCachedDistricts();
+        $upazilas  = $this->getCachedUpazilas();
+        $unions    = $this->getCachedUnions();
+        $villages  = $this->getCachedVillages();
+        return view('product.product_save', compact('title','countries','divisions','districts','upazilas','unions','villages'));
     }
 
     public function save(Request $request, $id = null)
     { 
         $validator = Validator::make($request->all(), [
-            'name'          => 'required|max:190',
+            'name'          => 'required|numeric|max:190',
             'country'       => 'required|exists:countries,id',
             'division'      => 'required|exists:divisions,id',
             'district'      => 'required|exists:districts,id',
@@ -50,14 +59,12 @@ class ProductController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
         }
-    
 
         $user_id = Auth::user()->id;
 
         if (!empty($id)) {
-            dd($request->all());
 
             $info = Project::find($id);
 
@@ -132,16 +139,24 @@ class ProductController extends Controller
     }
 
     public function edit($id){
-        $title     = "Product Edit";
-        $divisions = Division::select('id', 'name')->get();
-        $countries = Country::select('id','name')->get();
-        $villages  = Village::select('id','name')->get();
-        $product   = Project::find($id);
-        return view('product.product_save', compact('divisions', 'countries', 'villages', 'title', 'product'));
+        $title      = "Product Edit";
+        $countries = $this->getCachedCountries();
+        $divisions = $this->getCachedDivisions();
+        $districts = $this->getCachedDistricts();
+        $upazilas  = $this->getCachedUpazilas();
+        $unions    = $this->getCachedUnions();
+        $villages  = $this->getCachedVillages();
+
+        $product    = Project::find($id);
+
+        $selected['country_id']   = $product->country_id;
+        $selected['division_id']  = $product->division_id;
+        $selected['district_id']  = $product->district_id;
+        $selected['upazila_id']   = $product->upazila_id;
+        $selected['union_id']     = $product->union_id;
+        $selected['village_id']   = $product->village_id;
+        return view('product.product_save', compact('title','countries','divisions','districts','upazilas','unions', 'villages','product','selected'));
     }
-
-
-
 
     public function sold_unsold(){
         return view('product.sold_unsold');

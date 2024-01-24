@@ -74,26 +74,25 @@
     @yield('script')
 
     <script> 
- 
         @if(session('success')) 
-            Toast.fire({ icon: "success", title: '{{ session('success') }}'}); 
+            Toast.fire({ icon: "success", title: '{{ session('success') }}' }); 
         @endif  
 
         @if(session('error'))
-            Toast.fire({ icon: "error", title: '{{ session('success') }}' }); 
+            Toast.fire({ icon: "error", title: '{{ session('error') }}' }); 
         @endif 
 
         @if(session('failed'))
-            Toast.fire({ icon: "error", title: '{{ session('success') }}' }); 
+            Toast.fire({ icon: "error", title: '{{ session('failed') }}' }); 
         @endif 
 
         @if(session('info'))
-            Toast.fire({ icon: "info", title: '{{ session('success') }}' }); 
+            Toast.fire({ icon: "info", title: '{{ session('info') }}' }); 
         @endif
 
         @if(session('warning'))
-            Toast.fire({ icon: "warning", title: '{{ session('success') }}' }); 
-        @endif    
+            Toast.fire({ icon: "warning", title: '{{ session('warning') }}' }); 
+        @endif
     </script>
 </body>
  

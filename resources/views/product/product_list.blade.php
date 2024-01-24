@@ -48,7 +48,7 @@
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="../assets/images/users/avatar-6.png" alt="Header Avatar">
+                                                    <img class="rounded avatar-2xs p-0" src="{{ isset($project->images) && $project->images->isNotEmpty() ? asset('storage/' . $project->images->first()->name) : asset('../assets/images/users/avatar-6.png') }}" alt="Header Avatar">
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('product.edit',$project->id)}}">Edit</a>
