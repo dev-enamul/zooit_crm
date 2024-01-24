@@ -14,12 +14,10 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Product List</h4> 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Product List</li>
-                            </ol>
-                        </div>
-
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -28,16 +26,7 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
-                               <div class=""> </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
+                          
                            
                             <table id="book_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
@@ -135,7 +124,7 @@
                         }
                     }
                 ]
-            });
+            }); 
         });
     </script>
 @endsection

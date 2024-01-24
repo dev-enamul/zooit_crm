@@ -4,8 +4,7 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-
-            <!-- start page title -->
+ 
             <div class="row">
                 <div class="col-12"> 
                     <div class="text-center">
@@ -14,10 +13,7 @@
                         <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
                     </div>
                 </div>
-            </div>
-            <!-- end page title -->
-
-         
+            </div>  
 
             <div class="row">
                 <div class="col-12">
@@ -31,7 +27,7 @@
                                         </button>
         
                                         <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
+                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
                                         </button> 
                                     </div> 
                                 </div>
@@ -73,101 +69,81 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
-                                        <td>ED</td>
-                                        <td>৳217</td>
-                                        <td>৳532</td>
-                                        <td>৳434</td>
-                                        <td>৳217</td>
-                                        <td>৳976</td>
-                                        <td>৳433</td>
-                                        <td>৳434</td>
-                                        <td>৳7565</td> 
-                                        <td>৳987</td>
-                                        <td>৳655</td>
-                                        <td>৳7565</td>
-                                        <td>৳65554</td>
-                                        <td>৳34655</td>
-                                        <td>10%</td>
-                                        <td>৳655</td>
+                                    <tr class="">
+                                        <td style="white-space: nowrap;"><a href="{{route('mst.commission.details',1)}}">Ms. Aisha Khan[E-12]</a></td>
+                                        <td>Manager</td>
+                                        <td>৳325</td>
+                                        <td>৳742</td>
+                                        <td>৳598</td>
+                                        <td>৳325</td>
+                                        <td>৳1200</td>
+                                        <td>৳576</td>
+                                        <td>৳567</td>
+                                        <td>৳8900</td>
+                                        <td>৳1200</td>
+                                        <td>৳900</td>
+                                        <td>৳8900</td>
+                                        <td>৳76543</td>
+                                        <td>৳54321</td>
+                                        <td>8%</td>
+                                        <td>৳432</td>
+                                        <td>৳100</td>
+                                        <td>৳332</td>
+                                        <td>75%</td>
                                         <td>-</td>
-                                        <td>৳655</td>
+                                    </tr>
+                                    
+                                    <tr class="">
+                                        <td style="white-space: nowrap;"><a href="#">Mr. John Doe[E-15]</a></td>
+                                        <td>Supervisor</td>
+                                        <td>৳420</td>
+                                        <td>৳600</td>
+                                        <td>৳700</td>
+                                        <td>৳320</td>
+                                        <td>৳1100</td>
+                                        <td>৳500</td>
+                                        <td>৳400</td>
+                                        <td>৳7500</td>
+                                        <td>৳900</td>
+                                        <td>৳800</td>
+                                        <td>৳7500</td>
+                                        <td>৳65432</td>
+                                        <td>৳43210</td>
+                                        <td>7%</td>
+                                        <td>৳400</td>
+                                        <td>৳80</td>
+                                        <td>৳320</td>
+                                        <td>80%</td>
+                                        <td>-</td>
+                                    </tr>
+                                    
+                                    <!-- Add 8 more rows with different data for each row -->
+                                    
+                                    <tr class="">
+                                        <td style="white-space: nowrap;"><a href="#">Ms. Sarah Smith[E-18]</a></td>
+                                        <td>Sales Associate</td>
+                                        <td>৳300</td>
+                                        <td>৳800</td>
+                                        <td>৳500</td>
+                                        <td>৳200</td>
+                                        <td>৳900</td>
+                                        <td>৳300</td>
+                                        <td>৳600</td>
+                                        <td>৳6500</td>
+                                        <td>৳800</td>
+                                        <td>৳700</td>
+                                        <td>৳6500</td>
+                                        <td>৳54321</td>
+                                        <td>৳32109</td>
+                                        <td>9%</td>
+                                        <td>৳300</td>
+                                        <td>৳50</td>
+                                        <td>৳250</td>
                                         <td>90%</td>
                                         <td>-</td>
-                                        
-                                    </tr> 
-                                    <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
-                                        <td>ED</td>
-                                        <td>৳217</td>
-                                        <td>৳532</td>
-                                        <td>৳434</td>
-                                        <td>৳217</td>
-                                        <td>৳976</td>
-                                        <td>৳433</td>
-                                        <td>৳434</td>
-                                        <td>৳7565</td> 
-                                        <td>৳987</td>
-                                        <td>৳655</td>
-                                        <td>৳7565</td>
-                                        <td>৳65554</td>
-                                        <td>৳34655</td>
-                                        <td>10%</td>
-                                        <td>৳655</td>
-                                        <td>-</td>
-                                        <td>৳655</td>
-                                        <td>90%</td>
-                                        <td>-</td>
-                                        
-                                    </tr> 
-                                    <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
-                                        <td>ED</td>
-                                        <td>৳217</td>
-                                        <td>৳532</td>
-                                        <td>৳434</td>
-                                        <td>৳217</td>
-                                        <td>৳976</td>
-                                        <td>৳433</td>
-                                        <td>৳434</td>
-                                        <td>৳7565</td> 
-                                        <td>৳987</td>
-                                        <td>৳655</td>
-                                        <td>৳7565</td>
-                                        <td>৳65554</td>
-                                        <td>৳34655</td>
-                                        <td>10%</td>
-                                        <td>৳655</td>
-                                        <td>-</td>
-                                        <td>৳655</td>
-                                        <td>90%</td>
-                                        <td>-</td>
-                                        
-                                    </tr> 
-                                    <tr class=""> 
-                                        <td style="white-space: nowrap;">Mr. Mahbubur Rahman[E-07]</td>
-                                        <td>ED</td>
-                                        <td>৳217</td>
-                                        <td>৳532</td>
-                                        <td>৳434</td>
-                                        <td>৳217</td>
-                                        <td>৳976</td>
-                                        <td>৳433</td>
-                                        <td>৳434</td>
-                                        <td>৳7565</td> 
-                                        <td>৳987</td>
-                                        <td>৳655</td>
-                                        <td>৳7565</td>
-                                        <td>৳65554</td>
-                                        <td>৳34655</td>
-                                        <td>10%</td>
-                                        <td>৳655</td>
-                                        <td>-</td>
-                                        <td>৳655</td>
-                                        <td>90%</td>
-                                        <td>-</td> 
-                                    </tr> 
+                                    </tr>
+                                    
+                                    
                                     <tr class=""> 
                                         <td colspan="2">Total</td> 
                                         <td>৳217</td>

@@ -286,6 +286,121 @@ a{
 }
 
 
+
+.buttons-excel {
+    color: #fff !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+  
+  .buttons-excel:hover {
+    color: #fff;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+  
+  .buttons-excel:focus,
+  .buttons-excel.focus {
+    box-shadow: 0 0 0 0.2rem var(--primary-hover) !important;
+  }
+  
+  .buttons-excel.disabled,
+  .buttons-excel:disabled {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+  
+  .buttons-excel:not(:disabled):not(.disabled):active,
+  .buttons-excel:not(:disabled):not(.disabled).active,
+  .show > .buttons-excel.dropdown-toggle {
+    color: #fff !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+  
+  .buttons-excel:not(:disabled):not(.disabled):active:focus,
+  .buttons-excel:not(:disabled):not(.disabled).active:focus,
+  .show > .buttons-excel.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem var(--primary-hover) !important;
+  }
+
+
+  .buttons-csv {
+    color: #fff !important;
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-csv:hover {
+    color: #fff;
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-csv:focus,
+  .buttons-csv.focus {
+    box-shadow: 0 0 0 0.2rem var(--secondary-hover) !important;
+  }
+  
+  .buttons-csv.disabled,
+  .buttons-csv:disabled {
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-csv:not(:disabled):not(.disabled):active,
+  .buttons-csv:not(:disabled):not(.disabled).active,
+  .show > .buttons-csv.dropdown-toggle {
+    color: #fff !important;
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-csv:not(:disabled):not(.disabled):active:focus,
+  .buttons-csv:not(:disabled):not(.disabled).active:focus,
+  .show > .buttons-csv.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem var(--secondary-hover) !important;
+  }
+
+
+  .buttons-pdf {
+    color: #fff !important;
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-pdf:hover {
+    color: #fff;
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-pdf:focus,
+  .buttons-pdf.focus {
+    box-shadow: 0 0 0 0.2rem var(--secondary-hover) !important;
+  }
+  
+  .buttons-pdf.disabled,
+  .buttons-pdf:disabled {
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-pdf:not(:disabled):not(.disabled):active,
+  .buttons-pdf:not(:disabled):not(.disabled).active,
+  .show > .buttons-pdf.dropdown-toggle {
+    color: #fff !important;
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+  }
+  
+  .buttons-pdf:not(:disabled):not(.disabled):active:focus,
+  .buttons-pdf:not(:disabled):not(.disabled).active:focus,
+  .show > .buttons-pdf.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem var(--secondary-hover) !important;
+  }
+
+
    
  
  

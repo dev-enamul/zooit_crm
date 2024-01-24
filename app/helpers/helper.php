@@ -1,9 +1,7 @@
  <?php  
 
 use Illuminate\Support\Str;
-
-
-// Unique Slug Generate Function 
+ 
 if (!function_exists('getSlug')) {
     function getSlug($model, $title, $column = 'slug', $separator = '-')
     {
@@ -17,5 +15,25 @@ if (!function_exists('getSlug')) {
         }
 
         return $slug;
+    }
+}
+
+if (!function_exists('get_date')) {
+    function get_date($inputDate, $format = 'j M, Y')
+    { 
+        $timestamp = strtotime($inputDate);
+ 
+        if ($timestamp === false || $timestamp < 0) {
+            return '';  
+        }
+
+        return date($format, $timestamp);
+    }
+}
+
+if (!function_exists('get_price')) {
+    function get_price($amount,$decimal = 0)
+    { 
+        return '৳' . number_format($amount,$decimal);
     }
 }

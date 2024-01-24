@@ -176,9 +176,10 @@ Route::group(['middleware' => 'auth'],function () {
 
 
         //Reports 
-        Route::get('salse-commission-summary',[CommissionReportController::class,'salse_comission_summary'])->name('salse.commission.summery');
         Route::get('monthly-target-achive',[CommissionReportController::class,'monthly_target_achive'])->name('monthly.target.achive');
-        Route::get('area-wise-commission',[CommissionReportController::class,'area_wise_commission'])->name('area.wise.commission');
+        Route::get('mst-commission',[CommissionReportController::class,'mst_commission'])->name('mst.commission');
+        Route::get('mst-commission-details/{id}',[CommissionReportController::class,'mst_commission_details'])->name('mst.commission.details');
+        Route::get('rsa-co-ordinator',[CommissionReportController::class,'rsa_co_ordinator'])->name('rsa.co.ordinator');
         
 
         Route::get('dt-achivement',[DtaReportController::class,'dt_achivement'])->name('dt.achivement');

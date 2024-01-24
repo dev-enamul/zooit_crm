@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('approve_by')->nullable();
             $table->foreign('approve_by')->references('id')->on('users'); 
             
-            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->tinyInteger('status')->default(1)->comment('1= Complete, 0= UnComplete');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

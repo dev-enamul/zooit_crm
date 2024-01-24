@@ -73,7 +73,8 @@
     <script src="{{asset('assets/js/app.js')}}"></script> 
     @yield('script')
 
-    <script>
+    <script> 
+ 
         @if(session('success')) 
             Toast.fire({ icon: "success", title: '{{ session('success') }}'}); 
         @endif  

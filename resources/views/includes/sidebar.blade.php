@@ -274,14 +274,21 @@
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-chart-bar"></i>
-                        <span>Commission Report</span>
+                        <span>MST Commission</span>
                     </a> 
                     <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('salse.commission.summery')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Designation Wise Comission</a></li> 
-                        <li><a href="{{route('area.wise.commission')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Area Wise Commission</a></li> 
                         <li><a href="{{route('monthly.target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Monthly TA</a></li> 
-                        {{-- <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>RSA Commission</a></li> --}}
-      
+                        <li><a href="{{route('mst.commission')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>MST Commission</a></li> 
+                    </ul>
+                </li> 
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-chart-bar"></i>
+                        <span>FL Commission</span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false">  
+                        <li><a href="{{route('rsa.co.ordinator')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>RSA & Co-Ordinator</a></li> 
                     </ul>
                 </li> 
                 
