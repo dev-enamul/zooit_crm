@@ -9,7 +9,7 @@ class ProjectUnit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'floor', 'description', 'project_id', 'unit_categorie_id', 'unit_id', 'status', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['name', 'floor', 'description', 'project_id', 'unit_category_id', 'unit_id', 'status', 'created_by', 'updated_by', 'deleted_by'];
 
     public function project()
     {
@@ -18,7 +18,7 @@ class ProjectUnit extends Model
 
     public function unitCategory()
     {
-        return $this->belongsTo(UnitCategory::class, 'unit_categorie_id');
+        return $this->belongsTo(UnitCategory::class, 'unit_category_id');
     }
 
     public function unit()

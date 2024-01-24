@@ -44,7 +44,7 @@ class ProductController extends Controller
     public function save(Request $request, $id = null)
     { 
         $validator = Validator::make($request->all(), [
-            'name'          => 'required|numeric|max:190',
+            'name'          => 'required|string|max:190',
             'country'       => 'required|exists:countries,id',
             'division'      => 'required|exists:divisions,id',
             'district'      => 'required|exists:districts,id',
@@ -123,12 +123,13 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             $project = Project::create($data);
-             if ($request->hasFile('image')) {
-                        $p_images = new ProjectImage();
-                        $p_images->project_id = $project->id;
-                        $p_images->name =   $this->uploadImage($request, 'image', 'projects', 'public'); 
-                        $p_images->save();
-                    }
+            
+            if ($request->hasFile('image')) {
+                $p_images = new ProjectImage();
+                $p_images->project_id = $project->id;
+                $p_images->name =   $this->uploadImage($request, 'image', 'projects', 'public'); 
+                $p_images->save();
+            }
             DB::commit();
             
             return redirect()->route('product.index')->with('success', 'Project created successfully');

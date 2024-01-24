@@ -84,13 +84,16 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('employees/tree',[EmployeeController::class,'tree'])->name('employees.tree');
 
         // Product 
+      
         Route::resource('product', ProductController::class);  
-        Route::resource('unit', ProductUnitController::class);
         Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
         Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
         Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
         Route::get('/product-approve',[ProductController::class,'product_approve'])->name('product.approve');
-
+        
+        Route::resource('unit', ProductUnitController::class);
+        Route::post('unit-save/{id?}',[ProductUnitController::class,'save'])->name('unit.save');
+        
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class); 
         Route::get('freelancer-profile',[FreelancerProfileController::class,'freelancer_profile'])->name('freelancer.profile');

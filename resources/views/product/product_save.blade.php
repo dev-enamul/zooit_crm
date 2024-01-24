@@ -42,7 +42,7 @@
                                 <form action="{{route('product.save',$product->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 <input type="hidden" name="id" value="{{$product->id}}">
                             @else 
-                                <form action="{{route('product.save')}}" method="POST" enctype="multipart/form-data" > 
+                                <form action="{{route('product.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
                                 <div class="row">

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('floor');
             $table->string('description')->nullable();
             $table->foreignId('project_id')->constrained();
-            $table->foreignId('unit_categorie_id')->constrained();
+            $table->foreignId('unit_category_id')->constrained();
             $table->foreignId('unit_id')->constrained(); 
 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
