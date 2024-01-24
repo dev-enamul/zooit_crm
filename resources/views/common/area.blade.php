@@ -112,14 +112,13 @@
     <div class="{{ $div . ' ' . $mb }}">
         <label for="village" class="form-label">Village <span class="text-danger">{{ in_array('village', $required) ? '*' : '' }}</span></label>
         <select class="form-select select2" name="village" id="village" {{ in_array('village', $required) ? 'required' : '' }}>
-            <option data-display="Select a village {{ in_array('village', $required) ? '*' : '' }}"
-                    value="">
+            <option data-display="Select a village {{ in_array('village', $required) ? '*' : '' }}" value="">
                 Select a Village {{ in_array('village', $required) ? '*' : '' }}
             </option>
-            @isset($villages)
+            @isset($vilages)
                 @foreach ($villages as $village)
-                    <option value="{{ $village }}" {{ isset($village_id) && $village_id == $village ? 'selected' : '' }}>
-                        {{ $village }}
+                    <option value="{{ $village->id }}" {{ isset($village_id) && $village_id == $village->id ? 'selected' : '' }}>
+                        {{ $village->name }}
                     </option>
                 @endforeach
             @endisset
@@ -256,6 +255,49 @@
                         $('#union').trigger('change');
 
                         $('#union').select2({
+                        minimumResultsForSearch: Infinity
+                        });
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                    },
+                });
+            });
+
+            $("#union").on("change", function() {
+                var url = $("#url").val();
+                var formData = {
+                    id: $(this).val(),
+                };
+                // get village
+                $.ajax({
+                    type: "GET",
+                    data: formData,
+                    dataType: "json",
+                    url: "{{ route('union-get-village') }}",
+
+                    success: function(data) {
+                        $("#village").empty().append(
+                            $("<option>", {
+                                value: '',
+                                text: 'Select village',
+                            })
+                        );
+
+                        if (data.length) {
+                            $.each(data, function(i, village) {
+                                $("#village").append(
+                                    $("<option>", {
+                                        value: village.id,
+                                        text: village.name,
+                                    })
+                                );
+                            });
+                        }
+
+                        $('#village').trigger('change');
+
+                        $('#village').select2({
                         minimumResultsForSearch: Infinity
                         });
                     },

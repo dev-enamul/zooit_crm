@@ -72,6 +72,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('division-get-district',[AreaController::class,'divisionGetDistrict'])->name('division-get-district');
         Route::get('district-get-upazila',[AreaController::class,'districtGetUpazila'])->name('district-get-upazila');
         Route::get('upazila-get-union',[AreaController::class,'upazilaGetUnion'])->name('upazila-get-union');
+        Route::get('union-get-village',[AreaController::class,'unionGetVillage'])->name('union-get-village');
 
         // Profile 
         Route::get('profile',[ProfileController::class,'index'])->name('profile');
@@ -85,6 +86,7 @@ Route::group(['middleware' => 'auth'],function () {
         // Product 
         Route::resource('product', ProductController::class);  
         Route::resource('unit', ProductUnitController::class);
+        Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
         Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
         Route::post('product-save',[ProductController::class,'save'])->name('product.save');
         Route::get('/product-approve',[ProductController::class,'product_approve'])->name('product.approve');
