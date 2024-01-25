@@ -20,8 +20,10 @@ class ProductUnitController extends Controller
      */
     public function index()
     {
-        $products = Project::select('id','name')->get();
-        return view('product.unit',compact('products'));
+        $projectUnits = ProjectUnit::where('status', 1)
+                        ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
+                        ->get(['id','name','project_id','unit_id','unit_category_id']);        
+        return view('product.unit',compact('projectUnits'));
     }
 
     public function create()
@@ -36,33 +38,30 @@ class ProductUnitController extends Controller
 
     public function save(Request $request, $id = null)
     {
-        dd($request->all()); 
-
         $validator = Validator::make($request->all(), [
             'project'           => 'required|exists:projects,id',
-            'name'              => 'required|string|max:190',
+            'name'              => 'required|numeric|max:190',
             'floor'             => 'required|numeric',
             'unit'              => 'required|exists:units,id',
             'category'          => 'required|exists:unit_categories,id',
             'description'       => 'nullable|string|max:5000',
-            'lottery_price'     => 'required|numeric',
-            'on_choice_price'   => 'required|numeric',
-            'payment_duration'  => 'required|numeric',
+            'lottery_price.*'   => 'required|numeric',
+            'on_choice_price.*' => 'required|numeric',
+            'payment_duration.*'=> 'required|numeric',
         ]);
         
         if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $user_id = Auth::user()->id;
 
         if (!empty($id)) {
-
             $info = ProjectUnit::find($id);
 
             if (!empty($info)){
                 $info->name             = $request->project;
-                $info->floor            = $request->total_floor;
+                $info->floor            = $request->floor;
                 $info->project_id       = $request->project;
                 $info->unit_category_id = $request->category;
                 $info->unit_id          = $request->unit;
@@ -74,34 +73,36 @@ class ProductUnitController extends Controller
                     $info->save();
 
                     if ($info) {
-                        $unit_price = UnitPrice::find($info->id);
-                        $unit_price->project_unit_id    = $info->id;
-                        $unit_price->payment_duration   = $request->payment_duration;
-                        $unit_price->lottery_price      = $request->lottery_price;
-                        $unit_price->on_choice_price    = $request->on_choice_price;
-                        $unit_price->status             = 1;
-                        $unit_price->updated_at         = now();
-                        $unit_price->save();
+                        foreach ($request->payment_duration as $key => $value) {
+                            $unit_price = new UnitPrice();
+                            $unit_price->project_unit_id = $info->id;
+                            $unit_price->payment_duration = $request->payment_duration[$key];
+                            $unit_price->lottery_price = $request->lottery_price[$key];
+                            $unit_price->on_choice_price = $request->on_choice_price[$key];
+                            $unit_price->status = 1;
+                            $unit_price->updated_at = now();
+                            $unit_price->save();
+                        }
                     }
                     DB::commit();
-                    return redirect()->route('product.index')->with('success', 'Project updated successfully');
+                    return response()->json(['success' => 'Unit updated successfully']);
                 } catch (Exception $e) {
                     DB::rollback();
-                    return redirect()->back()->withInput()->with('error', $e->getMessage());
+                    return response()->json(['error' => $e->getMessage()], 422);
                 }
             }
             else{
-                return  redirect()->back('error', 'Project not found');
+                return response()->json(['error' => 'Unit not found'], 422);
             }
         }
 
         $data = [
             'name'              => $request->name,
-            'floor'             => $request->total_floor,
-            'project_id'        => $request->google_map,
-            'unit_category_id'  => $request->address,
-            'unit_id'           => $request->description,
-            'description'       => $request->country,
+            'floor'             => $request->floor,
+            'project_id'        => $request->project,
+            'unit_category_id'  => $request->category,
+            'unit_id'           => $request->unit,
+            'description'       => $request->description,
             'status'            => 1,
             'created_by'        => $user_id,
         ];
@@ -110,20 +111,20 @@ class ProductUnitController extends Controller
         try {
             $project_unit = ProjectUnit::create($data);
 
-            $unit_price = UnitPrice::find($project_unit->id);
-                $unit_price->project_unit_id    = $project_unit->id;
-                $unit_price->payment_duration   = $request->payment_duration;
-                $unit_price->lottery_price      = $request->lottery_price;
-                $unit_price->on_choice_price    = $request->on_choice_price;
-                $unit_price->status             = 1;
-                $unit_price->updated_at         = now();
+            foreach ($request->payment_duration as $key => $value) {
+                $unit_price = new UnitPrice();
+                $unit_price->project_unit_id = $project_unit->id;
+                $unit_price->payment_duration = $request->payment_duration[$key];
+                $unit_price->lottery_price = $request->lottery_price[$key];
+                $unit_price->on_choice_price = $request->on_choice_price[$key];
+                $unit_price->updated_at = now();
                 $unit_price->save();
+            }
             DB::commit();
-            
-            return redirect()->route('unit.index')->with('success', 'Project created successfully');
+            return response()->json(['success' => 'Unit created successfully']);
         } catch (Exception $e) {
             DB::rollback();
-            return redirect()->back()->withInput()->with('error', $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 422);
         }
     }
 

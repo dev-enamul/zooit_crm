@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Product Create')
+@section('title','Product List')
 @section('style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">

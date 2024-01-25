@@ -38,23 +38,18 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            @if(isset($unit))
-                                <form action="{{route('unit.save',$product->id)}}" method="POST" class="needs-validation" novalidate> 
-                                <input type="hidden" name="id" value="{{$product->id}}">
-                            @else 
-                                <form action="{{route('unit.save')}}" method="POST" class="needs-validation" novalidate> 
-                            @endif 
+                            <form id="unitSave" action="{{ isset($unit) ? route('unit.save', $unit->id) : route('unit.save') }}" method="POST" >
                                 @csrf                                 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Product <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="project" id="project" required>
+                                        <select class="form-select reset-data" name="project" id="project" required>
                                             <option data-display="Select a product *" value="">
                                                 Select a Product
                                             </option>
                                             @isset($products)
                                                 @foreach ($products as $product)
-                                                    <option value="{{ $product->id }}" {{ old('product', isset($product) ? $product->country_id : null) == $product->id ? 'selected' : '' }}>
+                                                    <option value="{{ $product->id }}" {{ old('project', isset($product) ? $product->country_id : null) == $product->id ? 'selected' : '' }}>
                                                         {{ $product->name }}
                                                     </option>
                                                 @endforeach
@@ -71,7 +66,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_name" class="form-label">Unit Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="name" class="form-control" id="unit_name" placeholder="Unit name" value="{{ isset($unit) ? $unit->name : old('name')}}" required>
+                                            <input type="text" name="name" class="form-control reset-data" id="unit_name" placeholder="Unit name" value="{{ isset($unit) ? $unit->name : old('name')}}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -81,24 +76,23 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="floor" class="form-label">Floor Number <span class="text-danger">*</span></label>
-                                            <input type="text" name="floor" class="form-control" id="floor" placeholder="Floor number" value="{{ isset($unit) ? $unit->floor : old('floor')}}" required>
+                                            <input type="text" name="floor" class="form-control reset-data" id="floor" placeholder="Floor number" value="{{ isset($unit) ? $unit->floor : old('floor')}}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
                                     </div>
  
-
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Unit Type <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="unit" id="unit" required>
+                                        <select class="form-select reset-data" name="unit" id="unit" required>
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
                                                     <option value="{{ $unit->id }}" {{ old('unit', isset($unit) ? $unit->unit_id : null) == $unit->id ? 'selected' : '' }}>
-                                                        {{ $unit->unit }}
+                                                        {{ $unit->title }}
                                                     </option>
                                                 @endforeach
                                             @endisset
@@ -113,14 +107,14 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label for="category" class="form-label">Unit Category Type <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="category" id="category" required>
+                                        <select class="form-select reset-data" name="category" id="category" required>
                                             <option data-display="Select a category *" value="">
                                                 Select a category
                                             </option>
                                             @isset($categories)
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}" {{ old('unit', isset($category) ? $category->unit_category_id : null) == $category->id ? 'selected' : '' }}>
-                                                        {{ $category->unitCategory }}
+                                                        {{ $category->title }}
                                                     </option>
                                                 @endforeach
                                             @endisset
@@ -132,67 +126,130 @@
                                             </span>
                                         @endif
                                     </div> 
- 
 
                                     <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="payment_duration" class="form-label">Payment Duration Month<span class="text-danger">*</span></label>
-                                            <input type="number" name="payment_duration" class="form-control" id="payment_duration" placeholder="Payment Duration Month" value="{{ isset($unit) ? $unit->payment_duration : old('payment_duration')}}" required>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="on_choice_price" class="form-label">On Choice  Price<span class="text-danger">*</span></label>
-                                            <input type="number" name="on_choice_price" class="form-control" id="on_choice_price" placeholder="On Choice Price" value="{{ isset($unit) ? $unit->on_choice_price : old('on_choice_price')}}" required>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="lottery_price" class="form-label">Lottery Select Price<span class="text-danger">*</span></label>
-                                            <input type="number" name="lottery_price" class="form-control" id="lottery_price" placeholder="Lotter Select Price" value="{{ isset($unit) ? $unit->lottery_price : old('lottery_price')}}" required>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div> 
-
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" type="button">+</button>
-                                    </div>
-
-                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="description" class="form-label">Description</label>
-                                            <textarea class="form-control" id="description" rows="2" name="description">{{isset($unit) ? $unit->description : old('description')}}</textarea>
+                                            <textarea class="form-control reset-data" id="description" rows="2" name="description">{{ old('description', isset($unit) ? $unit->description : '') }}</textarea>
                                         </div>
                                     </div>
-
                                     
-                                </div>
-                                  
-                                <div>
-                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                    <div class="container" id="unit_prices">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="payment_duration[]" class="form-label">Payment Duration Month<span class="text-danger">*</span></label>
+                                                    <input type="number" name="payment_duration[]" class="form-control reset-data" placeholder="Payment Duration Month" required value="{{ old('payment_duration.0') }}">
+                                                    <div class="invalid-feedback">
+                                                        This field is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="on_choice_price[]" class="form-label">On Choice Price<span class="text-danger">*</span></label>
+                                                    <input type="number" name="on_choice_price[]" class="form-control reset-data" placeholder="On Choice Price" required value="{{ old('on_choice_price.0') }}">
+                                                    <div class="invalid-feedback">
+                                                        This field is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="lottery_price[]" class="form-label">Lottery Select Price<span class="text-danger">*</span></label>
+                                                    <input type="number" name="lottery_price[]" class="form-control reset-data" placeholder="Lottery Select Price" required value="{{ old('lottery_price.0') }}">
+                                                    <div class="invalid-feedback">
+                                                        This field is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="text-center">
+                                                <button class="btn btn-primary add-row" type="button">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div> 
                 </div>
-                <!-- end col -->
-
             </div>
-            <!-- end row -->
-        </div> <!-- container-fluid -->
+        </div>
     </div>
-
-   @include('includes.footer')
-
+    @include('includes.footer')
 </div>
-@endsection 
  
+@section('script')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $(document).on("click", ".add-row", function() {
+                var newRow = $("<div class='row'></div>");
+                var cols = "";
+    
+                cols += "<div class='col-md-4'><input type='number' name='payment_duration[]' class='form-control reset-data' placeholder='Payment Duration Month' required value='{{ old('payment_duration.*') }}'></div>";
+                cols += "<div class='col-md-4'><input type='number' name='on_choice_price[]' class='form-control reset-data' placeholder='On Choice Price' required value='{{ old('on_choice_price.*') }}'></div>";
+                cols += "<div class='col-md-4'><input type='number' name='lottery_price[]' class='form-control reset-data' placeholder='Lottery Select Price' required value='{{ old('lottery_price.*') }}'></div>";
+                cols += "<div class='text-center'><button class='btn btn-danger remove-row' type='button'>-</button></div>";
+    
+                newRow.append(cols);
+                $(".container .row:last-child").after(newRow);
+            });
+    
+            $("#unitSave").submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: formData,
+                    success: function(response) {
+                        toastr.success(response.message);
+                        resetData();
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            updateUnitPrice(errors);
+    
+                            $.each(errors, function(key, value) {
+                                toastr.error(value[0]);
+                            });
+                        } else {
+                            console.error(xhr.responseText);
+                            toastr.error('An error occurred. Please try again.');
+                        }
+                    }
+                });
+            });
+    
+            $(".container").on("click", ".remove-row", function() {
+                $(this).closest(".row").remove();
+            });
+    
+            function resetData() {
+                $(".reset-data").val('');
+            }
+    
+            function updateUnitPrice(errors) {
+                $.each(errors, function(key, value) {
+                    var inputName = key.replace('[]', '');
+                    $("#unit_prices input[name='" + inputName + "']").each(function() {
+                        $(this).addClass('is-invalid').next('.invalid-feedback').text(value[0]);
+                    });
+                });
+            }
+        });
+    </script>
+ @endsection

@@ -13,16 +13,16 @@ class ProjectUnit extends Model
 
     public function project()
     {
-        return $this->belongsTo(Project::class, 'project_id');
+        return $this->belongsTo(Project::class);
     }
 
     public function unitCategory()
     {
-        return $this->belongsTo(UnitCategory::class, 'unit_category_id');
+        return $this->belongsTo(UnitCategory::class);
     }
 
     public function unit()
     {
-        return $this->belongsTo(Unit::class, 'unit_id');
+        return $this->belongsTo(Unit::class);
     }
 }
