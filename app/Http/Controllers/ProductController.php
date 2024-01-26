@@ -26,8 +26,9 @@ class ProductController extends Controller
     use AreaTrait;
 
     public function index(){
+        $divisions = $this->getCachedDivisions();
         $projects = Project::where('status',1)->select('id','name','address','total_floor')->get();
-        return view('product.product_list',compact('projects'));
+        return view('product.product_list',compact('projects','divisions'));
     }
 
     public function create(){
