@@ -25,4 +25,9 @@ class ProjectUnit extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+
+    public function unitPrices()
+    {
+        return $this->hasMany(UnitPrice::class);
+    }
 }

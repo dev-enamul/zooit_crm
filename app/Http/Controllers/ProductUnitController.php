@@ -28,7 +28,7 @@ class ProductUnitController extends Controller
 
     public function create()
     {
-        $title      = "Unit Create";
+        $title      = "Project Unit Create";
         $products   = Project::select('id','name')->get();
         $units      = Unit::select('id','title')->get();
         $categories = UnitCategory::select('id','title')->get();
@@ -40,7 +40,7 @@ class ProductUnitController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'project'           => 'required|exists:projects,id',
-            'name'              => 'required|numeric|max:190',
+            'name'              => 'required|string|max:190',
             'floor'             => 'required|numeric',
             'unit'              => 'required|exists:units,id',
             'category'          => 'required|exists:unit_categories,id',
@@ -60,7 +60,7 @@ class ProductUnitController extends Controller
             $info = ProjectUnit::find($id);
 
             if (!empty($info)){
-                $info->name             = $request->project;
+                $info->name             = $request->name;
                 $info->floor            = $request->floor;
                 $info->project_id       = $request->project;
                 $info->unit_category_id = $request->category;
@@ -74,14 +74,26 @@ class ProductUnitController extends Controller
 
                     if ($info) {
                         foreach ($request->payment_duration as $key => $value) {
-                            $unit_price = new UnitPrice();
-                            $unit_price->project_unit_id = $info->id;
-                            $unit_price->payment_duration = $request->payment_duration[$key];
-                            $unit_price->lottery_price = $request->lottery_price[$key];
-                            $unit_price->on_choice_price = $request->on_choice_price[$key];
-                            $unit_price->status = 1;
-                            $unit_price->updated_at = now();
-                            $unit_price->save();
+                            $unit_price = UnitPrice::where('project_unit_id', $info->id)
+                                ->where('payment_duration', $request->payment_duration[$key])->first();
+
+                            if ($unit_price) {
+                                $unit_price->update([
+                                    'lottery_price'     => $request->lottery_price[$key],
+                                    'on_choice_price'   => $request->on_choice_price[$key],
+                                    'status'            => 1,
+                                    'updated_at'        => now(),
+                                ]);
+                            } else {
+                                UnitPrice::create([
+                                    'project_unit_id'   => $info->id,
+                                    'payment_duration'  => $request->payment_duration[$key],
+                                    'lottery_price'     => $request->lottery_price[$key],
+                                    'on_choice_price'   => $request->on_choice_price[$key],
+                                    'status'            => 1,
+                                    'updated_at'        => now(),
+                                ]);
+                            }
                         }
                     }
                     DB::commit();
@@ -128,20 +140,13 @@ class ProductUnitController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    public function edit($id){
+        $title          = "Project Unit Edit";
+        $units          = Unit::select('id','title')->get();
+        $products       = Project::select('id','name')->get();
+        $categories     = UnitCategory::select('id','title')->get();
+        $project_unit   = ProjectUnit::with('unitPrices')->findOrFail($id);
+        return view('product.unit_save',compact('title','units','products','categories','project_unit'));
     }
 
     /**

@@ -51,7 +51,7 @@
                                                     <img class="rounded avatar-2xs p-0" src="{{ asset('../assets/images/users/avatar-6.png') }}" alt="Header Avatar">
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    <a class="dropdown-item" href="{{route('product.edit',$projectUnit->id)}}">Edit</a>
+                                                    <a class="dropdown-item" href="{{route('unit.edit',$projectUnit->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="#">Delete</a>
                                                     <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a>
                                                     <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
