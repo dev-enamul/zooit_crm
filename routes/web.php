@@ -206,6 +206,8 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('deposit-target',[DepositTargetController::class,'target'])->name('deposit.target');
         Route::get('deposit-target-asign',[DepositTargetController::class,'target_asign'])->name('deposit.target.asign');
         Route::get('deposit-target-asign-list',[DepositTargetController::class,'target_asign_list'])->name('deposit.target.asign.list'); 
+        Route::get('project-deposit-target',[DepositTargetController::class,'project_deposit_target'])->name('project.deposit.target');
+        Route::get('direct-deposit-target',[DepositTargetController::class,'direct_deposit_target'])->name('direct.deposit.target');
 
         // Training
         Route::resource('training', TrainingController::class);
