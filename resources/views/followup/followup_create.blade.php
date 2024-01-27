@@ -4,8 +4,7 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid"> 
-            <!-- start page title -->
+        <div class="container-fluid">  
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -71,24 +70,36 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="product" class="form-label">Product Name <span class="text-danger">*</span></label>
+                                            <label for="product" class="form-label">Unit Type <span class="text-danger">*</span></label>
                                             <select class="select2" name="product" id="product" required>
-                                                <option value="">Select Product</option>
-                                                <option value="1">A-1</option>
-                                                <option value="meet-up">B-2</option> 
-                                                <option value="meet-up">C-2</option>
+                                                <option value="">Select Unit</option>
+                                                <option value="1">Shop</option>
+                                                <option value="meet-up">Garage</option> 
+                                                <option value="meet-up">Apartment</option>
                                             </select>  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="qty" class="form-label"> Product Qty.</label>
-                                             <input type="text" placeholder="Product Qty." class="form-control" name="qty" id="qty"> 
+                                            <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
+                                            <select class="select2" multiple name="project_unit" id="project_unit" required>
+                                                <option value="">Select Project Unit</option>
+                                                <option value="1">A-2</option>
+                                                <option value="meet-up">A-2</option> 
+                                                <option value="meet-up">A-4</option>
+                                            </select>  
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="amount" class="form-label"> Unit Amount</label>
+                                             <input value="453545457" type="number"  class="form-control" name="amount" id="amount" disabled> 
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label"> Negotiation Amount</label>
                                              <input type="number" placeholder="Negotiation Amount" class="form-control" name="amount" id="amount"> 

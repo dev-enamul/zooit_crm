@@ -45,7 +45,19 @@
                                                 <option value="10">Emma Anderson #55667</option>
                                             </select>  
                                         </div>
-                                    </div> 
+                                    </div>  
+                                    
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="deposit_category" class="form-label">Deposit Category <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" name="deposit_category" id="deposit_category" required>
+                                                <option value="">Select Deposit Category</option>
+                                                @foreach($deposit_categories as $data)
+                                                    <option {{$data->id==1?"selected":""}} value="{{$data->id}}">{{$data->name}}</option>
+                                                @endforeach 
+                                            </select>  
+                                        </div>
+                                    </div>
 
                                     <div class="col-md-12">
                                         <div class="mb-3">

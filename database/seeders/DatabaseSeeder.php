@@ -32,7 +32,10 @@ class DatabaseSeeder extends Seeder
         $this->call(ZoneSeeder::class); 
         $this->call(AreaSeeder::class); 
         $this->call(PermissionSeeder::class); 
-        $this->call(NegotiationWaitingDay::class);
+        $this->call(NegotiationWaitingDaySeeder::class);
         $this->call(VillageSeeder::class);
+        $this->call(DesignationPermissionSeeder::class);
+        $this->call(UserPermissionSeeder::class);
+        $this->call(DepositCategorySeeder::class);
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\BankDayController;
 use App\Http\Controllers\ColdCallingController;
 use App\Http\Controllers\ComissionReportController;
 use App\Http\Controllers\CommissionControler;
@@ -10,6 +11,7 @@ use App\Http\Controllers\CommissionReportController;
 use App\Http\Controllers\Common\AreaController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepositCategoryController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\DepositTargetController;
 use App\Http\Controllers\DesignationController;
@@ -47,6 +49,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VillageController;
+use App\Models\DepositCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -169,9 +172,13 @@ Route::group(['middleware' => 'auth'],function () {
         Route::resource('commission-deducted-setting', CommissionDeductedController::class);
         // Bank
         Route::resource('bank', BankController::class);  
+        Route::resource('bank-day', BankDayController::class);
         // Project 
         Route::get('unit-type',[ProjectSettingController::class,'unit_type'])->name('unit.type');
-        Route::get('unit-category',[ProjectSettingController::class,'unit_category'])->name('unit.category');
+        Route::get('unit-category',[ProjectSettingController::class,'unit_category'])->name('unit.category'); 
+
+        // Deposit Category 
+        Route::resource('deposit-category', DepositCategoryController::class);
 
 
 

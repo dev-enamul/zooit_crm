@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserPermission extends Model
+class BankDay extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','permission_id'];
+    protected $fillable =  ['month','bank_day'];
 }

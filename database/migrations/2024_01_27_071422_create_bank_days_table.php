@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_permissions', function (Blueprint $table) {
+        Schema::create('bank_days', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('permission_id')->constrained();
+            $table->string('month'); 
+            $table->json('bank_day');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_permissions');
+        Schema::dropIfExists('bank_days');
     }
 };

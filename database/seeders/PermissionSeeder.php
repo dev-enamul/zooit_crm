@@ -20,6 +20,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'product', 'name' => 'Product', 'status' => 1],
             ['slug' => 'product-manage', 'name' => 'Product Manage', 'status' => 1],
             ['slug' => 'product-delete', 'name' => 'Product Delete', 'status' => 1],
+            ['slug' => 'product-approve', 'name' => 'Product Approve', 'status' => 1],
             ['slug' => 'freelancer', 'name' => 'Freelancer', 'status' => 1],
             ['slug' => 'freelancer-manage', 'name' => 'Freelancer Manage', 'status' => 1],
             ['slug' => 'freelancer-delete', 'name' => 'Freelancer Delete', 'status' => 1],
