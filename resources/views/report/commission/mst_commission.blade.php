@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Summary of Salse Commision")
+@section('title',"Summary of Sales Commision")
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -9,7 +9,7 @@
                 <div class="col-12"> 
                     <div class="text-center">
                         <h4 class="mb-sm-0">Way Housing Pvt. Ltd</h4> 
-                        <p class="m-0">Summary of Salse Commission (For Executive, ASM, AL, ZM, RM, HOS & ED)</p>
+                        <p class="m-0">Summary of Sales Commission (For Executive, ASM, AL, ZM, RM, HOS & ED)</p>
                         <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
                     </div>
                 </div>

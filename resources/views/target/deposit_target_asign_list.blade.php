@@ -93,7 +93,7 @@
                                         <td class="align-middle">3000000</td>  
                                     </tr>  
                                     <tr>   
-                                        <td class="align-middle">New Salse</td>  
+                                        <td class="align-middle">New Sales</td>  
                                         <td class="align-middle">1</td> 
                                         <td class="align-middle">2000000</td>
 

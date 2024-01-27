@@ -10,7 +10,7 @@
                 <div class="col-12"> 
                     <div class="text-center">
                         <h4 class="mb-sm-0">{{ config('app.name', 'ZOOM IT') }}</h4> 
-                        <p class="m-0">Project, Unit - Salse Executive, ASM/DSM Wise & Area In Chagre Deposit Report</p>
+                        <p class="m-0">Project, Unit - Sales Executive, ASM/DSM Wise & Area In Chagre Deposit Report</p>
                         <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
                     </div>
                 </div>
@@ -40,7 +40,6 @@
                                         <a class="btn btn-primary" href="{{route('bank-day.index')}}" target="blank">
                                             <span><i class="fas fa-filter"></i> BankDay Setting</span>
                                         </a> 
-
                                         <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button> 

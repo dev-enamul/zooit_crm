@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Visit Analyses</h4> 
+                        <h4 class="mb-sm-0">Visit Analysis</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
@@ -241,7 +241,7 @@
                         </tr> 
 
                         <tr> 
-                            <td class="p-1"><strong> Designation : </strong> Salse Executive</td>
+                            <td class="p-1"><strong> Designation : </strong> Sales Executive</td>
                             <td class="p-1"><strong>Project Visit Date : </strong>4 Dec, 2023</td> 
                         </tr> 
                     </tbody>
