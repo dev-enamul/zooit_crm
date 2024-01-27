@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Summary of Salse Commision")
+@section('title',"Summary of Sales Commision")
 @section('content')
 <div class="main-content">
     <div class="page-content">

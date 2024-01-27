@@ -111,7 +111,7 @@
                                                     <div class="card-body">
                                                         <div class="d-flex"> 
                                                             <div class="ms-3">
-                                                                <p class="text-primary mb-0">Lead Analyses</p>
+                                                                <p class="text-primary mb-0">Lead Analysis</p>
                                                                 <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
                                                                 <h4 class="mb-0">21/45</h4>
                                                             </div>
@@ -208,7 +208,7 @@
                                                     <div class="card-body">
                                                         <div class="d-flex"> 
                                                             <div class="ms-3">
-                                                                <p class="text-primary mb-0">Lead Analyses</p>
+                                                                <p class="text-primary mb-0">Lead Analysis</p>
                                                                 <small> <span class="badge badge-label-primary" id="countdown">4: 3: 12</span></small>
                                                                 <h4 class="mb-0">21/45</h4>
                                                             </div>

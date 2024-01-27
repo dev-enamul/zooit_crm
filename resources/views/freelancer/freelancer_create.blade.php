@@ -53,8 +53,8 @@
                                             <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="profession" id="profession" required>
                                                 <option value="">Select Profession</option>
-                                                <option value="">Doctors</option>
-                                                <option value="">Lawyers</option> 
+                                                <option value="">Doctor</option>
+                                                <option value="">Lawyer</option> 
                                                 <option value="">Banker</option>
                                                 <option value="">Teacher</option>
                                                 <option value="">Engineer</option>
@@ -72,7 +72,7 @@
                                                 <option value="">Select Marital Status</option>
                                                 <option value="">Married</option>
                                                 <option value="">Unmarried</option>
-                                                <option value="">Devorce</option>  
+                                                <option value="">Divorce</option>  
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -145,6 +145,7 @@
                                                 <option value="">Select Gender</option>
                                                 <option value="">Male</option> 
                                                 <option value="">Female</option>  
+                                                <option value="">Others</option> 
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -208,7 +209,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="imo_number" class="form-label">Imo/Whatsapp Number</label>
+                                            <label for="imo_number" class="form-label">Imo/WhatsApp Number</label>
                                             <input type="text" name="imo_number" class="form-control" id="imo_number" placeholder="Emo Number">  
                                         </div>
                                     </div>
@@ -377,7 +378,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></spN> </label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father Name">  
+                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name">  
                                         </div>
                                     </div> 
 
@@ -405,7 +406,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mother_name" class="form-label">Spouse Name</label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name">  
+                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Spouse Name">  
                                         </div>
                                     </div> 
 
@@ -489,14 +490,14 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Birth Cirtificate Number</label>
+                                            <label for="nid" class="form-label">Birth Certificate Number</label>
                                             <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Upload Birth Cirtificate</label>
+                                            <label for="nid" class="form-label">Upload Birth Certificate</label>
                                             <input type="file" name="nid" id="nid" class="form-control" > 
                                         </div>
                                     </div>

@@ -10,7 +10,7 @@
                 <div class="col-12"> 
                     <div class="text-center">
                         <h4 class="mb-sm-0">Way Housing Pvt. Ltd</h4> 
-                        <p class="m-0">Project Unit and Salse Executive Wise Deposit Report</p>
+                        <p class="m-0">Project Unit and Sales Executive Wise Deposit Report</p>
                         <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
                     </div>
                 </div>

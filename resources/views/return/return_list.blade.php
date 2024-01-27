@@ -248,7 +248,7 @@
                         </tr> 
 
                         <tr> 
-                            <td class="p-1"><strong> Designation : </strong> Salse Executive</td>
+                            <td class="p-1"><strong> Designation : </strong> Sales Executive</td>
                             <td class="p-1"><strong>Project Visit Date : </strong>4 Dec, 2023</td> 
                         </tr> 
                     </tbody>

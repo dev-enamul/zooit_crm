@@ -14,7 +14,7 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Lead analyses form</li>
+                                <li class="breadcrumb-item active">Lead Analysis form</li>
                             </ol>
                         </div>
 
@@ -91,8 +91,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="tentative_amount" class="form-label">Tentative Salse Amount</label> 
-                                            <input type="number" name="tentative_amount" class="form-control" id="tentative_amount" placeholder="Tentative Salse Amount" value=""> 
+                                            <label for="tentative_amount" class="form-label">Tentative Sales Amount</label> 
+                                            <input type="number" name="tentative_amount" class="form-control" id="tentative_amount" placeholder="Tentative Sales Amount" value=""> 
                                         </div>
                                     </div>
 
@@ -112,7 +112,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="refferal" class="form-label">Refferal</label> 
+                                            <label for="refferal" class="form-label">Referral</label> 
                                             <input type="text" name="refferal" class="form-control" id="refferal" placeholder="Refferal" value=""> 
                                         </div>
                                     </div>

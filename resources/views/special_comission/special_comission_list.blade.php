@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Special Comission List')
+@section('title','Special Commission List')
 
 @section('content')
 <div class="main-content">
@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Special Comission </h4> 
+                        <h4 class="mb-sm-0">Special Commission </h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Special Comission</li>
+                                <li class="breadcrumb-item active">Special Commission</li>
                             </ol>
                         </div> 
                     </div>
@@ -55,7 +55,7 @@
                                         <th>S/N</th>
                                         <th>Comission Name</th> 
                                         <th>Total Comission</th>
-                                        <th>Total Salse</th> 
+                                        <th>Total Sales</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 

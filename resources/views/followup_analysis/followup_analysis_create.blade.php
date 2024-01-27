@@ -9,12 +9,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Follow Up Analyses Entry</h4>
+                        <h4 class="mb-sm-0">Follow Up Analysis Entry</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Follow Up Analyses Entry</li>
+                                <li class="breadcrumb-item active">Follow Up Analysis Entry</li>
                             </ol>
                         </div>
 
@@ -118,7 +118,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="amount" class="form-label"> Influnce Opinion</label>
+                                            <label for="amount" class="form-label"> Influencer Opinion</label>
                                              <input type="text" placeholder="Influncer Opinion" class="form-control" name="amount" id="amount"> 
                                         </div>
                                     </div>
