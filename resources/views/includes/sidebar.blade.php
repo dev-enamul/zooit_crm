@@ -218,8 +218,14 @@
                         <a href="javascript: void(0);" class="has-arrow ">
                             <i class="mdi mdi-teach"></i>
                             <span>Deposit Target</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false"> 
+                        </a>   
+
+                        <ul class="sub-menu" aria-expanded="false">
+                            {{-- only super admin  --}}
+                            <li><a href="{{route('project.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Project Wise Target</a></li> 
+                            <li><a href="{{route('direct.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Target</a></li> 
+
+                            {{-- SuperAdmin cannn't see   --}}
                             <li><a href="{{route('deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target</a></li> 
                             <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Asign List</a></li>
                         </ul>
@@ -263,14 +269,7 @@
                     </a>
                 </li>   
  
-                <li class="menu-title">Report</li> 
-                <li>
-                    <a href="salse_marketing_target_achivement.html" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>S&M Achivement</span>
-                    </a>
-                </li> 
-
+                <li class="menu-title">Report</li>  
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-chart-bar"></i>

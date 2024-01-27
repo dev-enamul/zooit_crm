@@ -17,4 +17,12 @@ class DepositTargetController extends Controller
     public function target_asign_list(){
         return view('target.deposit_target_asign_list');
     }
+
+    public function project_deposit_target(){
+        return view('target.project_deposit_target');
+    } 
+
+    public function direct_deposit_target(){
+        return view('target.direct_deposit_target');
+    }
 }
