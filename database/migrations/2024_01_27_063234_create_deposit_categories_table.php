@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_permissions', function (Blueprint $table) {
+        Schema::create('deposit_categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('permission_id')->constrained();
+            $table->string('name');
+            $table->unsignedTinyInteger('status')->default('1')->comment('1 = Active, 0 = Unactive');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_permissions');
+        Schema::dropIfExists('deposit_categories');
     }
 };

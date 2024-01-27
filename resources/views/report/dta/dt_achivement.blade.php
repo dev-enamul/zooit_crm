@@ -36,7 +36,11 @@
                                     </div> 
                                 </div>
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                    <div class="flex-wrap mb-2">   
+                                        <a class="btn btn-primary" href="{{route('bank-day.index')}}" target="blank">
+                                            <span><i class="fas fa-filter"></i> BankDay Setting</span>
+                                        </a> 
+
                                         <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button> 

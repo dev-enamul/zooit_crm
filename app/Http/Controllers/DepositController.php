@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DepositCategory;
 use Illuminate\Http\Request;
 
 class DepositController extends Controller
@@ -10,7 +11,7 @@ class DepositController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {  
         return view('deposit.deposit_list');
     }
 
@@ -19,7 +20,8 @@ class DepositController extends Controller
      */
     public function create()
     {
-        return view('deposit.deposit_create');
+        $deposit_categories =  DepositCategory::where('status',1)->get();
+        return view('deposit.deposit_create',compact('deposit_categories'));
     }
 
     /**
