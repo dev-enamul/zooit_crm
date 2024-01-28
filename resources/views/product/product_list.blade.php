@@ -42,6 +42,7 @@
                                         <th>Sea/Hall</th> 
                                     </tr>
                                 </thead>
+                                
                                 <tbody> 
                                     @foreach ($projects as  $project)
                                     <tr class="">

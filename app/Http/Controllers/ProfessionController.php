@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profession;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProfessionController extends Controller
@@ -11,44 +13,44 @@ class ProfessionController extends Controller
      */
     public function index()
     {
-        return view('profession.profession_list');
+        $datas = Profession::where('status',1)->get();
+        return view('profession.profession_list',compact('datas'));
     }
 
     
     public function store(Request $request)
     {
-      
+      try{
+        $input = $request->all();
+        Profession::create($input);
+        return redirect()->back()->with('success','Profession Created');
+      }catch(Exception $e){
+        return redirect()->back()->with('error',$e->getMessage());
+      }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+  
+     
+    public function update(Request $request)
     {
-        //
+        try{
+          $data = Profession::find($request->id);
+          $data->name = $request->name;
+          $data->save();
+          return redirect()->back()->with('success','Profession Updated');
+        }catch(Exception $e){
+          return redirect()->back()->with('error',$e->getMessage());
+        }
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+ 
     public function destroy(string $id)
     {
-        //
+       try{
+            $data = Profession::find($id);
+            $data->delete();
+            return redirect()->back()->with('success','Profession Deleted');
+       }catch(Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+       }
     }
 }

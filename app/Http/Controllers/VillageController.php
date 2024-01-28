@@ -3,35 +3,69 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\District;
 use App\Models\Division;
+use App\Models\Union;
+use App\Models\Upazila;
 use App\Models\Village;
+use App\Traits\AreaTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class VillageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    use AreaTrait;
+    
+   
+    public function index(Request $request)
     {
         $divisions = Division::select('id', 'name')->get();
-        $villages = Village::all();
-        return view('village.village_list',compact('divisions','villages'));
+        $districts = District::select('id', 'name')->get();
+        $upazilas = Upazila::select('id', 'name')->get();
+        $unions = Union::select('id', 'name')->get();
+       
+
+        $division =  $request->division;
+        $district = $request->district;
+        $upazila = $request->upazila;
+        $union = $request->union; 
+        $villages = Village::where('status',1);
+        if(isset($union)){
+            $villages =  $villages->where('union_id',$union);
+        }
+
+        if(isset($upazila)){
+            $villages =  $villages->whereHas('union',function($q) use ($upazila){
+                $q->where('upazila_id',$upazila);
+            });
+        }
+
+        if(isset($district)){
+            $villages =  $villages->whereHas('union',function($q) use ($district){
+                 $q->whereHas('upazilla',function($p)use($district){
+                    $p->where('district_id', $district); 
+                 });
+            });
+        } 
+
+        if(isset($division)){
+            $villages =  $villages->whereHas('union',function($q) use ($division){
+                 $q->whereHas('upazilla',function($p)use($division){
+                     $p->whereHas('district',function($x) use ($division){
+                        $x->where('division_id',$division);
+                     });
+                 });
+            });
+        }  
+
+        $villages = $villages->paginate(2); 
+        return view('location.village_list',compact('divisions','villages','districts','upazilas','unions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('village.village_create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+   
     public function store(Request $request)
     {
         
@@ -49,34 +83,20 @@ class VillageController extends Controller
             return redirect()->back()->with('error',$e); 
        }
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+ 
+    public function update(Request $request)
     {
-        //
+        try{
+           $data =  Village::find($request->id);
+           $data->word_no = $request->word_no;
+           $data->village  = $request->village;
+           $data->save();
+           return redirect()->back()->with('success','Village Updated');
+        }catch(Exception $e){
+            return redirect()->back()->with('error',$e);
+        }
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+ 
     public function destroy(string $id)
     {
         try{

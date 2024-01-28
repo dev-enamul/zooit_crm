@@ -16,6 +16,7 @@
     --bs-primary: rgb(132, 204, 22);
     --bs-success: rgba(27, 65, 99, 1);
     --bs-form-valid-border-color:var(--bs-primary); 
+ 
   }
   
 .row_success td{
@@ -398,7 +399,15 @@ a{
   .buttons-pdf:not(:disabled):not(.disabled).active:focus,
   .show > .buttons-pdf.dropdown-toggle:focus {
     box-shadow: 0 0 0 0.2rem var(--secondary-hover) !important;
+  } 
+
+  .active>.page-link, .page-link.active{
+    background-color: var(--primary);
+    border-color:var(--primary)
+
   }
+
+ 
 
 
    

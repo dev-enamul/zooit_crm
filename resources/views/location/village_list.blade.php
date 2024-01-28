@@ -1,6 +1,9 @@
 @extends('layouts.dashboard')
 @section('title','Village List')
 
+@section('style')
+{{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+@endsection
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -45,7 +48,9 @@
 
                                 <div class="">
                                     <div class="d-flex">   
-                                        <div class="input-group">   
+                                        <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a> 
+                                        <div class="input-group">  
+                                            
                                             <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#filter_offcanvas">
                                                 <span><i class="fas fa-filter"></i> Filter</span>
                                             </button> 
@@ -75,7 +80,7 @@
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($item)}})">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('village.destroy',$item->id) }}')" >Delete</a>  
                                                 </div>
                                             </div> 
@@ -87,9 +92,11 @@
                                         <td>{{@$item->union->upazilla->district->name}}</td>
                                         <td>{{@$item->union->upazilla->district->division->name}}</td> 
                                     </tr>   
-                                    @endforeach
-                                </tbody>
+                                    @endforeach  
+                                </tbody>  
                             </table>
+
+                            {{$villages->links()}}
                         </div>
                     </div>
                 </div> <!-- end col -->
@@ -142,77 +149,67 @@
     </div>
 </div>
 
+<div class="modal fade" id="edit_modal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <h5 class="modal-title">Create new Village</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form action="{{route('village.update')}}" method="post"> 
+                    @csrf 
+
+                    <input type="hidden" name="id">
+                    <div class="form-group mb-2">
+                        <label for="word_no">Word No <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="word_no" name="word_no" placeholder="Enter Word No" required>
+                    </div> 
+
+                    <div class="form-group mb-2">
+                        <label for="village">Village <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="village" name="village" placeholder="Enter Village" required>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <div class="text-end">
+                            <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                        </div> 
+                    </div>
+                </form>
+            </div> 
+
+            <!-- <div class="modal-footer"><button class="btn btn-primary">Submit</button> <button class="btn btn-outline-danger">Reset</button></div> -->
+        </div>
+    </div>
+</div>
+
 <div class="offcanvas offcanvas-end" id="filter_offcanvas">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Filter Union</h5>
+        <h5 class="offcanvas-title">Filter Village</h5>
         <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
             <i class="fa fa-times"></i>
         </button>
     </div>
     <div class="offcanvas-body">
-        <div class="row"> 
- 
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="division_filter" class="form-label">Division</label>
-                    <select id="division_filter" class="select2" name="division_filter" search>
-                        <option value="">All Division</option> 
-                        <option value="">Dhaka </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Borisal</option>
-                        <option value="">Sylet</option>  
-                    </select> 
-                </div>
-            </div> 
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="district_filter" class="form-label">Districe</label>
-                    <select id="district_filter" class="select2" name="district_filter" search>
-                        <option value="">All Districe</option> 
-                        <option value="">Naogaon </option> 
-                        <option value="">Joypurhat</option> 
-                        <option value="">Bogura</option> 
-                        <option value="">Pabna</option>
-                        <option value="">Rajshahi</option>  
-                    </select> 
-                </div>
-            </div> 
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="thana_filter" class="form-label">Thana / Upazila</label>
-                    <select id="thana_filter" class="select2" name="thana_filter" search>
-                        <option value="">All Thana / Upazila</option> 
-                        <option value="">Badulgachi </option> 
-                        <option value="">Sapahar</option> 
-                        <option value="">Mohadebpur</option> 
-                        <option value="">Porsha</option>
-                        <option value="">Attrai</option>  
-                    </select> 
-                </div>
-            </div> 
-            
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="union_filter" class="form-label">Union</label>
-                    <select id="union_filter" class="select2" name="union_filter" search>
-                        <option value="">All Union</option> 
-                        <option value="">Mothorapur </option> 
-                        <option value="">Jabaripur</option> 
-                        <option value="">Badulgachhi</option> 
-                        <option value="">Akkelpur</option>
-                        <option value="">Sagorpur</option>  
-                    </select> 
-                </div>
-            </div>
+       <form action="" method="get">
+        <div class="row">  
+            @include('common.area', [
+                'div'       => 'col-md-12',
+                'mb'        => 'mb-3',
+                'visible'   => ['division', 'district', 'upazila','union'],
+                'required'  => [],
+                'selected'  => $selected ?? null,
+            ])
  
             <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
+                <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button type="button" class="btn btn-outline-danger refresh_btn"><i class="mdi mdi-refresh"></i> Reset</button>
+            </div>  
         </div>
+       </form>
     </div>
-</div>
-@endsection
+</div> 
+ 
+@endsection 
+
+ 

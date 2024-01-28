@@ -49,6 +49,8 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VillageController;
+use App\Http\Controllers\ZoneAreaController;
+use App\Http\Controllers\ZoneController;
 use App\Models\DepositCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -76,6 +78,8 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('district-get-upazila',[AreaController::class,'districtGetUpazila'])->name('district-get-upazila');
         Route::get('upazila-get-union',[AreaController::class,'upazilaGetUnion'])->name('upazila-get-union');
         Route::get('union-get-village',[AreaController::class,'unionGetVillage'])->name('union-get-village');
+
+ 
 
         // Profile 
         Route::get('profile',[ProfileController::class,'index'])->name('profile');
@@ -160,9 +164,15 @@ Route::group(['middleware' => 'auth'],function () {
         // Settings ============================= 
         // Profession
         Route::resource('profession', ProfessionController::class); 
+        Route::post('profession-update',[ProfessionController::class,'update'])->name('profession.update');
         // Location
         Route::resource('union', UnionController::class);
         Route::resource('village', VillageController::class); 
+        Route::get('village-update',[VillageController::class,'update'])->name('village.update'); 
+        Route::resource('zone', ZoneController::class); 
+        Route::post('zone-update',[ZoneController::class,'update'])->name('zone.update'); 
+        Route::resource('area', ZoneAreaController::class);
+        Route::post('area-update',[ZoneAreaController::class,'update'])->name('area.update'); 
 
         // Emp Position & Permission 
         Route::resource('designation', DesignationController::class); 
@@ -178,6 +188,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::resource('bank-day', BankDayController::class);
         // Project 
         Route::get('unit-type',[ProjectSettingController::class,'unit_type'])->name('unit.type');
+        Route::post('unit-type-store',[ProjectSettingController::class,"unit_type_store"])->name('unit.type.store');
         Route::get('unit-category',[ProjectSettingController::class,'unit_category'])->name('unit.category'); 
 
         // Deposit Category 
