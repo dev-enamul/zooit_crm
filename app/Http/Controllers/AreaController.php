@@ -4,19 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UnionController extends Controller
+class AreaController extends Controller
 {
-    
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
-    { 
-        // $datas = Union::find
-        return view('location.union_list');
+    {
+        //
     }
 
-   
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('location.union_create');
+        //
     }
 
     /**

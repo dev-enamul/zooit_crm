@@ -423,10 +423,10 @@
                         <span>Location</span>
                     </a> 
                     <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a></li> 
+                        {{-- <li><a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a></li>  --}}
                         <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Village</a></li> 
-                        <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Zone</a></li> 
-                        <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Area</a></li> 
+                        <li><a href="{{route('zone.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Zone</a></li> 
+                        <li><a href="{{route('area.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Area</a></li> 
                     </ul>
                 </li>
 

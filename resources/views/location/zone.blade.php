@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Profession List')
+@section('title','Zone List')
 
 @section('content')
 <div class="main-content">
@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Professions</h4> 
+                        <h4 class="mb-sm-0">Zones</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_profession">
-                                    <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Profession</span>
+                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_zone">
+                                    <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Zone</span>
                                 </button>
                             </ol>
                         </div> 
@@ -32,7 +32,7 @@
                                     <tr>
                                         <th class="text-center">Action</th>
                                         <th>S/N</th>
-                                        <th>Profession Name</th>  
+                                        <th>Zone Name</th>  
                                     </tr>
                                 </thead>
                                 <tbody> 
@@ -43,7 +43,7 @@
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($data)}})">Edit</a>
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('profession.destroy',$data->id) }}')">Delete</a>   
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('zone.destroy',$data->id) }}')">Delete</a>   
                                                     </div>
                                                 </div> 
                                             </td> 
@@ -65,18 +65,18 @@
 </div>
 
 {{-- Create Modal   --}}
-<div class="modal fade" id="create_profession">
+<div class="modal fade" id="create_zone">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header"> 
-                <h5 class="modal-title">Create new profession</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                <h5 class="modal-title">Create new Zone</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
             </div>
 
-            <form action="{{route('profession.store')}}" method="POST">
+            <form action="{{route('zone.store')}}" method="POST">
                 @csrf
                 <div class="modal-body"> 
                     <div class="form-group mb-2">
-                        <label for="name">Profession Name <span class="text-danger">*</span></label>
+                        <label for="name">Zone Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div> 
                 </div> 
@@ -93,20 +93,20 @@
 
 
 {{-- Edit Modal  --}}
-<div class="modal fade" id="edit_profession">
+<div class="modal fade" id="edit_zone">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header"> 
-                <h5 class="modal-title">Create new profession</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                <h5 class="modal-title">Create new Zone</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
             </div>
 
-            <form action="{{route('profession.update')}}" method="POST"> 
+            <form action="{{route('zone.update')}}" method="POST"> 
                 @csrf  
 
                 <input type="hidden" name="id">
                 <div class="modal-body"> 
                     <div class="form-group mb-2">
-                        <label for="name">Profession Name <span class="text-danger">*</span></label>
+                        <label for="name">Zone Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div> 
                 </div> 
@@ -126,9 +126,9 @@
 @section('script')
     <script> 
         function editItem(data){   
-            $('#edit_profession').find(' input[name="name"]').val(data.name);
-            $('#edit_profession').find(' input[name="id"]').val(data.id);
-            $('#edit_profession').modal('show');
+            $('#edit_zone').find(' input[name="name"]').val(data.name);
+            $('#edit_zone').find(' input[name="id"]').val(data.id);
+            $('#edit_zone').modal('show');
         }
     </script>
 @endsection

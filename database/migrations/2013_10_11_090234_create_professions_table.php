@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('professions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            
+            $table->string('name'); 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
