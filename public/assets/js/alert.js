@@ -42,8 +42,15 @@ function deleteItem(url) {
                 'Content-Type': 'application/json'
             },
         })
-        .then(response => {
-            location.reload();
+        .then(response => { 
+            if (response.ok) { 
+                Toast.fire({ icon: "success", title: 'Deleted successfully' });
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            } else {
+                Toast.fire({ icon: "error", title: 'Something is wrong' });
+            }
         })
         .catch(error => {
             Toast.fire({ icon: "error", title: 'Something is wrong' });
