@@ -442,7 +442,7 @@
                 </li>
 
                 <li>
-                    <a href="{{route('training.index')}}" class="">
+                    <a href="{{route('training-category.index')}}" class="">
                         <i class="fas fa-desktop"></i>
                         <span>Training</span>
                     </a>
@@ -465,8 +465,8 @@
                         <span>Commission</span>
                     </a> 
                     <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('comission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission</a></li> 
-                        <li><a href="{{route('special-comission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Special Commission</a></li> 
+                        <li><a href="{{route('commission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Regular Commission</a></li> 
+                        <li class="{{ Route::is(['special-commission.create','special-commission.edit']) ? 'mm-active' : '' }}"><a href="{{route('special-commission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Special Commission</a></li> 
                         <li><a href="{{route('commission-deducted-setting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission Deducation</a></li> 
                     </ul>
                 </li> 

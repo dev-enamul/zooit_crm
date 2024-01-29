@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('special_commissions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            
+            $table->string('title'); 
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

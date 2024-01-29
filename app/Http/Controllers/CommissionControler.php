@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commission;
+use App\Models\CommissionHolder;
+use App\Models\Designation;
 use Illuminate\Http\Request;
 
 class CommissionControler extends Controller
@@ -11,47 +14,45 @@ class CommissionControler extends Controller
      */
     public function index()
     {
-        return view('setting.commission');
+        $datas = Commission::where('status', 1)->latest()->get(); 
+        return view('setting.commission',compact('datas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
-    {
-        //
-    }
+    { 
+       try{
+            $request->validate([
+                'title' => 'required',
+                'commission' => 'required'
+            ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+            $input = $request->all(); 
+            $commission = Commission::create($input);  
+            
+            return redirect()->back()->with('success', 'Commission created');
+       }catch(\Exception $e){
+        dd($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+       }
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+ 
+ 
+    public function update(Request $request)
     {
-        //
-    }
+        try{
+            $request->validate([
+                'title' => 'required',
+                'commission' => 'required'
+            ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+            $input = $request->all(); 
+            $commission = Commission::find($request->id);
+            $commission->update($input);  
+            return redirect()->back()->with('success', 'Commission updated');
+       }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+       }
     }
 
     /**
@@ -59,6 +60,12 @@ class CommissionControler extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            $commission = Commission::find($id);  
+            $commission->delete();
+            return response()->json(['success' => 'Commission deleted']);
+       }catch(\Exception $e){ 
+            return response()->json(['error' => $e->getMessage()]);
+       }
     }
 }

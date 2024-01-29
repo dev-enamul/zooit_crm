@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TrainingCategory extends Model
 {
-    use HasFactory;
-
+    use HasFactory; 
     use SoftDeletes;
 
     protected $fillable = [
         'title',  
         'status',
+        'description',
         'created_by', 
         'updated_by', 
         'deleted_by'

@@ -20,7 +20,7 @@ class DesignationController extends Controller
     {
         $permissions = Permission::latest()->get();
         $commissions = Commission::where('status','1')->get();
-        $datas = Designation::where('status',1)->get();
+        $datas = Designation::where('status',1)->get(); 
         return view('setting.designation.designation_list',compact('permissions','commissions','datas'));
     }
   
@@ -33,9 +33,22 @@ class DesignationController extends Controller
         return redirect()->back()->with('success','Designation Created');
     }
    
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request)
+    {   
+        $request->validate([
+            'title' => 'required:max:45',
+            'commission_id' => 'required', 
+            'working_place' => 'required',
+        ]);
+
+       
+        try{
+            $input =  $request->all(); 
+            Designation::find($request->id)->update($input); 
+            return redirect()->back()->with('success','Designation Updated');
+        }catch(Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+        }
     }
 
     /**
@@ -45,9 +58,9 @@ class DesignationController extends Controller
     { 
         try{
             Designation::find($id)->delete();
-            return redirect()->back()->with('success','Designation Deleted');
-        }catch(Extension $ex){
-            return redirect()->back()->with('error',$ex);
+            return response()->json(['success' => 'Designation deleted']);
+        }catch(Exception $e){ 
+            return response()->json(['error' => $e->getMessage()]); 
         }
         
     }

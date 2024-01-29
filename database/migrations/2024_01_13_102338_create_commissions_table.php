@@ -14,16 +14,13 @@ return new class extends Migration
         Schema::create('commissions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->float('commission');
-            
+            $table->float('commission');  
             $table->unsignedTinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
-            $table->softDeletes(); 
-
-            
+            $table->softDeletes();  
         });
     }
 

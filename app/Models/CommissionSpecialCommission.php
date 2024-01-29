@@ -16,8 +16,8 @@ class CommissionSpecialCommission extends Model
         'created_by', 'updated_by', 'deleted_by'
     ];
 
-    // Define the commission and special_commission relationships
-    public function commission()
+   
+    public function commission_id()
     {
         return $this->belongsTo(Commission::class, 'commissions_id');
     }
