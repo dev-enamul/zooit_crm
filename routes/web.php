@@ -98,6 +98,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
         Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
         Route::get('/product-approve',[ProductController::class,'product_approve'])->name('product.approve');
+        Route::post('/product-search',[ProductController::class,'productSearch'])->name('product.search');
         
         Route::resource('unit', ProductUnitController::class);
         Route::post('unit-save/{id?}',[ProductUnitController::class,'save'])->name('unit.save');

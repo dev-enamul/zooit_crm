@@ -4,32 +4,25 @@ $mb         = isset($mb) ? $mb : 'mb-3';
 
 $required       = $required ?? [];
 $selected       = isset($selected) ? $selected : null;
-$division_id    = $selected && isset($selected['division']) ? $selected['division'] : null;
-$district_id    = $selected && isset($selected['district']) ? $selected['district'] : null;
-$upazila_id     = $selected && isset($selected['upazila']) ? $selected['upazila'] : null;
-$union_id       = $selected && isset($selected['union']) ? $selected['union'] : null;
-$village_id     = $selected && isset($selected['village']) ? $selected['village'] : null;
+
+$division_id    = $selected && isset($selected['division_id']) ? $selected['division_id'] : null;
+$district_id    = $selected && isset($selected['district_id']) ? $selected['district_id'] : null;
+$upazila_id     = $selected && isset($selected['upazila_id']) ? $selected['upazila_id'] : null;
+$union_id       = $selected && isset($selected['union_id']) ? $selected['union_id'] : null;
+$village_id     = $selected && isset($selected['village_id']) ? $selected['village_id'] : null;
 $visible        = $visible ?? [];
 
 if ($division_id) {
     $districts  = districts($division_id) ?? null;
     $upazila_id = $district_id ? upazilas($district_id, $division_id) : null;
-    $union_id   = $upazila_id && $district_id ? unions($upazila_id, $district_id, $division_id) : null;
+    #$union_id   = $upazila_id && $district_id ? unions($upazila_id, $district_id, $division_id) : null;
     $village_id = $union_id && $upazila_id ? villages($union_id, $upazila_id, $district_id, $division_id) : null;
 }
 $visible = $visible ?? [];
 
 @endphp
 
-<div class="offcanvas offcanvas-end" id="offcanvas">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Select Filter Item</h5>
-        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-            <i class="fa fa-times"></i>
-        </button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row">   
+  
             {{-- <div class="col-md-12">
                 <div class="mb-3">
                     <label for="duration" class="form-label">Duration </label>
@@ -75,7 +68,6 @@ $visible = $visible ?? [];
                 </div>
             </div> 
 
-
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="project" class="form-label">Project </label>
@@ -117,9 +109,6 @@ $visible = $visible ?? [];
                     </select>  
                 </div>
             </div> --}}
-
-
-        
 
             {{-- @if (in_array('division_id', $visiable))
                 <div class="{{ $div . ' ' . $mb }}">
@@ -366,13 +355,7 @@ $visible = $visible ?? [];
                 </div>
             @endif
 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
-        </div>
-    </div>
-</div>
+          
 
 @section('script')
     <script>
