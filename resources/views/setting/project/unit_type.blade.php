@@ -50,8 +50,8 @@
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>  
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($item)}})">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('unit.type.delete',$item->id) }}')">Delete</a>  
                                                 </div>
                                             </div> 
                                         </td> 
@@ -85,8 +85,8 @@
                 @csrf
                 <div class="modal-body"> 
                     <div class="form-group mb-2">
-                            <label for="union">Unit Type <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="union" name="union"  required>
+                            <label for="title">Unit Type <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title" name="title"  required>
                         </div>
 
                         <div class="form-group mb-2">
@@ -108,7 +108,55 @@
             </form>
         </div>
     </div>
-</div> 
- 
+</div>   
 
+
+<div class="modal fade" id="edit_modal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <h5 class="modal-title">Update Unit Type</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+            </div>  
+            <form action="{{route('unit.type.update')}}" method="post">  
+                @csrf 
+                <input type="hidden" name="id" id="id">
+                <div class="modal-body"> 
+                    <div class="form-group mb-2">
+                            <label for="title">Unit Type <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title" name="title"  required>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="down_payment">Down Payment <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="down_payment" name="down_payment"  required>
+                        </div> 
+
+                        <div class="form-group mb-2">
+                            <label for="booking">Booking Money <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="booking" name="booking"  required>
+                        </div>   
+                </div>
+
+                <div class="modal-footer">
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button> <button type="button" class="btn btn-outline-danger refresh_btn"><i class="mdi mdi-refresh"></i> Reset</button>
+                    </div> 
+                </div> 
+            </form>
+        </div>
+    </div>
+</div>
+@endsection 
+
+@section('script')
+   <script>
+     function editItem(data){ 
+        console.log(data);
+        $('#edit_modal').find('input[name="id"]').val(data.id);
+        $('#edit_modal').find('input[name="title"]').val(data.title);
+        $('#edit_modal').find('input[name="down_payment"]').val(data.down_payment); 
+        $('#edit_modal').find('input[name="booking"]').val(data.booking);
+        $('#edit_modal').modal('show'); 
+    }
+   </script>
 @endsection

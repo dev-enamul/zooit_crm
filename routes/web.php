@@ -189,6 +189,8 @@ Route::group(['middleware' => 'auth'],function () {
         // Project 
         Route::get('unit-type',[ProjectSettingController::class,'unit_type'])->name('unit.type');
         Route::post('unit-type-store',[ProjectSettingController::class,"unit_type_store"])->name('unit.type.store');
+        Route::post('unit-type-update',[ProjectSettingController::class,"unit_type_update"])->name('unit.type.update');
+        Route::any('unit-type-delete/{id}',[ProjectSettingController::class,"unit_type_delete"])->name('unit.type.delete');
         Route::get('unit-category',[ProjectSettingController::class,'unit_category'])->name('unit.category'); 
 
         // Deposit Category 
