@@ -11,18 +11,19 @@ class Commission extends Model
     use HasFactory;
     use SoftDeletes; 
 
-    public function designations(){
-        return $this->hasMany(Designation::class);
-    } 
-
     protected $fillable = [
         'title', 
-        'commission', 
+        'commission',  
         'status',
         'created_by', 
         'updated_by', 
         'deleted_by'
     ]; 
+
+    public function designations(){
+        return $this->hasMany(Designation::class);
+    }  
+ 
 
     public function createdBy()
     {

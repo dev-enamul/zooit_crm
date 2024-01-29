@@ -11,8 +11,19 @@ class SpecialCommission extends Model
     use HasFactory; 
     use SoftDeletes;
 
-    protected $fillable = ['title', 'status', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['title', 'status','start_date','end_date', 'created_by', 'updated_by', 'deleted_by'];
  
+    public function commissions(){
+        return $this->hasMany(Commission::class);
+    }
+
+    public function special_commissions(){
+        return $this->hasMany(CommissionSpecialCommission::class,'special_commissions_id');
+    } 
+
+    public function total_commission(){
+        return $this->special_commissions()->sum('commission');
+    }
 
     public function createdBy()
     {

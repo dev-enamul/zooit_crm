@@ -13,8 +13,9 @@
                         <h4 class="mb-sm-0">Special Commission </h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Special Commission</li>
+                                <a class="btn btn-secondary" href="{{route('special-commission.create')}}">
+                                    <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Comission</span>
+                                </a> 
                             </ol>
                         </div> 
                     </div>
@@ -25,29 +26,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body"> 
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <a class="btn btn-secondary" href="{{route('special-comission.create')}}">
-                                            <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Comission</span>
-                                        </a> 
-                                    </div>
-                                </div>
-                           </div>
-
+                        <div class="card-body">  
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
@@ -59,54 +38,28 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="{{route('special-comission.show','12')}}">View Details</a>  
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>  
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>1</td>
-                                        <td><a href="{{route('special-comission.show','23')}}">Bijoy Offer</a></td>   
-                                        <td>10%</td>   
-                                        <td>0</td>
-                                    </tr>  
-
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>  
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>1</td>
-                                        <td>Bijoy Offer</td>   
-                                        <td>10%</td>   
-                                        <td>0</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>  
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>1</td>
-                                        <td>Bijoy Offer</td>   
-                                        <td>10%</td>   
-                                        <td>0</td>
-                                    </tr>
+                                    @foreach ($datas as $key => $item)
+                                        <tr>
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="{{route('special-commission.show',$item->id)}}">View Details</a>  
+                                                        <a class="dropdown-item" href="{{route('special-commission.edit',$item->id)}}">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('special-commission.destroy',$item->id) }}')">Delete</a>  
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td>{{$key+1}}</td>
+                                            <td><a href="{{route('special-commission.show',$item->id)}}">{{$item->title}}</a></td>   
+                                            <td>
+                                                @if($item->total_commission() != "" )
+                                                    {{ number_format($item->total_commission(), 2) }}%
+                                                @endif
+                                            </td>   
+                                            <td>0</td>
+                                        </tr> 
+                                    @endforeach 
                                 </tbody>
                             </table>
                         </div>

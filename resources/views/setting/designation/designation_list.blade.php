@@ -65,7 +65,7 @@
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a> 
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($data)}})">Edit</a> 
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('designation.destroy',$data->id) }}')">Delete</a>
                                                     <a class="dropdown-item" href="{{route('designation.permission',$data->id)}}">Update Permission</a> 
                                                 </div>
@@ -130,7 +130,65 @@
             </form> 
         </div>
     </div>
+</div> 
+
+
+<div class="modal fade" id="update_profession">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <h5 class="modal-title">Create New Designation</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+            </div>
+
+            <form action="{{route('designation.update')}}" method="POST">
+                @csrf 
+                <input type="hidden" name="id">
+                <div class="modal-body"> 
+                    <div class="form-group mb-2">
+                        <label for="title">Position Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div> 
+
+                    <div class="form-group mb-2">
+                        <label for="commission_id">Commission <span class="text-danger">*</span></label>
+                        <select id="commission_id" class="select2" name="commission_id" required>
+                            @foreach ($commissions as $item)
+                                <option value="{{$item->id}}">{{$item->title}} - {{$item->commission}}%</option>
+                            @endforeach 
+                        </select> 
+                    </div> 
+
+                    <div class="form-group mb-2">
+                        <label for="working_place">Working Space <span class="text-danger">*</span></label>
+                        <select id="working_place" class="select2" name="working_place" required> 
+                            <option value="1">Zone</option> 
+                            <option value="2">Area</option>  
+                        </select> 
+                    </div>  
+                </div> 
+                <div class="modal-footer">
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button> <button type="button" class="btn btn-outline-danger refresh_btn"><i class="mdi mdi-refresh"></i> Reset</button>
+                    </div> 
+                </div> 
+
+            </form> 
+        </div>
+    </div>
 </div>
-@endsection 
+@endsection  
+
+@section('script')
+    <script>  
+        function editItem(data){
+            $('#update_profession input[name=id]').val(data.id);
+            $('#update_profession input[name=title]').val(data.title);
+            $('#update_profession select[name=commission_id]').val(data.commission_id);
+            $('#update_profession select[name=working_place]').val(data.working_place);
+            $('#update_profession').modal('show');
+        }
+    </script>
+@endsection
+
 
  

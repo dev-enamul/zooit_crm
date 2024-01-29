@@ -50,7 +50,7 @@ class ProjectSettingController extends Controller
     }
 
     public function unit_category(){
-        $datas = UnitCategory::where('status',1)->get();
+        $datas = UnitCategory::where('status',1)->latest()->get();
         return view('setting.project.unit_category',compact('datas'));
     }  
 

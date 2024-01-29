@@ -46,6 +46,7 @@ use App\Http\Controllers\SpecialComissionController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\TargetReportController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TrainingCategoryController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VillageController;
@@ -176,12 +177,14 @@ Route::group(['middleware' => 'auth'],function () {
 
         // Emp Position & Permission 
         Route::resource('designation', DesignationController::class); 
+        Route::post('designation-update',[DesignationController::class,'update'])->name('designation.update');
         Route::get('designation-permission/{id}',[DesignationController::class,'designation_permission'])->name('designation.permission');
         Route::post('designation-permission-update',[DesignationController::class,'designation_permission_update'])->name('designation.permission.update');
         Route::resource('permission', PermissionController::class);
         // Special 
-        Route::resource('comission', CommissionControler::class);
-        Route::resource('special-comission', SpecialComissionController::class);
+        Route::resource('commission', CommissionControler::class);
+        Route::post('commission-update',[CommissionControler::class,'update'])->name('commission.update');
+        Route::resource('special-commission', SpecialComissionController::class);
         Route::resource('commission-deducted-setting', CommissionDeductedController::class);
         // Bank
         Route::resource('bank', BankController::class);  
@@ -192,6 +195,9 @@ Route::group(['middleware' => 'auth'],function () {
         Route::post('unit-type-update',[ProjectSettingController::class,"unit_type_update"])->name('unit.type.update');
         Route::any('unit-type-delete/{id}',[ProjectSettingController::class,"unit_type_delete"])->name('unit.type.delete');
         Route::get('unit-category',[ProjectSettingController::class,'unit_category'])->name('unit.category'); 
+        Route::post('unit-category-store',[ProjectSettingController::class,"unit_category_store"])->name('unit.category.store');
+        Route::post('unit-category-update',[ProjectSettingController::class,"unit_category_update"])->name('unit.category.update');
+        Route::any('unit-category-delete/{id}',[ProjectSettingController::class,"unit_category_delete"])->name('unit.category.delete');
 
         // Deposit Category 
         Route::resource('deposit-category', DepositCategoryController::class);
@@ -230,7 +236,8 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('direct-deposit-target',[DepositTargetController::class,'direct_deposit_target'])->name('direct.deposit.target');
 
         // Training
-        Route::resource('training', TrainingController::class);
+        Route::resource('training-category', TrainingCategoryController::class);
+        Route::post('training-category-update',[TrainingCategoryController::class,'update'])->name('training.category.update');
         Route::get('training-schedule-create',[TrainingController::class,'training_schedule_create'])->name('training.schedule.create');
         Route::get('training-schedule',[TrainingController::class,'training_schedule'])->name('training.schedule');
         Route::get('training-attendance',[TrainingController::class,'training_attendance'])->name('training.attendance');

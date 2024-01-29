@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('commissions_id')->constrained();
             $table->foreignId('special_commissions_id')->constrained();
-            $table->integer('commission')->default(0);
+            $table->float('commission')->default(0);
 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();

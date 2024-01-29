@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('training_categories', function (Blueprint $table) {
             $table->id();
             $table->string('title', 45);
+            $table->text('description')->nullable();
             
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
