@@ -76,10 +76,38 @@
                 </div>
             </div>
 
-            @include('common.search', [
-                'div' => 'col-md-6',
-                'visible' => ['division', 'district', 'upazila','union','village'],
-            ])
+
+            <div class="offcanvas offcanvas-end" id="offcanvas">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title">Select Filter Item</h5>
+                    <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="offcanvas-body">
+                    <form action="{{route('product.search')}}" method="POST">
+                        @csrf
+                        <div class="row"> 
+                            @include('common.search', [
+                                'div' => 'col-md-6',
+                                'visible' => ['division', 'district', 'upazila','union','village'],
+                            ])
+                            <input type="hidden" id="division" value="{{ @$division }}">
+                            <input type="hidden" id="district" value="{{ @$district }}">
+                            <input type="hidden" id="upazila" value="{{ @$upazila }}">
+                            <input type="hidden" id="union" value="{{ @$union }}">
+                            <input type="hidden" id="village" value="{{ @$village }}">
+                            <div class="text-end ">
+                                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                            </div> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+          
+
+
+
         </div>
     </div>
 

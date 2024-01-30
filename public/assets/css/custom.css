@@ -8,8 +8,7 @@
     --secondary: rgba(27 65 99);
     --secondary-hover:rgba(27 65 99 .8); 
     --bs-list-group-active-border-color: rgba(27 65 99);
-    --bs-list-group-active-bg: rgba(27 65 99);
-  
+    --bs-list-group-active-bg: rgba(27 65 99); 
 }
 
 :root {

@@ -18,11 +18,13 @@
     <link rel="stylesheet" href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}">
     
     <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
-    @yield('style')
+    @yield('style') 
 
 </head>
 
-<body> 
+
+<body>    
+    @include('includes.preloader')
     <div id="layout-wrapper">  
         @include('includes.header') 
         @include('includes.sidebar') 
@@ -93,7 +95,8 @@
 
         @if(session('warning'))
             Toast.fire({ icon: "warning", title: '{{ session('warning') }}' }); 
-        @endif
+        @endif 
+ 
     </script>
 </body>
  

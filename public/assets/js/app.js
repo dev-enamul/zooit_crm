@@ -4,3 +4,7 @@ $('.refresh_btn').click(function(){
     var form = $(this).closest('form')[0];
             form.reset();
 })
+
+$(window).on('load', function() {
+    $(".preloader").fadeOut("slow");
+});
