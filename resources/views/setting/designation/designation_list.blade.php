@@ -13,8 +13,9 @@
                         <h4 class="mb-sm-0">Designation</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Designation</li>
+                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_profession">
+                                    <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Designation</span>
+                                </button> 
                             </ol>
                         </div> 
                     </div>
@@ -26,29 +27,7 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_profession">
-                                            <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Designation</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
+ 
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
@@ -150,8 +129,8 @@
                     </div> 
 
                     <div class="form-group mb-2">
-                        <label for="commission_id">Commission <span class="text-danger">*</span></label>
-                        <select id="commission_id" class="select2" name="commission_id" required>
+                        <label for="new_commission_id">Commission <span class="text-danger">*</span></label>
+                        <select id="new_commission_id" class="select2" name="commission_id" required>
                             @foreach ($commissions as $item)
                                 <option value="{{$item->id}}">{{$item->title}} - {{$item->commission}}%</option>
                             @endforeach 
@@ -159,8 +138,8 @@
                     </div> 
 
                     <div class="form-group mb-2">
-                        <label for="working_place">Working Space <span class="text-danger">*</span></label>
-                        <select id="working_place" class="select2" name="working_place" required> 
+                        <label for="new_working_place">Working Space <span class="text-danger">*</span></label>
+                        <select id="new_working_place" class="select2" name="working_place" required> 
                             <option value="1">Zone</option> 
                             <option value="2">Area</option>  
                         </select> 

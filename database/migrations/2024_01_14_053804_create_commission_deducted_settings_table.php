@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('start_amount');
             $table->bigInteger('end_amount')->nullable();
-            $table->integer('deducted')->nullable()->comment('%');
+            $table->float('deducted')->nullable()->comment('%');
             
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();

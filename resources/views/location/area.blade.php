@@ -136,7 +136,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header"> 
-                <h5 class="modal-title">Create new Area</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                <h5 class="modal-title">Update Area</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
             </div>
 
             <form action="{{route('area.update')}}" method="POST"> 
