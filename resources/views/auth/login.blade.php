@@ -1,5 +1,6 @@
 @extends('layouts.app') 
-@section('content')
+@section('content') 
+ 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -61,6 +62,27 @@
                             </div>
                         </div>
                     </form>
+                </div> 
+            </div>
+            <div class="card mt-2">
+                <div class="card-header">
+                    Login Information
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>User</th>
+                            <th>Phone</th>
+                            <th>Password</th>
+                        </tr>
+                        @foreach ($datas as $item)
+                        <tr>
+                            <td>{{$item->name}}</td>
+                            <td>{{$item->phone}}</td>
+                            <td>123456</td>
+                        </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>
