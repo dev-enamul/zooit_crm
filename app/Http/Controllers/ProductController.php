@@ -145,9 +145,9 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'division'          => 'required',
             'district'          => 'required',
-            'upazila_id'        => 'sometimes|required',
-            'union_id'          => 'sometimes|required',
-            'village_id'        => 'sometimes|required',
+            'upazila'        => 'sometimes|required',
+            'union'          => 'sometimes|required',
+            'village'        => 'sometimes|required',
         ]);
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
@@ -166,21 +166,19 @@ class ProductController extends Controller
                 $upazila_id     = $request->upazila;
                 $union_id       = $request->union;
                 $village_id     = $request->village;
-
-                $divisions = $this->getCachedDivisions();
-                $districts = $this->getCachedDistricts();
-                $upazilas  = $this->getCachedUpazilas();
-                $unions    = $this->getCachedUnions();
-                $villages  = $this->getCachedVillages();
-
-                $projects  = Project::where('status',1)->select('id','name','address','total_floor')->get();
+                $divisions      = $this->getCachedDivisions();
+                $districts      = $this->getCachedDistricts();
+                $upazilas       = $this->getCachedUpazilas();
+                $unions         = $this->getCachedUnions();
+                $villages       = $this->getCachedVillages();
 
                 $selected['division_id'] = $division_id;
                 $selected['district_id'] = $district_id;
                 $selected['upazila_id']  = $upazila_id;
                 $selected['union_id']    = $union_id;
                 $selected['village_id']  = $village_id;
-    
+
+                $projects  = Project::where(['status'=>1, 'division_id'=>$division_id,'district_id'=>$district_id,'upazila_id'=>$upazila_id,'union_id'=>$union_id,'village_id'=>$village_id])->select('id','name','address','total_floor')->get();
                 return view('product.product_list', compact('projects','divisions','districts','upazilas','unions','villages','selected'));
             }
         }
@@ -191,7 +189,7 @@ class ProductController extends Controller
     }
 
     public function edit($id){
-        $title      = "Product Edit";
+        $title     = "Product Edit";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
         $districts = $this->getCachedDistricts();

@@ -98,16 +98,15 @@
                             <input type="hidden" id="union" value="{{ @$union }}">
                             <input type="hidden" id="village" value="{{ @$village }}">
                             <div class="text-end ">
-                                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> 
+                                <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
+                                    <i class="mdi mdi-refresh"></i> Reset
+                                </button>                            
                             </div> 
                         </div>
                     </form>
                 </div>
             </div>
-          
-
-
-
         </div>
     </div>
 
@@ -129,15 +128,18 @@
 @endsection
 
 @section('script')
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    
-    <script>
-        $(document).ready(function () {
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $(window).on('load', function () {
+            console.log('DataTable initialized');
             var table = $('#book_table').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
@@ -158,7 +160,18 @@
                         }
                     }
                 ]
-            }); 
+            });
         });
-    </script>
+    });
+
+    function resetFormFields() {
+        $("#division").val('');
+        $("#district").val('');
+        $("#upazila").val('');
+        $("#union").val('');
+        $("#village").val('');
+    }
+</script>
+
+@yield('script-bottom')s
 @endsection
