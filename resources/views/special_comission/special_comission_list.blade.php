@@ -53,8 +53,8 @@
                                             <td>{{$key+1}}</td>
                                             <td><a href="{{route('special-commission.show',$item->id)}}">{{$item->title}}</a></td>   
                                             <td>
-                                                @if($item->total_commission() != "" )
-                                                    {{ number_format($item->total_commission(), 2) }}%
+                                                @if($item->total_commission() != "" ) 
+                                                    {{ round($item->total_commission(),2) }}%
                                                 @endif
                                             </td>   
                                             <td>0</td>

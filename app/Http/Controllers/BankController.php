@@ -2,63 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
+use Exception;
 use Illuminate\Http\Request;
 
 class BankController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
+{ 
     public function index()
     {
-        return view('setting.bank_list');
+        $datas = Bank::where('status', 1)->get();
+        return view('setting.bank_list',compact('datas'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('bank.bank_create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+  
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'type' => 'required' 
+        ]);
+       try{
+        $data = new Bank();
+        $data->name = $request->name;
+        $data->type = $request->type; 
+        $data->save();
+            return redirect()->back()->with('success', 'Bank Created Successfully');
+       }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+       }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'type' => 'required' 
+        ]);
+       try{
+        $data = Bank::find($id);
+        if(!$data){
+            return redirect()->back()->with('error', 'Data Not Found');
+        }   
+        $data->name = $request->name;
+        $data->type = $request->type; 
+        $data->save();
+        return redirect()->back()->with('success', 'Bank Updated'); 
+       }catch(Exception $e){ 
+            return redirect()->back()->with('error', $e->getMessage());
+       }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(string $id)
     {
-        //
+        try{
+            $data = Bank::find($id);
+            if(!$data){
+                return redirect()->back()->with('error', 'Data Not Found');
+            }   
+            $data->delete();
+            return response()->json(['success' => 'Bank Deleted Successfully']); 
+        }catch(Exception $e){ 
+                return response()->json(['error' => $e->getMessage()]);
+        }
     }
 }

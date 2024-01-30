@@ -41,9 +41,20 @@ class BankDayController extends Controller
     }
   
  
+ 
     public function update(Request $request, string $id)
     {
-        //
+        try{
+            $data = BankDay::find($id); 
+            if(!$data){
+                return redirect()->back()->with('error','Data Not Found');
+            } 
+            $data->bank_day = json_encode($request->bank_day);  
+            $data->save();
+            return redirect()->back()->with('success','Bank Day Updated');
+        }catch(Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+        }
     }
 
  
@@ -52,9 +63,9 @@ class BankDayController extends Controller
         try{
             $data = BankDay::find($id);
             $data->delete();
-            return redirect()->back()->with('success','Bank Day Deleted');
-        }catch(Exception $e){
-            return redirect()->back()->with('error',$e);
+            return response()->json(['success'=>'Bank Day Deleted']);
+        }catch(Exception $e){  
+            return response()->json(['error'=>$e->getMessage()]);
         }
     }
 }

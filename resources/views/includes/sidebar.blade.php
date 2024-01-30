@@ -455,7 +455,7 @@
                     </a> 
                     <ul class="sub-menu" aria-expanded="false"> 
                         <li><a href="{{route('designation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Employee Position</a></li> 
-                        <li><a href="{{route('permission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Permission</a></li> 
+                        {{-- <li><a href="{{route('permission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Permission</a></li>  --}}
                     </ul>
                 </li> 
 
