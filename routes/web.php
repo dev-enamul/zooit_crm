@@ -248,7 +248,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::resource('meeting',MeetingController::class);
 });
 
-Route::get('/migrate-refresh',[DashboardController::class,'migrate_fresh']); 
+Route::get('artisan/{data}',[DashboardController::class,'migrate_fresh']); 
 
 
   

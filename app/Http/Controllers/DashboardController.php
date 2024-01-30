@@ -13,9 +13,8 @@ class DashboardController extends Controller
         return view('index',compact('user'));
     }
 
-    public function migrate_fresh(){  
-        Artisan::call('migrate:fresh');
-        Artisan::call('db:seed'); 
+    public function migrate_fresh($data){   
+        Artisan::call($data); 
         return redirect()->route('index');
     }
 }
