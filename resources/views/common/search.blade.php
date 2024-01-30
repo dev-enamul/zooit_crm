@@ -142,6 +142,53 @@ $visible = $visible ?? [];
     </div>
 @endif
 
+@if (in_array('status', $visible))
+    <div class="{{ $div . ' ' . $mb }}">
+        <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('status', $required) ? '*' : '' }}</span></label>
+        <select class="form-select select2" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
+            <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
+                Select a Status {{ in_array('status', $required) ? '*' : '' }}
+            </option>
+            @foreach (\App\Enums\Status::values() as $status)
+                <option value="{{ $status }}" {{ old('status', $selected['status'] ?? null) == $status ? 'selected' : '' }}>
+                    {{ $status }}
+                </option>
+            @endforeach
+        </select>
+        
+        @if ($errors->has('status'))
+            <span class="text-danger" role="alert">
+                {{ $errors->first('status') }}
+            </span>
+        @endif
+    </div>
+@endif
+
+@if (in_array('project', $visible))
+    <div class="{{ $div . ' ' . $mb }}">
+        <label for="project" class="form-label">Project <span class="text-danger">{{ in_array('project', $required) ? '*' : '' }}</span></label>
+        <select class="form-select select2" name="project" id="project" {{ in_array('project', $required) ? 'required' : '' }}>
+            <option value="" data-display="Select a Project {{ in_array('project', $required) ? '*' : '' }}">
+                Select a Project {{ in_array('project', $required) ? '*' : '' }}
+            </option>
+            @isset($projects)
+                @foreach ($projects as $project)
+                    <option value="{{ $project->id }}" {{ old('project', $selected['project_id'] ?? null) == $project->id ? 'selected' : '' }}>
+                        {{ $project->name }}
+                    </option>
+                @endforeach
+            @endisset
+        </select>
+        
+        @if ($errors->has('village'))
+            <span class="text-danger" role="alert">
+                {{ $errors->first('village') }}
+            </span>
+        @endif
+    </div>
+@endif
+
+
 {{-- <div class="col-md-12">
         <div class="mb-3">
             <label for="duration" class="form-label">Duration </label>

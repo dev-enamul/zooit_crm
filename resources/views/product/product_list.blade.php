@@ -35,11 +35,10 @@
                                         <th>S/N</th> 
                                         <th>Name & ID</th>
                                         <th>Address</th>
-                                        <th>Flat</th>
-                                        <th>Shop</th>
-                                        <th>Garage</th> 
-                                        <th>Deluxe/Studio</th> 
-                                        <th>Sea/Hall</th> 
+                                        <th>Floor</th>
+                                        @foreach($unit_headers as $header)
+                                            <th>{{ ucfirst($header->title) }}</th>
+                                        @endforeach 
                                     </tr>
                                 </thead>
                                 
@@ -53,7 +52,7 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('product.edit',$project->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('product.delete',$project->id) }}')">Delete</a>  
                                                     <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a>
                                                     <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
                                                 </div>
@@ -128,8 +127,8 @@
 @endsection
 
 @section('script')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+{{-- <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script> --}}
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>

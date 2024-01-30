@@ -149,19 +149,52 @@ class ProductUnitController extends Controller
         return view('product.unit_save',compact('title','units','products','categories','project_unit'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function productUnitDelete($id){
+        try{ 
+            $data  = ProjectUnit::find($id);
+            UnitPrice::where('project_unit_id', $id)->delete();
+            $data->delete();
+            return response()->json(['success' => 'Project Unit Deleted'],200);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()],500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function productUnitSearch(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'status'         => 'required',
+            'project'        => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $errorMessage = implode('<br>', $errors);
+        
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
+            }
+        }
+
+        try{
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $status         = $request->status;
+                $project_id     = $request->project;
+
+                $selected['status']      = $status;
+                $selected['project_id'] = $project_id;
+                ProjectUnit::where('status', 1)
+                ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
+                ->get(['id','name','project_id','unit_id','unit_category_id']);
+                $project  = ProjectUnit::where('status', $status)->where('project_id',$project_id)
+                            ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
+                            ->get(['id','name','project_id','unit_id','unit_category_id']);
+                return view('product.product_list', compact('projects','divisions','districts','upazilas','unions','villages','selected'));
+            }
+        }
+        catch (\Throwable $th) {
+            dd( $th);
+            return redirect()->route('product.edit')->with('error', 'Something went wrong!');
+         }
     }
 }

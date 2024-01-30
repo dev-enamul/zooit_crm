@@ -8,6 +8,7 @@ use App\Models\Division;
 use App\Models\Project;
 use App\Models\ProjectImage;
 use App\Models\Union;
+use App\Models\Unit;
 use App\Models\Upazila;
 use App\Models\Village;
 use App\Traits\AreaTrait;
@@ -26,9 +27,10 @@ class ProductController extends Controller
     use AreaTrait;
 
     public function index(){
-        $divisions = $this->getCachedDivisions();
-        $projects = Project::where('status',1)->select('id','name','address','total_floor')->get();
-        return view('product.product_list',compact('projects','divisions'));
+        $divisions      = $this->getCachedDivisions();
+        $projects       = Project::where('status',1)->select('id','name','address','total_floor')->get();
+        $unit_headers   = Unit::where('status',1)->select('id','title')->get();
+        return view('product.product_list',compact('projects','divisions','unit_headers'));
     }
 
     public function create(){
@@ -158,7 +160,6 @@ class ProductController extends Controller
             }
         }
 
-    
         try{
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $division_id    = $request->division;
@@ -214,5 +215,15 @@ class ProductController extends Controller
 
     public function product_approve(){
         return view('product.product_approve');
+    }
+
+    public function productDelete($id){
+        try{ 
+            $data  = Project::find($id);
+            $data->delete();
+            return response()->json(['success' => 'Project Deleted'],200);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()],500);
+        }
     }
 }
