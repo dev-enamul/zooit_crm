@@ -75,6 +75,11 @@
                             <th>Phone</th>
                             <th>Password</th>
                         </tr>
+                        {{-- get user list from database --}}
+                        @php
+                            $datas = App\Models\User::all();
+                        @endphp
+
                         @foreach ($datas as $item)
                         <tr>
                             <td>{{$item->name}}</td>
