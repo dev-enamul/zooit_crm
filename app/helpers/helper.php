@@ -1,5 +1,9 @@
- <?php  
+ <?php
 
+use App\Models\District;
+use App\Models\Union;
+use App\Models\Upazila;
+use App\Models\Village;
 use Illuminate\Support\Str;
  
 if (!function_exists('getSlug')) {
@@ -35,5 +39,45 @@ if (!function_exists('get_price')) {
     function get_price($amount,$decimal = 0)
     { 
         return '৳' . number_format($amount,$decimal);
+    }
+}
+
+if (!function_exists('districts')) {
+    function districts(int $division_id = null)
+    {
+        return District::withOutGlobalScopes()
+            ->when($division_id, function ($q) use ($division_id) {
+                $q->where('division_id', $division_id);
+            })->get();
+    }
+}
+
+if (!function_exists('upazilas')) {
+    function upazilas(int $district_id = null, int $division_id = null)
+    {
+        return Upazila::withOutGlobalScopes()
+            ->when($district_id, function ($q) use ($district_id) {
+                $q->where('district_id', $district_id);
+            })->get();
+    }
+}
+
+if (!function_exists('unions')) {
+    function unions(int $upazila_id = null, int $district_id = null, int $division_id = null)
+    {
+        return Union::withOutGlobalScopes()
+            ->when($upazila_id, function ($q) use ($upazila_id) {
+                $q->where('upazila_id', $upazila_id);
+            })->get();
+    }
+}
+
+if (!function_exists('villages')) {
+    function villages(  int $union_id = null, int $upazila_id = null, int $district_id = null, int $division_id = null)
+    {
+        return Village::withOutGlobalScopes()
+            ->when($union_id, function ($q) use ($union_id) {
+                $q->where('union_id', $union_id);
+            })->get();
     }
 }

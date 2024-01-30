@@ -140,6 +140,56 @@ class ProductController extends Controller
         }
     }
 
+    public function productSearch(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'division'          => 'required',
+            'district'          => 'required',
+            'upazila_id'        => 'sometimes|required',
+            'union_id'          => 'sometimes|required',
+            'village_id'        => 'sometimes|required',
+        ]);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $errorMessage = implode('<br>', $errors);
+        
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
+            }
+        }
+
+    
+        try{
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $division_id    = $request->division;
+                $district_id    = $request->district;
+                $upazila_id     = $request->upazila;
+                $union_id       = $request->union;
+                $village_id     = $request->village;
+
+                $divisions = $this->getCachedDivisions();
+                $districts = $this->getCachedDistricts();
+                $upazilas  = $this->getCachedUpazilas();
+                $unions    = $this->getCachedUnions();
+                $villages  = $this->getCachedVillages();
+
+                $projects  = Project::where('status',1)->select('id','name','address','total_floor')->get();
+
+                $selected['division_id'] = $division_id;
+                $selected['district_id'] = $district_id;
+                $selected['upazila_id']  = $upazila_id;
+                $selected['union_id']    = $union_id;
+                $selected['village_id']  = $village_id;
+    
+                return view('product.product_list', compact('projects','divisions','districts','upazilas','unions','villages','selected'));
+            }
+        }
+        catch (\Throwable $th) {
+            dd( $th);
+            return redirect()->route('product.edit')->with('error', 'Something went wrong!');
+         }
+    }
+
     public function edit($id){
         $title      = "Product Edit";
         $countries = $this->getCachedCountries();
