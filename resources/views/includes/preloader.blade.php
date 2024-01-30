@@ -8,8 +8,7 @@
 :root {
     --hue: 208;
     --bg: hsl(var(--hue),100%,100%); 
-    --trans-dur: 0.3s;
-    font-size: calc(16px + (24 - 16) * (100vw - 320px) / (2560 - 320));
+    --trans-dur: 0.3s; 
 }
 .preloader {
     position: fixed;
