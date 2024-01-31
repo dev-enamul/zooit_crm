@@ -21,4 +21,8 @@ class CommissionReportController extends Controller
     public function rsa_co_ordinator(){
         return view('report.commission.rsa_co_ordinator');
     }
+
+    public function cc_report(){
+        return view('report.commission.cc_report');
+    }
 }

@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\CommissionDeductedSetting;
 use App\Models\NegotiationWaitingDay;
+use App\Models\ReportingUser;
 use App\Models\TrainingCategory;
 use Illuminate\Database\Seeder;
 
@@ -37,5 +38,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DesignationPermissionSeeder::class);
         $this->call(UserPermissionSeeder::class);
         $this->call(DepositCategorySeeder::class);
+        $this->call(ReportingUserSeeder::class);
     }
 }

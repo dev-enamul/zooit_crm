@@ -51,6 +51,11 @@ class User extends Authenticatable
     public function profession()
     {
         return $this->belongsTo(Profession::class, 'professions_id');
+    } 
+
+    public function reportingUser()
+    {
+        return $this->hasOne(ReportingUser::class, 'user_id');
     }
 
     public function referee()
@@ -72,5 +77,6 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
+ 
 
 }
