@@ -17,7 +17,7 @@ use App\Http\Controllers\DepositTargetController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\DtaReportController;
 use App\Http\Controllers\DueReportController;
-use App\Http\Controllers\EmployeeController; 
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FieldTargetController;
 use App\Http\Controllers\FollowupAnalysisController;
 use App\Http\Controllers\FollowupController;
@@ -69,198 +69,201 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
- 
-Auth::routes();
-Route::post('login', [LoginController::class,'login'])->name('login');
 
-Route::group(['middleware' => 'auth'],function () { 
-        Route::get('/',[DashboardController::class,'index'])->name('index');
-  
+Auth::routes();
+Route::post('login', [LoginController::class, 'login'])->name('login');
+
+Route::group(['middleware' => 'auth'], function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+
         # Common
         //Area
-        Route::get('division-get-district',[AreaController::class,'divisionGetDistrict'])->name('division-get-district');
-        Route::get('district-get-upazila',[AreaController::class,'districtGetUpazila'])->name('district-get-upazila');
-        Route::get('upazila-get-union',[AreaController::class,'upazilaGetUnion'])->name('upazila-get-union');
-        Route::get('union-get-village',[AreaController::class,'unionGetVillage'])->name('union-get-village');
+        Route::get('division-get-district', [AreaController::class, 'divisionGetDistrict'])->name('division-get-district');
+        Route::get('district-get-upazila', [AreaController::class, 'districtGetUpazila'])->name('district-get-upazila');
+        Route::get('upazila-get-union', [AreaController::class, 'upazilaGetUnion'])->name('upazila-get-union');
+        Route::get('union-get-village', [AreaController::class, 'unionGetVillage'])->name('union-get-village');
 
- 
+
 
         // Profile 
-        Route::get('profile',[ProfileController::class,'index'])->name('profile');
+        Route::get('profile', [ProfileController::class, 'index'])->name('profile');
 
         // Employee 
-        Route::resource('employee', EmployeeController::class); 
-        Route::get('employee-permission/{id}',[EmployeeController::class,'employee_permission'])->name('employee.permission');
-        Route::post('user-permission-update',[EmployeeController::class,'user_permission_update'])->name('user.permission.update');
-        Route::get('employees/tree',[EmployeeController::class,'tree'])->name('employees.tree');
+        Route::resource('employee', EmployeeController::class);
+        Route::get('employee-permission/{id}', [EmployeeController::class, 'employee_permission'])->name('employee.permission');
+        Route::post('user-permission-update', [EmployeeController::class, 'user_permission_update'])->name('user.permission.update');
+        Route::get('employees/tree', [EmployeeController::class, 'tree'])->name('employees.tree');
 
         // Product 
-      
-        Route::resource('product', ProductController::class);  
-        Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
-        Route::get('sold-unsold',[ProductController::class,'sold_unsold'])->name('sold.unsold');
-        Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
-        Route::get('/product-approve',[ProductController::class,'product_approve'])->name('product.approve');
-        Route::post('/product-search',[ProductController::class,'productSearch'])->name('product.search');
-        Route::any('product-delete/{id}',[ProductController::class,"productDelete"])->name('product.delete');
+
+        Route::resource('product', ProductController::class);
+        Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
+        Route::get('sold-unsold', [ProductController::class, 'sold_unsold'])->name('sold.unsold');
+        Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
+        Route::get('/product-approve', [ProductController::class, 'product_approve'])->name('product.approve');
+        Route::post('/product-search', [ProductController::class, 'productSearch'])->name('product.search');
+        Route::any('product-delete/{id}', [ProductController::class, "productDelete"])->name('product.delete');
 
         Route::resource('unit', ProductUnitController::class);
-        Route::post('unit-save/{id?}',[ProductUnitController::class,'save'])->name('unit.save');
-        Route::any('product-unit-delete/{id}',[ProductUnitController::class,"productUnitDelete"])->name('project.unit.delete');
-        Route::post('/product-unit-search',[ProductUnitController::class,'productUnitSearch'])->name('project.unit.search');
+        Route::post('unit-save/{id?}', [ProductUnitController::class, 'save'])->name('unit.save');
+        Route::any('product-unit-delete/{id}', [ProductUnitController::class, "productUnitDelete"])->name('project.unit.delete');
+        Route::post('/product-unit-search', [ProductUnitController::class, 'productUnitSearch'])->name('project.unit.search');
 
         // Freelancer 
-        Route::resource('freelancer', FreelancerController::class); 
-        Route::get('freelancer-profile',[FreelancerProfileController::class,'freelancer_profile'])->name('freelancer.profile');
-        Route::get('freelancer-hierarchy',[FreelancerProfileController::class,'freelancer_hierarchy'])->name('freelancer.hierarchy');
-        Route::get('freelancer-book-reading',[FreelancerProfileController::class,'freelancer_book_reading'])->name('freelancer.book');
-        Route::get('freelancer-field-work',[FreelancerProfileController::class,'freelancer_field_work'])->name('freelancer.field.work');
-        Route::get('freelancer-wallet',[FreelancerProfileController::class,'freelancer_wallet'])->name('freelancer.wallet');
-        Route::get('freelancer-salse',[FreelancerProfileController::class,'freelancer_sales'])->name('freelancer.salse');
-        
+        Route::resource('freelancer', FreelancerController::class);
+        Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
+        Route::get('freelancer-hierarchy', [FreelancerProfileController::class, 'freelancer_hierarchy'])->name('freelancer.hierarchy');
+        Route::get('freelancer-book-reading', [FreelancerProfileController::class, 'freelancer_book_reading'])->name('freelancer.book');
+        Route::get('freelancer-field-work', [FreelancerProfileController::class, 'freelancer_field_work'])->name('freelancer.field.work');
+        Route::get('freelancer-wallet', [FreelancerProfileController::class, 'freelancer_wallet'])->name('freelancer.wallet');
+        Route::get('freelancer-salse', [FreelancerProfileController::class, 'freelancer_sales'])->name('freelancer.salse');
+
 
 
         // Customer 
-        Route::resource('customer', CustomerController::class); 
+        Route::resource('customer', CustomerController::class);
 
         // Prospecting 
-        Route::resource('prospecting', ProspectingController::class); 
+        Route::resource('prospecting', ProspectingController::class);
 
         // Prospecting 
-        Route::resource('cold-calling', ColdCallingController::class); 
+        Route::resource('cold-calling', ColdCallingController::class);
 
         // Lead 
-        Route::resource('lead', LeadController::class); 
+        Route::resource('lead', LeadController::class);
 
         // Lead Analysis
-        Route::resource('lead-analysis', LeadAnalysisController::class); 
+        Route::resource('lead-analysis', LeadAnalysisController::class);
 
         // Presentation
-        Route::resource('presentation', PresentationController::class); 
+        Route::resource('presentation', PresentationController::class);
 
         // Presentation Analysis
-        Route::resource('presentation_analysis', PresentationAnalysisController::class); 
+        Route::resource('presentation_analysis', PresentationAnalysisController::class);
 
         // Follow Up
-        Route::resource('followup', FollowupController::class); 
+        Route::resource('followup', FollowupController::class);
 
         // Follow Up Analysis
-        Route::resource('followup-analysis', FollowupAnalysisController::class); 
+        Route::resource('followup-analysis', FollowupAnalysisController::class);
 
         // Negotation
-        Route::resource('negotiation', NegotiationController::class); 
+        Route::resource('negotiation', NegotiationController::class);
 
         // Negotation Analysis
-        Route::resource('negotiation-analysis', NegotiationAnalysisController::class); 
+        Route::resource('negotiation-analysis', NegotiationAnalysisController::class);
 
 
         // Salse
-        Route::resource('salse', SalseController::class);  
+        Route::resource('salse', SalseController::class);
 
         // Salse
-        Route::resource('deposit', DepositController::class); 
+        Route::resource('deposit', DepositController::class);
 
         // Rejection
-        Route::resource('rejection', RejectionController::class); 
+        Route::resource('rejection', RejectionController::class);
 
         // Return
-        Route::resource('return', SalseReturnController::class); 
+        Route::resource('return', SalseReturnController::class);
 
         // Transfer
         Route::resource('transfer', SalseTransferController::class);
 
         // Settings ============================= 
         // Profession
-        Route::resource('profession', ProfessionController::class); 
-        Route::post('profession-update',[ProfessionController::class,'update'])->name('profession.update');
+        Route::resource('profession', ProfessionController::class);
+        Route::post('profession-update', [ProfessionController::class, 'update'])->name('profession.update');
         // Location
         Route::resource('union', UnionController::class);
-        Route::resource('village', VillageController::class); 
-        Route::get('village-update',[VillageController::class,'update'])->name('village.update'); 
-        Route::resource('zone', ZoneController::class); 
-        Route::post('zone-update',[ZoneController::class,'update'])->name('zone.update'); 
+        Route::resource('village', VillageController::class);
+        Route::get('village-update', [VillageController::class, 'update'])->name('village.update');
+        Route::resource('zone', ZoneController::class);
+        Route::post('zone-update', [ZoneController::class, 'update'])->name('zone.update');
         Route::resource('area', ZoneAreaController::class);
-        Route::post('area-update',[ZoneAreaController::class,'update'])->name('area.update'); 
+        Route::post('area-update', [ZoneAreaController::class, 'update'])->name('area.update');
 
         // Emp Position & Permission 
-        Route::resource('designation', DesignationController::class); 
-        Route::post('designation-update',[DesignationController::class,'update'])->name('designation.update');
-        Route::get('designation-permission/{id}',[DesignationController::class,'designation_permission'])->name('designation.permission');
-        Route::post('designation-permission-update',[DesignationController::class,'designation_permission_update'])->name('designation.permission.update');
+        Route::resource('designation', DesignationController::class);
+        Route::post('designation-update', [DesignationController::class, 'update'])->name('designation.update');
+        Route::get('designation-permission/{id}', [DesignationController::class, 'designation_permission'])->name('designation.permission');
+        Route::post('designation-permission-update', [DesignationController::class, 'designation_permission_update'])->name('designation.permission.update');
         Route::resource('permission', PermissionController::class);
         // Special 
         Route::resource('commission', CommissionControler::class);
-        Route::post('commission-update',[CommissionControler::class,'update'])->name('commission.update');
+        Route::post('commission-update', [CommissionControler::class, 'update'])->name('commission.update');
         Route::resource('special-commission', SpecialComissionController::class);
         Route::resource('commission-deducted-setting', CommissionDeductedController::class);
         // Bank
-        Route::resource('bank', BankController::class);  
+        Route::resource('bank', BankController::class);
         Route::resource('bank-day', BankDayController::class);
         // Project 
-        Route::get('unit-type',[ProjectSettingController::class,'unit_type'])->name('unit.type');
-        Route::post('unit-type-store',[ProjectSettingController::class,"unit_type_store"])->name('unit.type.store');
-        Route::post('unit-type-update',[ProjectSettingController::class,"unit_type_update"])->name('unit.type.update');
-        Route::any('unit-type-delete/{id}',[ProjectSettingController::class,"unit_type_delete"])->name('unit.type.delete');
-        Route::get('unit-category',[ProjectSettingController::class,'unit_category'])->name('unit.category'); 
-        Route::post('unit-category-store',[ProjectSettingController::class,"unit_category_store"])->name('unit.category.store');
-        Route::post('unit-category-update',[ProjectSettingController::class,"unit_category_update"])->name('unit.category.update');
-        Route::any('unit-category-delete/{id}',[ProjectSettingController::class,"unit_category_delete"])->name('unit.category.delete');
+        Route::get('unit-type', [ProjectSettingController::class, 'unit_type'])->name('unit.type');
+        Route::post('unit-type-store', [ProjectSettingController::class, "unit_type_store"])->name('unit.type.store');
+        Route::post('unit-type-update', [ProjectSettingController::class, "unit_type_update"])->name('unit.type.update');
+        Route::any('unit-type-delete/{id}', [ProjectSettingController::class, "unit_type_delete"])->name('unit.type.delete');
+        Route::get('unit-category', [ProjectSettingController::class, 'unit_category'])->name('unit.category');
+        Route::post('unit-category-store', [ProjectSettingController::class, "unit_category_store"])->name('unit.category.store');
+        Route::post('unit-category-update', [ProjectSettingController::class, "unit_category_update"])->name('unit.category.update');
+        Route::any('unit-category-delete/{id}', [ProjectSettingController::class, "unit_category_delete"])->name('unit.category.delete');
 
         // Deposit Category 
         Route::resource('deposit-category', DepositCategoryController::class);
-        Route::resource('special-offer',SpecialOffer::class);
+        Route::resource('special-offer', SpecialOffer::class);
 
 
         //Reports 
-        Route::get('monthly-target-achive',[CommissionReportController::class,'monthly_target_achive'])->name('monthly.target.achive');
-        Route::get('mst-commission',[CommissionReportController::class,'mst_commission'])->name('mst.commission');
-        Route::get('mst-commission-details/{id}',[CommissionReportController::class,'mst_commission_details'])->name('mst.commission.details');
-        Route::get('rsa-co-ordinator',[CommissionReportController::class,'rsa_co_ordinator'])->name('rsa.co.ordinator');
-        Route::get('cc-report',[CommissionReportController::class,'cc_report'])->name('cc.report');
-        Route::get('special-offer-report',[SpecialOfferReportController::class,'index'])->name('special.offer.report');
-        
+        Route::get('monthly-target-achive', [CommissionReportController::class, 'monthly_target_achive'])->name('monthly.target.achive');
+        Route::get('mst-commission', [CommissionReportController::class, 'mst_commission'])->name('mst.commission');
+        Route::get('mst-commission-details/{id}', [CommissionReportController::class, 'mst_commission_details'])->name('mst.commission.details');
+        Route::get('rsa-co-ordinator', [CommissionReportController::class, 'rsa_co_ordinator'])->name('rsa.co.ordinator');
+        Route::get('cc-report', [CommissionReportController::class, 'cc_report'])->name('cc.report');
+        Route::get('special-offer-report', [SpecialOfferReportController::class, 'index'])->name('special.offer.report');
 
-        Route::get('dt-achivement',[DtaReportController::class,'dt_achivement'])->name('dt.achivement');
-        Route::get('daily-deposit',[DtaReportController::class,'daily_deposit'])->name('daily.deposit');
-        Route::get('deposit-report',[DtaReportController::class,'deposit_report'])->name('deposit.report');  
-        Route::get('due-report',[DueReportController::class,'due_report'])->name('due.report');
-        Route::get('floor-wise-sold-unsold-report',[ProductReportController::class,'floor_wise_sold'])->name('floor.wise.sold.report');
-       
+
+        Route::get('dt-achivement', [DtaReportController::class, 'dt_achivement'])->name('dt.achivement');
+        Route::get('daily-deposit', [DtaReportController::class, 'daily_deposit'])->name('daily.deposit');
+        Route::get('deposit-report', [DtaReportController::class, 'deposit_report'])->name('deposit.report');
+        Route::get('due-report', [DueReportController::class, 'due_report'])->name('due.report');
+        Route::get('floor-wise-sold-unsold-report', [ProductReportController::class, 'floor_wise_sold'])->name('floor.wise.sold.report');
+
         // Route::get('project-wise-sold-unsold-report',[ProductReportController::class,'project_wise_sold'])->name('project.wise.sold.report');
 
 
 
         // field target
-        Route::get('target-achive',[FieldTargetController::class,'target_achive'])->name('target.achive');
-        Route::get('today-target',[FieldTargetController::class,'today_target'])->name('today.target'); 
-        Route::get('marketing-field-report',[FieldTargetController::class,'marketing_field_report'])->name('marketing.field.report');
-        Route::get('salse-field-report',[FieldTargetController::class,'salse_field_report'])->name('salse.field.report');
+        Route::get('target-achive', [FieldTargetController::class, 'target_achive'])->name('target.achive');
+        Route::get('today-target', [FieldTargetController::class, 'today_target'])->name('today.target');
+        Route::get('marketing-field-report', [FieldTargetController::class, 'marketing_field_report'])->name('marketing.field.report');
+        Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');
         // task 
-        Route::get('task-complete',[TaskController::class,'task_complete'])->name('task.complete'); 
+        Route::get('task-complete', [TaskController::class, 'task_complete'])->name('task.complete');
 
         // deposit target 
-        Route::get('deposit-target',[DepositTargetController::class,'target'])->name('deposit.target');
-        Route::get('deposit-target-asign',[DepositTargetController::class,'target_asign'])->name('deposit.target.asign');
-        Route::get('deposit-target-asign-list',[DepositTargetController::class,'target_asign_list'])->name('deposit.target.asign.list'); 
-        Route::get('project-deposit-target',[DepositTargetController::class,'project_deposit_target'])->name('project.deposit.target');
-        Route::get('direct-deposit-target',[DepositTargetController::class,'direct_deposit_target'])->name('direct.deposit.target');
+        Route::get('deposit-target', [DepositTargetController::class, 'target'])->name('deposit.target');
+        Route::get('deposit-target-asign', [DepositTargetController::class, 'target_asign'])->name('deposit.target.asign');
+        Route::get('deposit-target-asign-list', [DepositTargetController::class, 'target_asign_list'])->name('deposit.target.asign.list');
+        Route::get('project-deposit-target', [DepositTargetController::class, 'project_deposit_target'])->name('project.deposit.target');
+        Route::get('direct-deposit-target', [DepositTargetController::class, 'direct_deposit_target'])->name('direct.deposit.target');
 
         // Training
         Route::resource('training-category', TrainingCategoryController::class);
-        Route::post('training-category-update',[TrainingCategoryController::class,'update'])->name('training.category.update');
-        Route::get('training-schedule-create',[TrainingController::class,'training_schedule_create'])->name('training.schedule.create');
-        Route::get('training-schedule',[TrainingController::class,'training_schedule'])->name('training.schedule');
-        Route::get('training-attendance',[TrainingController::class,'training_attendance'])->name('training.attendance');
-        Route::get('training-history',[TrainingController::class,'training_history'])->name('training.history');
-        Route::get('training-details',[TrainingController::class,'training_details'])->name('training.details');
+        Route::post('training-category-update', [TrainingCategoryController::class, 'update'])->name('training.category.update');
+        Route::get('training-schedule-create', [TrainingController::class, 'training_schedule_create'])->name('training.schedule.create');
+        Route::get('training-schedule', [TrainingController::class, 'training_schedule'])->name('training.schedule');
+        Route::get('training-attendance', [TrainingController::class, 'training_attendance'])->name('training.attendance');
+        Route::get('training-history', [TrainingController::class, 'training_history'])->name('training.history');
+        Route::get('training-details', [TrainingController::class, 'training_details'])->name('training.details');
 
         // Meeting  
-        Route::resource('meeting',MeetingController::class);
- 
+        Route::resource('meeting', MeetingController::class);
+
         // Header Route 
-        Route::get('notification',[NotificationController::class,'index'])->name('notification.index');
-}); 
-Route::get('/migrate-refresh',[DashboardController::class,'migrate_fresh']); 
+        Route::get('notification', [NotificationController::class, 'index'])->name('notification.index');
+});
+Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 
-  
+
+Route::get('function_test', function () {
+        return user_reporting(9);
+});
