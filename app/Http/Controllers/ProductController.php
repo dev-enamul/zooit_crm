@@ -8,6 +8,7 @@ use App\Models\Division;
 use App\Models\Project;
 use App\Models\ProjectImage;
 use App\Models\Union;
+use App\Models\Unit;
 use App\Models\Upazila;
 use App\Models\Village;
 use App\Traits\AreaTrait;
@@ -26,9 +27,10 @@ class ProductController extends Controller
     use AreaTrait;
 
     public function index(){
-        $divisions = $this->getCachedDivisions();
-        $projects = Project::where('status',1)->select('id','name','address','total_floor')->get();
-        return view('product.product_list',compact('projects','divisions'));
+        $divisions      = $this->getCachedDivisions();
+        $projects       = Project::where('status',1)->select('id','name','address','total_floor')->get();
+        $unit_headers   = Unit::where('status',1)->select('id','title')->get();
+        return view('product.product_list',compact('projects','divisions','unit_headers'));
     }
 
     public function create(){
@@ -145,9 +147,9 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'division'          => 'required',
             'district'          => 'required',
-            'upazila_id'        => 'sometimes|required',
-            'union_id'          => 'sometimes|required',
-            'village_id'        => 'sometimes|required',
+            'upazila'        => 'sometimes|required',
+            'union'          => 'sometimes|required',
+            'village'        => 'sometimes|required',
         ]);
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
@@ -158,7 +160,6 @@ class ProductController extends Controller
             }
         }
 
-    
         try{
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $division_id    = $request->division;
@@ -166,21 +167,19 @@ class ProductController extends Controller
                 $upazila_id     = $request->upazila;
                 $union_id       = $request->union;
                 $village_id     = $request->village;
-
-                $divisions = $this->getCachedDivisions();
-                $districts = $this->getCachedDistricts();
-                $upazilas  = $this->getCachedUpazilas();
-                $unions    = $this->getCachedUnions();
-                $villages  = $this->getCachedVillages();
-
-                $projects  = Project::where('status',1)->select('id','name','address','total_floor')->get();
+                $divisions      = $this->getCachedDivisions();
+                $districts      = $this->getCachedDistricts();
+                $upazilas       = $this->getCachedUpazilas();
+                $unions         = $this->getCachedUnions();
+                $villages       = $this->getCachedVillages();
 
                 $selected['division_id'] = $division_id;
                 $selected['district_id'] = $district_id;
                 $selected['upazila_id']  = $upazila_id;
                 $selected['union_id']    = $union_id;
                 $selected['village_id']  = $village_id;
-    
+
+                $projects  = Project::where(['status'=>1, 'division_id'=>$division_id,'district_id'=>$district_id,'upazila_id'=>$upazila_id,'union_id'=>$union_id,'village_id'=>$village_id])->select('id','name','address','total_floor')->get();
                 return view('product.product_list', compact('projects','divisions','districts','upazilas','unions','villages','selected'));
             }
         }
@@ -191,7 +190,7 @@ class ProductController extends Controller
     }
 
     public function edit($id){
-        $title      = "Product Edit";
+        $title     = "Product Edit";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
         $districts = $this->getCachedDistricts();
@@ -216,5 +215,15 @@ class ProductController extends Controller
 
     public function product_approve(){
         return view('product.product_approve');
+    }
+
+    public function productDelete($id){
+        try{ 
+            $data  = Project::find($id);
+            $data->delete();
+            return response()->json(['success' => 'Project Deleted'],200);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()],500);
+        }
     }
 }

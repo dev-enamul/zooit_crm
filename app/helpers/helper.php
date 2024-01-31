@@ -5,7 +5,9 @@ use App\Models\Union;
 use App\Models\Upazila;
 use App\Models\Village;
 use Illuminate\Support\Str;
- 
+
+use function Laravel\Prompts\select;
+
 if (!function_exists('getSlug')) {
     function getSlug($model, $title, $column = 'slug', $separator = '-')
     {
@@ -55,6 +57,7 @@ if (!function_exists('districts')) {
 if (!function_exists('upazilas')) {
     function upazilas(int $district_id = null, int $division_id = null)
     {
+        #dd($district_id);
         return Upazila::withOutGlobalScopes()
             ->when($district_id, function ($q) use ($district_id) {
                 $q->where('district_id', $district_id);

@@ -99,10 +99,13 @@ Route::group(['middleware' => 'auth'],function () {
         Route::post('product-save/{id?}',[ProductController::class,'save'])->name('product.save');
         Route::get('/product-approve',[ProductController::class,'product_approve'])->name('product.approve');
         Route::post('/product-search',[ProductController::class,'productSearch'])->name('product.search');
-        
+        Route::any('product-delete/{id}',[ProductController::class,"productDelete"])->name('product.delete');
+
         Route::resource('unit', ProductUnitController::class);
         Route::post('unit-save/{id?}',[ProductUnitController::class,'save'])->name('unit.save');
-        
+        Route::any('product-unit-delete/{id}',[ProductUnitController::class,"productUnitDelete"])->name('project.unit.delete');
+        Route::post('/product-unit-search',[ProductUnitController::class,'productUnitSearch'])->name('project.unit.search');
+
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class); 
         Route::get('freelancer-profile',[FreelancerProfileController::class,'freelancer_profile'])->name('freelancer.profile');
