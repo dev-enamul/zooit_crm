@@ -49,11 +49,11 @@
                                     </div>
                                 </div>
                            </div>
-                           <div class="text-center">
+                           {{-- <div class="text-center">
                             <h5 class="m-0">{{ config('app.name', 'ZOOM IT') }}</h5>
                             <p class="mb-1" ><b>Real Estate Agent- Data Collection Form</b> </p>
-                           </div>
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                           </div> --}}
+                            {{-- <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="">
                                         <th>Name : MD Enamul Haque</th> 
@@ -63,7 +63,7 @@
                                         <th>Reporting Name & ID : MR Kamruzzaman & 153</th>
                                     </tr>
                                 </thead> 
-                            </table>
+                            </table> --}}
                            
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
@@ -81,6 +81,7 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
+                                    @foreach ($datas as $key => $data)
                                     <tr class="">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
@@ -93,85 +94,17 @@
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>1</td>
-                                        <td>3 Dec, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
+                                        <td>{{$key+1}}</td>
+                                        <td>{{get_date($data->created_at)}}</td>
+                                        <td>{{@$data->user->name}}</td>
+                                        <td>{{@$data->profession->name}}</td>
                                         <td>Badulgachhi</td>
                                         <td>Mothorapur</td>
                                         <td>Chalkmothor</td>
                                         <td>01796351081</td>
                                         <td>FL-154</td> 
-                                    </tr>
-
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="prospectings_create.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>2</td>
-                                        <td>12 Nov, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
-                                    </tr>
-
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="prospectings_create.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>3</td>
-                                        <td>7 Sep, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-center"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" class="d-block" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="prospectings_create.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>4</td>
-                                        <td>9 Aug, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
-                                    </tr>
+                                    </tr> 
+                                    @endforeach 
                                 </tbody>
                             </table>
                         </div>

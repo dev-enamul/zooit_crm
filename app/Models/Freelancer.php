@@ -21,6 +21,10 @@ class Freelancer extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    } 
+
+    public function profession(){
+        return $this->belongsTo(Profession::class,'professions_id');
     }
 
     public function reference()
