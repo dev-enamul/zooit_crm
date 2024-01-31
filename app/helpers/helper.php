@@ -84,3 +84,37 @@ if (!function_exists('villages')) {
             })->get();
     }
 }
+
+
+// user helper function 
+ 
+$all_id = [];
+if (!function_exists('user_reporting')) {
+    function user_reporting($user_id){
+        $reporting = \App\Models\ReportingUser::where('user_id',$user_id)->first();
+        if($reporting){ 
+           return reporting_user($reporting->reporting_user_id);  
+        }
+        return null;
+    }
+}
+
+if (!function_exists('reporting_user')) {
+    function reporting_user($reporting_id){
+         
+        $reporting_user = \App\Models\ReportingUser::find($reporting_id); 
+        if($reporting_user->user_id!=null){
+           return user_info($reporting_user->user_id);
+        } 
+    }
+}
+
+
+if (!function_exists('user_info')) {
+    function user_info($user_id,$column = 'name'){  
+        $user = \App\Models\User::find($user_id);
+        if($user){  
+            return $user;
+        }
+    }
+}

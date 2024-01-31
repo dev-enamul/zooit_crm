@@ -28,6 +28,7 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\NegotiationAnalysisController;
 use App\Http\Controllers\NegotiationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PresentationAnalysisController;
 use App\Http\Controllers\PresentationController;
@@ -43,6 +44,8 @@ use App\Http\Controllers\SalseController;
 use App\Http\Controllers\SalseReturnController;
 use App\Http\Controllers\SalseTransferController;
 use App\Http\Controllers\SpecialComissionController;
+use App\Http\Controllers\SpecialOffer;
+use App\Http\Controllers\SpecialOfferReportController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\TargetReportController;
 use App\Http\Controllers\TaskController;
@@ -205,7 +208,7 @@ Route::group(['middleware' => 'auth'],function () {
 
         // Deposit Category 
         Route::resource('deposit-category', DepositCategoryController::class);
-
+        Route::resource('special-offer',SpecialOffer::class);
 
 
         //Reports 
@@ -213,6 +216,8 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('mst-commission',[CommissionReportController::class,'mst_commission'])->name('mst.commission');
         Route::get('mst-commission-details/{id}',[CommissionReportController::class,'mst_commission_details'])->name('mst.commission.details');
         Route::get('rsa-co-ordinator',[CommissionReportController::class,'rsa_co_ordinator'])->name('rsa.co.ordinator');
+        Route::get('cc-report',[CommissionReportController::class,'cc_report'])->name('cc.report');
+        Route::get('special-offer-report',[SpecialOfferReportController::class,'index'])->name('special.offer.report');
         
 
         Route::get('dt-achivement',[DtaReportController::class,'dt_achivement'])->name('dt.achivement');
@@ -220,6 +225,7 @@ Route::group(['middleware' => 'auth'],function () {
         Route::get('deposit-report',[DtaReportController::class,'deposit_report'])->name('deposit.report');  
         Route::get('due-report',[DueReportController::class,'due_report'])->name('due.report');
         Route::get('floor-wise-sold-unsold-report',[ProductReportController::class,'floor_wise_sold'])->name('floor.wise.sold.report');
+       
         // Route::get('project-wise-sold-unsold-report',[ProductReportController::class,'project_wise_sold'])->name('project.wise.sold.report');
 
 
@@ -250,8 +256,10 @@ Route::group(['middleware' => 'auth'],function () {
 
         // Meeting  
         Route::resource('meeting',MeetingController::class);
-});
-
+ 
+        // Header Route 
+        Route::get('notification',[NotificationController::class,'index'])->name('notification.index');
+}); 
 Route::get('/migrate-refresh',[DashboardController::class,'migrate_fresh']); 
 
 

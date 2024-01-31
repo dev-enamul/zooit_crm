@@ -168,7 +168,7 @@
                         </div>
                         <div class="p-2 border-top">
                             <div class="d-grid">
-                                <a class="btn btn-sm btn-link font-size-14 text-center" href="notification.html">
+                                <a class="btn btn-sm btn-link font-size-14 text-center" href="{{route('notification.index')}}">
                                     <i class="mdi mdi-arrow-right-circle me-1"></i> View More..
                                 </a>
                             </div>

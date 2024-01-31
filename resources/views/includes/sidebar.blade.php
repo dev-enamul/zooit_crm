@@ -245,7 +245,7 @@
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="fas fa-user-times"></i>
-                        <span>Salse Return</span>
+                        <span>Sales Return</span>
                     </a>  
                     <ul class="sub-menu" aria-expanded="false">
                         @can('sales-return-manage')
@@ -408,6 +408,20 @@
                         <span>Sold & Unsold Report</span>
                     </a>
                 </li>  
+
+                <li>
+                    <a href="{{route('cc.report')}}" class="">
+                        <i class="fas fa-desktop"></i>
+                        <span>CC Report</span>
+                    </a>
+                </li>   
+
+                <li>
+                    <a href="{{route('special.offer.report')}}" class="">
+                        <i class="fas fa-desktop"></i>
+                        <span>Special Offer Report</span>
+                    </a>
+                </li>  
   
                 <li class="menu-title">Setting</li>  
                 <li>
@@ -470,6 +484,16 @@
                         <li><a href="{{route('commission-deducted-setting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission Deducation</a></li> 
                     </ul>
                 </li> 
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-chart-bar"></i>
+                        <span>Special Offer</span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{{route('special-offer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer List</a></li> 
+                        <li><a href="{{route('special-offer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer Create</a></li>
+                    </ul>
+                </li> 
 
                 <li>
                     <a href="{{route('bank.index')}}" class="">
@@ -490,8 +514,9 @@
                         <i class="fas fa-desktop"></i>
                         <span>Deposit Category</span>
                     </a>
-                </li>  
-
+                </li>
+                
+                  
             </ul>
         </div> 
     </div>

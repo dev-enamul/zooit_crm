@@ -12,4 +12,5 @@ class ProductReportController extends Controller
     public function project_wise_sold(){
         return view('report.product.floor_wise_sold_report');
     }
+ 
 }

@@ -84,7 +84,9 @@
                                         <td>-</td> 
                                         <td>Engineer</td> 
                                         <td>Badulgachhi</td>
-                                        <td>Mothorapur</td> 
+                                        <td>
+                                            {{@user_reporting($data->id)->name}} [ {{@user_reporting($data->id)->user_id}} ] 
+                                        </td> 
                                     </tr> 
                                     @endforeach 
                                 </tbody>
