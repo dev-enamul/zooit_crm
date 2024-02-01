@@ -85,7 +85,9 @@
                                         <td>Engineer</td> 
                                         <td>Badulgachhi</td>
                                         <td>
-                                            {{@user_reporting($data->id)->name}} [ {{@user_reporting($data->id)->user_id}} ] 
+                                            {{reporting_user(user_reporting($data->id)[0])->name}}
+                                             @php 
+                                             @endphp
                                         </td> 
                                     </tr> 
                                     @endforeach 
