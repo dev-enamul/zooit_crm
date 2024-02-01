@@ -53,6 +53,11 @@ class User extends Authenticatable
         return $this->belongsTo(Profession::class, 'professions_id');
     } 
 
+    public function freelancer()
+    {
+        return $this->hasOne(Freelancer::class, 'user_id');
+    }
+
     public function reportingUser()
     {
         return $this->hasOne(ReportingUser::class, 'user_id');
