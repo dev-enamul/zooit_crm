@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Freelancer Create")
+@section('title',"Special Offer Create")
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -26,504 +26,138 @@
                                 <div class="row"> 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="First name" value="" required>
+                                            <label for="name" class="form-label">Offer Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="name" class="form-control" id="name" placeholder="Offer Name" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="profile_image" class="form-label">Profile Image</label>
-                                            <input type="file" name="profile_image" class="form-control" id="profile_image" >
-                                           
-                                        </div>
-                                    </div>   
+                                    </div>
                                     
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
-                                            <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="profession" id="profession" required>
-                                                <option value="">Select Profession</option>
-                                                <option value="">Doctor</option>
-                                                <option value="">Lawyer</option> 
-                                                <option value="">Banker</option>
-                                                <option value="">Teacher</option>
-                                                <option value="">Engineer</option>
-                                            </select> 
+                                            <label for="start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
+                                            <input type="text" name="start_date" class="form-control datepicker w-100 p-1" id="start_date" placeholder="Select Start Date" required> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
-                                            <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="marital_status" id="marital_status" required>
-                                                <option value="">Select Marital Status</option>
-                                                <option value="">Married</option>
-                                                <option value="">Unmarried</option>
-                                                <option value="">Divorce</option>  
-                                            </select> 
+                                            <label for="end_date" class="form-label">End Date <span class="text-danger">*</span></label>
+                                            <input type="text" name="end_date" class="form-control datepicker w-100 p-1" id="end_date" placeholder="Select End Date" required> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
                                     </div>
+  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                                            <input type="text" name="dob" class="form-control datepicker w-100 p-1" id="dob" placeholder="Select date of birth" required> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="card_id" class="form-label">Card/Finger ID </label>
-                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="Enter ID">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="religion" id="religion" required>
-                                                <option value="">Select Region</option>
-                                                <option value="1">Christianity</option>
-                                                <option value="2">Islam</option>
-                                                <option value="3">Hinduism</option>
-                                                <option value="4">Buddhism</option>
-                                                <option value="5">Judaism</option>
-                                                <option value="6">Sikhism</option>
-                                                <option value="7">Jainism</option>
-                                                <option value="8">Bahá'í Faith</option>
-                                                <option value="9">Confucianism</option>
-                                                <option value="10">Others</option> 
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="blood_group" class="form-label">Blood Group <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="blood_group" id="blood_group" required>
-                                                <option value="1">A positive (A+)</option>
-                                                <option value="2">A negative (A-)</option>
-                                                <option value="3">B positive (B+)</option>
-                                                <option value="4">B negative (B-)</option>
-                                                <option value="5">AB positive (AB+)</option>
-                                                <option value="6">AB negative (AB-)</option>
-                                                <option value="7">O positive (O+)</option>
-                                                <option value="8">O negative (O-)</option>
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="blood_group" id="blood_group" required>
-                                                <option value="">Select Gender</option>
-                                                <option value="">Male</option> 
-                                                <option value="">Female</option>  
-                                                <option value="">Others</option> 
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="gender" class="form-label">Nationality <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="gender" id="gender" required>
-                                                <option value="">Select Nationality</option>
-                                                <option value="">Bangladeshi</option>
-                                                <option value="">Indian</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div> 
-
-                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Contact Information</h6>
-                                    <hr>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="phone1" class="form-label">Mobile Number 1 <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" placeholder="Phone 1 Number" value="" required>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="phone1" class="form-label">Mobile Number 2 </label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" placeholder="Phone 2 Number" value="">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Office Email</label>
-                                           <input type="email" name="email" class="form-control" id="email" placeholder="Email Number"> 
-                                            <div class="invalid-feedback">
-                                                This field is invalid.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Personal Email</label>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email Number"> 
-                                            <div class="invalid-feedback">
-                                                This field is invalid.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="imo_number" class="form-label">Imo/WhatsApp Number</label>
-                                            <input type="text" name="imo_number" class="form-control" id="imo_number" placeholder="Emo Number">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="emergency_person" class="form-label">Facebook ID</label>
-                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Emergency Contact Number">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="emergency_contact" class="form-label">Emergency Contact Number</label>
-                                            <input type="text" name="emergency_contact" class="form-control" id="emergency_contact" placeholder="Emergency Contact Number">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="emergency_person" class="form-label">Emergency Contact Person</label>
-                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Emergency Contact Number">  
-                                        </div>
-                                    </div> 
-
-                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Address</h6>
-                                    <hr> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="division" class="form-label">Division <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="division" id="division" required>
-                                                <option value="">Select District</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="district" class="form-label">District <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="district" id="district" required>
-                                                <option value="">Select District</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="upazila" class="form-label">Thana/Upazila <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="upazila" id="upazila" required>
-                                                <option value="">Select Thana/Upazila</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="union" class="form-label">Union <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="union" id="union" required>
-                                                <option value="">Select Union</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="post_office" class="form-label">Post Office <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="post_office" id="post_office" required>
-                                                <option value="">Select Union</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="village" class="form-label">Word</label>
-                                            <select class="form-select" name="village" id="village">
-                                                <option value="">Select Village</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
+                                            <label for="designation" class="form-label">Designation</label>
+                                            <select class="form-select select2" multiple name="marital_status" id="marital_status">
+                                                <option value="">Select Designations</option>
+                                                <option value="" selected>All</option>
+                                                @foreach($designations as $designation)
+                                                    <option value="">{{$designation->title}}</option> 
+                                                @endforeach
                                             </select>  
-                                        </div>
-                                    </div> -->
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="village" class="form-label">Village</label>
-                                            <select class="form-select select2" name="village" id="village">
-                                                <option value="">Select Village</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select>  
-                                        </div>
-                                    </div>  
-
-                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Family Details</h6>
-                                    <hr>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></spN> </label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name">  
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="father_phone" class="form-label">Mobile</label>
-                                            <input type="text" name="father_phone" class="form-control" id="father_phone" placeholder="Father Father Mobile">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="mother_name" class="form-label">Mother's Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name">  
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="mother_phone" class="form-label">Mobile</label>
-                                            <input type="text" name="mother_phone" class="form-control" id="mother_phone" placeholder="Mother's Mobile">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="mother_name" class="form-label">Spouse Name</label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Spouse Name">  
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="mother_phone" class="form-label">Mobile</label>
-                                            <input type="text" name="mother_phone" class="form-control" id="mother_phone" placeholder="Spouse Mobile">  
-                                        </div>
-                                    </div>
-
-                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Transaction Info</h6>
-                                    <hr>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="bank" class="form-label">Bank </label>
-                                            <select class="form-select select2" name="bank" id="bank" required>
-                                                <option value="">Select Bank</option>
-                                                <option value="">Dhaka Bank </option>
-                                                <option value="">Jamuna Bank </option>
-                                                <option value="">Islamic Bank </option>
-                                                <option value="">DBBL </option> 
-                                            </select>  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="branch" class="form-label">Branch Name</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Branch">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="branch" class="form-label">Account Number</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Account Number">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="branch" class="form-label">Account Holder Name</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Other's Information">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="mobile_bank" class="form-label">Mobile Bank</label>
-                                            <select class="form-select select2" name="mobile_bank" id="mobile_bank" required>
-                                                <option value="">Bksh</option>
-                                                <option value="">Roket </option>
-                                                <option value="">MCash </option>  
-                                            </select>  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="branch" class="form-label">Mobile Bank Number</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Mobile Bank Number">  
-                                        </div>
-                                    </div> 
-                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> ID Detail</h6>
-                                    <hr>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="nid" class="form-label">NID Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="nid" class="form-label">Upload NID</label>
-                                            <input type="file" name="nid" id="nid" class="form-control" > 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="nid" class="form-label">Birth Certificate Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="nid" class="form-label">Upload Birth Certificate</label>
-                                            <input type="file" name="nid" id="nid" class="form-control" > 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="nid" class="form-label">Passport Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="profile_image" class="form-label">Upload Passport</label>
-                                            <input type="file" name="profile_image" id="profile_image" class="form-control">  
+                                            <label for="deposit_type" class="form-label">Deposit Type</label>
+                                            <select class="form-select select2" multiple name="deposit_type" id="deposit_type">
+                                                <option value="" selected>All</option>
+                                                @foreach($deposit_types as $deposit_type)
+                                                    <option value="">{{$deposit_type->name}} </option> 
+                                                @endforeach
+                                            </select>  
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="customer" class="form-label">Customer</label>
+                                            <select class="form-select select2" multiple name="customer" id="customer">
+                                                <option value="" selected>All</option>
+                                                @foreach($customers as $customer)
+                                                    <option value="">{{$customer->name}} [{{$customer->user_id}}]</option> 
+                                                @endforeach
+                                            </select>   
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Expire Date</label>
-                                            <input type="text" name="dob" class="form-control datepicker w-100" id="dob" placeholder="Select expire date" required> 
+                                            <label for="project" class="form-label">Project Name</label>
+                                            <select class="form-select select2" multiple name="project" id="project">
+                                                <option value="" selected>All</option>
+                                                @foreach($projects as $project)
+                                                    <option value="">{{$project->name}}</option> 
+                                                @endforeach
+                                            </select>  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">TIN Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <label for="unit" class="form-label">Unit Name</label>
+                                            <select class="form-select select2" multiple name="unit" id="unit">
+                                                <option value="" selected>All</option>
+                                                @foreach($units as $unit)
+                                                    <option value="">{{$unit->title}}</option> 
+                                                @endforeach
+                                            </select>  
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="unit_qty" class="form-label">Unit Qty</label>
+                                            <input type="number" name="unit_qty" class="form-control" id="unit_qty" placeholder="Unit Qty"> 
                                         </div>
                                     </div> 
-                                  
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="deposit" class="form-label">Deposit Amount <span class="text-danger">*</span></label>
+                                            <input type="number" name="deposit" class="form-control" id="deposit" placeholder="Deposit Amount" required> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="follow_up" class="form-label">Follow Up</label>
+                                            <input type="number" name="follow_up" class="form-control" id="follow_up" value="0"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="negotiation" class="form-label">Negotiation</label>
+                                            <input type="number" name="negotiation" class="form-control" id="negotiation" value="0"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="incentive_name" class="form-label">Incentive Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="incentive_name" class="form-control" id="incentive_name" placeholder="Incentive Name" required>  
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="incentive_amount" class="form-label">Incentive Amount <span class="text-danger">*</span></label>
+                                            <input type="text" name="incentive_amount" class="form-control" id="incentive_amount" placeholder="Incentive Amount" required>  
+                                        </div>
+                                    </div>
                                 </div>
                                   
                                 <div>
