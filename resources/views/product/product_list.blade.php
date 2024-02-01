@@ -62,10 +62,9 @@
                                         <td>{{ @$project->name }}</td>
                                         <td>{{ @$project->address }}</td>
                                         <td>{{ @$project->total_floor}}</td>
-                                        <td>6/12</td>
-                                        <td>6/12</td>
-                                        <td>4/65</td> 
-                                        <td>5/12</td>
+                                        @foreach($unit_headers as $header)
+                                            <td>{{ $project->units->where('unit.title', $header->title)->count() }}</td>
+                                        @endforeach
                                     </tr> 
                                     @endforeach
                                 </tbody>
