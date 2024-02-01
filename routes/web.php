@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApproveFreelancerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\BankDayController;
@@ -112,6 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class);
+        Route::resource('approve-freelancer', ApproveFreelancerController::class);
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
         Route::get('freelancer-hierarchy', [FreelancerProfileController::class, 'freelancer_hierarchy'])->name('freelancer.hierarchy');
         Route::get('freelancer-book-reading', [FreelancerProfileController::class, 'freelancer_book_reading'])->name('freelancer.book');
