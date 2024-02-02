@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApproveFreelancerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\BankDayController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\SalseReturnController;
 use App\Http\Controllers\SalseTransferController;
 use App\Http\Controllers\SpecialComissionController;
 use App\Http\Controllers\SpecialOffer;
+use App\Http\Controllers\SpecialOfferController;
 use App\Http\Controllers\SpecialOfferReportController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\TargetReportController;
@@ -111,6 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class);
+        Route::resource('approve-freelancer', ApproveFreelancerController::class);
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
         Route::get('freelancer-hierarchy', [FreelancerProfileController::class, 'freelancer_hierarchy'])->name('freelancer.hierarchy');
         Route::get('freelancer-book-reading', [FreelancerProfileController::class, 'freelancer_book_reading'])->name('freelancer.book');
@@ -208,7 +211,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Deposit Category 
         Route::resource('deposit-category', DepositCategoryController::class);
-        Route::resource('special-offer', SpecialOffer::class);
+        Route::resource('special-offer', SpecialOfferController::class);
+        Route::get('special-offer-achiver',[SpecialOfferController::class,'achiver'])->name('special.offer.achiver');
 
 
         //Reports 
@@ -217,7 +221,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('mst-commission-details/{id}', [CommissionReportController::class, 'mst_commission_details'])->name('mst.commission.details');
         Route::get('rsa-co-ordinator', [CommissionReportController::class, 'rsa_co_ordinator'])->name('rsa.co.ordinator');
         Route::get('cc-report', [CommissionReportController::class, 'cc_report'])->name('cc.report');
-        Route::get('special-offer-report', [SpecialOfferReportController::class, 'index'])->name('special.offer.report');
 
 
         Route::get('dt-achivement', [DtaReportController::class, 'dt_achivement'])->name('dt.achivement');

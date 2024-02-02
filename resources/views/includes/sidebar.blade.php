@@ -67,9 +67,11 @@
                     <ul class="sub-menu" aria-expanded="false">
                         @can('freelancer-manage')
                             <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
-                        @endcan 
+                        @endcan   
 
                         <li><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
+                        <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
+  
                     </ul>
                 </li> 
                 @endcan
@@ -394,6 +396,18 @@
                         {{-- <li><a href="{{route('weekly.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Weekly Report</a></li>  --}}
                     </ul>
                 </li>  
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-chart-bar"></i>
+                        <span>Special Offer</span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{{route('special-offer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer List</a></li> 
+                        <li><a href="{{route('special-offer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer Create</a></li>
+                    </ul>
+                </li> 
+                
                 
                 <li>
                     <a href="{{route('due.report')}}" class="">
@@ -416,13 +430,7 @@
                     </a>
                 </li>   
 
-                <li>
-                    <a href="{{route('special.offer.report')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Special Offer Report</span>
-                    </a>
-                </li>  
-  
+                
                 <li class="menu-title">Setting</li>  
                 <li>
                     <a href="{{route('profession.index')}}" class="">
@@ -484,17 +492,7 @@
                         <li><a href="{{route('commission-deducted-setting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission Deducation</a></li> 
                     </ul>
                 </li> 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Special Offer</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('special-offer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer List</a></li> 
-                        <li><a href="{{route('special-offer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer Create</a></li>
-                    </ul>
-                </li> 
-
+                 
                 <li>
                     <a href="{{route('bank.index')}}" class="">
                         <i class="fas fa-desktop"></i>

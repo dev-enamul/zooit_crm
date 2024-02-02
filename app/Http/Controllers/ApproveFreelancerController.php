@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TrainingCategory;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class SpecialOffer extends Controller
+class ApproveFreelancerController extends Controller
 {
-     
+    
     public function index()
     {
-        return view('setting.special_offer.special_offer_list');
+        $trainings = TrainingCategory::where('status', '1')->get();
+        $datas = User::where('user_type', '2')->where('approve_by',null)->get();
+        return view('freelancer.approve-freelancer',compact('datas','trainings'));
     }
 
     /**
@@ -17,7 +21,7 @@ class SpecialOffer extends Controller
      */
     public function create()
     {
-        return view('setting.special_offer.special_offer_create');
+        //
     }
 
     /**
