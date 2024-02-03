@@ -35,7 +35,7 @@
                                         <th>S/N</th>
                                         <th>Commission Title</th>
                                         <th>Designation</th> 
-                                        <th>Commision</th> 
+                                        <th>Commission</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 

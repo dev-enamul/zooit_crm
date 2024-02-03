@@ -22,7 +22,7 @@
                             @can('employee-manage')
                                 <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
                             @endcan
-                            <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employies</a></li> 
+                            <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li> 
                             <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li> 
                         </ul>
                     </li>  
@@ -262,7 +262,7 @@
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
                             <i class="fas fa-user-times"></i>
-                            <span>Salse Transfer</span>
+                            <span>Sales Transfer</span>
                         </a>  
                         <ul class="sub-menu" aria-expanded="false">
                             @can('sales-transfer-manage')
@@ -299,7 +299,7 @@
                             <li><a href="{{route('today.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Today Task & Target</a></li> 
                             <li><a href="{{route('task.complete')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
                             <li><a href="{{route('marketing.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Marketing Ex. Report</a></li> 
-                            <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Salse Ex Report</a></li> 
+                            <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Ex. Report</a></li> 
                         </ul>
                     </li> 
 
@@ -427,6 +427,13 @@
                     <a href="{{route('cc.report')}}" class="">
                         <i class="fas fa-desktop"></i>
                         <span>CC Report</span>
+                    </a>
+                </li>  
+                
+                <li>
+                    <a href="{{route('pending.report')}}" class="">
+                        <i class="fas fa-desktop"></i>
+                        <span>Pending Report</span>
                     </a>
                 </li>   
 

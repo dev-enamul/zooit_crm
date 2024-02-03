@@ -7,7 +7,7 @@
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
-                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                    <div class="page-title-box d-flex align-items-c justify-content-between">
                         <h4 class="mb-sm-0">Customer Entry</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
@@ -42,7 +42,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="full_name" class="form-label">Last Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="First name" value="" required>
+                                            <input type="text" name="full_name" class="form-control" id="last_name" placeholder="Last name" value="" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -94,7 +94,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="card_id" class="form-label">Card/Finger ID </label>
-                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="Enter ID">  
+                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder=" ID">  
                                         </div>
                                     </div>
 
@@ -102,7 +102,7 @@
                                         <div class="mb-3">
                                             <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="religion" id="religion" required>
-                                                <option value="">Select Region</option>
+                                                <option value="">Select Religion</option>
                                                 <option value="">Christianity</option>
                                                 <option value="">Islam</option>
                                                 <option value="">Hinduism</option>  
@@ -190,7 +190,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Office Email</label>
-                                           <input type="email" name="email" class="form-control" id="email" placeholder="Email Number"> 
+                                           <input type="email" name="email" class="form-control" id="email" placeholder="Email ID"> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -200,7 +200,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Personal Email</label>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email Number"> 
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email ID"> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -210,14 +210,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="imo_number" class="form-label">Imo/Whatsapp Number</label>
-                                            <input type="text" name="imo_number" class="form-control" id="imo_number" placeholder="Emo Number">  
+                                            <input type="text" name="imo_number" class="form-control" id="imo_number" placeholder="Imo/Whatsapp Number">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="emergency_person" class="form-label">Facebook ID</label>
-                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Emergency Contact Number">  
+                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Facebook ID">  
                                         </div>
                                     </div>
 
@@ -230,8 +230,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="emergency_person" class="form-label">Emergency Contact Person</label>
-                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Emergency Contact Number">  
+                                            <label for="emergency_person" class="form-label">Emergency Contact Person Name</label>
+                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Emergency Contact Person Name">  
                                         </div>
                                     </div> 
 
@@ -377,8 +377,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></spN></label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father Name">  
+                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name">  
                                         </div>
                                     </div> 
 
@@ -406,7 +406,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mother_name" class="form-label">Spouse Name</label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name">  
+                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Spouse Name">  
                                         </div>
                                     </div> 
 
@@ -422,7 +422,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="nid" class="form-label">NID Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <input type="text" name="nid" id="nid" class="form-control" placeholder=" NID Number"> 
                                         </div>
                                     </div>
 
@@ -435,14 +435,14 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Birth Cirtificate Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <label for="nid" class="form-label">Birth Certificate Number</label>
+                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Birth Certificate Number"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Upload Birth Cirtificate</label>
+                                            <label for="nid" class="form-label">Upload Birth Certificate</label>
                                             <input type="file" name="nid" id="nid" class="form-control" > 
                                         </div>
                                     </div>
@@ -450,7 +450,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="nid" class="form-label">Passport Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Passport Number"> 
                                         </div>
                                     </div>
                                     
@@ -471,7 +471,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="nid" class="form-label">TIN Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="TIN Number"> 
                                         </div>
                                     </div> 
                                   

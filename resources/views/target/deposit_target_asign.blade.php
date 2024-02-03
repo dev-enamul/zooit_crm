@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Deposit Target Asign")
+@section('title',"Deposit Target Assign")
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Deposit Target Asign </h4>
+                        <h4 class="mb-sm-0">Deposit Target Assign</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Deposit Target Asign</li>
+                                <li class="breadcrumb-item active">Deposit Target Assign</li>
                             </ol>
                         </div>
 

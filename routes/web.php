@@ -30,6 +30,7 @@ use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\NegotiationAnalysisController;
 use App\Http\Controllers\NegotiationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PendingReportController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PresentationAnalysisController;
 use App\Http\Controllers\PresentationController;
@@ -221,6 +222,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('mst-commission-details/{id}', [CommissionReportController::class, 'mst_commission_details'])->name('mst.commission.details');
         Route::get('rsa-co-ordinator', [CommissionReportController::class, 'rsa_co_ordinator'])->name('rsa.co.ordinator');
         Route::get('cc-report', [CommissionReportController::class, 'cc_report'])->name('cc.report');
+        Route::get('pending-report',[PendingReportController::class,'pending_report'])->name('pending.report');
 
 
         Route::get('dt-achivement', [DtaReportController::class, 'dt_achivement'])->name('dt.achivement');
@@ -270,7 +272,7 @@ Route::get('function_test', function () {
                 ->select(['id', 'user_id'])
                 ->first();
 
-        $organogram = getOrganogram($topUser);
+        $organogram = getOrganogram($topUser); 
 
         return view('organogram', ['organogram' => $organogram]);
 });

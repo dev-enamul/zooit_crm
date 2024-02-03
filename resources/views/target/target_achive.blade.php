@@ -65,7 +65,7 @@
                                         <th>Freelancer Entry</th>
                                         <th>Prospecting</th> 
                                         <th>Cold Calling</th>
-                                        <th>Leat</th>
+                                        <th>Lead</th>
                                         <th>Progress</th>
                                         <th>Remark</th>
                                     </tr>

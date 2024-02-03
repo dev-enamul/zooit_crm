@@ -34,7 +34,7 @@
                                         <th>Action</th>
                                         <th>S/N</th>
                                         <th>Profession Name</th> 
-                                        <th>Commision</th> 
+                                        <th>Commission</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 
