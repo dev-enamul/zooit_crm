@@ -101,6 +101,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('sold-unsold', [ProductController::class, 'sold_unsold'])->name('sold.unsold');
         Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
         Route::get('/product-approve', [ProductController::class, 'product_approve'])->name('product.approve');
+        Route::post('/product-approve', [ProductController::class, 'productApprove'])->name('product.approve.save');
         Route::post('/product-search', [ProductController::class, 'productSearch'])->name('product.search');
         Route::any('product-delete/{id}', [ProductController::class, "productDelete"])->name('product.delete');
 
@@ -111,6 +112,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class);
+        Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save');
+
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
         Route::get('freelancer-hierarchy', [FreelancerProfileController::class, 'freelancer_hierarchy'])->name('freelancer.hierarchy');
         Route::get('freelancer-book-reading', [FreelancerProfileController::class, 'freelancer_book_reading'])->name('freelancer.book');

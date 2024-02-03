@@ -1,6 +1,8 @@
 @extends('layouts.dashboard')
 @section('title','Product Create')
-
+@section('style')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+@endsection
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -24,108 +26,56 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
-                                <div class="mb-1">
-                                    <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
-                                    <label for="selectAll">Check All</label>
-                                </div> 
+                        <form action="{{route('product.approve.save')}}" method="POST">
+                            @csrf
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between"> 
+                                    <div class="mb-1">
+                                        <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
+                                        <label for="selectAll">Check All</label>
+                                    </div> 
 
-                                <div class="mb-1">
-                                    <button class="btn btn-primary" type="submit">
-                                        Approve
-                                    </button>
+                                    <div class="mb-1">
+                                        <button class="btn btn-primary" type="submit">
+                                            Approve
+                                        </button>
+                                    </div>
                                 </div>
-                           </div>
-                           
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr class="">
-                                        <th>Action</th>
-                                        <th>S/N</th> 
-                                        <th>Name & ID</th>
-                                        <th>Address</th>
-                                        <th>Flat</th>
-                                        <th>Shop</th>
-                                        <th>Garage</th> 
-                                        <th>Deiuxe/Studio</th> 
-                                        <th>Sea/Hall</th> 
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                   <tr class="">
-                                        <td class="text-center">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
-                                        </td>
-                                        <td>1</td>
-                                        <td><a href="#">MN Tower</a></td>
-                                        <td>Mohammadpur, Dhaka</td>
-                                        <td>3/12</td>
-                                        <td>4/12</td>
-                                        <td>6/12</td>
-                                        <td>4/65</td> 
-                                        <td>5/12</td>
-                                    </tr> 
+                            
+                                <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr class="">
+                                            <th>Action</th>
+                                            <th>S/N</th> 
+                                            <th>Name & ID</th>
+                                            <th>Address</th>
+                                            <th>Floor</th>
+                                            @foreach($unit_headers as $header)
+                                                <th>{{ ucfirst($header->title) }}</th>
+                                            @endforeach 
+                                        </tr>
+                                    </thead>
 
-                                    <tr class="">
-                                         <td class="text-center">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
-                                        </td> 
-                                        <td>1</td>
-                                        <td><a href="#">MN Tower</a></td>
-                                        <td>Mohammadpur, Dhaka</td>
-                                        <td>3/12</td>
-                                        <td>4/12</td>
-                                        <td>6/12</td>
-                                        <td>4/65</td> 
-                                        <td>5/12</td>
-                                    </tr> 
+                                    <tbody>
+                                        @foreach ($projects as  $project)
+                                            <tr class="">
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox" name="project_id[]" value="{{$project->id}}" id="flexCheckChecked" >
+                                                </td>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ @$project->name }}</td>
+                                                <td>{{ @$project->address }}</td>
+                                                <td>{{ @$project->total_floor}}</td>
+                                                @foreach($unit_headers as $header)
+                                                    <td>{{ $project->units->where('unit.title', $header->title)->count() }}</td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach 
 
-                                    <tr class="">
-                                         <td class="text-center">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
-                                        </td> 
-                                        <td>1</td>
-                                        <td><a href="#">MN Tower</a></td>
-                                        <td>Mohammadpur, Dhaka</td>
-                                        <td>3/12</td>
-                                        <td>4/12</td>
-                                        <td>6/12</td>
-                                        <td>4/65</td> 
-                                        <td>5/12</td>
-                                    </tr> 
-
-                                    <tr class="">
-                                         <td class="text-center">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
-                                         </td>
-                                        <td>1</td>
-                                        <td><a href="#">MN Tower</a></td>
-                                        <td>Mohammadpur, Dhaka</td>
-                                        <td>3/12</td>
-                                        <td>4/12</td>
-                                        <td>6/12</td>
-                                        <td>4/65</td> 
-                                        <td>5/12</td>
-                                    </tr> 
-
-                                    <tr class="">
-                                         <td class="text-center">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
-                                         </td>
-                                        <td>1</td>
-                                        <td><a href="#">MN Tower</a></td>
-                                        <td>Mohammadpur, Dhaka</td>
-                                        <td>3/12</td>
-                                        <td>4/12</td>
-                                        <td>6/12</td>
-                                        <td>4/65</td> 
-                                        <td>5/12</td>
-                                    </tr> 
-                                     
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
                     </div>
                 </div> <!-- end col -->
             </div>
@@ -152,10 +102,21 @@
 @endsection 
 
 @section('script')
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
 <script>
     $(document).ready(function () { 
         $('#selectAll').click(function () {
             $(':checkbox').prop('checked', this.checked);
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(window).on('load', function () {
+            console.log('DataTable initialized');
+            var table = $('#approve_table').DataTable({});
         });
     });
 </script>

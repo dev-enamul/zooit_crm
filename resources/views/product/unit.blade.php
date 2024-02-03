@@ -44,28 +44,34 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($projectUnits as  $projectUnit)
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{ asset('../assets/images/users/avatar-6.png') }}" alt="Header Avatar">
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    <a class="dropdown-item" href="{{route('unit.edit',$projectUnit->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('project.unit.delete',$projectUnit->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a>
-                                                    <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ @$projectUnit->name }}</td>
-                                        <td>{{ @$projectUnit->project->name }}</td>
-                                        <td>{{ @$projectUnit->unit->title}}</td>
-                                        <td>{{ @$projectUnit->unitCategory->title}}</td>
-                                        <td>{{ @$projectUnit->unit->down_payment}}</td>
-                                        <td>{{ @$projectUnit->status == 1 ?'Active' : 'Inactive' }}</td> 
-                                    </tr> 
+                                        <tr class="">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{ asset('../assets/images/users/avatar-6.png') }}" alt="Header Avatar">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated"> 
+                                                        <a class="dropdown-item" href="{{route('unit.edit',$projectUnit->id)}}">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('project.unit.delete',$projectUnit->id) }}')">Delete</a>  
+                                                        <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a>
+                                                        <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ @$projectUnit->name }}</td>
+                                            <td>{{ @$projectUnit->project->name }}</td>
+                                            <td>{{ @$projectUnit->unit->title}}</td>
+                                            <td>{{ @$projectUnit->unitCategory->title}}</td>
+                                            <td>{{ @$projectUnit->unit->down_payment}}</td>
+                                            <td>
+                                                @if($projectUnit->status == 1)
+                                                    <button class="btn btn-success">{{ __('Active') }}</button>
+                                                @else
+                                                    <button class="btn btn-danger">{{ __('Inactive') }}</button>
+                                                @endif
+                                            </td>
+                                        </tr> 
                                     @endforeach
                                 </tbody>
                             </table> <!-- end table -->
@@ -93,7 +99,7 @@
     </footer> 
 </div> 
 
-{{-- <div class="offcanvas offcanvas-end" id="offcanvas">
+{{--<div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Select Filter Item</h5>
         <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
@@ -131,39 +137,54 @@
 
         </div>
     </div>
+</div>--}}
+
+<div class="offcanvas offcanvas-end" id="offcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Select Filter Item</h5>
+        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+            <i class="fa fa-times"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form action="{{ route('project.unit.search') }}" method="POST">
+            @csrf
+            <div class="row">
+                @include('common.search', [
+                    'div' => 'col-md-12',
+                    'visible' => ['status', 'project'],
+                ])
+                <input type="hidden" id="status" value="{{ @$status }}">
+                <input type="hidden" id="project" value="{{ @$project }}">
+        
+                <div class="text-end">
+                    <button class="btn btn-primary" id="filter_button" disabled><i class="fas fa-filter"></i> Filter</button>
+                    <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
+                        <i class="mdi mdi-refresh"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </form> 
+    </div> 
 </div>
-
-<div class="offcanvas-body">
-    <form action="{{route('project.unit.search')}}" method="POST">
-        @csrf
-        <div class="row"> 
-            @include('common.search', [
-                'div' => 'col-md-12',
-                'visible' => ['status', 'project'],
-            ])
-            <input type="hidden" id="status" value="{{ @$division }}">
-            <input type="hidden" id="project" value="{{ @$project }}">
-
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> 
-                <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
-                    <i class="mdi mdi-refresh"></i> Reset
-                </button>                            
-            </div> 
-        </div>
-    </form>
-</div> --}}
 @endsection
 
 @section('script')
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script> --}}
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     
     <script>
+        function resetFormFields() {
+            $("#status").val('');
+            $("#project").val('');
+        
+            $("#status").trigger('change');
+            $("#project").trigger('change');
+            $('#filter_button').prop('disabled', true);
+        }
+    
         $(document).ready(function () {
             var table = $('#unit_table').DataTable({
                 dom: 'Bfrtip',
@@ -185,7 +206,26 @@
                         }
                     }
                 ]
-            }); 
+            });
         });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2();
+        
+            $('#status').on('change', function () {
+                var status = $(this).val();
+                $('#status').val(status);
+                $('#filter_button').prop('disabled', false);
+            });
+        
+            $('#project').on('change', function () {
+                var project = $(this).val();
+                $('#project').val(project);
+                $('#filter_button').prop('disabled', false);
+            });
+        });
+    </script>
+    
 @endsection

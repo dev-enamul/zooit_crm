@@ -120,7 +120,7 @@ class ProductController extends Controller
             'upazila_id'    => $request->upazila,
             'union_id'      => $request->union,
             'village_id'    => $request->village,   
-            'status'        => 1,
+            'status'        => 0,
             'created_by'    => $user_id,
         ];
 
@@ -215,7 +215,31 @@ class ProductController extends Controller
     }
 
     public function product_approve(){
-        return view('product.product_approve');
+        $projects       = Project::where('status',0)->with('units')->select('id','name','address','total_floor')->get();
+        $unit_headers   = Unit::where('status',1)->select('id','title')->get();
+        return view('product.product_approve',compact('projects','unit_headers'));
+    }
+
+    public function productApprove(Request $request) {
+        if($request->has('project_id') && $request->project_id !== '' & $request->project_id !== null) {
+            DB::beginTransaction();
+            try {
+                foreach ($request->project_id as $key => $project_id) {
+                    $project = Project::where('status',0)->where('id',$project_id)->first();
+                    $project->status = 1;
+                    $project->save();
+                }
+                DB::commit();
+                return redirect()->route('product.approve')->with('success', 'Status Updated Successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+            
+        } else {
+            return redirect()->route('product.approve')->with('error', 'Something went wrong!');
+        }
+
     }
 
     public function productDelete($id){

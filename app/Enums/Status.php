@@ -4,14 +4,14 @@ namespace App\Enums;
 
 final class Status
 {
-    const Active = "Active";
-    const Inactive = "Inactive";
+    const Active = "1";
+    const Inactive = "0";
 
     public static function values()
     {
         return [
-            self::Active,
-            self::Inactive,
+            self::Active => 'Active',
+            self::Inactive => 'Inactive',
         ];
     }
 }
