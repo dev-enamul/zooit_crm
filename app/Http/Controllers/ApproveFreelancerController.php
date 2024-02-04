@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FreelancerApprovel;
 use App\Models\TrainingCategory;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class ApproveFreelancerController extends Controller
@@ -29,7 +31,16 @@ class ApproveFreelancerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $input = $request->all();
+            $input['approve_by'] = auth()->user()->id;
+            $input['meeting_date'] = $request->meeting_date . ' ' . $request->meeting_time;
+            FreelancerApprovel::create($input); 
+            return redirect()->back()->with('success', 'Freelancer approved successfully');
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
     }
 
     /**

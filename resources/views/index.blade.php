@@ -27,7 +27,7 @@
                     @if ($user==1)
                     <div class="mb-3"> 
                         <div class="accordion" id="accordionExample-general"> 
-                            <div class="accordion-item">
+                            <div class="accordion-item"> 
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-general" aria-expanded="false" aria-controls="collapseOne-general">
                                         <b>Today target achivement</b>

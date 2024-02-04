@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\District;
+use App\Models\ReportingUser;
 use App\Models\Union;
 use App\Models\Upazila;
 use App\Models\Village;
@@ -131,11 +132,22 @@ if (!function_exists('reporting_user')) {
 
 
 if (!function_exists('user_info')) {
-    function user_info($user_id, $column = 'name')
+    function user_info($user_id)
     {
         $user = \App\Models\User::find($user_id);
         if ($user) {
             return $user;
+        }
+    }
+}
+
+if (!function_exists('my_employee')) {
+    function my_employee($user_id)
+    {
+        $reporting_id = ReportingUser::where('user_id', $user_id)->first('id');
+        if ($reporting_id) { 
+            $my_employee_id = ReportingUser::where('reporting_user_id', $reporting_id->id)->pluck('user_id')->toArray();
+            return $my_employee_id;
         }
     }
 }

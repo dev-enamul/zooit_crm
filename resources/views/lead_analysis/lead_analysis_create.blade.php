@@ -34,7 +34,7 @@
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Select Customer</label>
                                             <select class="select2" search id="freelancer" name="freelancer" required>
-                                                <option value="">Select Freelancer</option> 
+                                                <option value="">Select Customer</option> 
                                                 <option value="">Md Enamul Haque 01796351081</option> 
                                                 <option value="">Jamil Hosain 01796351081</option> 
                                                 <option value="">Md Mehedi Hasan 01796351081</option> 
@@ -84,7 +84,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="customer_need" class="form-label">Custome's Need</label> 
+                                            <label for="customer_need" class="form-label">Customer's Need</label> 
                                             <input type="text" name="customer_need" class="form-control" id="customer_need" placeholder="Customer's Need" value=""> 
                                         </div>
                                     </div>
@@ -113,7 +113,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="refferal" class="form-label">Referral</label> 
-                                            <input type="text" name="refferal" class="form-control" id="refferal" placeholder="Refferal" value=""> 
+                                            <input type="text" name="refferal" class="form-control" id="refferal" placeholder="Referral" value=""> 
                                         </div>
                                     </div>
 

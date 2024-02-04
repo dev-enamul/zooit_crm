@@ -32,8 +32,8 @@
                                     <tr>
                                         <th>Action</th>
                                         <th>S/N</th>
-                                        <th>Comission Name</th> 
-                                        <th>Total Comission</th>
+                                        <th>Commission Name</th> 
+                                        <th>Total Commission</th>
                                         <th>Total Sales</th> 
                                     </tr>
                                 </thead>

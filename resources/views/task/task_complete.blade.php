@@ -54,7 +54,7 @@
                                         <th>Action</th> 
                                         <th>S/N</th> 
                                         <th>Date</th> 
-                                        <th>Asign Task</th>
+                                        <th>Assign Task</th>
                                         <th>Complete Task</th>
                                         <th>Progress</th>  
                                         <th>Remark</th>

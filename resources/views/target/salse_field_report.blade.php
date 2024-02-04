@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Salse Executive Report")
+@section('title',"Sales Executive Report")
 @section('content')
 <div class="main-content">
     <div class="page-content">
