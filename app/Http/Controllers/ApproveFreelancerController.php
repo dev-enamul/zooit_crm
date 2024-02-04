@@ -14,7 +14,9 @@ class ApproveFreelancerController extends Controller
     public function index()
     {
         $trainings = TrainingCategory::where('status', '1')->get();
-        $datas = User::where('user_type', '2')->where('approve_by',null)->get();
+        $datas = User::where('user_type', '2')->where('approve_by',null)->whereHas('freelancer', function($query){
+            $query->whereIn('last_approve_by',[17]);
+        })->get();
         return view('freelancer.approve-freelancer',compact('datas','trainings'));
     }
 

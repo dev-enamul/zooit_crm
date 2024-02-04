@@ -10,7 +10,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Designation</h4> 
+                        <h4 class="mb-sm-0">Designation</h4>
+                        @can('designation-manage') 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_profession">
@@ -18,6 +19,7 @@
                                 </button> 
                             </ol>
                         </div> 
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -31,7 +33,9 @@
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
+                                        @can('designation-manage')
                                         <th>Action</th>
+                                        @endcan
                                         <th>S/N</th>
                                         <th>Profession Name</th> 
                                         <th>Commission</th> 
@@ -40,6 +44,7 @@
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
                                     <tr>
+                                        @can('designation-manage')
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
@@ -50,6 +55,7 @@
                                                 </div>
                                             </div> 
                                         </td> 
+                                        @endcan
                                         <td>{{$key+1}}</td>
                                         <td>{{$data->title}}</td>  
                                         <th>{{@$data->commission->commission}}%</th> 

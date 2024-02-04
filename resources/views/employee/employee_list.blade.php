@@ -74,7 +74,9 @@
                                                     <a class="dropdown-item" href="#">Edit</a>
                                                     <a class="dropdown-item" href="#">Delete</a>
                                                     <a class="dropdown-item" href="prospecting.html">Prospecting</a>
-                                                    <a class="dropdown-item" href="{{route('employee.permission', $data->id)}}">Change Permissin </a>
+                                                    @can('employee-permission')
+                                                        <a class="dropdown-item" href="{{route('employee.permission', $data->id)}}">Change Permissin </a>
+                                                    @endcan
                                                 </div>
                                             </div> 
                                         </td> 

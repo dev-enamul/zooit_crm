@@ -14,12 +14,12 @@ class DatabaseSeeder extends Seeder
 { 
     public function run(): void
     {
-        $this->call(UsersSeeder::class); 
-        $this->call(CountriesSeeder::class); 
         $this->call(ProfessionsSeeder::class); 
         $this->call(CommissionSeeder::class); 
-        $this->call(BankSeeder::class);
         $this->call(DesignationSeeder::class);  
+        $this->call(UsersSeeder::class); 
+        $this->call(CountriesSeeder::class);   
+        $this->call(BankSeeder::class); 
         $this->call(SpecialCommissionSeeder::class); 
         $this->call(CommissionSpecialCommissionSeeder::class);
         $this->call(CommissionDeductedSettingSeeder::class); 

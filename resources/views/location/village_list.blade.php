@@ -13,13 +13,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Villages</h4> 
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Village List</li>
-                            </ol>
-                        </div> 
+                        <h4 class="mb-sm-0">Villages</h4>  
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Village List</li>
+                                </ol>
+                            </div> 
                     </div>
                 </div>
             </div>
@@ -31,19 +31,12 @@
                         <div class="card-body">
 
                             <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    {{-- <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button>  
-                                    </div>  --}}
-                                    <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#create_modal">
-                                        <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Village</span>
-                                    </button> 
+                                <div class=""> 
+                                    @can('village-manage')
+                                        <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#create_modal">
+                                            <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Village</span>
+                                        </button> 
+                                    @endcan
                                 </div>
 
                                 <div class="">
@@ -64,7 +57,9 @@
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
+                                        @can('village-manage')
                                         <th>Action</th>
+                                        @endcan
                                         <th>S/N</th> 
                                         <th>Village</th>
                                         <th>Union</th> 
@@ -76,6 +71,7 @@
                                 <tbody> 
                                     @foreach($villages as $key => $item)
                                     <tr>
+                                        @can('village-manage')
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
@@ -85,6 +81,7 @@
                                                 </div>
                                             </div> 
                                         </td> 
+                                        @endcan
                                         <td>{{$key+1}}</td>
                                         <td>{{$item->name}}</td>  
                                         <td>{{@$item->union->name}}</td>

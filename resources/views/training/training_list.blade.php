@@ -11,6 +11,7 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Training Category</h4> 
+                        @can('training-category-manage')
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_profession">
@@ -18,6 +19,7 @@
                                 </button> 
                             </ol>
                         </div> 
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -30,7 +32,9 @@
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th>Action</th>
+                                        @can('training-category-manage')
+                                            <th>Action</th>
+                                        @endcan
                                         <th>S/N</th>
                                         <th>Training Name</th>  
                                         <th>Description</th>  
@@ -39,6 +43,7 @@
                                 <tbody> 
                                     @foreach ($datas as $key =>  $item) 
                                         <tr>
+                                            @can('training-category-manage')
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
@@ -48,6 +53,7 @@
                                                     </div>
                                                 </div> 
                                             </td> 
+                                            @endcan
                                             <td>{{$key+1}}</td>
                                             <td>{{$item->title}}</td>   
                                             <td>{{$item->description}}</td> 
