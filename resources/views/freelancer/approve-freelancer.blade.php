@@ -52,7 +52,7 @@
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)"data-bs-toggle="modal" data-bs-target="#approve_frelancer">Approve</a> 
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer('{{$data->id}}')">Approve</a> 
                                                 </div>
                                             </div> 
                                         </td> 
@@ -88,7 +88,8 @@
             </div>
 
             <form action="{{route('approve-freelancer.store')}}" method="POST">
-                @csrf
+                @csrf 
+                <input type="hidden" name="user_id">
                 <div class="modal-body"> 
                     <div class="form-group mb-2">
                         <label for="counselling">Counselling</label> 
@@ -117,8 +118,8 @@
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="meeting_time">Recommendation Training</label> 
-                        <select name="meeting_time" class="select2" id="meeting_time">
+                        <label for="training_id">Recommendation Training</label> 
+                        <select name="training_id" class="select2" id="training_id">
                             <option value="">Select Training</option> 
                             @foreach ($trainings as $training)
                                 <option value="{{$training->id}}">{{$training->title}}</option> 
@@ -127,7 +128,7 @@
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="meeting_time">Remark</label> 
+                        <label for="remark">Remark</label> 
                         <textarea name="" id="" class="form-control" rows="3"></textarea>
                     </div>
 
@@ -145,5 +146,10 @@
 @endsection 
 
 @section('script')
-    <script src="{{asset('')}}"></script>
+<script>
+    function approveFreelancer(id){ 
+        $('input[name="user_id"]').val(id);
+        $('#approve_frelancer').modal('show');
+    }
+    <script>
 @endsection
