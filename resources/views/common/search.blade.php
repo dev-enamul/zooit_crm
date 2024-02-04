@@ -10,6 +10,7 @@ $district_id    = $selected && isset($selected['district_id']) ? $selected['dist
 $upazila_id     = $selected && isset($selected['upazila_id']) ? $selected['upazila_id'] : null;
 $union_id       = $selected && isset($selected['union_id']) ? $selected['union_id'] : null;
 $village_id     = $selected && isset($selected['village_id']) ? $selected['village_id'] : null;
+$project_id     = $selected && isset($selected['project_id']) ? $selected['project_id'] : null;
 $visible        = $visible ?? [];
 
 if ($division_id) {
@@ -149,9 +150,9 @@ $visible = $visible ?? [];
             <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
                 Select a Status {{ in_array('status', $required) ? '*' : '' }}
             </option>
-            @foreach (\App\Enums\Status::values() as $status)
-                <option value="{{ $status }}" {{ old('status', $selected['status'] ?? null) == $status ? 'selected' : '' }}>
-                    {{ $status }}
+            @foreach (\App\Enums\Status::values() as $key => $value)
+                <option value="{{ $key }}" {{ old('status', $selected['status'] ?? null) == $key ? 'selected' : '' }}>
+                    {{ $value }}
                 </option>
             @endforeach
         </select>

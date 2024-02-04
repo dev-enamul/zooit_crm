@@ -99,7 +99,7 @@
                                 <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> 
                                 <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
                                     <i class="mdi mdi-refresh"></i> Reset
-                                </button>                            
+                                </button>
                             </div> 
                         </div>
                     </form>

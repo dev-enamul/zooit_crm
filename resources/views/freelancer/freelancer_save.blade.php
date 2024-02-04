@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Freelancer Create")
+@section('title', $title)
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -8,15 +8,26 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Freelancer Entry</h4>
+                        <h4 class="mb-sm-0">
+                            @if(isset($freelancer))
+                                Freelancer Edit
+                            @else
+                                Freelancer Entry
+                            @endif
+                        </h4> 
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Freelancer Entry</li>
+                                <li class="breadcrumb-item active">
+                                    @if(isset($freelancer))
+                                        Freelancer Edit
+                                    @else
+                                        Freelancer Entry
+                                    @endif
+                                </li>
                             </ol>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -26,14 +37,20 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form class="needs-validation" novalidate>
+                            @if(isset($freelancer))
+                                <form action="{{route('freelancer.save',$freelancer->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <input type="hidden" name="id" value="{{$freelancer->id}}">
+                            @else 
+                                <form action="{{route('freelancer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                            @endif 
+                                @csrf
                                 <div class="row">
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Personal Information</h6>
                                     <hr>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="First name" value="" required>
+                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{ isset($freelancer) ? $freelancer->user->name : old('name')}}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -44,7 +61,6 @@
                                         <div class="mb-3">
                                             <label for="profile_image" class="form-label">Profile Image</label>
                                             <input type="file" name="profile_image" class="form-control" id="profile_image" >
-                                           
                                         </div>
                                     </div>   
                                     
@@ -68,7 +84,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="marital_status" id="marital_status" required>
+                                            <select class="form-select" name="maritual_status" id="marital_status" required>
                                                 <option value="">Select Marital Status</option>
                                                 <option value="">Married</option>
                                                 <option value="">Unmarried</option>
@@ -101,7 +117,7 @@
                                         <div class="mb-3">
                                             <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="religion" id="religion" required>
-                                                <option value="">Select Region</option>
+                                                <option value="">Select Religion</option>
                                                 <option value="1">Christianity</option>
                                                 <option value="2">Islam</option>
                                                 <option value="3">Hinduism</option>
@@ -141,7 +157,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="blood_group" id="blood_group" required>
+                                            <select class="form-select select2" name="gender" id="gender" required>
                                                 <option value="">Select Gender</option>
                                                 <option value="">Male</option> 
                                                 <option value="">Female</option>  
@@ -155,8 +171,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="gender" class="form-label">Nationality <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="gender" id="gender" required>
+                                            <label for="nationality" class="form-label">Nationality <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" name="nationality" id="nationality" required>
                                                 <option value="">Select Nationality</option>
                                                 <option value="">Bangladeshi</option>
                                                 <option value="">Indian</option>  
@@ -182,15 +198,15 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="phone1" class="form-label">Mobile Number 2 </label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" placeholder="Phone 2 Number" value="">
+                                            <label for="phone2" class="form-label">Mobile Number 2 </label>
+                                            <input type="text" name="phone2" class="form-control" id="phone2" placeholder="Phone 2 Number" value="">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="email" class="form-label">Office Email</label>
-                                           <input type="email" name="email" class="form-control" id="email" placeholder="Email Number"> 
+                                            <label for="office_email" class="form-label">Office Email</label>
+                                           <input type="email" name="office_email" class="form-control" id="office_email" placeholder="Office Email ID"> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -200,7 +216,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Personal Email</label>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email Number"> 
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email ID"> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -209,29 +225,29 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="imo_number" class="form-label">Imo/WhatsApp Number</label>
-                                            <input type="text" name="imo_number" class="form-control" id="imo_number" placeholder="Emo Number">  
+                                            <label for="imo_whatsapp_number" class="form-label">Imo/WhatsApp Number</label>
+                                            <input type="text" name="imo_whatsapp_number" class="form-control" id="imo_whatsapp_number" placeholder="Imo/Emo Number">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="emergency_person" class="form-label">Facebook ID</label>
-                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Emergency Contact Number">  
+                                            <label for="facebook_id" class="form-label">Facebook ID</label>
+                                            <input type="text" name="facebook_id" class="form-control" id="facebook_id" placeholder="Facebook ID">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="emergency_contact" class="form-label">Emergency Contact Number</label>
-                                            <input type="text" name="emergency_contact" class="form-control" id="emergency_contact" placeholder="Emergency Contact Number">  
+                                            <label for="emergency_contact_person_name" class="form-label">Emergency Contact Name</label>
+                                            <input type="text" name="emergency_contact_name" class="form-control" id="emergency_contact_person_name" placeholder="Emergency Contact Person Name">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="emergency_person" class="form-label">Emergency Contact Person</label>
-                                            <input type="text" name="emergency_person" class="form-control" id="emergency_person" placeholder="Emergency Contact Number">  
+                                            <label for="emergency_contact_person_number" class="form-label">Emergency Contact Person Number</label>
+                                            <input type="text" name="emergency_person_number" class="form-control" id="emergency_contact_person_number" placeholder="Emergency Contact Person Number">  
                                         </div>
                                     </div> 
 
@@ -318,7 +334,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="post_office" class="form-label">Post Office <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="post_office" id="post_office" required>
@@ -336,24 +352,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <!-- <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="village" class="form-label">Word</label>
-                                            <select class="form-select" name="village" id="village">
-                                                <option value="">Select Village</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select>  
-                                        </div>
-                                    </div> -->
+                                    </div> --}}
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -377,14 +376,14 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></spN> </label>
+                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
                                             <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_phone" class="form-label">Mobile</label>
+                                            <label for="father_phone" class="form-label">Father Mobile</label>
                                             <input type="text" name="father_phone" class="form-control" id="father_phone" placeholder="Father Father Mobile">  
                                         </div>
                                     </div>
@@ -398,22 +397,22 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="mother_phone" class="form-label">Mobile</label>
+                                            <label for="mother_phone" class="form-label">Mother Mobile</label>
                                             <input type="text" name="mother_phone" class="form-control" id="mother_phone" placeholder="Mother's Mobile">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="mother_name" class="form-label">Spouse Name</label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Spouse Name">  
+                                            <label for="spouse_name" class="form-label">Spouse Name</label>
+                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="mother_phone" class="form-label">Mobile</label>
-                                            <input type="text" name="mother_phone" class="form-control" id="mother_phone" placeholder="Spouse Mobile">  
+                                            <label for="spouse_phone" class="form-label">Spouse Mobile</label>
+                                            <input type="text" name="spouse_phone" class="form-control" id="spouse_phone" placeholder="Spouse Mobile">  
                                         </div>
                                     </div>
 
@@ -442,15 +441,15 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="branch" class="form-label">Account Number</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Account Number">  
+                                            <label for="account_number" class="form-label">Account Number</label>
+                                            <input type="text" name="account_number" id="account_number" class="form-control" placeholder="Enter Bank Account Number">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="branch" class="form-label">Account Holder Name</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Other's Information">  
+                                            <label for="account_holder_name" class="form-label">Account Holder Name</label>
+                                            <input type="text" name="account_holder_name" id="account_holder_name" class="form-control" placeholder="Enter Bank Holder Name">  
                                         </div>
                                     </div>
 
@@ -458,8 +457,8 @@
                                         <div class="mb-3">
                                             <label for="mobile_bank" class="form-label">Mobile Bank</label>
                                             <select class="form-select select2" name="mobile_bank" id="mobile_bank" required>
-                                                <option value="">Bksh</option>
-                                                <option value="">Roket </option>
+                                                <option value="">Bkash</option>
+                                                <option value="">Rocket </option>
                                                 <option value="">MCash </option>  
                                             </select>  
                                         </div>
@@ -467,8 +466,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="branch" class="form-label">Mobile Bank Number</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Mobile Bank Number">  
+                                            <label for="mobile_bank_number" class="form-label">Mobile Bank Number</label>
+                                            <input type="text" name="mobile_bank_number" id="mobile_bank_number" class="form-control" placeholder="Enter Mobile Bank Number">  
                                         </div>
                                     </div> 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> ID Detail</h6>
@@ -483,53 +482,52 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Upload NID</label>
-                                            <input type="file" name="nid" id="nid" class="form-control" > 
+                                            <label for="nid_file" class="form-label">Upload NID</label>
+                                            <input type="file" name="nid_file" id="nid_file" class="form-control" > 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Birth Certificate Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <label for="birth_certificate_number" class="form-label">Birth Certificate Number</label>
+                                            <input type="text" name="birth_certificate_number" id="birth_certificate_number" class="form-control" placeholder="Enter Birth Certificate Number"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Upload Birth Certificate</label>
-                                            <input type="file" name="nid" id="nid" class="form-control" > 
+                                            <label for="birth_certificate_file" class="form-label">Upload Birth Certificate</label>
+                                            <input type="file" name="birth_certificate_file" id="birth_certificate_file" class="form-control" > 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Passport Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <label for="passport_number" class="form-label">Passport Number</label>
+                                            <input type="text" name="passport_number" id="passport_number" class="form-control" placeholder="Enter Passport Number"> 
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="profile_image" class="form-label">Upload Passport</label>
-                                            <input type="file" name="profile_image" id="profile_image" class="form-control">  
+                                            <label for="upload_passport" class="form-label">Upload Passport</label>
+                                            <input type="file" name="upload_passport" id="upload_passport" class="form-control">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">Expire Date</label>
-                                            <input type="text" name="dob" class="form-control datepicker w-100" id="dob" placeholder="Select expire date" required> 
+                                            <label for="passport_expire_date" class="form-label">Expire Date</label>
+                                            <input type="text" name="passport_expire_date" class="form-control datepicker w-100" id="passport_expire_date" placeholder="Select expire date" required> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="nid" class="form-label">TIN Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number"> 
+                                            <label for="tin_number" class="form-label">TIN Number</label>
+                                            <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="Enter TIN Number"> 
                                         </div>
-                                    </div> 
-                                  
+                                    </div>
                                 </div>
                                   
                                 <div>

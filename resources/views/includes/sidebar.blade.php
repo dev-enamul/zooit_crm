@@ -40,7 +40,7 @@
                                 <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
                             @endcan   
 
-                            <li class="{{ Route::is('product.index', 'product.edit') ? 'mm-active' : '' }}">
+                            <li class="{{ Route::is('product.index', 'product.edit','product.search') ? 'mm-active' : '' }}">
                                 <a href="{{ route('product.index') }}">
                                     <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products
                                 </a>
@@ -49,7 +49,9 @@
                             @can('product-manage')
                                 <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
                             @endcan
-                            <li><a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a></li>                        
+                            <li class="{{ Route::is('unit.save', 'project.unit.delete','project.unit.search') ? 'mm-active' : '' }}">
+                                <a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a>
+                            </li>                        
                             
                             @can('product-approve')
                                 <li><a href="{{route('product.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Product Approve</a></li>

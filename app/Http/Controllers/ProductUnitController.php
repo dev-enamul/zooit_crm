@@ -22,8 +22,9 @@ class ProductUnitController extends Controller
     {
         $projectUnits = ProjectUnit::where('status', 1)
                         ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
-                        ->get(['id','name','project_id','unit_id','unit_category_id']);        
-        return view('product.unit',compact('projectUnits'));
+                        ->get(['id','name','project_id','unit_id','unit_category_id','status']);
+        $projects       = Project::where('status',1)->select('id','name')->get();
+        return view('product.unit',compact('projectUnits','projects'));
     }
 
     public function create()
@@ -177,19 +178,24 @@ class ProductUnitController extends Controller
         }
 
         try{
+            $requestData = $request->except('token');
+
+            if (count($requestData) === 0) {
+                return redirect()->route('unit.index')->with('error', 'Please select project and status!');
+            }
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $status         = $request->status;
                 $project_id     = $request->project;
 
                 $selected['status']      = $status;
                 $selected['project_id'] = $project_id;
-                ProjectUnit::where('status', 1)
-                ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
-                ->get(['id','name','project_id','unit_id','unit_category_id']);
-                $project  = ProjectUnit::where('status', $status)->where('project_id',$project_id)
-                            ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
-                            ->get(['id','name','project_id','unit_id','unit_category_id']);
-                return view('product.product_list', compact('projects','divisions','districts','upazilas','unions','villages','selected'));
+
+                $projectUnits = ProjectUnit::where('status',$request->status)->where('project_id',$request->project)
+                    ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
+                    ->get(['id','name','project_id','unit_id','unit_category_id','status']);
+                $projects = Project::where('status',1)->select('id','name')->get();
+                
+                return view('product.unit', compact('projects','selected','projectUnits'));
             }
         }
         catch (\Throwable $th) {
