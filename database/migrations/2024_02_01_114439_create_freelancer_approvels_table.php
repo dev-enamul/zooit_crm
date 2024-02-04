@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('freelancer_approvels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->comment('user_id=user table id for freelancer'); 
+            $table->foreignId('freelancer_id')->constrained('users')->comment('freelancer_id=user table id for freelancer'); 
             $table->unsignedInteger('counselling')->default(1)->comment('counselling=1 for yes, 0 for no');
             $table->unsignedInteger('interview')->default(1)->comment('interview=1 for yes, 0 for no');
             $table->dateTime('meeting_date')->nullable();

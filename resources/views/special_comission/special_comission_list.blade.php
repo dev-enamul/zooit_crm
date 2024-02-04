@@ -11,6 +11,7 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Special Commission </h4> 
+                        @can('special-commission-manage')
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <a class="btn btn-secondary" href="{{route('special-commission.create')}}">
@@ -18,6 +19,7 @@
                                 </a> 
                             </ol>
                         </div> 
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -30,7 +32,9 @@
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
+                                        @can('special-commission-manage')
                                         <th>Action</th>
+                                        @endcan
                                         <th>S/N</th>
                                         <th>Commission Name</th> 
                                         <th>Total Commission</th>
@@ -40,6 +44,7 @@
                                 <tbody> 
                                     @foreach ($datas as $key => $item)
                                         <tr>
+                                            @can('special-commission-manage')
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
@@ -50,6 +55,7 @@
                                                     </div>
                                                 </div> 
                                             </td> 
+                                            @endcan
                                             <td>{{$key+1}}</td>
                                             <td><a href="{{route('special-commission.show',$item->id)}}">{{$item->title}}</a></td>   
                                             <td>

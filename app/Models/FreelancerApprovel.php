@@ -10,7 +10,7 @@ class FreelancerApprovel extends Model
     use HasFactory; 
 
     protected $fillable = [
-        'user_id',
+        'freelancer_id',
         'counselling',
         'interview',
         'meeting_date',
@@ -20,9 +20,9 @@ class FreelancerApprovel extends Model
     ];
 
  
-    public function user()
+    public function freelancer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'freelancer_id');
     }
 
  

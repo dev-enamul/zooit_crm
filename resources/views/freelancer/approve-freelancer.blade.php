@@ -52,7 +52,7 @@
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer('{{$data->id}}')">Approve</a> 
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->freelancer_id}})">Approve</a> 
                                                 </div>
                                             </div> 
                                         </td> 
@@ -89,49 +89,57 @@
 
             <form action="{{route('approve-freelancer.store')}}" method="POST">
                 @csrf 
-                <input type="hidden" name="user_id">
+                <input type="hidden" name="freelancer_id">
                 <div class="modal-body"> 
-                    <div class="form-group mb-2">
-                        <label for="counselling">Counselling</label> 
-                        <select name="counselling" class="select2" id="counselling">
-                            <option value="1" selected>Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div> 
+                    @can('freelancer-counselling')
+                        <div class="form-group mb-2">
+                            <label for="counselling">Counselling</label> 
+                            <select name="counselling" class="select2" id="counselling">
+                                <option value="1" selected>Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div> 
+                    @endcan
 
-                    <div class="form-group mb-2">
-                        <label for="interview">Interview</label> 
-                        <select name="interview" class="select2" id="interview">
-                            <option value="1" selected>Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
+                    @can('freelancer-interview')
+                        <div class="form-group mb-2">
+                            <label for="interview">Interview</label> 
+                            <select name="interview" class="select2" id="interview">
+                                <option value="1" selected>Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    @endcan
 
-                    <div class="form-group mb-2">
-                        <label for="meeting_date">Meeting Date</label> 
-                        <input type="date" name="meeting_date" class="form-control">
-                    </div>
+                    @can('freelancer-meeting')
+                        <div class="form-group mb-2">
+                            <label for="meeting_date">Meeting Date</label> 
+                            <input type="date" name="meeting_date" class="form-control">
+                        </div> 
+                        <div class="form-group mb-2">
+                            <label for="meeting_time">Meeting Time</label> 
+                            <input type="time" name="meeting_time" class="form-control">
+                        </div>
+                    @endcan 
 
-                    <div class="form-group mb-2">
-                        <label for="meeting_time">Meeting Time</label> 
-                        <input type="time" name="meeting_time" class="form-control">
-                    </div>
+                    @can('freelancer-training')
+                        <div class="form-group mb-2">
+                            <label for="training_id">Recommendation Training</label> 
+                            <select name="training_id" class="select2" id="training_id">
+                                <option value="">Select Training</option> 
+                                @foreach ($trainings as $training)
+                                    <option value="{{$training->id}}">{{$training->title}}</option> 
+                                @endforeach
+                            </select>
+                        </div>
+                    @endcan
 
-                    <div class="form-group mb-2">
-                        <label for="training_id">Recommendation Training</label> 
-                        <select name="training_id" class="select2" id="training_id">
-                            <option value="">Select Training</option> 
-                            @foreach ($trainings as $training)
-                                <option value="{{$training->id}}">{{$training->title}}</option> 
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="remark">Remark</label> 
-                        <textarea name="" id="" class="form-control" rows="3"></textarea>
-                    </div>
-
+                    @can('freelancer-remark')
+                        <div class="form-group mb-2">
+                            <label for="remark">Remark</label> 
+                            <textarea name="" id="" class="form-control" rows="3"></textarea>
+                        </div>
+                    @endcan 
                 </div> 
                 <div class="modal-footer">
                     <div class="text-end">
@@ -148,8 +156,8 @@
 @section('script')
 <script>
     function approveFreelancer(id){ 
-        $('input[name="user_id"]').val(id);
+        $('input[name="freelancer_id"]').val(id);
         $('#approve_frelancer').modal('show');
     }
-    <script>
+</script>
 @endsection

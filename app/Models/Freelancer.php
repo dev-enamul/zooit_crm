@@ -15,7 +15,8 @@ class Freelancer extends Model
         'ref_id',
         'reporting_person',
         'approve_by',
-        'status',
+        'last_approve_by',
+        'status', 
     ];
 
     public function user()

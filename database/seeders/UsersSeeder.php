@@ -273,7 +273,7 @@ class UsersSeeder extends Seeder
                 'name' => "Ex.Co-Ordinator",
                 'phone' => "01700000017",
                 'password' => bcrypt('123456'),
-                'user_type' => 1,
+                'user_type' => 2,
                 'profile_image' => "",
                 'marital_status' => 1, 
                 'finger_id' => "43435343",
@@ -287,7 +287,7 @@ class UsersSeeder extends Seeder
                 'name' => "Co Ordinator",
                 'phone' => "01700000018",
                 'password' => bcrypt('123456'),
-                'user_type' => 1,
+                'user_type' => 2,
                 'profile_image' => "",
                 'marital_status' => 1, 
                 'finger_id' => "43435343",
@@ -301,7 +301,7 @@ class UsersSeeder extends Seeder
                 'name' => "Co-Ordinator Applicant",
                 'phone' => "01700000019",
                 'password' => bcrypt('123456'),
-                'user_type' => 1,
+                'user_type' => 2,
                 'profile_image' => "",
                 'marital_status' => 1, 
                 'finger_id' => "43435343",
@@ -315,7 +315,7 @@ class UsersSeeder extends Seeder
                 'name' => "Franchise Partner",
                 'phone' => "01700000020",
                 'password' => bcrypt('123456'),
-                'user_type' => 1,
+                'user_type' => 2,
                 'profile_image' => "",
                 'marital_status' => 1, 
                 'finger_id' => "43435343",
@@ -326,6 +326,35 @@ class UsersSeeder extends Seeder
                 'updated_by' => 1,
             ]
         ];
-        DB::table('users')->insert($data);
+        DB::table('users')->insert($data); 
+
+        $freelancer_data = [
+            [
+                'user_id' => 18,
+                'professions_id' => 1,
+                'designation_id' => 21, 
+                'last_approve_by' => 17,
+            ],
+            [
+                'user_id' => 19,
+                'professions_id' => 1,
+                'designation_id' => 21, 
+                'last_approve_by' => 17,
+            ],
+            [
+                'user_id' => 20,
+                'professions_id' => 1,
+                'designation_id' => 21,
+                'last_approve_by' => 17, 
+            ],
+
+            [
+                'user_id' => 21,
+                'professions_id' => 1,
+                'designation_id' => 21, 
+                'last_approve_by' => 17,
+            ],
+        ]; 
+        DB::table('freelancers')->insert($freelancer_data);
     }
 }

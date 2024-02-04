@@ -288,9 +288,10 @@
                             <li><a href="{{route('deposit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit List</a></li> 
                         </ul>
                     </li>  
-                @endcan
- 
+                @endcan 
+
                     <li class="menu-title">Progress</li>  
+                    @can('field-target')
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
                             <i class="mdi mdi-teach"></i>
@@ -304,7 +305,9 @@
                             <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Ex. Report</a></li> 
                         </ul>
                     </li> 
+                    @endcan
 
+                    @can('deposit-target')
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
                             <i class="mdi mdi-teach"></i>
@@ -323,8 +326,10 @@
                             
                             
                         </ul>
-                    </li>  
+                    </li> 
+                    @endcan 
                     
+                    @can('training')
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
                             <i class="mdi mdi-teach"></i>
@@ -336,14 +341,16 @@
                             <li><a href="{{route('training.history')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training History</a></li> 
                         </ul>
                     </li> 
+                    @endcan 
+                    @can('meeting')
                     <li>
                         <a href="{{route('meeting.index')}}" class="">
                             <i class="fas fa-calendar-alt"></i>
                             <span>Meeting Schedule</span>
                         </a>
-                    </li>  
-   
-                <li class="menu-title">Asign</li>  
+                    </li>   
+                    @endcan
+                {{-- <li class="menu-title">Asign</li>  
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-teach"></i>
@@ -361,9 +368,10 @@
                         <i class="fas fa-calendar-alt"></i>
                         <span>Meeting Schedule</span>
                     </a>
-                </li>   
+                </li>    --}}
  
                 <li class="menu-title">Report</li>  
+                @can('mst-commission')
                 <li>
                     <a href="javascript: void(0);" class="has-arrow ">
                         <i class="mdi mdi-chart-bar"></i>
@@ -374,154 +382,204 @@
                         <li><a href="{{route('mst.commission')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>MST Commission</a></li> 
                     </ul>
                 </li> 
+                @endcan
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>FL Commission</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false">  
-                        <li><a href="{{route('rsa.co.ordinator')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>RSA & Co-Ordinator</a></li> 
-                    </ul>
-                </li> 
+                @can('fl-commission')
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="mdi mdi-chart-bar"></i>
+                            <span>FL Commission</span>
+                        </a> 
+                        <ul class="sub-menu" aria-expanded="false">  
+                            <li><a href="{{route('rsa.co.ordinator')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>RSA & Co-Ordinator</a></li> 
+                        </ul>
+                    </li> 
+                @endcan
                 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>DT Achivement</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Monthly T&A</a></li>
-                        <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Bank Day Wise T&A</a></li> 
-                        <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Daily Deposit</a></li> 
-                        {{-- <li><a href="{{route('deposit.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Report</a></li>  --}}
-                        {{-- <li><a href="{{route('weekly.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Weekly Report</a></li>  --}}
-                    </ul>
-                </li>  
+                @can('dt-achivement')
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="mdi mdi-chart-bar"></i>
+                            <span>DT Achivement</span>
+                        </a> 
+                        <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Monthly T&A</a></li>
+                            <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Bank Day Wise T&A</a></li> 
+                            <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Daily Deposit</a></li> 
+                            {{-- <li><a href="{{route('deposit.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Report</a></li>  --}}
+                            {{-- <li><a href="{{route('weekly.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Weekly Report</a></li>  --}}
+                        </ul>
+                    </li> 
+                @endcan
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Special Offer</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('special-offer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer List</a></li> 
-                        <li><a href="{{route('special-offer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer Create</a></li>
-                    </ul>
-                </li> 
-                
-                
-                <li>
-                    <a href="{{route('due.report')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Due & Over Due</span>
-                    </a>
-                </li> 
+                @can('special-offer')
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="mdi mdi-chart-bar"></i>
+                            <span>Special Offer</span>
+                        </a> 
+                        <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('special-offer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer List</a></li> 
+                            <li><a href="{{route('special-offer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer Create</a></li>
+                        </ul>
+                    </li> 
+                @endcan 
 
-                <li>
-                    <a href="{{route('floor.wise.sold.report')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Sold & Unsold Report</span>
-                    </a>
-                </li>  
+                @can('due-report')
+                    <li>
+                        <a href="{{route('due.report')}}" class="">
+                            <i class="fas fa-desktop"></i>
+                            <span>Due & Over Due</span>
+                        </a>
+                    </li> 
+                @endcan
 
-                <li>
-                    <a href="{{route('cc.report')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>CC Report</span>
-                    </a>
-                </li>  
+                @can('sold-report')
+                    <li>
+                        <a href="{{route('floor.wise.sold.report')}}" class="">
+                            <i class="fas fa-desktop"></i>
+                            <span>Sold & Unsold Report</span>
+                        </a>
+                    </li> 
+                @endcan 
+
+                @can('cc-report')
+                    <li>
+                        <a href="{{route('cc.report')}}" class="">
+                            <i class="fas fa-desktop"></i>
+                            <span>CC Report</span>
+                        </a>
+                    </li>
+                @endcan  
                 
+                @can('pending-report')
                 <li>
                     <a href="{{route('pending.report')}}" class="">
                         <i class="fas fa-desktop"></i>
                         <span>Pending Report</span>
                     </a>
-                </li>   
-
-                
-                <li class="menu-title">Setting</li>  
-                <li>
-                    <a href="{{route('profession.index')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Profession</span>
-                    </a>
                 </li> 
+                @endcan  
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Location</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        {{-- <li><a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a></li>  --}}
-                        <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Village</a></li> 
-                        <li><a href="{{route('zone.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Zone</a></li> 
-                        <li><a href="{{route('area.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Area</a></li> 
-                    </ul>
-                </li>
+                @can('setting')
+                    <li class="menu-title">Setting</li> 
+                    @can('profession') 
+                        <li>
+                            <a href="{{route('profession.index')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Profession</span>
+                            </a>
+                        </li> 
+                    @endcan
+    
+                    @can('location')
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow ">
+                                <i class="mdi mdi-chart-bar"></i>
+                                <span>Location</span>
+                            </a> 
+                            <ul class="sub-menu" aria-expanded="false"> 
+                                {{-- <li><a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a></li>  --}}
+                                @can('village')
+                                    <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Village</a></li> 
+                                @endcan  
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Product</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('unit.type')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit & Down Payment</a></li> 
-                        <li><a href="{{route('unit.category')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit Category</a></li> 
-                    </ul>
-                </li>
+                                @can('zone')
+                                    <li><a href="{{route('zone.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Zone</a></li> 
+                                @endcan  
 
-                <li>
-                    <a href="{{route('training-category.index')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Training</span>
-                    </a>
-                </li> 
+                                @can('area')
+                                    <li><a href="{{route('area.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Area</a></li> 
+                                @endcan
+                            </ul>
+                        </li> 
+                    @endcan
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Position & Permission</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('designation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Employee Position</a></li> 
-                        {{-- <li><a href="{{route('permission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Permission</a></li>  --}}
-                    </ul>
-                </li> 
+                    @can('unit')
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow ">
+                                <i class="mdi mdi-chart-bar"></i>
+                                <span>Unit</span>
+                            </a> 
+                            <ul class="sub-menu" aria-expanded="false">
+                                @can('unit-type')
+                                    <li><a href="{{route('unit.type')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit & Down Payment</a></li> 
+                                @endcan 
+                                @can('unit-category')
+                                    <li><a href="{{route('unit.category')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit Category</a></li> 
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow ">
-                        <i class="mdi mdi-chart-bar"></i>
-                        <span>Commission</span>
-                    </a> 
-                    <ul class="sub-menu" aria-expanded="false"> 
-                        <li><a href="{{route('commission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Regular Commission</a></li> 
-                        <li class="{{ Route::is(['special-commission.create','special-commission.edit']) ? 'mm-active' : '' }}"><a href="{{route('special-commission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Special Commission</a></li> 
-                        <li><a href="{{route('commission-deducted-setting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission Deducation</a></li> 
-                    </ul>
-                </li> 
-                 
-                <li>
-                    <a href="{{route('bank.index')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Bank</span>
-                    </a>
-                </li>  
+                    @can('training-category')
+                        <li>
+                            <a href="{{route('training-category.index')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Training</span>
+                            </a>
+                        </li>
+                    @endcan 
 
-                <li>
-                    <a href="{{route('bank-day.index')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Bank Day</span>
-                    </a>
-                </li>  
+                    @can('designation')
+                        <li>
+                            <a href="{{route('designation.index')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Designation</span>
+                            </a>
+                        </li> 
+                    @endcan
+    
 
-                <li>
-                    <a href="{{route('deposit-category.index')}}" class="">
-                        <i class="fas fa-desktop"></i>
-                        <span>Deposit Category</span>
-                    </a>
-                </li>
+                    @can('commission')
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow ">
+                                <i class="mdi mdi-chart-bar"></i>
+                                <span>Commission</span>
+                            </a> 
+                            <ul class="sub-menu" aria-expanded="false"> 
+                                @can('regular-commission')
+                                    <li><a href="{{route('commission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Regular Commission</a></li> 
+                                @endcan   
+
+                                @can('special-commission')
+                                    <li class="{{ Route::is(['special-commission.create','special-commission.edit']) ? 'mm-active' : '' }}"><a href="{{route('special-commission.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Special Commission</a></li> 
+                                @endcan  
+
+                                @can('commission-deducation')
+                                    <li><a href="{{route('commission-deducted-setting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Commission Deducation</a></li> 
+                                @endcan
+                            </ul>
+                        </li> 
+                    @endcan
+                    
+                    @can('bank')
+                        <li>
+                            <a href="{{route('bank.index')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Bank</span>
+                            </a>
+                        </li> 
+                    @endcan 
+
+                    @can('bank-day')
+                        <li>
+                            <a href="{{route('bank-day.index')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Bank Day</span>
+                            </a>
+                        </li> 
+                    @endcan 
+
+                    @can('deposit-category')
+                        <li>
+                            <a href="{{route('deposit-category.index')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Deposit Category</span>
+                            </a>
+                        </li> 
+                    @endcan
+                @endcan
                 
                   
             </ul>

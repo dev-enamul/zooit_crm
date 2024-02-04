@@ -32,9 +32,11 @@
                     <div class="card"> 
                         <div class="card-body">  
                             <div class="d-flex justify-content-between mb-3"> 
+                                @can('area-manage')
                                 <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_area">
                                     <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Area</span>
                                 </button>
+                                @endcan
 
                                 <div class="">  
                                     <form action="" method="get">
@@ -56,7 +58,9 @@
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
+                                        @can('area-manage')
                                         <th class="text-center">Action</th>
+                                        @endcan
                                         <th>S/N</th>
                                         <th>Area Name</th>  
                                         <th>Zone Name</th>  
@@ -65,6 +69,7 @@
                                 <tbody> 
                                     @foreach($datas as $key => $data)
                                         <tr>
+                                            @can('area-manage')
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
@@ -74,6 +79,7 @@
                                                     </div>
                                                 </div> 
                                             </td> 
+                                            @endcan
                                             <td>{{$key+1}}</td>
                                             <td>{{$data->name}}</td>  
                                             <td>{{@$data->zone->name}}</td> 

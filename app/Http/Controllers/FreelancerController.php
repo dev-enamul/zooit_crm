@@ -30,8 +30,7 @@ class FreelancerController extends Controller
         $upazilas  = $this->getCachedUpazilas();
         $unions    = $this->getCachedUnions();
         $villages  = $this->getCachedVillages();
-        $professions = Profession::where('status',1)->select('id','name')->get();
-        
+        $professions = Profession::where('status',1)->select('id','name')->get(); 
         return view('freelancer.freelancer_save', compact('title','countries','divisions','districts','upazilas','unions','villages'));
     }
     

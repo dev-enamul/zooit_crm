@@ -18,8 +18,6 @@ class DesignationPermissionSeeder extends Seeder
                 'designation_id'=> 1, 
                 'permission_id' => $permission->id
             ]);
-        } 
-
-       
+        }  
     }
 }
