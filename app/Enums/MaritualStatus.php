@@ -11,7 +11,7 @@ final class MaritualStatus
     public static function values()
     {
         return [
-            self::Married   => 'Marrieds',
+            self::Married   => 'Married',
             self::Unmarried => 'Unmarried',
             self::Divorce   => 'Divorce',
         ];
