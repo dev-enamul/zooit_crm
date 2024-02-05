@@ -15,11 +15,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Enums\MaritualStatus;
 use App\Enums\Religion;
+use App\Models\Area;
 use App\Models\Bank;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\UserContact;
 use App\Models\UserFamily;
+use App\Models\Zone;
 use App\Rules\AtLeastOneFilledRule;
 use Illuminate\Validation\Rule;
 
@@ -51,8 +53,16 @@ class FreelancerController extends Controller
     
 
     public function index(){ 
-        $datas=  Freelancer::where('status',1)->get();
-        return view('freelancer.freelancer_list',compact('datas'));
+        $datas       =  Freelancer::where('status',1)->get();
+        $countries   = $this->getCachedCountries();
+        $divisions   = $this->getCachedDivisions();
+        $districts   = $this->getCachedDistricts();
+        $upazilas    = $this->getCachedUpazilas();
+        $unions      = $this->getCachedUnions();
+        $villages    = $this->getCachedVillages();
+        $professions = Profession::where('status',1)->select('id','name')->get();
+        $freelancers = Freelancer::where('status', 1)->get();
+        return view('freelancer.freelancer_list',compact('datas','professions','countries','divisions','districts','upazilas','unions','villages','freelancers'));
     }
 
     public function create(){
@@ -68,9 +78,11 @@ class FreelancerController extends Controller
         $religions = $this->religion();
         $bloodGroups = $this->bloodGroup();
         $genders = $this->gender();
-        $banks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
-        $mobileBanks = Bank::where('status',1)->where('type',2)->select('id','name')->get();
-        return view('freelancer.freelancer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks'));
+        $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
+        $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
+        $zones = Zone::where('status',1)->select('id','name')->get();
+        $areas = Area::where('status',1)->select('id','name')->get();
+        return view('freelancer.freelancer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas'));
     }
     
     public function save(Request $request, $id = null)
@@ -98,6 +110,9 @@ class FreelancerController extends Controller
             'upazila'                   => 'required|numeric|exists:upazilas,id',
             'union'                     => 'required|numeric|exists:unions,id',
             'village'                   => 'required|numeric|exists:villages,id',
+            'address'                   => 'required|string',
+            'zone'                      => 'required|numeric|exists:zones,id',
+            'area'                      => 'required|numeric|exists:areas,id',
             'father_name'               => 'required|string',
             'father_phone'              => 'nullable|string',
             'mother_name'               => 'required|string',
@@ -124,7 +139,6 @@ class FreelancerController extends Controller
             return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
         }
         $user_id = Auth::user()->id;
-
         // if (!empty($id)) {
 
         //     $info = Freelancer::find($id);
@@ -165,9 +179,10 @@ class FreelancerController extends Controller
         //     }
         // }
 
-        # Create new User
         DB::beginTransaction();
         try {
+
+            # Create new User
             $user = User::create([
                 'user_id'       => User::generateNextUserId(),
                 'name'          => $request->full_name,
@@ -178,7 +193,7 @@ class FreelancerController extends Controller
                 'marital_status'=> $request->maritual_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),
                 'finger_id'     => $request->card_id,
-                'region'        => $request->region,
+                'religion'      => $request->religion,
                 'blood_group'   => $request->blood_group,
                 'gender'        => $request->gender,
                 'status'        => 1,
@@ -200,8 +215,8 @@ class FreelancerController extends Controller
                 'union_id'      => $request->union,
                 'village_id'    => $request->village,
                 'address'       => $request->address,
-                'zone_id'       => 1,   #dummy
-                'area_id'       => 1,   #dummy
+                'zone_id'       => $request->zone,
+                'area_id'       => $request->area,
                 'created_at'    => now(),
             ]);
 
@@ -241,6 +256,7 @@ class FreelancerController extends Controller
                 'designation_id'            => $user->user_type,    #dummy
                 'status'                    => 1,
                 'created_at'                => now(),
+                'last_approve_by'           => $user_id,    #dummy
             ];
             Freelancer::create($data);
  
@@ -252,5 +268,122 @@ class FreelancerController extends Controller
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
-    
+
+    public function freelancerSearch(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'division'       => 'required',
+            'district'       => 'required',
+            'upazila'        => 'sometimes|required',
+            'union'          => 'sometimes|required',
+            'village'        => 'sometimes|required',
+            'status'         => 'required|in:1,0',
+            'freelancer'     => 'required|numeric|exists:freelancers,id',
+            'profession'     => 'required|numeric|exists:professions,id',
+            'daterange'      => 'required',
+        ]);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $errorMessage = implode('<br>', $errors);
+            
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
+            }
+        }
+
+        try{
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $division_id    = $request->division;
+                $district_id    = $request->district;
+                $upazila_id     = $request->upazila;
+                $union_id       = $request->union;
+                $village_id     = $request->village;
+                $status         = $request->status;
+                $freelancer_id  = $request->freelancer;
+                $profession_id  = $request->profession;
+                $daterange      = $request->daterange;
+
+                $divisions      = $this->getCachedDivisions();
+                $districts      = $this->getCachedDistricts();
+                $upazilas       = $this->getCachedUpazilas();
+                $unions         = $this->getCachedUnions();
+                $villages       = $this->getCachedVillages();
+                $professions    = Profession::where('status',1)->select('id','name')->get();
+                $freelancers    = Freelancer::where('status', 1)->get();
+
+                $selected['division_id']   = $division_id;
+                $selected['district_id']   = $district_id;
+                $selected['upazila_id']    = $upazila_id;
+                $selected['union_id']      = $union_id;
+                $selected['village_id']    = $village_id;
+                $selected['status']        = $status;
+                $selected['freelancer_id'] = $freelancer_id;
+                $selected['profession_id'] = $profession_id;
+                $selected['daterange']     = $daterange;
+
+                $dateParts      = explode(' - ', $daterange);
+                $fromDate       = \Carbon\Carbon::createFromFormat('m/d/Y', $dateParts[0])->startOfDay();
+                $toDate         = \Carbon\Carbon::createFromFormat('m/d/Y', $dateParts[1])->endOfDay();
+                $freelancer_id  = $freelancer_id;
+                $freelancerId   = Freelancer::where('id',$freelancer_id)->pluck('user_id')->first();
+                
+                $datas = Freelancer::where('status', 1)
+                                ->where('profession_id', $profession_id)
+                                ->where('user_id',  $freelancerId)
+                                ->whereHas('user.userAddress', function ($query) use ($division_id, $district_id, $village_id, $union_id, $upazila_id) {
+                                    $query->where('division_id', $division_id)
+                                          ->where('district_id', $district_id)
+                                          ->where('village_id', $village_id)
+                                          ->where('union_id', $union_id)
+                                          ->where('upazila_id', $upazila_id);
+                                })
+                                ->whereBetween('created_at', [$fromDate, $toDate])
+                                ->where('status', $status)
+                                ->get();
+                return view('freelancer.freelancer_list', compact('professions','freelancers','datas','divisions','districts','upazilas','unions','villages','selected'));
+            }
+        }
+        catch (\Throwable $th) {
+            dd( $th);
+            return redirect()->route('product.edit')->with('error', 'Something went wrong!');
+         }
+    }
+
+    public function edit($id){
+        $title     = "Freelancer Edit";
+        $countries = $this->getCachedCountries();
+        $divisions = $this->getCachedDivisions();
+        $districts = $this->getCachedDistricts();
+        $upazilas  = $this->getCachedUpazilas();
+        $unions    = $this->getCachedUnions();
+        $villages  = $this->getCachedVillages();
+        $professions = Profession::where('status',1)->select('id','name')->get();
+        $maritalStatuses = $this->maritalStatus();
+        $religions = $this->religion();
+        $bloodGroups = $this->bloodGroup();
+        $genders = $this->gender();
+        $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
+        $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
+        $zones = Zone::where('status',1)->select('id','name')->get();
+        $areas = Area::where('status',1)->select('id','name')->get();
+        $freelancer    = Freelancer::find($id);
+        $selected['country_id']   = $freelancer->user->userAddress->country_id;
+        $selected['division_id']  = $freelancer->user->userAddress->division_id;
+        $selected['district_id']  = $freelancer->user->userAddress->district_id;
+        $selected['upazila_id']   = $freelancer->user->userAddress->upazila_id;
+        $selected['union_id']     = $freelancer->user->userAddress->union_id;
+        $selected['village_id']   = $freelancer->user->userAddress->village_id;
+
+        return view('freelancer.freelancer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','freelancer','selected'));
+    }
+
+    public function freelancerDelete($id){
+        try{ 
+            $data  = Freelancer::find($id);
+            $data->delete();
+            return response()->json(['success' => 'Freelancer Deleted'],200);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()],500);
+        }
+    }
 }

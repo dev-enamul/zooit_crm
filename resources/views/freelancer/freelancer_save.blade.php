@@ -70,7 +70,7 @@
                                             <select class="form-select select2" name="profession" id="profession" required>
                                                 @isset($professions)
                                                     @foreach ($professions as $profession)
-                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($freelancer) ? $freelancer->freelancers_id : null) == $profession->id ? 'selected' : '' }}>
+                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($freelancer) ? $freelancer->profession_id : null) == $profession->id ? 'selected' : '' }}>
                                                             {{ $profession->name }}
                                                         </option>
                                                     @endforeach
@@ -89,7 +89,7 @@
                                                 <option value="">Select a Marital Status</option>
                                                 @isset($maritalStatuses)
                                                     @foreach ($maritalStatuses as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('maritual_status', isset($freelancer) ? $freelancer->user->marital_status : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('marital_status', isset($freelancer) ? $freelancer->user->marital_status : null) == $id ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -104,7 +104,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                                            <input type="text" name="dob" class="form-control datepicker w-100 p-1" id="dob" placeholder="Select date of birth" required> 
+                                            <input type="text" name="dob" class="form-control datepicker w-100 p-1" id="dob" placeholder="Select date of birth" value="{{ isset($freelancer) ? $freelancer->user->dob : old('dob')}}" required> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -114,7 +114,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="card_id" class="form-label">Card/Finger ID </label>
-                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="Enter ID">  
+                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="Enter ID" value="{{ isset($freelancer) ? $freelancer->user->finger_id : old('card_id') }}">  
                                         </div>
                                     </div>
 
@@ -125,12 +125,14 @@
                                                 <option value="">Select Religion</option>
                                                 @isset($religions)
                                                     @foreach ($religions as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('religion', isset($freelancer) ? $freelancer->user->religion : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('religion', isset($freelancer) && isset($freelancer->user->religion) && $freelancer->user->religion == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
                                                 @endisset
-                                            </select> 
+                                            </select>
+                                            
+                                            
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -274,6 +276,50 @@
                                         'required'  => ['division', 'district', 'upazila','union','village'],
                                         'selected'  => $selected ?? null,
                                     ])
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="zone" class="form-label">Zone <span class="text-danger">*</span></label>
+                                        <select class="form-select" name="zone" id="zone" required>
+                                            <option data-display="Select a Zone *" value="">
+                                                Select a Zone
+                                            </option>
+                                            @isset($zones)
+                                                @foreach ($zones as $zone)
+                                                    <option value="{{ $zone->id }}" {{ old('zone', isset($freelancer) ? $freelancer->user->userAddress->zone_id : null) == $zone->id ? 'selected' : '' }}>
+                                                        {{ $zone->name }}
+                                                    </option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                        
+                                        @if ($errors->has('zone'))
+                                            <span class="text-danger" role="alert">
+                                                {{ $errors->first('zone') }}
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="area" class="form-label">Area <span class="text-danger">*</span></label>
+                                        <select class="form-select" name="area" id="area" required>
+                                            <option data-display="Select a Area *" value="">
+                                                Select a Area
+                                            </option>
+                                            @isset($areas)
+                                                @foreach ($areas as $area)
+                                                    <option value="{{ $area->id }}" {{ old('area', isset($freelancer) ? $freelancer->user->userAddress->area_id : null) == $area->id ? 'selected' : '' }}>
+                                                        {{ $area->name }}
+                                                    </option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                        
+                                        @if ($errors->has('area'))
+                                            <span class="text-danger" role="alert">
+                                                {{ $errors->first('area') }}
+                                            </span>
+                                        @endif
+                                    </div> 
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
