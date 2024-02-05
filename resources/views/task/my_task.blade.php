@@ -33,49 +33,27 @@
                         <div class="card-body">
                             <h3 class="card-title">Today Task</h3>
                             <div class="timeline timeline-timed">
-                                <div class="timeline-item">
-                                    <span class="timeline-time">10:00</span>
-                                    <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="checked"></div>
-                                    <div class="timeline-content">
-                                        <div>
-                                            <span>Meeting with Enamul, Jamil in Dhaka</span> 
+                                @if ($today_tasks?->taskList && $today_tasks->taskList->count() > 0)
+                                    @foreach($today_tasks->taskList as $data)
+                                    <div class="timeline-item">
+                                        <span class="timeline-time">{{get_date($data->time,'H:i')}}</span>
+                                        <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{$data->status==1?"checked":""}}></div>
+                                        <div class="timeline-content">
+                                            <div>
+                                                <span>{{$data->task}}</span> 
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <span class="timeline-time">12:45</span>
-                                    <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="checked"></div>
-                                    <div class="timeline-content">
-                                        <p class="mb-0">Lorem ipsum dolor sit amit,consectetur eiusmdd tempor incididunt ut labore et dolore magna elit enim at minim veniam quis nostrud</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <span class="timeline-time">14:00</span>
-                                    <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"></div>
-                                    <div class="timeline-content">
-                                        <p class="mb-0">Received a new feedback on <a href="#">GoFinance</a> App product.</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <span class="timeline-time">15:20</span>
-                                    <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"></div>
-                                    <div class="timeline-content">
-                                        <p class="mb-0">Lorem ipsum dolor sit amit,consectetur eiusmdd tempor incididunt ut labore et dolore magna.</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <span class="timeline-time">17:00</span>
-                                    <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"></div>
-                                    <div class="timeline-content">
-                                        <p class="mb-0">Make Deposit <a href="#">USD 700</a> o ESL.</p>
-                                    </div>
-                                </div>
+                                    </div> 
+                                    @endforeach
+                                @else 
+                                     <p class="mt-3">No task asign today</p>
+                                @endif
                             </div>
                         </div> 
                     </div>
 
 
-                    <div class="card"> 
+                    {{-- <div class="card"> 
                         <div class="card-body">
                             <h3 class="card-title">Tomorrow Task</h3>
                             <div class="timeline timeline-timed"> 
@@ -102,7 +80,7 @@
                                 </div>
                             </div>
                         </div> 
-                    </div>
+                    </div> --}}
                 </div> <!-- end col -->
             </div>
             <!-- end row -->

@@ -52,7 +52,7 @@
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->freelancer_id}})">Approve</a> 
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->id}})">Approve</a> 
                                                 </div>
                                             </div> 
                                         </td> 

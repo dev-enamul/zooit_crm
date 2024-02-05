@@ -27,7 +27,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">  
+                        <div class="card-body"> 
+                            
                             <div class="d-flex justify-content-between"> 
                                 <div class="">
                                     <div class="dt-buttons btn-group flex-wrap mb-2">      

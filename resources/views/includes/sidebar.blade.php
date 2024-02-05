@@ -298,13 +298,24 @@
                             <span>Field Target & Task</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false"> 
-                            <li><a href="{{route('target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Achivement</a></li> 
-                            <li><a href="{{route('today.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Today Task & Target</a></li> 
-                            <li><a href="{{route('task.complete')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
+                            <li><a href="{{route('target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Achivement</a></li>
                             <li><a href="{{route('marketing.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Marketing Ex. Report</a></li> 
                             <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Ex. Report</a></li> 
                         </ul>
                     </li> 
+
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="mdi mdi-teach"></i>
+                            <span>Daily Task</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('my.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Task</a></li> 
+                            <li class="{{ Route::is('task.details') ? 'mm-active' : '' }}"><a href="{{route('task.complete')}}"><i class=" mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
+                            {{-- <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li>  --}}
+                            <li><a href="{{route('assign.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task</a></li> 
+                        </ul>
+                    </li>
                     @endcan
 
                     @can('deposit-target')

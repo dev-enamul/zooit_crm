@@ -239,12 +239,16 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         // field target
-        Route::get('target-achive', [FieldTargetController::class, 'target_achive'])->name('target.achive');
-        Route::get('today-target', [FieldTargetController::class, 'today_target'])->name('today.target');
+        Route::get('target-achive', [FieldTargetController::class, 'target_achive'])->name('target.achive'); 
         Route::get('marketing-field-report', [FieldTargetController::class, 'marketing_field_report'])->name('marketing.field.report');
         Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');
         // task 
         Route::get('task-complete', [TaskController::class, 'task_complete'])->name('task.complete');
+        Route::get('my-task', [TaskController::class, 'my_task'])->name('my.task');
+        Route::get('assign-task-list',[TaskController::class,'assign_task_list'])->name('assign.task.list');
+        Route::get('task-details/{id}',[TaskController::class,'task_details'])->name('task.details');
+        Route::get('assign-task',[TaskController::class,'assign_task'])->name('assign.task');
+        Route::post('task-save',[TaskController::class,'task_save'])->name('task.save');
 
         // deposit target 
         Route::get('deposit-target', [DepositTargetController::class, 'target'])->name('deposit.target');

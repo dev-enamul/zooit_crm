@@ -14,7 +14,7 @@ class UserPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = Permission::all();
+        $permissions = Permission::all(); 
         foreach($permissions as $permission){
             UserPermission::create([
                 'user_id' => 1,

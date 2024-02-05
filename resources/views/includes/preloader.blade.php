@@ -23,7 +23,9 @@
     bottom: 0;
     right: 0;
     z-index: 99999;
-}
+    display: none;
+} 
+
 .preloader .pl {
     display: block;
     margin: auto;
