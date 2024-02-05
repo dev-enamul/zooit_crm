@@ -2,67 +2,93 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task as ModelsTask;
+use App\Models\TaskList;
+use App\Models\User;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Console\View\Components\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+     
+    public function my_task()
     {
-        //
+        $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
+                    ->whereDate('date', today())
+                    ->first(); 
+        return view('task.my_task',compact('today_tasks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function task_complete(Request $request){
+        $datas = new ModelsTask;
+        if(isset($request->date) && $request->date != ''){
+            $dateRange = explode(' - ', $request->date);
+            $startDate = Carbon::createFromFormat('m/d/Y', $dateRange[0])->startOfDay();
+            $endDate = Carbon::createFromFormat('m/d/Y', $dateRange[1])->endOfDay();
+            $datas = $datas->whereBetween('date',[$startDate,$endDate]);
+        }
+
+        if(isset($request->employee) && $request->employee != ''){
+            $user_id = $request->employee;
+        }else{
+            $user_id = auth()->user()->id;
+        }
+        $datas = $datas->where('assign_to',$user_id)->get(); 
+        $my_employee = my_employee(auth()->user()->id);
+        $employeies = User::whereIn('id',$my_employee)->where('status',1)->get();  
+        return view('task.task_complete',compact('datas','employeies'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function assign_task_list(){
+        $datas = ModelsTask::where('assign_by',auth()->user()->id)->get()->groupBy('assign_to'); 
+        return view('task.assign_task_list',compact('datas'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+    public function assign_task(){
+        $my_employee = my_employee(auth()->user()->id);
+        $employeies = User::whereIn('id',$my_employee)->where('status',1)->get(); 
+        return view('task.assign_task',compact('employeies'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function task_save(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'assign_to' => 'required',
+            'date' => 'required',
+            'task.*' => 'required',
+            'time.*' => 'required',
+            
+        ]); 
+          
+        try{ 
+            $task = ModelsTask::create([
+                'assign_to' => $request->assign_to,
+                'assign_by' => auth()->user()->id,
+                'date' => $request->date,
+                // 'submit_time' => $request->date.' '. $request->submit_time,
+            ]); 
+            foreach($request->task as $key => $task_list){
+                TaskList::create([
+                    'task_id' => $task->id,
+                    'task' => $task_list,
+                    'time' => $request->date.' '. $request->time[$key],
+                    'status' => 0,
+                ]);
+            }   
+            return redirect()->back()->with('success', 'Task assigned successfully');
+        }catch(Exception $e){ 
+            dd($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    } 
+
+    public function task_details($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    public function task_complete(){
-        return view('task.task_complete');
+        $task = ModelsTask::find($id); 
+        return view('task.task_details',compact('task'));
     }
 }

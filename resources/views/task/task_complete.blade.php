@@ -26,22 +26,21 @@
                 <div class="col-12"> 
                     <div class="card"> 
                         <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
+                            <div class="d-flex justify-content-between"> 
                                 <div class="">
                                     <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
+                                        <button class="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
                                             <span><i class="fas fa-file-excel"></i> Excel</span>
                                         </button>
 
                                         <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
                                             <span><i class="fas fa-file-csv"></i> CSV</span>
                                         </button> 
-                                    </div>  
+                                    </div> 
                                 </div>
-                                <div class="">  
-                                    <div class="input-group">  
-                                        <input class="form-control" type="text" id="daterangepicker" />   
-                                        <button class="btn btn-secondary" type="submit">
+                                <div class="">
+                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button> 
                                     </div>
@@ -56,144 +55,44 @@
                                         <th>Date</th> 
                                         <th>Assign Task</th>
                                         <th>Complete Task</th>
-                                        <th>Progress</th>  
-                                        <th>Remark</th>
+                                        <th>Progress</th>   
                                     </tr>
                                 </thead>
                                 <tbody> 
+                                    @foreach ($datas as $key => $data)
                                     <tr> 
-                                        <td class="text-center"><button data-bs-toggle="modal" data-bs-target="#view_detail" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</button></td>
-                                        <td>1</td>
-                                        <td>30 September,2023</td>
-                                        <td>10</td>
-                                        <td>5</td>
+                                        <td class="text-center"><a href="{{route('task.details',$data->id)}}" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</a></td>
+                                        <td>{{$key+1}}</td>
+                                        <td>{{get_date($data->date)}}</td>
+                                        @php
+                                            if(isset($data->taskList) && $data->taskList->count() > 0){
+                                                $total_task = count($data->taskList);
+                                                $complete_task = count($data->taskList->where('status',1));
+
+                                                $completionPercentage = $total_task > 0 ? round(($complete_task / $total_task) * 100) : 0;
+                                                
+                                            }else{
+                                                $total_task = 0;
+                                                $complete_task = 0;
+                                                $completionPercentage = 0;
+                                            }  
+ 
+                                        @endphp 
+
+                                        <td>{{$total_task}}</td>
+                                        <td>{{$complete_task}}</td> 
                                         <td class="align-middle">
                                             <div class="">
                                                 <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>  
+                                                    <h6>{{$completionPercentage}}%</h6>  
                                                 </div>
                                                 <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
+                                                    <div class="progress-bar bg-primary" style="width: {{$completionPercentage}}%"></div>
                                                 </div>
                                             </div>
-                                        </td>  
-                                        <td>Average</td>
+                                        </td>   
                                     </tr>  
-
-
-                                    <tr> 
-                                        <td class="text-center"><button data-bs-toggle="modal" data-bs-target="#view_detail" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</button></td>
-                                        <td>1</td>
-                                        <td>30 September,2023</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>  
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>  
-                                        <td>Average</td>
-                                    </tr>  
-
-                                    <tr> 
-                                        <td class="text-center"><button data-bs-toggle="modal" data-bs-target="#view_detail" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</button></td>
-                                        <td>1</td>
-                                        <td>30 September,2023</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>  
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>  
-                                        <td>Average</td>
-                                    </tr>  
-
-                                    <tr> 
-                                        <td class="text-center"><button data-bs-toggle="modal" data-bs-target="#view_detail" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</button></td>
-                                        <td>1</td>
-                                        <td>30 September,2023</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>  
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>  
-                                        <td>Average</td>
-                                    </tr>  
-
-                                    <tr> 
-                                        <td class="text-center"><button data-bs-toggle="modal" data-bs-target="#view_detail" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</button></td>
-                                        <td>1</td>
-                                        <td>30 September,2023</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>  
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>  
-                                        <td>Average</td>
-                                    </tr>  
-
-                                    <tr> 
-                                        <td class="text-center"><button data-bs-toggle="modal" data-bs-target="#view_detail" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</button></td>
-                                        <td>1</td>
-                                        <td>30 September,2023</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>  
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>  
-                                        <td>Average</td>
-                                    </tr>  
-
-                                    <tr> 
-                                        <td class="text-center"><button data-bs-toggle="modal" data-bs-target="#view_detail" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</button></td>
-                                        <td>1</td>
-                                        <td>30 September,2023</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>  
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>  
-                                        <td>Average</td>
-                                    </tr>  
+                                    @endforeach 
                                 </tbody>
                             </table>
                         </div>
@@ -205,70 +104,39 @@
 
   @include('includes.footer') 
 </div> 
-
-<div class="modal fade" id="view_detail">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="card"> 
-                <div class="card-body">
-                    <h3 class="card-title">Task Details <span class='text-primary'>[1 Decemer,2023]</span></h3>
-                    <div class="timeline timeline-timed"> 
-                        <div class="timeline-item">
-                            <span class="timeline-time">14:00</span>
-                            <div class="timeline-pin"><i class="fas fa-calendar-check fs-16 text-primary"></i></div>
-                            <div class="timeline-content">
-                                <p class="mb-0">Received a new feedback on <a href="#">GoFinance</a> App product.</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <span class="timeline-time">15:20</span>
-                            <div class="timeline-pin"><i class="fas fa-calendar-times fs-16 text-danger"></i></div>
-                            <div class="timeline-content">
-                                <p class="mb-0">Lorem ipsum dolor sit amit,consectetur eiusmdd tempor incididunt ut labore et dolore magna.</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <span class="timeline-time">17:00</span>
-                            <div class="timeline-pin"><i class="fas fa-calendar-times fs-16 text-danger"></i></div>
-                            <div class="timeline-content">
-                                <p class="mb-0">Make Deposit <a href="#">USD 700</a> o ESL.</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <span class="timeline-time">17:00</span>
-                            <div class="timeline-pin"><i class="fas fa-calendar-times fs-16 text-danger"></i></div>
-                            <div class="timeline-content">
-                                <p class="mb-0">Make Deposit <a href="#">USD 700</a> o ESL.</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <span class="timeline-time">17:00</span>
-                            <div class="timeline-pin"><i class="fas fa-calendar-check fs-16 text-primary"></i></div>
-                            <div class="timeline-content">
-                                <p class="mb-0">Make Deposit <a href="#">USD 700</a> o ESL.</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <span class="timeline-time">17:00</span>
-                            <div class="timeline-pin"><i class="fas fa-calendar-check fs-16 text-primary"></i></div>
-                            <div class="timeline-content">
-                                <p class="mb-0">Make Deposit <a href="#">USD 700</a> o ESL.</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <span class="timeline-time">17:00</span>
-                            <div class="timeline-pin"><i class="fas fa-calendar-check fs-16 text-primary"></i></div>
-                            <div class="timeline-content">
-                                <p class="mb-0">Make Deposit <a href="#">USD 700</a> o ESL.</p>
-                            </div>
-                        </div>
+ 
+<div class="offcanvas offcanvas-end" id="offcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Select Filter Item</h5>
+        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+            <i class="fa fa-times"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="row"> 
+           <form action="" method="get">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="freelancer" class="form-label">Date</label>
+                        <input class="form-control" type="text" name="date" id="daterangepicker" /> 
                     </div>
-                </div> 
-            </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Employee</label>
+                        <select class="form-select select2" name="employee" id="employee"> 
+                            <option value="{{auth()->user()->id}}" selected>My Task</option> 
+                            @foreach ($employeies as $data)
+                                <option value="{{$data->id}}">{{$data->name}}</option> 
+                            @endforeach 
+                        </select>  
+                    </div>
+                </div>  
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+                </div>
+           </form> 
         </div>
     </div>
 </div>

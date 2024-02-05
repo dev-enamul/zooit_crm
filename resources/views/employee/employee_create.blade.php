@@ -360,14 +360,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father Name">  
+                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_phone" class="form-label">Mobile</label>
-                                            <input type="text" name="father_phone" class="form-control" id="father_phone" placeholder="Father Father Mobile">  
+                                            <input type="text" name="father_phone" class="form-control" id="father_phone" placeholder="Father's Mobile">  
                                         </div>
                                     </div>
 
@@ -388,7 +388,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mother_name" class="form-label">Spouse Name</label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name">  
+                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Spouse Name">  
                                         </div>
                                     </div> 
 
