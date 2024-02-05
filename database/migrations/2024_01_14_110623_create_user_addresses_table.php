@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('union_id')->constrained()->nullable();
             $table->foreignId('village_id')->constrained()->nullable();
             $table->string('address', 250)->nullable(); 
-            $table->foreignId('countrie_id')->constrained()->nullable();
+            $table->foreignId('country_id')->constrained()->nullable();
 
             $table->foreignId('zone_id')->constrained()->nullable();
             $table->foreignId('area_id')->constrained()->nullable();
