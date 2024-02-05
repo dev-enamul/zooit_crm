@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('banks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedTinyInteger('type')->comment('0= Bank, 1= Mobile Bank');
+            $table->unsignedTinyInteger('type')->comment('1= Bank, 2= Mobile Bank');
             $table->string('account_number')->unique()->nullable(); 
              
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');

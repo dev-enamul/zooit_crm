@@ -68,12 +68,13 @@
                                         <div class="mb-3">
                                             <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="profession" id="profession" required>
-                                                <option value="">Select Profession</option>
-                                                <option value="">Doctor</option>
-                                                <option value="">Lawyer</option> 
-                                                <option value="">Banker</option>
-                                                <option value="">Teacher</option>
-                                                <option value="">Engineer</option>
+                                                @isset($professions)
+                                                    @foreach ($professions as $profession)
+                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($freelancer) ? $freelancer->freelancers_id : null) == $profession->id ? 'selected' : '' }}>
+                                                            {{ $profession->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -85,10 +86,14 @@
                                         <div class="mb-3">
                                             <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
                                             <select class="form-select" name="maritual_status" id="marital_status" required>
-                                                <option value="">Select Marital Status</option>
-                                                <option value="">Married</option>
-                                                <option value="">Unmarried</option>
-                                                <option value="">Divorce</option>  
+                                                <option value="">Select a Marital Status</option>
+                                                @isset($maritalStatuses)
+                                                    @foreach ($maritalStatuses as $id => $name)
+                                                        <option value="{{ $id }}" {{ old('maritual_status', isset($freelancer) ? $freelancer->user->marital_status : null) == $id ? 'selected' : '' }}>
+                                                            {{ $name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -118,16 +123,13 @@
                                             <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="religion" id="religion" required>
                                                 <option value="">Select Religion</option>
-                                                <option value="1">Christianity</option>
-                                                <option value="2">Islam</option>
-                                                <option value="3">Hinduism</option>
-                                                <option value="4">Buddhism</option>
-                                                <option value="5">Judaism</option>
-                                                <option value="6">Sikhism</option>
-                                                <option value="7">Jainism</option>
-                                                <option value="8">Bahá'í Faith</option>
-                                                <option value="9">Confucianism</option>
-                                                <option value="10">Others</option> 
+                                                @isset($religions)
+                                                    @foreach ($religions as $id => $name)
+                                                        <option value="{{ $id }}" {{ old('religion', isset($freelancer) ? $freelancer->user->religion : null) == $id ? 'selected' : '' }}>
+                                                            {{ $name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -139,14 +141,14 @@
                                         <div class="mb-3">
                                             <label for="blood_group" class="form-label">Blood Group <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="blood_group" id="blood_group" required>
-                                                <option value="1">A positive (A+)</option>
-                                                <option value="2">A negative (A-)</option>
-                                                <option value="3">B positive (B+)</option>
-                                                <option value="4">B negative (B-)</option>
-                                                <option value="5">AB positive (AB+)</option>
-                                                <option value="6">AB negative (AB-)</option>
-                                                <option value="7">O positive (O+)</option>
-                                                <option value="8">O negative (O-)</option>
+                                                <option value="">Select a Blood Group</option>
+                                                @isset($bloodGroups)
+                                                    @foreach ($bloodGroups as $id => $blood)
+                                                        <option value="{{ $id }}" {{ old('blood_group', isset($freelancer) ? $freelancer->user->blood_group : null) == $id ? 'selected' : '' }}>
+                                                            {{ $blood }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -159,29 +161,19 @@
                                             <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="gender" id="gender" required>
                                                 <option value="">Select Gender</option>
-                                                <option value="">Male</option> 
-                                                <option value="">Female</option>  
-                                                <option value="">Others</option> 
+                                                @isset($genders)
+                                                    @foreach ($genders as $id => $gender)
+                                                        <option value="{{ $id }}" {{ old('gender', isset($freelancer) ? $freelancer->user->gender : null) == $id ? 'selected' : '' }}>
+                                                            {{ $gender }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="nationality" class="form-label">Nationality <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="nationality" id="nationality" required>
-                                                <option value="">Select Nationality</option>
-                                                <option value="">Bangladeshi</option>
-                                                <option value="">Indian</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div> 
 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Contact Information</h6>
                                     <hr>
@@ -252,124 +244,43 @@
                                     </div> 
 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Address</h6>
-                                    <hr> 
+                                    <hr>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                                        <select class="form-select" name="country" id="country" required>
+                                            <option data-display="Select a country *" value="">
+                                                Select a country
+                                            </option>
+                                            @isset($countries)
+                                                @foreach ($countries as $country)
+                                                    <option value="{{ $country->id }}" {{ old('country', isset($freelancer) ? $freelancer->country_id : null) == $country->id ? 'selected' : '' }}>
+                                                        {{ $country->name }}
+                                                    </option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                        
+                                        @if ($errors->has('country'))
+                                            <span class="text-danger" role="alert">
+                                                {{ $errors->first('country') }}
+                                            </span>
+                                        @endif
+                                    </div> 
 
-                                    <div class="col-md-6">
+                                    @include('common.area', [
+                                        'div'       => 'col-md-6',
+                                        'mb'        => 'mb-3',
+                                        'visible'   => ['division', 'district', 'upazila','union','village'],
+                                        'required'  => ['division', 'district', 'upazila','union','village'],
+                                        'selected'  => $selected ?? null,
+                                    ])
+
+                                    <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="division" class="form-label">Division <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="division" id="division" required>
-                                                <option value="">Select District</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
+                                            <label for="address" class="form-label">Address</label>
+                                            <textarea class="form-control" id="address" rows="2" name="address">{{isset($freelancer) ? $freelancer->address : old('address')}}</textarea> 
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="district" class="form-label">District <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="district" id="district" required>
-                                                <option value="">Select District</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="upazila" class="form-label">Thana/Upazila <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="upazila" id="upazila" required>
-                                                <option value="">Select Thana/Upazila</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="union" class="form-label">Union <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="union" id="union" required>
-                                                <option value="">Select Union</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{-- <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="post_office" class="form-label">Post Office <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="post_office" id="post_office" required>
-                                                <option value="">Select Union</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div> --}}
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="village" class="form-label">Village</label>
-                                            <select class="form-select select2" name="village" id="village">
-                                                <option value="">Select Village</option>
-                                                <option value="">Dhaka </option>
-                                                <option value="">Chittagong </option> 
-                                                <option value="">Rajshahi</option> 
-                                                <option value="">Khulna </option> 
-                                                <option value="">Barishal </option> 
-                                                <option value="">Sylhet</option> 
-                                                <option value="">Rangpur</option> 
-                                                <option value="">Mymensingh</option>  
-                                            </select>  
-                                        </div>
-                                    </div>  
 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Family Details</h6>
                                     <hr>
@@ -423,11 +334,14 @@
                                         <div class="mb-3">
                                             <label for="bank" class="form-label">Bank </label>
                                             <select class="form-select select2" name="bank" id="bank" required>
-                                                <option value="">Select Bank</option>
-                                                <option value="">Dhaka Bank </option>
-                                                <option value="">Jamuna Bank </option>
-                                                <option value="">Islamic Bank </option>
-                                                <option value="">DBBL </option> 
+                                                <option value="">Select a Bank</option>
+                                                @isset($banks)
+                                                    @foreach ($banks as $bank)
+                                                        <option value="{{ $bank->id }}" {{ old('bank', isset($freelancer) ? $freelancer->freelancers_id : null) == $bank->id ? 'selected' : '' }}>
+                                                            {{ $bank->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select>  
                                         </div>
                                     </div>
@@ -457,9 +371,14 @@
                                         <div class="mb-3">
                                             <label for="mobile_bank" class="form-label">Mobile Bank</label>
                                             <select class="form-select select2" name="mobile_bank" id="mobile_bank" required>
-                                                <option value="">Bkash</option>
-                                                <option value="">Rocket </option>
-                                                <option value="">MCash </option>  
+                                                <option value="">Select a Mobile Bank</option>
+                                                @isset($mobileBanks)
+                                                    @foreach ($mobileBanks as $mobileBank)
+                                                        <option value="{{ $mobileBank->id }}" {{ old('mobile_bank', isset($freelancer) ? $freelancer->freelancers_id : null) == $mobileBank->id ? 'selected' : '' }}>
+                                                            {{ $mobileBank->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select>  
                                         </div>
                                     </div>
