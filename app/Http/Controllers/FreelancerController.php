@@ -53,8 +53,6 @@ class FreelancerController extends Controller
         return Gender::values();
     }
 
-    
-
     public function index(){ 
         $datas       =  Freelancer::where('status',1)->get();
         $countries   = $this->getCachedCountries();
@@ -90,12 +88,12 @@ class FreelancerController extends Controller
     
     public function save(Request $request, $id = null)
     {
-        $freelancer_id = Freelancer::where('id', $id)->first();
-        $freelancerUserId = $freelancer_id->user_id;
-        $userContactId = UserContact::where('user_id', $freelancerUserId)->first();
-        $user_contact_id = $userContactId->id;
         if (!empty($id)) {
-
+            
+            $freelancer_id = Freelancer::where('id', $id)->first();
+            $freelancerUserId = $freelancer_id->user_id;
+            $userContactId = UserContact::where('user_id', $freelancerUserId)->first();
+            $user_contact_id = $userContactId->id;
             $validator = Validator::make($request->all(), [
                 'full_name'                 => 'required|string|max:255',
                 'profession'                => 'required|numeric|exists:professions,id',
@@ -404,7 +402,7 @@ class FreelancerController extends Controller
                     'designation_id'            => $user->user_type,    #dummy
                     'status'                    => 1,
                     'created_at'                => now(),
-                    'last_approve_by'           => $user_id,    #dummy
+                    'last_approve_by'           => auth()->user()->id,    #dummy
                 ];
                 Freelancer::create($data);
 

@@ -61,30 +61,30 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
+                                        <tr class="">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
 
-                                                    <a class="dropdown-item" href="{{route('freelancer.print',$data->id)}}">Print Frelancer</a>
-                                                    <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                    <a class="dropdown-item" href="{{route('freelancer.edit',$data->id)}}" onclick="printPage()">Edit</a>
-                                                    <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('freelancer.delete',$data->id) }}')">Delete</a>
-                                                    <a class="dropdown-item" href="prospecting.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>{{$key+1}}</td>
-                                        <td>{{get_date($data->created_at)}}</td>
-                                        <td>{{@$data->user->name}}</td>
-                                        <td>{{@$data->profession->name}}</td>
-                                        <td>{{@$data->user->userAddress->upazila->name}}</td>
-                                        <td>{{@$data->user->userAddress->union->name }}</td>
-                                        <td>{{@$data->user->userAddress->village->name}}</td>
-                                        <td>{{@$data->user->phone}}</td>
-                                        <td>{{@$data->user->user_id}}</td> 
-                                    </tr> 
+                                                        <a class="dropdown-item" href="{{route('freelancer.print',$data->id)}}">Print Frelancer</a>
+                                                        <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
+                                                        <a class="dropdown-item" href="{{route('freelancer.edit',$data->id)}}" onclick="printPage()">Edit</a>
+                                                        <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('freelancer.delete',$data->id) }}')">Delete</a>
+                                                        <a class="dropdown-item" href="prospecting.html">Prospecting</a>
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td>{{$key+1}}</td>
+                                            <td>{{get_date($data->created_at)}}</td>
+                                            <td>{{@$data->user->name}}</td>
+                                            <td>{{@$data->profession->name}}</td>
+                                            <td>{{@$data->user->userAddress->upazila->name}}</td>
+                                            <td>{{@$data->user->userAddress->union->name }}</td>
+                                            <td>{{@$data->user->userAddress->village->name}}</td>
+                                            <td>{{@$data->user->phone}}</td>
+                                            <td>{{@$data->user->user_id}}</td> 
+                                        </tr> 
                                     @endforeach 
                                 </tbody>
                             </table>
