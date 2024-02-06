@@ -26,7 +26,33 @@
          
           
             <div class="row"> 
-                <div class="col-12">
+                <div class="col-12"> 
+
+                    @if (isset($old_tasks) && count($old_tasks) > 0)
+                       
+                    <div class="card"> 
+                        <div class="card-body">
+                            <h3 class="card-title">Old Task</h3>
+                            <div class="timeline timeline-timed">
+                               
+                                    @foreach($old_tasks as $data)
+                                    <div class="timeline-item">
+                                        <span class="timeline-time">{{get_date($data->time,'H:i')}}</span>
+                                        <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{$data->status==1?"checked":""}}></div>
+                                        <div class="timeline-content">
+                                            <div>
+                                                <small>{{get_date($data->time)}}</small> <br>
+                                                <span>{{$data->task}}</span>  <br>
+                                                <a href="{{route('submit.task',$data->id)}}" class="btn btn-primary">Submit Task</a> <a href="{{route('reject.task',$data->id)}}" class="btn btn-danger">Skip Task</a>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    @endforeach 
+                            </div>
+                        </div> 
+                    </div>
+
+                    @endif
 
                     
                     <div class="card"> 
@@ -40,7 +66,8 @@
                                         <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{$data->status==1?"checked":""}}></div>
                                         <div class="timeline-content">
                                             <div>
-                                                <span>{{$data->task}}</span> 
+                                                <span>{{$data->task}}</span> <br>
+                                                <a href="{{route('submit.task',$data->id)}}" class="btn btn-primary">Submit Task</a> <a href="{{route('reject.task',$data->id)}}" class="btn btn-danger">Skip Task</a>
                                             </div>
                                         </div>
                                     </div> 

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained('tasks');
             $table->text('task'); 
+            $table->dateTime('time')->nullable();
 
             $table->foreignId('approve_by')->nullable()->constrained('users');
             $table->unsignedInteger('status')->default(0)->comment('0=pending, 1=completed, 3=Skip'); 
