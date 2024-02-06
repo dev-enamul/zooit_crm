@@ -25,7 +25,7 @@ class User extends Authenticatable
         'marital_status',
         'dob',
         'finger_id',
-        'region',
+        'religion',
         'blood_group',
         'gender',
         'professions_id',
@@ -113,6 +113,9 @@ class User extends Authenticatable
 
         return $nextEmail;
     }
- 
 
+    public function userAddress()
+    {
+        return $this->hasOne(UserAddress::class);
+    }
 }

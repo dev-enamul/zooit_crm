@@ -71,7 +71,7 @@
                             <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
                         @endcan   
 
-                        <li><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
+                        <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
                         <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
   
                     </ul>
@@ -295,28 +295,37 @@
                     <li>
                         <a href="javascript: void(0);" class="has-arrow ">
                             <i class="mdi mdi-teach"></i>
-                            <span>Field Target & Task</span>
+                            <span>Field Target</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('assign.field.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Target</a></li>
                             <li><a href="{{route('target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Achivement</a></li>
                             <li><a href="{{route('marketing.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Marketing Ex. Report</a></li> 
                             <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Ex. Report</a></li> 
                         </ul>
                     </li> 
 
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="mdi mdi-teach"></i>
-                            <span>Daily Task</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false"> 
-                            <li><a href="{{route('my.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Task</a></li> 
-                            <li class="{{ Route::is('task.details') ? 'mm-active' : '' }}"><a href="{{route('task.complete')}}"><i class=" mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
-                            {{-- <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li>  --}}
-                            <li><a href="{{route('assign.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task</a></li> 
-                        </ul>
-                    </li>
                     @endcan
+
+                    @can('daily-task')
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow ">
+                                <i class="mdi mdi-teach"></i>
+                                <span>Daily Task</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false"> 
+                                <li><a href="{{route('my.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Task</a></li> 
+                                <li class="{{ Route::is('task.details') ? 'mm-active' : '' }}"><a href="{{route('task.complete')}}"><i class=" mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
+                                {{-- <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li>  --}}
+                                <li><a href="{{route('assign.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task</a></li> 
+                            </ul>
+                        </li>
+                    @endcan 
+
+                    @can('book-reading')
+
+                    @endcan
+                    
 
                     @can('deposit-target')
                     <li>

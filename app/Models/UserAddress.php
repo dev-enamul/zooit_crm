@@ -17,7 +17,9 @@ class UserAddress extends Model
         'union_id',
         'village_id',
         'address',
-        'countrie_id',
+        'country_id',
+        'zone_id',
+        'area_id',
     ];
 
     public function user()
@@ -53,5 +55,15 @@ class UserAddress extends Model
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class, 'zone_id');
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'area_id');
     }
 }

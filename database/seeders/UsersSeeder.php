@@ -331,26 +331,26 @@ class UsersSeeder extends Seeder
         $freelancer_data = [
             [
                 'user_id' => 18,
-                'professions_id' => 1,
+                'profession_id' => 1,
                 'designation_id' => 21, 
                 'last_approve_by' => 17,
             ],
             [
                 'user_id' => 19,
-                'professions_id' => 1,
+                'profession_id' => 1,
                 'designation_id' => 21, 
                 'last_approve_by' => 17,
             ],
             [
                 'user_id' => 20,
-                'professions_id' => 1,
+                'profession_id' => 1,
                 'designation_id' => 21,
                 'last_approve_by' => 17, 
             ],
 
             [
                 'user_id' => 21,
-                'professions_id' => 1,
+                'profession_id' => 1,
                 'designation_id' => 21, 
                 'last_approve_by' => 17,
             ],

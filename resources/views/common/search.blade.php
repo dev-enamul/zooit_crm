@@ -165,6 +165,28 @@ $visible = $visible ?? [];
     </div>
 @endif
 
+@if (in_array('progressStatus', $visible))
+    <div class="{{ $div . ' ' . $mb }}">
+        <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('status', $required) ? '*' : '' }}</span></label>
+        <select class="form-select select2" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
+            <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
+                Select a Status {{ in_array('status', $required) ? '*' : '' }}
+            </option>
+            @foreach (\App\Enums\ProgressStatus::values() as $key => $value)
+                <option value="{{ $key }}" {{ old('status', $selected['status'] ?? null) == $key ? 'selected' : '' }}>
+                    {{ $value }}
+                </option>
+            @endforeach
+        </select>
+        
+        @if ($errors->has('status'))
+            <span class="text-danger" role="alert">
+                {{ $errors->first('status') }}
+            </span>
+        @endif
+    </div>
+@endif
+
 @if (in_array('project', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="project" class="form-label">Project <span class="text-danger">{{ in_array('project', $required) ? '*' : '' }}</span></label>

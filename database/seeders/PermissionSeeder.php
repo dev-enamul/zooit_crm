@@ -75,6 +75,8 @@ class PermissionSeeder extends Seeder
             ['slug' => 'deposit-delete', 'name' => 'Deposit Delete', 'status' => 1], 
             // progress 
             ['slug' => 'field-target', 'name' => 'Field Target', 'status' => 1], 
+            ['slug' => 'daily-task', 'name' => 'Daily Task', 'status' => 1], 
+            ['slug' => 'book-reading', 'name' => 'Book Reading', 'status' => 1], 
             ['slug' => 'deposit-target', 'name' => 'Deposit Target', 'status' => 1], 
             ['slug' => 'training', 'name' => 'Training', 'status' => 1],
             ['slug' => 'meeting', 'name' => 'Meeting', 'status' => 1],

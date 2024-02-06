@@ -16,6 +16,8 @@ class Freelancer extends Model
         'reporting_person',
         'approve_by',
         'last_approve_by',
+        'profession_id',
+        'designation_id',
         'status', 
     ];
 
@@ -25,7 +27,7 @@ class Freelancer extends Model
     } 
 
     public function profession(){
-        return $this->belongsTo(Profession::class,'professions_id');
+        return $this->belongsTo(Profession::class,'profession_id');
     }
 
     public function reference()

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('freelancers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained(); 
-            $table->foreignId('professions_id')->constrained()->nullable();
-            $table->foreignId('designation_id')->constrained()->nullable();
+            $table->foreignId('user_id')->constrained('users'); 
+            $table->foreignId('profession_id')->constrained('professions')->nullable();
+            $table->foreignId('designation_id')->constrained('designations')->nullable();
 
             $table->foreignId('last_approve_by')->constrained('users');
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');

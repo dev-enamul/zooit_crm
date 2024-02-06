@@ -117,6 +117,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('freelancer', FreelancerController::class);
         Route::resource('approve-freelancer', ApproveFreelancerController::class);
         Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save');
+        Route::post('/freelancer-search', [FreelancerController::class, 'freelancerSearch'])->name('freelancer.search');
+        Route::any('freelacer-delete/{id}', [FreelancerController::class, "freelancerDelete"])->name('freelancer.delete');
 
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
         Route::get('freelancer-hierarchy', [FreelancerProfileController::class, 'freelancer_hierarchy'])->name('freelancer.hierarchy');
@@ -239,12 +241,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         // field target
+        Route::get('assign-field-target', [FieldTargetController::class, 'assign_target'])->name('assign.field.target');
         Route::get('target-achive', [FieldTargetController::class, 'target_achive'])->name('target.achive'); 
         Route::get('marketing-field-report', [FieldTargetController::class, 'marketing_field_report'])->name('marketing.field.report');
         Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');
         // task 
         Route::get('task-complete', [TaskController::class, 'task_complete'])->name('task.complete');
         Route::get('my-task', [TaskController::class, 'my_task'])->name('my.task');
+        Route::get('submit-task/{id}', [TaskController::class, 'submit_task'])->name('submit.task');
+        Route::get('reject-task/{id}', [TaskController::class, 'reject_task'])->name('reject.task');
         Route::get('assign-task-list',[TaskController::class,'assign_task_list'])->name('assign.task.list');
         Route::get('task-details/{id}',[TaskController::class,'task_details'])->name('task.details');
         Route::get('assign-task',[TaskController::class,'assign_task'])->name('assign.task');
