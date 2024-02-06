@@ -63,8 +63,9 @@
                                             
                                             <input type="file" name="profile_image" class="form-control" id="profile_image" >
                                             @if (isset($freelancer) && !empty($freelancer->user->profile_image))
-                                            <img src="{{ asset('storage/' . $freelancer->user->profile_image) }}" alt="" width="100" height="100">
-                                        @endif                                        </div>
+                                                <img src="{{ asset('storage/' . $freelancer->user->profile_image) }}" alt="" width="100" height="100">
+                                            @endif                                        
+                                        </div>
                                     </div>
                                      
                                     
