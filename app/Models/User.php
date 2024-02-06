@@ -118,4 +118,27 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserAddress::class);
     }
+
+    public function userContact()
+    {
+        return $this->hasOne(UserContact::class);
+    }
+
+    public  function userFamily()
+    {
+        return $this->hasOne(UserFamily::class);
+    }
+
+    public  function userTransaction()
+    {
+        return $this->hasOne(UserTransaction::class);
+    }
+
+    public  function userId()
+    {
+        return $this->hasOne(UserId::class);
+    }
+
+
+    
 }

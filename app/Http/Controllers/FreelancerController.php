@@ -21,6 +21,8 @@ use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\UserContact;
 use App\Models\UserFamily;
+use App\Models\UserId;
+use App\Models\UserTransaction;
 use App\Models\Zone;
 use App\Rules\AtLeastOneFilledRule;
 use Illuminate\Validation\Rule;
@@ -90,7 +92,7 @@ class FreelancerController extends Controller
         $validator = Validator::make($request->all(), [
             'full_name'                 => 'required|string|max:255',
             'profession'                => 'required|numeric|exists:professions,id',
-            'maritual_status'           => 'required|in:1,2,3',
+            'marital_status'            => 'required|in:1,2,3',
             'dob'                       => 'required|date_format:m/d/Y',
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10',
@@ -125,6 +127,7 @@ class FreelancerController extends Controller
             'account_holder_name'       => 'nullable|string',
             'mobile_bank'               => 'nullable|numeric|exists:banks,id',
             'mobile_bank_number'        => 'nullable|string',
+            'passport_issue_date'       => 'nullable|date_format:m/d/Y',
             'passport_expire_date'      => 'nullable|date_format:m/d/Y',
             'tin_number'                => 'nullable|string',
             'profile_image'             => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -190,7 +193,7 @@ class FreelancerController extends Controller
                 'phone'         => $request->phone1,
                 'password'      => bcrypt('123456'),
                 'user_type'     => 2, #Freelancer
-                'marital_status'=> $request->maritual_status,
+                'marital_status'=> $request->marital_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),
                 'finger_id'     => $request->card_id,
                 'religion'      => $request->religion,
@@ -259,6 +262,44 @@ class FreelancerController extends Controller
                 'last_approve_by'           => $user_id,    #dummy
             ];
             Freelancer::create($data);
+
+            #user transaction
+            $data_transaction = [
+                'user_id'                       => $user->id,
+                'bank_id'                       => $request->bank,
+                'branch'                        => $request->branch,
+                'bank_account_number'           => $request->account_number,
+                'bank_details'                  => $request->account_holder_name,
+                'mobile_bank_id'                => $request->mobile_bank,
+                'mobile_bank_account_number'    => $request->mobile_bank_number,
+                'created_at'                    => now(),
+            ];
+            UserTransaction::create($data_transaction);
+
+            #user documents
+            if ($request->hasFile('nid_file')) {
+                $nid_file = $this->uploadImage($request, 'nid_file', 'users', 'public');
+            }
+            if ($request->hasFile('birth_certificate_file')) {
+                $birth_certificate_file = $this->uploadImage($request, 'birth_certificate_file', 'users', 'public');
+            }
+            if ($request->hasFile('upload_passport')) {
+                $upload_passport = $this->uploadImage($request, 'upload_passport', 'users', 'public');
+            }
+            $user_documents = [
+                'user_id'                   => $user->id,
+                'nid_number'                => $request->nid,
+                'nid_image'                 => $nid_file ?? null,
+                'birth_cirtificate_number'  => $request->birth_certificate_number,
+                'birth_cirtificate_image'   => $birth_certificate_file ?? null,
+                'passport_number'           => $request->passport_number,
+                'passport_issue_date'       => date('Y-m-d', strtotime($request->passport_issue_date)),
+                'passport_exp_date'         => date('Y-m-d', strtotime($request->passport_expire_date)),
+                'passport_image'            => $upload_passport ?? null,
+                'tin_number'                => $request->tin_number,
+                'created_at'                => now(),
+            ];
+            UserId::create($user_documents);
  
             DB::commit();
             
