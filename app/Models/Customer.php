@@ -12,9 +12,12 @@ class Customer extends Model
 
     protected $fillable = [
         'user_id',
+        'customer_id',
+        'user_id',
+        'profession_id',
         'name',
         'ref_id',
-        'status',
+        'status'
     ];
 
     public function user()
@@ -25,5 +28,9 @@ class Customer extends Model
     public function reference()
     {
         return $this->belongsTo(User::class, 'ref_id')->withDefault(); 
+    }
+
+    public function profession(){
+        return $this->belongsTo(Profession::class,'profession_id');
     }
 }

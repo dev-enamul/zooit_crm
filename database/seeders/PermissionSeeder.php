@@ -85,6 +85,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'fl-commission', 'name' => 'FL Commission', 'status' => 1],
             ['slug' => 'dt-achivement', 'name' => 'DT Achivement', 'status' => 1],
             ['slug' => 'special-offer', 'name' => 'Special Offer', 'status' => 1],
+            ['slug' => 'field-target-report' ,'name' => 'Field Target Report', 'status'=>1],
             ['slug' => 'due-report', 'name' => 'Due Report', 'status' => 1],
             ['slug' => 'sold-report', 'name' => 'Sold Report', 'status' => 1],
             ['slug' => 'cc-report', 'name' => 'CC Report', 'status' => 1],

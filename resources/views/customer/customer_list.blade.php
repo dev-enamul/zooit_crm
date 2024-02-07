@@ -1,5 +1,11 @@
 @extends('layouts.dashboard')
 @section('title',"Customer List")
+
+@section('style')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
+@endsection
+
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -30,17 +36,7 @@
                     <div class="card"> 
                         <div class="card-body">
                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button> 
-                                    </div> 
-                                </div>
+                                <div class=""> </div>
                                 <div class="">
                                     <div class="dt-buttons btn-group flex-wrap mb-2">      
                                         <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
@@ -54,7 +50,7 @@
                             <h5 class="m-0">{{ config('app.name', 'ZOOM IT') }}</h5>
                             <p class="mb-1" ><b>Real Estate Agent- Data Collection Form</b> </p>
                            </div>
-                            <div class="table-container">
+                            <div class="table-container mb-3">
                                 <div class="table-row">
                                     <div class="table-cell">
                                         Marketing Executive: MD Enamul Haque
@@ -77,7 +73,7 @@
                                 </div>
                             </div>
                            
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="customer_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="">
                                         <th>Action</th>
@@ -93,97 +89,31 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="prospecting.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>1</td>
-                                        <td>3 Dec, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
-                                    </tr>
-
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="prospectings_create.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>2</td>
-                                        <td>12 Nov, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
-                                    </tr>
-
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="prospectings_create.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>3</td>
-                                        <td>7 Sep, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-center"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" class="d-block" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="freelancer_profile.html">View Profile</a>
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="prospectings_create.html">Prospecting</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>4</td>
-                                        <td>9 Aug, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
-                                    </tr>
+                                    @foreach ($datas as $key => $data)
+                                        <tr class="">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="javascript:void(0);" onclick="printPage()">Print Customer</a>
+                                                        <a class="dropdown-item" href="{{route('customer.profile')}}">View Profile</a>
+                                                        <a class="dropdown-item" href="{{route('customer.edit',$data->id)}}" >Edit</a>
+                                                        <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',$data->id) }}')">Delete</a>
+                                                        <a class="dropdown-item" href="prospecting.html">Prospecting</a>
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td>{{$key+1}}</td>
+                                            <td>{{get_date($data->created_at)}}</td>
+                                            <td>{{@$data->user->name}}</td>
+                                            <td>{{@$data->profession->name}}</td>
+                                            <td>{{@$data->user->userAddress->upazila->name}}</td>
+                                            <td>{{@$data->user->userAddress->union->name }}</td>
+                                            <td>{{@$data->user->userAddress->village->name}}</td>
+                                            <td>{{@$data->user->phone}}</td>
+                                            <td>{{@$data->user->user_id}}</td> 
+                                        </tr> 
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -193,9 +123,7 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div>
-
   @include('includes.footer')
-
 </div>
 
 <div class="offcanvas offcanvas-end" id="offcanvas">
@@ -206,153 +134,161 @@
         </button>
     </div>
     <div class="offcanvas-body">
-        <div class="row">  
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status </label>
-                    <select class="select2" name="status" id="status"> 
-                        <option value="">Running </option> 
-                        <option value="">Complete </option> 
-                    </select>  
+        <form action="{{route('customer.search')}}" method="POST">
+            @csrf
+            <div class="row">
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="customer" class="form-label">Customer </label>
+                        <select class="form-select select2" name="customer" id="customer" required>
+                            <option value="" data-display="Select a Customer">
+                                Select a Customer
+                            </option>
+                            @isset($customers)
+                                @foreach ($customers as $data)
+                                    <option value="{{ $data->id }}" {{ old('customer', $selected['customer_id'] ?? null) == $data->id ? 'selected' : '' }}>
+                                        {{ $data->user->name }}
+                                    </option>
+                                @endforeach
+                            @endisset
+                        </select>  
+                    </div>
                 </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Marketing Executive </label>
+                        <select class="select2" search name="employee" id="employee">
+                            <option value="">All</option>
+                            <option value="1">John Doe #231</option>
+                            <option value="2">Jane Smith #232</option>
+                            <option value="3">Michael Johnson #233</option>
+                            <option value="4">Emily Davis #234</option>
+                            <option value="5">David Brown #235</option>
+                            <option value="6">Sophia Wilson #236</option>
+                            <option value="7">Christopher Lee #237</option>
+                            <option value="8">Olivia Martin #238</option>
+                            <option value="9">Matthew Taylor #239</option>
+                            <option value="10">Emma Anderson #240</option>
+                            
+                        </select>  
+                    </div>
+                </div>
+    
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="daterangepicker" class="form-label">Join Date </label>
+                        <input class="form-control" type="text" id="daterangepicker" name="daterange" value="{{ old('daterange', $selected['daterange'] ?? '') }}" />   
+                    </div>
+                </div> 
+                
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="profession" class="form-label">Profession </label>
+                        <select class="form-select select2" name="profession" id="freelancer" required>
+                            <option value="" data-display="Select a Profession">
+                                Select a Profession
+                            </option>
+                            @isset($professions)
+                                @foreach ($professions as $profession)
+                                    <option value="{{ $profession->id }}" {{ old('profession', $selected['profession_id'] ?? null) == $profession->id ? 'selected' : '' }}>
+                                        {{ $profession->name }}
+                                    </option>
+                                @endforeach
+                            @endisset
+                        </select>  
+                    </div>
+                </div>
+
+                @include('common.search', [
+                    'div' => 'col-md-6',
+                    'visible' => ['division', 'district', 'upazila','union','village','progressStatus'],
+                ])
+                <input type="hidden" id="division" value="{{ @$division }}">
+                <input type="hidden" id="district" value="{{ @$district }}">
+                <input type="hidden" id="upazila" value="{{ @$upazila }}">
+                <input type="hidden" id="union" value="{{ @$union }}">
+                <input type="hidden" id="village" value="{{ @$village }}">
+                <input type="hidden" id="status" value="{{ @$status }}">
+                <div class="text-end ">
+                    <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> 
+                    <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
+                        <i class="mdi mdi-refresh"></i> Reset
+                    </button>
+                </div> 
             </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="employee" class="form-label">Marketing Executive </label>
-                    <select class="select2" search name="employee" id="employee">
-                        <option value="">All</option>
-                        <option value="1">John Doe #231</option>
-                        <option value="2">Jane Smith #232</option>
-                        <option value="3">Michael Johnson #233</option>
-                        <option value="4">Emily Davis #234</option>
-                        <option value="5">David Brown #235</option>
-                        <option value="6">Sophia Wilson #236</option>
-                        <option value="7">Christopher Lee #237</option>
-                        <option value="8">Olivia Martin #238</option>
-                        <option value="9">Matthew Taylor #239</option>
-                        <option value="10">Emma Anderson #240</option>
-                        
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="profession" class="form-label">Join Date </label>
-                    <input class="form-control" type="text" id="daterangepicker" />   
-                </div>
-            </div> 
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="division" class="form-label">Division </label>
-                    <select class="select2" name="division" id="division" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="district" class="form-label">District </label>
-                    <select class="select2" name="district" id="district" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="upazila" class="form-label">Thana/Upazila </label>
-                    <select class="select2" name="upazila" id="upazila">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="union" class="form-label">Union </label>
-                    <select class="select2" name="union" id="union">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="village" class="form-label">Village</label>
-                    <select class="select2" name="village" id="village">
-                        <option value="">Select Village</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="profession" class="form-label">Profession </label>
-                    <select class="select2" name="profession" id="profession">
-                        <option value="">Select Profession</option>
-                        <option value="">Doctors</option>
-                        <option value="">Lawyers</option> 
-                        <option value="">Banker</option>
-                        <option value="">Teacher</option>
-                        <option value="">Engineer</option>
-                    </select>  
-                </div>
-            </div> 
- 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
-        </div>
+        </form>
     </div>
 </div>
+@endsection
+
+@section('script')
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(window).on('load', function () {
+                console.log('DataTable initialized');
+                var table = $('#customer_table').DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Excel',
+                            filename: 'export',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            text: 'CSV',
+                            filename: 'export',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        }
+                    ]
+                });
+            });
+        });
+
+        function resetFormFields() {
+            $("#division").val('');
+            $("#district").val('');
+            $("#upazila").val('');
+            $("#union").val('');
+            $("#village").val('');
+            $("#status").val('');
+            $("#daterange").val('');
+            $("#profession").val('');
+            $("#customer").val('');
+            $("#employee").val('');
+        
+            $("#status").trigger('change');
+            $("#division").trigger('change');
+            $("#district").trigger('change');
+            $("#upazila").trigger('change');
+            $("#union").trigger('change');
+            $("#village").trigger('change');
+            $("#daterange").trigger('change');
+            $("#profession").trigger('change');
+            $("#customer").trigger('change');
+            $("#employee").trigger('change');
+
+            $('#filter_button').prop('disabled', true);
+        }
+    
+        getDateRange('daterangepicker');
+
+        function printPage() {
+            window.print();
+        }
+    </script>
+
+    @yield('script-bottom')
 @endsection

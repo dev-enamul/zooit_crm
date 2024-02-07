@@ -53,17 +53,34 @@ class FieldTargetController extends Controller
         }
      }
 
+     public function my_field_target(Request $request){
+        $data = new FieldTarget();
+        if(isset($request->month) && $request->month != ''){ 
+            $month = date('m',strtotime($request->month));
+            $year = date('Y',strtotime($request->month)); 
+            $data = $data->whereMonth('month',$month)->whereYear('month',$year);
+        }else{
+            $data = $data->whereMonth('month',date('m'))->whereYear('month',date('Y'));
+        }
+        $data =   $data->where('assign_to',auth()->user()->id)->first();  
+        $selected = $request->month; 
+        return view('target.field_target.my_field_target',compact('data','selected'));
+     }
 
-    public function target_achive(Request $request){
+
+    public function assign_target_list(Request $request){
         $datas = new FieldTarget();
         if(isset($request->month) && $request->month != ''){ 
             $month = date('m',strtotime($request->month));
             $year = date('Y',strtotime($request->month)); 
             $datas = $datas->whereMonth('month',$month)->whereYear('month',$year);
-        } 
+        }else{
+            $datas = $datas->whereMonth('month',date('m'))->whereYear('month',date('Y'));
+        }
+
         $datas =   $datas->where('assign_by',auth()->user()->id)->get();  
         $selected = $request->month; 
-        return view('target.field_target.target_achive',compact('datas','selected'));
+        return view('target.field_target.assign_target_list',compact('datas','selected'));
     }
 
     public function today_target(){

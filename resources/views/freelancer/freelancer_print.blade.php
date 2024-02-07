@@ -15,6 +15,8 @@
                                 Freelancer Entry
                             @endif
                         </h4> 
+                        <button class="btn btn-primary" onclick="printDiv()">Print</button>
+
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
@@ -44,7 +46,7 @@
                                 <form action="{{route('freelancer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
-                                <div class="row">
+                                <div class="row" id="print_div">
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Personal Information</h6>
                                     <hr>
                                     <div class="col-md-6">
@@ -557,4 +559,21 @@
     </footer>
 
 </div>
+
+<script>
+    function printDiv() {
+        var printContents = document.getElementById('print_div').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
+@endsection
+
+@section('script')
+    
 @endsection

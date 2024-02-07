@@ -98,6 +98,21 @@ class User extends Authenticatable
         return $nextUserId;
     }
 
+    public static function generateNextUserCustomerId()
+    {
+        $lastUserId = self::latest('id')->value('user_id');
+
+        if ($lastUserId) {
+            $numericPart     = (int)substr($lastUserId, 4);
+            $nextNumericPart = $numericPart + 1;
+            $nextUserId      = 'CS-' . str_pad($nextNumericPart, 4, '0', STR_PAD_LEFT);
+        } else {
+            $nextUserId      = 'CS-0001';
+        }
+
+        return $nextUserId;
+    }
+
     public static function generateNextEmail()
     {
         $lastEmail = self::latest('id')->value('email');
@@ -114,8 +129,47 @@ class User extends Authenticatable
         return $nextEmail;
     }
 
+    public static function generateCustomerNextEmail()
+    {
+        $lastEmail = self::latest('id')->value('email');
+
+        if ($lastEmail) {
+            preg_match('/\d+$/', $lastEmail, $matches);
+            $numericPart = $matches[0] ?? 1;
+            $nextNumericPart = $numericPart + 1;
+            $nextEmail = 'customer' . $nextNumericPart . '@wayhouse.com';
+        } else {
+            $nextEmail = 'customer1@wayhouse.com';
+        }
+
+        return $nextEmail;
+    }
+
     public function userAddress()
     {
         return $this->hasOne(UserAddress::class);
     }
+
+    public function userContact()
+    {
+        return $this->hasOne(UserContact::class);
+    }
+
+    public  function userFamily()
+    {
+        return $this->hasOne(UserFamily::class);
+    }
+
+    public  function userTransaction()
+    {
+        return $this->hasOne(UserTransaction::class);
+    }
+
+    public  function userId()
+    {
+        return $this->hasOne(UserId::class);
+    }
+
+
+    
 }
