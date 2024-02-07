@@ -15,7 +15,7 @@
                                 Freelancer Entry
                             @endif
                         </h4> 
-                        <button class="btn btn-primary" onclick="printDiv()">Print</button>
+                        <button class="btn btn-primary">Print</button>
 
 
                         <div class="page-title-right">
@@ -35,8 +35,8 @@
             </div>
             <!-- end page title -->
 
-            <div class="row">
-                <div class="col-xl-12">
+            <div class="row" id="print_div">
+                <div class="col-xl-12" >
                     <div class="card"> 
                         <div class="card-body">
                             @if(isset($freelancer))
@@ -46,7 +46,7 @@
                                 <form action="{{route('freelancer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
-                                <div class="row" id="print_div">
+                                <div class="row" >
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Personal Information</h6>
                                     <hr>
                                     <div class="col-md-6">
@@ -561,7 +561,6 @@
 </div>
 
 <script>
-    function printDiv() {
         var printContents = document.getElementById('print_div').innerHTML;
         var originalContents = document.body.innerHTML;
 
@@ -570,7 +569,7 @@
         window.print();
 
         document.body.innerHTML = originalContents;
-    }
+    
 </script>
 @endsection
 

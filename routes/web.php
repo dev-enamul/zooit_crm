@@ -139,6 +139,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Prospecting 
         Route::resource('prospecting', ProspectingController::class);
+        Route::post('prospecting-save/{id?}', [ProspectingController::class, 'save'])->name('prospecting.save');
+        Route::any('prospecting-delete/{id}', [ProspectingController::class, "prospectingDelete"])->name('prospecting.delete');
+
 
         // Prospecting 
         Route::resource('cold-calling', ColdCallingController::class);
