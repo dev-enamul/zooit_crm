@@ -9,10 +9,10 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">
-                            @if(isset($freelancer))
-                                Freelancer Edit
+                            @if(isset($customer))
+                                Customer Edit
                             @else
-                                Freelancer Entry
+                                Customer Entry
                             @endif
                         </h4> 
 
@@ -20,10 +20,10 @@
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
                                 <li class="breadcrumb-item active">
-                                    @if(isset($freelancer))
-                                        Freelancer Edit
+                                    @if(isset($customer))
+                                        Customer Edit
                                     @else
-                                        Freelancer Entry
+                                        Customer Entry
                                     @endif
                                 </li>
                             </ol>
@@ -37,11 +37,11 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            @if(isset($freelancer))
-                                <form action="{{route('freelancer.save',$freelancer->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                                <input type="hidden" name="id" value="{{$freelancer->id}}">
+                            @if(isset($customer))
+                                <form action="{{route('customer.save',$customer->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <input type="hidden" name="id" value="{{$customer->id}}">
                             @else 
-                                <form action="{{route('freelancer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('customer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
                                 <div class="row">
@@ -50,7 +50,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{ isset($freelancer) ? $freelancer->user->name : old('full_name')}}" required>
+                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{ isset($customer) ? $customer->user->name : old('full_name')}}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -62,8 +62,8 @@
                                             <label for="profile_image" class="form-label">Profile Image</label>
                                             
                                             <input type="file" name="profile_image" class="form-control" id="profile_image" >
-                                            @if (isset($freelancer) && !empty($freelancer->user->profile_image))
-                                                <img src="{{ asset('storage/' . $freelancer->user->profile_image) }}" alt="" width="100" height="100">
+                                            @if (isset($customer) && !empty($customer->user->profile_image))
+                                                <img src="{{ asset('storage/' . $customer->user->profile_image) }}" alt="" width="100" height="100">
                                             @endif                                        
                                         </div>
                                     </div>
@@ -75,7 +75,7 @@
                                             <select class="form-select select2" name="profession" id="profession" required>
                                                 @isset($professions)
                                                     @foreach ($professions as $profession)
-                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($freelancer) ? $freelancer->profession_id : null) == $profession->id ? 'selected' : '' }}>
+                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($customer) ? $customer->profession_id : null) == $profession->id ? 'selected' : '' }}>
                                                             {{ $profession->name }}
                                                         </option>
                                                     @endforeach
@@ -94,7 +94,7 @@
                                                 <option value="">Select a Marital Status</option>
                                                 @isset($maritalStatuses)
                                                     @foreach ($maritalStatuses as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('marital_status', isset($freelancer) ? $freelancer->user->marital_status : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('marital_status', isset($customer) ? $customer->user->marital_status : null) == $id ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -109,7 +109,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                                            <input type="text" name="dob" class="form-control datepicker w-100 p-1" id="dob" placeholder="Select date of birth" value="{{ isset($freelancer) ? $freelancer->user->dob : old('dob')}}" required> 
+                                            <input type="text" name="dob" class="form-control datepicker w-100 p-1" id="dob" placeholder="Select date of birth" value="{{ isset($customer) ? $customer->user->dob : old('dob')}}" required> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -119,7 +119,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="card_id" class="form-label">Card/Finger ID </label>
-                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="Enter ID" value="{{ isset($freelancer) ? $freelancer->user->finger_id : old('card_id') }}">  
+                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="Enter ID" value="{{ isset($customer) ? $customer->user->finger_id : old('card_id') }}">  
                                         </div>
                                     </div>
 
@@ -130,7 +130,7 @@
                                                 <option value="">Select Religion</option>
                                                 @isset($religions)
                                                     @foreach ($religions as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('religion', isset($freelancer) && isset($freelancer->user->religion) && $freelancer->user->religion == $id) ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('religion', isset($customer) && isset($customer->user->religion) && $customer->user->religion == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -151,7 +151,7 @@
                                                 <option value="">Select a Blood Group</option>
                                                 @isset($bloodGroups)
                                                     @foreach ($bloodGroups as $id => $blood)
-                                                        <option value="{{ $id }}" {{ old('blood_group', isset($freelancer) ? $freelancer->user->blood_group : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('blood_group', isset($customer) ? $customer->user->blood_group : null) == $id ? 'selected' : '' }}>
                                                             {{ $blood }}
                                                         </option>
                                                     @endforeach
@@ -170,7 +170,7 @@
                                                 <option value="">Select Gender</option>
                                                 @isset($genders)
                                                     @foreach ($genders as $id => $gender)
-                                                        <option value="{{ $id }}" {{ old('gender', isset($freelancer) ? $freelancer->user->gender : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('gender', isset($customer) ? $customer->user->gender : null) == $id ? 'selected' : '' }}>
                                                             {{ $gender }}
                                                         </option>
                                                     @endforeach
@@ -188,7 +188,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone1" class="form-label">Mobile Number 1 <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" placeholder="Phone 1 Number" value="{{ isset($freelancer) ? $freelancer->user->phone : old('phone1') }}" required>
+                                            <input type="text" name="phone1" class="form-control" id="phone1" placeholder="Phone 1 Number" value="{{ isset($customer) ? $customer->user->phone : old('phone1') }}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -198,14 +198,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone2" class="form-label">Mobile Number 2 </label>
-                                            <input type="text" name="phone2" class="form-control" id="phone2" placeholder="Phone 2 Number" value="{{ isset($freelancer) ? $freelancer->user->userContact->office_phone : old('phone2') }}">
+                                            <input type="text" name="phone2" class="form-control" id="phone2" placeholder="Phone 2 Number" value="{{ isset($customer) ? $customer->user->userContact->office_phone : old('phone2') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="office_email" class="form-label">Office Email</label>
-                                           <input type="email" name="office_email" class="form-control" id="office_email" placeholder="Office Email ID" value="{{ isset($freelancer) ? $freelancer->user->userContact->office_email : old('office_email') }}"> 
+                                           <input type="email" name="office_email" class="form-control" id="office_email" placeholder="Office Email ID" value="{{ isset($customer) ? $customer->user->userContact->office_email : old('office_email') }}"> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -215,7 +215,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Personal Email</label>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email ID" value={{ isset($freelancer) ? $freelancer->user->userContact->personal_email : old('email') }}> 
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Email ID" value={{ isset($customer) ? $customer->user->userContact->personal_email : old('email') }}> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -225,28 +225,28 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="imo_whatsapp_number" class="form-label">Imo/WhatsApp Number</label>
-                                            <input type="text" name="imo_whatsapp_number" class="form-control" id="imo_whatsapp_number" placeholder="Imo/Emo Number" value="{{ isset($freelancer) ? $freelancer->user->userContact->imo_number : old('imo_whatsapp_number') }}">  
+                                            <input type="text" name="imo_whatsapp_number" class="form-control" id="imo_whatsapp_number" placeholder="Imo/Emo Number" value="{{ isset($customer) ? $customer->user->userContact->imo_number : old('imo_whatsapp_number') }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="facebook_id" class="form-label">Facebook ID</label>
-                                            <input type="text" name="facebook_id" class="form-control" id="facebook_id" placeholder="Facebook ID" value="{{ isset($freelancer) ? $freelancer->user->userContact->facebook_id : old('facebook_id') }}">  
+                                            <input type="text" name="facebook_id" class="form-control" id="facebook_id" placeholder="Facebook ID" value="{{ isset($customer) ? $customer->user->userContact->facebook_id : old('facebook_id') }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="emergency_contact_person_name" class="form-label">Emergency Contact Name</label>
-                                            <input type="text" name="emergency_contact_name" class="form-control" id="emergency_contact_person_name" placeholder="Emergency Contact Person Name" value="{{ isset($freelancer) ? $freelancer->user->userContact->emergency_contact_person : old('emergency_contact_name') }}">  
+                                            <input type="text" name="emergency_contact_name" class="form-control" id="emergency_contact_person_name" placeholder="Emergency Contact Person Name" value="{{ isset($customer) ? $customer->user->userContact->emergency_contact_person : old('emergency_contact_name') }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="emergency_contact_person_number" class="form-label">Emergency Contact Person Number</label>
-                                            <input type="text" name="emergency_person_number" class="form-control" id="emergency_contact_person_number" placeholder="Emergency Contact Person Number" value="{{ isset($freelancer) ? $freelancer->user->userContact->emergency_contact_number : old('emergency_person_number') }}">  
+                                            <input type="text" name="emergency_person_number" class="form-control" id="emergency_contact_person_number" placeholder="Emergency Contact Person Number" value="{{ isset($customer) ? $customer->user->userContact->emergency_contact_number : old('emergency_person_number') }}">  
                                         </div>
                                     </div> 
 
@@ -261,7 +261,7 @@
                                             @isset($countries)
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country->id }}" 
-                                                        {{ (old('country') == $country->id) || (isset($freelancer) && $freelancer->user->userAddress->country_id == $country->id) ? 'selected' : '' }}>
+                                                        {{ (old('country') == $country->id) || (isset($customer) && $customer->user->userAddress->country_id == $country->id) ? 'selected' : '' }}>
                                                         {{ $country->name }}
                                                     </option>
                                                 @endforeach
@@ -270,7 +270,7 @@
                                             @isset($countries)
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country->id }}" 
-                                                        {{ (old('country') == $country->id) || (!isset($freelancer) && $country->id == 18) || (isset($freelancer) && $freelancer->user->userAddress->country_id == $country->id) ? 'selected' : '' }}>
+                                                        {{ (old('country') == $country->id) || (!isset($customer) && $country->id == 18) || (isset($customer) && $customer->user->userAddress->country_id == $country->id) ? 'selected' : '' }}>
                                                         {{ $country->name }}
                                                     </option>
                                                 @endforeach
@@ -301,7 +301,7 @@
                                             </option>
                                             @isset($zones)
                                                 @foreach ($zones as $zone)
-                                                    <option value="{{ $zone->id }}" {{ old('zone', isset($freelancer) ? $freelancer->user->userAddress->zone_id : null) == $zone->id ? 'selected' : '' }}>
+                                                    <option value="{{ $zone->id }}" {{ old('zone', isset($customer) ? $customer->user->userAddress->zone_id : null) == $zone->id ? 'selected' : '' }}>
                                                         {{ $zone->name }}
                                                     </option>
                                                 @endforeach
@@ -323,7 +323,7 @@
                                             </option>
                                             @isset($areas)
                                                 @foreach ($areas as $area)
-                                                    <option value="{{ $area->id }}" {{ old('area', isset($freelancer) ? $freelancer->user->userAddress->area_id : null) == $area->id ? 'selected' : '' }}>
+                                                    <option value="{{ $area->id }}" {{ old('area', isset($customer) ? $customer->user->userAddress->area_id : null) == $area->id ? 'selected' : '' }}>
                                                         {{ $area->name }}
                                                     </option>
                                                 @endforeach
@@ -340,7 +340,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="2" name="address">{{isset($freelancer) ? $freelancer->user->userAddress->address : old('address')}}</textarea> 
+                                            <textarea class="form-control" id="address" rows="2" name="address">{{isset($customer) ? $customer->user->userAddress->address : old('address')}}</textarea> 
                                         </div>
                                     </div>
 
@@ -350,42 +350,42 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{isset($freelancer) ? $freelancer->user->userFamily->father_name : old('father_name')}}">  
+                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{isset($customer) ? $customer->user->userFamily->father_name : old('father_name')}}">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_phone" class="form-label">Father Mobile</label>
-                                            <input type="text" name="father_phone" class="form-control" id="father_phone" placeholder="Father Father Mobile" value="{{isset($freelancer) ? $freelancer->user->userFamily->father_mobile : old('father_phone')}}">  
+                                            <input type="text" name="father_phone" class="form-control" id="father_phone" placeholder="Father Father Mobile" value="{{isset($customer) ? $customer->user->userFamily->father_mobile : old('father_phone')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mother_name" class="form-label">Mother's Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name" value="{{isset($freelancer) ? $freelancer->user->userFamily->mother_name : old('mother_name')}}">  
+                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name" value="{{isset($customer) ? $customer->user->userFamily->mother_name : old('mother_name')}}">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mother_phone" class="form-label">Mother Mobile</label>
-                                            <input type="text" name="mother_phone" class="form-control" id="mother_phone" placeholder="Mother's Mobile" value="{{isset($freelancer) ? $freelancer->user->userFamily->mother_mobile : old('mother_phone')}}">  
+                                            <input type="text" name="mother_phone" class="form-control" id="mother_phone" placeholder="Mother's Mobile" value="{{isset($customer) ? $customer->user->userFamily->mother_mobile : old('mother_phone')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="spouse_name" class="form-label">Spouse Name</label>
-                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{isset($freelancer) ? $freelancer->user->userFamily->spouse_name : old('spouse_name')}}">  
+                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{isset($customer) ? $customer->user->userFamily->spouse_name : old('spouse_name')}}">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="spouse_phone" class="form-label">Spouse Mobile</label>
-                                            <input type="text" name="spouse_phone" class="form-control" id="spouse_phone" placeholder="Spouse Mobile" value="{{isset($freelancer) ? $freelancer->user->userFamily->spouse_contact : old('spouse_phone')}}">  
+                                            <input type="text" name="spouse_phone" class="form-control" id="spouse_phone" placeholder="Spouse Mobile" value="{{isset($customer) ? $customer->user->userFamily->spouse_contact : old('spouse_phone')}}">  
                                         </div>
                                     </div>
 
@@ -399,7 +399,7 @@
                                                 <option value="">Select a Bank</option>
                                                 @isset($banks)
                                                     @foreach ($banks as $bank)
-                                                        <option value="{{ $bank->id }}" {{ old('bank', isset($freelancer) ? $freelancer->user->userTransaction->bank_id : null) == $bank->id ? 'selected' : '' }}>
+                                                        <option value="{{ $bank->id }}" {{ old('bank', isset($customer) ? $customer->user->userTransaction->bank_id : null) == $bank->id ? 'selected' : '' }}>
                                                             {{ $bank->name }}
                                                         </option>
                                                     @endforeach
@@ -411,21 +411,21 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="branch" class="form-label">Branch Name</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Branch" value="{{isset($freelancer) ? $freelancer->user->userTransaction->branch : old('branch')}}">  
+                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Enter Bank Branch" value="{{isset($customer) ? $customer->user->userTransaction->branch : old('branch')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="account_number" class="form-label">Account Number</label>
-                                            <input type="text" name="account_number" id="account_number" class="form-control" placeholder="Enter Bank Account Number" value="{{isset($freelancer) ? $freelancer->user->userTransaction->bank_account_number : old('account_number')}}">  
+                                            <input type="text" name="account_number" id="account_number" class="form-control" placeholder="Enter Bank Account Number" value="{{isset($customer) ? $customer->user->userTransaction->bank_account_number : old('account_number')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="account_holder_name" class="form-label">Account Holder Name</label>
-                                            <input type="text" name="account_holder_name" id="account_holder_name" class="form-control" placeholder="Enter Bank Holder Name" value="{{isset($freelancer) ? $freelancer->user->userTransaction->bank_details : old('account_holder_name')}}">  
+                                            <input type="text" name="account_holder_name" id="account_holder_name" class="form-control" placeholder="Enter Bank Holder Name" value="{{isset($customer) ? $customer->user->userTransaction->bank_details : old('account_holder_name')}}">  
                                         </div>
                                     </div>
 
@@ -436,7 +436,7 @@
                                                 <option value="">Select a Mobile Bank</option>
                                                 @isset($mobileBanks)
                                                     @foreach ($mobileBanks as $mobileBank)
-                                                        <option value="{{ $mobileBank->id }}" {{ old('mobile_bank', isset($freelancer) ? $freelancer->user->userTransaction->mobile_bank_id : null) == $mobileBank->id ? 'selected' : '' }}>
+                                                        <option value="{{ $mobileBank->id }}" {{ old('mobile_bank', isset($customer) ? $customer->user->userTransaction->mobile_bank_id : null) == $mobileBank->id ? 'selected' : '' }}>
                                                             {{ $mobileBank->name }}
                                                         </option>
                                                     @endforeach
@@ -448,7 +448,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mobile_bank_number" class="form-label">Mobile Bank Number</label>
-                                            <input type="text" name="mobile_bank_number" id="mobile_bank_number" class="form-control" placeholder="Enter Mobile Bank Number" value="{{isset($freelancer) ? $freelancer->user->userTransaction->mobile_bank_account_number : old('mobile_bank_number')}}">  
+                                            <input type="text" name="mobile_bank_number" id="mobile_bank_number" class="form-control" placeholder="Enter Mobile Bank Number" value="{{isset($customer) ? $customer->user->userTransaction->mobile_bank_account_number : old('mobile_bank_number')}}">  
                                         </div>
                                     </div> 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> ID Detail</h6>
@@ -457,7 +457,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="nid" class="form-label">NID Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number" value="{{isset($freelancer) ? $freelancer->user->userId->nid_number : old('nid')}}"> 
+                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="Enter NID Number" value="{{isset($customer) ? $customer->user->userId->nid_number : old('nid')}}"> 
                                         </div>
                                     </div>
 
@@ -471,9 +471,9 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="birth_certificate_number" class="form-label">Birth Certificate Number</label>
-                                            <input type="text" name="birth_certificate_number" id="birth_certificate_number" class="form-control" placeholder="Enter Birth Certificate Number" value="{{isset($freelancer) ? $freelancer->user->userId->birth_cirtificate_number : old('birth_certificate_number')}}"> 
-                                            @if (isset($freelancer) && !empty($freelancer->user->userId->nid_image))
-                                                <img src="{{ asset('storage/' . $freelancer->user->userId->nid_image) }}" alt="" width="100" height="100">
+                                            <input type="text" name="birth_certificate_number" id="birth_certificate_number" class="form-control" placeholder="Enter Birth Certificate Number" value="{{isset($customer) ? $customer->user->userId->birth_cirtificate_number : old('birth_certificate_number')}}"> 
+                                            @if (isset($customer) && !empty($customer->user->userId->nid_image))
+                                                <img src="{{ asset('storage/' . $customer->user->userId->nid_image) }}" alt="" width="100" height="100">
                                             @endif
                                         </div>
                                     </div>
@@ -482,8 +482,8 @@
                                         <div class="mb-3">
                                             <label for="birth_certificate_file" class="form-label">Upload Birth Certificate</label>
                                             <input type="file" name="birth_certificate_file" id="birth_certificate_file" class="form-control" > 
-                                            @if (isset($freelancer) && !empty($freelancer->user->userId->birth_cirtificate_image))
-                                                <img src="{{ asset('storage/' . $freelancer->user->userId->birth_cirtificate_image) }}" alt="" width="100" height="100">
+                                            @if (isset($customer) && !empty($customer->user->userId->birth_cirtificate_image))
+                                                <img src="{{ asset('storage/' . $customer->user->userId->birth_cirtificate_image) }}" alt="" width="100" height="100">
                                             @endif
                                         </div>
                                     </div>
@@ -491,7 +491,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="passport_number" class="form-label">Passport Number</label>
-                                            <input type="text" name="passport_number" id="passport_number" class="form-control" placeholder="Enter Passport Number" value="{{isset($freelancer) ? $freelancer->user->userId->passport_number : old('passport_number')}}"> 
+                                            <input type="text" name="passport_number" id="passport_number" class="form-control" placeholder="Enter Passport Number" value="{{isset($customer) ? $customer->user->userId->passport_number : old('passport_number')}}"> 
                                         </div>
                                     </div>
                                     
@@ -499,8 +499,8 @@
                                         <div class="mb-3">
                                             <label for="upload_passport" class="form-label">Upload Passport</label>
                                             <input type="file" name="upload_passport" id="upload_passport" class="form-control">
-                                            @if (isset($freelancer) && !empty($freelancer->user->userId->passport_image))
-                                                <img src="{{ asset('storage/' . $freelancer->user->userId->passport_image) }}" alt="" width="100" height="100">
+                                            @if (isset($customer) && !empty($customer->user->userId->passport_image))
+                                                <img src="{{ asset('storage/' . $customer->user->userId->passport_image) }}" alt="" width="100" height="100">
                                             @endif  
                                         </div>
                                     </div>
@@ -508,21 +508,21 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="passport_expire_date" class="form-label">Passport Issue Date</label>
-                                            <input type="text" name="passport_issue_date" class="form-control datepicker w-100" id="passport_issue_date" placeholder="Select passport issue date" value="{{isset($freelancer) ? $freelancer->user->userId->passport_issue_date : old('passport_issue_date')}}"> 
+                                            <input type="text" name="passport_issue_date" class="form-control datepicker w-100" id="passport_issue_date" placeholder="Select passport issue date" value="{{isset($customer) ? $customer->user->userId->passport_issue_date : old('passport_issue_date')}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="passport_expire_date" class="form-label">Passport Expire Date</label>
-                                            <input type="text" name="passport_expire_date" class="form-control datepicker w-100" id="passport_expire_date" placeholder="Select passport expire date" value="{{isset($freelancer) ? $freelancer->user->userId->passport_exp_date : old('passport_expire_date')}}"> 
+                                            <input type="text" name="passport_expire_date" class="form-control datepicker w-100" id="passport_expire_date" placeholder="Select passport expire date" value="{{isset($customer) ? $customer->user->userId->passport_exp_date : old('passport_expire_date')}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="tin_number" class="form-label">TIN Number</label>
-                                            <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="Enter TIN Number" value="{{isset($freelancer) ? $freelancer->user->userId->tin_number : old('tin_number')}}"> 
+                                            <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="Enter TIN Number" value="{{isset($customer) ? $customer->user->userId->tin_number : old('tin_number')}}"> 
                                         </div>
                                     </div>
                                 </div>

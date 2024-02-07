@@ -119,6 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save');
         Route::post('/freelancer-search', [FreelancerController::class, 'freelancerSearch'])->name('freelancer.search');
         Route::any('freelacer-delete/{id}', [FreelancerController::class, "freelancerDelete"])->name('freelancer.delete');
+        Route::get('freelacer-print/{id}', [FreelancerController::class, "freelancerPrint"])->name('freelancer.print');
 
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
         Route::get('freelancer-hierarchy', [FreelancerProfileController::class, 'freelancer_hierarchy'])->name('freelancer.hierarchy');
@@ -131,6 +132,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Customer 
         Route::resource('customer', CustomerController::class);
+        Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save');
+        Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
+        Route::get('customer-profile', [CustomerController::class, 'customer_profile'])->name('customer.profile');
+        Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
 
         // Prospecting 
         Route::resource('prospecting', ProspectingController::class);
