@@ -242,6 +242,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // field target
         Route::get('assign-field-target', [FieldTargetController::class, 'assign_target'])->name('assign.field.target');
+        Route::post('field-target-save', [FieldTargetController::class, 'field_target_save'])->name('field.target.save');
         Route::get('target-achive', [FieldTargetController::class, 'target_achive'])->name('target.achive'); 
         Route::get('marketing-field-report', [FieldTargetController::class, 'marketing_field_report'])->name('marketing.field.report');
         Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');

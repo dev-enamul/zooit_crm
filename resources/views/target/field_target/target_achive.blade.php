@@ -31,7 +31,8 @@
                     
                     <div class="card"> 
                         <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
+                            
+                            <div class="d-flex justify-content-between"> 
                                 <div class="">
                                     <div class="dt-buttons btn-group flex-wrap mb-2">      
                                         <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
@@ -39,633 +40,65 @@
                                         </button>
 
                                         <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
+                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
                                         </button> 
                                     </div> 
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">     
-                                        <button class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#modal6"> <i class="mdi mdi-chart-box-outline"></i> View Chart</button> 
-                                    </div>
+                                 
                                 </div>
-                                <div class="">  
-                                    <div class="input-group">  
-                                        <input class="form-control" type="text" id="daterangepicker" />   
-                                        <button class="btn btn-secondary" type="submit">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
+                                <div class="">   
+                                    <form action="" method="get" action="">
+                                        <div class="input-group">  
+                                            <input class="form-control" type="month" name="month" value="{{$selected != ''?$selected:now()->format('Y-m') }}"/>   
+                                            <button class="btn btn-secondary" type="submit">
+                                                <span><i class="fas fa-filter"></i> Filter</span>
+                                            </button> 
+                                        </div>
+                                    </form> 
                                 </div>
                            </div>
 
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                           <div class="table-box" style="overflow-x: scroll;">
+                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr> 
                                         <th>S/N</th>
-                                        <th>Date</th> 
-                                        <th>Customer Entry</th>
-                                        <th>Freelancer Entry</th>
-                                        <th>Prospecting</th> 
-                                        <th>Cold Calling</th>
+                                        <th>Employee Name</th>  
+                                        <th>FL Recruitment</th>
+                                        <th>Customer Data</th> 
+                                        <th>Prospecting</th>
+                                        <th>Cold calling</th>
                                         <th>Lead</th>
-                                        <th>Progress</th>
-                                        <th>Remark</th>
+                                        <th>Lead Analysis</th>
+                                        <th>Project Visit</th>
+                                        <th>Project Visit Analysis</th>
+                                        <th>Follow Up</th>
+                                        <th>Follow Up Analysis</th>
+                                        <th>Negotiation</th>
+                                        <th>Negotiation Analysis</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr> 
-                                        <td>1</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 40%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                    <tr class="success_row"> 
-                                        <td>2</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                    <tr> 
-                                        <td>3</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                    <tr> 
-                                        <td>4</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                    <tr class="row_info"> 
-                                        <td>4</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                    <tr class="row_secondary"> 
-                                        <td>6</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                    <tr class="row_primary"> 
-                                        <td>7</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                     <tr class="row_danger"> 
-                                        <td>8</td>
-                                        <td>30/10/2023</td>
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>50%</h6>
-                                                    <span>12/6</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>55%</h6>
-                                                    <span>12/8</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 55%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>60%</h6>
-                                                    <span>13/9</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>100%</h6>
-                                                    <span>20/20</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>10%</h6>
-                                                    <span>100/10</span> 
-                                                </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 100%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <h6>60%</h6>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                        </td> 
-                                        <td>Average</td>
-                                    </tr>
-
-                                    
+                                    @foreach ($datas as $data)
+                                        <tr> 
+                                            <td>1</td>
+                                            <td>{{@$data->assignTo->name}}</td>  
+                                            <td class="align-middle">{{$data->freelancer}} </td>  
+                                            <td class="align-middle">{{$data->customer}}  </td>  
+                                            <td class="align-middle">{{$data->prospecting}}</td>  
+                                            <td class="align-middle">{{$data->cold_calling}}</td>  
+                                            <td class="align-middle">{{$data->lead}}</td>  
+                                            <td class="align-middle">{{$data->lead_analysis}}</td>  
+                                            <td class="align-middle">{{$data->project_visit}}</td>  
+                                            <td class="align-middle">{{$data->project_visit_analysis}}</td>  
+                                            <td class="align-middle">{{$data->follow_up}}</td>  
+                                            <td class="align-middle">{{$data->follow_up_analysis}}</td>  
+                                            <td class="align-middle">{{$data->negotiation}}</td>  
+                                            <td class="align-middle">{{$data->negotiation_analysis}}</td>   
+                                        </tr>
+                                    @endforeach 
                                 </tbody>
                             </table>
+                           </div> 
                         </div>
                     </div>
                 </div> <!-- end col -->
@@ -696,6 +129,7 @@
         </div>
     </div>
 </div>
+ 
 @endsection 
 
 @section('script')
