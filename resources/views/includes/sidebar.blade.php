@@ -298,13 +298,11 @@
                             <span>Field Target</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('my.field.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Target</a></li>
                             <li><a href="{{route('assign.field.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Target</a></li>
-                            <li><a href="{{route('target.achive')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Achivement</a></li>
-                            <li><a href="{{route('marketing.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Marketing Ex. Report</a></li> 
-                            <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Ex. Report</a></li> 
+                            <li><a href="{{route('assign.field.target.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Target List</a></li>                            
                         </ul>
-                    </li> 
-
+                    </li>  
                     @endcan
 
                     @can('daily-task')
@@ -443,6 +441,19 @@
                             <li><a href="{{route('special-offer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Offer Create</a></li>
                         </ul>
                     </li> 
+                @endcan 
+
+                @can('field-target-report')
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow ">
+                        <i class="mdi mdi-teach"></i>
+                        <span>Field Target Report</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">  
+                        <li><a href="{{route('marketing.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Marketing Ex. Report</a></li> 
+                        <li><a href="{{route('salse.field.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Ex. Report</a></li> 
+                    </ul>
+                </li>
                 @endcan 
 
                 @can('due-report')
