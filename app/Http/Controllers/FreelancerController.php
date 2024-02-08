@@ -62,7 +62,9 @@ class FreelancerController extends Controller
         $unions      = $this->getCachedUnions();
         $villages    = $this->getCachedVillages();
         $professions = Profession::where('status',1)->select('id','name')->get();
-        $freelancers = Freelancer::where('status', 1)->get();
+        $my_freelancer = my_employee(auth()->user()->id);
+        $freelancers = Freelancer::whereIn('id',$my_freelancer)->where('status',1)->get();  
+
         return view('freelancer.freelancer_list',compact('datas','professions','countries','divisions','districts','upazilas','unions','villages','freelancers'));
     }
 
@@ -457,15 +459,15 @@ class FreelancerController extends Controller
     public function freelancerSearch(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'division'       => 'required',
-            'district'       => 'required',
-            'upazila'        => 'sometimes|required',
-            'union'          => 'sometimes|required',
-            'village'        => 'sometimes|required',
-            'status'         => 'required|in:1,0',
-            'freelancer'     => 'required|numeric|exists:freelancers,id',
-            'profession'     => 'required|numeric|exists:professions,id',
-            'daterange'      => 'required',
+            'division'       => 'nullable',
+            'district'       => 'nullable',
+            'upazila'        => 'nullable',
+            'union'          => 'nullable',
+            'village'        => 'nullable',
+            'status'         => 'nullable|in:1,0',
+            'freelancer'     => 'nullable|numeric|exists:freelancers,id',
+            'profession'     => 'nullable|numeric|exists:professions,id',
+            'daterange'      => 'nullable',
         ]);
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
@@ -513,18 +515,35 @@ class FreelancerController extends Controller
                 $freelancerId   = Freelancer::where('id',$freelancer_id)->pluck('user_id')->first();
                 
                 $datas = Freelancer::where('status', 1)
-                                ->where('profession_id', $profession_id)
-                                ->where('user_id',  $freelancerId)
-                                ->whereHas('user.userAddress', function ($query) use ($division_id, $district_id, $village_id, $union_id, $upazila_id) {
-                                    $query->where('division_id', $division_id)
-                                          ->where('district_id', $district_id)
-                                          ->where('village_id', $village_id)
-                                          ->where('union_id', $union_id)
-                                          ->where('upazila_id', $upazila_id);
-                                })
-                                ->whereBetween('created_at', [$fromDate, $toDate])
-                                ->where('status', $status)
-                                ->get();
+                    ->whereHas('user.userAddress', function ($query) use ($profession_id,$freelancerId,$division_id, $district_id, $village_id, $union_id, $upazila_id,$status) {
+                        if ($profession_id != null) {
+                            $query->where('profession_id', $profession_id);
+                        }
+                        if ($freelancerId != null) {
+                            $query->where('freelancer_id', $freelancerId);
+                        }
+                        if ($division_id != null) {
+                            $query->where('division_id', $division_id);
+                        }
+                        if ($district_id != null) {
+                            $query->where('district_id', $district_id);
+                        }
+                        if ($village_id != null) {
+                            $query->where('village_id', $village_id);
+                        }
+                        if ($union_id != null) {
+                            $query->where('union_id', $union_id);
+                        }
+                        if ($upazila_id != null) {
+                            $query->where('upazila_id', $upazila_id);
+                        }
+                    })
+                    ->whereBetween('created_at', [$fromDate, $toDate]);
+                    if ($status != null) {
+                        $datas = $datas->where('status', $status);
+                    }
+
+                $datas = $datas->get();
                 return view('freelancer.freelancer_list', compact('professions','freelancers','datas','divisions','districts','upazilas','unions','villages','selected'));
             }
         }

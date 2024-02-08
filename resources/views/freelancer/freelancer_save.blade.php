@@ -258,15 +258,7 @@
                                             <option data-display="Select a country *" value="">
                                                 Select a country
                                             </option>
-                                            @isset($countries)
-                                                @foreach ($countries as $country)
-                                                    <option value="{{ $country->id }}" 
-                                                        {{ (old('country') == $country->id) || (isset($freelancer) && $freelancer->user->userAddress->country_id == $country->id) ? 'selected' : '' }}>
-                                                        {{ $country->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-
+                                            
                                             @isset($countries)
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country->id }}" 
