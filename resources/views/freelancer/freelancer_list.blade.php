@@ -67,7 +67,7 @@
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
 
-                                                        <a class="dropdown-item" href="{{route('freelancer.print',$data->id)}}">Print Frelancer</a>
+                                                        <a class="dropdown-item" href="{{route('freelancer.print',$data->id) }}" onclick="printDiv()">Print Freelancer</a>
                                                         <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
                                                         <a class="dropdown-item" href="{{route('freelancer.edit',$data->id)}}" onclick="printPage()">Edit</a>
                                                         <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('freelancer.delete',$data->id) }}')">Delete</a>
@@ -257,10 +257,6 @@
         }
     
         getDateRange('daterangepicker');
-
-        function printPage() {
-            window.print();
-        }
     </script>
 
     @yield('script-bottom')
