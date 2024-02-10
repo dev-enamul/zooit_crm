@@ -27,8 +27,34 @@
                     <form class="needs-validation" method="POST" action="{{route('deposit.target.save')}}" novalidate> 
                         @csrf
                         <div class="card"> 
+                            <div class="card-body"> 
+                                <div class="row"> 
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="assign_to" class="form-label">Assign To <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="assign_to" id="assign_to" required>
+                                                <option value="">Select Employee</option>
+                                                @foreach ($employees as $key => $item)
+                                                    <option {{$key==0?"selected":""}} value="{{$item->id}}">{{$item->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="month" class="form-label">Month<span class="text-danger">*</span></label>
+                                            <input type="month" class="form-control" id="month" name="month" value="{{ date('Y-m') }}" required>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div> 
                             @foreach ($projects as $item) 
-                                <input type="hidden" name="project_id[]" value="{{$item->id}}">
+                                <input type="hidden" name="project_id[]" value="{{$item->id}}"> 
+ 
                                 <div class="card-body"> 
                                     <div class="row">
                                         <div class="rich-list-item pt-0">

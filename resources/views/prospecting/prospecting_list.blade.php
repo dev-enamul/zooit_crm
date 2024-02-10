@@ -31,15 +31,7 @@
                             
                             <div class="d-flex justify-content-between"> 
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button> 
-                                    </div> 
+                                    
                                 </div>
                                 <div class="">
                                     <div class="dt-buttons btn-group flex-wrap mb-2">      
@@ -67,97 +59,31 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr>
+                                    @foreach ($prospectings as  $prospecting)
+                                    <tr class="">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="cold_calling_create.html">Cold Calling</a>
+
+                                                <div class="dropdown-menu dropdown-menu-animated"> 
+                                                    <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('prospecting.delete',$prospecting->id) }}')">Delete</a>  
+                                                    <a class="dropdown-item" href="">Cold Calling</a>
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>1</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>Phone</td>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ @$prospecting->customer->user->name }}</td>
+                                        <td>{{ @$prospecting->customer->profession }}</td>
+                                        <td>{{ @$prospecting->customer->upazilla }}</td>
+                                        <td>{{ @$prospecting->customer->union }}</td>
+                                        <td>{{ @$prospecting->customer->village }}</td>
+                                        <td>{{ @$prospecting->prospecting }}</td>
+                                        <td>{{ @$prospecting->customer->user->mobile }}</td>
+                                        <td>{{ @$prospecting->freelancer->user->name }}</td>
+                                        <td>{{ @$prospecting->remark }}</td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="cold_calling_create.html">Cold Calling</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>1</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>Directly</td>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="cold_calling_create.html">Cold Calling</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>2</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>Phone</td>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-center"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" class="d-block" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="cold_calling_create.html">Cold Callin</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>3</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>Phone</td>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
-                                    </tr>
+                                    @endforeach 
                                 </tbody>
                             </table>
                         </div>

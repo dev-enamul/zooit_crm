@@ -12,9 +12,10 @@ class DepositTarget extends Model
     protected $fillable = [
         'assign_to',
         'assign_by',
+        'month',
         'is_project_wise',
-        'new_deposit',
-        'existing_deposit',
+        'new_total_deposit',
+        'existing_total_deposit',
     ];
 
     public function assignTo()
@@ -25,5 +26,10 @@ class DepositTarget extends Model
     public function assignBy()
     {
         return $this->belongsTo(User::class, 'assign_by');
+    } 
+
+    public function depositTargetProjects()
+    {
+        return $this->hasMany(DepositTargetProject::class);
     }
 }

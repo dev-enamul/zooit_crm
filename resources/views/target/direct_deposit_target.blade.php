@@ -27,7 +27,7 @@
                         <div class="card"> 
                             <div class="card-body"> 
                                     <div class="row">  
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                             <div class="mb-3">
                                                 <label for="assign_to" class="form-label">Assign To <span class="text-danger">*</span></label>
                                                 <select class="form-select" name="assign_to" id="assign_to" required>
@@ -38,18 +38,28 @@
                                                 </select>
                                             </div>
                                         </div> 
+
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="month" class="form-label">Month<span class="text-danger">*</span></label>
+                                                <input type="month" class="form-control" id="month" name="month" value="{{ date('Y-m') }}" required>
+                                                <div class="invalid-feedback">
+                                                    This field is required.
+                                                </div>
+                                            </div>
+                                        </div>
  
 
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="new_deposit" class="form-label">New Deposit <span class="text-danger">*</span></label>
-                                                <input type="number" name="new_deposit" id="new_deposit" min="0" class="form-control" placeholder="0" required> 
+                                                <label for="new_total_deposit" class="form-label">New Deposit</label>
+                                                <input type="number" name="new_total_deposit" id="new_total_deposit" min="0" class="form-control" placeholder="0"> 
                                             </div>
                                         </div> 
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="existing_deposit" class="form-label">Existing Deposit <span class="text-danger">*</span></label>
-                                                <input type="number" name="existing_deposit" id="existing_deposit" min="0" class="form-control" placeholder="o" required> 
+                                                <label for="existing_total_deposit" class="form-label">Existing Deposit</label>
+                                                <input type="number" name="existing_total_deposit" id="existing_total_deposit" min="0" class="form-control" placeholder="o"> 
                                             </div>
                                         </div> 
                                     </div>  

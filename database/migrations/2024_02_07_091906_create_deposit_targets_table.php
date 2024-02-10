@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('assign_to')->constrained('users');
             $table->foreignId('assign_by')->constrained('users');
+            $table->date('month');
             $table->unsignedInteger('is_project_wise')->default(0)->comment('0=No, 1=Yes');
-            $table->float('new_deposit', 10, 2)->nullable();
-            $table->float('existing_deposit', 10, 2)->nullable();
+            $table->float('new_total_deposit', 10, 2)->nullable();
+            $table->float('existing_total_deposit', 10, 2)->nullable();
             $table->timestamps();
         });
     }

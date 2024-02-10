@@ -92,7 +92,6 @@ class CustomerController extends Controller
             $customerUserId = $customer_id->user_id;
             $userContactId = UserContact::where('user_id', $customerUserId)->first();
             $user_contact_id = $userContactId->id;
-            dd($user_contact_id);
 
             $validator = Validator::make($request->all(), [
                 'full_name'                 => 'required|string|max:255',
@@ -333,7 +332,7 @@ class CustomerController extends Controller
                     'name'          => $request->full_name,
                     'phone'         => $request->phone1,
                     'password'      => bcrypt('123456'),
-                    'user_type'     => 2, #Customer
+                    'user_type'     => 3, #Customer
                     'marital_status'=> $request->marital_status,
                     'dob'           => date('Y-m-d', strtotime($request->dob)),
                     'finger_id'     => $request->card_id,
