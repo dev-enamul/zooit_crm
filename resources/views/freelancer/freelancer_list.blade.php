@@ -67,7 +67,7 @@
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
 
-                                                        <a class="dropdown-item" href="{{route('freelancer.print',$data->id) }}" onclick="printDiv()">Print Freelancer</a>
+                                                        <a class="dropdown-item" href="{{ route('freelancer.print', $data->id) }}" onclick="printDiv('print_div')">Print Freelancer</a>
                                                         <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
                                                         <a class="dropdown-item" href="{{route('freelancer.edit',$data->id)}}" onclick="printPage()">Edit</a>
                                                         <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('freelancer.delete',$data->id) }}')">Delete</a>
@@ -127,7 +127,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="freelancer" class="form-label">Freelancer </label>
-                        <select class="form-select select2" name="freelancer" id="freelancer" required>
+                        <select class="form-select select2" name="freelancer" id="freelancer">
                             <option value="" data-display="Select a Freelancer">
                                 Select a Freelancer
                             </option>
@@ -152,7 +152,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="profession" class="form-label">Profession </label>
-                        <select class="form-select select2" name="profession" id="freelancer" required>
+                        <select class="form-select select2" name="profession" id="freelancer">
                             <option value="" data-display="Select a Profession">
                                 Select a Profession
                             </option>
@@ -195,9 +195,11 @@
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="{{asset('assets/js/print.js')}}"></script>
 
     <script>
-        $(document).ready(function () {
+       $(document).ready(function () {
             $(window).on('load', function () {
                 console.log('DataTable initialized');
                 var table = $('#freelancer_table').DataTable({
@@ -212,9 +214,9 @@
                             }
                         },
                         {
-                            extend: 'csv',
-                            text: 'CSV',
-                            filename: 'export',
+                            extend: 'print',
+                            text: 'Print',
+                            title: 'Freelancer Data',
                             exportOptions: {
                                 columns: ':visible'
                             }

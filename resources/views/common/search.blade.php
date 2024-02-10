@@ -26,7 +26,7 @@ $visible = $visible ?? [];
 @if (in_array('division', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="division" class="form-label">Division <span class="text-danger">{{ in_array('division', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="division" id="division" {{ in_array('division', $required) ? 'required' : '' }}>
+        <select class="form-select" name="division" id="division" {{ in_array('division', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a division {{ in_array('division', $required) ? '*' : '' }}">
                 Select a division {{ in_array('division', $required) ? '*' : '' }}
             </option>
@@ -50,7 +50,7 @@ $visible = $visible ?? [];
 @if (in_array('district', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="district" class="form-label">District <span class="text-danger">{{ in_array('district', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
+        <select class="form-select" name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a district {{ in_array('district', $required) ? '*' : '' }}">
                 Select district {{ in_array('district', $required) ? '*' : '' }}
             </option>
@@ -74,7 +74,7 @@ $visible = $visible ?? [];
 @if (in_array('upazila', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="upazila" class="form-label">Upazila <span class="text-danger">{{ in_array('upazila', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="upazila" id="upazila" {{ in_array('upazila', $required) ? 'required' : '' }}>
+        <select class="form-select" name="upazila" id="upazila" {{ in_array('upazila', $required) ? 'required' : '' }}>
             <option value="" data-display="Select an Upazila {{ in_array('upazila', $required) ? '*' : '' }}">
                 Select an Upazila {{ in_array('upazila', $required) ? '*' : '' }}
             </option>
@@ -98,7 +98,7 @@ $visible = $visible ?? [];
 @if (in_array('union', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="union" class="form-label">Union <span class="text-danger">{{ in_array('union', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="union" id="union" {{ in_array('union', $required) ? 'required' : '' }}>
+        <select class="form-select" name="union" id="union" {{ in_array('union', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a Union {{ in_array('union', $required) ? '*' : '' }}">
                 Select a Union {{ in_array('union', $required) ? '*' : '' }}
             </option>
@@ -122,7 +122,7 @@ $visible = $visible ?? [];
 @if (in_array('village', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="village" class="form-label">Village <span class="text-danger">{{ in_array('village', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="village" id="village" {{ in_array('village', $required) ? 'required' : '' }}>
+        <select class="form-select" name="village" id="village" {{ in_array('village', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a Village {{ in_array('village', $required) ? '*' : '' }}">
                 Select a Village {{ in_array('village', $required) ? '*' : '' }}
             </option>
@@ -146,7 +146,7 @@ $visible = $visible ?? [];
 @if (in_array('status', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('status', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
+        <select class="form-select" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
                 Select a Status {{ in_array('status', $required) ? '*' : '' }}
             </option>
@@ -168,7 +168,7 @@ $visible = $visible ?? [];
 @if (in_array('progressStatus', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('status', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
+        <select class="form-select" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
                 Select a Status {{ in_array('status', $required) ? '*' : '' }}
             </option>
@@ -190,7 +190,7 @@ $visible = $visible ?? [];
 @if (in_array('project', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="project" class="form-label">Project <span class="text-danger">{{ in_array('project', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="project" id="project" {{ in_array('project', $required) ? 'required' : '' }}>
+        <select class="form-select" name="project" id="project" {{ in_array('project', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a Project {{ in_array('project', $required) ? '*' : '' }}">
                 Select a Project {{ in_array('project', $required) ? '*' : '' }}
             </option>

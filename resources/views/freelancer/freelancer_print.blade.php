@@ -547,7 +547,7 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-sm-6">
-                    <script>document.write(new Date().getFullYear())</script> © Zoom IT.
+                    <>document.write(new Date().getFullYear())</script> © Zoom IT.
                 </div>
                 <div class="col-sm-6">
                     <div class="text-sm-end d-none d-sm-block">
@@ -559,18 +559,6 @@
     </footer>
 
 </div>
-
-<script>
-        var printContents = document.getElementById('print_div').innerHTML;
-        var originalContents = document.body.innerHTML;
-
-        document.body.innerHTML = printContents;
-
-        window.print();
-
-        document.body.innerHTML = originalContents;
-    
-</script>
 @endsection
 
 @section('script')
