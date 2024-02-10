@@ -15,12 +15,57 @@
                 margin: 0 auto;
             }
         }
+        .table-container {
+            display: table;
+            width: 100%;
+            border: 1px solid #dee2e6; 
+            border-collapse: collapse;
+        }
+        .table-row {
+            display: table-row;
+        }
+        .table-cell {
+            display: table-cell;
+            padding: 8px;
+            border: 1px solid #dee2e6;
+        }
     </style>
 </head>
 <body>
     <div class="main-content">
         <div class="page-content">
             <div class="container">
+                <div class="row">
+                    <div class="container">
+                        <div class="text-center">
+                            <h5 class="m-0">{{ config('app.name', 'ZOOM IT') }}</h5>
+                            <p class="mb-1"><b>Real Estate Agent- Data Collection Form</b></p>
+                        </div>
+                        <div class="table-container mb-3">
+                            <div class="table-row">
+                                <div class="table-cell">
+                                    Marketing Executive: MD Enamul Haque
+                                </div>
+                                <div class="table-cell">
+                                    EMP-254
+                                </div>
+                                <div class="table-cell">
+                                    Region:
+                                </div>
+                                <div class="table-cell">
+                                    Zone: Noakhali
+                                </div>
+                                <div class="table-cell">
+                                    Area: Maijdee
+                                </div>
+                                <div class="table-cell">
+                                    Reporting Name & ID: MR Kamruzzaman & 153
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card"> 

@@ -515,13 +515,8 @@ class FreelancerController extends Controller
                 $freelancerId   = Freelancer::where('id',$freelancer_id)->pluck('user_id')->first();
                 
                 $datas = Freelancer::where('status', 1)
+                   
                     ->whereHas('user.userAddress', function ($query) use ($profession_id,$freelancerId,$division_id, $district_id, $village_id, $union_id, $upazila_id,$status) {
-                        if ($profession_id != null) {
-                            $query->where('profession_id', $profession_id);
-                        }
-                        if ($freelancerId != null) {
-                            $query->where('freelancer_id', $freelancerId);
-                        }
                         if ($division_id != null) {
                             $query->where('division_id', $division_id);
                         }
