@@ -1,6 +1,18 @@
 @extends('layouts.dashboard')
 @section('title','Deposit Target') 
-@section('content')
+@section('content') 
+
+{{-- Date by Filter  --}}
+@php
+    if(isset($selected) && $selected != ''){ 
+        $month = date('m',strtotime($selected));
+        $year = date('Y',strtotime($selected)); 
+    }else{
+        $month = date('m');
+        $year = date('Y');
+    } 
+    
+@endphp
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid"> 
@@ -39,13 +51,15 @@
                                         <button class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#modal6"> <i class="mdi mdi-chart-box-outline"></i> View Chart</button> 
                                     </div> --}}
                                 </div>
-                                <div class="">  
-                                    <div class="input-group">  
-                                        <input class="form-control" type="month" value="{{ now()->format('Y-m') }}"/>   
-                                        <button class="btn btn-secondary" type="submit">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
+                                <div class="">   
+                                    <form action="" method="get" action="">
+                                        <div class="input-group">  
+                                            <input class="form-control" type="month" name="month" value="{{$selected != ''?$selected:now()->format('Y-m') }}"/>   
+                                            <button class="btn btn-secondary" type="submit">
+                                                <span><i class="fas fa-filter"></i> Filter</span>
+                                            </button> 
+                                        </div>
+                                    </form>
                                 </div>
                            </div>
 
@@ -55,54 +69,161 @@
                                         <th rowspan="2">Action</th>
                                         <th rowspan="2">S/N</th>
                                         <th rowspan="2">Project</th> 
-                                        <th rowspan="2">Unit & Amount</th> 
-                                        <th colspan="2">Md Enamul Haque (EMP 013) - RMG</th>
-                                        <th colspan="2">Md Jahid Hasan (EMP 014) - RMG</th> 
+                                        <th rowspan="2">Unit & Amount</th>
+                                        @foreach ($employees as $employee) 
+                                            <th colspan="2">{{$employee->name}} ({{$employee->user_id}})</th>
+                                        @endforeach 
                                         <th colspan="2">Total</th> 
                                     </tr> 
                                     
-                                    <tr>  
-                                        <th>Unit</th>
-                                        <th>Deposit</th>
+                                    <tr> 
+                                        @foreach ($employees as $employee) 
+                                            <th>Unit</th>
+                                            <th>Deposit</th>
+                                        @endforeach
                                         <th>Unit</th>
                                         <th>Deposit</th> 
-                                        <th>Unit</th>
-                                        <th>Deposit</th> 
+                                      
                                     </tr>
                                 </thead>
-                                <tbody> 
-                                    <tr> 
-                                        <td rowspan="2" class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Edit Target</a> 
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td  rowspan="2">1</td>
-                                        <td  rowspan="2">Wahidul Islam Plaza, Ramgonj</td>
-                                        <td class="align-middle">Existing</td> 
-                                        <td class="align-middle">1</td> 
-                                        <td class="align-middle">2000000</td>
+                                <tbody>
+                                    @if(isset($projects) && $projects->isNotEmpty())  
+                                        @foreach ($projects as $project) 
+                                            <tr> 
+                                                <td rowspan="2" class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                    <div class="dropdown">
+                                                        <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-animated">
+                                                            <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Edit Target</a> 
+                                                        </div>
+                                                    </div> 
+                                                </td>
+                                                <td  rowspan="2">1</td>
+                                                <td  rowspan="2">{{$project->name}}</td>
+                                                <td class="align-middle">Existing</td>
 
-                                        <td class="align-middle">2</td> 
-                                        <td class="align-middle">3000000</td>  
+                                                @php
+                                                    $total_existing_unit = 0;
+                                                    $total_existing_deposit = 0;
+                                                @endphp  
+                                                    @foreach ($employees as $employee)
+                                                    @php  
+                                                        $deposit_target = App\Models\DepositTarget::where('assign_to',$employee->id)
+                                                            ->where('assign_by',auth()->user()->id)
+                                                            ->whereMonth('created_at',$month)
+                                                            ->whereYear('created_at',$year)
+                                                            ->where('is_project_wise',1)
+                                                            ->first();
 
-                                        <td class="align-middle">2</td> 
-                                        <td class="align-middle">3000000</td>  
-                                    </tr>  
-                                    <tr>   
-                                        <td class="align-middle">New Sales</td>  
-                                        <td class="align-middle">1</td> 
-                                        <td class="align-middle">2000000</td>
+                                                        if($deposit_target) {
+                                                            $target_project = App\Models\DepositTargetProject::where('project_id',$project->id)
+                                                                ->where('deposit_target_id',$deposit_target->id)
+                                                                ->first();   
+                                                            if($target_project) {
+                                                                $total_existing_unit += $target_project->existing_unit; 
+                                                                $total_existing_deposit += $target_project->existing_deposit; 
+                                                                echo '<td class="align-middle">'.$target_project->existing_unit.'</td>'; 
+                                                                echo '<td class="align-middle">'.get_price($target_project->existing_deposit).'</td>';
+                                                            } else { 
+                                                                echo '<td class="align-middle">-</td>';
+                                                                echo '<td class="align-middle">-</td>';
+                                                            }
+                                                        } else { 
+                                                            echo '<td class="align-middle">-</td>';
+                                                            echo '<td class="align-middle">-</td>';
+                                                        }
+                                                    @endphp 
+                                                    @endforeach 
 
-                                        <td class="align-middle">2</td> 
-                                        <td class="align-middle">3000000</td>  
+                                                <td class="align-middle">{{$total_existing_unit}}</td> 
+                                                <td class="align-middle">{{get_price($total_existing_deposit)}}</td>  
+                                            </tr>  
+                                            <tr>   
+                                                <td class="align-middle">New Sales</td> 
+                                                
+                                                @php
+                                                    $total_new_unit = 0;
+                                                    $total_new_deposit = 0;
+                                                @endphp 
 
-                                        <td class="align-middle">2</td> 
-                                        <td class="align-middle">3000000</td>  
-                                    </tr>  
+                                                @foreach ($employees as $employee)
+                                                @php
+                                                    $deposit_target = App\Models\DepositTarget::where('assign_to', $employee->id)
+                                                        ->where('assign_by', auth()->user()->id)
+                                                        ->whereMonth('created_at', $month)
+                                                        ->whereYear('created_at', $year)
+                                                        ->where('is_project_wise', 1)
+                                                        ->first();
+
+                                                    $target_project = null;
+                                                    $new_unit = 0;
+                                                    $new_deposit = 0;
+
+                                                    if ($deposit_target) {
+                                                        $target_project = App\Models\DepositTargetProject::where('project_id', $project->id)
+                                                            ->where('deposit_target_id', $deposit_target->id)
+                                                            ->first();
+
+                                                        if ($target_project) {
+                                                            $new_unit = $target_project->new_unit;
+                                                            $new_deposit = $target_project->new_deposit;
+                                                            $total_new_unit += $new_unit;
+                                                            $total_new_deposit += $new_deposit;
+                                                        }
+                                                    }
+                                                @endphp 
+
+                                                <td class="align-middle">{{ $target_project ? $new_unit : '-' }}</td> 
+                                                <td class="align-middle">{{ $target_project ? get_price($new_deposit) : '-' }}</td>
+                                                @endforeach  
+                                                <td class="align-middle">{{$total_new_unit}}</td> 
+                                                <td class="align-middle">{{get_price($total_new_deposit)}}</td>  
+ 
+                                            </tr> 
+                                        @endforeach  
+                                        <tr>
+                                            <td colspan="4" class="text-end">Total</td> 
+                                            @php 
+                                                $total_unit = 0;
+                                                $total_deposit = 0;
+                                            @endphp 
+                                            @foreach ($employees as $employee) 
+                                                @php 
+                                                    $employee_total_unit = 0;
+                                                    $employee_total_deposit = 0;
+                                                    $deposit_target = App\Models\DepositTarget::where('assign_to',$employee->id)
+                                                    ->where('assign_by',auth()->user()->id)
+                                                    ->whereMonth('created_at',$month)
+                                                    ->whereYear('created_at',$year) 
+                                                    ->first();
+                                                    if($deposit_target->is_project_wise==1){  
+                                                        if(isset($deposit_target->depositTargetProjects) && $deposit_target->depositTargetProjects->isNotEmpty()){
+                                                            $deposit_target = $deposit_target->depositTargetProjects;
+                                                            $employee_total_unit = $deposit_target->sum('new_unit') + $deposit_target->sum('existing_unit');
+                                                            $employee_total_deposit = $deposit_target->sum('new_deposit') + $deposit_target->sum('existing_deposit');
+                                                            $total_unit += $employee_total_unit;
+                                                            $total_deposit += $employee_total_deposit;
+                                                        }
+                                                    }else{  
+                                                        $employee_total_unit = $deposit_target->new_total_unit + $deposit_target->existing_total_unit;
+                                                        $employee_total_deposit = $deposit_target->new_total_deposit + $deposit_target->existing_total_deposit;
+                                                        $total_unit += $employee_total_unit;
+                                                        $total_deposit += $employee_total_deposit;
+                                                    }
+                                                    
+                                                @endphp  
+                                                
+                                                <td class="align-middle">{{$employee_total_unit}}</td> 
+                                                <td class="align-middle">{{get_price($employee_total_deposit)}}</td>
+                                            @endforeach
+                                            <td class="align-middle">{{$total_unit}}</td> 
+                                            <td class="align-middle">{{get_price($total_deposit)}}</td>
+                                        </tr> 
+                                    @else   
+                                        <tr>
+                                            <td colspan="10" class="text-center">Project not found</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
