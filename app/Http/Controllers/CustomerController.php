@@ -570,5 +570,33 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()],500);
         }
     }
+
+    public  function customerPrint($id) {
+        $title     = "Customer Edit";
+        $countries = $this->getCachedCountries();
+        $divisions = $this->getCachedDivisions();
+        $districts = $this->getCachedDistricts();
+        $upazilas  = $this->getCachedUpazilas();
+        $unions    = $this->getCachedUnions();
+        $villages  = $this->getCachedVillages();
+        $professions = Profession::where('status',1)->select('id','name')->get();
+        $maritalStatuses = $this->maritalStatus();
+        $religions = $this->religion();
+        $bloodGroups = $this->bloodGroup();
+        $genders = $this->gender();
+        $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
+        $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
+        $zones = Zone::where('status',1)->select('id','name')->get();
+        $areas = Area::where('status',1)->select('id','name')->get();
+        $customer = Customer::find($id);
+        $selected['country_id']   = $customer->user->userAddress->country_id;
+        $selected['division_id']  = $customer->user->userAddress->division_id;
+        $selected['district_id']  = $customer->user->userAddress->district_id;
+        $selected['upazila_id']   = $customer->user->userAddress->upazila_id;
+        $selected['union_id']     = $customer->user->userAddress->union_id;
+        $selected['village_id']   = $customer->user->userAddress->village_id;
+
+        return view('customer.customer_print', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','customer','selected'));
+    }
     
 }
