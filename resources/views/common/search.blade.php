@@ -167,10 +167,10 @@ $visible = $visible ?? [];
 
 @if (in_array('progressStatus', $visible))
     <div class="{{ $div . ' ' . $mb }}">
-        <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('status', $required) ? '*' : '' }}</span></label>
-        <select class="form-select" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
-            <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
-                Select a Status {{ in_array('status', $required) ? '*' : '' }}
+        <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('progressStatus', $required) ? '*' : '' }}</span></label>
+        <select class="form-select" name="status" id="progressStatus" {{ in_array('progressStatus', $required) ? 'required' : '' }}>
+            <option value="" data-display="Select a Status {{ in_array('progressStatus', $required) ? '*' : '' }}">
+                Select a Status {{ in_array('progressStatus', $required) ? '*' : '' }}
             </option>
             @foreach (\App\Enums\ProgressStatus::values() as $key => $value)
                 <option value="{{ $key }}" {{ old('status', $selected['status'] ?? null) == $key ? 'selected' : '' }}>

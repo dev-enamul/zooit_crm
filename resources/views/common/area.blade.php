@@ -26,6 +26,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('division'))
             <span class="text-danger" role="alert">
@@ -50,6 +53,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('district'))
             <span class="text-danger" role="alert">
@@ -74,7 +80,10 @@
                 @endforeach
             @endisset
         </select>
-        
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
+
         @if ($errors->has('upazila'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('upazila') }}
@@ -98,6 +107,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('union'))
             <span class="text-danger" role="alert">
@@ -122,6 +134,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('village'))
             <span class="text-danger" role="alert">

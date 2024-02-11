@@ -267,8 +267,10 @@
                                                     </option>
                                                 @endforeach
                                             @endisset
-
                                         </select>
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
                                         
                                         @if ($errors->has('country'))
                                             <span class="text-danger" role="alert">
@@ -299,7 +301,10 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
+
                                         @if ($errors->has('zone'))
                                             <span class="text-danger" role="alert">
                                                 {{ $errors->first('zone') }}
@@ -321,6 +326,9 @@
                                                 @endforeach
                                             @endisset
                                         </select>
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
                                         
                                         @if ($errors->has('area'))
                                             <span class="text-danger" role="alert">
