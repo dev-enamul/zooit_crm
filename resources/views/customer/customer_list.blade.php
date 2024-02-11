@@ -45,33 +45,6 @@
                                     </div>
                                 </div>
                            </div>
-
-                           <div class="text-center">
-                            <h5 class="m-0">{{ config('app.name', 'ZOOM IT') }}</h5>
-                            <p class="mb-1" ><b>Real Estate Agent- Data Collection Form</b> </p>
-                           </div>
-                            <div class="table-container mb-3">
-                                <div class="table-row">
-                                    <div class="table-cell">
-                                        Marketing Executive: MD Enamul Haque
-                                    </div>
-                                    <div class="table-cell">
-                                        EMP-254
-                                    </div>
-                                    <div class="table-cell">
-                                        Region:
-                                    </div>
-                                    <div class="table-cell">
-                                        Zone: Noakhali
-                                    </div>
-                                    <div class="table-cell">
-                                        Area: Maijdee
-                                    </div>
-                                    <div class="table-cell">
-                                        Reporting Name & ID: MR Kamruzzaman & 153
-                                    </div>
-                                </div>
-                            </div>
                            
                             <table id="customer_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
@@ -95,7 +68,7 @@
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
-                                                        <a class="dropdown-item" href="javascript:void(0);" onclick="printPage()">Print Customer</a>
+                                                        <a class="dropdown-item" href="{{ route('customer.print', $data->id) }}">Print Customer</a>
                                                         <a class="dropdown-item" href="{{route('customer.profile')}}">View Profile</a>
                                                         <a class="dropdown-item" href="{{route('customer.edit',$data->id)}}" >Edit</a>
                                                         <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',$data->id) }}')">Delete</a>
@@ -141,7 +114,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="customer" class="form-label">Customer </label>
-                        <select class="form-select select2" name="customer" id="customer" required>
+                        <select class="form-select select2" name="customer" id="customer">
                             <option value="" data-display="Select a Customer">
                                 Select a Customer
                             </option>
@@ -160,17 +133,13 @@
                     <div class="mb-3">
                         <label for="employee" class="form-label">Marketing Executive </label>
                         <select class="select2" search name="employee" id="employee">
-                            <option value="">All</option>
-                            <option value="1">John Doe #231</option>
-                            <option value="2">Jane Smith #232</option>
-                            <option value="3">Michael Johnson #233</option>
-                            <option value="4">Emily Davis #234</option>
-                            <option value="5">David Brown #235</option>
-                            <option value="6">Sophia Wilson #236</option>
-                            <option value="7">Christopher Lee #237</option>
-                            <option value="8">Olivia Martin #238</option>
-                            <option value="9">Matthew Taylor #239</option>
-                            <option value="10">Emma Anderson #240</option>
+                            @isset($employees)
+                                @foreach ($employees as $data)
+                                    <option value="{{ $data->id }}" {{ old('employee', $selected['employee_id'] ?? null) == $data->id ? 'selected' : '' }}>
+                                        {{ $data->user->name }}
+                                    </option>
+                                @endforeach
+                            @endisset
                             
                         </select>  
                     </div>
@@ -186,7 +155,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="profession" class="form-label">Profession </label>
-                        <select class="form-select select2" name="profession" id="freelancer" required>
+                        <select class="form-select select2" name="profession" id="freelancer">
                             <option value="" data-display="Select a Profession">
                                 Select a Profession
                             </option>
@@ -284,10 +253,6 @@
         }
     
         getDateRange('daterangepicker');
-
-        function printPage() {
-            window.print();
-        }
     </script>
 
     @yield('script-bottom')

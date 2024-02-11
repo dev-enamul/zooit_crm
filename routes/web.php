@@ -136,6 +136,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
         Route::get('customer-profile', [CustomerController::class, 'customer_profile'])->name('customer.profile');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
+        Route::get('customer-print/{id}', [CustomerController::class, "customerPrint"])->name('customer.print');
 
         // Prospecting 
         Route::resource('prospecting', ProspectingController::class);
