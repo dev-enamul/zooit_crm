@@ -9,6 +9,7 @@ use App\Enums\Religion;
 use App\Models\Area;
 use App\Models\Bank;
 use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Profession;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -454,15 +455,15 @@ class CustomerController extends Controller
     public function customerSearch(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'division'       => 'required',
-            'district'       => 'required',
-            'upazila'        => 'sometimes|required',
-            'union'          => 'sometimes|required',
-            'village'        => 'sometimes|required',
-            'status'         => 'required|in:1,0',
-            'customer'       => 'required|numeric|exists:freelancers,id',
-            'profession'     => 'required|numeric|exists:professions,id',
-            'daterange'      => 'required',
+            'division'       => 'nullable',
+            'district'       => 'nullable',
+            'upazila'        => 'nullable',
+            'union'          => 'nullable',
+            'village'        => 'nullable',
+            'status'         => 'nullable|in:1,0',
+            'customer'       => 'nullable|numeric|exists:freelancers,id',
+            'profession'     => 'nullable|numeric|exists:professions,id',
+            'daterange'      => 'nullable',
             'employee'       => 'nullable'
         ]);
         if ($validator->fails()) {
@@ -494,6 +495,7 @@ class CustomerController extends Controller
                 $villages       = $this->getCachedVillages();
                 $professions    = Profession::where('status',1)->select('id','name')->get();
                 $customers      = Customer::where('status', 1)->get();
+                $employees      = Employee::where('status',1)->get();
 
                 $selected['division_id']   = $division_id;
                 $selected['district_id']   = $district_id;
@@ -503,6 +505,7 @@ class CustomerController extends Controller
                 $selected['status']        = $status;
                 $selected['customer_id']   = $customer_id;
                 $selected['profession_id'] = $profession_id;
+                $selected['employee_id']   = $employee_id;
                 $selected['daterange']     = $daterange;
 
                 $dateParts      = explode(' - ', $daterange);
@@ -510,21 +513,35 @@ class CustomerController extends Controller
                 $toDate         = \Carbon\Carbon::createFromFormat('m/d/Y', $dateParts[1])->endOfDay();
                 $customer_id    = $customer_id;
                 $customerId     = Customer::where('id',$customer_id)->pluck('user_id')->first();
-                
-                $datas = Customer::where('status', 1)
-                                ->where('profession_id', $profession_id)
-                                ->where('user_id',  $customerId)
-                                ->whereHas('user.userAddress', function ($query) use ($division_id, $district_id, $village_id, $union_id, $upazila_id) {
-                                    $query->where('division_id', $division_id)
-                                          ->where('district_id', $district_id)
-                                          ->where('village_id', $village_id)
-                                          ->where('union_id', $union_id)
-                                          ->where('upazila_id', $upazila_id);
-                                })
-                                ->whereBetween('created_at', [$fromDate, $toDate])
-                                ->where('status', $status)
-                                ->get();
-                return view('customer.customer_list', compact('professions','customers','datas','divisions','districts','upazilas','unions','villages','selected'));
+                $employeeId     = Employee::where('id',$employee_id)->pluk('user_id')->first();
+                $customers = Customer::where('status', 1)
+                    ->where('profession_id', $profession_id)
+                    ->where('user_id', $customerId)
+                    ->whereHas('user.userAddress', function ($query) use ($division_id, $district_id, $village_id, $union_id, $upazila_id) {
+                        if ($division_id != null) {
+                            $query->where('division_id', $division_id);
+                        }
+                        if ($district_id != null) {
+                            $query->where('district_id', $district_id);
+                        }
+                        if ($village_id != null) {
+                            $query->where('village_id', $village_id);
+                        }
+                        if ($union_id != null) {
+                            $query->where('union_id', $union_id);
+                        }
+                        if ($upazila_id != null) {
+                            $query->where('upazila_id', $upazila_id);
+                        }
+                    })
+                    ->whereBetween('created_at', [$fromDate, $toDate]);
+
+                if ($status != null) {
+                    $customers = $customers->where('status', $status);
+                }
+
+                $datas = $customers->get();
+                return view('customer.customer_list', compact('employees','professions','customers','datas','divisions','districts','upazilas','unions','villages','selected'));
             }
         }
         catch (\Throwable $th) {
@@ -569,6 +586,34 @@ class CustomerController extends Controller
         }catch(Exception $e){
             return response()->json(['error' => $e->getMessage()],500);
         }
+    }
+
+    public  function customerPrint($id) {
+        $title     = "Customer Edit";
+        $countries = $this->getCachedCountries();
+        $divisions = $this->getCachedDivisions();
+        $districts = $this->getCachedDistricts();
+        $upazilas  = $this->getCachedUpazilas();
+        $unions    = $this->getCachedUnions();
+        $villages  = $this->getCachedVillages();
+        $professions = Profession::where('status',1)->select('id','name')->get();
+        $maritalStatuses = $this->maritalStatus();
+        $religions = $this->religion();
+        $bloodGroups = $this->bloodGroup();
+        $genders = $this->gender();
+        $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
+        $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
+        $zones = Zone::where('status',1)->select('id','name')->get();
+        $areas = Area::where('status',1)->select('id','name')->get();
+        $customer = Customer::find($id);
+        $selected['country_id']   = $customer->user->userAddress->country_id;
+        $selected['division_id']  = $customer->user->userAddress->division_id;
+        $selected['district_id']  = $customer->user->userAddress->district_id;
+        $selected['upazila_id']   = $customer->user->userAddress->upazila_id;
+        $selected['union_id']     = $customer->user->userAddress->union_id;
+        $selected['village_id']   = $customer->user->userAddress->village_id;
+
+        return view('customer.customer_print', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','customer','selected'));
     }
     
 }
