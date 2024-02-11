@@ -75,6 +75,8 @@ class PermissionSeeder extends Seeder
             ['slug' => 'deposit-delete', 'name' => 'Deposit Delete', 'status' => 1], 
             // progress 
             ['slug' => 'field-target', 'name' => 'Field Target', 'status' => 1], 
+            ['slug' => 'daily-task', 'name' => 'Daily Task', 'status' => 1], 
+            ['slug' => 'book-reading', 'name' => 'Book Reading', 'status' => 1], 
             ['slug' => 'deposit-target', 'name' => 'Deposit Target', 'status' => 1], 
             ['slug' => 'training', 'name' => 'Training', 'status' => 1],
             ['slug' => 'meeting', 'name' => 'Meeting', 'status' => 1],
@@ -83,6 +85,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'fl-commission', 'name' => 'FL Commission', 'status' => 1],
             ['slug' => 'dt-achivement', 'name' => 'DT Achivement', 'status' => 1],
             ['slug' => 'special-offer', 'name' => 'Special Offer', 'status' => 1],
+            ['slug' => 'field-target-report' ,'name' => 'Field Target Report', 'status'=>1],
             ['slug' => 'due-report', 'name' => 'Due Report', 'status' => 1],
             ['slug' => 'sold-report', 'name' => 'Sold Report', 'status' => 1],
             ['slug' => 'cc-report', 'name' => 'CC Report', 'status' => 1],

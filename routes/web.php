@@ -101,7 +101,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('product', ProductController::class);
         Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
-        Route::get('sold-unsold', [ProductController::class, 'sold_unsold'])->name('sold.unsold');
+        Route::get('sold-unsold/{id}', [ProductController::class, 'sold_unsold'])->name('sold.unsold');
         Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
         Route::get('/product-approve', [ProductController::class, 'product_approve'])->name('product.approve');
         Route::post('/product-approve', [ProductController::class, 'productApprove'])->name('product.approve.save');
@@ -250,12 +250,17 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         // field target
-        Route::get('target-achive', [FieldTargetController::class, 'target_achive'])->name('target.achive'); 
+        Route::get('assign-field-target', [FieldTargetController::class, 'assign_target'])->name('assign.field.target');
+        Route::post('field-target-save', [FieldTargetController::class, 'field_target_save'])->name('field.target.save');
+        Route::get('my-field-target', [FieldTargetController::class, 'my_field_target'])->name('my.field.target');
+        Route::get('assign-field-target-list', [FieldTargetController::class, 'assign_target_list'])->name('assign.field.target.list'); 
         Route::get('marketing-field-report', [FieldTargetController::class, 'marketing_field_report'])->name('marketing.field.report');
         Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');
         // task 
         Route::get('task-complete', [TaskController::class, 'task_complete'])->name('task.complete');
         Route::get('my-task', [TaskController::class, 'my_task'])->name('my.task');
+        Route::get('submit-task/{id}', [TaskController::class, 'submit_task'])->name('submit.task');
+        Route::get('reject-task/{id}', [TaskController::class, 'reject_task'])->name('reject.task');
         Route::get('assign-task-list',[TaskController::class,'assign_task_list'])->name('assign.task.list');
         Route::get('task-details/{id}',[TaskController::class,'task_details'])->name('task.details');
         Route::get('assign-task',[TaskController::class,'assign_task'])->name('assign.task');
@@ -267,6 +272,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('deposit-target-asign-list', [DepositTargetController::class, 'target_asign_list'])->name('deposit.target.asign.list');
         Route::get('project-deposit-target', [DepositTargetController::class, 'project_deposit_target'])->name('project.deposit.target');
         Route::get('direct-deposit-target', [DepositTargetController::class, 'direct_deposit_target'])->name('direct.deposit.target');
+        Route::post('deposit-target-save', [DepositTargetController::class, 'deposit_target_save'])->name('deposit.target.save');
 
         // Training
         Route::resource('training-category', TrainingCategoryController::class);

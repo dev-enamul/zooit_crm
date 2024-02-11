@@ -16,10 +16,17 @@ class TaskController extends Controller
      
     public function my_task()
     {
+        $old_tasks = TaskList::where('status',0)
+                    ->whereHas('task',function($q){
+                        $q->where('assign_to',auth()->user()->id);
+                    })
+                    ->where('time','<',today()) 
+                    ->get(); 
+
         $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
                     ->whereDate('date', today())
-                    ->first(); 
-        return view('task.my_task',compact('today_tasks'));
+                    ->first();
+        return view('task.my_task',compact('today_tasks','old_tasks'));
     }
 
     public function task_complete(Request $request){
@@ -90,5 +97,22 @@ class TaskController extends Controller
     {
         $task = ModelsTask::find($id); 
         return view('task.task_details',compact('task'));
+    } 
+
+
+    public function submit_task($id)
+    {
+        $task = TaskList::find($id);
+        $task->status = 1;
+        $task->save();
+        return redirect()->back()->with('success', 'Task submitted');
+    }
+
+    public function reject_task($id){
+        $task = TaskList::find($id);
+        $task->status = 2;
+        $task->save();
+        return redirect()->back()->with('success', 'Task rejected');
+
     }
 }

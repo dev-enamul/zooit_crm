@@ -53,7 +53,7 @@
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('product.edit',$project->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('product.delete',$project->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a>
+                                                    <a class="dropdown-item" href="{{route('sold.unsold',$project->id)}}">Sold & Unsold</a>
                                                     <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
                                                 </div>
                                             </div> 
