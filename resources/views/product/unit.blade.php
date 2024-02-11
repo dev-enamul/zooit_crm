@@ -53,7 +53,7 @@
                                                     <div class="dropdown-menu dropdown-menu-animated"> 
                                                         <a class="dropdown-item" href="{{route('unit.edit',$projectUnit->id)}}">Edit</a>
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('project.unit.delete',$projectUnit->id) }}')">Delete</a>  
-                                                        <a class="dropdown-item" href="{{route('sold.unsold')}}">Sold & Unsold</a>
+                                                        <a class="dropdown-item" href="{{route('sold.unsold',$projectUnit->id)}}">Sold & Unsold</a>
                                                         <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
                                                     </div>
                                                 </div> 
@@ -99,46 +99,6 @@
     </footer> 
 </div> 
 
-{{--<div class="offcanvas offcanvas-end" id="offcanvas">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Select Filter Item</h5>
-        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-            <i class="fa fa-times"></i>
-        </button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row">  
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status </label>
-                    <select class="select2" name="status" id="status"> 
-                        <option value="">Sold </option> 
-                        <option value="">Blocked </option> 
-                        <option value="">Available </option>
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="project" class="form-label">Project </label>
-                    <select class="select2" search name="project" id="project">
-                        <option value="">All</option>
-                        <option value="1">City Plaza</option>
-                        <option value="2">Green Valley</option>
-                        <option value="3">Ocean View</option>  
-                    </select>  
-                </div>
-            </div> 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
-        </div>
-    </div>
-</div>--}}
-
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Select Filter Item</h5>
@@ -152,13 +112,13 @@
             <div class="row">
                 @include('common.search', [
                     'div' => 'col-md-12',
-                    'visible' => ['status', 'project'],
+                    'visible' => ['statusUnit', 'project'],
                 ])
                 <input type="hidden" id="status" value="{{ @$status }}">
                 <input type="hidden" id="project" value="{{ @$project }}">
         
                 <div class="text-end">
-                    <button class="btn btn-primary" id="filter_button" disabled><i class="fas fa-filter"></i> Filter</button>
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-filter"></i> Filter</button>
                     <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
                         <i class="mdi mdi-refresh"></i> Reset
                     </button>
@@ -174,6 +134,8 @@
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="{{asset('assets/js/print.js')}}"></script>
     
     <script>
         function resetFormFields() {
@@ -182,10 +144,11 @@
         
             $("#status").trigger('change');
             $("#project").trigger('change');
-            $('#filter_button').prop('disabled', true);
         }
     
         $(document).ready(function () {
+        $(window).on('load', function () {
+            console.log('DataTable initialized');
             var table = $('#unit_table').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
@@ -194,37 +157,38 @@
                         text: 'Excel',
                         filename: 'export',
                         exportOptions: {
-                            columns: ':visible'
+                            columns: ':visible:not(:first-child)'
                         }
                     },
                     {
-                        extend: 'csv',
-                        text: 'CSV',
-                        filename: 'export',
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Unit Data',
                         exportOptions: {
-                            columns: ':visible'
+                            columns: ':visible:not(:first-child)'
                         }
                     }
                 ]
             });
         });
+    });
     </script>
 
     <script>
         $(document).ready(function () {
             $('.select2').select2();
         
-            $('#status').on('change', function () {
-                var status = $(this).val();
-                $('#status').val(status);
-                $('#filter_button').prop('disabled', false);
-            });
+            // $('#status').on('change', function () {
+            //     var status = $(this).val();
+            //     $('#status').val(status);
+            //     $('#filter_button').prop('disabled', false);
+            // });
         
-            $('#project').on('change', function () {
-                var project = $(this).val();
-                $('#project').val(project);
-                $('#filter_button').prop('disabled', false);
-            });
+            // $('#project').on('change', function () {
+            //     var project = $(this).val();
+            //     $('#project').val(project);
+            //     $('#filter_button').prop('disabled', false);
+            // });
         });
     </script>
     

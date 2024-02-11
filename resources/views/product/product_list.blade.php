@@ -136,32 +136,31 @@
 
 <script>
     $(document).ready(function () {
-    $(window).on('load', function () {
-        console.log('DataTable initialized');
-        var table = $('#book_table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'excel',
-                    text: 'Excel',
-                    filename: 'export',
-                    exportOptions: {
-                        columns: ':visible:not(:first-child)'
+        $(window).on('load', function () {
+            console.log('DataTable initialized');
+            var table = $('#book_table').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        filename: 'export',
+                        exportOptions: {
+                            columns: ':visible:not(:first-child)'
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        title: 'Product Data',
+                        exportOptions: {
+                            columns: ':visible:not(:first-child)'
+                        }
                     }
-                },
-                {
-                    extend: 'print',
-                    text: 'Print',
-                    title: 'Product Data',
-                    exportOptions: {
-                        columns: ':visible:not(:first-child)'
-                    }
-                }
-            ]
+                ]
+            });
         });
     });
-});
-
 
     function resetFormFields() {
         $("#division").val('');
