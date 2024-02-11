@@ -51,9 +51,6 @@
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
                                             <input type="text" name="name" class="form-control" id="first_name" placeholder="name" value="{{ isset($product) ? $product->name : old('name')}}" required>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
                                         </div>
                                     </div>
 
@@ -67,28 +64,6 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-md-6 mb-3">
-                                        <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="country" id="country" required>
-                                            <option data-display="Select a country *" value="">
-                                                Select a country
-                                            </option>
-                                            @isset($countries)
-                                                @foreach ($countries as $country)
-                                                    <option value="{{ $country->id }}" {{ old('country', isset($product) ? $product->country_id : null) == $country->id ? 'selected' : '' }}>
-                                                        {{ $country->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-                                        
-                                        @if ($errors->has('country'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('country') }}
-                                            </span>
-                                        @endif
-                                    </div>
-
                                     @include('common.area', [
                                         'div'       => 'col-md-6',
                                         'mb'        => 'mb-3',

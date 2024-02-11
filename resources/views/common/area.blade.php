@@ -38,7 +38,7 @@
 @if (in_array('district', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="district" class="form-label">District <span class="text-danger">{{ in_array('district', $required) ? '*' : '' }}</span></label>
-        <select class="form-select " name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
+        <select class="form-select {{ $errors->has('district') ? 'is-invalid' : '' }}" name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a district {{ in_array('district', $required) ? '*' : '' }}">
                 Select district {{ in_array('district', $required) ? '*' : '' }}
             </option>

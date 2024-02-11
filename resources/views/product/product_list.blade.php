@@ -126,41 +126,42 @@
 @endsection
 
 @section('script')
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-{{-- <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script> --}}
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<script src="{{asset('assets/js/print.js')}}"></script>
 
 
 <script>
     $(document).ready(function () {
-        $(window).on('load', function () {
-            console.log('DataTable initialized');
-            var table = $('#book_table').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    {
-                        extend: 'excel',
-                        text: 'Excel',
-                        filename: 'export',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        text: 'CSV',
-                        filename: 'export',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
+    $(window).on('load', function () {
+        console.log('DataTable initialized');
+        var table = $('#book_table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                    filename: 'export',
+                    exportOptions: {
+                        columns: ':visible:not(:first-child)'
                     }
-                ]
-            });
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    title: 'Product Data',
+                    exportOptions: {
+                        columns: ':visible:not(:first-child)'
+                    }
+                }
+            ]
         });
     });
+});
+
 
     function resetFormFields() {
         $("#division").val('');
