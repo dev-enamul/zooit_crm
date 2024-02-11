@@ -12,30 +12,35 @@ use Illuminate\Support\Facades\DB;
 
 class DepositTargetController extends Controller
 {
-    public function target(){
-        return view('target.deposit_target');
+    public function my_target(Request $request){  
+        $datas = DepositTarget::where('assign_to',auth()->user()->id);
+        if(isset($request->month) && $request->month != ''){ 
+            $month = date('m',strtotime($request->month));
+            $year = date('Y',strtotime($request->month)); 
+            $datas = $datas->whereMonth('month',$month)->whereYear('month',$year);
+        }else{
+            $datas = $datas->whereMonth('month',date('m'))->whereYear('month',date('Y'));
+        }
+        $datas = $datas->first(); 
+        return view('target.deposit_target',compact('datas'));
     }
 
-    public function target_asign(){
-        return view('target.deposit_target_asign');
+    public function target_asign($id){ 
+       try{
+        $my_employee = my_employee(auth()->user()->id);
+        $employees = User::whereIn('id',$my_employee)->where('status',1)->get();
+        $target_project  = DepositTargetProject::find($id); 
+        return view('target.deposit_target_asign',compact('target_project','employees'));
+       }catch(Exception $e){
+           return redirect()->back()->with('error',$e->getMessage());
+       }
     }
 
     public function target_asign_list(Request $request){ 
-
-        // $datas = DepositTargetProject::where('assign_by',auth()->user()->id);
-        // if(isset($request->month) && $request->month != ''){ 
-        //     $month = date('m',strtotime($request->month));
-        //     $year = date('Y',strtotime($request->month)); 
-        //     $datas = $datas->whereMonth('month',$month)->whereYear('month',$year);
-        // }else{
-        //     $datas = $datas->whereMonth('month',date('m'))->whereYear('month',date('Y'));
-        // }
-        // $datas = $datas->get(); 
-
+ 
         $my_employee = my_employee(auth()->user()->id);
         $employees = User::whereIn('id',$my_employee)->where('status',1)->get();   
-        $selected = $request->month; 
-
+        $selected = $request->month;  
         $projects = Project::where('status', 1)->get();
         return view('target.deposit_target_asign_list',compact('selected','projects','employees'));
     }
@@ -89,10 +94,10 @@ class DepositTargetController extends Controller
                         ]);
                     }
                 }
-            }   
-            $deposit_target->new_total_deposit = DepositTargetProject::where('deposit_target_id',$deposit_target->id)->sum('new_deposit');
-            $deposit_target->existing_total_deposit = DepositTargetProject::where('deposit_target_id',$deposit_target->id)->sum('existing_deposit');
-            $deposit_target->save();
+                $deposit_target->is_project_wise = 1;
+                $deposit_target->save();
+
+            }    
             DB::commit();
             return redirect()->back()->with('success','Deposit target assigned successfully');
        }catch(Exception $e){  
