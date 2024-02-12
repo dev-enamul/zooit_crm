@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('title','Dashboard')
-@section('content')
+@section('content')  
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
@@ -20,9 +20,8 @@
                     </div>
                 </div>
             </div>
-            <!--    end row -->
-
-            <div class="row">
+        
+            <div class="row">  
                 <div class="col-xxl-9"> 
                     @if ($user==1)
                     <div class="mb-3"> 

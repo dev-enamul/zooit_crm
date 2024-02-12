@@ -33,7 +33,7 @@ class User extends Authenticatable
         'created_by',
         'updated_by',
         'deleted_by',
-    ];
+    ]; 
  
     protected $hidden = [
         'password',
@@ -47,6 +47,15 @@ class User extends Authenticatable
     ]; 
 
     protected $dates = ['deleted_at'];
+
+    public function image(){ 
+         $image = $this->profile_image;
+         if($image != null && $image != '' && file_exists('storage/'.$image)){ 
+            return asset('../assets/images/users/avatar-6.png');
+         }else{
+             return asset('../assets/images/users/avatar-6.png');
+         }
+    } 
 
     public function profession()
     {

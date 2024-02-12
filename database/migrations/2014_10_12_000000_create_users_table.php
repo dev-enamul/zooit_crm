@@ -22,7 +22,7 @@ return new class extends Migration
             $table->tinyInteger('marital_status')->nullable()->comment('1= Married, 2= Unmarried, 3 = Divorce');
             $table->date('dob')->nullable();
             $table->string('finger_id')->nullable();
-            $table->tinyInteger('region')->nullable()->comment('1 = Islam, 2 = Christianity, 3 = Hinduism, 4 = Buddhism, 5 = Judaism, 6 = Sikhism, 7 = Jainism, 8 = Bahá\'í Faith, 9 = Confucianism, 10 = Others');
+            $table->tinyInteger('religion')->nullable()->comment('1 = Islam, 2 = Christianity, 3 = Hinduism, 4 = Buddhism, 5 = Judaism, 6 = Sikhism, 7 = Jainism, 8 = Bahá\'í Faith, 9 = Confucianism, 10 = Others');
             $table->tinyInteger('blood_group')->nullable()->comment('1 = A+, 2 = A-, 3 = B+, 4 = B-, 5 = AB+, 6 = AB-, 7 = O+, 8 = O-');
             $table->tinyInteger('gender')->nullable()->comment('1= "Male" 2= "Female"'); 
             

@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reporting_users', function (Blueprint $table) {
+        Schema::create('deposits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('reporting_user_id')->nullable()->constrained('reporting_users');
-            $table->string('position_title')->nullable();
-             
-            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->foreignId('customer_id')->constrained();
+            $table->foreignId('deposit_category_id')->constrained('deposit_categories');
+            $table->decimal('amount', 10, 2);
+            $table->text('remark'); 
+
+            $table->foreignId('employee_id')->constrained('users');  
+            $table->foreignId('approve_by')->nullable()->constrained('users'); 
+            
+            $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reporting_users');
+        Schema::dropIfExists('deposits');
     }
 };

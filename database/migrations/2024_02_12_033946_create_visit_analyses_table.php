@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reporting_users', function (Blueprint $table) {
+        Schema::create('visit_analyses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('reporting_user_id')->nullable()->constrained('reporting_users');
-            $table->string('position_title')->nullable();
-             
+            $table->foreignId('customer_id')->constrained()->comment('Negotiation Person'); 
+            $table->json('visitors')->nullable()->comment('Visitor List');
+            $table->json('projects')->nullable()->comment('Project List'); 
+            $table->string('remark')->nullable(); 
+
+            $table->foreignId('employee_id')->constrained('users');  
+            $table->foreignId('approve_by')->nullable()->constrained('users'); 
+            
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reporting_users');
+        Schema::dropIfExists('visit_analyses');
     }
 };

@@ -449,7 +449,8 @@ class FreelancerController extends Controller
                 DB::commit();
                 
                 return redirect()->route('freelancer.index')->with('success', 'Freelancer created successfully');
-            } catch (Exception $e) {
+            } catch (Exception $e) { 
+                dd($e->getMessage());
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }

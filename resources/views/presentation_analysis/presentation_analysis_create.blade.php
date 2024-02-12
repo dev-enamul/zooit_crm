@@ -32,29 +32,29 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Visitor <span class="text-danger">*</span></label>
-                                            <select id="freelancer" class="select2" multiple search name="freelancer">
-                                                <option value="">Select Customer</option> 
-                                                <option value="">Md Enamul Haque 01796351081</option> 
-                                                <option value="">Jamil Hosain 01796351081</option> 
-                                                <option value="">Md Mehedi Hasan 01796351081</option> 
-                                                <option value="">Suvo Hasan 01796351081</option>  
+                                            <select id="freelancer" class="select2" tags search name="freelancer">
+                                                {{-- value will be name  --}}
+                                                <option value="Md Enamul Haque">Md Enamul Haque 01796351081</option> 
+                                                <option value="Md Enamul Haque">Jamil Hosain 01796351081</option> 
+                                                <option value="Md Enamul Haque">Md Mehedi Hasan 01796351081</option> 
+                                                <option value="Md Enamul Haque">Suvo Hasan 01796351081</option>  
                                             </select> 
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="priority" class="form-label">Porject <span class="text-danger">*</span></label>
-                                            <select class="select2" name="priority" id="priority" search>
-                                                <option value="">Select Project</option>
-                                                <option value="1">Enamul Vila</option>
-                                                <option value="meet-up">Musafir Vaban</option> 
-                                                <option value="meet-up">Bosila City</option>
+                                            <select class="select2" multiple name="priority" id="priority" search>
+                                                {{-- value will be project name  --}}
+                                                <option value="Enamul Vila">Enamul Vila</option>
+                                                <option value="Musafir Vaban">Musafir Vaban</option> 
+                                                <option value="Bosila City">Bosila City</option>
                                             </select>  
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="negotiation_person" class="form-label">Negotiation Person </label>
                                             <select id="negotiation_person" class="select2" search name="negotiation_person">
