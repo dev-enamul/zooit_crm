@@ -517,7 +517,7 @@ class FreelancerController extends Controller
                 
                 $datas = Freelancer::where('status', 1)
                    
-                    ->whereHas('user.userAddress', function ($query) use ($profession_id,$freelancerId,$division_id, $district_id, $village_id, $union_id, $upazila_id,$status) {
+                    ->whereHas('user.userAddress', function ($query) use ($division_id, $district_id, $village_id, $union_id, $upazila_id,$status) {
                         if ($division_id != null) {
                             $query->where('division_id', $division_id);
                         }

@@ -513,11 +513,9 @@ class CustomerController extends Controller
                 $toDate         = \Carbon\Carbon::createFromFormat('m/d/Y', $dateParts[1])->endOfDay();
                 $customer_id    = $customer_id;
                 $customerId     = Customer::where('id',$customer_id)->pluck('user_id')->first();
-                $employeeId     = Employee::where('id',$employee_id)->pluk('user_id')->first();
-                $customers = Customer::where('status', 1)
-                    ->where('profession_id', $profession_id)
-                    ->where('user_id', $customerId)
-                    ->whereHas('user.userAddress', function ($query) use ($division_id, $district_id, $village_id, $union_id, $upazila_id) {
+                $employeeId     = Employee::where('id',$employee_id)->pluck('user_id')->first();
+                $customers = Customer::where('status', 1) 
+                ->whereHas('user.userAddress', function ($query) use ($division_id, $district_id, $village_id, $union_id, $upazila_id) {
                         if ($division_id != null) {
                             $query->where('division_id', $division_id);
                         }
@@ -535,7 +533,12 @@ class CustomerController extends Controller
                         }
                     })
                     ->whereBetween('created_at', [$fromDate, $toDate]);
-
+                if ($customer_id != null) {
+                    $customers = $customers->where('id', $customer_id);
+                }
+                if ($profession_id != null) {
+                    $customers = $customers->where('profession_id', $profession_id);
+                }
                 if ($status != null) {
                     $customers = $customers->where('status', $status);
                 }

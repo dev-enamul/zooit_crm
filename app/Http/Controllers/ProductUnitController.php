@@ -164,8 +164,8 @@ class ProductUnitController extends Controller
     public function productUnitSearch(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'status'         => 'required',
-            'project'        => 'required',
+            'status'         => 'nullable',
+            'project'        => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -190,9 +190,20 @@ class ProductUnitController extends Controller
                 $selected['status']      = $status;
                 $selected['project_id'] = $project_id;
 
-                $projectUnits = ProjectUnit::where('status',$request->status)->where('project_id',$request->project)
-                    ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
-                    ->get(['id','name','project_id','unit_id','unit_category_id','status']);
+                $projectUnits = ProjectUnit::query();
+
+                if ($request->has('status') && $request->status != null) {
+                    $projectUnits->where('status', $request->status);
+                }
+
+                if ($request->has('project') && $request->project != null) {
+                    $projectUnits->where('project_id', $request->project);
+                }
+
+                $projectUnits->with(['project:id,name', 'unit:id,title,down_payment', 'unitCategory:id,title']);
+
+                $projectUnits = $projectUnits->get(['id', 'name', 'project_id', 'unit_id', 'unit_category_id', 'status']);
+
                 $projects = Project::where('status',1)->select('id','name')->get();
                 
                 return view('product.unit', compact('projects','selected','projectUnits'));

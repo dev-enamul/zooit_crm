@@ -26,6 +26,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('division'))
             <span class="text-danger" role="alert">
@@ -38,7 +41,7 @@
 @if (in_array('district', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="district" class="form-label">District <span class="text-danger">{{ in_array('district', $required) ? '*' : '' }}</span></label>
-        <select class="form-select " name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
+        <select class="form-select {{ $errors->has('district') ? 'is-invalid' : '' }}" name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a district {{ in_array('district', $required) ? '*' : '' }}">
                 Select district {{ in_array('district', $required) ? '*' : '' }}
             </option>
@@ -50,6 +53,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('district'))
             <span class="text-danger" role="alert">
@@ -74,7 +80,10 @@
                 @endforeach
             @endisset
         </select>
-        
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
+
         @if ($errors->has('upazila'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('upazila') }}
@@ -98,6 +107,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('union'))
             <span class="text-danger" role="alert">
@@ -122,6 +134,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('village'))
             <span class="text-danger" role="alert">
