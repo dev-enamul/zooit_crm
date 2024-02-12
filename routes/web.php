@@ -294,9 +294,8 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 Route::get('function_test', function () {
         $topUser = \App\Models\ReportingUser::where('user_id', 1)
                 ->select(['id', 'user_id'])
-                ->first();
-
-        $organogram = getOrganogram($topUser); 
-
+                ->first(); 
+        $organogram = getOrganogram($topUser);  
+ 
         return view('organogram', ['organogram' => $organogram]);
 });

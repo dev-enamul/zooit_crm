@@ -21,8 +21,12 @@ class EmployeeController extends Controller
     }
  
 
-    public function tree(){
-        return view('employee.employee_tree');
+    public function tree(){ 
+        $topUser = \App\Models\ReportingUser::where('user_id', 1)
+        ->select(['id', 'user_id'])
+        ->first(); 
+        $organogram = getOrganogram($topUser);  
+        return view('employee.employee_tree',compact('organogram'));
     } 
 
 
