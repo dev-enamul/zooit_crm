@@ -210,7 +210,7 @@
                             text: 'Excel',
                             filename: 'export',
                             exportOptions: {
-                                columns: ':visible'
+                                columns: ':visible:not(:first-child)'
                             }
                         },
                         {
@@ -218,7 +218,7 @@
                             text: 'Print',
                             title: 'Freelancer Data',
                             exportOptions: {
-                                columns: ':visible'
+                                columns: ':visible:not(:first-child)'
                             }
                         }
                     ]

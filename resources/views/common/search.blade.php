@@ -143,12 +143,12 @@ $visible = $visible ?? [];
     </div>
 @endif
 
-@if (in_array('status', $visible))
+@if (in_array('statusUnit', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('status', $required) ? '*' : '' }}</span></label>
-        <select class="form-select" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
-            <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
-                Select a Status {{ in_array('status', $required) ? '*' : '' }}
+        <select class="form-select" name="status" id="statusUnit" {{ in_array('statusUnit', $required) ? 'required' : '' }}>
+            <option value="" data-display="Select a Status {{ in_array('statusUnit', $required) ? '*' : '' }}">
+                Select a Status {{ in_array('statusUnit', $required) ? '*' : '' }}
             </option>
             @foreach (\App\Enums\Status::values() as $key => $value)
                 <option value="{{ $key }}" {{ old('status', $selected['status'] ?? null) == $key ? 'selected' : '' }}>
@@ -167,10 +167,10 @@ $visible = $visible ?? [];
 
 @if (in_array('progressStatus', $visible))
     <div class="{{ $div . ' ' . $mb }}">
-        <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('status', $required) ? '*' : '' }}</span></label>
-        <select class="form-select" name="status" id="status" {{ in_array('status', $required) ? 'required' : '' }}>
-            <option value="" data-display="Select a Status {{ in_array('status', $required) ? '*' : '' }}">
-                Select a Status {{ in_array('status', $required) ? '*' : '' }}
+        <label for="status" class="form-label">Status <span class="text-danger">{{ in_array('progressStatus', $required) ? '*' : '' }}</span></label>
+        <select class="form-select" name="status" id="progressStatus" {{ in_array('progressStatus', $required) ? 'required' : '' }}>
+            <option value="" data-display="Select a Status {{ in_array('progressStatus', $required) ? '*' : '' }}">
+                Select a Status {{ in_array('progressStatus', $required) ? '*' : '' }}
             </option>
             @foreach (\App\Enums\ProgressStatus::values() as $key => $value)
                 <option value="{{ $key }}" {{ old('status', $selected['status'] ?? null) == $key ? 'selected' : '' }}>
@@ -210,219 +210,6 @@ $visible = $visible ?? [];
         @endif
     </div>
 @endif
-
-
-{{-- <div class="col-md-12">
-        <div class="mb-3">
-            <label for="duration" class="form-label">Duration </label>
-            <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />   
-        </div>
-    </div> 
-
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="zone" class="form-label">Zone </label>
-                <select class="select2" name="zone" id="zone" >
-                    <option value="">All</option>
-                    <option value="1">Dhaka</option>
-                    <option value="2">Chittagong</option>
-                    <option value="3">Khulna</option>
-                    <option value="4">Rajshahi</option>
-                    <option value="5">Barisal</option>
-                    <option value="6">Sylhet</option>
-                    <option value="7">Rangpur</option>
-                    <option value="8">Mymensingh</option>
-                    <option value="9">Jessore</option>
-                    <option value="10">Comilla</option> 
-                </select>  
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="area" class="form-label">Area </label>
-                <select class="select2" name="area" id="area" >
-                    <option value="">All</option>
-                    <option value="1">Dhaka</option>
-                    <option value="2">Chittagong</option>
-                    <option value="3">Khulna</option>
-                    <option value="4">Rajshahi</option>
-                    <option value="5">Barisal</option>
-                    <option value="6">Sylhet</option>
-                    <option value="7">Rangpur</option>
-                    <option value="8">Mymensingh</option>
-                    <option value="9">Jessore</option>
-                    <option value="10">Comilla</option> 
-                </select>  
-            </div>
-        </div> 
-
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="project" class="form-label">Project </label>
-                <select class="select2" name="project" id="project" >
-                    <option value="">All</option>
-                    <option value="1">Dhaka</option>
-                    <option value="2">Chittagong</option>
-                    <option value="3">Khulna</option>
-                    <option value="4">Rajshahi</option>
-                    <option value="5">Barisal</option>
-                    <option value="6">Sylhet</option>
-                    <option value="7">Rangpur</option>
-                    <option value="8">Mymensingh</option>
-                    <option value="9">Jessore</option>
-                    <option value="10">Comilla</option> 
-                </select>  
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="unit" class="form-label">Unit </label>
-                <select class="select2" name="unit" id="unit" >
-                    <option value="">All</option>
-                    <option value="1">Shop</option>
-                    <option value="2">Flat</option> 
-                </select>  
-            </div>
-        </div>
-        
-        <div class="col-md-12">
-            <div class="mb-3">
-                <label for="employee_hierachy" class="form-label">Employee Hierachy</label>
-                <select class="select2" name="employee_hierachy" id="employee_hierachy" > 
-                    <option value="1">Marketing Executive</option>
-                    <option value="2">Salse Executive</option>
-                    <option value="3">ASM</option>
-                    <option value="4">DSM</option> 
-                </select>  
-            </div>
-        </div> --}}
-
-        {{-- @if (in_array('division_id', $visiable))
-            <div class="{{ $div . ' ' . $mb }}">
-                <label class="form-label" for="common_division_id">Division
-                    <span class="text-danger">{{ in_array('division_id', $required) ? '*' : '' }}</span>
-                </label>
-                <select
-                    class="select2  form-control{{ $errors->has('division_id') ? ' is-invalid' : '' }} common_division_id"
-                    name="division_id" id="common_division_id">
-                    <option data-display="Division {{ in_array('division_id', $required) ? '*' : '' }}"
-                        value="">
-                        Select a division {{ in_array('academic', $required) ? '*' : '' }}
-                    </option>
-                    @isset($divisions)
-                    @foreach ($divisions as $division)
-                        <option value="{{ $division->id }}"
-                            {{ isset($division_id) && $division_id == $division->id ? 'selected' : ($division_id == $division->id ? 'selected' : '') }}>
-                            {{ $division->name }}</option>
-                        @endforeach
-                    @endisset
-
-                </select>
-
-                @if ($errors->has('division_id'))
-                <span class="text-danger" role="alert">
-                    {{ $errors->first('division_id') }}
-                </span>
-                @endif
-            </div>
-        @endif
-        
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="district" class="form-label">District </label>
-                <select class="select2" name="district" id="district" >
-                    <option value="">All</option>
-                    <option value="1">Dhaka</option>
-                    <option value="2">Chittagong</option>
-                    <option value="3">Khulna</option>
-                    <option value="4">Rajshahi</option>
-                    <option value="5">Barisal</option>
-                    <option value="6">Sylhet</option>
-                    <option value="7">Rangpur</option>
-                    <option value="8">Mymensingh</option>
-                    <option value="9">Jessore</option>
-                    <option value="10">Comilla</option> 
-                </select>  
-            </div>
-        </div>
-
-        @if (in_array('district_id', $visiable))
-            <div class="{{ $div . ' ' . $mb }}" id="common_select_district_div">
-                <label class="form-label" for="">District
-                    <span class="text-danger">{{ in_array('district_id', $required) ? '*' : '' }}</span>
-                </label>
-                <select class="select2  form-control{{ $errors->has('district_id') ? ' is-invalid' : '' }}" name="district_id"
-                    id="common_select_district">
-                    <option data-display="@lang('common.select_class') {{ in_array('class', $required) ? '*' : '' }}" value="">
-                        {{ __('common.select_class') }} {{ in_array('class', $required) ? '*' : '' }}</option>
-                    @if (isset($classes))
-                    @foreach ($classes as $class)
-                    <option value="{{ $class->id }}" {{ isset($class_id) ? ($class_id == $class->id ? 'selected' : '') : '' }}>
-                        {{ $class->class_name }}</option>
-                    @endforeach
-                    @endif
-                </select>
-                <div class="pull-right loader loader_style" id="common_select_class_loader">
-                    <img class="loader_img_style" src="{{ asset('public/backEnd/img/demo_wait.gif') }}" alt="loader">
-                </div>
-                <span class="text-danger">{{ $errors->first('class_id') }}</span>
-            </div>
-
-            @endif
-
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="upazila" class="form-label">Thana/Upazila </label>
-                <select class="select2" name="upazila" id="upazila">
-                    <option value="">All</option>
-                    <option value="">Dhaka </option>
-                    <option value="">Chittagong </option> 
-                    <option value="">Rajshahi</option> 
-                    <option value="">Khulna </option> 
-                    <option value="">Barishal </option> 
-                    <option value="">Sylhet</option> 
-                    <option value="">Rangpur</option> 
-                    <option value="">Mymensingh</option>  
-                </select>  
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="union" class="form-label">Union </label>
-                <select class="select2" name="union" id="union">
-                    <option value="">All</option>
-                    <option value="">Dhaka </option>
-                    <option value="">Chittagong </option> 
-                    <option value="">Rajshahi</option> 
-                    <option value="">Khulna </option> 
-                    <option value="">Barishal </option> 
-                    <option value="">Sylhet</option> 
-                    <option value="">Rangpur</option> 
-                    <option value="">Mymensingh</option>  
-                </select>  
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="union" class="form-label">Village </label>
-                <select class="select2" name="village" id="village">
-                    <option value="">All</option>
-                    <option value="">Dhaka </option>
-                    <option value="">Chittagong </option> 
-                    <option value="">Rajshahi</option> 
-                    <option value="">Khulna </option> 
-                    <option value="">Barishal </option> 
-                    <option value="">Sylhet</option> 
-                    <option value="">Rangpur</option> 
-                    <option value="">Mymensingh</option>  
-                </select>  
-            </div>
-        </div>  
---}}
           
 @section('script-bottom')
     <script>
