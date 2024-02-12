@@ -179,6 +179,13 @@ class User extends Authenticatable
         return $this->hasOne(UserId::class);
     }
 
+    public function my_all_employee(){
+        $topUser = \App\Models\ReportingUser::where('user_id', auth()->user()->id)
+        ->select(['id', 'user_id'])
+        ->first(); 
+        return my_all_employee($topUser); 
+    }
+
 
     
 }

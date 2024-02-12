@@ -11,7 +11,7 @@
 <ul>
     @foreach ($organogram['downlines'] as $downline)
         <li>
-            {{ $downline['user']->user->name }}
+            {{ @$downline['user']->user->name }}
             @if (!empty($downline['downlines']))
                 @include('organogram', ['organogram' => $downline])
             @endif

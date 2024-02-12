@@ -24,7 +24,7 @@
 
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="card"> p
+                    <div class="card"> 
                         <div class="card-body">
                             <form class="needs-validation" novalidate>
                                 <div class="row"> 
