@@ -35,9 +35,7 @@
                                             <span><i class="fas fa-file-csv"></i> CSV</span>
                                         </button> 
                                     </div> 
-                                    {{-- <div class="dt-buttons btn-group flex-wrap mb-2">     
-                                        <button class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#modal6"> <i class="mdi mdi-chart-box-outline"></i> View Chart</button> 
-                                    </div> --}}
+                              
                                 </div>
                                 <div class="">  
                                     <div class="input-group">  
@@ -52,77 +50,41 @@
                             <table class="table table-hover table-bordered table-striped dt-responsive nowrap text-center" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="align-middle"> 
-                                        <th rowspan="2">Action</th>
-                                        <th rowspan="2">S/N</th>
-                                        <th rowspan="2">Project</th> 
-                                        <th colspan="2">Existing</th>
-                                        <th colspan="2">New Sales</th> 
-                                    </tr>  
-                                    <tr>  
-                                        <th>Unit</th>
-                                        <th>Deposit</th>
-                                        <th>Unit</th>
-                                        <th>Deposit</th> 
-                                    </tr>
+                                        <th>Action</th>
+                                        <th>S/N</th>
+                                        <th>Project</th> 
+                                        <th>Existing Unit</th>
+                                        <th>Existing Deposit</th>
+                                        <th>New Unit</th> 
+                                        <th>New Deposit</th> 
+                                    </tr>   
                                 </thead>
                                 <tbody> 
-                                    <tr> 
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Asign Target</a>
-                                                    <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Update Asign</a>  
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>1</td>
-                                        <td>Wahidul Islam Plaza, Ramgonj</td>
-                                        <td class="align-middle">1</td> 
-                                        <td class="align-middle">1000000/2000000</td>
+                                    @if ($datas->is_project_wise==1) 
+                                        @if (isset($datas->depositTargetProjects) && count($datas->depositTargetProjects)>0)
+                                            @foreach ($datas->depositTargetProjects as $key => $data)
+                                                <tr> 
+                                                    <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                        <div class="dropdown">  
+                                                            <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-animated">
+                                                                <a class="dropdown-item" href="{{route('deposit.target.asign',$data->id)}}">Asign Target</a>
+                                                            </div>
+                                                        </div> 
+                                                    </td>
+                                                    <td>{{$key+1}}</td>
+                                                    <td>{{@$data->project->name}}</td>
+                                                    <td class="align-middle">{{$data->existing_unit}}</td> 
+                                                    <td class="align-middle">{{get_price($data->existing_deposit)}}</td>
 
-                                        <td class="align-middle">2</td> 
-                                        <td class="align-middle">1000000/3000000</td>  
-                                    </tr> 
-
-                                    <tr> 
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Asign Target</a>
-                                                    <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Update Asign</a>  
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>2</td>
-                                        <td>Chatkhil Project</td>
-                                        <td class="align-middle">1</td> 
-                                        <td class="align-middle">2000000</td>
-
-                                        <td class="align-middle">2</td> 
-                                        <td class="align-middle">3000000</td>  
-                                    </tr> 
-
-
-                                    <tr> 
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Asign Target</a>
-                                                    <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Update Asign</a>  
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>3</td>
-                                        <td>Adv. A.H. City Plaza</td>
-                                        <td class="align-middle">1</td> 
-                                        <td class="align-middle">2000000</td>
-
-                                        <td class="align-middle">2</td> 
-                                        <td class="align-middle">3000000</td>  
-                                    </tr> 
+                                                    <td class="align-middle">{{$data->new_unit}}</td> 
+                                                    <td class="align-middle">{{get_price($data->new_deposit)}}</td>  
+                                                </tr> 
+                                            @endforeach 
+                                        @endif 
+                                    @else
+                                        
+                                    @endif
                                     
                                 </tbody>
                             </table>

@@ -136,6 +136,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
         Route::get('customer-profile', [CustomerController::class, 'customer_profile'])->name('customer.profile');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
+        Route::get('customer-print/{id}', [CustomerController::class, "customerPrint"])->name('customer.print');
 
         // Prospecting 
         Route::resource('prospecting', ProspectingController::class);
@@ -266,8 +267,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('task-save',[TaskController::class,'task_save'])->name('task.save');
 
         // deposit target 
-        Route::get('deposit-target', [DepositTargetController::class, 'target'])->name('deposit.target');
-        Route::get('deposit-target-asign', [DepositTargetController::class, 'target_asign'])->name('deposit.target.asign');
+        Route::get('my-deposit-target', [DepositTargetController::class, 'my_target'])->name('my.deposit.target');
+        Route::get('deposit-target-asign/{id}', [DepositTargetController::class, 'target_asign'])->name('deposit.target.asign');
         Route::get('deposit-target-asign-list', [DepositTargetController::class, 'target_asign_list'])->name('deposit.target.asign.list');
         Route::get('project-deposit-target', [DepositTargetController::class, 'project_deposit_target'])->name('project.deposit.target');
         Route::get('direct-deposit-target', [DepositTargetController::class, 'direct_deposit_target'])->name('direct.deposit.target');

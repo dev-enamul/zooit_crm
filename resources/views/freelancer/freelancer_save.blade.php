@@ -258,15 +258,7 @@
                                             <option data-display="Select a country *" value="">
                                                 Select a country
                                             </option>
-                                            @isset($countries)
-                                                @foreach ($countries as $country)
-                                                    <option value="{{ $country->id }}" 
-                                                        {{ (old('country') == $country->id) || (isset($freelancer) && $freelancer->user->userAddress->country_id == $country->id) ? 'selected' : '' }}>
-                                                        {{ $country->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-
+                                            
                                             @isset($countries)
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country->id }}" 
@@ -275,8 +267,10 @@
                                                     </option>
                                                 @endforeach
                                             @endisset
-
                                         </select>
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
                                         
                                         @if ($errors->has('country'))
                                             <span class="text-danger" role="alert">
@@ -307,7 +301,10 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
+
                                         @if ($errors->has('zone'))
                                             <span class="text-danger" role="alert">
                                                 {{ $errors->first('zone') }}
@@ -329,6 +326,9 @@
                                                 @endforeach
                                             @endisset
                                         </select>
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
                                         
                                         @if ($errors->has('area'))
                                             <span class="text-danger" role="alert">

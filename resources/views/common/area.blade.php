@@ -14,7 +14,7 @@
 @if (in_array('division', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="division" class="form-label">Division <span class="text-danger">{{ in_array('division', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="division" id="division" {{ in_array('division', $required) ? 'required' : '' }}>
+        <select class="form-select " name="division" id="division" {{ in_array('division', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a division {{ in_array('division', $required) ? '*' : '' }}">
                 Select a division {{ in_array('division', $required) ? '*' : '' }}
             </option>
@@ -26,6 +26,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('division'))
             <span class="text-danger" role="alert">
@@ -38,7 +41,7 @@
 @if (in_array('district', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="district" class="form-label">District <span class="text-danger">{{ in_array('district', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
+        <select class="form-select {{ $errors->has('district') ? 'is-invalid' : '' }}" name="district" id="district" {{ in_array('district', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a district {{ in_array('district', $required) ? '*' : '' }}">
                 Select district {{ in_array('district', $required) ? '*' : '' }}
             </option>
@@ -50,6 +53,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('district'))
             <span class="text-danger" role="alert">
@@ -62,7 +68,7 @@
 @if (in_array('upazila', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="upazila" class="form-label">Upazila <span class="text-danger">{{ in_array('upazila', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="upazila" id="upazila" {{ in_array('upazila', $required) ? 'required' : '' }}>
+        <select class="form-select " name="upazila" id="upazila" {{ in_array('upazila', $required) ? 'required' : '' }}>
             <option value="" data-display="Select an Upazila {{ in_array('upazila', $required) ? '*' : '' }}">
                 Select an Upazila {{ in_array('upazila', $required) ? '*' : '' }}
             </option>
@@ -74,7 +80,10 @@
                 @endforeach
             @endisset
         </select>
-        
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
+
         @if ($errors->has('upazila'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('upazila') }}
@@ -86,7 +95,7 @@
 @if (in_array('union', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="union" class="form-label">Union <span class="text-danger">{{ in_array('union', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="union" id="union" {{ in_array('union', $required) ? 'required' : '' }}>
+        <select class="form-select " name="union" id="union" {{ in_array('union', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a Union {{ in_array('union', $required) ? '*' : '' }}">
                 Select a Union {{ in_array('union', $required) ? '*' : '' }}
             </option>
@@ -98,6 +107,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('union'))
             <span class="text-danger" role="alert">
@@ -110,7 +122,7 @@
 @if (in_array('village', $visible))
     <div class="{{ $div . ' ' . $mb }}">
         <label for="village" class="form-label">Village <span class="text-danger">{{ in_array('village', $required) ? '*' : '' }}</span></label>
-        <select class="form-select select2" name="village" id="village" {{ in_array('village', $required) ? 'required' : '' }}>
+        <select class="form-select " name="village" id="village" {{ in_array('village', $required) ? 'required' : '' }}>
             <option value="" data-display="Select a Village {{ in_array('village', $required) ? '*' : '' }}">
                 Select a Village {{ in_array('village', $required) ? '*' : '' }}
             </option>
@@ -122,6 +134,9 @@
                 @endforeach
             @endisset
         </select>
+        <div class="invalid-feedback">
+            This field is required.
+        </div>
         
         @if ($errors->has('village'))
             <span class="text-danger" role="alert">
@@ -167,9 +182,7 @@
 
                         $('#district').trigger('change');
 
-                        $('#district').select2({
-                        minimumResultsForSearch: Infinity
-                        });
+                        
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -210,9 +223,7 @@
 
                         $('#upazila').trigger('change');
 
-                        $('#upazila').select2({
-                        minimumResultsForSearch: Infinity
-                        });
+                       
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -253,9 +264,7 @@
 
                         $('#union').trigger('change');
 
-                        $('#union').select2({
-                        minimumResultsForSearch: Infinity
-                        });
+                       
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -296,9 +305,7 @@
 
                         $('#village').trigger('change');
 
-                        $('#village').select2({
-                        minimumResultsForSearch: Infinity
-                        });
+                     
                     },
                     error: function(data) {
                         console.log('Error:', data);

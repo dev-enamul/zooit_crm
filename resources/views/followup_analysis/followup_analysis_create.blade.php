@@ -28,8 +28,7 @@
                     <div class="card"> 
                         <div class="card-body">
                             <form class="needs-validation" novalidate>
-                                <div class="row"> 
-
+                                <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
@@ -82,16 +81,50 @@
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="amount" class="form-label"> Price</label>
-                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="amount" id="amount"> 
+                                            <label for="payment_duration" class="form-label">Payment Duration <span class="text-danger">*</span></label>
+                                            <select class="select2" name="payment_duration" id="payment_duration" required>
+                                                <option value="1">6 Month</option>
+                                                <option value="2">12 Month</option> 
+                                                <option value="3">18 Month</option>
+                                                <option value="4">24 Month</option>
+                                            </select>  
                                         </div>
-                                    </div>
-
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="qty" class="form-label"> Product Qty.</label>
-                                             <input type="text" placeholder="Product Qty." class="form-control" name="qty" id="qty"> 
+                                            <label for="select_type" class="form-label">Select Type <span class="text-danger">*</span></label>
+                                            <select class="select2" name="select_type" id="select_type" required>
+                                                <option value="">Select Type</option>
+                                                <option value="">On Choice</option>
+                                                <option value="1">Lottery</option> 
+                                            </select>  
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
+                                            <select class="select2" multiple name="project_unit" id="project_unit" required>
+                                                <option value="">Select Project Unit</option>
+                                                <option value="1">A-2 [$8676767]</option>
+                                                <option value="meet-up">A-2 [$8676767]</option> 
+                                                <option value="meet-up">A-4 [$8676767]</option>
+                                            </select>  
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="regular_amount" class="form-label"> Regular Amount</label>
+                                             <input value="453545457" type="number"  class="form-control" name="regular_amount" id="regular_amount" disabled> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="negotiation_amount" class="form-label"> Negotiation Amount</label>
+                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount"> 
                                         </div>
                                     </div>
 

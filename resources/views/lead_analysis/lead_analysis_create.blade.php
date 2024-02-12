@@ -45,6 +45,30 @@
                                             </div>
                                         </div>
                                     </div> 
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="project" class="form-label">Preferrer Project Name <span class="text-danger">*</span></label>
+                                            <select class="select2" name="project" id="project" required>
+                                                <option value="">Select Project</option>
+                                                <option value="1">Regular</option>
+                                                <option value="meet-up">High</option> 
+                                                <option value="meet-up">Low</option>
+                                            </select>  
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="profession" class="form-label">Preferrer Unit Name <span class="text-danger">*</span></label>
+                                            <select class="select2" name="profession" id="profession" required>
+                                                <option value="">Select Priority</option>
+                                                <option value="1">Regular</option>
+                                                <option value="meet-up">High</option> 
+                                                <option value="meet-up">Low</option>
+                                            </select>  
+                                        </div>
+                                    </div>
+                                    
 
                                     <div class="col-md-6">
                                         <div class="mb-3">

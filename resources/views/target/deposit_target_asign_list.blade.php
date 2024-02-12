@@ -65,8 +65,7 @@
 
                             <table class="table table-bordered dt-responsive nowrap text-center" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
-                                    <tr class="align-middle"> 
-                                        <th rowspan="2">Action</th>
+                                    <tr class="align-middle">  
                                         <th rowspan="2">S/N</th>
                                         <th rowspan="2">Project</th> 
                                         <th rowspan="2">Unit & Amount</th>
@@ -90,14 +89,7 @@
                                     @if(isset($projects) && $projects->isNotEmpty())  
                                         @foreach ($projects as $project) 
                                             <tr> 
-                                                <td rowspan="2" class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                                    <div class="dropdown">
-                                                        <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                        <div class="dropdown-menu dropdown-menu-animated">
-                                                            <a class="dropdown-item" href="{{route('deposit.target.asign')}}">Edit Target</a> 
-                                                        </div>
-                                                    </div> 
-                                                </td>
+                                                 
                                                 <td  rowspan="2">1</td>
                                                 <td  rowspan="2">{{$project->name}}</td>
                                                 <td class="align-middle">Existing</td>
@@ -182,7 +174,7 @@
                                             </tr> 
                                         @endforeach  
                                         <tr>
-                                            <td colspan="4" class="text-end">Total</td> 
+                                            <td colspan="3" class="text-end">Total</td> 
                                             @php 
                                                 $total_unit = 0;
                                                 $total_deposit = 0;
@@ -196,21 +188,22 @@
                                                     ->whereMonth('created_at',$month)
                                                     ->whereYear('created_at',$year) 
                                                     ->first();
-                                                    if($deposit_target->is_project_wise==1){  
-                                                        if(isset($deposit_target->depositTargetProjects) && $deposit_target->depositTargetProjects->isNotEmpty()){
-                                                            $deposit_target = $deposit_target->depositTargetProjects;
-                                                            $employee_total_unit = $deposit_target->sum('new_unit') + $deposit_target->sum('existing_unit');
-                                                            $employee_total_deposit = $deposit_target->sum('new_deposit') + $deposit_target->sum('existing_deposit');
+                                                    if (isset($deposit_target)) {
+                                                        if($deposit_target->is_project_wise==1){  
+                                                            if(isset($deposit_target->depositTargetProjects) && $deposit_target->depositTargetProjects->isNotEmpty()){
+                                                                $deposit_target = $deposit_target->depositTargetProjects;
+                                                                $employee_total_unit = $deposit_target->sum('new_unit') + $deposit_target->sum('existing_unit');
+                                                                $employee_total_deposit = $deposit_target->sum('new_deposit') + $deposit_target->sum('existing_deposit');
+                                                                $total_unit += $employee_total_unit;
+                                                                $total_deposit += $employee_total_deposit;
+                                                            }
+                                                        }else{  
+                                                            $employee_total_unit = $deposit_target->new_total_unit + $deposit_target->existing_total_unit;
+                                                            $employee_total_deposit = $deposit_target->new_total_deposit + $deposit_target->existing_total_deposit;
                                                             $total_unit += $employee_total_unit;
                                                             $total_deposit += $employee_total_deposit;
                                                         }
-                                                    }else{  
-                                                        $employee_total_unit = $deposit_target->new_total_unit + $deposit_target->existing_total_unit;
-                                                        $employee_total_deposit = $deposit_target->new_total_deposit + $deposit_target->existing_total_deposit;
-                                                        $total_unit += $employee_total_unit;
-                                                        $total_deposit += $employee_total_deposit;
-                                                    }
-                                                    
+                                                    } 
                                                 @endphp  
                                                 
                                                 <td class="align-middle">{{$employee_total_unit}}</td> 
@@ -221,7 +214,7 @@
                                         </tr> 
                                     @else   
                                         <tr>
-                                            <td colspan="10" class="text-center">Project not found</td>
+                                            <td colspan="9" class="text-center">Project not found</td>
                                         </tr>
                                     @endif
                                 </tbody>
