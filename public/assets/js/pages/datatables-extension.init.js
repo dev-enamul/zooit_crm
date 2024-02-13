@@ -8,16 +8,15 @@ $(document).ready(function() {
                     text: "Excel",
                     title: "Way Housing Pvt. Ltd \n"+title+"\nPeriod: "+Period ,
                     // exportOptions: {
-                    //     columns: ':visible:not(:first-child)'
-                    // }
-
+                    //     columns: ':visible:not()'
+                    // } 
                 },
                 {
                     extend: "pdfHtml5",
                     text: "PDF",
                     title: "",
                     // exportOptions: {
-                    //     columns: ':visible:not(:first-child)'
+                    //     columns: ':visible:not()'
                     // },
                     customize: function(doc) {
                         doc.content.unshift({
@@ -28,8 +27,7 @@ $(document).ready(function() {
                             ],
                             alignment: "center"
                         });
-
-                        // Set table width to 100%
+ 
                         doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
  
                         doc.content[1].table.body[0].forEach(function(headerCell) {
@@ -37,11 +35,9 @@ $(document).ready(function() {
                             headerCell.margin = [2, 0, 0, 0];
                         });
                     }
-                }
+                },
+                // "colvis"
             ],
-
-          
-
             language: {
                 paginate: {
                     previous: "<i class='mdi mdi-chevron-left'>",

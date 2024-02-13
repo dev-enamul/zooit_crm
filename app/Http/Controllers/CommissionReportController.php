@@ -31,7 +31,9 @@ class CommissionReportController extends Controller
 
     public function mst_commission(){ 
         $projects = Project::where('status',1)->get();
-        return view('report.commission.mst_commission',compact('projects'));
+        $employees = User::where('status',1)->get();
+        $selected = date('Y-m');
+        return view('report.commission.mst_commission',compact('projects','employees','selected'));
     } 
 
     public function mst_commission_details($id){

@@ -5,18 +5,16 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+{ 
     public function up(): void
     {
         Schema::create('deposit_commissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('deposit_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('project_id');
-            $table->unsignedBigInteger('commission_id');
+            $table->foreignId('deposit_id')->constrained('deposits');
+            $table->foreignId('user_id')->constrainted('users');
+            $table->foreignId('project_id')->constrained('projects');
+            $table->foreignId('commission_id')->constrainted('commissions');
+            $table->date('date'); 
             $table->timestamps();
         });
     }
