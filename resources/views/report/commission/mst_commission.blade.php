@@ -6,41 +6,31 @@
         <div class="container-fluid">
  
             <div class="row">
-                <div class="col-12"> 
-                    <div class="text-center">
-                        <h4 class="mb-sm-0">Way Housing Pvt. Ltd</h4> 
-                        <p class="m-0">Summary of Sales Commission (For Executive, ASM, AL, ZM, RM, HOS & ED)</p>
-                        <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="mb-sm-0">Summary of Sales Commission (For Executive, ASM, AL, ZM, RM, HOS & ED)</h4> 
+                            <p class="d-none">{{get_date($selected, 'M - Y')}}</p>
+                        </div>
+
+                        <div class="page-title-right">
+                            <div class="dt-buttons btn-group flex-wrap mb-2">     
+                                <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                    <span><i class="fas fa-filter"></i> Filter</span>
+                                </button> 
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>  
+            </div> 
 
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-        
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">     
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div> 
+                        <div class="card-body"> 
                            <div class="table-box" style="overflow-x: scroll;">
-                            <table class="table table-hover table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable-buttons" class="table table-hover table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class=""> 
                                         <th>Name of Staffs</th>
@@ -56,26 +46,28 @@
                                         <th>GTBIRC Deducation</th>
                                         <th>Instant Paid Commision</th>
                                         <th>Payble Commision</th>
-                                        <th>Achivement</th>
-                                        <th>Remark</th>
+                                        <th>Achivement</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr class="">
-                                        <td style="white-space: nowrap;"><a href="{{route('mst.commission.details',1)}}">Ms. Aisha Khan[E-12]</a></td>
-                                        <td>Manager</td>
-                                        @foreach ($projects as $project)
-                                            <td>৳325</td> 
-                                        @endforeach  
-                                        <td>৳76543</td>
-                                        <td>৳54321</td>
-                                        <td>8%</td>
-                                        <td>৳432</td>
-                                        <td>৳100</td>
-                                        <td>৳332</td>
-                                        <td>75%</td>
-                                        <td>-</td>
-                                    </tr> 
+                                    @foreach ($employees as $employee)
+                                        <tr class="">
+                                            <td style="white-space: nowrap;">
+                                                <a href="{{route('mst.commission.details',1)}}">{{$employee->name}} [{{$employee->user_id}}]</a>
+                                            </td>
+                                            <td>Manager</td>
+                                            @foreach ($projects as $project)
+                                                <td>৳325</td> 
+                                            @endforeach  
+                                            <td>৳76543</td>
+                                            <td>৳54321</td>
+                                            <td>8%</td>
+                                            <td>৳432</td>
+                                            <td>৳100</td>
+                                            <td>৳332</td>
+                                            <td>75%</td> 
+                                        </tr>
+                                    @endforeach 
                                 </tbody>
                             </table>
                            </div>
@@ -169,6 +161,12 @@
 @endsection
 
 @section('script')
+    <script>
+        var title = $('.page-title-box').find('h4').text();
+        var Period = $('.page-title-box').find('p').text();;
+    </script>
+    @include('includes.data_table')
+
     <script>
         getDateRange('duration')
     </script>

@@ -182,6 +182,22 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="bank" class="form-label">Ref Id </label>
+                                            <select class="form-select select2" name="ref_id" id="ref_id" required>
+                                                <option value="">Select a Reference</option>
+                                                @isset($ref_ids)
+                                                    @foreach ($ref_ids as $ref_id)
+                                                        <option value="{{ $ref_id->id }}" {{ old('ref_id', isset($freelancer) ? $freelancer->user->ref_id : null) == $ref_id->id ? 'selected' : '' }}>
+                                                            {{ $ref_id->name }} {{$ref_id->user_id}}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select>  
+                                        </div>
+                                    </div>
+
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Contact Information</h6>
                                     <hr>
 
