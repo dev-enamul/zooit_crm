@@ -110,6 +110,7 @@ class ProductController extends Controller
             'village_id'    => $request->village,   
             'status'        => 0,
             'created_by'    => $user_id,
+            'country_id'   => 18,
         ];
 
         DB::beginTransaction();

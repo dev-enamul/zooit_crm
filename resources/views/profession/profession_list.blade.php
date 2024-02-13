@@ -29,7 +29,7 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">  
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable-buttons" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         @can('profession-manage')
@@ -131,7 +131,14 @@
 @endsection 
 
 @section('script')
-    <script> 
+<script>
+    var title = "Profession List";
+    var Period = "";
+</script>
+
+@include('includes.data_table')
+
+    <script>  
         function editItem(data){   
             $('#edit_profession').find(' input[name="name"]').val(data.name);
             $('#edit_profession').find(' input[name="id"]').val(data.id);

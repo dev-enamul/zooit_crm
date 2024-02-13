@@ -1,9 +1,7 @@
 @extends('layouts.dashboard')
 @section('title',"Monthly Target Vs Achivement") 
 @section('style') 
-    <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+  
 @endsection
 
 @section('content') 
@@ -13,13 +11,20 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Monthly Target Achivement</h4>
+                        <div>
+                            <h4 class="mb-sm-0">Monthly Target Achivement</h4> 
+                            <p class="d-none">{{get_date($selected, 'M - Y')}}</p>
+                        </div>
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Datatable</a></li>
-                                <li class="breadcrumb-item active">Monthly Target Achivement</li>
-                            </ol>
+                            <form action="" method="get" action="">
+                                <div class="input-group">  
+                                    <input class="form-control" type="month" name="month" value="{{$selected != ''?$selected:now()->format('Y-m') }}"/>   
+                                    <button class="btn btn-secondary" type="submit">
+                                        <span><i class="fas fa-filter"></i> Filter</span>
+                                    </button> 
+                                </div>
+                            </form> 
                         </div>
 
                     </div>
@@ -35,11 +40,11 @@
                                 <thead>
                                     <tr>
                                         <th>SL</th>
-                                        <th>Employee Name</th>
+                                        <th>Employee</th>
                                         <th>Employee ID</th>
                                         <th>Target</th>
                                         <th>Achivement</th>
-                                        <th>Achieve Percentage</th> 
+                                        <th>Percentage</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 
@@ -58,15 +63,18 @@
                                             <td>{{get_price($target)}}</td> 
 
                                             @php  
-                                                if(isset($data->assign_to) && $data->assign_to != null){
-                                                    $achive = \App\Models\Deposit::where('employee_id', $data->assign_to)
-                                                                ->whereNotNull('approve_by') 
+                                                if(isset($data->assign_to) && $data->assign_to != null){ 
+                                                    $my_all_employee = my_all_employee($data->assign_to);
+                                                 
+                                                    $achive = \App\Models\Deposit::whereNotNull('approve_by') 
                                                                 ->whereMonth('created_at', date('m'))
                                                                 ->whereYear('created_at', date('Y'))
+                                                                ->whereHas('customer', function($q) use($my_all_employee){
+                                                                    $q->whereIn('ref_id', $my_all_employee);
+                                                                }) 
                                                                 ->sum('amount');
                                                 }
-                                            @endphp 
-
+                                            @endphp  
                                             <td>{{get_price($achive)}}</td>
                                             <td>{{get_percent($achive,$target)}}</td> 
                                         </tr>
@@ -99,32 +107,16 @@
     </footer> 
 </div>
 
+
 @endsection
 
-@section('script') 
-
-  <!-- Required datatable js -->
-  <script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
-
-  <!-- buttons examples -->
-  <script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-  <script src="{{asset('assets/libs/jszip/jszip.min.js')}}"></script>
-  <script src="{{asset('assets/libs/pdfmake/build/pdfmake.min.js')}}"></script>
-  {{-- <script src="{{asset('assets/libs/pdfmake/build/vfs_fonts.js')}}"></script> --}}
-  <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-  {{-- <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script> --}}
-
-  <!-- Responsive examples -->
-  <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
-
-  <!-- Datatable init js -->
-  <script src="{{asset('assets/js/pages/datatables-extension.init.js')}}"></script>
-  
+@section('script')  
     <script>
-        getDateRange('duration')
+        var title = $('.page-title-box').find('h4').text();
+        var Period = $('.page-title-box').find('p').text();;
+    </script>
+    @include('includes.data_table')
+    <script>
+        getDateRange('duration') 
     </script>
 @endsection

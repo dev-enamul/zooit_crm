@@ -41,7 +41,7 @@ if (!function_exists('get_date')) {
 if (!function_exists('get_price')) {
     function get_price($amount, $decimal = 0)
     {
-        return '৳' . number_format($amount, $decimal);
+        return  number_format($amount, $decimal) .' Tk';
     }
 }
 
