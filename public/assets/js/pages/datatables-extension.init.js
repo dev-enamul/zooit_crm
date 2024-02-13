@@ -2,7 +2,7 @@ $(document).ready(function() {
     if (document.getElementById("datatable-buttons")) {
         $("#datatable-buttons").DataTable({
             lengthChange: false,
-            buttons: ["excel", "pdf",'print'],
+            buttons: ["excel", "pdf"],
             language: {
                 paginate: {
                     previous: "<i class='mdi mdi-chevron-left'>",

@@ -16,10 +16,14 @@
                         <h4 class="mb-sm-0">Monthly Target Achivement</h4>
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Datatable</a></li>
-                                <li class="breadcrumb-item active">Monthly Target Achivement</li>
-                            </ol>
+                            <form action="" method="get" action="">
+                                <div class="input-group">  
+                                    <input class="form-control" type="month" name="month" value="{{$selected != ''?$selected:now()->format('Y-m') }}"/>   
+                                    <button class="btn btn-secondary" type="submit">
+                                        <span><i class="fas fa-filter"></i> Filter</span>
+                                    </button> 
+                                </div>
+                            </form> 
                         </div>
 
                     </div>
@@ -58,11 +62,15 @@
                                             <td>{{get_price($target)}}</td> 
 
                                             @php  
-                                                if(isset($data->assign_to) && $data->assign_to != null){
-                                                    $achive = \App\Models\Deposit::where('employee_id', $data->assign_to)
-                                                                ->whereNotNull('approve_by') 
+                                                if(isset($data->assign_to) && $data->assign_to != null){ 
+                                                    $my_all_employee = my_all_employee($data->assign_to);
+                                                 
+                                                    $achive = \App\Models\Deposit::whereNotNull('approve_by') 
                                                                 ->whereMonth('created_at', date('m'))
                                                                 ->whereYear('created_at', date('Y'))
+                                                                ->whereHas('customer', function($q) use($my_all_employee){
+                                                                    $q->whereIn('ref_id', $my_all_employee);
+                                                                }) 
                                                                 ->sum('amount');
                                                 }
                                             @endphp 

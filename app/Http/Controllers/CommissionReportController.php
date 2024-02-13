@@ -8,12 +8,21 @@ use Illuminate\Http\Request;
 
 class CommissionReportController extends Controller
 {
-    public function monthly_target_achive(){  
+    public function monthly_target_achive(Request $request){  
         $datas = DepositTarget::whereMonth('month', date('m'))
         ->whereYear('created_at', date('Y'))
-        ->distinct('assign_to')
-        ->get(); 
-        return view('report.commission.monthly_target_achive', compact('datas'));
+        ->distinct('assign_to'); 
+
+        if(isset($request->month) && $request->month != ''){ 
+            $month = date('m',strtotime($request->month));
+            $year = date('Y',strtotime($request->month)); 
+            $datas = $datas->whereMonth('month',$month)->whereYear('month',$year);
+        }
+
+        
+        $datas = $datas->get(); 
+        $selected = $request->month; 
+        return view('report.commission.monthly_target_achive', compact('datas','selected'));
     }
 
     public function mst_commission(){
