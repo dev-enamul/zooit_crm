@@ -87,6 +87,18 @@ if (!function_exists('villages')) {
 }
 
 
+if (!function_exists('get_percent')) {
+    function get_percent($numerator, $denominator)
+    {
+        if ($denominator != 0) {
+            return ($numerator / $denominator) * 100 .'%';
+        } else {
+            return 0;  
+        }
+    }
+}
+
+
 // user helper function
 
 

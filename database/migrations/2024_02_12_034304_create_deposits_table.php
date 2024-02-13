@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained();
+            $table->foreignId('customer_id')->constrained('users');
             $table->foreignId('deposit_category_id')->constrained('deposit_categories');
             $table->decimal('amount', 10, 2);
             $table->text('remark'); 

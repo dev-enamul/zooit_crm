@@ -94,9 +94,9 @@
                                             <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
                                             <select class="select2" multiple name="project_unit" id="project_unit" required>
                                                 <option value="">Select Project Unit</option>
-                                                <option value="1">A-2 [$8676767]</option>
-                                                <option value="meet-up">A-2 [$8676767]</option> 
-                                                <option value="meet-up">A-4 [$8676767]</option>
+                                                <option value="1">Floor: 2, Flat: 1</option> 
+                                                <option value="1">Floor: 2, Flat: 3</option> 
+                                                <option value="1">Floor: 2, Flat: 4</option> 
                                             </select>  
                                         </div>
                                     </div>  
