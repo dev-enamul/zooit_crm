@@ -7,6 +7,7 @@ use App\Enums\ProspectingMedia;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Prospecting;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,11 +24,23 @@ class ProspectingController extends Controller
         return Priority::values();
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $prospectings = Customer::select('id','name')->get();
 
-        return view('prospecting.prospecting_list', compact('prospectings'));
+        
+        // $my_all_employee = my_all_employee(5);
+        // $my_all_customer = Customer::whereIn('ref_id', $my_all_employee);
+        
+        $my_all_employee = my_all_employee(auth()->user()->id);
+        $employee_data = User::whereIn('id', $my_all_employee)->get();
+ 
+        // $datas = Prospecting::whereNotNull('approve_by')   
+        //     ->whereHas('customer', function($q) use($my_all_employee){
+        //         $q->whereIn('ref_id', $my_all_employee);
+        //     })->get(); 
+             
+        return view('prospecting.prospecting_list', compact('prospectings','employee_data'));
     }
 
     public function create()
@@ -52,7 +65,7 @@ class ProspectingController extends Controller
             'remark'        => 'nullable|string|max:255',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }
 
         if (!empty($id)) {

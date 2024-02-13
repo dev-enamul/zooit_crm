@@ -45,17 +45,9 @@
                                     <tr class=""> 
                                         <th>Name of Staffs</th>
                                         <th>Des.</th>
-                                        <th>Popular City Plaza</th>
-                                        <th>AH City Plaza Laxmipur</th>
-                                        <th>Shopno Nir 01</th>
-                                        <th>Hadid Tower 01</th>
-                                        <th>Zam Zam City Plaza</th>
-                                        <th>Grand H. Sonapur Plaza</th>
-                                        <th>Noahkali Tower</th>
-                                        <th>M.N Tower</th> 
-                                        <th>A Rob Heights</th>
-                                        <th>Ratonpur Square</th>
-                                        <th>Wahidul Islam Plaza</th>
+                                        @foreach ($projects as $project)
+                                            <th>{{$project->name}}</th>
+                                        @endforeach  
                                         <th>Total Achived Comission</th>
                                         <th>Applicable Commission </th>
                                         <th>GTBI RC Deduction 
@@ -72,17 +64,9 @@
                                     <tr class="">
                                         <td style="white-space: nowrap;"><a href="{{route('mst.commission.details',1)}}">Ms. Aisha Khan[E-12]</a></td>
                                         <td>Manager</td>
-                                        <td>৳325</td>
-                                        <td>৳742</td>
-                                        <td>৳598</td>
-                                        <td>৳325</td>
-                                        <td>৳1200</td>
-                                        <td>৳576</td>
-                                        <td>৳567</td>
-                                        <td>৳8900</td>
-                                        <td>৳1200</td>
-                                        <td>৳900</td>
-                                        <td>৳8900</td>
+                                        @foreach ($projects as $project)
+                                            <td>৳325</td> 
+                                        @endforeach  
                                         <td>৳76543</td>
                                         <td>৳54321</td>
                                         <td>8%</td>
@@ -91,81 +75,7 @@
                                         <td>৳332</td>
                                         <td>75%</td>
                                         <td>-</td>
-                                    </tr>
-                                    
-                                    <tr class="">
-                                        <td style="white-space: nowrap;"><a href="#">Mr. John Doe[E-15]</a></td>
-                                        <td>Supervisor</td>
-                                        <td>৳420</td>
-                                        <td>৳600</td>
-                                        <td>৳700</td>
-                                        <td>৳320</td>
-                                        <td>৳1100</td>
-                                        <td>৳500</td>
-                                        <td>৳400</td>
-                                        <td>৳7500</td>
-                                        <td>৳900</td>
-                                        <td>৳800</td>
-                                        <td>৳7500</td>
-                                        <td>৳65432</td>
-                                        <td>৳43210</td>
-                                        <td>7%</td>
-                                        <td>৳400</td>
-                                        <td>৳80</td>
-                                        <td>৳320</td>
-                                        <td>80%</td>
-                                        <td>-</td>
-                                    </tr>
-                                    
-                                    <!-- Add 8 more rows with different data for each row -->
-                                    
-                                    <tr class="">
-                                        <td style="white-space: nowrap;"><a href="#">Ms. Sarah Smith[E-18]</a></td>
-                                        <td>Sales Associate</td>
-                                        <td>৳300</td>
-                                        <td>৳800</td>
-                                        <td>৳500</td>
-                                        <td>৳200</td>
-                                        <td>৳900</td>
-                                        <td>৳300</td>
-                                        <td>৳600</td>
-                                        <td>৳6500</td>
-                                        <td>৳800</td>
-                                        <td>৳700</td>
-                                        <td>৳6500</td>
-                                        <td>৳54321</td>
-                                        <td>৳32109</td>
-                                        <td>9%</td>
-                                        <td>৳300</td>
-                                        <td>৳50</td>
-                                        <td>৳250</td>
-                                        <td>90%</td>
-                                        <td>-</td>
-                                    </tr>
-                                    
-                                    
-                                    <tr class=""> 
-                                        <td colspan="2">Total</td> 
-                                        <td>৳217</td>
-                                        <td>৳532</td>
-                                        <td>৳434</td>
-                                        <td>৳217</td>
-                                        <td>৳976</td>
-                                        <td>৳433</td>
-                                        <td>৳434</td>
-                                        <td>৳7565</td> 
-                                        <td>৳987</td>
-                                        <td>৳655</td>
-                                        <td>৳7565</td>
-                                        <td>৳65554</td>
-                                        <td>৳34655</td>
-                                        <td>10%</td>
-                                        <td>৳655</td>
-                                        <td>-</td>
-                                        <td>৳655</td>
-                                        <td>90%</td>
-                                        <td>-</td> 
-                                    </tr>
+                                    </tr> 
                                 </tbody>
                             </table>
                            </div>

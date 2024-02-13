@@ -105,32 +105,33 @@
         </button>
     </div>
     <div class="offcanvas-body">
-        <div class="row">
-
+       <form action="" method="get">
+        <div class="row">  
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="freelancer" class="form-label">Freelancer</label>
-                    <select class="select2" search id="freelancer" name="freelancer" required>
-                        <option value="">Select Freelancer</option> 
-                        <option value="">Md Enamul Haque #FL1545 01796351081</option> 
-                        <option value="">Jamil Hosain #FL1545 01796351081</option> 
-                        <option value="">Md Mehedi Hasan #FL1545 01796351081</option> 
-                        <option value="">Suvo Hasan #FL1545 01796351081</option>  
-                    </select> 
+                    <label for="join_date" class="form-label">Date </label>
+                    <input class="form-control" id="date_range" name="join_date" default="This Month" type="text" value="" />   
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="customer_name" class="form-label">Customer name <span class="text-danger">*</span></label>
-                    <input type="text" name="customer_name" class="form-control" id="customer_name" placeholder="Customer name" >
+                    <label for="employee" class="form-label">Employee</label>
+                    <select class="select2" search id="employee" name="employee" required>
+                        <option value="">Select Freelancer</option> 
+                        @foreach ($employee_data as $item)
+                            <option value="">{{$item->name}} [{{$item->user_id}}]</option> 
+                        @endforeach
+                        
+                  
+                    </select> 
                 </div>
-            </div> 
+            </div>  
 
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="mb-3">
                     <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
-                    <select class="form-select" name="profession" id="profession">
+                    <select class="form-select select2" name="profession" id="profession">
                         <option value="">Select Profession</option>
                         <option value="">Doctors</option>
                         <option value="">Lawyers</option> 
@@ -139,13 +140,19 @@
                         <option value="">Engineer</option>
                     </select>  
                 </div>
-            </div> 
+            </div>  
 
             <div class="text-center">
                 <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
-            </div>
-
+            </div> 
         </div>
+       </form>
     </div>
 </div>
+@endsection 
+
+@section('script') 
+<script>
+     getDateRange('date_range');
+</script>
 @endsection

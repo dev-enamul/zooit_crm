@@ -17,6 +17,7 @@ return new class extends Migration
             $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
             $table->string('remark')->nullable(); 
             $table->foreignId('customer_id')->constrained();
+            $table->date('date')->default(now());
             
             $table->foreignId('employee_id')->constrained('users'); 
             $table->unsignedBigInteger('approve_by')->nullable();

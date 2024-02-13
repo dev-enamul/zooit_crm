@@ -1,9 +1,7 @@
 @extends('layouts.dashboard')
 @section('title',"Monthly Target Vs Achivement") 
 @section('style') 
-    <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+  
 @endsection
 
 @section('content') 
@@ -13,7 +11,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Monthly Target Achivement</h4>
+                        <div>
+                            <h4 class="mb-sm-0">Monthly Target Achivement</h4> 
+                            <p class="d-none">{{get_date($selected, 'M - Y')}}</p>
+                        </div>
 
                         <div class="page-title-right">
                             <form action="" method="get" action="">
@@ -39,11 +40,11 @@
                                 <thead>
                                     <tr>
                                         <th>SL</th>
-                                        <th>Employee Name</th>
+                                        <th>Employee</th>
                                         <th>Employee ID</th>
                                         <th>Target</th>
                                         <th>Achivement</th>
-                                        <th>Achieve Percentage</th> 
+                                        <th>Percentage</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 
@@ -73,8 +74,7 @@
                                                                 }) 
                                                                 ->sum('amount');
                                                 }
-                                            @endphp 
-
+                                            @endphp  
                                             <td>{{get_price($achive)}}</td>
                                             <td>{{get_percent($achive,$target)}}</td> 
                                         </tr>
@@ -107,32 +107,16 @@
     </footer> 
 </div>
 
+
 @endsection
 
-@section('script') 
-
-  <!-- Required datatable js -->
-  <script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
-
-  <!-- buttons examples -->
-  <script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-  <script src="{{asset('assets/libs/jszip/jszip.min.js')}}"></script>
-  <script src="{{asset('assets/libs/pdfmake/build/pdfmake.min.js')}}"></script>
-  {{-- <script src="{{asset('assets/libs/pdfmake/build/vfs_fonts.js')}}"></script> --}}
-  <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-  {{-- <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script> --}}
-
-  <!-- Responsive examples -->
-  <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-  <script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
-
-  <!-- Datatable init js -->
-  <script src="{{asset('assets/js/pages/datatables-extension.init.js')}}"></script>
-  
+@section('script')  
     <script>
-        getDateRange('duration')
+        var title = $('.page-title-box').find('h4').text();
+        var Period = $('.page-title-box').find('p').text();;
+    </script>
+    @include('includes.data_table')
+    <script>
+        getDateRange('duration') 
     </script>
 @endsection

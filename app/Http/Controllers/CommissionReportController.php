@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DepositTarget;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -22,11 +23,15 @@ class CommissionReportController extends Controller
         
         $datas = $datas->get(); 
         $selected = $request->month; 
+        if($selected == ''){
+            $selected = date('Y-m');
+        }
         return view('report.commission.monthly_target_achive', compact('datas','selected'));
     }
 
-    public function mst_commission(){
-        return view('report.commission.mst_commission');
+    public function mst_commission(){ 
+        $projects = Project::where('status',1)->get();
+        return view('report.commission.mst_commission',compact('projects'));
     } 
 
     public function mst_commission_details($id){
