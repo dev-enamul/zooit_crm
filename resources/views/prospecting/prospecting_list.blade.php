@@ -74,10 +74,10 @@
                                         </td> 
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ @$prospecting->customer->user->name }}</td>
-                                        <td>{{ @$prospecting->customer->profession }}</td>
-                                        <td>{{ @$prospecting->customer->upazilla }}</td>
-                                        <td>{{ @$prospecting->customer->union }}</td>
-                                        <td>{{ @$prospecting->customer->village }}</td>
+                                        <td>{{ @$prospecting->customer->profession->name }}</td>
+                                        <td>{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
+                                        <td>{{ @$prospecting->customer->user->userAddress->union->name }}</td>
+                                        <td>{{ @$prospecting->customer->user->userAddress->village->name }}</td>
                                         <td>{{ @$prospecting->prospecting }}</td>
                                         <td>{{ @$prospecting->customer->user->mobile }}</td>
                                         <td>{{ @$prospecting->freelancer->user->name }}</td>
@@ -119,8 +119,8 @@
                     <label for="employee" class="form-label">Employee</label>
                     <select class="select2" search id="employee" name="employee" required>
                         <option value="">Select Freelancer</option> 
-                        @foreach ($employee_data as $item)
-                            <option value="">{{$item->name}} [{{$item->user_id}}]</option> 
+                        @foreach ($employees as $item)
+                            <option value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option> 
                         @endforeach
                         
                   
@@ -133,11 +133,9 @@
                     <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
                     <select class="form-select select2" name="profession" id="profession">
                         <option value="">Select Profession</option>
-                        <option value="">Doctors</option>
-                        <option value="">Lawyers</option> 
-                        <option value="">Banker</option>
-                        <option value="">Teacher</option>
-                        <option value="">Engineer</option>
+                       @foreach ($professions as $data)
+                            <option value="{{$data->id}}">{{$data->name}}</option> 
+                       @endforeach
                     </select>  
                 </div>
             </div>  
