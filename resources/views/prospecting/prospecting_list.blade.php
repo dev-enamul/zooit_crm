@@ -109,20 +109,19 @@
         <div class="row">  
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="join_date" class="form-label">Date </label>
-                    <input class="form-control" id="date_range" name="join_date" default="This Month" type="text" value="" />   
+                    <label for="prospecting_date" class="form-label">Date</label>
+                    <input class="form-control" id="prospecting_date" name="date" default="This Month" type="text" value="" />   
                 </div>
             </div>
 
             <div class="col-md-12">
                 <div class="mb-3">
                     <label for="employee" class="form-label">Employee</label>
-                    <select class="select2" search id="employee" name="employee" required>
+                    <select class="select2" search id="employee" name="employee">
                         <option value="">Select Freelancer</option> 
                         @foreach ($employees as $item)
                             <option value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option> 
-                        @endforeach
-                        
+                        @endforeach 
                   
                     </select> 
                 </div>
@@ -130,7 +129,7 @@
 
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
+                    <label for="profession" class="form-label">Profession </label>
                     <select class="form-select select2" name="profession" id="profession">
                         <option value="">Select Profession</option>
                        @foreach ($professions as $data)
@@ -151,6 +150,6 @@
 
 @section('script') 
 <script>
-     getDateRange('date_range');
+     getDateRange('prospecting_date');
 </script>
 @endsection
