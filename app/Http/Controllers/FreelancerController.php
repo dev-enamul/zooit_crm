@@ -81,11 +81,12 @@ class FreelancerController extends Controller
         $religions = $this->religion();
         $bloodGroups = $this->bloodGroup();
         $genders = $this->gender();
+        $ref_ids = User::where('status',1)->get();
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
         $zones = Zone::where('status',1)->select('id','name')->get();
         $areas = Area::where('status',1)->select('id','name')->get();
-        return view('freelancer.freelancer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas'));
+        return view('freelancer.freelancer_save', compact('ref_ids','title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas'));
     }
     
     public function save(Request $request, $id = null)
@@ -140,6 +141,7 @@ class FreelancerController extends Controller
                 'nid_file'                  => 'file|mimes:pdf,jpeg,png,jpg|max:2048',
                 'birth_certificate_file'    => 'file|mimes:pdf,jpeg,png,jpg|max:2048',
                 'upload_passport'           => 'file|mimes:pdf,jpeg,png,jpg|max:2048',
+                'ref_id'                    => 'nullable',
                 'at_least_one_field' => [
                     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
                 ],
@@ -166,6 +168,7 @@ class FreelancerController extends Controller
                 $user->marital_status   = $request->marital_status;
                 $user->dob              = date('Y-m-d', strtotime($request->dob));
                 $user->finger_id        = $request->card_id;
+                $user->ref_id           = $request->ref_id;
                 $user->religion         = $request->religion;
                 $user->blood_group      = $request->blood_group;
                 $user->gender           = $request->gender;
@@ -340,6 +343,7 @@ class FreelancerController extends Controller
                     'user_type'     => 2, #Freelancer
                     'marital_status'=> $request->marital_status,
                     'dob'           => date('Y-m-d', strtotime($request->dob)),
+                    'ref_id'        => $request->ref_id,
                     'finger_id'     => $request->card_id,
                     'religion'      => $request->religion,
                     'blood_group'   => $request->blood_group,

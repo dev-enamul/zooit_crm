@@ -41,7 +41,7 @@
                         <div class="card-body">
                             @if(isset($prospecting))
                                 <form action="{{route('prospecting.save',$prospecting->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                                <input type="hidden" name="id" value="{{$product->id}}">
+                                <input type="hidden" name="id" value="{{$prospecting->id}}">
                             @else 
                                 <form action="{{route('prospecting.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
@@ -58,7 +58,7 @@
                                                 @isset($customers)
                                                     @foreach ($customers as $customer)
                                                         <option value="{{ $customer->id }}" {{ old('customer', isset($prospecting) ? $prospecting->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->user->name }}
+                                                            {{ @$customer->user->name }} ({{ $customer->user->user_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -79,7 +79,7 @@
                                                 @isset($employees)
                                                     @foreach ($employees as $employee)
                                                         <option value="{{ $employee->id }}" {{ old('employee', isset($prospecting) ? $prospecting->employee_id : null) == $employee->id ? 'selected' : '' }}>
-                                                            {{ @$employee->user->name }}
+                                                            {{ @$employee->name }} ({{ $employee->user_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset

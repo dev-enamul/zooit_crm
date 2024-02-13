@@ -6,10 +6,12 @@ use App\Enums\Priority;
 use App\Enums\ProspectingMedia;
 use App\Models\Customer;
 use App\Models\Employee;
+use App\Models\Profession;
 use App\Models\Prospecting;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ProspectingController extends Controller
@@ -26,32 +28,44 @@ class ProspectingController extends Controller
 
     public function index(Request $request)
     {
-        $prospectings = Customer::select('id','name')->get();
 
+        if($request->filled('join_date')) {
+            $professions = Profession::all();
+
+            $employee = (int)$request->employee;
+            $my_all_employee = my_all_employee($employee);
+            $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get();
+            $employees = User::whereIn('id', $my_all_employee)->get();
+            $prospectings = Prospecting::whereHas('customer', function($q) use($my_all_employee){ 
+                $q->whereIn('ref_id', $my_all_employee);
+            })->get(); 
+        }else {
+            $customer = Customer::select('id','name')->get();
+
+            $professions = Profession::all();
+            $my_all_employee = my_all_employee(auth()->user()->id);
+            $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get();
+            $employees = User::whereIn('id', $my_all_employee)->get();
+
+            $prospectings = Prospecting::whereHas('customer', function($q) use($my_all_employee){ 
+                    $q->whereIn('ref_id', $my_all_employee);
+                })->get(); 
+        }
         
-        // $my_all_employee = my_all_employee(5);
-        // $my_all_customer = Customer::whereIn('ref_id', $my_all_employee);
-        
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $employee_data = User::whereIn('id', $my_all_employee)->get();
- 
-        // $datas = Prospecting::whereNotNull('approve_by')   
-        //     ->whereHas('customer', function($q) use($my_all_employee){
-        //         $q->whereIn('ref_id', $my_all_employee);
-        //     })->get(); 
-             
-        return view('prospecting.prospecting_list', compact('prospectings','employee_data'));
+        return view('prospecting.prospecting_list', compact('prospectings','employee_data','professions','employees'));
     }
 
     public function create()
     {
         $title = 'Prospecting Entry';
-        $customers = Customer::with('user')->get();
-        $employees = Employee::with('user')->get();
+        $user_id   = Auth::user()->id; 
+        $my_all_employee = my_all_employee($user_id);
+        $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
         $priorities = $this->priority();
 
-        return view('prospecting.prospecting_save', compact('customers','prospectingMedias','priorities','title'));
+        return view('prospecting.prospecting_save', compact('customers','prospectingMedias','priorities','title','employees'));
     }
 
 
@@ -79,6 +93,8 @@ class ProspectingController extends Controller
                 'created_by'    => auth()->id(),
                 'created_at'     => now(),
             ]);
+            return redirect()->route('prospecting.index')->with('success','Prospecting update successfully');
+
         } else {
             $prospecting = new Prospecting();
             $prospecting->media         = $request->media;
@@ -89,6 +105,7 @@ class ProspectingController extends Controller
             $prospecting->created_by    = auth()->id();
             $prospecting->created_at    = now();
             $prospecting->save();
+            return redirect()->route('prospecting.index')->with('success','Prospecting create successfully');
         }
     }
 
@@ -96,8 +113,10 @@ class ProspectingController extends Controller
     {
         $title = 'Prospecting Edit';
         $prospecting = Prospecting::find($id);
-        $customers = Customer::with('user')->get();
-        $employees = Employee::with('user')->get();
+        $user_id   = Auth::user()->id; 
+        $my_all_employee = my_all_employee($user_id);
+        $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
         $priorities = $this->priority();
 
