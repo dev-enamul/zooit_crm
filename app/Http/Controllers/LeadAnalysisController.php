@@ -2,61 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Religion;
+use App\Models\Customer;
+use App\Models\Project;
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LeadAnalysisController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         return view('lead_analysis.lead_analysis_list');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function religion()
     {
-        return view('lead_analysis.lead_analysis_create');
+        return Religion::values();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
+    public function create()
+    {
+        $title = 'Lead Analysis Entry';
+        $user_id   = Auth::user()->id; 
+        $my_all_employee = my_all_employee($user_id);
+        $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $projects = Project::where('status',1)->select('id','name')->get();
+        $units          = Unit::select('id','title')->get();
+        $religions = $this->religion();
+        return view('lead_analysis.lead_analysis_save',compact('title','customers','projects','units','religions'));
+    }
+
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         //

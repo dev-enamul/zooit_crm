@@ -98,6 +98,48 @@
                                         <td>Md Jamil [FL154]</td> 
                                     </tr> 
                                 </tbody>
+
+                                <tbody> 
+                                    @foreach ($leads as  $lead)
+                                    <tr class="">
+                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+
+                                                <div class="dropdown-menu dropdown-menu-animated"> 
+                                                    <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$lead->id) }}')">Delete</a>  
+                                                    <a class="dropdown-item" href="">Presentation</a>
+                                                </div>
+                                            </div> 
+                                        </td> 
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ @$lead->customer->user->name }}</td>
+                                        <td>{{ @$lead->customer->profession->name }}</td>
+                                        <td>{{ @$lead->customer->user->userAddress->upazila->name }}</td>
+                                        <td>{{ @$lead->customer->user->userAddress->union->name }}</td>
+                                        <td>{{ @$lead->customer->user->userAddress->village->name }}</td>
+                                        <td>{{ @$lead->prospecting }}</td>
+                                        <td>{{ @$lead->prospecting }}</td>
+                                        <td>{{ @$lead->prospecting }}</td>
+                                        <td>{{ @$lead->project->name }}</td>
+                                        {{-- <td>{{ @$lead->project->name }}</td> --}}
+                                        <td> {{ @$lead->unit->title}} </td>
+                                        <td class="text-primary">
+                                           @if ($lead->purchase_capacity ==1)
+                                               High
+                                           @elseif($lead->purchase_capacity ==2)
+                                               Regular
+                                            @else
+                                                Low
+                                           @endif
+                                        </td>
+                                        <td>{{ @$lead->possible_purchase_date }}</td>
+                                        <td>{{ @$lead->customer->user->phone }}</td>
+                                        <td>{{ @$lead->freelancer->user->name ?? 'N/A' }}</td>
+                                    </tr>
+                                    @endforeach 
+                                </tbody>
                             </table>
                         </div>
                     </div>
