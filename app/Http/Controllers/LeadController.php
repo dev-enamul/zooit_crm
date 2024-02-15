@@ -9,6 +9,7 @@ use App\Models\Profession;
 use App\Models\Project;
 use App\Models\Unit;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -122,8 +123,13 @@ class LeadController extends Controller
         return view('lead.lead_save', compact('customers','priorities','title','projects','units','lead'));
     }
 
-    public function destroy(string $id)
-    {
-        //
+    public function leadDelete($id){
+        try{ 
+            $data  = Lead::find($id);
+            $data->delete();
+            return response()->json(['success' => 'Lead Deleted'],200);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()],500);
+        }
     }
 }

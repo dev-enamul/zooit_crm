@@ -157,6 +157,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Lead Analysis
         Route::resource('lead-analysis', LeadAnalysisController::class);
+        Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');
+        Route::any('lead-analysis-delete/{id}', [LeadAnalysisController::class, "leadAnalysisDelete"])->name('lead_analysis.delete');
 
         // Presentation
         Route::resource('presentation', PresentationController::class);

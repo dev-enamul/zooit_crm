@@ -27,7 +27,13 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form class="needs-validation" novalidate>
+                            @if(isset($lead_analysis))
+                                <form action="{{route('lead_analysis.save',$lead_analysis->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <input type="hidden" name="id" value="{{$lead_analysis->id}}">
+                            @else 
+                                <form action="{{route('lead_analysis.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                            @endif 
+                            @csrf
                                 <div class="row">
 
                                     <div class="col-md-6">
@@ -39,7 +45,7 @@
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($lead) ? $lead->customer_id : null) == $customer->id ? 'selected' : '' }}>
+                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($lead_analysis) ? $lead_analysis->customer_id : null) == $customer->id ? 'selected' : '' }}>
                                                             {{ @$customer->user->name }} ({{ $customer->user->user_id}})
                                                         </option>
                                                     @endforeach
@@ -58,7 +64,7 @@
                                             </option>
                                             @isset($projects)
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($lead) ? $lead->project_id : null) == $project->id ? 'selected' : '' }}>
+                                                    <option value="{{ $project->id }}" {{ old('project', isset($lead_analysis) ? $lead_analysis->project_id : null) == $project->id ? 'selected' : '' }}>
                                                         {{ $project->name }}
                                                     </option>
                                                 @endforeach
@@ -80,7 +86,7 @@
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($lead) ? $lead->unit_id : null) == $unit->id ? 'selected' : '' }}>
+                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($lead_analysis) ? $lead_analysis->unit_id : null) == $unit->id ? 'selected' : '' }}>
                                                         {{ $unit->title }}
                                                     </option>
                                                 @endforeach
@@ -115,7 +121,7 @@
                                                 <option value="">Select Religion</option>
                                                 @isset($religions)
                                                     @foreach ($religions as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('religion', isset($freelancer) && isset($freelancer->user->religion) && $freelancer->user->religion == $id) ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('religion', isset($lead_analysis) && isset($lead_analysis->user->religion) && $lead_analysis->user->religion == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach

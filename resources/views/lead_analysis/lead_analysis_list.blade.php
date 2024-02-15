@@ -70,34 +70,37 @@
                                         <th>Freelancer</th> 
                                     </tr>
                                 </thead>
-                                <tbody> 
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="lead_analysis_entry.html">Lead Analysis</a>
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>1</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>Married</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td>Rana Plaza</td>
-                                        <td>A-5</td>
-                                        <td class="text-primary">High</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td> 
-                                    </tr> 
+
+                                <tbody>
+                                    @foreach ($leads as  $lead)
+                                        <tr>
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="{{route('lead-analysis.edit',$lead->id)}}">Edit</a>
+                                                        <a class="dropdown-item" onclick="deleteItem('{{ route('lead-analysis.destroy',$lead->id) }}')">Delete</a>
+                                                        <a class="dropdown-item" href="lead_analysis_entry.html">Lead Analysis</a>
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ @$lead->created_at }}</td>
+                                            <td> {{ @$lead->customer->name }}</td>
+                                            <td> {{ @$lead->customer->profession->name }}</td>
+                                            <td> {{ @$lead->customer->user->userAddress->upazila->name}}</td>
+                                            <td>{{ @$lead->customer->user->userAddress->union->name}}</td>
+                                            <td> {{ @$lead->customer->user->userAddress->village->name }}</td>
+                                            <td> {{ $lead->customer->user->marital_status}}</td>
+                                            <td>Dummy</td>
+                                            <td>{{ $lead->project->name }}</td>
+                                            <td> {{  @$lead->unit->name}}</td>
+                                            <td class="text-primary"> {{ @$lead->purchase_capacity }}</td>
+                                            <td>{{@$lead->possible_purchase_date }}</td>
+                                            <td>{{ @$lead->customer->user->phone}}</td>
+                                            <td>Dummy</td> 
+                                        </tr>
+                                    @endforeach 
                                 </tbody>
                             </table>
                         </div>
