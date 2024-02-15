@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
+use App\Models\Employee;
+use App\Models\Freelancer;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -324,37 +327,81 @@ class UsersSeeder extends Seeder
                 'gender' => 1, 
                 'created_by' => 1, 
                 'updated_by' => 1,
+            ],[ 
+                'user_id' => null,
+                'name' => "Customer 1",
+                'phone' => "01700000021",
+                'password' => bcrypt('123456'),
+                'user_type' => 3,
+                'profile_image' => "",
+                'marital_status' => 1, 
+                'finger_id' => "43435343",
+                'religion' => 1,
+                'blood_group' => 1,
+                'gender' => 1, 
+                'created_by' => 1, 
+                'updated_by' => 1,
+            ],[ 
+                'user_id' => null,
+                'name' => "Customer 2",
+                'phone' => "01700000022",
+                'password' => bcrypt('123456'),
+                'user_type' => 3,
+                'profile_image' => "",
+                'marital_status' => 1, 
+                'finger_id' => "43435343",
+                'religion' => 1,
+                'blood_group' => 1,
+                'gender' => 1, 
+                'created_by' => 1, 
+                'updated_by' => 1,
             ]
         ];
         DB::table('users')->insert($data); 
+ 
 
-        $freelancer_data = [
-            [
-                'user_id' => 18,
-                'profession_id' => 1,
-                'designation_id' => 21, 
-                'last_approve_by' => 17,
-            ],
-            [
-                'user_id' => 19,
-                'profession_id' => 1,
-                'designation_id' => 21, 
-                'last_approve_by' => 17,
-            ],
-            [
-                'user_id' => 20,
-                'profession_id' => 1,
-                'designation_id' => 21,
-                'last_approve_by' => 17, 
-            ],
+        // Employee  
+        for($i=1; $i<=17; $i++){
+            Employee::create([
+                'user_id' => $i,
+                'designation_id' => $i,
+                'status' => 1,
+            ]); 
+        }
 
-            [
-                'user_id' => 21,
-                'profession_id' => 1,
-                'designation_id' => 21, 
-                'last_approve_by' => 17,
-            ],
-        ]; 
-        DB::table('freelancers')->insert($freelancer_data);
+
+        // Freelancer 
+        for($i=1; $i<=4; $i++){
+            Freelancer::create([
+                'user_id' => $i+17,
+                'profession_id' => $i,
+                'designation_id' => $i+17,
+                'last_approve_by' => 1,
+                'status' => 1,
+            ]);
+        } 
+
+        for($i=1; $i<=2; $i++){
+            Customer::create([
+                'user_id' => $i+21,
+                'customer_id' => 'CUS-0'.$i,
+                'profession_id' => $i,
+                'name' => 'Mehedi & Jamil',
+                'ref_id' => $i+17, 
+                'status' => 1,
+            ]);
+        } 
+
+        for($i=1; $i<=2; $i++){
+            Customer::create([
+                'user_id' => $i+21,
+                'customer_id' => 'CUS-0'.$i+2,
+                'profession_id' => $i+2,
+                'name' => 'Akash & Batas',
+                'ref_id' => $i+19, 
+                'status' => 1,
+            ]);
+        }
+        
     }
 }

@@ -67,6 +67,11 @@ class User extends Authenticatable
         return $this->hasOne(Freelancer::class, 'user_id');
     }
 
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'user_id');
+    }
+
     public function reportingUser()
     {
         return $this->hasOne(ReportingUser::class, 'user_id');
@@ -184,7 +189,9 @@ class User extends Authenticatable
         ->select(['id', 'user_id'])
         ->first(); 
         return my_all_employee($topUser); 
-    }
+    } 
+
+    
 
 
     

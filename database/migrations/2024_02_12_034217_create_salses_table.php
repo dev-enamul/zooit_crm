@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('salses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained();  
+            $table->foreignId('customer_id')->constrained()->uniqid(); 
+            $table->foreignId('customer_user_id')->constrained('users');
             $table->foreignId('project_id')->constrained();  
             $table->foreignId('unit_id')->constrained();  
             $table->integer('payment_duration')->nullable()->comment('In Month');
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->decimal('down_payment', 10, 2);
             $table->decimal('down_payment_pay', 10, 2);
             $table->date('rest_down_payment_date');
+            $table->decimal('total_deposit', 10, 2);
             $table->enum('installment_type', ['weekly', 'bi-weekly', 'monthly', 'bi-monthly', 'quarterly', 'semi-annually', 'annually']);
             $table->decimal('installment_value', 10, 2);
             $table->string('facility');

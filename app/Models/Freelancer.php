@@ -43,5 +43,10 @@ class Freelancer extends Model
     public function approveBy()
     {
         return $this->belongsTo(User::class, 'approve_by')->withDefault();
+    } 
+
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class);
     }
 }

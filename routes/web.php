@@ -178,7 +178,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Salse
         Route::resource('salse', SalseController::class);
 
-        // Salse
+        // Deposit
         Route::resource('deposit', DepositController::class);
 
         // Rejection
