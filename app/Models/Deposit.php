@@ -13,46 +13,69 @@ class Deposit extends Model
     protected $fillable = [
         'customer_id',
         'deposit_category_id',
+        'project_id',
+        'salse_id',
         'amount',
+        'date',
+        'bank_id',
+        'cheque_no',
+        'branch_name',
         'remark',
-        'employee_id',
         'approve_by',
         'created_by',
         'updated_by',
-        'deleted_by'
+        'deleted_by',
     ];
- 
+
+    protected $dates = [
+        'date',
+    ];
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    } 
+
+    public function commissions(){
+        return $this->hasMany(DepositCommission::class);
     }
- 
+
     public function depositCategory()
     {
         return $this->belongsTo(DepositCategory::class);
     }
- 
-    public function employee()
+
+    public function project()
     {
-        return $this->belongsTo(User::class, 'employee_id');
+        return $this->belongsTo(Project::class);
     }
- 
-    public function approvedBy()
+
+    public function salse()
+    {
+        return $this->belongsTo(Salse::class);
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
+
+    public function approver()
     {
         return $this->belongsTo(User::class, 'approve_by');
     }
- 
-    public function createdBy()
+
+    public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
- 
-    public function updatedBy()
+
+    public function editor()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
- 
-    public function deletedBy()
+
+    public function destroyer()
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }

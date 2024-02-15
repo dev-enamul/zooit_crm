@@ -54,84 +54,53 @@
                                         <th>Project Name</th>
                                         <th>Unit Name</th>
                                         <th>Unit Qty</th>
-                                        <th>Franchise Partner Name & ID</th>
-                                        <th>Co-Ordinator Applicant Name & ID</th>
-                                        <th>Co-Ordinator Name & ID</th> 
-                                        <th>Ex. Co-Ordinator Name & ID</th>
-                                        <th>Sales Executive Name & ID</th>
+                                        <th>Deposit Type</th>
+                                        @foreach ($designations as $designation)
+                                            <th>{{$designation->title}}</th>
+                                        @endforeach 
+                                    
                                         <th>Declaration Price</th>
                                         <th>Discount Amount</th>
                                         <th>Sales Value </th>
                                         <th>Deposit Amount</th>
                                         <th>Total Deposit Amount</th>
-                                        <th>Total Due Amount</th>
-                                        <th>Remarks</th> 
+                                        <th>Total Due Amount</th>  
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr class=""> 
-                                        <td>1</td>
-                                        <td>#231</td>
-                                        <td>Md Enamul Haque</td>
-                                        <td>11, Dec-2023</td>
-                                        <td>City Plaza</td>
-                                        <td>Shop</td>
-                                        <td>5</td>
-                                        <td>MD Jahid Hasan (#5333)</td>
-                                        <td>MD Mehedi Hasan (#6755)</td>
-                                        <td>Md Rahim (#5645)</td> 
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>5000000</td>
-                                        <td>1000000</td>
-                                        <td>4000000</td>
-                                        <td>10000</td>
-                                        <td>3500000</td>
-                                        <td>1500000</td>
-                                        <td>Remarks</td>  
-                                    </tr>  
-                                    <tr class=""> 
-                                        <td>2</td>
-                                        <td>#232</td>
-                                        <td>John Doe</td>
-                                        <td>12, Dec-2023</td>
-                                        <td>Main Street Apartments</td>
-                                        <td>Unit B</td>
-                                        <td>3</td>
-                                        <td>Jane Smith (#1234)</td>
-                                        <td>Michael Johnson (#5678)</td>
-                                        <td>David Brown (#9876)</td> 
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>6000000</td>
-                                        <td>1200000</td>
-                                        <td>4800000</td>
-                                        <td>15000</td>
-                                        <td>4650000</td>
-                                        <td>1500000</td>
-                                        <td>Additional Remarks</td>  
-                                    </tr>  
-                                    <tr class=""> 
-                                        <td>3</td>
-                                        <td>#233</td>
-                                        <td>Jane Smith</td>
-                                        <td>13, Dec-2023</td>
-                                        <td>Ocean View Residency</td>
-                                        <td>Apartment 302</td>
-                                        <td>1</td>
-                                        <td>Michael Johnson (#5678)</td>
-                                        <td>Emily Davis (#3456)</td>
-                                        <td>Sophia Wilson (#8765)</td> 
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>7000000</td>
-                                        <td>1400000</td>
-                                        <td>5600000</td>
-                                        <td>20000</td>
-                                        <td>5580000</td>
-                                        <td>2000000</td>
-                                        <td>More Remarks</td>  
-                                    </tr>  
+                                    @foreach ($datas as $key => $data)
+                                        <tr class=""> 
+                                            <td>{{$key +1}}</td>
+                                            <td>{{@$data->customer->customer_id}}</td>
+                                            <td>{{@$data->customer->name}}</td>
+                                            <td>{{get_date(@$data->salse->created_at)}}</td>
+                                            <td>{{$data->salse->project->name??'-'}}</td>
+                                            <td>{{$data->salse->unit->title??'-'}}</td>
+                                            <td>
+                                                @if (isset($data->salse) && isset($data->salse->project_units) && count($data->salse->project_units) > 0)
+                                                    {{ count($data->salse->project_units) }}
+                                                @endif
+                                            </td> 
+                                            <td>{{$data->depositCategory->name??'Regular'}}</td>
+                                            @foreach ($designations as $designation)   
+                                                @php 
+                                                    $employee = $data->commissions->where('designation_id', $designation->id);
+                                                    if ($employee->isNotEmpty()) { 
+                                                        $employee = $employee->first()->user->name;
+                                                    } else {
+                                                        $employee = '-';
+                                                    }
+                                                @endphp
+                                                <th>{{$employee}}</th>
+                                            @endforeach  
+                                            <td>{{get_price(@$data->salse->regular_amount)}}</td>
+                                            <td>{{get_price(@$data->salse->regular_amount-@$data->salse->sold_value)}}</td>
+                                            <td>{{get_price(@$data->salse->sold_value)}}</td>
+                                            <td>{{get_price($data->amount)}}</td>
+                                            <td>{{get_price(@$data->salse->total_deposit)}}</td>
+                                            <td>{{get_price(@$data->salse->sold_value-@$data->salse->total_deposit)}}</td>  
+                                        </tr>  
+                                    @endforeach 
                                 </tbody>
                             </table>
                            </div>

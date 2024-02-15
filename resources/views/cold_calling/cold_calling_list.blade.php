@@ -67,105 +67,35 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr>
+                                    @foreach ($cold_callings as  $cold_calling)
+                                    <tr class="">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="lead_create.html">Lead</a>
+
+                                                <div class="dropdown-menu dropdown-menu-animated"> 
+                                                    <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('cold_calling.delete',$cold_calling->id) }}')">Delete</a>  
+                                                    <a class="dropdown-item" href="">Lead</a>
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>1</td>
-                                        <td>Enamul</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <th>11,Dec-2023</th>
-                                        <th>Rana Plaza</th>
-                                        <th>D-3</th>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ @$cold_calling->customer->user->name }}</td>
+                                        <td>{{ @$cold_calling->customer->profession->name }}</td>
+                                        <td>{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
+                                        <td>{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
+                                        <td>{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
+                                        <td>{{ @$cold_calling->prospecting }}</td>
+                                        <td>{{ @$cold_calling->prospecting }}</td>
+                                        {{-- <td>{{ @$cold_calling->project->name }}</td> --}}
+                                        <td> Dummy </td>
+                                        <td>{{ @$cold_calling->unit->title }}</td>
+                                        <td>{{ @$cold_calling->customer->user->mobile }}</td>
+                                        <td>{{ @$cold_calling->freelancer->user->name }}</td>
+                                        <td>{{ @$cold_calling->remark }}</td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="lead_create.html">Lead</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>1</td>
-                                        <td>Enamul</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <th>11,Dec-2023</th>
-                                        <th>Rana Plaza</th>
-                                        <th>D-3</th>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="lead_create.html">Lead</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>2</td>
-                                        <td>Enamul</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <th>11,Dec-2023</th>
-                                        <th>Rana Plaza</th>
-                                        <th>D-3</th>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-center"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" class="d-block" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                    <a class="dropdown-item" href="#">Delete</a>
-                                                    <a class="dropdown-item" href="lead_create.html">Lead</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>3</td>
-                                        <td>Enamul</td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <th>11,Dec-2023</th>
-                                        <th>Rana Plaza</th>
-                                        <th>D-3</th>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td>
-                                        <td>He is Good</td>
-                                    </tr>
+                                    @endforeach 
                                 </tbody>
                             </table>
                         </div>
@@ -189,32 +119,30 @@
         <div class="row"> 
             <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="freelancer" class="form-label">Freelancer</label>
-                    <select class="select2" search id="freelancer" name="freelancer" required>
+                    <label for="employee" class="form-label">Employee</label>
+                    <select class="select2" search id="employee" name="employee">
                         <option value="">Select Freelancer</option> 
-                        <option value="">Enamul #FL1545 01796351081</option> 
-                        <option value="">Jamil Hosain #FL1545 01796351081</option> 
-                        <option value="">Md Mehedi Hasan #FL1545 01796351081</option> 
-                        <option value="">Suvo Hasan #FL1545 01796351081</option>  
+                        @foreach ($employees as $item)
+                            <option value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option> 
+                        @endforeach 
+                  
                     </select> 
                 </div>
-            </div>
-            <div class="col-md-6">
+            </div> 
+            {{-- <div class="col-md-6">
                 <div class="mb-3">
                     <label for="customer_name" class="form-label">Customer name <span class="text-danger">*</span></label>
                     <input type="text" name="customer_name" class="form-control" id="customer_name" placeholder="Customer name" >
                 </div>
-            </div>  
-            <div class="col-md-6">
+            </div>   --}}
+            <div class="col-md-12">
                 <div class="mb-3">
-                    <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
-                    <select class="select2" name="profession" id="profession">
+                    <label for="profession" class="form-label">Profession </label>
+                    <select class="form-select select2" name="profession" id="profession">
                         <option value="">Select Profession</option>
-                        <option value="">Doctors</option>
-                        <option value="">Lawyers</option> 
-                        <option value="">Banker</option>
-                        <option value="">Teacher</option>
-                        <option value="">Engineer</option>
+                       @foreach ($professions as $data)
+                            <option value="{{$data->id}}">{{$data->name}}</option> 
+                       @endforeach
                     </select>  
                 </div>
             </div>  

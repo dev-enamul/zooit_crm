@@ -31,7 +31,7 @@ if (!function_exists('get_date')) {
         $timestamp = strtotime($inputDate);
 
         if ($timestamp === false || $timestamp < 0) {
-            return '';
+            return '-';
         }
 
         return date($format, $timestamp);
@@ -98,7 +98,5 @@ if (!function_exists('get_percent')) {
     }
 }
 
-
-// user helper function
-
+ 
 

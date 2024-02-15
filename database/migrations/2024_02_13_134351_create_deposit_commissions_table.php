@@ -12,9 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('deposit_id')->constrained('deposits');
             $table->foreignId('user_id')->constrainted('users');
-            $table->foreignId('project_id')->constrained('projects');
+            $table->foreignId('designation_id')->constrainted('designations');
+            $table->foreignId('project_id')->nullable()->constrained('projects');
             $table->foreignId('commission_id')->constrainted('commissions');
-            $table->date('date'); 
+            $table->decimal('commission', 10, 2)->default(0.00);
+            $table->date('date')->default(now()); 
             $table->timestamps();
         });
     }

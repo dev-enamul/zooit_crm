@@ -24,6 +24,7 @@ class Salse extends Model
         'rest_down_payment_date',
         'installment_type',
         'installment_value',
+        'total_deposit',
         'facility',
         'employee_id',
         'approve_by',
