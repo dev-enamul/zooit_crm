@@ -129,7 +129,8 @@
                                                 {{ $errors->first('unit') }}
                                             </span>
                                         @endif
-                                    </div> 
+                                    </div>
+                                     
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>

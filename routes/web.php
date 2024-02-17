@@ -172,6 +172,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Follow Up
         Route::resource('followup', FollowupController::class);
+        Route::get('get-project-duration-type-name', [FollowupController::class, 'projectDurationTypeName'])->name('get-project-duration-type-name');
 
         // Follow Up Analysis
         Route::resource('followup-analysis', FollowupAnalysisController::class);
