@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Product Sold & Unsold</h4> 
+                        <h4 class="mb-sm-0">{{$product->name}}</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
@@ -28,85 +28,20 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> pdf</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                             
-                           </div>
-                           
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                 <tbody>
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                 <tbody> 
+                                    @for ($i = 1; $i <= $product->total_floor; $i++)
                                     <tr class=""> 
-                                        <td><b>4th Floor</b></td>
-                                        <td class="bg-danger text-white">Garaze 01</td>
-                                        <td class="bg-primary text-white">Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td> 
-                                    </tr> 
-                                    <tr class=""> 
-                                        <td><b>3rd Floor</b></td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td> 
-                                    </tr>
-                                    <tr class=""> 
-                                        <td><b>2nd Floor</b></td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td> 
-                                    </tr>
-                                    <tr class=""> 
-                                        <td><b>1st Floor</b></td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td> 
-                                    </tr> 
-                                   <tr class=""> 
-                                        <td><b>Ground Floor</b></td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>  
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td>
-                                        <td>Garaze 01</td> 
-                                    </tr> 
-                               
+                                        <td><b>Floor-{{$i}}</b></td>
+                                        @php 
+                                            $units = $product->units->where('floor',$i);
+                                        @endphp 
+                                        @foreach ($units as $unit)
+                                            <td class="bg-danger text-white">{{$unit->name}}</td>
+                                        @endforeach 
+                                    </tr>  
+                                    @endfor 
                                 </tbody>
                             </table>
                         </div>
@@ -132,4 +67,13 @@
         </div>
     </footer> 
 </div>
+@endsection  
+
+@section('script') 
+<script>
+    var title = $('.page-title-box').find('h4').text();
+    var Period = $('.page-title-box').find('p').text(); 
+</script>
+    @include('includes.data_table')
+    
 @endsection

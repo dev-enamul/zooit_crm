@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('profession_id')->constrained()->nullable();
             $table->string('name')->nullable(); 
             $table->unsignedBigInteger('ref_id')->nullable();
-            $table->foreign('ref_id')->references('id')->on('users'); 
+            $table->foreign('ref_id')->references('id')->on('users');
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->softDeletes();
             $table->timestamps(); 

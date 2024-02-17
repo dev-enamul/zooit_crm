@@ -49,4 +49,8 @@ class Freelancer extends Model
     {
         return $this->belongsTo(Designation::class);
     }
+
+    public function pending(){
+        return $this->where('status',0);
+    }
 }
