@@ -1,6 +1,6 @@
 $(document).ready(function() {  
-    if (document.getElementById("datatable-buttons")) { 
-        $("#datatable-buttons").DataTable({
+    if (document.getElementById("datatable")) { 
+        $("#datatable").DataTable({
             lengthChange: false,
             buttons: [
                 {
@@ -47,6 +47,6 @@ $(document).ready(function() {
             drawCallback: function() {
                 $(".dataTables_paginate > .pagination").addClass("pagination");
             }
-        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+        }).buttons().container().appendTo("#datatable_wrapper .col-md-6:eq(0)");
     }
 });

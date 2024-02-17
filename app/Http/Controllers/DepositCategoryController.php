@@ -40,11 +40,10 @@ class DepositCategoryController extends Controller
     public function destroy($id){ 
         try{
             $data = DepositCategory::find($id);
-            $data->delete();
-
-            return redirect()->back()->with('success', 'Deposit Category Deleted');
-        }catch(Exception $e){
-            return redirect()->back()->with('error',$e->getMessage());
+            $data->delete(); 
+            return response()->json(['status' => 'success', 'message' => 'Deposit Category Deleted']);
+        }catch(Exception $e){ 
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         };
 
     }

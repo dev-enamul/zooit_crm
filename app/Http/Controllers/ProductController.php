@@ -217,8 +217,14 @@ class ProductController extends Controller
         return view('product.product_save', compact('title','divisions','districts','upazilas','unions', 'villages','product','selected'));
     }
 
-    public function sold_unsold(){
-        return view('product.sold_unsold');
+    public function sold_unsold($id){
+        try{
+            $product = Project::find($id); 
+            return view('product.sold_unsold',compact('product'));
+        }catch(Exception $e){
+            dd($e->getMessage());
+        }
+        
     }
 
     public function product_approve(){

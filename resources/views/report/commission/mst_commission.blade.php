@@ -56,9 +56,9 @@
                                                 <a href="{{route('mst.commission.details',1)}}">{{$employee->name}} [{{$employee->user_id}}]</a>
                                             </td>
                                             <td>Manager</td>
-                                            @foreach ($projects as $project)
-                                                <td>৳325</td> 
-                                            @endforeach  
+                                            @foreach ($projects as $project)  
+                                                <td>{{get_price(120)}}</td> 
+                                            @endforeach
                                             <td>৳76543</td>
                                             <td>৳54321</td>
                                             <td>8%</td>

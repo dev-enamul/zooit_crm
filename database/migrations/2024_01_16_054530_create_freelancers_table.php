@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('designation_id')->constrained('designations')->nullable();
 
             $table->foreignId('last_approve_by')->constrained('users');
-            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->foreignId('ref_id')->nullable()->constrained('users'); 
+            $table->tinyInteger('status')->default(1)->comment('1= Complete, 0= Pending');
             $table->softDeletes();
             $table->timestamps(); 
         });

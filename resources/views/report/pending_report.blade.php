@@ -3,69 +3,72 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">
-
-            <!-- start page title -->
+        <div class="container-fluid"> 
             <div class="row">
-                <div class="col-12"> 
-                    <div class="text-center">
-                        <h4 class="mb-sm-0">{{ config('app.name', 'ZOOM IT') }}</h4> 
-                        <p class="m-0">Daily Work Pending or Done Report</p>
-                        <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="mb-sm-0">Daily Work Pending or Done Report</h4> 
+                            <p class="d-none">{{get_date($startDate)}} - {{get_date($endDate)}}</p>
+                        </div>
+
+                        <div class="">   
+                            <form action="" method="get" action="">
+                                <div class="input-group">  
+                                    <input class="form-control" id="date" name="date" default="This Month" type="text" value="" /> 
+                                    <button class="btn btn-secondary" type="submit">
+                                        <span><i class="fas fa-filter"></i> Filter</span>
+                                    </button> 
+                                </div>
+                            </form> 
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
 
          
 
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-        
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                {{-- <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div> --}}
-                           </div> 
+                        <div class="card-body"> 
                            <div class="table-box" style="overflow-x: scroll;">
-                            <table class="table table-hover align-middle text-center table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-hover align-middle table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
-                                    <tr class="align-middle"> 
-                                        <th>SL.</th>
+                                    <tr class="align-middle">  
                                         <th>Employee</th>
                                         <th>Designation</th>
                                         <th>Pending FL</th>
                                         <th>Done FL</th>
                                         <th>Pending Cus.</th>
-                                        <th>Done Cus</th>
+                                        <th>Done Cus.</th>
                                         <th>Pending Prospecting</th>
                                         <th>Done Prospecting</th>
                                         <th>Pending Cold Calling </th> 
                                         <th>Done Cold Calling</th>
                                         <th>Pending Lead</th>
                                         <th>Done Lead</th>
+                                        <th>Pending Lead Analysis</th>
+                                        <th>Done Lead Analysis</th>
+
                                         <th>Pending Visit & Presentation</th> 
-                                        <th>Done Visit & Presentation</th>
+                                        <th>Done Visit & Presentation</th> 
+                                        <th>Pending Visit Analysis</th> 
+                                        <th>Done Visit Analysis</th>
+
                                         <th>Pending Folow Up</th>
                                         <th>Done Follow Up</th>
+                                        
+                                        <th>Pending Folow Up Analysis</th>
+                                        <th>Done Follow Up Analysis</th>
+
                                         <th>Pending Negotiation</th>
-                                        <th>Done Negotiation</th>
+                                        <th>Done Negotiation</th> 
+
+                                        <th>Pending Negotiation Analysis</th>
+                                        <th>Done Negotiation Analysis</th>
+
                                         <th>Pending Rejection</th>
                                         <th>Done Rejection</th>
                                         <th>New Salse Unit</th>
@@ -74,33 +77,119 @@
                                     </tr>
                                 </thead>
                              <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>Sales Executive</td>
-                                    <td>2</td>
-                                    <td>5</td>
-                                    <td>1</td>
-                                    <td>8</td>
-                                    <td>3</td>
-                                    <td>6</td>
-                                    <td>4</td>
-                                    <td>7</td>
-                                    <td>2</td>
-                                    <td>5</td>
-                                    <td>1</td>
-                                    <td>8</td>
-                                    <td>3</td>
-                                    <td>6</td>
-                                    <td>4</td>
-                                    <td>7</td>
-                                    <td>2</td>
-                                    <td>5</td>
-                                    <td>10</td>
-                                    <td>15</td>
-                                    <td>8</td>
-                                </tr>
-                                
+                                @foreach ($employees as $key => $employee)
+                                    <tr> 
+                                        <td>{{$employee->name}}</td>
+                                        <td>{{@$employee->employee->designation->title}}</td> 
+                                        @php   
+                                        $my_all_employee_ids = my_all_employee($employee->id);
+                                          $freelancer = App\Models\Freelancer::whereIn('ref_id', $my_all_employee_ids) 
+                                            ->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp 
+                                        <td>{{$freelancer->where('status', 0)->count()}}</td>
+                                        <td>{{$freelancer->where('status', 1)->count()}}</td> 
+                                        
+                                        @php
+                                        $customer = App\Models\Customer::whereIn('ref_id', $my_all_employee_ids) 
+                                            ->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$customer->where('status', 0)->count()}}</td>
+                                        <td>{{$customer->where('status', 1)->count()}}</td> 
+
+                                        @php
+                                        $prospecting = App\Models\Prospecting::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$prospecting->where('status',0)->count()}}</td>
+                                        <td>{{$prospecting->where('status',1)->count()}}</td> 
+
+                                        @php
+                                        $cold_calling = App\Models\ColdCalling::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$cold_calling->where('status',0)->count()}}</td>
+                                        <td>{{$cold_calling->where('status',1)->count()}}</td>  
+
+                                        @php
+                                        $lead = App\Models\Lead::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]); 
+
+                                        @endphp
+                                        <td>{{$lead->where('status',0)->count()}}</td>
+                                        <td>{{$lead->where('status',1)->count()}}</td>  
+                                        @php 
+
+                                        $lead_analysis = App\Models\LeadAnalysis::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$lead_analysis->where('status',0)->count()}}</td>
+                                        <td>{{$lead_analysis->where('status',1)->count()}}</td>
+
+                                        @php
+                                        $visit_presentation = App\Models\Presentation::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$visit_presentation->where('status',0)->count()}}</td>
+                                        <td>{{$visit_presentation->where('status',1)->count()}}</td>
+
+                                        @php
+                                        $visit_analysis = App\Models\VisitAnalysis::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$visit_analysis->where('status',0)->count()}}</td>
+                                        <td>{{$visit_analysis->where('status',1)->count()}}</td>
+                                        
+                                        @php
+                                        $follow_up = App\Models\FollowUp::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$follow_up->where('status',0)->count()}}</td>
+                                        <td>{{$follow_up->where('status',1)->count()}}</td>
+
+                                        @php
+                                        $follow_up_analysis = App\Models\FollowUpAnalysis::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$follow_up_analysis->where('status',0)->count()}}</td>
+                                        <td>{{$follow_up_analysis->where('status',1)->count()}}</td>
+
+                                        @php
+                                        $negotiation = App\Models\Negotiation::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$negotiation->where('status',0)->count()}}</td>
+                                        <td>{{$negotiation->where('status',1)->count()}}</td>
+
+                                        @php
+                                        $negotiation_analysis = App\Models\NegotiationAnalysis::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$negotiation_analysis->where('status',0)->count()}}</td>
+                                        <td>{{$negotiation_analysis->where('status',1)->count()}}</td>
+
+                                        @php
+                                        $rejection = App\Models\Rejection::whereHas('customer', function($query) use($my_all_employee_ids){
+                                            $query->whereIn('ref_id', $my_all_employee_ids);
+                                        })->whereBetween('created_at', [$startDate, $endDate]);
+                                        @endphp
+                                        <td>{{$rejection->where('status',0)->count()}}</td>
+                                        <td>{{$rejection->where('status',1)->count()}}</td> 
+
+                                         <td>0</td>
+                                         <td>0</td>
+                                         <td>0</td>
+                                    </tr>
+                                @endforeach 
                              </tbody>
                             </table>
                            </div>
@@ -110,149 +199,18 @@
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->
-    </div> 
-
-    @include('includes.footer')
-
+    </div>  
+    @include('includes.footer') 
 </div> 
-
-<div class="offcanvas offcanvas-end" id="offcanvas">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Select Filter Item</h5>
-        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-            <i class="fa fa-times"></i>
-        </button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row">   
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="duration" class="form-label">Month </label>
-                    {{-- <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />    --}}
-                    <input type="month" name="month" class="form-control" id="">
-                </div>
-            </div>  
-             
-            <div class="col-md-6"> 
-                <div class="mb-3">
-                    <label for="zone" class="form-label">Zone </label>
-                    <select class="select2" name="zone" id="zone" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="area" class="form-label">Area </label>
-                    <select class="select2" name="area" id="area" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-  
-            <div class="col-md-6"> 
-                <div class="mb-3">
-                    <label for="division" class="form-label">Division </label>
-                    <select class="select2" name="division" id="division" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="district" class="form-label">District </label>
-                    <select class="select2" name="district" id="district" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="upazila" class="form-label">Thana/Upazila </label>
-                    <select class="select2" name="upazila" id="upazila">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="union" class="form-label">Union </label>
-                    <select class="select2" name="union" id="union">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div> 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
-        </div>
-    </div>
-</div>
+ 
 @endsection
 
-@section('script')
-    <script>
-        getDateRange('duration')
-    </script>
+@section('script') 
+<script>
+    var title = $('.page-title-box').find('h4').text();
+    var Period = $('.page-title-box').find('p').text();
+    getDateRange('date');
+</script>
+    @include('includes.data_table')
+    
 @endsection
