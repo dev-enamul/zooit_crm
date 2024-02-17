@@ -21,11 +21,6 @@ class ColdCallingController extends Controller
         return Priority::values();
     }
 
-    public function dsindex()
-    {
-        return view('cold_calling.cold_calling_list');
-    }
-
     public function index(Request $request)
     { 
         $professions = Profession::all();  

@@ -162,9 +162,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Presentation
         Route::resource('presentation', PresentationController::class);
+        Route::post('presentation-save/{id?}', [PresentationController::class, 'save'])->name('presentation.save');
+        Route::any('presentation-delete/{id}', [PresentationController::class, "presentationDelete"])->name('presentation.delete');
 
         // Presentation Analysis
         Route::resource('presentation_analysis', PresentationAnalysisController::class);
+        Route::post('visit-save/{id?}', [PresentationAnalysisController::class, 'save'])->name('visit.save');
+        Route::any('visit-delete/{id}', [PresentationAnalysisController::class, "presentationDelete"])->name('visit.delete');
 
         // Follow Up
         Route::resource('followup', FollowupController::class);
