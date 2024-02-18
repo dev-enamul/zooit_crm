@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Product Approve</h4> 
+                        <h4 class="mb-sm-0">Prospecting Approve</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
@@ -65,21 +65,20 @@
                                                     <input class="form-check-input" type="checkbox" name="prospecting_id[]" value="{{$prospecting->id}}" id="flexCheckChecked" >
                                                 </td>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->name }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->profession->name }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->union->name }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->village->name }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">
+                                                <td >{{ @$prospecting->customer->name }}</td>
+                                                <td >{{ @$prospecting->customer->profession->name }}</td>
+                                                <td >{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
+                                                <td >{{ @$prospecting->customer->user->userAddress->union->name }}</td>
+                                                <td >{{ @$prospecting->customer->user->userAddress->village->name }}</td>
+                                                <td >
                                                     @if ($prospecting->media == 1)
                                                         <span class="badge bg-primary">Phone</span>
                                                     @elseif($prospecting->media == 2)
                                                         <span class="badge bg-success">Meet</span>
-
                                                     @endif 
                                                 </td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->phone }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->employee->name }}</td>     
+                                                <td >{{ @$prospecting->customer->user->phone }}</td>
+                                                <td >{{ @$prospecting->employee->name }}</td>     
                                             </tr>
                                         @endforeach  
                                     </tbody>
@@ -122,12 +121,12 @@
     });
 </script>
 
-<script>
+{{-- <script>
     $(document).ready(function () {
         $(window).on('load', function () {
             console.log('DataTable initialized');
             var table = $('#approve_table').DataTable({});
         });
     });
-</script>
+</script> --}}
 @endsection
