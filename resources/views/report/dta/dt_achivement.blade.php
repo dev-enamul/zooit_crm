@@ -3,61 +3,54 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">
-
-            <!-- start page title -->
+        <div class="container-fluid"> 
             <div class="row">
-                <div class="col-12"> 
-                    <div class="text-center">
-                        <h4 class="mb-sm-0">{{ config('app.name', 'ZOOM IT') }}</h4> 
-                        <p class="m-0">Project, Unit - Sales Executive, ASM/DSM Wise & Area In Chagre Deposit Report</p>
-                        <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="mb-sm-0">
+                                @if ($is_all_designation)
+                                    All Employee
+                                @else
+                                    @foreach ($selected_designation as  $designation)
+                                        {{$designation->title}} @if(!$loop->last) , @endif
+                                    @endforeach 
+                                @endif
+                            Wise Deposit Report</h4> 
+                            <p class="d-none">{{get_date($startDate)}} - {{get_date($endDate)}}</p>
+                        </div>
+
+                        <div class="d-flex">   
+                            <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a>
+                            <a class="btn btn-primary me-1" href="{{route('bank-day.index')}}" target="blank">
+                                <span><i class="fas fa-filter"></i> BankDay Setting</span>
+                            </a> 
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
 
          
 
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-        
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="flex-wrap mb-2">   
-                                        <a class="btn btn-primary" href="{{route('bank-day.index')}}" target="blank">
-                                            <span><i class="fas fa-filter"></i> BankDay Setting</span>
-                                        </a> 
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div> 
+                        <div class="card-body"> 
                            <div class="table-box" style="overflow-x: scroll;">
-                            <table class="table table-hover align-middle text-center table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-hover align-middle text-center table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="align-middle"> 
                                         <th>SL.</th>
                                         <th>Name of Employee</th>
                                         <th>Total Target</th>
                                         <th>Regolar Deposit</th>
-                                        <th>Block Factory Share Deposit</th>
-                                        <th>Franchise Partner Security Deposit</th>
-                                        <th>Build BD Share Deposit</th>
-                                        <th>S.T.I Deposit</th>
+                                        @foreach ($deposit_categories as $deposit_category)
+                                            <th>{{ $deposit_category->name }}</th> 
+                                        @endforeach  
                                         <th>Total Cash Collection</th>
                                         <th>T & A %</th> 
                                         <th>Market Share</th>
@@ -67,22 +60,68 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr class=""> 
-                                        <td>1</td>
-                                        <td>John Doe</td>
-                                        <td>100,000</td>
-                                        <td>20,000</td>
-                                        <td>10,000</td>
-                                        <td>5,000</td>
-                                        <td>8,000</td>
-                                        <td>7,000</td>
-                                        <td>50,000</td>
-                                        <td>80%</td>
-                                        <td>15%</td>
-                                        <td>50,000</td>
-                                        <td>10,000</td>
-                                        <td>40,000</td> 
-                                    </tr>   
+                                    @foreach ($selected_designation as  $designation)
+                                        @if (isset($designation->employees) && count($designation->employees) > 0)
+                                            @foreach ($designation->employees as $key=> $employee)
+                                            <tr class=""> 
+                                                <td>{{ $key+ 1}}</td>
+                                                <td>{{$employee->user->name}}</td>
+                                              @php
+                                                  $target = clone $deposit_target;
+                                                  $total_target = $target->where('assign_to', $employee->id)->sum(function ($item) {
+                                                        return $item->new_total_deposit + $item->existing_total_deposit;
+                                                    });
+                                              @endphp
+                                                <td>{{get_price($total_target)}}</td>
+                                                @php
+                                                    $my_all_employee = my_all_employee($employee->id);
+                                                    $deposit = App\Models\Deposit::where('approve_by', '!=', null)
+                                                        ->whereHas('customer', function ($query) use ($my_all_employee) {
+                                                            $query->WhereIn('ref_id', $my_all_employee);
+                                                        }) 
+                                                        ->whereBetween('date', [$startDate, $endDate]); 
+                                                    @endphp 
+                                                 @php
+                                                    $clone_deposit = clone $deposit; 
+                                                @endphp 
+                                                <td>{{get_price($clone_deposit->where('deposit_category_id', null)->sum('amount'))}}</td>
+                                                @foreach ($deposit_categories as $deposit_category)  
+                                                    @php
+                                                        $clone_deposit = clone $deposit; 
+                                                    @endphp
+                                                    <td>{{get_price($clone_deposit->where('deposit_category_id', $deposit_category->id)->sum('amount'))}}</td>  
+                                                @endforeach  
+
+                                                @php
+                                                    $clone_deposit = clone $deposit; 
+                                                    $total_deposit = $clone_deposit->sum('amount');
+                                                @endphp 
+
+                                                <td>{{get_price($total_deposit)}} </td>
+                                                <td>{{get_percent($total_deposit,$total_target)}}</td>
+                                                <td>15%</td>
+                                                <td>{{get_price($total_target-$total_deposit)}}</td>
+                                                <td>10,000</td>
+                                                <td>40,000</td> 
+                                            </tr> 
+                                            @endforeach    
+                                            {{-- <tr>
+                                                <td>{{$designation->title}} Report</td>
+                                                <td></td>
+                                                <td>100,000</td> 
+                                                 @foreach ($deposit_categories as $deposit_category)  
+                                                    <td> {{$deposit->where('deposit_category_id', $deposit_category->id)->sum('amount')}}</td> 
+                                                @endforeach  
+                                                <td>{{$designation->title}}</td>
+                                                <td>{{$designation->title}}</td>
+                                                <td>{{$designation->title}}</td>
+                                                <td>{{$designation->title}}</td>
+                                                <td>{{$designation->title}}</td>
+                                                <td>{{$designation->title}}</td>
+                                                <td>{{$designation->title}}</td> 
+                                            </tr>  --}}
+                                        @endif 
+                                    @endforeach 
                                 </tbody>
                             </table>
                            </div>
@@ -106,157 +145,35 @@
         </button>
     </div>
     <div class="offcanvas-body">
-        <div class="row">   
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="duration" class="form-label">Month </label>
-                    <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />   
-                </div>
-            </div>   
-
-            {{-- <div class="col-md-6"> 
-                <div class="mb-3">
-                    <label for="period" class="form-label">Select Period </label>
-                    <select class="select2" name="period" id="period" >
-                        <option value="">Full Month</option>
-                        <option value="1">First Week</option> 
-                        <option value="1">Second Week</option> 
-                        <option value="1">Fourth Week</option> 
-                    </select>  
-                </div>
-            </div> --}}
-
-            <div class="col-md-6"> 
-                <div class="mb-3">
-                    <label for="position" class="form-label">Employee Position </label>
-                    <select class="select2" name="position" id="position" >
-                        <option value="">Salse Executive</option>
-                        <option value="1">Area Inncharge</option> 
-                        <option value="1">Zonal Manager</option> 
-                    </select>  
-                </div>
+       <form action="" method="get">
+            <div class="row">   
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="duration" class="form-label">Month </label>
+                        <input class="form-control" id="duration" name="date" start="{{$startDate}}" end="{{$endDate}}" type="text" value=""/>   
+                    </div>
+                </div>  
+                <div class="col-md-12"> 
+                    <div class="mb-3">
+                        <label for="designation" class="form-label">Employee Position </label>
+                        <select class="select2" multiple  name="designation[]" id="designation"> 
+                            <option value="">All Designation</option>
+                            @foreach ($designations as $designation) 
+                                <option value="{{$designation->id}}">{{$designation->title}}</option>
+                            @endforeach 
+                        </select>  
+                    </div>
+                </div> 
+                <div class="text-end ">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger refresh_btn"><i class="mdi mdi-refresh"></i> Reset</button>
+                </div>  
             </div>
-
-            <div class="col-md-6"> 
-                <div class="mb-3">
-                    <label for="division" class="form-label">Division </label>
-                    <select class="select2" name="division" id="division" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
- 
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="area" class="form-label">Area </label>
-                    <select class="select2" name="area" id="area" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6"> 
-                <div class="mb-3">
-                    <label for="zone" class="form-label">Zone </label>
-                    <select class="select2" name="zone" id="zone" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="district" class="form-label">District </label>
-                    <select class="select2" name="district" id="district" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="upazila" class="form-label">Thana/Upazila </label>
-                    <select class="select2" name="upazila" id="upazila">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="union" class="form-label">Union </label>
-                    <select class="select2" name="union" id="union">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div> 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
-        </div>
+       </form>
     </div>
 </div>
 @endsection
 
-@section('script')
+@section('script') 
     <script>
         getDateRange('duration')
     </script>

@@ -3,44 +3,50 @@
 function getDateRange(id,CustomRangeLabel = false){ 
 
     var defaultRange = $("#"+id).attr("default");
+    var startDate = $("#"+id).attr("start");
+    var endDate = $("#"+id).attr("end");
+
  
     var defaultStartDate, defaultEndDate;
 
-    switch (defaultRange) {
-        case "All":
-            defaultStartDate = moment('1900-01-01');
-            defaultEndDate = moment();
-            break;
-        case "Today":
-            defaultStartDate = moment();
-            defaultEndDate = moment();
-            break;
-        case "Yesterday":
-            defaultStartDate = moment().subtract(1, "days");
-            defaultEndDate = moment().subtract(1, "days");
-            break;
-        case "Last 7 Days":
-            defaultStartDate = moment().subtract(6, "days");
-            defaultEndDate = moment();
-            break;
-        case "Last 30 Days":
-            defaultStartDate = moment().subtract(29, "days");
-            defaultEndDate = moment();
-            break;
-        case "This Month":
-            defaultStartDate = moment().startOf("month");
-            defaultEndDate = moment().endOf("month");
-            break;
-        case "Last Month":
-            defaultStartDate = moment().subtract(1, "month").startOf("month");
-            defaultEndDate = moment().subtract(1, "month").endOf("month");
-            break;
-        // Handle the case when no default range is specified or an invalid value is provided
-        default:
-            // Set a default range, or you can leave it blank
-            defaultStartDate = moment().subtract(29, "days");
-            defaultEndDate = moment();
-            break;
+    if (startDate && endDate) {
+        defaultStartDate = moment(startDate);
+        defaultEndDate = moment(endDate);
+    }else{
+        switch (defaultRange) {
+            case "All":
+                defaultStartDate = moment('1900-01-01');
+                defaultEndDate = moment();
+                break;
+            case "Today":
+                defaultStartDate = moment();
+                defaultEndDate = moment();
+                break;
+            case "Yesterday":
+                defaultStartDate = moment().subtract(1, "days");
+                defaultEndDate = moment().subtract(1, "days");
+                break;
+            case "Last 7 Days":
+                defaultStartDate = moment().subtract(6, "days");
+                defaultEndDate = moment();
+                break;
+            case "Last 30 Days":
+                defaultStartDate = moment().subtract(29, "days");
+                defaultEndDate = moment();
+                break;
+            case "This Month":
+                defaultStartDate = moment().startOf("month");
+                defaultEndDate = moment().endOf("month");
+                break;
+            case "Last Month":
+                defaultStartDate = moment().subtract(1, "month").startOf("month");
+                defaultEndDate = moment().subtract(1, "month").endOf("month");
+                break; 
+            default: 
+                defaultStartDate = moment().subtract(29, "days");
+                defaultEndDate = moment();
+                break;
+        }
     }
 
     var direction = $("html").attr("dir") === "rtl" ? "left" : "right";  

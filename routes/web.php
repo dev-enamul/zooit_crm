@@ -162,12 +162,17 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Presentation
         Route::resource('presentation', PresentationController::class);
+        Route::post('presentation-save/{id?}', [PresentationController::class, 'save'])->name('presentation.save');
+        Route::any('presentation-delete/{id}', [PresentationController::class, "presentationDelete"])->name('presentation.delete');
 
         // Presentation Analysis
         Route::resource('presentation_analysis', PresentationAnalysisController::class);
+        Route::post('visit-save/{id?}', [PresentationAnalysisController::class, 'save'])->name('visit.save');
+        Route::any('visit-delete/{id}', [PresentationAnalysisController::class, "presentationDelete"])->name('visit.delete');
 
         // Follow Up
         Route::resource('followup', FollowupController::class);
+        Route::get('get-project-duration-type-name', [FollowupController::class, 'projectDurationTypeName'])->name('get-project-duration-type-name');
 
         // Follow Up Analysis
         Route::resource('followup-analysis', FollowupAnalysisController::class);
@@ -246,9 +251,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('pending-report',[PendingReportController::class,'pending_report'])->name('pending.report');
 
 
+        Route::get('monthly-dt-achivement', [DtaReportController::class, 'monthly_dt_achivement'])->name('monthly.dt.achivement');
         Route::get('dt-achivement', [DtaReportController::class, 'dt_achivement'])->name('dt.achivement');
-        Route::get('daily-deposit', [DtaReportController::class, 'daily_deposit'])->name('daily.deposit');
-        Route::get('deposit-report', [DtaReportController::class, 'deposit_report'])->name('deposit.report');
+        Route::get('daily-deposit', [DtaReportController::class, 'daily_deposit'])->name('daily.deposit'); 
         Route::get('due-report', [DueReportController::class, 'due_report'])->name('due.report');
         Route::get('floor-wise-sold-unsold-report', [ProductReportController::class, 'floor_wise_sold'])->name('floor.wise.sold.report');
 

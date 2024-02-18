@@ -10,4 +10,9 @@ class DepositCategory extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = ['name'];
+
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class, 'deposit_category_id');
+    }
 }

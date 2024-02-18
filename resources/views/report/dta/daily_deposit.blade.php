@@ -14,10 +14,11 @@
                             <p class="d-none">{{get_date($startDate)}} - {{get_date($endDate)}}</p>
                         </div>
 
-                        <div class="">   
+                        <div class="d-flex">   
+                            <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a>
                             <form action="" method="get" action="">
                                 <div class="input-group">  
-                                    <input class="form-control" id="date" name="date" default="This Month" type="text" value="" /> 
+                                    <input class="form-control" id="date" name="date" start="{{$startDate}}" end="{{$endDate}}" type="text" value="" /> 
                                     <button class="btn btn-secondary" type="submit">
                                         <span><i class="fas fa-filter"></i> Filter</span>
                                     </button> 
@@ -60,19 +61,19 @@
                                         @endforeach 
                                         <td>{{ get_price($deposit->sum('amount')) }}</td>
                                     </tr>
-                                    @endforeach 
-                                </tbody>
-                                <tfoot>
-                                    <tr class="align-middle"> 
-                                        <th></th>
-                                        <th>Total</th>
-                                        <th>{{ get_price($total_deposit->where('deposit_category_id',null)->sum('amount'))}}</th>
-                                        @foreach ($deposit_categories as $category)
-                                            <th>{{ get_price($total_deposit->where('deposit_category_id',$category->id)->sum('amount'))}}</th> 
+                                    @endforeach  
+
+                                    <tr class="">  
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td>{{ get_price($total_deposit->where('deposit_category_id',null)->sum('amount'))}}</td>
+                                        @foreach ($deposit_categories as $category) 
+                                            <td>{{ get_price($total_deposit->where('deposit_category_id',$category->id)->sum('amount'))}}</td>
                                         @endforeach 
-                                        <th>{{get_price($total_deposit->sum('amount'))}}</th>
+                                        <td>{{get_price($total_deposit->sum('amount'))}}</td>
                                     </tr>
-                                </tfoot>
+                                   
+                                </tbody> 
                             </table>
                            </div>
                         </div>

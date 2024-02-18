@@ -38,6 +38,7 @@ $(document).ready(function() {
                 },
                 // "colvis"
             ],
+            
             language: {
                 paginate: {
                     previous: "<i class='mdi mdi-chevron-left'>",
