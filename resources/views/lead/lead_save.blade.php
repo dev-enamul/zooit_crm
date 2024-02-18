@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Cold Calling Create')
+@section('title',$title)
 
 @section('content')
 <div class="main-content">
@@ -9,22 +9,22 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Cold Calling 
-                            @if(isset($cold_calling))
-                                Edit
+                        <h4 class="mb-sm-0">
+                            @if(isset($lead))
+                                Lead Edit
                             @else
-                                Entry
+                                Lead Entry
                             @endif
-                        </h4>
+                        </h4> 
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Cold Calling  
-                                    @if(isset($cold_calling))
-                                        Edit
+                                <li class="breadcrumb-item active">
+                                    @if(isset($lead))
+                                        Lead Edit
                                     @else
-                                        Entry
+                                        Lead Entry
                                     @endif
                                 </li>
                             </ol>
@@ -39,11 +39,11 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            @if(isset($prospecting))
-                                <form action="{{route('cold_calling.save',$cold_calling->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                                <input type="hidden" name="id" value="{{$cold_calling->id}}">
+                            @if(isset($lead))
+                                <form action="{{route('lead.save',$lead->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <input type="hidden" name="id" value="{{$lead->id}}">
                             @else 
-                                <form action="{{route('cold_calling.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('lead.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
                                 <div class="row"> 
@@ -57,7 +57,7 @@
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($cold_calling) ? $cold_calling->customer_id : null) == $customer->id ? 'selected' : '' }}>
+                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($lead) ? $lead->customer_id : null) == $customer->id ? 'selected' : '' }}>
                                                             {{ @$customer->user->name }} ({{ $customer->user->user_id}})
                                                         </option>
                                                     @endforeach
@@ -67,15 +67,15 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="priority" class="form-label">Priority<span class="text-danger">*</span></label>
+                                            <label for="priority" class="form-label">Purchase Capacity<span class="text-danger">*</span></label>
                                             <select class="select2" name="priority" id="priority" required>
                                                 @isset($priorities)
                                                     @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('media', isset($cold_calling) ? $cold_calling->priority : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('media', isset($lead) ? $lead->priority : null) == $id ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -88,14 +88,14 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="project" class="form-label">Interested Project Name <span class="text-danger">*</span></label>
+                                        <label for="project" class="form-label">Preferred Project Name <span class="text-danger">*</span></label>
                                         <select class="form-select reset-data" name="project" id="project" required>
                                             <option data-display="Select a project *" value="">
                                                 Select a Project
                                             </option>
                                             @isset($projects)
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($cold_calling) ? $cold_calling->project_id : null) == $project->id ? 'selected' : '' }}>
+                                                    <option value="{{ $project->id }}" {{ old('project', isset($lead) ? $lead->project_id : null) == $project->id ? 'selected' : '' }}>
                                                         {{ $project->name }}
                                                     </option>
                                                 @endforeach
@@ -107,17 +107,17 @@
                                                 {{ $errors->first('project') }}
                                             </span>
                                         @endif
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="unit" class="form-label">Interested Unit Name <span class="text-danger">*</span></label>
+                                        <label for="unit" class="form-label">Preferred Unit Name <span class="text-danger">*</span></label>
                                         <select class="form-select reset-data" name="unit" id="unit" required>
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($cold_calling) ? $cold_calling->unit_id : null) == $unit->id ? 'selected' : '' }}>
+                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($lead) ? $lead->unit_id : null) == $unit->id ? 'selected' : '' }}>
                                                         {{ $unit->title }}
                                                     </option>
                                                 @endforeach
@@ -129,19 +129,26 @@
                                                 {{ $errors->first('unit') }}
                                             </span>
                                         @endif
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="purchase_date" class="form-label">Possible Purchase Date</label>
+                                            <input type="text" name="purchase_date" class="form-control datepicker w-100" id="purchase_date" placeholder="Select passport issue date" value="{{isset($lead) ? $lead->possible_purchase_date : old('purchase_date')}}"> 
+                                        </div>
                                     </div>
-                                     
+
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark">{{isset($cold_calling) ? $cold_calling->remark : old('remark')}}</textarea>
+                                            <textarea class="form-control" id="remark" rows="3" name="remark">{{isset($lead) ? $lead->remark : old('remark')}}</textarea>
                                         </div>
                                     </div>
                                 </div>
                                   
-                                <div class="text-end ">
-                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-                                </div> 
+                                <div>
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                </div>
                             </form>
                         </div>
                     </div> 

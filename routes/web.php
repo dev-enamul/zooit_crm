@@ -152,18 +152,27 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Lead 
         Route::resource('lead', LeadController::class);
+        Route::post('lead-save/{id?}', [LeadController::class, 'save'])->name('lead.save');
+        Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
 
         // Lead Analysis
         Route::resource('lead-analysis', LeadAnalysisController::class);
+        Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');
+        Route::any('lead-analysis-delete/{id}', [LeadAnalysisController::class, "leadAnalysisDelete"])->name('lead_analysis.delete');
 
         // Presentation
         Route::resource('presentation', PresentationController::class);
+        Route::post('presentation-save/{id?}', [PresentationController::class, 'save'])->name('presentation.save');
+        Route::any('presentation-delete/{id}', [PresentationController::class, "presentationDelete"])->name('presentation.delete');
 
         // Presentation Analysis
         Route::resource('presentation_analysis', PresentationAnalysisController::class);
+        Route::post('visit-save/{id?}', [PresentationAnalysisController::class, 'save'])->name('visit.save');
+        Route::any('visit-delete/{id}', [PresentationAnalysisController::class, "presentationDelete"])->name('visit.delete');
 
         // Follow Up
         Route::resource('followup', FollowupController::class);
+        Route::get('get-project-duration-type-name', [FollowupController::class, 'projectDurationTypeName'])->name('get-project-duration-type-name');
 
         // Follow Up Analysis
         Route::resource('followup-analysis', FollowupAnalysisController::class);
