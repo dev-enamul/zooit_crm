@@ -109,10 +109,10 @@ class DtaReportController extends Controller
 
 
         if(isset($request->designation) && count($request->designation) > 0){ 
-            $selected_designation = Designation::whereIn('id', $request->designation)->where('id','!=',1)->latest()->get(); 
+            $selected_designation = Designation::whereIn('id', $request->designation)->where('id','!=',1)->orderBy('id','DESC')->get(); 
             $is_all_designation = false; 
         }else{
-            $selected_designation = Designation::where('status', 1)->where('id','!=',1)->latest()->get();
+            $selected_designation = Designation::where('status', 1)->where('id','!=',1)->orderBy('id','DESC')->get();
             $is_all_designation = true; 
         }  
         $designations = Designation::where('status', 1)->select('id','title')->get();

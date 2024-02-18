@@ -135,12 +135,22 @@ class ProspectingController extends Controller
     }
 
     public function prospectingDelete($id){
-        try{ 
+        try{
             $data  = Prospecting::find($id);
             $data->delete();
             return response()->json(['success' => 'Prospecting Deleted'],200);
         }catch(Exception $e){
             return response()->json(['error' => $e->getMessage()],500);
         }
+    } 
+
+    public function prospecting_approve(){ 
+        $user_id   = Auth::user()->id; 
+        $my_employee = my_employee($user_id); 
+        dd($my_employee);
+        $prospectings = Prospecting::where('approve_by', null)->whereHas('customer', function($q) use($my_employee){ 
+            $q->whereIn('ref_id', $my_employee);
+        })->get();
+        return view('prospecting.prospecting_approve', compact('prospectings'));
     }
 }

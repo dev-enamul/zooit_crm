@@ -7,6 +7,7 @@ use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Profession;
 use App\Models\Project;
+use App\Models\Prospecting;
 use App\Models\Unit;
 use App\Models\User;
 use Exception;
@@ -56,6 +57,10 @@ class ColdCallingController extends Controller
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
         $customers          = Customer::whereIn('ref_id', $my_all_employee)->get();
+        // $customer = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+        //     $q->whereIn('ref_id',$my_all_employee);
+        // }); 
+
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
         $units              = Unit::select('id','title')->get();

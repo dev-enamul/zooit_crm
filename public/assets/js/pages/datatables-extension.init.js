@@ -2,6 +2,7 @@ $(document).ready(function() {
     if (document.getElementById("datatable")) { 
         $("#datatable").DataTable({
             lengthChange: false,
+            ordering: false,
             buttons: [
                 {
                     extend: "excelHtml5",
