@@ -246,9 +246,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('pending-report',[PendingReportController::class,'pending_report'])->name('pending.report');
 
 
+        Route::get('monthly-dt-achivement', [DtaReportController::class, 'monthly_dt_achivement'])->name('monthly.dt.achivement');
         Route::get('dt-achivement', [DtaReportController::class, 'dt_achivement'])->name('dt.achivement');
-        Route::get('daily-deposit', [DtaReportController::class, 'daily_deposit'])->name('daily.deposit');
-        Route::get('deposit-report', [DtaReportController::class, 'deposit_report'])->name('deposit.report');
+        Route::get('daily-deposit', [DtaReportController::class, 'daily_deposit'])->name('daily.deposit'); 
         Route::get('due-report', [DueReportController::class, 'due_report'])->name('due.report');
         Route::get('floor-wise-sold-unsold-report', [ProductReportController::class, 'floor_wise_sold'])->name('floor.wise.sold.report');
 

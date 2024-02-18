@@ -418,11 +418,10 @@
                             <span>DT Achivement</span>
                         </a> 
                         <ul class="sub-menu" aria-expanded="false"> 
-                            <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Monthly T&A</a></li>
-                            <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Bank Day Wise T&A</a></li> 
-                            <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Daily Deposit</a></li> 
-                            {{-- <li><a href="{{route('deposit.report')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Report</a></li>  --}}
-                            {{-- <li><a href="{{route('weekly.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Weekly Report</a></li>  --}}
+                            <li><a href="{{route('monthly.dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Monthly & Weekly Report</a></li>
+                            <li><a href="{{route('dt.achivement')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Bank Day Wise Report</a></li> 
+                            <li><a href="{{route('daily.deposit')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Daily Report</a></li> 
+                            
                         </ul>
                     </li> 
                 @endcan

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Designation extends Model
-{ 
+{
     use SoftDeletes;
     use HasFactory; 
 
@@ -31,5 +31,10 @@ class Designation extends Model
     public function deletedBy()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    } 
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class, 'designation_id');
     }
 }
