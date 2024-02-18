@@ -29,7 +29,6 @@
                                 </li>
                             </ol>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -158,7 +157,7 @@
                                 </div>
                                   
                                 <div class="text-end ">
-                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>
                                 </div> 
                             </form>
                         </div>

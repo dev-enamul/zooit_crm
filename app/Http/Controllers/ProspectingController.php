@@ -195,7 +195,7 @@ class ProspectingController extends Controller
             }
             
         } else {
-            return redirect()->route('product.approve')->with('error', 'Something went wrong!');
+            return redirect()->route('prospecting.approve')->with('error', 'Something went wrong!');
         }
 
     }
