@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Priority;
 use App\Enums\ProspectingMedia;
+use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Profession;
@@ -217,7 +218,7 @@ class ProspectingController extends Controller
         $user_id   = Auth::user()->id; 
         $my_employee = my_employee($user_id); 
  
-        $prospectings = Prospecting::where('approve_by', null)->whereIn('employee_id',$my_employee)->get();
+        $prospectings = Prospecting::where('approve_by', null)->whereIn('employee_id',$my_employee)->get(); 
         return view('prospecting.prospecting_approve', compact('prospectings'));
     }
 }

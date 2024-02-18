@@ -75,7 +75,7 @@
                                             </div> 
                                         </td> 
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->name }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->name }}</td>
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->profession->name }}</td>
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->union->name }}</td>
