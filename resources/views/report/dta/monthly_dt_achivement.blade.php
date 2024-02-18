@@ -9,14 +9,7 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <div>
                             <h4 class="mb-sm-0">
-                                @if ($is_all_designation)
-                                    All Employee
-                                @else
-                                    @foreach ($selected_designation as  $designation)
-                                        {{$designation->title}} @if(!$loop->last) , @endif
-                                    @endforeach 
-                                @endif
-                            Wise Deposit Report</h4>
+                                @if ($is_all_designation)All Employee @else @foreach ($selected_designation as  $designation){{$designation->title}} @if(!$loop->last) , @endif @endforeach  @endif Wise Deposit Report</h4>
                             <p class="d-none">{{get_date($date,'M-Y')}}</p>
                         </div>
 
@@ -54,10 +47,7 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    @php
-                                        $serial = 0;
-                                    @endphp 
-
+                               
                                     @foreach ($selected_designation as  $designation)
 
                                         @if (isset($designation->employees) && count($designation->employees) > 0)
@@ -70,7 +60,7 @@
                                             @endphp
                                             @foreach ($designation->employees as $key=> $employee)
                                                 <tr class=""> 
-                                                    <td>{{ $serial+=1}}</td>
+                                                    <td>{{ $key+=1}}</td>
                                                     <td>{{$employee->user->name}}</td>
                                                     @php
                                                         $target = clone $deposit_target;
@@ -113,17 +103,16 @@
                                                     <td>{{get_percent($total_deposit,$total_target)}}</td> 
                                                 </tr> 
                                             @endforeach    
-                                            <tr>  
-                                            
-                                                <td>{{$serial+=1}}</td>
+                                            <tr>   
+                                                <th></th>
                                                 <td><b>{{$designation->title}} Report</b></td>
                                                 <td><b>{{get_price($designation_target)}}</b></td> 
                                                 <td>{{get_price($designation_deposit['regular'])}}</td>
                                                  @foreach ($deposit_categories as $deposit_category)  
                                                     <td><b>{{get_price($designation_deposit[$deposit_category->id])}}</b></td> 
                                                 @endforeach  
-                                                <td>{{get_price(array_sum($designation_deposit))}}</td>
-                                                <td>{{get_percent(array_sum($designation_deposit),$designation_target)}}</td> 
+                                                <td><b>{{get_price(array_sum($designation_deposit))}}</b></td>
+                                                <td><b>{{get_percent(array_sum($designation_deposit),$designation_target)}}</b></td> 
                                            
                                             </tr> 
                                         @endif 

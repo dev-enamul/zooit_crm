@@ -34,7 +34,8 @@
                                     
                                 </div>
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                    <div class="dt-buttons btn-group flex-wrap mb-2">
+                                        <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a>      
                                         <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button> 
@@ -55,7 +56,6 @@
                                         <th>Prospecting</th>
                                         <th>Mobile No</th>
                                         <th>Freelancer</th>
-                                        <th>Remark</th>
                                     </tr>
                                 </thead>
                                 <tbody> 
@@ -63,8 +63,10 @@
                                     <tr class="">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img class="rounded avatar-2xs p-0" src="{{ isset($prospecting) ? 'storage/' . $prospecting->customer->user->profile_image : '../assets/images/users/avatar-6.png' }}" alt="Header Avatar">
+                                                </a>
+                                                
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('prospecting.delete',$prospecting->id) }}')">Delete</a>  
@@ -73,15 +75,14 @@
                                             </div> 
                                         </td> 
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ @$prospecting->customer->user->name }}</td>
-                                        <td>{{ @$prospecting->customer->profession->name }}</td>
-                                        <td>{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
-                                        <td>{{ @$prospecting->customer->user->userAddress->union->name }}</td>
-                                        <td>{{ @$prospecting->customer->user->userAddress->village->name }}</td>
-                                        <td>{{ @$prospecting->prospecting }}</td>
-                                        <td>{{ @$prospecting->customer->user->mobile }}</td>
-                                        <td>{{ @$prospecting->freelancer->user->name }}</td>
-                                        <td>{{ @$prospecting->remark }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->name }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->profession->name }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->union->name }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->village->name }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->prospecting }} #dummy</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->phone }}</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->employee->name }}</td>
                                     </tr>
                                     @endforeach 
                                 </tbody>

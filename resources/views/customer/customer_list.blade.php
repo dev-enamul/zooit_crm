@@ -72,7 +72,7 @@
                                                         <a class="dropdown-item" href="{{route('customer.profile')}}">View Profile</a>
                                                         <a class="dropdown-item" href="{{route('customer.edit',$data->id)}}" >Edit</a>
                                                         <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',$data->id) }}')">Delete</a>
-                                                        <a class="dropdown-item" href="prospecting.html">Prospecting</a>
+                                                        <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
                                                     </div>
                                                 </div> 
                                             </td> 

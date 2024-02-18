@@ -396,11 +396,14 @@ class CustomerController extends Controller
                 #customer info
                 $data = [
                     'user_id'                   => $user->id,
+                    'customer_id'               => $user->user_id,
                     'profession_id'             => $request->profession,
-                    'designation_id'            => $user->user_type,    #dummy
-                    'status'                    => 1,
+                    #'designation_id'            => $user->user_type,    #dummy
+                    'name'                      => $request->full_name,
+                    'ref_id'                    => 20, #dummy
+                    'status'                    => 0,
                     'created_at'                => now(),
-                    'last_approve_by'           => auth()->user()->id,    #dummy
+                    'last_approve_by'           => ''    #dummy
                 ];
                 Customer::create($data);
 
