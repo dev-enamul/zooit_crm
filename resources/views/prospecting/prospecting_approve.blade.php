@@ -79,11 +79,9 @@
                                                     @endif 
                                                 </td>
                                                 <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->phone }}</td>
-                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->employee->name }}</td>
-                                                        
+                                                <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->employee->name }}</td>     
                                             </tr>
-                                        @endforeach 
-
+                                        @endforeach  
                                     </tbody>
                                 </table>
                             </div>

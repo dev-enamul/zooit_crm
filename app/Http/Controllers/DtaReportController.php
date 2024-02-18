@@ -105,8 +105,13 @@ class DtaReportController extends Controller
             $date = Carbon::parse($date);
         }else{
             $date = Carbon::now(); 
-        } 
+        }  
 
+        if(isset($request->week) && $request->week != ''){
+            $week = $request->week;
+        }else{
+            $week = 0; 
+        } 
 
         if(isset($request->designation) && count($request->designation) > 0){ 
             $selected_designation = Designation::whereIn('id', $request->designation)->where('id','!=',1)->orderBy('id','DESC')->get(); 
@@ -128,7 +133,8 @@ class DtaReportController extends Controller
             'designations',
             'deposit_categories',
             'is_all_designation',
-            'deposit_target'
+            'deposit_target',
+            'week'
         ]));
     }
 }
