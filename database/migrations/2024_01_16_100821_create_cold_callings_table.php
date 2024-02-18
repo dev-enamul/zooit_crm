@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('unit_id')->nullable()->constrained(); 
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
             
-            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->tinyInteger('status')->default(1)->comment('1= Complete, 0= Uncomplete');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
