@@ -53,7 +53,7 @@
                                         <th>Upazilla/Thana</th>
                                         <th>Union</th>
                                         <th>Village</th>
-                                        <th>Prospecting</th>
+                                        <th>Media</th>
                                         <th>Mobile No</th>
                                         <th>Freelancer</th>
                                     </tr>
@@ -80,7 +80,14 @@
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->union->name }}</td>
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->village->name }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->prospecting }} #dummy</td>
+                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">
+                                            @if ($prospecting->media == 1)
+                                                <span class="badge bg-primary">Phone</span>
+                                            @elseif($prospecting->media == 2)
+                                                <span class="badge bg-success">Meet</span>
+
+                                            @endif 
+                                        </td>
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->phone }}</td>
                                         <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->employee->name }}</td>
                                     </tr>

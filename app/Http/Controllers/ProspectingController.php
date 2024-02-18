@@ -13,6 +13,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProspectingController extends Controller
@@ -27,97 +28,53 @@ class ProspectingController extends Controller
         return Priority::values();
     }
 
-    // public function index(Request $request)
-    // { 
-    //     $professions = Profession::all();  
-    //     $my_all_employee = my_all_employee(auth()->user()->id);
-    //     $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-    //     $employees = User::whereIn('id', $my_all_employee)->get();
-
-    //     if(isset($request->employee) && !empty($request->employee)){
-    //         $user_id = (int)$request->employee;
-    //     }else{
-    //         $user_id = Auth::user()->id;
-    //     } 
-      
-    //     $user_employee = my_all_employee($user_id);
-    //     $prospectings = Prospecting::where('status',1)->whereHas('customer', function($q) use($user_employee){ 
-    //         $q->whereIn('ref_id', $user_employee);
-    //     }); 
-
-    //     if(isset($request->date) && !empty($request->date)){ 
-    //         $date_parts = explode(" - ", $request->date); 
-    //         $start_date = $date_parts[0];
-    //         $end_date = $date_parts[1]; 
-             
-    //         $start_date = \Carbon\Carbon::createFromFormat('m/d/Y', $start_date)->format('Y-m-d');
-    //         $end_date = \Carbon\Carbon::createFromFormat('m/d/Y', $end_date)->format('Y-m-d'); 
-    //         $prospectings = $prospectings->whereBetween('created_at', [$start_date, $end_date]);
-            
-    //      }
-
-    //      if(isset($request->profession) && !empty($request->profession)){
-    //         $profession = (int)$request->profession;
-    //         $prospectings = $prospectings->whereHas('customer', function($q) use($profession){ 
-    //             $q->where('profession_id', $profession);
-    //         });
-    //      } 
-    //     $prospectings = $prospectings->get();
-        
-    //     $prospecting_unapproved = Prospecting::where('status', 0)->where('created_by',1)->get();
-    //     $filter =  $request->all();
-    //     return view('prospecting.prospecting_list', compact('prospectings','employee_data','professions','employees','filter','prospecting_unapproved'));
-    // }
-
     public function index(Request $request)
-{ 
-    $professions = Profession::all();  
-    $my_all_employee = my_all_employee(auth()->user()->id);
-    $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-    $employees = User::whereIn('id', $my_all_employee)->get();
+    { 
+        $professions = Profession::all();  
+        $my_all_employee = my_all_employee(auth()->user()->id);
+        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
+        $employees = User::whereIn('id', $my_all_employee)->get();
 
-    if(isset($request->employee) && !empty($request->employee)){
-        $user_id = (int)$request->employee;
-    }else{
-        $user_id = Auth::user()->id;
-    } 
+        if(isset($request->employee) && !empty($request->employee)){
+            $user_id = (int)$request->employee;
+        }else{
+            $user_id = Auth::user()->id;
+        } 
 
-    $user_employee = my_all_employee($user_id);
-    $prospectings = Prospecting::whereHas('customer', function($q) use($user_employee){ 
-        $q->whereIn('ref_id', $user_employee);
-    }); 
+        $user_employee = my_all_employee($user_id);
+        $prospectings = Prospecting::whereHas('customer', function($q) use($user_employee){ 
+            $q->whereIn('ref_id', $user_employee);
+        }); 
 
-    if(isset($request->date) && !empty($request->date)){ 
-        $date_parts = explode(" - ", $request->date); 
-        $start_date = $date_parts[0];
-        $end_date = $date_parts[1]; 
-         
-        $start_date = \Carbon\Carbon::createFromFormat('m/d/Y', $start_date)->format('Y-m-d');
-        $end_date = \Carbon\Carbon::createFromFormat('m/d/Y', $end_date)->format('Y-m-d'); 
-        $prospectings = $prospectings->whereBetween('created_at', [$start_date, $end_date]);
-        
+        if(isset($request->date) && !empty($request->date)){ 
+            $date_parts = explode(" - ", $request->date); 
+            $start_date = $date_parts[0];
+            $end_date = $date_parts[1]; 
+            
+            $start_date = \Carbon\Carbon::createFromFormat('m/d/Y', $start_date)->format('Y-m-d');
+            $end_date = \Carbon\Carbon::createFromFormat('m/d/Y', $end_date)->format('Y-m-d'); 
+            $prospectings = $prospectings->whereBetween('created_at', [$start_date, $end_date]);
+            
+        }
+
+        if(isset($request->profession) && !empty($request->profession)){
+            $profession = (int)$request->profession;
+            $prospectings = $prospectings->whereHas('customer', function($q) use($profession){ 
+                $q->where('profession_id', $profession);
+            });
+        } 
+
+        $prospectings = $prospectings->with('employee','customer.user')->where(function ($query) {
+            $query->where('status', 1)
+                ->orWhere(function ($subquery) {
+                    $subquery->where('status', 0)
+                            ->where('created_by', Auth::user()->id);
+                });
+        })->orderBy('id','desc')->get();
+
+        $filter =  $request->all();
+        return view('prospecting.prospecting_list', compact('prospectings','employee_data','professions','employees','filter'));
     }
-
-    if(isset($request->profession) && !empty($request->profession)){
-        $profession = (int)$request->profession;
-        $prospectings = $prospectings->whereHas('customer', function($q) use($profession){ 
-            $q->where('profession_id', $profession);
-        });
-    } 
-
-    // Get all prospectings with status 1 and those unapproved with status 0
-    $prospectings = $prospectings->with('employee','customer.user')->where(function ($query) {
-        $query->where('status', 1)
-              ->orWhere(function ($subquery) {
-                  $subquery->where('status', 0)
-                           ->where('created_by', Auth::user()->id);
-              });
-    })->get();
-
-    $filter =  $request->all();
-    return view('prospecting.prospecting_list', compact('prospectings','employee_data','professions','employees','filter'));
-}
-
 
     public function create(Request $request)
     {
@@ -215,9 +172,31 @@ class ProspectingController extends Controller
     } 
 
     public function prospecting_approve(){ 
-        $user_id   = Auth::user()->id; 
-        $my_employee = my_employee($user_id);  
-        $prospectings = Prospecting::where('approve_by', null)->whereIn('employee_id',$my_employee)->get(); 
+        $user_id        = Auth::user()->id; 
+        $my_employee    = my_employee($user_id);
+        $prospectings   = Prospecting::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
         return view('prospecting.prospecting_approve', compact('prospectings'));
+    }
+
+    public function prospectingApprove(Request $request) {
+        if($request->has('prospecting_id') && $request->prospecting_id !== '' & $request->prospecting_id !== null) {
+            DB::beginTransaction();
+            try {
+                foreach ($request->prospecting_id as $key => $prospecting_id) {
+                    $prospecting = Prospecting::where('id',$prospecting_id)->first();
+                    $prospecting->approve_by = Auth::user()->id;
+                    $prospecting->save();
+                }
+                DB::commit();
+                return redirect()->route('prospecting.approve')->with('success', 'Status Updated Successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+            
+        } else {
+            return redirect()->route('product.approve')->with('error', 'Something went wrong!');
+        }
+
     }
 }
