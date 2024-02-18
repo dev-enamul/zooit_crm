@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
-@section('title','Cold Calling Create')
+@section('title','Presentation Entry')
 
-@section('content')
+@section('content') 
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid"> 
@@ -9,8 +9,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Cold Calling 
-                            @if(isset($cold_calling))
+                        <h4 class="mb-sm-0">Presentation 
+                            @if(isset($presentation))
                                 Edit
                             @else
                                 Entry
@@ -20,8 +20,8 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Cold Calling  
-                                    @if(isset($cold_calling))
+                                <li class="breadcrumb-item active">Presentation  
+                                    @if(isset($presentation))
                                         Edit
                                     @else
                                         Entry
@@ -39,11 +39,11 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            @if(isset($prospecting))
-                                <form action="{{route('cold_calling.save',$cold_calling->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                                <input type="hidden" name="id" value="{{$cold_calling->id}}">
+                            @if(isset($presentation))
+                                <form action="{{route('presentation.save',$presentation->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <input type="hidden" name="id" value="{{$presentation->id}}">
                             @else 
-                                <form action="{{route('cold_calling.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('presentation.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
                                 <div class="row"> 
@@ -57,7 +57,7 @@
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($cold_calling) ? $cold_calling->customer_id : null) == $customer->id ? 'selected' : '' }}>
+                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($presentation) ? $presentation->customer_id : null) == $customer->id ? 'selected' : '' }}>
                                                             {{ @$customer->user->name }} ({{ $customer->user->user_id}})
                                                         </option>
                                                     @endforeach
@@ -75,7 +75,7 @@
                                             <select class="select2" name="priority" id="priority" required>
                                                 @isset($priorities)
                                                     @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('media', isset($cold_calling) ? $cold_calling->priority : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('media', isset($presentation) ? $presentation->priority : null) == $id ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -95,7 +95,7 @@
                                             </option>
                                             @isset($projects)
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($cold_calling) ? $cold_calling->project_id : null) == $project->id ? 'selected' : '' }}>
+                                                    <option value="{{ $project->id }}" {{ old('project', isset($presentation) ? $presentation->project_id : null) == $project->id ? 'selected' : '' }}>
                                                         {{ $project->name }}
                                                     </option>
                                                 @endforeach
@@ -117,7 +117,7 @@
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($cold_calling) ? $cold_calling->unit_id : null) == $unit->id ? 'selected' : '' }}>
+                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($presentation) ? $presentation->unit_id : null) == $unit->id ? 'selected' : '' }}>
                                                         {{ $unit->title }}
                                                     </option>
                                                 @endforeach
@@ -129,18 +129,17 @@
                                                 {{ $errors->first('unit') }}
                                             </span>
                                         @endif
-                                    </div>
-                                     
+                                    </div> 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark">{{isset($cold_calling) ? $cold_calling->remark : old('remark')}}</textarea>
+                                            <textarea class="form-control" id="remark" rows="3" name="remark">{{isset($presentation) ? $presentation->remark : old('remark')}}</textarea>
                                         </div>
                                     </div>
                                 </div>
                                   
                                 <div class="text-end ">
-                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>
                                 </div> 
                             </form>
                         </div>
