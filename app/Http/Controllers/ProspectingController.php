@@ -216,8 +216,7 @@ class ProspectingController extends Controller
 
     public function prospecting_approve(){ 
         $user_id   = Auth::user()->id; 
-        $my_employee = my_employee($user_id); 
- 
+        $my_employee = my_employee($user_id);  
         $prospectings = Prospecting::where('approve_by', null)->whereIn('employee_id',$my_employee)->get(); 
         return view('prospecting.prospecting_approve', compact('prospectings'));
     }
