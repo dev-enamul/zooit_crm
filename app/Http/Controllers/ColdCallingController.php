@@ -47,7 +47,14 @@ class ColdCallingController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $cold_callings = $cold_callings->with('project','employee')->get();  
+         
+         $prospectings = $cold_callings->with('employee','customer.user')->where(function ($query) {
+            $query->where('status', 1)
+                ->orWhere(function ($subquery) {
+                    $subquery->where('status', 0)
+                            ->where('created_by', Auth::user()->id);
+                });
+        })->orderBy('id','desc')->get();
          $filter =  $request->all();
         return view('cold_calling.cold_calling_list', compact('cold_callings','employee_data','professions','employees','filter'));
     }

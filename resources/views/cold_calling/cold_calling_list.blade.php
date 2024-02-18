@@ -76,7 +76,7 @@
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('cold_calling.delete',$cold_calling->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="">Lead</a>
+                                                    <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
                                                 </div>
                                             </div> 
                                         </td> 

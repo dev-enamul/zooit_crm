@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Religion;
 use App\Models\Customer;
+use App\Models\Lead;
 use App\Models\LeadAnalysis;
 use App\Models\Profession;
 use App\Models\Project;
@@ -57,11 +58,13 @@ class LeadAnalysisController extends Controller
         $title = 'Lead Analysis Entry';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
-        $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $cstmrs             = Lead::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                $q->whereIn('ref_id',$my_all_employee);
+                            })->get();
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
         $religions = $this->religion();
-        return view('lead_analysis.lead_analysis_save',compact('title','customers','projects','units','religions'));
+        return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','religions'));
     }
 
     public function save(Request $request, $id = null)
@@ -158,12 +161,15 @@ class LeadAnalysisController extends Controller
         $title = 'Lead Analysis Entry';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
-        $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $cstmrs             = Lead::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                    $q->whereIn('ref_id',$my_all_employee);
+                                })->get();
+
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
         $religions = $this->religion();
         $lead_analysis = LeadAnalysis::find($id);
-        return view('lead_analysis.lead_analysis_save',compact('title','customers','projects','units','religions','lead_analysis'));
+        return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','religions','lead_analysis'));
     }
 
     public function leadAnalysisDelete($id){

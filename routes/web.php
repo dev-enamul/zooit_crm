@@ -156,7 +156,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('lead', LeadController::class);
         Route::post('lead-save/{id?}', [LeadController::class, 'save'])->name('lead.save');
         Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
-
+        Route::get('lead-approve', [LeadController::class, 'leadApprove'])->name('lead.approve');
+        Route::post('lead-approve-save', [LeadController::class, 'leadApproveSave'])->name('lead.approve.save');
         // Lead Analysis
         Route::resource('lead-analysis', LeadAnalysisController::class);
         Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');

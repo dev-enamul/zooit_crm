@@ -70,35 +70,7 @@
                                         <th>Freelancer</th> 
                                     </tr>
                                 </thead>
-                                <tbody> 
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                    <a class="dropdown-item" href="presentation_create.html">Presentation</a>
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>1</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td><a href="customer_profile.html">Md Enamul Haque</a></td>
-                                        <td>Engineer</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>Married</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td>Rana Plaza</td>
-                                        <td>A-5</td>
-                                        <td class="text-primary">High</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td>01796351081</td>
-                                        <td>Md Jamil [FL154]</td> 
-                                    </tr> 
-                                </tbody>
-
+                               
                                 <tbody> 
                                     @foreach ($leads as  $lead)
                                     <tr class="">
@@ -109,22 +81,21 @@
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$lead->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="">Presentation</a>
+                                                    <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $lead->customer->id])}}">Lead Analysis Form</a>
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ @$lead->customer->user->name }}</td>
-                                        <td>{{ @$lead->customer->profession->name }}</td>
-                                        <td>{{ @$lead->customer->user->userAddress->upazila->name }}</td>
-                                        <td>{{ @$lead->customer->user->userAddress->union->name }}</td>
-                                        <td>{{ @$lead->customer->user->userAddress->village->name }}</td>
-                                        <td>{{ @$lead->prospecting }}</td>
-                                        <td>{{ @$lead->prospecting }}</td>
-                                        <td>{{ @$lead->prospecting }}</td>
-                                        <td>{{ @$lead->project->name }}</td>
-                                        {{-- <td>{{ @$lead->project->name }}</td> --}}
-                                        <td> {{ @$lead->unit->title}} </td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ $lead->created_at->format('Y-m-d') }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->name }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->profession->name }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->userAddress->upazila->name }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->userAddress->union->name }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->userAddress->village->name }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->marital_status }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->prospecting }} #dummy</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->project->name }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->unit->title }}</td>
                                         <td class="text-primary">
                                            @if ($lead->purchase_capacity ==1)
                                                High
@@ -134,9 +105,9 @@
                                                 Low
                                            @endif
                                         </td>
-                                        <td>{{ @$lead->possible_purchase_date }}</td>
-                                        <td>{{ @$lead->customer->user->phone }}</td>
-                                        <td>{{ @$lead->freelancer->user->name ?? 'N/A' }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->possible_purchase_date }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->phone }}</td>
+                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->employee->name ?? 'N/A' }}</td>
                                     </tr>
                                     @endforeach 
                                 </tbody>
