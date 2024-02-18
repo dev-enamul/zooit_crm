@@ -48,8 +48,7 @@
                                 </thead>
                                 <tbody> 
                                
-                                    @foreach ($selected_designation as  $designation)
-
+                                    @foreach ($selected_designation as  $designation) 
                                         @if (isset($designation->employees) && count($designation->employees) > 0)
                                             @php
                                                 $designation_target = 0;  
@@ -67,7 +66,10 @@
                                                         $total_target = $target->where('assign_to', $employee->id)->sum(function ($item) {
                                                                 return $item->new_total_deposit + $item->existing_total_deposit;
                                                             });
-                                                            $designation_target += $total_target;
+                                                        if($week != 0){
+                                                            $total_target = $total_target / 4;
+                                                        }
+                                                        $designation_target += $total_target;
                                                     @endphp
                                                     <td>{{get_price($total_target)}}</td>
                                                     @php 

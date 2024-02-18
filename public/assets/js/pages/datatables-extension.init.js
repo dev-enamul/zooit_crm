@@ -3,6 +3,7 @@ $(document).ready(function() {
         $("#datatable").DataTable({
             lengthChange: false,
             ordering: false,
+            pageLength: 20,
             buttons: [
                 {
                     extend: "excelHtml5",
