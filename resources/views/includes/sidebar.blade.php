@@ -606,7 +606,14 @@
                                 <span>Deposit Category</span>
                             </a>
                         </li> 
-                    @endcan
+                    @endcan  
+
+                    <li>
+                        <a href="{{route('approve.setting')}}" class="">
+                            <i class="fas fa-desktop"></i>
+                            <span>Approve Setting</span>
+                        </a>
+                    </li> 
                 @endcan
                 
                   

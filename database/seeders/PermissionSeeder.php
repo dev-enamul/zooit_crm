@@ -123,6 +123,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'bank-day-manage', 'name' => 'Bank Day Manage', 'status' => 1],
             ['slug' => 'deposit-category', 'name' => 'Deposit Category', 'status' => 1],
             ['slug' => 'deposit-category-manage', 'name' => 'Deposit Category Manage', 'status' => 1],
+            ['slug' => 'approve-setting', 'name' => "Approve Setting", 'status' => 1],
 
             // Freelancer Approve 
             ['slug' => 'freelancer-counselling', 'name' => 'Freelancer Counselling', 'status' => 1],

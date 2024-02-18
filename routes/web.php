@@ -45,6 +45,7 @@ use App\Http\Controllers\RejectionController;
 use App\Http\Controllers\SalseController;
 use App\Http\Controllers\SalseReturnController;
 use App\Http\Controllers\SalseTransferController;
+use App\Http\Controllers\settings\ApproveSettingController;
 use App\Http\Controllers\SpecialComissionController;
 use App\Http\Controllers\SpecialOffer;
 use App\Http\Controllers\SpecialOfferController;
@@ -240,6 +241,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('deposit-category', DepositCategoryController::class);
         Route::resource('special-offer', SpecialOfferController::class);
         Route::get('special-offer-achiver',[SpecialOfferController::class,'achiver'])->name('special.offer.achiver');
+
+        //Approve Setting 
+        Route::get('approve-setting', [ApproveSettingController::class, 'index'])->name('approve.setting');
+        Route::post('approve-setting-save', [ApproveSettingController::class, 'save'])->name('approve.setting.save');
 
 
         //Reports 
