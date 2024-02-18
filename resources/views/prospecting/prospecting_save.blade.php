@@ -51,7 +51,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer</label>
-                                            <select class="form-select" name="customer" id="customer" required>
+                                            <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>

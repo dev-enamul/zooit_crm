@@ -55,13 +55,14 @@
                                 </thead>
                                 <tbody> 
                                     @php
-                                        
+                                        $serial = 0;
                                     @endphp 
-                                    
+
                                     @foreach ($selected_designation as  $designation)
+
                                         @if (isset($designation->employees) && count($designation->employees) > 0)
                                             @php
-                                                $designation_target = 0; 
+                                                $designation_target = 0;  
                                                 foreach($deposit_categories as $deposit_category) {
                                                     $designation_deposit[$deposit_category->id] = 0;
                                                 }
@@ -69,7 +70,7 @@
                                             @endphp
                                             @foreach ($designation->employees as $key=> $employee)
                                                 <tr class=""> 
-                                                    <td>{{ $key+ 1}}</td>
+                                                    <td>{{ $serial+=1}}</td>
                                                     <td>{{$employee->user->name}}</td>
                                                     @php
                                                         $target = clone $deposit_target;
@@ -114,7 +115,7 @@
                                             @endforeach    
                                             <tr>  
                                             
-                                                <td></td>
+                                                <td>{{$serial+=1}}</td>
                                                 <td><b>{{$designation->title}} Report</b></td>
                                                 <td><b>{{get_price($designation_target)}}</b></td> 
                                                 <td>{{get_price($designation_deposit['regular'])}}</td>
@@ -194,6 +195,12 @@
 @endsection
 
 @section('script') 
+<script>
+    var title = $('.page-title-box').find('h4').text();
+    var Period = $('.page-title-box').find('p').text();
+    getDateRange('date');
+</script>
+    @include('includes.data_table')
     <script>
         // getDateRange('duration')
     </script>
