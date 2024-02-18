@@ -39,7 +39,7 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            @if(isset($prospecting))
+                            @if(isset($cold_calling))
                                 <form action="{{route('cold_calling.save',$cold_calling->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 <input type="hidden" name="id" value="{{$cold_calling->id}}">
                             @else 
@@ -47,18 +47,36 @@
                             @endif 
                                 @csrf
                                 <div class="row"> 
-
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer</label>
-                                            <select class="form-select" name="customer" id="customer" required>
+                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>
-                                                @isset($customers)
-                                                    @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($cold_calling) ? $cold_calling->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->user->name }} ({{ $customer->user->user_id}})
+                                                @foreach ($cstmrs as $cstm)
+                                                    <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($cold_calling->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                        {{ @$cstm->customer->name }} ({{ $cstm->customer->user_id}})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="employee" id="employee" required>
+                                                <option data-display="Select a employee *" value="">
+                                                    Select a employee
+                                                </option>
+                                                @isset($employees)
+                                                    @foreach ($employees as $employee)
+                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($cold_calling) ? $cold_calling->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
+                                                            {{ $employee->name }} ({{ $employee->user_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -75,7 +93,7 @@
                                             <select class="select2" name="priority" id="priority" required>
                                                 @isset($priorities)
                                                     @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('media', isset($cold_calling) ? $cold_calling->priority : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('priority', isset($cold_calling) ? $cold_calling->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -88,8 +106,8 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="project" class="form-label">Interested Project Name <span class="text-danger">*</span></label>
-                                        <select class="form-select reset-data" name="project" id="project" required>
+                                        <label for="project" class="form-label">Interested Project Name</label>
+                                        <select class="select2 reset-data" search name="project" id="project" required>
                                             <option data-display="Select a project *" value="">
                                                 Select a Project
                                             </option>
@@ -110,8 +128,8 @@
                                     </div> 
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="unit" class="form-label">Interested Unit Name <span class="text-danger">*</span></label>
-                                        <select class="form-select reset-data" name="unit" id="unit" required>
+                                        <label for="unit" class="form-label">Interested Unit Name </label>
+                                        <select class="select2 reset-data" search name="unit" id="unit" required>
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>
