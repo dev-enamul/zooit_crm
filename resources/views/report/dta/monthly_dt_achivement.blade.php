@@ -60,7 +60,7 @@
                                             @foreach ($designation->employees as $key=> $employee)
                                                 <tr class=""> 
                                                     <td>{{ $key+=1}}</td>
-                                                    <td>{{$employee->user->name}}</td>
+                                                    <td>{{$employee->user->name}} [{{$employee->user->user_id}}]</td>
                                                     @php
                                                         $target = clone $deposit_target;
                                                         $total_target = $target->where('assign_to', $employee->id)->sum(function ($item) {
@@ -76,10 +76,9 @@
                                                         $my_all_employee = my_all_employee($employee->id);
                                                         $deposit = App\Models\Deposit::where('approve_by', '!=', null)
                                                             ->whereHas('customer', function ($query) use ($my_all_employee) {
-                                                                $query->WhereIn('ref_id', $my_all_employee);
+                                                                $query->whereIn('ref_id', $my_all_employee);
                                                             }) 
-                                                            ->whereMonth('date', $date->format('m')) 
-                                                            ->whereYear('date', $date->format('Y'));
+                                                            ->whereBetween('date', [$startDate, $endDate]);
                                                     @endphp 
                                                     @php
                                                         $clone_deposit = clone $deposit;
@@ -133,7 +132,7 @@
     @include('includes.footer')
 
 </div> 
-
+ 
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Select Filter Item</h5>
@@ -155,12 +154,13 @@
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label for="week" class="form-label">Week </label>
-                        <select name="week" class="select2" id=""> 
-                            <option value="1">1st Week [1-7]</option>
-                            <option value="2">2nd Week [8-14]</option>
-                            <option value="3">3rd Week [15-21]</option>
-                            <option value="4">4th Week [22-31]</option>
-                            <option value="0" selected>Full Month</option>
+                        <select name="week" class="select2" id="">
+                           
+                            <option {{$week=="1"?"selected":""}} value="1">1st Week [1-7]</option>
+                            <option {{$week=="2"?"selected":""}} value="2">2nd Week [8-14]</option>
+                            <option {{$week=="3"?"selected":""}} value="3">3rd Week [15-21]</option>
+                            <option {{$week=="4"?"selected":""}} value="4">4th Week [22-31]</option>
+                            <option {{$week=="0"?"selected":""}} value="0">Full Month</option>
                         </select>   
                     </div>
                 </div> 
@@ -169,9 +169,14 @@
                     <div class="mb-3">
                         <label for="designation" class="form-label">Employee Position </label>
                         <select class="select2" multiple  name="designation[]" id="designation"> 
-                            <option value="">All Designation</option>
+                            <option value=""{{$is_all_designation?"selected":""}}>All Designation</option>
                             @foreach ($designations as $designation) 
-                                <option value="{{$designation->id}}">{{$designation->title}}</option>
+                                @if ($is_all_designation)
+                                    <option  value="{{ $designation->id }}">{{ $designation->title }}</option>
+                                @else  
+                                    <option {{ in_array($designation->id, $selected_designation->pluck('id')->toArray()) ? 'selected' : '' }} value="{{ $designation->id }}">{{ $designation->title }}</option>
+                                @endif
+                                
                             @endforeach 
                         </select>  
                     </div>

@@ -25,8 +25,8 @@ class DtaReportController extends Controller
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth();
         } 
-
-        if(isset($request->designation) && count($request->designation) > 0){ 
+ 
+        if(isset($request->designation) && $request->designation!='' && count($request->designation) > 0){ 
             $selected_designation = Designation::whereIn('id', $request->designation)->get(); 
             $is_all_designation = false; 
         }else{
@@ -106,19 +106,45 @@ class DtaReportController extends Controller
         }else{
             $date = Carbon::now(); 
         }  
+ 
 
-        if(isset($request->week) && $request->week != ''){
-            $week = $request->week;
+        $week = $request->week;
+
+        if($week==1){
+            $clone_date     = clone $date;
+            $startDate      = $clone_date;  
+            $clone_date     = clone $date;
+            $endDate        = $clone_date->addDay(6); 
+        }elseif($week==2){
+            $clone_date     = clone $date; 
+            $startDate      = $clone_date->addDay(7); 
+            $clone_date     = clone $date; 
+            $endDate        = $clone_date->addDay(14); 
+        }elseif($week==3){
+            $clone_date     = clone $date; 
+            $startDate      = $clone_date->addDay(15); 
+            $clone_date     = clone $date; 
+            $endDate        = $clone_date->addDay(20); 
+        }elseif($week==4){
+            $clone_date     = clone $date; 
+            $startDate      = $clone_date->addDay(21); 
+            $clone_date     = clone $date; 
+            $endDate        = $clone_date->endOfMonth();
         }else{
-            $week = 0; 
-        } 
-
-        if(isset($request->designation) && count($request->designation) > 0){ 
+            $clone_date     = clone $date; 
+            $startDate      = $clone_date; 
+            $clone_date     = clone $date; 
+            $endDate        = $clone_date->endOfMonth();
+            $week="0";
+        }   
+     
+        if(isset($request->designation) && $request->designation[0]!=null && count($request->designation) > 0){ 
             $selected_designation = Designation::whereIn('id', $request->designation)->where('id','!=',1)->orderBy('id','DESC')->get(); 
             $is_all_designation = false; 
+          
         }else{
             $selected_designation = Designation::where('status', 1)->where('id','!=',1)->orderBy('id','DESC')->get();
-            $is_all_designation = true; 
+            $is_all_designation = true;  
         }  
         $designations = Designation::where('status', 1)->select('id','title')->get();
         $deposit_categories =  DepositCategory::where('status', 1)->select('id','name')->get();
@@ -134,7 +160,9 @@ class DtaReportController extends Controller
             'deposit_categories',
             'is_all_designation',
             'deposit_target',
-            'week'
+            'week',
+            'startDate',
+            'endDate'
         ]));
     }
 }
