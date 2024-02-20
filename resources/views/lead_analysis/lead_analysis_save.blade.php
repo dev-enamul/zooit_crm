@@ -38,15 +38,15 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer</label>
-                                            <select class="form-select" name="customer" id="customer" required>
+                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>
-                                                @isset($customers)
-                                                    @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($lead_analysis) ? $lead_analysis->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->user->name }} ({{ $customer->user->user_id}})
+                                                @isset($cstmrs)
+                                                    @foreach ($cstmrs as $cstm)
+                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($lead_analysis->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->user_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -55,7 +55,8 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
+
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Preferred Project Name <span class="text-danger">*</span></label>
                                         <select class="form-select reset-data" name="project" id="project" required>

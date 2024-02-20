@@ -163,18 +163,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('prospecting-save/{id?}', [ProspectingController::class, 'save'])->name('prospecting.save');
         Route::any('prospecting-delete/{id}', [ProspectingController::class, "prospectingDelete"])->name('prospecting.delete');
         Route::get('prospecting-approve', [ProspectingController::class, 'prospecting_approve'])->name('prospecting.approve');
-        Route::post('/product-approve-save', [ProspectingController::class, 'prospectingApprove'])->name('prospecting.approve.save');
+        Route::post('product-approve-save', [ProspectingController::class, 'prospectingApprove'])->name('prospecting.approve.save');
 
-        // Prospecting 
+        // Cold Calling 
         Route::resource('cold-calling', ColdCallingController::class);
         Route::post('cold-calling-save/{id?}', [ColdCallingController::class, 'save'])->name('cold_calling.save');
         Route::any('cold-calling-delete/{id}', [ColdCallingController::class, "colCallingDelete"])->name('cold_calling.delete');
+        Route::get('cold-calling-approve', [ColdCallingController::class, 'coldCallingApprove'])->name('cold-calling.approve');
+        Route::post('cold-calling-approve-save', [ColdCallingController::class, 'coldCallingApproveSave'])->name('cold-calling.approve.save');
 
         // Lead 
         Route::resource('lead', LeadController::class);
         Route::post('lead-save/{id?}', [LeadController::class, 'save'])->name('lead.save');
         Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
-
+        Route::get('lead-approve', [LeadController::class, 'leadApprove'])->name('lead.approve');
+        Route::post('lead-approve-save', [LeadController::class, 'leadApproveSave'])->name('lead.approve.save');
         // Lead Analysis
         Route::resource('lead-analysis', LeadAnalysisController::class);
         Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');

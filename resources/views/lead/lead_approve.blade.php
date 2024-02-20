@@ -11,11 +11,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Prospecting Approve</h4> 
+                        <h4 class="mb-sm-0">Lead Approve</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Prospecting Approve</li>
+                                <li class="breadcrumb-item active">Lead Approve</li>
                             </ol>
                         </div>
 
@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <form action="{{route('prospecting.approve.save')}}" method="POST">
+                        <form action="{{route('lead.approve.save')}}" method="POST">
                             @csrf
                             <div class="card-body">
                                 <div class="d-flex justify-content-between"> 
@@ -47,38 +47,52 @@
                                         <tr>
                                             <th>Action</th>
                                             <th>S/N</th>
-                                            <th>Full Name</th>
+                                            <th>Date</th>
+                                            <th>Name</th>
                                             <th>Profession</th>
                                             <th>Upazilla/Thana</th>
                                             <th>Union</th>
                                             <th>Village</th>
-                                            <th>Media</th>
-                                            <th>Mobile No</th>
-                                            <th>Freelancer</th>
+                                            <th>Maritial</th>
+                                            <th>Last Call</th>
+                                            <th>Project</th>
+                                            <th>Unit</th>
+                                            <th>Capacity</th>
+                                            <th>Purchase Date</th>
+                                            <th>Mobile</th>
+                                            <th>Freelancer</th> 
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @foreach ($prospectings as  $prospecting)
+                                        @foreach ($leads as  $lead)
                                             <tr class="">
                                                 <td class="text-center">
-                                                    <input class="form-check-input" type="checkbox" name="prospecting_id[]" value="{{$prospecting->id}}" id="flexCheckChecked" >
+                                                    <input class="form-check-input" type="checkbox" name="lead_id[]" value="{{$lead->id}}" id="flexCheckChecked" >
                                                 </td>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td >{{ @$prospecting->customer->name }}</td>
-                                                <td >{{ @$prospecting->customer->profession->name }}</td>
-                                                <td >{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
-                                                <td >{{ @$prospecting->customer->user->userAddress->union->name }}</td>
-                                                <td >{{ @$prospecting->customer->user->userAddress->village->name }}</td>
-                                                <td >
-                                                    @if ($prospecting->media == 1)
-                                                        <span class="badge bg-primary">Phone</span>
-                                                    @elseif($prospecting->media == 2)
-                                                        <span class="badge bg-success">Meet</span>
-                                                    @endif 
+                                                <td>{{ $lead->created_at->format('Y-m-d') }}</td>
+                                                <td>{{ @$lead->customer->user->name }}</td>
+                                                <td>{{ @$lead->customer->profession->name }}</td>
+                                                <td>{{ @$lead->customer->user->userAddress->upazila->name }}</td>
+                                                <td>{{ @$lead->customer->user->userAddress->union->name }}</td>
+                                                <td>{{ @$lead->customer->user->userAddress->village->name }}</td>
+                                                <td>{{ @$lead->customer->user->marital_status }}</td>
+                                                <td>{{ @$lead->prospecting }} #dummy</td>
+                                                <td>{{ @$lead->project->name }}</td>
+                                                <td>{{ @$lead->unit->title }}</td>
+                                                <td class="text-primary">
+                                                   @if ($lead->purchase_capacity ==1)
+                                                       High
+                                                   @elseif($lead->purchase_capacity ==2)
+                                                       Regular
+                                                    @else
+                                                        Low
+                                                   @endif
                                                 </td>
-                                                <td >{{ @$prospecting->customer->user->phone }}</td>
-                                                <td >{{ @$prospecting->employee->name }}</td>     
+                                                <td>{{ @$lead->possible_purchase_date }}</td>
+                                                <td>{{ @$lead->customer->user->phone }}</td>
+                                                <td>{{ @$lead->employee->name ?? 'N/A' }}</td>  
                                             </tr>
                                         @endforeach  
                                     </tbody>

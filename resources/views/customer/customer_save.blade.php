@@ -182,6 +182,24 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="reference_id" class="form-label">Reference ID <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="ref_id" id="reference_id" required>
+                                                @isset($references)
+                                                    @foreach ($references as $reference)
+                                                        <option value="{{ $reference->id }}" {{ old('ref_id', isset($customer) ? $customer->ref_id : null) == $reference->id ? 'selected' : '' }}>
+                                                            {{ $reference->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select> 
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Contact Information</h6>
                                     <hr>
 
