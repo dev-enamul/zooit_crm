@@ -63,7 +63,6 @@
                                         <th>Unit</th>
                                         <th>Mobile No</th>
                                         <th>Freelancer</th>
-                                        <th>Remark</th>
                                     </tr>
                                 </thead>
                                 <tbody> 
@@ -71,31 +70,33 @@
                                     <tr class="">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img class="rounded avatar-2xs p-0" src="{{ isset($cold_calling) ? 'storage/' . $cold_calling->customer->user->profile_image : '../assets/images/users/avatar-6.png' }}" alt="Header Avatar">
+                                                </a>
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('cold_calling.delete',$cold_calling->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="">Lead</a>
+                                                    <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ @$cold_calling->customer->user->name }}</td>
-                                        <td>{{ @$cold_calling->customer->profession->name }}</td>
-                                        <td>{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
-                                        <td>{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
-                                        <td>{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
-                                        <td>{{ @$cold_calling->prospecting }}</td>
-                                        <td>{{ @$cold_calling->prospecting }}</td>
-                                        {{-- <td>{{ @$cold_calling->project->name }}</td> --}}
-                                        <td> Dummy </td>
-                                        <td>{{ @$cold_calling->unit->title }}</td>
-                                        <td>{{ @$cold_calling->customer->user->mobile }}</td>
-                                        <td>{{ @$cold_calling->freelancer->user->name }}</td>
-                                        <td>{{ @$cold_calling->remark }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->name }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->profession->name }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
+                                        @php
+                                            $prospecting = \App\Models\Prospecting::where('customer_id',$cold_calling->customer->id)->first();
+                                            $last_prospecting = $prospecting->updated_at;
+                                        @endphp
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ $last_prospecting->format('Y-m-d') }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->project->name }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}"> {{@$cold_calling->unit->title }} </td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->phone }}</td>
+                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->employee->name }}</td>
                                     </tr>
-                                    @endforeach 
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

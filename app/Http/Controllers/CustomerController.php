@@ -61,7 +61,7 @@ class CustomerController extends Controller
         $unions      = $this->getCachedUnions();
         $villages    = $this->getCachedVillages();
         $professions = Profession::where('status',1)->select('id','name')->get();
-        $customers   = Customer::where('status', 1)->get();
+        $customers   = Customer::where('status', 1)->orderBy('id','desc')->get();
         return view('customer.customer_list',compact('datas','professions','countries','divisions','districts','upazilas','unions','villages','customers'));
 
     }
@@ -83,7 +83,8 @@ class CustomerController extends Controller
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
         $zones = Zone::where('status',1)->select('id','name')->get();
         $areas = Area::where('status',1)->select('id','name')->get();
-        return view('customer.customer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas'));
+        $references = User::where('user_type',[2,3])->select('id','name')->get();
+        return view('customer.customer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','references'));
     }
 
     public function save(Request $request, $id = null)
@@ -138,6 +139,7 @@ class CustomerController extends Controller
                 'nid_file'                  => 'file|mimes:pdf,jpeg,png,jpg|max:2048',
                 'birth_certificate_file'    => 'file|mimes:pdf,jpeg,png,jpg|max:2048',
                 'upload_passport'           => 'file|mimes:pdf,jpeg,png,jpg|max:2048',
+                'ref_id'                    => 'nullable',
                 'at_least_one_field' => [
                     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
                 ],
@@ -156,7 +158,6 @@ class CustomerController extends Controller
                 try {
                     $userId = $info->user_id;
                 $user = User::findOrFail($userId);
-                // Update user attributes
                 $user->name             = $request->full_name;
                 $user->phone            = isset($request->phone1) ?? $request->phone1;
                 $user->marital_status   = $request->marital_status;
@@ -166,6 +167,8 @@ class CustomerController extends Controller
                 $user->blood_group      = $request->blood_group;
                 $user->gender           = $request->gender;
                 $user->updated_by       = $userId;
+                $user->ref_id           = $request->ref_id;
+
                 if ($request->hasFile('profile_image')) {
                     $user->profile_image = $this->uploadImage($request, 'profile_image', 'users', 'public');
                     $user->save();
@@ -213,11 +216,12 @@ class CustomerController extends Controller
 
                 $customer = Customer::where('user_id', $userId)->first();
                 $customer->update([
+                    'user_id'                   => $user->id,
                     'profession_id'             => $request->profession,
-                    'designation_id'            => $user->user_type,    #dummy
-                    'status'                    => 1,
                     'updated_at'                => now(),
-                    'last_approve_by'           => $userId,    #dummy
+                    'ref_id'                    => $request->ref_id,
+                    'name'                      => $request->full_name,
+                    'updated_at'                => now()
                 ]);
 
                 $userTransaction = UserTransaction::where('user_id', $userId)->first();
@@ -340,6 +344,7 @@ class CustomerController extends Controller
                     'religion'      => $request->religion,
                     'blood_group'   => $request->blood_group,
                     'gender'        => $request->gender,
+                    'ref_id'        => $request->ref_id,
                     'status'        => 1,
                     'created_by'    => auth()->user()->id,
                 ]);
@@ -398,12 +403,10 @@ class CustomerController extends Controller
                     'user_id'                   => $user->id,
                     'customer_id'               => $user->user_id,
                     'profession_id'             => $request->profession,
-                    #'designation_id'            => $user->user_type,    #dummy
+                    'ref_id'                    => $request->ref_id,
                     'name'                      => $request->full_name,
-                    'ref_id'                    => 20, #dummy
                     'status'                    => 0,
                     'created_at'                => now(),
-                    'last_approve_by'           => ''    #dummy
                 ];
                 Customer::create($data);
 
@@ -574,6 +577,7 @@ class CustomerController extends Controller
         $zones = Zone::where('status',1)->select('id','name')->get();
         $areas = Area::where('status',1)->select('id','name')->get();
         $customer = Customer::find($id);
+        $references = User::where('user_type',[2,3])->select('id','name')->get();
         $selected['country_id']   = $customer->user->userAddress->country_id;
         $selected['division_id']  = $customer->user->userAddress->division_id;
         $selected['district_id']  = $customer->user->userAddress->district_id;
@@ -581,7 +585,7 @@ class CustomerController extends Controller
         $selected['union_id']     = $customer->user->userAddress->union_id;
         $selected['village_id']   = $customer->user->userAddress->village_id;
 
-        return view('customer.customer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','customer','selected'));
+        return view('customer.customer_save', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','customer','selected','references'));
     }
 
     public function customerDelete($id){

@@ -13,6 +13,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ColdCallingController extends Controller
@@ -46,35 +47,51 @@ class ColdCallingController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $cold_callings = $cold_callings->get();  
+         
+         $prospectings = $cold_callings->with('employee','customer.user')->where(function ($query) {
+            $query->where('status', 1)
+                ->orWhere(function ($subquery) {
+                    $subquery->where('status', 0)
+                            ->where('created_by', Auth::user()->id);
+                });
+        })->orderBy('id','desc')->get();
          $filter =  $request->all();
         return view('cold_calling.cold_calling_list', compact('cold_callings','employee_data','professions','employees','filter'));
     }
 
-    public function create()
+    public function create(Request $request)
     {        
         $title = 'Cold Calling Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = Customer::whereIn('ref_id', $my_all_employee)->get();
-        // $customer = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-        //     $q->whereIn('ref_id',$my_all_employee);
-        // }); 
-
+        $cstmrs             = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                $q->whereIn('ref_id',$my_all_employee);
+                              })->get();
+        $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
         $units              = Unit::select('id','title')->get();
-        return view('cold_calling.cold_calling_save',compact('title','customers','priorities','projects','units'));
+
+        $selected_data = 
+        [
+            'employee' => Auth::user()->id,
+            'priority' => Priority::Regular,
+        ];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = $request->customer;
+        }
+        return view('cold_calling.cold_calling_save',compact('title','cstmrs','priorities','projects','units','selected_data','employees'));
     }
 
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [
-            'customer'   => 'required',
+            'customer'   => 'required|unique:cold_callings,customer_id,'.$id,
+            'employee'   => 'required',
             'priority'   => 'required',
             'project'    => 'required',
             'unit'       => 'required',
-            'remark'     => 'nullable|string|max:255',
+            'remark'     => 'nullable|string|max:255'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -88,27 +105,33 @@ class ColdCallingController extends Controller
                 'priority'      => $request->priority,
                 'remark'        => $request->remark,
                 'customer_id'   => $request->customer,
-                'employee_id'   => 1, #dummy
+                'employee_id'   => $request->employee,
                 'project_id'    => $request->project,
                 'unit_id'       => $request->unit,
-                'status'        => 1, #dummy
-                'created_by'    => auth()->id(),
-                'created_at'    => now(),
+                'updated_by'    => auth()->id(),
+                'updated_at'    => now(),
             ]);
             return redirect()->route('cold-calling.index')->with('success','Cold Calling update successfully');
 
         } else {
-            $prospecting = new ColdCalling();
-            $prospecting->media         = 1;    #dummy
-            $prospecting->priority      = $request->priority;
-            $prospecting->remark        = $request->remark;
-            $prospecting->customer_id   = $request->customer;
-            $prospecting->employee_id   = 1;    #dummy
-            $prospecting->project_id    = $request->project;    
-            $prospecting->unit_id       = $request->unit;    
-            $prospecting->updated_by    = auth()->id();
-            $prospecting->updated_at    = now();
-            $prospecting->save();
+            $cold_call = new ColdCalling();
+            $cold_call->media         = 1;    #dummy
+            $cold_call->priority      = $request->priority;
+            $cold_call->remark        = $request->remark;
+            $cold_call->customer_id   = $request->customer;
+            $cold_call->employee_id   = $request->employee;
+            $cold_call->project_id    = $request->project;    
+            $cold_call->unit_id       = $request->unit;
+            $cold_call->status        = 0;    
+            $cold_call->created_by    = auth()->id();
+            $cold_call->created_at    = now();
+            $cold_call->save();
+
+            if($cold_call) {
+                $prospecting = Prospecting::where('customer_id',$request->customer)->first();
+                $prospecting->status = 1;
+                $prospecting->save();
+            }
             return redirect()->route('cold-calling.index')->with('success','Cold Calling create successfully');
         }
     }
@@ -118,11 +141,15 @@ class ColdCallingController extends Controller
         $title = 'Cold Calling Edit';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
-        $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $cstmrs     = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                    $q->whereIn('ref_id',$my_all_employee);
+                                })->get();
         $priorities = $this->priority();
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
-        return view('cold_calling.cold_calling_save',compact('title','customers','priorities','projects','units'));
+        $cold_calling = ColdCalling::find($id);
+        $employees   = User::whereIn('id', $my_all_employee)->get();
+        return view('cold_calling.cold_calling_save',compact('title','cstmrs','priorities','projects','units','cold_calling','employees'));
     }
 
     public function colCallingDelete($id){
@@ -133,5 +160,34 @@ class ColdCallingController extends Controller
         }catch(Exception $e){
             return response()->json(['error' => $e->getMessage()],500);
         }
+    }
+
+    public function coldCallingApprove(){ 
+        $user_id        = Auth::user()->id; 
+        $my_employee    = my_employee($user_id);
+        $cold_callings  = ColdCalling::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        return view('cold_calling.cold_calling_approve', compact('cold_callings'));
+    }
+
+    public function coldCallingApproveSave(Request $request) {
+        if($request->has('cold_calling_id') && $request->cold_calling_id !== '' & $request->cold_calling_id !== null) {
+            DB::beginTransaction();
+            try {
+                foreach ($request->cold_calling_id as $key => $cold_calling_id) {
+                    $prospecting = ColdCalling::where('id',$cold_calling_id)->first();
+                    $prospecting->approve_by = Auth::user()->id;
+                    $prospecting->save();
+                }
+                DB::commit();
+                return redirect()->route('cold-calling.approve')->with('success', 'Status Updated Successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+            
+        } else {
+            return redirect()->route('cold-calling.approve')->with('error', 'Something went wrong!');
+        }
+
     }
 }
