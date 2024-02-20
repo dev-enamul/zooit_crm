@@ -4,8 +4,8 @@ namespace App\Enums;
 
 final class Nationality
 {
-    const Bangladeshi = "1";
-    const Indian      = "0";
+    const Bangladeshi = "0";
+    const Indian      = "1";
 
     public static function values()
     {

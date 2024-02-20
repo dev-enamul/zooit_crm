@@ -50,10 +50,10 @@ class User extends Authenticatable
 
     public function image(){ 
          $image = $this->profile_image;
-         if($image != null && $image != '' && file_exists('storage/'.$image)){ 
-            return asset('../assets/images/users/avatar-6.png');
+         if($image != null && $image != '' && file_exists('storage/'.$image)){  
+            return asset('storage/'.$image);
          }else{
-             return asset('../assets/images/users/avatar-6.png');
+            return asset('../assets/images/users/avatar-6.png');
          }
     } 
 
@@ -74,7 +74,7 @@ class User extends Authenticatable
 
     public function reportingUser()
     {
-        return $this->hasOne(ReportingUser::class, 'user_id');
+        return $this->hasOne(ReportingUser::class, 'user_id')->whereNull('deleted_at');
     }
 
     public function referee()
@@ -110,6 +110,17 @@ class User extends Authenticatable
         }
 
         return $nextUserId;
+    }
+
+    public static function generateNextEmployeeId(){ 
+        $user_id = User::where('user_type',1)->latest('id')->first()->user_id;
+        if($user_id == null){
+            $user_id = 'EMP-000';
+        }
+        $numericPart = substr($user_id, 4);  
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT); // "018" 
+        $newValue = "EMP-" . $newNumericPart; 
+        return $newValue;
     }
 
     public static function generateNextUserCustomerId()

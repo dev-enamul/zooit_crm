@@ -55,9 +55,9 @@ if (!function_exists('user_info')) {
 if (!function_exists('my_employee')) {
     function my_employee($user_id)
     {
-        $reporting_id = ReportingUser::where('user_id', $user_id)->first('id');
+        $reporting_id = ReportingUser::where('user_id', $user_id)->first('id')->whereNull('deleted_at');
         if ($reporting_id) { 
-            $my_employee_id = ReportingUser::where('reporting_user_id', $reporting_id->id)->pluck('user_id')->toArray();
+            $my_employee_id = ReportingUser::where('reporting_user_id', $reporting_id->id)->whereNull('deleted_at')->pluck('user_id')->toArray();
             return $my_employee_id;
         }
     }
@@ -67,7 +67,7 @@ if (!function_exists('my_all_employee')) {
     function my_all_employee($user)
     {
         if (is_int($user)) {
-            $user = \App\Models\ReportingUser::where('user_id', $user)
+            $user = \App\Models\ReportingUser::where('user_id', $user)->whereNull('deleted_at')
                 ->select(['id', 'user_id'])
                 ->first();
         }

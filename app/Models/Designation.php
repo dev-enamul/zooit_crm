@@ -17,6 +17,11 @@ class Designation extends Model
     {
         return $this->belongsTo(Commission::class);
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'designation_permissions');
+    }
  
     public function createdBy()
     {
