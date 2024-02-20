@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('user_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->nullable();
-            $table->foreignId('division_id')->constrained()->nullable();
-            $table->foreignId('district_id')->constrained()->nullable();
-            $table->foreignId('upazila_id')->constrained()->nullable();
-            $table->foreignId('union_id')->constrained()->nullable();
-            $table->foreignId('village_id')->constrained()->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('division_id')->nullable()->constrained();
+            $table->foreignId('district_id')->nullable()->constrained();
+            $table->foreignId('upazila_id')->nullable()->constrained();
+            $table->foreignId('union_id')->nullable()->constrained();
+            $table->foreignId('village_id')->nullable()->constrained();
             $table->string('address', 250)->nullable(); 
-            $table->foreignId('country_id')->constrained()->nullable();
+            $table->foreignId('country_id')->nullable()->constrained();
 
-            $table->foreignId('zone_id')->constrained()->nullable();
-            $table->foreignId('area_id')->constrained()->nullable();
+            $table->foreignId('zone_id')->nullable()->constrained();
+            $table->foreignId('area_id')->nullable()->constrained();
              
             $table->timestamps();
         });

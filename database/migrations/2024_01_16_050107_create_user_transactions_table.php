@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('bank_id')->constrained()->nullable();
+            $table->foreignId('bank_id')->nullable()->constrained();
             $table->string('branch')->nullable();
             $table->string('bank_account_number')->nullable();
             $table->string('bank_details')->nullable();

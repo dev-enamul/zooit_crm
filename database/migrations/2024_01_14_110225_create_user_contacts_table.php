@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('office_email', 45)->nullable();
             $table->string('personal_email', 45)->nullable();
             $table->string('imo_number', 15)->nullable();
-            $table->string('facebook_id', 100)->nullable();
-            $table->string('user_contactscol', 45)->nullable();
+            $table->string('facebook_id', 100)->nullable(); 
             $table->string('emergency_contact_number', 15)->nullable();
             $table->string('emergency_contact_person', 45)->nullable(); 
             $table->timestamps(); 

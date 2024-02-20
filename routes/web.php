@@ -19,6 +19,7 @@ use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\DtaReportController;
 use App\Http\Controllers\DueReportController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeEditController;
 use App\Http\Controllers\FieldTargetController;
 use App\Http\Controllers\FollowupAnalysisController;
 use App\Http\Controllers\FollowupController;
@@ -76,6 +77,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');
+Route::get('id', [DashboardController::class, 'id'])->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
@@ -94,9 +96,16 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
+        Route::post('employee-save/{id?}', [EmployeeController::class, 'save'])->name('employee.save');
         Route::get('employee-permission/{id}', [EmployeeController::class, 'employee_permission'])->name('employee.permission');
         Route::post('user-permission-update', [EmployeeController::class, 'user_permission_update'])->name('user.permission.update');
         Route::get('employees/tree', [EmployeeController::class, 'tree'])->name('employees.tree');
+
+        Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
+        Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');
+        Route::get('update/employee/area/{id}', [EmployeeEditController::class, 'update_area'])->name('update.area');
+        Route::get('deactive/employee/{id}', [EmployeeEditController::class, 'deactive_employee'])->name('deactive.employee');
+        Route::get('update/employee/designation/{id}', [EmployeeEditController::class, 'update_designation'])->name('update.designation');
 
         // Product 
 
