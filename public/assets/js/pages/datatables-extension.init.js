@@ -2,21 +2,10 @@ $(document).ready(function() {
     if (document.getElementById("datatable")) { 
         var title = $('.page-title-box').find('h4').text();
         var Period = $('.page-title-box').find('p').text();
-        var hideExport = ':nth-child(1),:nth-child(2)'; 
-        if(!hideExport){ 
-           var hideExport = '';
-        } 
-        if(!pageOrientation){
-            var pageOrientation = "portrait";
-        } 
-        if(!pageSize){
-            var pageSize = "A4";
-        }
-
-        if(!fontSize){
-            var fontSize = 10;
-        }
- 
+        var hideExport = $('#hideExport').val(); 
+        var pageOrientation = $('#pageOrientation').val();
+        var pageSize = $('#pageSize').val();
+        var fontSize = $('#fontSize').val(); 
 
         $("#datatable").DataTable({
             lengthChange: false,

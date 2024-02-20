@@ -12,6 +12,10 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Employee List</h4>
                         <p class="d-none">Last Update: {{get_date($lastUpdateDate)}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)">
+                        {{-- <input type="hidden" id="pageOrientation" value="portrait"> --}}
+                        <input type="hidden" id="pageSize" value="A3">
+                        <input type="hidden" id="fontSize" value="10">
                     </div>
                 </div>
             </div>
@@ -46,10 +50,10 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-animated">   
                                                     @can('employee-permission')
-                                                        <a class="dropdown-item" href="{{route('employee.permission', $data->id)}}">Edit</a>
-                                                        <a class="dropdown-item" href="{{route('update.designation', $data->id)}}">Change Designation</a>
-                                                        <a class="dropdown-item" href="{{route('deactive.employee', $data->id)}}">Deactive Employee</a>
-                                                        <a class="dropdown-item" href="{{route('update.area', $data->id)}}">Change Area</a>
+                                                        <a class="dropdown-item" href="{{route('employee.edit', encrypt($data->id))}}">Edit</a>
+                                                        <a class="dropdown-item" href="{{route('designation.user.edit', $data->id)}}">Change Designation</a>
+                                                        <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.employee', $data->id) }}')">Resign Employee</a>
+                                                        <a class="dropdown-item" href="{{route('user.area.edit', $data->id)}}">Change Area</a>
                                                         <a class="dropdown-item" href="{{route('reporting.user.edit', $data->id)}}">Change Reporting User</a>
                                                         <a class="dropdown-item" href="{{route('employee.permission', $data->id)}}">Change Permissin</a>
                                                     @endcan
@@ -81,18 +85,16 @@
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->
-    </div>
-
-  @include('includes.footer')
+    </div> 
+  @include('includes.footer') 
 
 </div>
 @endsection 
 
 @section('script') 
     <script>
-        var hideExport = ":nth-child(1),:nth-child(2)"; 
-    </script>
-
+    
+    </script> 
     @include('includes.data_table')
     
 @endsection

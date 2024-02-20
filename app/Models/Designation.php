@@ -11,7 +11,7 @@ class Designation extends Model
     use SoftDeletes;
     use HasFactory; 
 
-    protected $fillable = ['title', 'status', 'commission_id','working_place', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['title', 'status', 'commission_id','working_place','designation_type', 'created_by', 'updated_by', 'deleted_by'];
  
     public function commission()
     {

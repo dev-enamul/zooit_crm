@@ -70,8 +70,7 @@
                                                         <a class="dropdown-item" href="{{ route('freelancer.print', $data->id) }}" onclick="printDiv('print_div')">Print Freelancer</a>
                                                         <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
                                                         <a class="dropdown-item" href="{{route('freelancer.edit',$data->id)}}" onclick="printPage()">Edit</a>
-                                                        <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('freelancer.delete',$data->id) }}')">Delete</a>
-                                                        <a class="dropdown-item" href="prospecting.html">Prospecting</a>
+                                                        <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('freelancer.delete',$data->id) }}')">Delete</a>                                                        
                                                     </div>
                                                 </div> 
                                             </td> 

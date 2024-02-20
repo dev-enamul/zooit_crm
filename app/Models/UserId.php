@@ -22,6 +22,33 @@ class UserId extends Model
         'tin_number',
     ];
 
+    public function nid_image(){ 
+        $nid = $this->nid_image;
+        if($nid != null && $nid != '' && file_exists('storage/'.$nid)){  
+            return asset('storage/'.$nid);
+        }else{
+            return asset('../assets/images/default/blank.png');
+        }
+    } 
+
+    public function birth_image(){ 
+        $birth = $this->birth_cirtificate_image;
+        if($birth != null && $birth != '' && file_exists('storage/'.$birth)){  
+            return asset('storage/'.$birth);
+        }else{
+            return asset('../assets/images/default/blank.png');
+        }
+    } 
+
+    public function passport_image(){ 
+        $passport = $this->passport_image;
+        if($passport != null && $passport != '' && file_exists('storage/'.$passport)){  
+            return asset('storage/'.$passport);
+        }else{
+            return asset('../assets/images/default/blank.png');
+        }
+    } 
+
     public function user()
     {
         return $this->belongsTo(User::class);

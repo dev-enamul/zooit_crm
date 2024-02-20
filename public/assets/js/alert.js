@@ -42,12 +42,15 @@ function deleteItem(url) {
                 'Content-Type': 'application/json'
             },
         })
-        .then(response => { 
-            if (response.ok) { 
-                Toast.fire({ icon: "success", title: 'Deleted successfully' });
+        .then(response => response.json())
+        .then(data => { 
+            if (data.success) { 
+                Toast.fire({ icon: "success", title: data.success });
                 setTimeout(function () {
                     location.reload();
                 }, 1000);
+            } else if (data.error) {
+                Toast.fire({ icon: "error", title: data.error });
             } else {
                 Toast.fire({ icon: "error", title: 'Something is wrong' });
             }
@@ -55,5 +58,6 @@ function deleteItem(url) {
         .catch(error => {
             Toast.fire({ icon: "error", title: 'Something is wrong' });
         });
+        
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Reporting Person')
+@section('title','Update Designation')
 
 @section('content')
 <div class="main-content">
@@ -17,7 +17,7 @@
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
                                 <li class="breadcrumb-item active">
-                                    Update Reporting Person
+                                    Update Designation
                                 </li>
                             </ol>
                         </div>
@@ -31,15 +31,15 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form action="{{route('reporting.user.update',$user->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                            <form action="{{route('designation.user.update',$user->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 @csrf
                                 <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="reporting_id" class="form-label">Reporting Employee <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="reporting_id" id="reporting_id" required> 
-                                                @foreach ($employees as $employee)
-                                                    <option value="{{@$employee->reportingUser->id}}" {{@$user->reportingUser->user_id==$employee->id?"selected":""}}> {{$employee->name}} [ {{$employee->user_id}} ] </option>
+                                            <label for="designation_id" class="form-label">Designation <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="designation_id" id="designation_id" required> 
+                                                @foreach ($designations as $designation)
+                                                    <option value="{{@$designation->id}}" {{$user->employee->designation_id==$designation->id?"selected":""}}> {{$designation->title}} </option>
                                                 @endforeach 
                                             </select> 
                                         </div>
@@ -47,7 +47,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="image" class="form-label">Valid Document <span class="text-danger">* [jpeg, jpg, png, gif | Max : 2MB ]</span></label>
+                                            <label for="image" class="form-label">Valid Document <span class="text-danger">* [jpeg, jpg, png, gif | Max : 2MB ]</span> </label>
                                             <input class="form-control" type="file" name="image" id="image" accept="image" required>
                                         </div>
                                     </div> 

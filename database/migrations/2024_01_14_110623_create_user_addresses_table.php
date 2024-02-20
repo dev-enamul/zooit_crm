@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('village_id')->nullable()->constrained();
             $table->string('address', 250)->nullable(); 
             $table->foreignId('country_id')->nullable()->constrained();
+            $table->string('change_reason_document')->nullable();
 
             $table->foreignId('zone_id')->nullable()->constrained();
             $table->foreignId('area_id')->nullable()->constrained();

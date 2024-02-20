@@ -40,8 +40,7 @@ class DesignationController extends Controller
             'commission_id' => 'required', 
             'working_place' => 'required',
         ]);
-
-       
+ 
         try{
             $input =  $request->all(); 
             Designation::find($request->id)->update($input); 

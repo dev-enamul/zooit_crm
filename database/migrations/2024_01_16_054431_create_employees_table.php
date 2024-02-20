@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('designation_id')->nullable()->constrained();  
 
+            $table->string('change_reason_document')->nullable();
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->softDeletes();
             $table->timestamps();

@@ -20,6 +20,8 @@ use App\Http\Controllers\DtaReportController;
 use App\Http\Controllers\DueReportController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeEditController;
+use App\Http\Controllers\EmployeePermissionController;
+use App\Http\Controllers\EmployeeTreeController;
 use App\Http\Controllers\FieldTargetController;
 use App\Http\Controllers\FollowupAnalysisController;
 use App\Http\Controllers\FollowupController;
@@ -96,19 +98,27 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
-        Route::post('employee-save/{id?}', [EmployeeController::class, 'save'])->name('employee.save');
-        Route::get('employee-permission/{id}', [EmployeeController::class, 'employee_permission'])->name('employee.permission');
-        Route::post('user-permission-update', [EmployeeController::class, 'user_permission_update'])->name('user.permission.update');
-        Route::get('employees/tree', [EmployeeController::class, 'tree'])->name('employees.tree');
-
+        Route::post('employee-save/{id?}', [EmployeeController::class, 'save'])->name('employee.save'); 
+         
         Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
         Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');
-        Route::get('update/employee/area/{id}', [EmployeeEditController::class, 'update_area'])->name('update.area');
-        Route::get('deactive/employee/{id}', [EmployeeEditController::class, 'deactive_employee'])->name('deactive.employee');
-        Route::get('update/employee/designation/{id}', [EmployeeEditController::class, 'update_designation'])->name('update.designation');
+        
+        Route::get('area/user/edit/{id}', [EmployeeEditController::class, 'area_edit'])->name('user.area.edit');
+        Route::post('area/user/update/{id}', [EmployeeEditController::class, 'area_update'])->name('user.area.update');
 
-        // Product 
+        Route::get('designation/user/edit/{id}', [EmployeeEditController::class, 'designation_edit'])->name('designation.user.edit');
+        Route::post('designation/user/update/{id}', [EmployeeEditController::class, 'designation_update'])->name('designation.user.update');
+        
+        Route::any('deactive/employee/{id}', [EmployeeEditController::class, 'deactive_employee'])->name('deactive.employee');
+        
+        #Employee Permission 
+        Route::get('employee-permission/{id}', [EmployeePermissionController::class, 'employee_permission'])->name('employee.permission');
+        Route::post('user-permission-update', [EmployeePermissionController::class, 'user_permission_update'])->name('user.permission.update');
+        
+        #Employee Tree
+        Route::get('employees/tree', [EmployeeTreeController::class, 'tree'])->name('employees.tree');
 
+        #Product  
         Route::resource('product', ProductController::class);
         Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
         Route::get('sold-unsold/{id}', [ProductController::class, 'sold_unsold'])->name('sold.unsold');

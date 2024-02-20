@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title'); 
             $table->foreignId('commission_id')->nullable()->constrained();
-            $table->bigInteger('working_place')->nullable()->comment('1= Zone, 2= Area');
+            $table->bigInteger('working_place')->nullable()->comment('1= Zone, 2= Area, 3 = Head Office');
 
+            $table->tinyInteger('designation_type')->default(1)->comment('1= Employee, 2 = Freelancer');
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

@@ -48,9 +48,9 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
-    public function image(){ 
+    public function image(){
          $image = $this->profile_image;
-         if($image != null && $image != '' && file_exists('storage/'.$image)){  
+         if($image != null && $image != '' && file_exists('storage/'.$image)){
             return asset('storage/'.$image);
          }else{
             return asset('../assets/images/users/avatar-6.png');
@@ -118,8 +118,19 @@ class User extends Authenticatable
             $user_id = 'EMP-000';
         }
         $numericPart = substr($user_id, 4);  
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT); // "018" 
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT); 
         $newValue = "EMP-" . $newNumericPart; 
+        return $newValue;
+    }
+
+    public static function generateNextFreelancerId(){ 
+        $user_id = User::where('user_type',2)->latest('id')->first()->user_id;
+        if($user_id == null){
+            $user_id = 'FL-000';
+        }
+        $numericPart = substr($user_id, 4);  
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
+        $newValue = "FL-" . $newNumericPart; 
         return $newValue;
     }
 

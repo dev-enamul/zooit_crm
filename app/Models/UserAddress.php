@@ -18,6 +18,7 @@ class UserAddress extends Model
         'village_id',
         'address',
         'country_id',
+        'change_reason_document',
         'zone_id',
         'area_id',
     ];

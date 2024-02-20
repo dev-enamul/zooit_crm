@@ -38,6 +38,7 @@
                                         @endcan
                                         <th>S/N</th>
                                         <th>Profession Name</th> 
+                                        <th>Designation Type</th> 
                                         <th>Commission</th> 
                                     </tr>
                                 </thead>
@@ -57,7 +58,8 @@
                                         </td> 
                                         @endcan
                                         <td>{{$key+1}}</td>
-                                        <td>{{$data->title}}</td>  
+                                        <td>{{$data->title}}</td>
+                                        <td>{{$data->designation_type==1?"Employee":"Freelancer"}}</td>  
                                         <th>{{@$data->commission->commission}}%</th> 
                                     </tr> 
                                     @endforeach 
@@ -103,8 +105,17 @@
                         <select id="working_place" class="select2" name="working_place" required> 
                             <option value="1">Zone</option> 
                             <option value="2">Area</option>  
+                            <option value="3">Head Office</option>
                         </select> 
                     </div>  
+
+                    <div class="form-group mb-2">
+                        <label for="designation_type">Designation Type <span class="text-danger">*</span></label>
+                        <select id="designation_type" class="select2" name="designation_type" required> 
+                            <option value="1">Employee</option> 
+                            <option value="2">Freelancer</option>   
+                        </select> 
+                    </div>
                 </div> 
                 <div class="modal-footer">
                     <div class="text-end">
@@ -148,8 +159,17 @@
                         <select id="new_working_place" class="select2" name="working_place" required> 
                             <option value="1">Zone</option> 
                             <option value="2">Area</option>  
+                            <option value="3">Head Office</option>
                         </select> 
                     </div>  
+
+                    <div class="form-group mb-2">
+                        <label for="designation_type">Designation Type <span class="text-danger">*</span></label>
+                        <select id="designation_type" class="select2" name="designation_type" required> 
+                            <option value="1">Employee</option> 
+                            <option value="2">Freelancer</option>   
+                        </select> 
+                    </div>
                 </div> 
                 <div class="modal-footer">
                     <div class="text-end">
@@ -170,6 +190,8 @@
             $('#update_profession input[name=title]').val(data.title);
             $('#update_profession select[name=commission_id]').val(data.commission_id);
             $('#update_profession select[name=working_place]').val(data.working_place);
+            $('#update_profession select[name=designation_type]').val(data.designation_type);
+            $('.select2').select2();
             $('#update_profession').modal('show');
         }
     </script>
