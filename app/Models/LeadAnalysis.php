@@ -77,4 +77,9 @@ class LeadAnalysis extends Model
     {
         return $this->belongsTo(User::class, 'approve_by');
     }
+
+    public  function lead()
+    {
+        return $this->belongsTo(Lead::class);
+    }
 }

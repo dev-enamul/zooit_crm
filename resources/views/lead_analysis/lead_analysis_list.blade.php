@@ -17,7 +17,6 @@
                                 <li class="breadcrumb-item active">Lead Analysis List</li>
                             </ol>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -81,24 +80,36 @@
                                                         <a class="dropdown-item" href="{{route('lead-analysis.edit',$lead->id)}}">Edit</a>
                                                         <a class="dropdown-item" onclick="deleteItem('{{ route('lead-analysis.destroy',$lead->id) }}')">Delete</a>
                                                         <a class="dropdown-item" href="lead_analysis_entry.html">Lead Analysis</a>
+                                                        <a class="dropdown-item" href="{{route('presentation.create',['customer'=> $lead->customer->id])}}">Entry Presentation</a>
                                                     </div>
                                                 </div> 
                                             </td> 
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ @$lead->created_at }}</td>
-                                            <td> {{ @$lead->customer->name }}</td>
-                                            <td> {{ @$lead->customer->profession->name }}</td>
-                                            <td> {{ @$lead->customer->user->userAddress->upazila->name}}</td>
-                                            <td>{{ @$lead->customer->user->userAddress->union->name}}</td>
-                                            <td> {{ @$lead->customer->user->userAddress->village->name }}</td>
-                                            <td> {{ $lead->customer->user->marital_status}}</td>
-                                            <td>Dummy</td>
-                                            <td>{{ $lead->project->name }}</td>
-                                            <td> {{  @$lead->unit->name}}</td>
-                                            <td class="text-primary"> {{ @$lead->purchase_capacity }}</td>
-                                            <td>{{@$lead->possible_purchase_date }}</td>
-                                            <td>{{ @$lead->customer->user->phone}}</td>
-                                            <td>Dummy</td> 
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}" >{{ $loop->iteration }}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}" >{{ @$lead->created_at }}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->name }}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->profession->name }}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->user->userAddress->upazila->name}}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->user->userAddress->union->name}}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->user->userAddress->village->name }}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ $lead->customer->user->marital_status}}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> #Dummy </td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ $lead->project->name }}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{  @$lead->unit->title}}</td>
+                                            @php
+                                                $lead_capacity = App\Models\Lead::where('customer_id',$lead->customer_id)->first();
+                                            @endphp
+                                            <td class="text-primary"> 
+                                                @if($lead_capacity->purchase_capacity == 1)
+                                                    High
+                                                @elseif($lead_capacity->purchase_capacity == 2)
+                                                    Medium
+                                                @else
+                                                    Low
+                                                @endif
+                                            </td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{@$lead_capacity->possible_purchase_date }}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->phone}}</td>
+                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">Dummy</td> 
                                         </tr>
                                     @endforeach 
                                 </tbody>

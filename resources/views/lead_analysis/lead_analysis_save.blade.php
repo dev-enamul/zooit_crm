@@ -58,6 +58,27 @@
                                     </div>
 
                                     <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="employee" id="employee" required>
+                                                <option data-display="Select a employee *" value="">
+                                                    Select a employee
+                                                </option>
+                                                @isset($employees)
+                                                    @foreach ($employees as $employee)
+                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($lead_analysis) ? $lead_analysis->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
+                                                            {{ $employee->name }} ({{ $employee->user_id}})
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-6">
                                         <label for="project" class="form-label">Preferred Project Name <span class="text-danger">*</span></label>
                                         <select class="form-select reset-data" name="project" id="project" required>
                                             <option data-display="Select a project *" value="">
@@ -167,7 +188,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_problem" class="form-label">Customer's Problem</label> 
-                                            <textarea class="form-control" id="customer_problem" rows="1" name="customer_problem" placeholder="Customer's Problem"> {{ isset($lead_analysis) ? $lead_analysis->customer_problem : old('customer_problem') }}"</textarea>
+                                            <textarea class="form-control" id="customer_problem" rows="1" name="customer_problem" placeholder="Customer's Problem"> {{ isset($lead_analysis) ? $lead_analysis->customer_problem : old('customer_problem') }}</textarea>
                                         </div>
                                     </div>
 
@@ -188,49 +209,49 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="family_member" class="form-label">Family Member Qty</label> 
-                                            <input type="number" name="family_member" class="form-control" id="family_member" placeholder="family_member" value="{{ isset($lead_analysis) ? $lead_analysis->family_member : old('family_member') }}"> 
+                                            <input type="number" name="family_member" class="form-control" id="family_member" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->family_member : old('family_member') }}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="decision_maker" class="form-label">Decision Maker</label> 
-                                            <input type="text" name="decision_maker" class="form-control" id="decision_maker" placeholder="decision_maker" value="{{ isset($lead_analysis) ? $lead_analysis->decision_maker : old('decision_maker') }}"> 
+                                            <input type="text" name="decision_maker" class="form-control" id="decision_maker" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->decision_maker : old('decision_maker') }}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="previous_experiance" class="form-label">Previous Experiance to Purchase this kind of product</label> 
-                                            <input type="text" name="previous_experiance" class="form-control" id="previous_experiance" placeholder="previous_experiance" value="{{ isset($lead_analysis) ? $lead_analysis->previous_experiance : old('previous_experiance') }}"> 
+                                            <input type="text" name="previous_experiance" class="form-control" id="previous_experiance" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->previous_experiance : old('previous_experiance') }}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="instant_investment" class="form-label">Instant Investment</label> 
-                                            <input type="text" name="instant_investment" class="form-control" id="instant_investment" placeholder="instant_investment" value="{{ isset($lead_analysis) ? $lead_analysis->instant_investment : old('instant_investment') }}"> 
+                                            <input type="text" name="instant_investment" class="form-control" id="instant_investment" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->instant_investment : old('instant_investment') }}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="buyer" class="form-label">Buyer</label> 
-                                            <input type="text" name="buyer" class="form-control" id="buyer" placeholder="buyer" value="{{ isset($lead_analysis) ? $lead_analysis->buyer : old('buyer') }}"> 
+                                            <input type="text" name="buyer" class="form-control" id="buyer" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->buyer : old('buyer') }}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="buyer" class="form-label">Area</label> 
-                                            <input type="text" name="area" class="form-control" id="area" placeholder="area" value="{{ isset($lead_analysis) ? $lead_analysis->area : old('area') }}"> 
+                                            <input type="text" name="area" class="form-control" id="area" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->area : old('area') }}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="consumer" class="form-label">Consumer</label> 
-                                            <input type="text" name="consumer" class="form-control" id="consumer" placeholder="consumer" value="{{ isset($lead_analysis) ? $lead_analysis->consumer : old('consumer') }}"> 
+                                            <input type="text" name="consumer" class="form-control" id="consumer" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->consumer : old('consumer') }}"> 
                                         </div>
                                     </div> 
                                     
@@ -253,4 +274,32 @@
     @include('includes.footer')
 
 </div>
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#customer').change(function () {
+            var customerId = $(this).val();
+            if (customerId) {
+                $.ajax({
+                    type: "GET",
+                    url: "/get-customer-religion/" + customerId,
+                    success: function (response) {
+                        console.log(response.religions)
+                        if (response) {
+                            var options = '';
+                            $.each(response.religions, function (key, value) {
+                                options += '<option value="' + key + '">' + value + '</option>';
+                            });
+                            $('#religion').html(options);
+                        }
+                    }
+                });
+            } else {
+                $('#religion').html('<option value="">Select Religion</option>');
+            }
+        });
+    });
+</script>
 @endsection
