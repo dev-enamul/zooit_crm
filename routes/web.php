@@ -171,11 +171,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('presentation', PresentationController::class);
         Route::post('presentation-save/{id?}', [PresentationController::class, 'save'])->name('presentation.save');
         Route::any('presentation-delete/{id}', [PresentationController::class, "presentationDelete"])->name('presentation.delete');
+        Route::get('presentation-approve', [PresentationController::class, 'presentationApprove'])->name('presentation.approve');
+        Route::post('presentation-approve-save', [PresentationController::class, 'presentationApproveSave'])->name('presentation.approve.save');
 
         // Presentation Analysis
         Route::resource('presentation_analysis', PresentationAnalysisController::class);
         Route::post('visit-save/{id?}', [PresentationAnalysisController::class, 'save'])->name('visit.save');
         Route::any('visit-delete/{id}', [PresentationAnalysisController::class, "presentationDelete"])->name('visit.delete');
+        Route::get('presentation-analysis-approve', [PresentationAnalysisController::class, 'presentationAnalysisApprove'])->name('presentation-analysis.approve');
+        Route::post('presentation-analysis-approve-save', [PresentationAnalysisController::class, 'presentationAnalysisApproveSave'])->name('presentation-analysis.approve.save');
 
         // Follow Up
         Route::resource('followup', FollowupController::class);
