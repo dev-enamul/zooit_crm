@@ -75,17 +75,17 @@
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>{{ $loop->iteration}}</td>
-                                        <td>{{ $visit->created_at }}</td>
-                                        <td><a> @php
+                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration}}</td>
+                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}">{{ $visit->created_at }}</td>
+                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}"><a> @php
                                             $projects = json_decode($visit->projects);
                                         @endphp
                                         @foreach($projects as $project)
                                             <a>{{ $project }}</a><br>
                                         @endforeach</a></td>
-                                        <td>{{ @$visit->customer->user->name }}</td>
-                                        <td> {{ @$visit->customer->user->phone }}</td>
-                                        <td><span class="badge badge-label-success"> 
+                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}">{{ @$visit->customer->user->name }}</td>
+                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}"> {{ @$visit->customer->user->phone }}</td>
+                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}"><span class="badge badge-label-success"> 
                                             @php
                                                 $visitors = json_decode($visit->visitors);
                                                 $totalVisitors = count($visitors);
