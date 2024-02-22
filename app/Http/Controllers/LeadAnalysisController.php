@@ -13,6 +13,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class LeadAnalysisController extends Controller
@@ -42,8 +43,8 @@ class LeadAnalysisController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $leads = $leads->get();  
-         $filter =  $request->all();
+         $leads     = $leads->with('lead')->orderBy('id','desc')->get();  
+         $filter    =  $request->all();
         return view('lead_analysis.lead_analysis_list',compact('leads','employee_data','professions','employees','filter'));
     }
 
@@ -64,14 +65,16 @@ class LeadAnalysisController extends Controller
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
         $religions = $this->religion();
-        return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','religions'));
+        $employees          = User::whereIn('id', $my_all_employee)->get();
+
+        return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','religions','employees'));
     }
 
     public function save(Request $request, $id = null)
     {
-        
         $validator = Validator::make($request->all(), [
             'customer' => ['required', 'numeric'],
+            'employee' => ['required', 'numeric'],
             'project' => ['required', 'numeric'],
             'unit' => ['required', 'numeric'],
             'hobby' => ['required', 'string', 'max:255'],
@@ -101,7 +104,7 @@ class LeadAnalysisController extends Controller
             $cold_calling = LeadAnalysis::find($id);
             $cold_calling->update([
                 'customer_id'   => $request->customer,
-                'employee_id'   => 1, #dummy
+                'employee_id'   => $request->employee, 
                 'project_id'   => $request->project,
                 'unit_id'   => $request->unit,
                 'hobby'   => $request->hobby,
@@ -121,15 +124,15 @@ class LeadAnalysisController extends Controller
                 'buyer'   => $request->buyer,
                 'area'   => $request->area,
                 'consumer'   => $request->consumer,
-                'created_by'    => auth()->id(),
-                'created_at'    => now(),
+                'updated_by'    => auth()->id(),
+                'updated_at'    => now(),
             ]);
             return redirect()->route('lead-analysis.index')->with('success','Lead Analysis update successfully');
 
         } else {
             $lead_analysis = LeadAnalysis::create([
                 'customer_id'          => $request->customer,
-                'employee_id'          => 1, #dummy
+                'employee_id'          => $request->employee, 
                 'project_id'           => $request->project,
                 'unit_id'              => $request->unit,
                 'hobby'                => $request->hobby,
@@ -148,6 +151,7 @@ class LeadAnalysisController extends Controller
                 'instant_investment'   => $request->instant_investment,
                 'buyer'                => $request->buyer,
                 'area'                 => $request->area,
+                'status'               => 0,    
                 'consumer'             => $request->consumer,
                 'created_by'           => auth()->id(),
                 'created_at'           => now(),
@@ -180,5 +184,44 @@ class LeadAnalysisController extends Controller
         }catch(Exception $e){
             return response()->json(['error' => $e->getMessage()],500);
         }
+    }
+
+    public function getCustomerReligion($customerId)
+    {
+        $customer = Customer::findOrFail($customerId);
+        $religionId = $customer->user->religion;
+        $religionName = isset(Religion::values()[$religionId]) ? Religion::values()[$religionId] : 'Unknown';
+
+
+        return response()->json(['religions' => [$religionId => $religionName]]);
+    }
+
+    public function leadAnalysisApprove(){ 
+        $user_id        = Auth::user()->id; 
+        $my_employee    = my_employee($user_id);
+        $leads          = LeadAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        return view('lead_analysis.lead_analysis_approve', compact('leads'));
+    }
+
+    public function leadAnalysisApproveSave(Request $request) {
+        if($request->has('lead_id') && $request->lead_id !== '' & $request->lead_id !== null) {
+            DB::beginTransaction();
+            try {
+                foreach ($request->lead_id as $key => $lead_id) {
+                    $lead = LeadAnalysis::where('id',$lead_id)->first();
+                    $lead->approve_by = Auth::user()->id;
+                    $lead->save();
+                }
+                DB::commit();
+                return redirect()->route('lead-analysis.approve')->with('success', 'Status Updated Successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+            
+        } else {
+            return redirect()->route('lead-analysis.approve')->with('error', 'Something went wrong!');
+        }
+
     }
 }

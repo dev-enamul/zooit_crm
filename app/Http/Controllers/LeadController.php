@@ -125,6 +125,12 @@ class LeadController extends Controller
             $lead->status                   = 0;
             $lead->created_at               = now();
             $lead->save();
+
+            if($lead) {
+                $cold_calling = ColdCalling::where('customer_id',$request->customer)->first();
+                $cold_calling->status = 1;
+                $cold_calling->save();
+            }
             return redirect()->route('lead.index')->with('success','Lead create successfully');
         }
     }
