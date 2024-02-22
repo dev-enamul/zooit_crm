@@ -158,7 +158,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
         Route::get('customer-print/{id}', [CustomerController::class, "customerPrint"])->name('customer.print');
 
-        // Prospecting 
+        // Prospecting a
         Route::resource('prospecting', ProspectingController::class);
         Route::post('prospecting-save/{id?}', [ProspectingController::class, 'save'])->name('prospecting.save');
         Route::any('prospecting-delete/{id}', [ProspectingController::class, "prospectingDelete"])->name('prospecting.delete');

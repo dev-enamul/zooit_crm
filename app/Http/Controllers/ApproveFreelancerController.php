@@ -39,7 +39,13 @@ class ApproveFreelancerController extends Controller
                 $input['meeting_date'] = $request->meeting_date . ' ' . $request->meeting_time;
             }
             
-            FreelancerApprovel::create($input);   
+            FreelancerApprovel::create($input);  
+            if(isset($request->user_id)){
+                $user = User::find($request->user_id);
+                $user->approve_by = auth()->user()->id;
+                $user->save();
+            } 
+            
             DB::commit(); 
             return redirect()->back()->with('success', 'Freelancer approved successfully');
         }catch(Exception $e){

@@ -12,8 +12,7 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Employee List</h4>
                         <p class="d-none">Last Update: {{get_date($lastUpdateDate)}}</p> 
-                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)">
-                        {{-- <input type="hidden" id="pageOrientation" value="portrait"> --}}
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
                         <input type="hidden" id="pageSize" value="A3">
                         <input type="hidden" id="fontSize" value="10">
                     </div>

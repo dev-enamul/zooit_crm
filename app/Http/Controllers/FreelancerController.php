@@ -63,8 +63,7 @@ class FreelancerController extends Controller
         return Nationality::values();
     }
     
-    public function index(){ 
-        $datas       =  Freelancer::where('status',1)->get();
+    public function index(){  
         $countries   = $this->getCachedCountries();
         $divisions   = $this->getCachedDivisions();
         $districts   = $this->getCachedDistricts();
@@ -72,7 +71,12 @@ class FreelancerController extends Controller
         $unions      = $this->getCachedUnions();
         $villages    = $this->getCachedVillages();
         $professions = Profession::where('status',1)->select('id','name')->get();
-        $my_freelancer = my_employee(auth()->user()->id);
+        $my_freelancer = my_all_employee(auth()->user()->id);  
+        $datas       =  Freelancer::whereIn('user_id',$my_freelancer)->whereHas('user', function($query){
+            $query->where('approve_by','!=',null)
+            ->orWhere('created_by',auth()->user()->id);
+        })->get();
+        
         $freelancers = Freelancer::whereIn('id',$my_freelancer)->where('status',1)->get();  
 
         return view('freelancer.freelancer_list',compact('datas','professions','countries','divisions','districts','upazilas','unions','villages','freelancers'));

@@ -52,7 +52,7 @@
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->id}})">Approve</a> 
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->id}},{{$data->user_id}})">Approve</a> 
                                                 </div>
                                             </div> 
                                         </td> 
@@ -140,6 +140,11 @@
                             <textarea name="" id="" class="form-control" rows="3"></textarea>
                         </div>
                     @endcan 
+
+                    @can('freelancer-id-create')
+                        <label for="remark">Freelancer ID</label> 
+                        <input type="text" name="user_id" id="user_id" readonly>
+                    @endcan
                 </div> 
                 <div class="modal-footer">
                     <div class="text-end">
@@ -157,6 +162,7 @@
 <script>
     function approveFreelancer(id){ 
         $('input[name="freelancer_id"]').val(id);
+        $('input[name="user_id"]').val(id);
         $('#approve_frelancer').modal('show');
     }
 </script>

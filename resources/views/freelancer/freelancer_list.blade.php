@@ -1,11 +1,6 @@
 @extends('layouts.dashboard')
 @section('title',"Freelancer Create")
-
-@section('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
-@endsection
-
+ 
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -15,13 +10,18 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Freelancer List</h4>
+                        <h4 class="mb-sm-0">Employee List</h4>
+                        <p class="d-none">Employee: MD Enamul Haque</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="A3">
+                        <input type="hidden" id="fontSize" value="10">
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Freelancer List</li>
-                            </ol>
+                            <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                    <span><i class="fas fa-filter"></i> Filter</span>
+                                </button> 
+                            </div>
                         </div>
 
                     </div>
@@ -32,19 +32,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
-                                <div class=""> </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table id="freelancer_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="">
                                         <th>Action</th>
@@ -62,7 +51,7 @@
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
                                         <tr class="">
-                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                            <td class="text-center " data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
@@ -74,7 +63,7 @@
                                                     </div>
                                                 </div> 
                                             </td> 
-                                            <td>{{$key+1}}</td>
+                                            <td class="">{{$key+1}}</td>
                                             <td>{{get_date($data->created_at)}}</td>
                                             <td>{{@$data->user->name}}</td>
                                             <td>{{@$data->profession->name}}</td>
@@ -82,7 +71,7 @@
                                             <td>{{@$data->user->userAddress->union->name }}</td>
                                             <td>{{@$data->user->userAddress->village->name}}</td>
                                             <td>{{@$data->user->phone}}</td>
-                                            <td>{{@$data->user->user_id}}</td> 
+                                            <td>{{$data->user->approve_by==null?"-":$data->user->user_id}}</td> 
                                         </tr> 
                                     @endforeach 
                                 </tbody>
@@ -178,7 +167,7 @@
                 <input type="hidden" id="status" value="{{ @$status }}">
                 <div class="text-end ">
                     <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> 
-                    <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
+                    <button class="btn btn-outline-danger refresh_btn" type="button">
                         <i class="mdi mdi-refresh"></i> Reset
                     </button>
                 </div> 
@@ -189,76 +178,9 @@
 
 @endsection 
 
-@section('script')
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-    <script src="{{asset('assets/js/print.js')}}"></script>
-
-    <script>
-       $(document).ready(function () {
-            $(window).on('load', function () {
-                console.log('DataTable initialized');
-                var table = $('#freelancer_table').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            extend: 'excel',
-                            text: 'Excel',
-                            filename: 'export',
-                            exportOptions: {
-                                columns: ':visible:not(:first-child)'
-                            }
-                        },
-                        {
-                            extend: 'print',
-                            text: 'Print',
-                            title: 'Freelancer Data',
-                            exportOptions: {
-                                columns: ':visible:not(:first-child)'
-                            }
-                        }
-                    ]
-                });
-            });
-        });
-
-        function resetFormFields() {
-            $("#division").val('');
-            $("#district").val('');
-            $("#upazila").val('');
-            $("#union").val('');
-            $("#village").val('');
-        }
-
-        function resetFormFields() {
-            $("#division").val('');
-            $("#district").val('');
-            $("#upazila").val('');
-            $("#union").val('');
-            $("#village").val('');
-            $("#status").val('');
-            $("#daterange").val('');
-            $("#profession").val('');
-            $("#freelancer").val('');
-        
-            $("#status").trigger('change');
-            $("#division").trigger('change');
-            $("#district").trigger('change');
-            $("#upazila").trigger('change');
-            $("#union").trigger('change');
-            $("#village").trigger('change');
-            $("#daterange").trigger('change');
-            $("#profession").trigger('change');
-            $("#freelancer").trigger('change');
-
-            $('#filter_button').prop('disabled', true);
-        }
-    
+@section('script') 
+    @include('includes.data_table')
+    <script>  
         getDateRange('daterangepicker');
-    </script>
-
-    @yield('script-bottom')
+    </script>  
 @endsection
