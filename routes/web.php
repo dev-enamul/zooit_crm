@@ -178,20 +178,28 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
         Route::get('lead-approve', [LeadController::class, 'leadApprove'])->name('lead.approve');
         Route::post('lead-approve-save', [LeadController::class, 'leadApproveSave'])->name('lead.approve.save');
+
         // Lead Analysis
         Route::resource('lead-analysis', LeadAnalysisController::class);
         Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');
         Route::any('lead-analysis-delete/{id}', [LeadAnalysisController::class, "leadAnalysisDelete"])->name('lead_analysis.delete');
+        Route::get('/get-customer-religion/{customerId}', [LeadAnalysisController::class, 'getCustomerReligion']);
+        Route::get('lead-analysis-approve', [LeadAnalysisController::class, 'leadAnalysisApprove'])->name('lead-analysis.approve');
+        Route::post('lead-analysis-approve-save', [LeadAnalysisController::class, 'leadAnalysisApproveSave'])->name('lead-analysis.approve.save');
 
         // Presentation
         Route::resource('presentation', PresentationController::class);
         Route::post('presentation-save/{id?}', [PresentationController::class, 'save'])->name('presentation.save');
         Route::any('presentation-delete/{id}', [PresentationController::class, "presentationDelete"])->name('presentation.delete');
+        Route::get('presentation-approve', [PresentationController::class, 'presentationApprove'])->name('presentation.approve');
+        Route::post('presentation-approve-save', [PresentationController::class, 'presentationApproveSave'])->name('presentation.approve.save');
 
         // Presentation Analysis
         Route::resource('presentation_analysis', PresentationAnalysisController::class);
         Route::post('visit-save/{id?}', [PresentationAnalysisController::class, 'save'])->name('visit.save');
         Route::any('visit-delete/{id}', [PresentationAnalysisController::class, "presentationDelete"])->name('visit.delete');
+        Route::get('presentation-analysis-approve', [PresentationAnalysisController::class, 'presentationAnalysisApprove'])->name('presentation-analysis.approve');
+        Route::post('presentation-analysis-approve-save', [PresentationAnalysisController::class, 'presentationAnalysisApproveSave'])->name('presentation-analysis.approve.save');
 
         // Follow Up
         Route::resource('followup', FollowupController::class);

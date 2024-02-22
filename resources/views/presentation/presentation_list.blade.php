@@ -81,18 +81,17 @@
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ @$presentation->created_at }}</td>
-                                        <td>{{ @$presentation->customer->user->name }}</td>
-                                        <td>{{ @$presentation->customer->profession->name }}</td>
-                                        <td>{{ @$presentation->customer->user->userAddress->address }}</td>
-                                        <td>{{ @$presentation->customer->user->marital_status }}</td>
-                                        <td>{{ @$presentation->created_at }} #dummy</td>
-                                        <td>{{ @$presentation->project->name }}</td>
-                                        <td>{{ @$presentation->unit->title }}</td>
-                                        <td> Dummy </td>
-                                        <td>{{ @$presentation->created_at  }} #dummy</td>
-                                        <td>{{ @$presentation->freelancer->user->name }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->created_at }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->user->name }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->profession->name }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->user->userAddress->address }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->user->marital_status }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->created_at }} #dummy</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->project->name }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->unit->title }}</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->created_at  }} #dummy</td>
+                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->employee->name }}</td>
                                     </tr>
                                     @endforeach 
                                 </tbody>
