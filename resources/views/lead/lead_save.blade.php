@@ -110,7 +110,7 @@
 
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Preferred Project Name </label>
-                                        <select class="form-select reset-data" name="project" id="project" required>
+                                        <select class="form-select reset-data" name="project" id="project" >
                                             <option data-display="Select a project *" value="">
                                                 Select a Project
                                             </option>
@@ -132,7 +132,7 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Preferred Unit Name </label>
-                                        <select class="form-select reset-data" name="unit" id="unit" required>
+                                        <select class="form-select reset-data" name="unit" id="unit">
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>

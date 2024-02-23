@@ -26,10 +26,8 @@
          
           
             <div class="row"> 
-                <div class="col-12"> 
-
-                    @if (isset($old_tasks) && count($old_tasks) > 0)
-                       
+                <div class="col-12">  
+                    @if (isset($old_tasks) && count($old_tasks) > 0) 
                     <div class="card"> 
                         <div class="card-body">
                             <h3 class="card-title">Old Task</h3>
@@ -108,7 +106,7 @@
                             </div>
                         </div> 
                     </div> --}}
-                </div> <!-- end col -->
+                </div> 
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->

@@ -88,9 +88,7 @@ class ColdCallingController extends Controller
         $validator = Validator::make($request->all(), [
             'customer'   => 'required|unique:cold_callings,customer_id,'.$id,
             'employee'   => 'required',
-            'priority'   => 'required',
-            'project'    => 'required',
-            'unit'       => 'required',
+            'priority'   => 'required', 
             'remark'     => 'nullable|string|max:255'
         ]);
         if ($validator->fails()) {
@@ -129,6 +127,7 @@ class ColdCallingController extends Controller
 
             if($cold_call) {
                 $prospecting = Prospecting::where('customer_id',$request->customer)->first();
+             
                 $prospecting->status = 1;
                 $prospecting->save();
             }

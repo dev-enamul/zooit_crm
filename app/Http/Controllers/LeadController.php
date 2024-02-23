@@ -86,9 +86,7 @@ class LeadController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'customer'   => 'required',
-            'priority'   => 'required',
-            'project'    => 'required',
-            'unit'       => 'required',
+            'priority'   => 'required', 
             'purchase_date' => 'required',
             'remark'     => 'nullable|string|max:255',
             'employee'   => 'required',

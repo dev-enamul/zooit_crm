@@ -13,7 +13,7 @@ class Freelancer extends Model
     protected $fillable = [
         'user_id',
         'ref_id',
-        'reporting_person',
+        'change_reason_document',
         'approve_by',
         'last_approve_by',
         'profession_id',

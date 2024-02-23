@@ -58,7 +58,7 @@
                                                 @isset($customers)
                                                     @foreach ($customers as $cstm)
                                                         <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($prospecting->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->name }} ({{ @$cstm->user_id }})
+                                                            {{ @$cstm->name }} ({{ @$cstm->customer_id }})
                                                         </option>
                                                     @endforeach
                                                 @endisset

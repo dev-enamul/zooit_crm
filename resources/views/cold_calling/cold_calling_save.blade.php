@@ -106,7 +106,7 @@
 
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Interested Project Name</label>
-                                        <select class="select2 reset-data" search name="project" id="project" required>
+                                        <select class="select2 reset-data" search name="project" id="project">
                                             <option data-display="Select a project *" value="">
                                                 Select a Project
                                             </option>

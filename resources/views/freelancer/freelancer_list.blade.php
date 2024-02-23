@@ -53,13 +53,16 @@
                                         <tr class="">
                                             <td class="text-center " data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
-                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-animated">
-
-                                                        <a class="dropdown-item" href="{{ route('freelancer.print', $data->id) }}" onclick="printDiv('print_div')">Print Freelancer</a>
-                                                        <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                        <a class="dropdown-item" href="{{route('freelancer.edit',$data->id)}}" onclick="printPage()">Edit</a>
-                                                        <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('freelancer.delete',$data->id) }}')">Delete</a>                                                        
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated"> 
+                                                        <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
+                                                        <a class="dropdown-item" href="{{route('designation.freelancer.edit', $data->user->id)}}">Change Designation</a>
+                                                        <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', $data->user->id) }}')">Resign Freelancer</a>
+                                                        <a class="dropdown-item" href="{{route('user.area.edit', $data->user->id)}}">Change Area</a>
+                                                        <a class="dropdown-item" href="{{route('reporting.user.edit', $data->user->id)}}">Change Reporting User</a>
+                                                        <a class="dropdown-item" href="{{route('employee.permission', $data->user->id)}}">Change Permissin</a>
                                                     </div>
                                                 </div> 
                                             </td> 

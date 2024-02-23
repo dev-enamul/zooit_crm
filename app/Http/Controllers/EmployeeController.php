@@ -290,7 +290,7 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
-        $id = decrypt($id);
+        $id = decrypt($id); 
         $title     = "Employee Edit";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
@@ -312,6 +312,16 @@ class EmployeeController extends Controller
         $reporting_user = ReportingUser::where('status',1)->get();
 
         $employee = Employee::where('user_id',$id)->first();
+        if(!$employee){
+            return redirect()->back()->with('error', 'Employee Not Found');
+        }
+
+        $selected['country_id']   = $employee->user->userAddress->country_id??1;
+        $selected['division_id']  = $employee->user->userAddress->division_id??1;
+        $selected['district_id']  = $employee->user->userAddress->district_id??1;
+        $selected['upazila_id']   = $employee->user->userAddress->upazila_id??1;
+        $selected['union_id']     = $employee->user->userAddress->union_id??1;
+        $selected['village_id']   = $employee->user->userAddress->village_id??1;
  
         return view('employee.employee_edit',compact([
             'ref_ids',
@@ -333,7 +343,9 @@ class EmployeeController extends Controller
             'nationalites',
             'designations', 
             'reporting_user',
-            'employee'
+            'employee',
+            'selected'
+            
         ]));
     }
 

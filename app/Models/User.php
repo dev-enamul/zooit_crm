@@ -72,6 +72,11 @@ class User extends Authenticatable
         return $this->hasOne(Employee::class, 'user_id');
     }
 
+    public function customer()
+    {
+        return $this->hasMany(Customer::class, 'user_id');
+    }
+
     public function reportingUser()
     {
         return $this->hasOne(ReportingUser::class, 'user_id')->whereNull('deleted_at');
@@ -112,7 +117,7 @@ class User extends Authenticatable
         return $nextUserId;
     }
 
-    public static function generateNextEmployeeId(){ 
+    public static function generateNextEmployeeId(){
         $user_id = User::where('user_type',1)->latest('id')->first()->user_id;
         if($user_id == null){
             $user_id = 'EMP-000';
@@ -123,14 +128,14 @@ class User extends Authenticatable
         return $newValue;
     }
 
-    public static function generateNextFreelancerId(){ 
-        $user_id = User::where('user_type',2)->latest('id')->first()->user_id;
-        if($user_id == null){
-            $user_id = 'FL-000';
+    public static function generateNextCustomerId(){ 
+        $customer = Customer::latest('id')->first()->customer_id;
+        if($customer == null){
+            $customer = 'CUS-000';
         }
-        $numericPart = substr($user_id, 4);  
+        $numericPart = substr($customer, 4);
         $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "FL-" . $newNumericPart; 
+        $newValue = "CUS-" . $newNumericPart; 
         return $newValue;
     }
 

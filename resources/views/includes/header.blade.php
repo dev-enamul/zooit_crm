@@ -2,21 +2,21 @@
     <div class="navbar-header">  
         <!-- Start Navbar-Brand -->
         <div class="navbar-logo-box">
-            <a href="index.html" class="logo logo-dark">
+            <a href="{{route('index')}}" class="logo logo-dark">
                 <span class="logo-sm">
-                    <img src="../assets/images/logo-sm.png" alt="logo-sm-dark" height="40px">
+                    <img src="{{asset('assets/images/logo-sm.png')}}" alt="logo-sm-dark" height="40px">
                 </span>
                 <span class="logo-lg">
-                    <img src="../assets/images/logo-dark.png" alt="logo-dark" height="40px">
+                    <img src="{{asset('assets/images/logo-dark.png')}}" alt="logo-dark" height="40px">
                 </span>
             </a>
 
-            <a href="index.html" class="logo logo-light">
+            <a href="{{route('index')}}" class="logo logo-light">
                 <span class="logo-sm">
-                    <img src="../assets/images/logo-sm.png" alt="logo-sm-light" height="40px">
+                    <img src="{{asset('assets/images/logo-sm.png')}}" alt="logo-sm-light" height="40px">
                 </span>
                 <span class="logo-lg">
-                    <img src="../assets/images/logo-light.png" alt="logo-light" height="40px">
+                    <img src="{{asset('assets/images/logo-dark.png')}}" alt="logo-light" height="40px">
                 </span>
             </a>
 
@@ -45,9 +45,9 @@
             <div class="d-flex align-items-center gap-2"> 
                 <!-- Start Notification --> 
 
-                <form class="app-search d-none d-lg-block pb-0">
+                <form action="{{route('search')}}" class="app-search d-none d-lg-block pb-0">
                     <div class="position-relative">
-                        <input type="text" class="form-control" placeholder="Search nid/phone...">
+                        <input type="text" class="form-control" name="key" placeholder="Search ">
                         <span class="fab fa-sistrix fs-17 align-middle"></span>
                     </div>
                 </form>
@@ -192,10 +192,10 @@
                                         </div>
                                     </div>
                                     <div class="rich-list-content">
-                                        <h3 class="rich-list-title text-white">Md Enamul Haque</h3>
-                                        <span class="rich-list-subtitle text-white">admin@codubucks.in</span>
+                                        <h3 class="rich-list-title text-white">{{auth()->user()->name}}</h3>
+                                        <span class="rich-list-subtitle text-white">{{auth()->user()->phone}}</span>
                                     </div>
-                                    <div class="rich-list-append"><span class="badge badge-label-light fs-6">6+</span></div>
+                                    {{-- <div class="rich-list-append"><span class="badge badge-label-light fs-6">6+</span></div> --}}
                                 </div>
                             </div>
                             <div class="card-body p-0">

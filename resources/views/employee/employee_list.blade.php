@@ -51,7 +51,7 @@
                                                     @can('employee-permission')
                                                         <a class="dropdown-item" href="{{route('employee.edit', encrypt($data->id))}}">Edit</a>
                                                         <a class="dropdown-item" href="{{route('designation.user.edit', $data->id)}}">Change Designation</a>
-                                                        <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.employee', $data->id) }}')">Resign Employee</a>
+                                                        <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.user', $data->id) }}')">Resign Employee</a>
                                                         <a class="dropdown-item" href="{{route('user.area.edit', $data->id)}}">Change Area</a>
                                                         <a class="dropdown-item" href="{{route('reporting.user.edit', $data->id)}}">Change Reporting User</a>
                                                         <a class="dropdown-item" href="{{route('employee.permission', $data->id)}}">Change Permissin</a>

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('facility');
 
             $table->foreignId('employee_id')->constrained('users');  
-            $table->foreignId('approve_by')->nullable()->constrained('users'); 
+            $table->foreignId('approve_by')->nullable()->constrained('users');
             
             $table->timestamps();
             $table->softDeletes();

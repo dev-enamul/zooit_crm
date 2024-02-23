@@ -11,6 +11,7 @@ use App\Http\Controllers\CommissionDeductedController;
 use App\Http\Controllers\CommissionReportController;
 use App\Http\Controllers\Common\AreaController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositCategoryController;
 use App\Http\Controllers\DepositController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\FieldTargetController;
 use App\Http\Controllers\FollowupAnalysisController;
 use App\Http\Controllers\FollowupController;
 use App\Http\Controllers\FreelancerController;
+use App\Http\Controllers\FreelancerEditController;
 use App\Http\Controllers\FreelancerProfileController;
 use App\Http\Controllers\LeadAnalysisController;
 use App\Http\Controllers\LeadController;
@@ -48,6 +50,7 @@ use App\Http\Controllers\RejectionController;
 use App\Http\Controllers\SalseController;
 use App\Http\Controllers\SalseReturnController;
 use App\Http\Controllers\SalseTransferController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\settings\ApproveSettingController;
 use App\Http\Controllers\SpecialComissionController;
 use App\Http\Controllers\SpecialOffer;
@@ -83,6 +86,7 @@ Route::get('id', [DashboardController::class, 'id'])->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/search',[SearchController::class,'search'])->name('search');
 
         # Common
         //Area
@@ -98,7 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
-        Route::post('employee-save/{id?}', [EmployeeController::class, 'save'])->name('employee.save'); 
+        Route::post('employee-save', [EmployeeController::class, 'save'])->name('employee.save'); 
          
         Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
         Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');
@@ -109,10 +113,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('designation/user/edit/{id}', [EmployeeEditController::class, 'designation_edit'])->name('designation.user.edit');
         Route::post('designation/user/update/{id}', [EmployeeEditController::class, 'designation_update'])->name('designation.user.update');
         
-        Route::any('deactive/employee/{id}', [EmployeeEditController::class, 'deactive_employee'])->name('deactive.employee');
+        Route::any('deactive/user/{id}', [EmployeeEditController::class, 'deactive_user'])->name('deactive.user');
         
         #Employee Permission 
-        Route::get('employee-permission/{id}', [EmployeePermissionController::class, 'employee_permission'])->name('employee.permission');
+        Route::get('user-permission/{id}', [EmployeePermissionController::class, 'employee_permission'])->name('employee.permission');
         Route::post('user-permission-update', [EmployeePermissionController::class, 'user_permission_update'])->name('user.permission.update');
         
         #Employee Tree
@@ -138,8 +142,25 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('approve-freelancer', ApproveFreelancerController::class);
         Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save');
         Route::post('/freelancer-search', [FreelancerController::class, 'freelancerSearch'])->name('freelancer.search');
-        Route::any('freelacer-delete/{id}', [FreelancerController::class, "freelancerDelete"])->name('freelancer.delete');
-        Route::get('freelacer-print/{id}', [FreelancerController::class, "freelancerPrint"])->name('freelancer.print');
+ 
+        Route::get('designation/freelancer/edit/{id}', [FreelancerEditController::class, 'designation_edit'])->name('designation.freelancer.edit');
+        Route::post('designation/freelancer/update/{id}', [FreelancerEditController::class, 'designation_update'])->name('designation.freelancer.update');
+        
+        Route::any('deactive/freelancer/{id}', [FreelancerEditController::class, 'deactive_user'])->name('deactive.freelancer');
+
+
+        Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
+        Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');
+        
+        Route::get('area/user/edit/{id}', [EmployeeEditController::class, 'area_edit'])->name('user.area.edit');
+        Route::post('area/user/update/{id}', [EmployeeEditController::class, 'area_update'])->name('user.area.update');
+
+        Route::get('designation/user/edit/{id}', [EmployeeEditController::class, 'designation_edit'])->name('designation.user.edit');
+        Route::post('designation/user/update/{id}', [EmployeeEditController::class, 'designation_update'])->name('designation.user.update');
+        
+        Route::any('deactive/user/{id}', [EmployeeEditController::class, 'deactive_user'])->name('deactive.user');
+ 
+        //Route::any('/freelacer-delete/{id}', [FreelancerController::class, "freelancerDelete"])->name('freelancer.delete');
 
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
         Route::get('freelancer-hierarchy', [FreelancerProfileController::class, 'freelancer_hierarchy'])->name('freelancer.hierarchy');
@@ -154,7 +175,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer', CustomerController::class);
         Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save');
         Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
-        Route::get('customer-profile', [CustomerController::class, 'customer_profile'])->name('customer.profile');
+        Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
         Route::get('customer-print/{id}', [CustomerController::class, "customerPrint"])->name('customer.print');
 
@@ -303,7 +324,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('assign-field-target-list', [FieldTargetController::class, 'assign_target_list'])->name('assign.field.target.list'); 
         Route::get('marketing-field-report', [FieldTargetController::class, 'marketing_field_report'])->name('marketing.field.report');
         Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');
-        // task 
+        // task
         Route::get('task-complete', [TaskController::class, 'task_complete'])->name('task.complete');
         Route::get('my-task', [TaskController::class, 'my_task'])->name('my.task');
         Route::get('submit-task/{id}', [TaskController::class, 'submit_task'])->name('submit.task');

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('salse_returns', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained();
+            $table->foreignId('customer_user_id')->constrained('users');
             $table->date('booking_date')->nullable();
             $table->foreignId('project_id')->nullable()->constrained();
             $table->decimal('declaration_value', 10, 2)->nullable();

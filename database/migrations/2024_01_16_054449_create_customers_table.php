@@ -19,7 +19,13 @@ return new class extends Migration
             $table->string('name')->nullable(); 
             $table->unsignedBigInteger('ref_id')->nullable();
             $table->foreign('ref_id')->references('id')->on('users');
-            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+
+            $table->foreignId('approve_by')->nullable()->constrained('users'); 
+
+            $table->tinyInteger('status')->default(1)->comment('1= Complete, 0= Uncomplete');
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
+            $table->foreignId('deleted_by')->nullable()->constrained('users');
             $table->softDeletes();
             $table->timestamps(); 
         });
