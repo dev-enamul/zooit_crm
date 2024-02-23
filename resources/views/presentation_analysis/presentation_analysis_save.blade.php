@@ -48,7 +48,7 @@
                             @endif 
                                 @csrf
                                 <div class="row">  
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Visitor <span class="text-danger">*</span></label>
                                             <select id="freelancer" class="select2" tags search name="freelancer[]" multiple>
@@ -63,7 +63,28 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="employee" id="employee" required>
+                                                <option data-display="Select a employee *" value="">
+                                                    Select a employee
+                                                </option>
+                                                @isset($employees)
+                                                    @foreach ($employees as $employee)
+                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($visit) ? $visit->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
+                                                            {{ $employee->name }} ({{ $employee->user_id}})
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Project <span class="text-danger">*</span></label>
                                             <select id="projects" class="select2" tags search name="projects[]" multiple>
@@ -77,17 +98,15 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
-
-                                    
-                                    <div class="col-md-12">
+                                                                   
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_id" class="form-label">Negotiation Person </label>
                                             <select id="customer_id" class="select2" search name="customer_id">
                                                 @isset($customers)
                                                     @foreach ($customers as $customer)
                                                         <option value="{{ $customer->id }}" {{ old('customer', isset($visit) ? $visit->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->user->name }} ({{ $customer->user->user_id}})
+                                                            {{ @$customer->customer->user->name }} ({{ $customer->customer->user->user_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset 

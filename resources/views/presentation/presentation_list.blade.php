@@ -77,7 +77,7 @@
                                                     <a class="dropdown-item" href="{{route('presentation.edit',$presentation->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('presentation.delete',$presentation->id) }}')">Delete</a>  
                                                     <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                    <a class="dropdown-item" href="project_visit_create.html">Project Visit Analysis</a>
+                                                    <a class="dropdown-item" href="{{route('presentation_analysis.create',['customer_id' => $presentation->customer->id])}}">Project Visit Analysis</a>
                                                 </div>
                                             </div> 
                                         </td> 

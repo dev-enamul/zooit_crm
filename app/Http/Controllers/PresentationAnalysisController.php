@@ -6,6 +6,7 @@ use App\Enums\Priority;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Freelancer;
+use App\Models\LeadAnalysis;
 use App\Models\Presentation;
 use App\Models\Profession;
 use App\Models\Project;
@@ -49,22 +50,34 @@ class PresentationAnalysisController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $visits = $visits->get();  
+         $visits = $visits->orderBY('id','desc')->get();  
          $filter =  $request->all();
         return view('presentation_analysis.presentation_analysis_list', compact('visits','employee_data','professions','employees','filter'));
     }
 
-    public function create()
+    public function create(Request $request)
     {        
         $title = 'Vist Analysis Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $customers          = LeadAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                    $q->whereIn('ref_id',$my_all_employee);
+                                })->get();
+        $employees          = User::whereIn('id', $my_all_employee)->get();
         $freelancers        = User::where('user_type',2)->whereIn('ref_id',$my_all_employee)->get();
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
         $units              = Unit::select('id','title')->get();
-        return view('presentation_analysis.presentation_analysis_save',compact('title','customers','priorities','projects','units','freelancers'));
+
+        $selected_data = 
+        [
+            'employee' => Auth::user()->id,
+        ];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = $request->customer;
+        }
+
+        return view('presentation_analysis.presentation_analysis_save',compact('title','customers','priorities','projects','units','freelancers','employees','selected_data'));
     }
 
     public function save(Request $request, $id = null)
@@ -72,6 +85,11 @@ class PresentationAnalysisController extends Controller
         $validator = Validator::make($request->all(), [
             'freelancer'    => 'required|array',
             'freelancer.*'  => 'string',
+            'employee'      => 'required',
+            'projects'      => 'required|array',
+            'projects.*'    => 'string',
+            'customer_id'   => 'required',
+            'remark'        => 'nullable',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -81,12 +99,12 @@ class PresentationAnalysisController extends Controller
             $visit = VisitAnalysis::findOrFail($id);
             $projectsJson = json_encode($request->input('projects'));
             $visit->visitors = json_encode($request->input('freelancer'));
+            $visit->employee_id = $request->employee;
             $visit->projects = $projectsJson;
             $visit->customer_id = $request->customer_id;
             $visit->remark = $request->remark;
             $visit->updated_by = $request->updated_by;
             $visit->updated_at = $request->updated_at;
-            $visit->status = 1;
             $visit->save();
             return redirect()->route('presentation_analysis.index')->with('success','Presemtation analysis update successfully');
         } else {
@@ -94,12 +112,20 @@ class PresentationAnalysisController extends Controller
             $visit->visitors = json_encode($request->input('freelancer'));;
             $visit->projects = json_encode($request->input('projects'));;
             $visit->customer_id = $request->customer_id;
-            $visit->employee_id = 1;    #dummy
+            $visit->employee_id = $request->employee;
             $visit->remark = $request->remark;
             $visit->created_by = auth()->id();
             $visit->created_at = now();
-            $visit->status = 1; #dummy
+            $visit->status = 0;
+            $visit->created_at = now();
+            $visit->created_by = auth()->id();
             $visit->save();
+
+            if($visit) {
+                $visit = Presentation::where('customer_id',$request->customer)->first();
+                $visit->status = 1;
+                $visit->save();
+            }
             
             return redirect()->route('presentation_analysis.index')->with('success','Presentation analysis create successfully');
         }
