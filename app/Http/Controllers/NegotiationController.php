@@ -49,7 +49,7 @@ class NegotiationController extends Controller
 
     public function create(Request $request)
     {
-        $title = 'Follow Up Entry';
+        $title = 'Negotiation Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
         $customers          = FollowUpAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){

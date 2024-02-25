@@ -66,27 +66,31 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
+                                    @foreach ($negotiations as  $negotiation)
                                     <tr>
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                    <a class="dropdown-item" href="negotiation_entry.html">Negotiation</a>
+                                                    <a class="dropdown-item" href="{{route('negotiation-analysis.edit',$negotiation->id)}}">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('negotiation.delete',$negotiation->id) }}')">Delete</a> 
+                                                    <a class="dropdown-item" href="{{route('rejection.create',['customer'=>$negotiation->customer->id])}}">Rejection Create</a>
                                                 </div>
                                             </div> 
                                         </td>
-                                        <td>1</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td><a href="customer_profile.html">Md Enamul Haque</a></td>
-                                        <td>01796351081</td>
-                                        <td>2/1, Mohammadpur, Dhaka-1230</td>
-                                        <td>$3555426</td> 
-                                        <td>Musafir Plaza</td>
-                                        <td>A-5</td> 
-                                        <td>Md Jamil [FL154]</td>  
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration}}</td>
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">{{ $negotiation->created_at }}</td>
+                                       
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">{{ @$negotiation->customer->user->name }}</td>
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->customer->user->phone }}</td>
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->customer->user->userAddress->address }}</td>
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->negotiation_amount }}</td>
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->project->name }}</td>
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">  2 #dummmy </td>
+                                        <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">  {{ @$negotiation->employee->user->name }} </td>
                                     </tr> 
-
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>

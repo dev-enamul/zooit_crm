@@ -2,59 +2,208 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Priority;
+use App\Models\Customer;
+use App\Models\Negotiation;
+use App\Models\NegotiationAnalysis;
+use App\Models\Project;
+use App\Models\ProjectUnit;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class NegotiationAnalysisController extends Controller
 {
-    
-    public function index()
+    public function priority()
     {
-        return view('negotiation_analysis.negotiation_analysis_list');
+        return Priority::values();
+    }
+
+    public function index(Request $request)
+    {
+        $my_all_employee = my_all_employee(auth()->user()->id);
+        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
+        $employees = User::whereIn('id', $my_all_employee)->get();
+
+        if(isset($request->employee) && !empty($request->employee)){
+            $user_id = (int)$request->employee;
+        }else{
+            $user_id = Auth::user()->id;
+        } 
+      
+        $user_employee = my_all_employee($user_id);
+        $negotiations = NegotiationAnalysis::whereHas('customer', function($q) use($user_employee){ 
+            $q->whereIn('ref_id', $user_employee);
+        }); 
+
+         $negotiations = $negotiations->orderBY('id','desc')->get();  
+         $filter =  $request->all();
+        return view('negotiation_analysis.negotiation_analysis_list',compact('negotiations','employee_data','employees','filter'));
     }
 
    
-    public function create()
+    public function create(Request $request)
     {
-        return view('negotiation_analysis.negotiation_analysis_create');
+        $title = 'Negotiation Analysis Entry';
+        $user_id            = Auth::user()->id; 
+        $my_all_employee    = my_all_employee($user_id);
+        $customers          = Negotiation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                    $q->whereIn('ref_id',$my_all_employee);
+                                })->get();
+        $projects       = Project::where('status',1)->get(['name', 'id']);
+        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
+        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $priorities         = $this->priority();
+
+        $selected_data = 
+        [
+            'employee' => Auth::user()->id,
+            'priority' => Priority::Regular,
+        ];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = $request->customer;
+        }
+
+        return view('negotiation_analysis.negotiation_analysis_save', compact('selected_data','priorities','projects','projectUnits','customers','employees'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function save(Request $request, $id = null)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'customer'          => 'required',
+            'employee'          => 'required',
+            'priority'          => 'required',
+            'project'           => 'required',
+            'unit'              => 'required',
+            'payment_duration'  => 'required',
+            'select_type'       => 'required',
+            'regular_amount'    => 'required',
+            'negotiation_amount'=> 'required',
+            'customer_emotion'  => 'nullable',
+            'customer_preference'=> 'nullable',
+            'plan_b'            => 'nullable'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
+        }
+
+        if (!empty($id)) {
+            $follow = NegotiationAnalysis::findOrFail($id);
+            $follow->customer_id = $request->customer;
+            $follow->employee_id = $request->employee;
+            $follow->priority = $request->priority;
+            $follow->project_id = $request->input('project');
+            $follow->unit_id = $request->input('unit');
+            $follow->select_type = $request->select_type;
+            $follow->payment_duration = $request->payment_duration;
+            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->regular_amount = $request->input('regular_amount');
+            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->customer_emotion = $request->input('customer_emotion');
+            $follow->customer_preference = $request->input('customer_preference');
+            $follow->plan_b = $request->input('plan_b');
+            
+            $follow->updated_by = $request->updated_by;
+            $follow->updated_at = $request->updated_at;
+            $follow->save();
+            return redirect()->route('negotiation-analysis.index')->with('success','Negotiation Analysis update successfully');
+        } else {
+            $follow = new NegotiationAnalysis();
+            $follow->customer_id = $request->customer;
+            $follow->employee_id = $request->employee;
+            $follow->priority = $request->priority;
+            $follow->project_id = $request->input('project');
+            $follow->unit_id = $request->input('unit');
+            $follow->select_type = $request->select_type;
+            $follow->payment_duration = $request->payment_duration;
+            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->regular_amount = $request->input('regular_amount');
+            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->customer_emotion = $request->input('customer_emotion');
+            $follow->customer_preference = $request->input('customer_preference');
+            $follow->plan_b = $request->input('plan_b');
+
+            $follow->created_by = auth()->id();
+            $follow->created_at = now();
+            $follow->status = 0;
+            $follow->save();
+
+            if($follow) {
+                $visit = Negotiation::where('customer_id',$request->customer)->first();
+                $visit->status = 1;
+                $visit->save();
+            }
+            
+            return redirect()->route('negotiation-analysis.index')->with('success','Negotiation Analysis create successfully');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(string $id, Request $request)
     {
-        //
+        $title = 'Negotiation Analysis Edit';
+        $user_id            = Auth::user()->id; 
+        $my_all_employee    = my_all_employee($user_id);
+        $customers          = Negotiation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                    $q->whereIn('ref_id',$my_all_employee);
+                                })->get();
+        $projects           = Project::where('status',1)->get(['name', 'id']);
+        $projectUnits       = ProjectUnit::where('status', 1)->get(['name', 'id']);
+        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $priorities         = $this->priority();
+
+        $selected_data = 
+        [
+            'employee' => Auth::user()->id,
+            'priority' => Priority::Regular,
+        ];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = $request->customer;
+        }
+        $negotiation = NegotiationAnalysis::find($id);
+        
+        return view('negotiation_analysis.negotiation_analysis_save',compact('selected_data','priorities','projects','projectUnits','customers','employees','negotiation'));
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    public function negotiationAnalysisDelete($id){
+        try{ 
+            $data  = NegotiationAnalysis::find($id);
+            $data->delete();
+            return response()->json(['success' => 'Negotiation Analysis Deleted'],200);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()],500);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function negotiationAnalysisApprove(){ 
+        $user_id        = Auth::user()->id; 
+        $my_employee    = my_employee($user_id);
+        $negotiations  = NegotiationAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        return view('negotiation_analysis.negotiation_analysis_approve', compact('negotiations'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function negotiationAnalysisApproveSave(Request $request) {
+        if($request->has('negotiation_id') && $request->negotiation_id !== '' & $request->negotiation_id !== null) {
+            DB::beginTransaction();
+            try {
+                foreach ($request->negotiation_id as $key => $negotiation_id) {
+                    $lead = NegotiationAnalysis::where('id',$negotiation_id)->first();
+                    $lead->approve_by = Auth::user()->id;
+                    $lead->save();
+                }
+                DB::commit();
+                return redirect()->route('negotiation-analysis-approve.save')->with('success', 'Status Updated Successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+            
+        } else {
+            return redirect()->route('negotiation-analysis.approve')->with('error', 'Something went wrong!');
+        }
     }
+
 }
