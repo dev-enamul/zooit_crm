@@ -11,11 +11,14 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Leads</h4> 
+                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="a3">
+                        <input type="hidden" id="fontSize" value="8">
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Lead List</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
 
                     </div>
@@ -26,30 +29,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -61,11 +42,11 @@
                                         <th>Union</th>
                                         <th>Village</th>
                                         <th>Maritial</th>
-                                        <th>Last Call</th>
+                                        <th>CC Call</th>
                                         <th>Project</th>
                                         <th>Unit</th>
                                         <th>Capacity</th>
-                                        <th>Purchase Date</th>
+                                        <th>PP Date</th>
                                         <th>Mobile</th>
                                         <th>Freelancer</th> 
                                     </tr>
@@ -73,29 +54,48 @@
                                
                                 <tbody> 
                                     @foreach ($leads as  $lead)
-                                    <tr class="">
+                                    <tr class="{{$lead->approve_by==null?"table-warning":""}}">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img class="rounded avatar-2xs p-0" src="{{@$lead->customer->user->image()}}">
+                                                </a> 
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$lead->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $lead->customer->id])}}">Lead Analysis Form</a>
+                                                    @if ($lead->approve_by==null)
+                                                        @can('lead-manage')
+                                                            <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
+                                                        @endcan 
+                                                    @endif 
+
+                                                    @can('lead-delete')
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$lead->id) }}')">Delete</a>  
+                                                    @endcan
+                                                    
+                                                    @if ($lead->approve_by!=null)
+                                                        @can('lead-analysis')
+                                                            <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $lead->customer->id])}}">Lead Analysis Form</a>
+                                                        @endcan 
+                                                    @endif 
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ $lead->created_at->format('Y-m-d') }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->name }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->profession->name }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->userAddress->upazila->name }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->userAddress->union->name }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->userAddress->village->name }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->marital_status }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->prospecting }} #dummy</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->project->name }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->unit->title }}</td>
+                                        <td class="">{{ $loop->iteration }}</td>
+                                        <td class="">{{ get_date($lead->created_at) }}</td>
+                                        <td class="">{{ @$lead->customer->name }} {{ @$lead->customer->customer_id }}</td>
+                                        <td class="">{{ @$lead->customer->profession->name }}</td>
+                                        <td class="">{{ @$lead->customer->user->userAddress->upazila->name }}</td>
+                                        <td class="">{{ @$lead->customer->user->userAddress->union->name }}</td>
+                                        <td class="">{{ @$lead->customer->user->userAddress->village->name }}</td>
+                                        <td class="">{{ @$lead->customer->user->marital_status }}</td>
+
+                                        @php
+                                            $cold_calling = \App\Models\ColdCalling::where('customer_id',$lead->customer_id)->first(); 
+                                            $last_cold_calling = $cold_calling->updated_at?? $cold_calling->created_at;
+                                        @endphp
+
+                                        <td class="">{{ get_date($last_cold_calling) }}</td>
+                                        <td class="">{{ @$lead->project->name }}</td>
+                                        <td class="">{{ @$lead->unit->title }}</td>
                                         <td class="text-primary">
                                            @if ($lead->purchase_capacity ==1)
                                                High
@@ -105,9 +105,9 @@
                                                 Low
                                            @endif
                                         </td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->possible_purchase_date }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->phone }}</td>
-                                        <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->employee->name ?? 'N/A' }}</td>
+                                        <td class="">{{ @$lead->possible_purchase_date }}</td>
+                                        <td class="">{{ @$lead->customer->user->phone }}</td>
+                                        <td class="">{{ @$lead->customer->reference->name ?? '-' }} [{{ @$lead->customer->reference->user_id }}]</td>
                                     </tr>
                                     @endforeach 
                                 </tbody>
@@ -274,7 +274,8 @@
 </div>
 @endsection 
 
-@section('script')
+@section('script') 
+@include('includes.data_table')
     <script>
         getDateRange('join_date');
         getDateRange('last_cold_calling');

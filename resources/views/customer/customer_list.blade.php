@@ -19,10 +19,11 @@
                         <input type="hidden" id="fontSize" value="10">
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Customer List</li>
-                            </ol>
+                            <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                    <span><i class="fas fa-filter"></i> Filter</span>
+                                </button> 
+                            </div>
                         </div>
 
                     </div>
@@ -35,18 +36,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
-                                <div class=""> </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-                           
+                        <div class="card-body"> 
                             <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="">
@@ -64,16 +54,26 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
-                                        <tr class="">
+                                        <tr class="{{$data->approve_by==null?"table-warning":""}}">
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
-                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
+                                                    </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="{{ route('customer.print', $data->id) }}">Print Customer</a>
                                                         <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->id))}}">View Profile</a>
-                                                        <a class="dropdown-item" href="{{route('customer.edit',$data->id)}}" >Edit</a>
-                                                        <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',$data->id) }}')">Delete</a>
-                                                        <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
+                                                        @can('customer-manage')
+                                                            <a class="dropdown-item" href="{{route('customer.edit',encrypt($data->id))}}" >Edit</a>
+                                                        @endcan 
+
+                                                        @can('customer-delete')
+                                                            <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',encrypt($data->id)) }}')">Delete</a>
+                                                        @endcan
+                                                        
+                                                        @can('prospecting')
+                                                            <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
+                                                        @endcan 
                                                     </div>
                                                 </div> 
                                             </td> 
@@ -85,7 +85,7 @@
                                             <td>{{@$data->user->userAddress->union->name }}</td>
                                             <td>{{@$data->user->userAddress->village->name}}</td>
                                             <td>{{@$data->user->phone}}</td>
-                                            <td>{{@$data->user->user_id}}</td> 
+                                            <td>{{@$data->reference->user_id}}</td> 
                                         </tr> 
                                     @endforeach
                                 </tbody>

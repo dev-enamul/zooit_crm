@@ -59,7 +59,14 @@ class CustomerController extends Controller
     }
 
     public function index(){
-        $datas       =  Customer::where('status',0)->get();
+        $my_all_employee = my_all_employee(auth()->user()->id);
+        $datas       =  Customer::whereIn('ref_id',$my_all_employee)
+                        ->where('status',0)
+                        ->where(function($q){
+                            $q->where('created_by',auth()->user()->id)
+                            ->orWhere('approve_by','!=',null);
+                        })->get(); 
+
         $countries   = $this->getCachedCountries();
         $divisions   = $this->getCachedDivisions();
         $districts   = $this->getCachedDistricts();
@@ -180,6 +187,7 @@ class CustomerController extends Controller
                     'ref_id'        => $request->reporting_user, 
                     'status'        => 0,
                     'created_at'    => now(),
+                    'created_by'    => auth()->user()->id,
                 ]);
                 return redirect()->route('customer.index')->with('success', 'Customer created successfully');
             } 
@@ -293,11 +301,199 @@ class CustomerController extends Controller
                 'ref_id'            => $request->reporting_user,
                 'status'            => 0,
                 'created_at'        => now(),
+                'created_by'        => auth()->user()->id,
             ];  
             Customer::create($customer_data);   
             
             DB::commit(); 
             return redirect()->route('freelancer.index')->with('success', 'Employee created successfully');
+        } catch (Exception $e) {   
+            DB::rollback();
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
+    }
+
+    public function update(Request $request, $id){
+        $validator = Validator::make($request->all(), [
+            'full_name'                 => 'required|string|max:255', 
+            'marital_status'            => 'required',
+            'profession'                => 'required|numeric|exists:professions,id',
+            'dob'                       => 'required',
+            'card_id'                   => 'nullable|string',
+            'religion'                  => 'required|numeric',
+            'blood_group'               => 'nullable|numeric',
+            'gender'                    => 'required|in:1,2', 
+            'phone2'                    => 'nullable|string|max:15',
+            'office_email'              => 'nullable|email',
+            'email'                     => 'nullable|email',
+            'imo_whatsapp_number'       => 'nullable|string',
+            'facebook_id'               => 'nullable|string',
+            'emergency_contact_name'    => 'nullable|string',
+            'emergency_person_number'   => 'nullable|string', 
+            'division'                  => 'required|numeric|exists:divisions,id',
+            'district'                  => 'required|numeric|exists:districts,id',
+            'upazila'                   => 'required|numeric|exists:upazilas,id',
+            'union'                     => 'required|numeric|exists:unions,id',
+            'village'                   => 'nullable|numeric|exists:villages,id',
+            'address'                   => 'nullable|string', 
+            'father_name'               => 'required|string',
+            'father_phone'              => 'nullable|string|max:15',
+            'mother_name'               => 'required|string',
+            'mother_phone'              => 'nullable|string|max:15',
+            'spouse_name'               => 'nullable|string',
+            'spouse_phone'              => 'nullable|string|max:15',
+            'bank'                      => 'nullable|numeric|exists:banks,id',
+            'branch'                    => 'nullable|string',
+            'account_number'            => 'nullable|string',
+            'account_holder_name'       => 'nullable|string',
+            'mobile_bank'               => 'nullable|numeric|exists:banks,id',
+            'mobile_bank_number'        => 'nullable|string|max:15',
+            'passport_issue_date'       => 'nullable',
+            'passport_expire_date'      => 'nullable',
+            'tin_number'                => 'nullable|string',
+            'profile_image'             => 'image|max:2048',
+            'nid_file'                  => 'image|max:2048',
+            'birth_certificate_file'    => 'image|max:2048',
+            'upload_passport'           => 'image|max:2048',  
+            'at_least_one_field' => [
+                'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
+            ],
+        ]); 
+
+        if ($validator->fails()) { 
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
+        } 
+
+        DB::beginTransaction(); 
+       
+        try {  
+            $customer = Customer::find($id);
+            $user = $customer->user; 
+
+            if($user==null){
+                return redirect()->back()->with('Invalid Customer');
+            }   
+            $user->update([ 
+                'name'          => $request->full_name,  
+                'user_type'     => 2,
+                'marital_status'=> $request->marital_status,
+                'dob'           => date('Y-m-d', strtotime($request->dob)),
+                'finger_id'     => $request->card_id,
+                'religion'      => $request->religion,
+                'blood_group'   => $request->blood_group,
+                'gender'        => $request->gender,
+                'nationality'   => $request->nationality, 
+            ]);
+
+            if ($request->hasFile('profile_image')) {
+                $user->profile_image = $this->uploadImage($request, 'profile_image', 'users', 'public');
+                $user->save();
+            }
+
+            $address_data = [ 
+                'country_id'    => $request->country,
+                'division_id'   => $request->division,
+                'district_id'   => $request->district,
+                'upazila_id'    => $request->upazila,
+                'union_id'      => $request->union,
+                'village_id'    => $request->village,
+                'address'       => $request->address, 
+            ]; 
+
+            if($user->userAddress){ 
+                $user->userAddress->update($address_data);
+            }else{
+                $address_data['user_id'] = $user->id;
+                UserAddress::create($address_data);
+            } 
+ 
+            $contact_data = [ 
+                'personal_phone'            => get_phone($request->phone1),
+                'office_phone'              => get_phone($request->phone2),
+                'office_email'              => $request->office_email,
+                'personal_email'            => $request->email,
+                'imo_number'                => get_phone($request->imo_whatsapp_number),
+                'facebook_id'               => $request->facebook_id, 
+                'emergency_contact_person'  => $request->emergency_contact_name,
+                'emergency_contact_number'  => get_phone($request->emergency_person_number), 
+            ];
+            if($user->userContact){
+                $user->userContact->update($contact_data);
+            }else{
+                $contact_data['user_id'] = $user->id;
+                UserContact::create($contact_data);
+            } 
+ 
+            $family_data = [ 
+                'father_name'           => $request->father_name,
+                'father_mobile'         => get_phone($request->father_phone),
+                'mother_name'           => $request->mother_name,
+                'mother_mobile'         => get_phone($request->mother_phone),
+                'spouse_name'           => $request->spouse_name,
+                'spouse_contact'        => get_phone($request->spouse_phone), 
+            ];
+
+            if($user->userFamily){
+                $user->userFamily->update($family_data);
+            }else{
+                $family_data['user_id'] = $user->id;
+                UserFamily::create($family_data);
+            } 
+             
+
+            #user transaction
+            $data_transaction = [ 
+                'bank_id'                       => $request->bank,
+                'branch'                        => $request->branch,
+                'bank_account_number'           => $request->account_number,
+                'bank_details'                  => $request->account_holder_name,
+                'mobile_bank_id'                => $request->mobile_bank,
+                'mobile_bank_account_number'    => get_phone($request->mobile_bank_number),
+                'created_at'                    => now(),
+            ];
+            if($user->userTransaction){
+                $user->userTransaction->update($data_transaction);
+            }else{
+                $data_transaction['user_id'] = $user->id;
+                UserTransaction::create($data_transaction);
+            } 
+
+            #user documents
+            if ($request->hasFile('nid_file')) {
+                $nid_file = $this->uploadImage($request, 'nid_file', 'users', 'public');
+            }
+            if ($request->hasFile('birth_certificate_file')) {
+                $birth_certificate_file = $this->uploadImage($request, 'birth_certificate_file', 'users', 'public');
+            }
+            if ($request->hasFile('upload_passport')) {
+                $upload_passport = $this->uploadImage($request, 'upload_passport', 'users', 'public');
+            }
+            $user_documents = [ 
+                'nid_number'                => $request->nid,
+                'nid_image'                 => $nid_file ?? null,
+                'birth_cirtificate_number'  => $request->birth_certificate_number,
+                'birth_cirtificate_image'   => $birth_certificate_file ?? null,
+                'passport_number'           => $request->passport_number, 
+                'passport_exp_date'         => date('Y-m-d', strtotime($request->passport_expire_date)),
+                'passport_image'            => $upload_passport ?? null,
+                'tin_number'                => $request->tin_number, 
+            ];
+
+            if($user->userId){
+                $user->userId->update($user_documents);
+            }else{
+                $user_documents['user_id'] = $user->id;
+                UserId::create($user_documents);
+            }
+
+            $customer_data = [  
+                'profession_id'     => $request->profession, 
+                'name'              => $request->full_name,  
+                'status'            => 0, 
+            ];  
+            $customer->update($customer_data);    
+            DB::commit(); 
+            return redirect()->route('customer.index')->with('success', 'Customer updated successfully');
         } catch (Exception $e) {   
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
@@ -405,8 +601,9 @@ class CustomerController extends Controller
          }
     }
 
-    public function edit($id){
-        $title     = "Freelancer Create";
+    public function edit($id){ 
+        $id = decrypt($id);
+        $title     = "Customer Edit";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
         $districts = $this->getCachedDistricts();
@@ -423,7 +620,16 @@ class CustomerController extends Controller
         $professions = Profession::where('status',1)->select('id','name')->get(); 
         $my_all_employee = my_all_employee(auth()->user()->id);
         $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->select('id','name','user_id')->get();
-        return view('customer.customer_create', compact(
+        
+        $customer = Customer::find($id);
+        $selected['country_id']   = $customer->user->userAddress->country_id??1;
+        $selected['division_id']  = $customer->user->userAddress->division_id??1;
+        $selected['district_id']  = $customer->user->userAddress->district_id??1;
+        $selected['upazila_id']   = $customer->user->userAddress->upazila_id??1;
+        $selected['union_id']     = $customer->user->userAddress->union_id??1;
+        $selected['village_id']   = $customer->user->userAddress->village_id??1;
+ 
+        return view('customer.customer_edit', compact(
             'title',
             'countries',
             'divisions',
@@ -438,11 +644,14 @@ class CustomerController extends Controller
             'banks',
             'mobileBanks', 
             'nationalites', 
-            'professions' 
+            'professions',
+            'customer',
+            'selected'
         ));
     }
 
-    public function customerDelete($id){
+    public function customerDelete($id){ 
+        $id = decrypt($id);
         try{ 
             $data  = Customer::find($id);
             $data->delete();
@@ -478,6 +687,6 @@ class CustomerController extends Controller
         $selected['village_id']   = $customer->user->userAddress->village_id;
 
         return view('customer.customer_print', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','customer','selected'));
-    }
+    }  
     
 }

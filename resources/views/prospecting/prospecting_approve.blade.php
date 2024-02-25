@@ -54,7 +54,7 @@
                                             <th>Village</th>
                                             <th>Media</th>
                                             <th>Mobile No</th>
-                                            <th>Freelancer</th>
+                                            <th>Employee</th>
                                         </tr>
                                     </thead>
 
@@ -65,20 +65,20 @@
                                                     <input class="form-check-input" type="checkbox" name="prospecting_id[]" value="{{$prospecting->id}}" id="flexCheckChecked" >
                                                 </td>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td >{{ @$prospecting->customer->name }}</td>
+                                                <td >{{ @$prospecting->customer->name }} [{{ @$prospecting->customer->customer_id }}]</td>
                                                 <td >{{ @$prospecting->customer->profession->name }}</td>
                                                 <td >{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
                                                 <td >{{ @$prospecting->customer->user->userAddress->union->name }}</td>
                                                 <td >{{ @$prospecting->customer->user->userAddress->village->name }}</td>
                                                 <td >
                                                     @if ($prospecting->media == 1)
-                                                        <span class="badge bg-primary">Phone</span>
+                                                    Phone
                                                     @elseif($prospecting->media == 2)
-                                                        <span class="badge bg-success">Meet</span>
+                                                    Meet
                                                     @endif 
                                                 </td>
                                                 <td >{{ @$prospecting->customer->user->phone }}</td>
-                                                <td >{{ @$prospecting->employee->name }}</td>     
+                                                <td >{{ @$prospecting->employee->name}} [{{ @$prospecting->employee->user_id}}]</td>     
                                             </tr>
                                         @endforeach  
                                     </tbody>

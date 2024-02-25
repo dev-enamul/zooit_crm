@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Message;
+use App\Events\Notice;
 use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Deposit;
@@ -17,13 +19,15 @@ use App\Models\Rejection;
 use App\Models\Salse;
 use App\Models\SalseReturn;
 use App\Models\SalseTransfar;
+use App\Models\User;
 use App\Models\VisitAnalysis;
+use App\Notifications\NewMessageNotification;
 use Exception;
 use Illuminate\Http\Request;
 
 class CustomerProfileController extends Controller
 {
-    public function index($id){ 
+    public function index($id){  
         try{
             $id = decrypt($id);
             $customer = Customer::find($id); 
@@ -55,6 +59,11 @@ class CustomerProfileController extends Controller
 
             $customer_salse = Salse::where('customer_id', $id)->whereNotNull('approve_by')->first();
 
+            // event(new Message($id, "Customer Profile Viewed"));
+
+            $user = User::find(auth()->user()->id);
+            $message = "Customer Profile Viewed";
+            $user->notify(new NewMessageNotification($message));
 
             return view('customer.customer_profile',compact([
                 'customer',

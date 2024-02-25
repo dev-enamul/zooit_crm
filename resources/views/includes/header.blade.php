@@ -1,4 +1,7 @@
 <header id="page-topbar">
+    @php
+        $user = \App\Models\User::find(auth()->id());
+    @endphp
     <div class="navbar-header">  
         <!-- Start Navbar-Brand -->
         <div class="navbar-logo-box">
@@ -180,7 +183,7 @@
                 <!-- Start Profile -->
                 <div class="dropdown d-inline-block">
                     <button type="button" class="btn btn-sm top-icon p-0" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img class="rounded avatar-2xs p-0" src="../assets/images/users/avatar-6.png" alt="Header Avatar">
+                        <img class="rounded avatar-2xs p-0" src="{{ $user->image()}}" alt="Header Avatar">
                     </button>
                     <div class="dropdown-menu dropdown-menu-wide dropdown-menu-end dropdown-menu-animated overflow-hidden py-0">
                         <div class="card border-0">

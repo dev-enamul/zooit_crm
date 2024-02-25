@@ -51,7 +51,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="customer" id="customer" required>
+                                            <select class="form-control" name="customer" id="customer" disabled>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>

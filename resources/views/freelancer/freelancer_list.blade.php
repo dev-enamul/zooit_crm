@@ -50,19 +50,33 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
-                                        <tr class="">
+                                        <tr class="{{$data->user->approve_by==null?"table-warning":""}}">
                                             <td class="text-center " data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-animated"> 
-                                                        <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
-                                                        <a class="dropdown-item" href="{{route('designation.freelancer.edit', $data->user->id)}}">Change Designation</a>
-                                                        <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', $data->user->id) }}')">Resign Freelancer</a>
-                                                        <a class="dropdown-item" href="{{route('user.area.edit', $data->user->id)}}">Change Area</a>
-                                                        <a class="dropdown-item" href="{{route('reporting.user.edit', $data->user->id)}}">Change Reporting User</a>
-                                                        <a class="dropdown-item" href="{{route('employee.permission', $data->user->id)}}">Change Permissin</a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                 
+                                                         
+                                                        @can('freelancer-manage') 
+                                                            <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
+                                                            <a class="dropdown-item" href="{{route('freelancer.profile', encrypt($data->id))}}">View Profile</a>
+                                                            @if ($data->status==1 && $data->user->approve_by==null) 
+                                                                @can('complete-training')
+                                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveItem('{{route('complete.training',encrypt($data->user_id))}}')">Complete Training</a>
+                                                                @endcan 
+                                                            @elseif($data->status==1) 
+                                                            <a class="dropdown-item" href="{{route('designation.freelancer.edit', encrypt($data->user_id))}}">Change Designation</a>
+                                                            @can('freelancer-delete')
+                                                                <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', encrypt($data->user_id)) }}')">Resign Freelancer</a>
+                                                            @endcan 
+                                                            <a class="dropdown-item" href="{{route('user.area.edit', encrypt($data->user_id))}}">Change Area</a>
+                                                            <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data->user_id))}}">Change Reporting User</a>
+                                                            @endif
+                                                            {{-- <a class="dropdown-item" href="{{route('employee.permission', $data->user->id)}}">Change Permissin</a> --}}
+                                                        @endcan
+                                                        
                                                     </div>
                                                 </div> 
                                             </td> 
@@ -74,7 +88,7 @@
                                             <td>{{@$data->user->userAddress->union->name }}</td>
                                             <td>{{@$data->user->userAddress->village->name}}</td>
                                             <td>{{@$data->user->phone}}</td>
-                                            <td>{{$data->user->approve_by==null?"-":$data->user->user_id}}</td> 
+                                            <td>{{$data->status==0?"-":$data->user->user_id}}</td> 
                                         </tr> 
                                     @endforeach 
                                 </tbody>

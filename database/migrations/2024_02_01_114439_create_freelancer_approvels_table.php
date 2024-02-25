@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('training_category_id')->nullable()->constrained('training_categories');
             $table->text('remarks')->nullable();
             $table->foreignId('approve_by')->constrained('users');
+            $table->tinyInteger('complete_training')->default(0)->comment('1= Complete, 0= Not Complete');
             $table->timestamps();
         });
     }

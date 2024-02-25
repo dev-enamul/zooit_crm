@@ -37,12 +37,12 @@ return new class extends Migration
 
 // ref_id = employee_id
 // created_by = auth:id 
-// status = complete or uncomplete 
-// last_approve_by = auth:id 
+// status = complete or uncomplete  //when status will 1 user will get freelancer_id and can training
+// last_approve_by = employee_id
 
 // User table 
 // approve_by = final approve by 
-// status = active or inactive
+// status = active or inactive  // when status will 1 can work
 // ref_id = Employee id
 
 

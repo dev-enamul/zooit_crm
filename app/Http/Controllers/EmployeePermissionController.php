@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 
 class EmployeePermissionController extends Controller
 {
-    public function employee_permission($id){ 
+    public function employee_permission($id){
+        $id = decrypt($id);  
         $datas = Permission::where('status',1)->get();
         $employee = User::find($id);
         $selected = UserPermission::where('user_id', $id)->pluck('permission_id')->toArray(); 

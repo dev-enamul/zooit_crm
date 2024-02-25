@@ -24,7 +24,8 @@ class FreelancerEditController extends Controller
 {
     use ImageUploadTrait; 
 
-    public function deactive_user($id){  
+    public function deactive_user($id){   
+        $id = decrypt($id);
         DB::beginTransaction();
         try{
             $user = User::find($id); 
@@ -68,7 +69,8 @@ class FreelancerEditController extends Controller
         }
     }
 
-    public function designation_edit($id){
+    public function designation_edit($id){ 
+        $id = decrypt($id);
         $user = User::find($id);
         $designations = Designation::where('status',1)->where('designation_type',2)->get();
         return view('freelancer.edit.update_designation',compact('user','designations'));

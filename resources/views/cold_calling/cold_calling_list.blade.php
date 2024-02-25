@@ -11,11 +11,14 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Cold-Calling List</h4> 
+                        <p class="d-none">Employee: MD Enamul Haque</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="legal">
+                        <input type="hidden" id="fontSize" value="8">
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Cold-Calling List</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div> 
                     </div>
                 </div>
@@ -25,30 +28,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -67,34 +48,47 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($cold_callings as  $cold_calling)
-                                    <tr class="">
+                                    <tr class="{{$cold_calling->approve_by==null?"table-warning":""}}">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{ isset($cold_calling) ? 'storage/' . $cold_calling->customer->user->profile_image : '../assets/images/users/avatar-6.png' }}" alt="Header Avatar">
+                                                    <img class="rounded avatar-2xs p-0" src="{{@$cold_calling->customer->user->image()}}">
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('cold_calling.delete',$cold_calling->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
+                                                    @if ($cold_calling->approve_by==null)
+                                                        @can('cold-calling-manage')
+                                                            <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>   
+                                                        @endcan 
+                                                    @endif 
+                                                    
+                                                    @can('cold-calling-delete')
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('cold_calling.delete',$cold_calling->id) }}')">Delete</a>  
+                                                    @endcan 
+                                                    
+                                                    @if ($cold_calling->approve_by!=null) 
+                                                        @can('lead-manage')
+                                                            <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
+                                                        @endcan 
+                                                    @endif
+                                                   
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->name }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->profession->name }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
+                                        <td class="">{{ $loop->iteration }}</td>
+                                        <td class="">{{ @$cold_calling->customer->name }} [{{ @$cold_calling->customer->customer_id }}]</td>
+                                        <td class="">{{ @$cold_calling->customer->profession->name }}</td>
+                                        <td class="">{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
+                                        <td class="">{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
+                                        <td class="">{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
                                         @php
                                             $prospecting = \App\Models\Prospecting::where('customer_id',$cold_calling->customer->id)->first();
                                             $last_prospecting = $prospecting->updated_at;
                                         @endphp
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ $last_prospecting->format('Y-m-d') }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->project->name }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}"> {{@$cold_calling->unit->title }} </td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->customer->user->phone }}</td>
-                                        <td class="{{ $cold_calling->status == 0 ? 'text-danger' : '' }}">{{ @$cold_calling->employee->name }}</td>
+                                        <td class="">{{ get_date($last_prospecting) }}</td>
+                                        <td class="">{{ @$cold_calling->project->name }}</td>
+                                        <td class=""> {{@$cold_calling->unit->title }} </td>
+                                        <td class="">{{ @$cold_calling->customer->user->phone }}</td>
+                                        <td class="">{{ @$cold_calling->customer->reference->name }} [{{ @$cold_calling->customer->reference->user_id }}]</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -153,4 +147,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+@include('includes.data_table')
 @endsection

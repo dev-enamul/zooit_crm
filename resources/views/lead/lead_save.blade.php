@@ -57,8 +57,8 @@
                                                 </option>
                                                 @isset($employees)
                                                     @foreach ($cstmrs as $cstm)
-                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($lead->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->user_id}})
+                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($lead->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset

@@ -33,7 +33,12 @@ class LeadController extends Controller
         } 
       
         $user_employee = my_all_employee($user_id);
-        $leads = Lead::whereHas('customer', function($q) use($user_employee){ 
+        $leads = Lead::where(function ($q){
+            $q->where('approve_by','!=',null)
+                ->orWhere('employee_id', Auth::user()->id)
+                ->orWhere('created_by', Auth::user()->id);
+        }) 
+        ->whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
         }); 
 
@@ -43,13 +48,22 @@ class LeadController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $leads = $leads->with('employee','customer.user')->where(function ($query) {
-            $query->where('status', 1)
-                ->orWhere(function ($subquery) {
-                    $subquery->where('status', 0)
-                            ->where('created_by', Auth::user()->id);
-                });
-        })->orderBy('id','desc')->get();  
+        //  $leads = $leads->with('employee','customer.user')->where(function ($query) {
+        //     $query->where('status', 1)
+        //         ->orWhere(function ($subquery) {
+        //             $subquery->where('status', 0)
+        //                     ->where('created_by', Auth::user()->id);
+        //         });
+        // })->orderBy('id','desc')->get(); 
+        
+        if(isset($request->status) && !empty($request->status)){
+            $status = (int)$request->status;
+            $leads = $leads->where('status', $status);
+        }else{
+            $leads = $leads->where('status', 0);
+        } 
+        $leads = $leads->get();
+       
          $filter =  $request->all();
         return view('lead.lead_list', compact('leads','employee_data','professions','employees','filter'));
     }
@@ -66,6 +80,7 @@ class LeadController extends Controller
         $cstmrs             = ColdCalling::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
+
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
@@ -87,7 +102,6 @@ class LeadController extends Controller
         $validator = Validator::make($request->all(), [
             'customer'   => 'required',
             'priority'   => 'required', 
-            'purchase_date' => 'required',
             'remark'     => 'nullable|string|max:255',
             'employee'   => 'required',
         ]);
@@ -107,6 +121,7 @@ class LeadController extends Controller
                 'possible_purchase_date'    => date('Y-m-d', strtotime($request->purchase_date)),
                 'updated_by'                => auth()->id(),
                 'updated_at'                => now(),
+                'created_by'                => auth()->id(),
             ]);
             return redirect()->route('lead.index')->with('success','Lead update successfully');
 

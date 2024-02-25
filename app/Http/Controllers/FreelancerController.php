@@ -136,7 +136,7 @@ class FreelancerController extends Controller
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
-            'gender'                    => 'required|in:1,2',
+            'gender'                    => 'required',
             'phone1'                    => 'required|string|unique:users,phone|max:15',
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
@@ -198,10 +198,9 @@ class FreelancerController extends Controller
                 'blood_group'   => $request->blood_group,
                 'gender'        => $request->gender,
                 'nationality'   => $request->nationality,
-                'status'        => 1,
-                'created_by'    => auth()->user()->id,
-                'approve_by'    => auth()->user()->id,
-                'ref_id'        => auth()->user()->id
+                'status'        => 0,
+                'created_by'    => auth()->user()->id, 
+                'ref_id'        => $request->reporting_user,
             ]);
 
             if ($request->hasFile('profile_image')) {
@@ -290,11 +289,12 @@ class FreelancerController extends Controller
             $employee_data = [
                 'user_id'           => $user->id,
                 'profession_id'     => $request->profession,
-                'designation_id'    => $request->designation,
-                'last_approve_by'   => auth()->user()->id,
+                'designation_id'    => $request->designation, 
                 'ref_id'            => $request->reporting_user,
-                'status'            => 1,
+                'last_approve_by'   => $request->reporting_user,
+                'status'            => 0,
                 'created_at'        => now(),
+                'created_by'        =>Auth::user()->id,
             ]; 
             Freelancer::create($employee_data);  
 
@@ -458,7 +458,7 @@ class FreelancerController extends Controller
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
-            'gender'                    => 'required|in:1,2', 
+            'gender'                    => 'required', 
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',

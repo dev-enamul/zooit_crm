@@ -37,7 +37,13 @@ class ColdCallingController extends Controller
         } 
       
         $user_employee = my_all_employee($user_id);
-        $cold_callings = ColdCalling::whereHas('customer', function($q) use($user_employee){ 
+
+        $cold_callings = ColdCalling::where(function ($q){
+            $q->where('approve_by','!=',null)
+                ->orWhere('employee_id', Auth::user()->id)
+                ->orWhere('created_by', Auth::user()->id);
+        }) 
+        ->whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
         }); 
 
@@ -48,13 +54,23 @@ class ColdCallingController extends Controller
             });
          } 
          
-         $prospectings = $cold_callings->with('employee','customer.user')->where(function ($query) {
-            $query->where('status', 1)
-                ->orWhere(function ($subquery) {
-                    $subquery->where('status', 0)
-                            ->where('created_by', Auth::user()->id);
-                });
-        })->orderBy('id','desc')->get();
+        //  $prospectings = $cold_callings->with('employee','customer.user')->where(function ($query) {
+        //     $query->where('status', 1)
+        //         ->orWhere(function ($subquery) {
+        //             $subquery->where('status', 0)
+        //                     ->where('created_by', Auth::user()->id);
+        //         });
+        // })->orderBy('id','desc')->get();
+ 
+        if(isset($request->status) && !empty($request->status)){
+            $status = (int)$request->status;
+            $cold_callings = $cold_callings->where('status', $status);
+        }else{
+            $cold_callings = $cold_callings->where('status', 0);
+        } 
+        $cold_callings = $cold_callings->get();
+
+         
          $filter =  $request->all();
         return view('cold_calling.cold_calling_list', compact('cold_callings','employee_data','professions','employees','filter'));
     }
@@ -63,7 +79,7 @@ class ColdCallingController extends Controller
     {        
         $title = 'Cold Calling Entry';
         $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
+        $my_all_employee    = my_all_employee($user_id); 
         $cstmrs             = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                 $q->whereIn('ref_id',$my_all_employee);
                               })->get();

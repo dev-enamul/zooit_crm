@@ -23,6 +23,7 @@ class EmployeeEditController extends Controller
 {
     use ImageUploadTrait;
     public function reporting_edit($id){
+        $id = decrypt($id);
         try{
             $employees = User::whereIn('user_type',[1,2])->where('status',1)->select('id','name','user_id')->get();
             $user = User::find($id); 
@@ -77,7 +78,8 @@ class EmployeeEditController extends Controller
         }
     } 
 
-    public function area_edit($id){
+    public function area_edit($id){ 
+        $id = decrypt($id);
         $user = User::find($id);
         $zones = Zone::where('status',1)->get();
         $areas = Area::where('status',1)->get();
@@ -130,7 +132,7 @@ class EmployeeEditController extends Controller
     }
 
     public function deactive_user($id){ 
-    
+        $id = decrypt($id);
         DB::beginTransaction();
         try{
             $user = User::find($id); 
@@ -166,7 +168,8 @@ class EmployeeEditController extends Controller
         }
     }
 
-    public function designation_edit($id){
+    public function designation_edit($id){ 
+        $id = decrypt($id);
         $user = User::find($id);
         $designations = Designation::where('status',1)->where('designation_type',1)->get();
         return view('employee.edit.update_designation',compact('user','designations'));

@@ -69,6 +69,9 @@ use App\Models\DepositCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+use App\Events\Message;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -140,7 +143,8 @@ Route::group(['middleware' => 'auth'], function () {
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class);
         Route::resource('approve-freelancer', ApproveFreelancerController::class);
-        Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save');
+        Route::get('complete-training/{id}', [ApproveFreelancerController::class, 'complete_training'])->name('complete.training');
+        Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save'); 
         Route::post('/freelancer-search', [FreelancerController::class, 'freelancerSearch'])->name('freelancer.search');
  
         Route::get('designation/freelancer/edit/{id}', [FreelancerEditController::class, 'designation_edit'])->name('designation.freelancer.edit');
@@ -173,7 +177,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Customer 
         Route::resource('customer', CustomerController::class);
-        Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save');
+        Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save'); 
+        Route::post('customer-approve-save', [CustomerController::class, 'customer_approve_save'])->name('customer.approve.save');
+      
         Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
         Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
@@ -367,3 +373,13 @@ Route::get('function_test', function () {
  
         return view('organogram', ['organogram' => $organogram]);
 });
+
+// test
+Route::get('/messae', function () {
+        return view('message');
+    });
+    
+    Route::post('send-message',function (Request $request){
+        event(new Message($request->username, $request->message));
+        return ['success' => true];
+    });
