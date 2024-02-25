@@ -175,7 +175,7 @@ class FollowupController extends Controller
 
     public function edit(string $id, Request $request)
     {
-        $title = 'Follow Up Entry';
+        $title = 'Follow Up Edit';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
         $customers          = VisitAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){

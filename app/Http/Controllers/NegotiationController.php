@@ -2,63 +2,202 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Priority;
+use App\Models\Customer;
+use App\Models\FollowUp;
+use App\Models\FollowUpAnalysis;
+use App\Models\Negotiation;
+use App\Models\Project;
+use App\Models\ProjectUnit;
+use App\Models\User;
+use App\Models\VisitAnalysis;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class NegotiationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function priority()
     {
-        return view('negotiation.negotiation_list');
+        return Priority::values();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(Request $request)
     {
-        return view('negotiation.negotiation_create');
+        $my_all_employee = my_all_employee(auth()->user()->id);
+        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
+        $employees = User::whereIn('id', $my_all_employee)->get();
+
+        if(isset($request->employee) && !empty($request->employee)){
+            $user_id = (int)$request->employee;
+        }else{
+            $user_id = Auth::user()->id;
+        } 
+      
+        $user_employee = my_all_employee($user_id);
+        $negotiations = Negotiation::whereHas('customer', function($q) use($user_employee){ 
+            $q->whereIn('ref_id', $user_employee);
+        }); 
+
+         $negotiations = $negotiations->orderBY('id','desc')->get();  
+         $filter =  $request->all();
+        return view('negotiation.negotiation_list',compact('negotiations','employee_data','employees','filter'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function create(Request $request)
     {
-        //
+        $title = 'Follow Up Entry';
+        $user_id            = Auth::user()->id; 
+        $my_all_employee    = my_all_employee($user_id);
+        $customers          = FollowUpAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                    $q->whereIn('ref_id',$my_all_employee);
+                                })->get();
+        $projects       = Project::where('status',1)->get(['name', 'id']);
+        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
+        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $priorities         = $this->priority();
+
+        $selected_data = 
+        [
+            'employee' => Auth::user()->id,
+            'priority' => Priority::Regular,
+        ];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = $request->customer;
+        }
+
+        return view('negotiation.negotiation_save', compact('selected_data','priorities','projects','projectUnits','customers','employees'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function save(Request $request, $id = null)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'customer'          => 'required',
+            'employee'          => 'required',
+            'priority'          => 'required',
+            'project'           => 'required',
+            'unit'              => 'required',
+            'payment_duration'  => 'required',
+            'select_type'       => 'required',
+            'regular_amount'    => 'required',
+            'negotiation_amount'=> 'required',
+            'remark'            => 'nullable',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
+        }
+
+        if (!empty($id)) {
+            $follow = Negotiation::findOrFail($id);
+            $follow->customer_id = $request->customer;
+            $follow->employee_id = $request->employee;
+            $follow->priority = $request->priority;
+            $follow->project_id = $request->input('project');
+            $follow->unit_id = $request->input('unit');
+            $follow->select_type = $request->select_type;
+            $follow->payment_duration = $request->payment_duration;
+            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->regular_amount = $request->input('regular_amount');
+            $follow->negotiation_amount = $request->input('negotiation_amount');
+
+            $follow->remark = $request->remark;
+            $follow->updated_by = $request->updated_by;
+            $follow->updated_at = $request->updated_at;
+            $follow->save();
+            return redirect()->route('negotiation.index')->with('success','Negotiation update successfully');
+        } else {
+            $follow = new Negotiation();
+            $follow->customer_id = $request->customer;
+            $follow->employee_id = $request->employee;
+            $follow->priority = $request->priority;
+            $follow->project_id = $request->input('project');
+            $follow->unit_id = $request->input('unit');
+            $follow->select_type = $request->select_type;
+            $follow->payment_duration = $request->payment_duration;
+            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->regular_amount = $request->input('regular_amount');
+            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->remark = $request->remark;
+
+            $follow->created_by = auth()->id();
+            $follow->created_at = now();
+            $follow->status = 0;
+            $follow->save();
+
+            if($follow) {
+                $visit = FollowUpAnalysis::where('customer_id',$request->customer)->first();
+                $visit->status = 1;
+                $visit->save();
+            }
+            
+            return redirect()->route('negotiation.index')->with('success','Negotiation create successfully');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(string $id, Request $request)
     {
-        //
+        $title = 'Negotiation Edit';
+        $user_id            = Auth::user()->id; 
+        $my_all_employee    = my_all_employee($user_id);
+        $customers          = VisitAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                                    $q->whereIn('ref_id',$my_all_employee);
+                                })->get();
+        $projects = Project::where('status',1)->get(['name', 'id']);
+        $projectUnits = ProjectUnit::where('status', 1)->get(['name', 'id']);
+        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $priorities         = $this->priority();
+
+        $selected_data = 
+        [
+            'employee' => Auth::user()->id,
+            'priority' => Priority::Regular,
+        ];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = $request->customer;
+        }
+        $negotiation = Negotiation::find($id);
+        return view('negotiation.negotiation_save',compact('selected_data','priorities','projects','projectUnits','customers','employees','negotiation'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function negotiationDelete($id){
+        try{ 
+            $data  = Negotiation::find($id);
+            $data->delete();
+            return response()->json(['success' => 'Negotiation Deleted'],200);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()],500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function negotiationApprove(){ 
+        $user_id        = Auth::user()->id; 
+        $my_employee    = my_employee($user_id);
+        $negotiations  = Negotiation::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        return view('negotiation.negotiation_approve', compact('negotiations'));
     }
+
+    public function negotiationApproveSave(Request $request) {
+        if($request->has('negotiation_id') && $request->negotiation_id !== '' & $request->negotiation_id !== null) {
+            DB::beginTransaction();
+            try {
+                foreach ($request->negotiation_id as $key => $negotiation_id) {
+                    $lead = Negotiation::where('id',$negotiation_id)->first();
+                    $lead->approve_by = Auth::user()->id;
+                    $lead->save();
+                }
+                DB::commit();
+                return redirect()->route('negotiation.approve')->with('success', 'Status Updated Successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+            
+        } else {
+            return redirect()->route('negotiation.approve')->with('error', 'Something went wrong!');
+        }
+    }
+
 }
