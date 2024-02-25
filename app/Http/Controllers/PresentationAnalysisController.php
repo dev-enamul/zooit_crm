@@ -159,7 +159,7 @@ class PresentationAnalysisController extends Controller
         $user_id        = Auth::user()->id; 
         $my_employee    = my_employee($user_id);
         $presentations  = VisitAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
-        return view('presentation.presentation_analysis_approve', compact('presentations'));
+        return view('presentation_analysis.presentation_analysis_approve', compact('presentations'));
     }
 
     public function presentationAnalysisApproveSave(Request $request) {

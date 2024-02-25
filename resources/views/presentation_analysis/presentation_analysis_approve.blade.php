@@ -47,6 +47,7 @@
                                             </button> 
                                         </div>
                                     </div>
+                                </div>
                             
 
                                 <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
