@@ -225,7 +225,7 @@ class FollowupController extends Controller
                     $lead->save();
                 }
                 DB::commit();
-                return redirect()->route('presen')->with('success', 'Status Updated Successfully');
+                return redirect()->route('followUp.approve')->with('success', 'Status Updated Successfully');
             } catch (Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
