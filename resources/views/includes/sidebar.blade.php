@@ -194,6 +194,7 @@
                        
                         @can('follow-up-analysis')
                             <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
+                            <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Analysis Approve</a></li> 
                         @endcan
                     </ul>
                 </li>

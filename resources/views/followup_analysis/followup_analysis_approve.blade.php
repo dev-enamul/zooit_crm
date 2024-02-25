@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <form action="{{route('followUp.approve.save')}}" method="POST">
+                        <form action="{{route('followUp-analysis.approve.save')}}" method="POST">
                             @csrf
                             <div class="card-body">
                                 <div class="d-flex justify-content-between"> 

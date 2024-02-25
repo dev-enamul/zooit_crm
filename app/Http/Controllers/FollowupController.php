@@ -45,10 +45,6 @@ class FollowupController extends Controller
         return view('followup.followup_list', compact('followUps','employee_data','employees','filter'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-
     public function priority()
     {
         return Priority::values();
@@ -116,12 +112,12 @@ class FollowupController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'customer'          => 'required',
+            'employee'          => 'required',
             'priority'          => 'required',
             'project'           => 'required',
             'unit'              => 'required',
             'payment_duration'  => 'required',
             'select_type'       => 'required',
-            'employee'          => 'required',
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'required',
             'remark'            => 'nullable',
@@ -236,7 +232,7 @@ class FollowupController extends Controller
             }
             
         } else {
-            return redirect()->route('ollowUp.approve')->with('error', 'Something went wrong!');
+            return redirect()->route('followUp.approve')->with('error', 'Something went wrong!');
         }
     }
 }
