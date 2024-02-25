@@ -26,7 +26,6 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">
-
                             <div class="d-flex justify-content-between"> 
                                 <div class="">
                                     <div class="dt-buttons btn-group flex-wrap mb-2">      
@@ -78,7 +77,6 @@
                                             </td>
                                             <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration}}</td>
                                             <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">{{ $rejection->created_at }}</td>
-                                        
                                             <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">{{ @$rejection->customer->user->name }}</td>
                                             <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}"> {{ @$rejection->customer->user->phone }}</td>
                                             <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}"> {{ @$rejection->customer->user->userAddress->address }}</td>
