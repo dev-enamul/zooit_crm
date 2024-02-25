@@ -136,50 +136,17 @@ class User extends Authenticatable
 
     public static function generateNextUserCustomerId()
     {
-        $lastUserId = self::latest('id')->value('user_id');
-
-        if ($lastUserId) {
-            $numericPart     = (int)substr($lastUserId, 4);
-            $nextNumericPart = $numericPart + 1;
-            $nextUserId      = 'CS-' . str_pad($nextNumericPart, 4, '0', STR_PAD_LEFT);
-        } else {
-            $nextUserId      = 'CS-0001';
+        $customer_id = Customer::latest('id')->first()->customer_id;
+        if($customer_id == null){
+            $customer_id = 'CUS-000';
         }
-
-        return $nextUserId;
+        $numericPart = substr($customer_id, 4);
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
+        $newValue = "CUS-" . $newNumericPart; 
+        return $newValue;
     }
-
-    public static function generateNextEmail()
-    {
-        $lastEmail = self::latest('id')->value('email');
-
-        if ($lastEmail) {
-            preg_match('/\d+$/', $lastEmail, $matches);
-            $numericPart = $matches[0] ?? 1;
-            $nextNumericPart = $numericPart + 1;
-            $nextEmail = 'freelancer' . $nextNumericPart . '@wayhouse.com';
-        } else {
-            $nextEmail = 'freelancer1@wayhouse.com';
-        }
-
-        return $nextEmail;
-    }
-
-    public static function generateCustomerNextEmail()
-    {
-        $lastEmail = self::latest('id')->value('email');
-
-        if ($lastEmail) {
-            preg_match('/\d+$/', $lastEmail, $matches);
-            $numericPart = $matches[0] ?? 1;
-            $nextNumericPart = $numericPart + 1;
-            $nextEmail = 'customer' . $nextNumericPart . '@wayhouse.com';
-        } else {
-            $nextEmail = 'customer1@wayhouse.com';
-        }
-
-        return $nextEmail;
-    }
+ 
+ 
 
     public function userAddress()
     {
@@ -207,11 +174,21 @@ class User extends Authenticatable
     }
 
     public function my_all_employee(){
-        $topUser = \App\Models\ReportingUser::where('user_id', auth()->user()->id)
-        ->select(['id', 'user_id'])
-        ->first(); 
-        return my_all_employee($topUser); 
-    }  
+         $my_all_employee =  my_all_employee($this->id); 
+         return $my_all_employee;
+    } 
+
+    public function my_employee(){
+         $my_employee =  my_employee($this->id); 
+         return $my_employee;
+    }
+
+    public function my_customer(){
+        $my_customer = Customer::where('ref_id',$this->id)->where('deleted_at',null)->pluck('id')->toArray();
+        return $my_customer;
+    }
+
+
  
 
     

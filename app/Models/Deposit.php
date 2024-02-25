@@ -78,5 +78,20 @@ class Deposit extends Model
     public function destroyer()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    } 
+
+    public static function getDeposit($user_id, $monthOffset)
+    {
+        $targetMonth = date('m', strtotime("-$monthOffset month"));
+        $targetYear = date('Y'); 
+        $my_all_employee = my_all_employee($user_id);
+ 
+        return self::whereHas('customer', function ($q) use ($my_all_employee) {
+                $q->whereIn('ref_id', $my_all_employee);
+            })
+            ->whereNotNull('approve_by')
+            ->whereMonth('date', $targetMonth)
+            ->whereYear('date', $targetYear)
+            ->sum('amount');
     }
 }

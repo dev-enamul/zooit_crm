@@ -1,3 +1,7 @@
+@php
+    $commission = App\Models\DepositCommission::where('user_id',$user_id)->sum('amount');
+    $withdraws =  App\Models\Withdraw::where('user_id',$user_id)->whereNotNull('approved_by')->sum('amount');
+@endphp
 <div class="row">
     <div class="col-md-4"> 
         <div class="card">
@@ -12,7 +16,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <p class="text-muted fw-medium mb-2">Total Commission</p>
-                        <h4 class="mb-0">$36,524</h4>
+                        <h4 class="mb-0">{{get_price($commission)}}</h4>
                     </div>
                 </div>
             </div>
@@ -31,7 +35,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <p class="text-muted fw-medium mb-2">Total Withdraw</p>
-                        <h4 class="mb-0">$36,524</h4>
+                        <h4 class="mb-0">{{get_price($withdraws)}}</h4>
                     </div>
                 </div>
             </div>
@@ -50,7 +54,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <p class="text-muted fw-medium mb-2">Ballance</p>
-                        <h4 class="mb-0">$36,524</h4>
+                        <h4 class="mb-0">{{get_price($commission-$withdraws)}}</h4>
                     </div>
                 </div>
             </div>

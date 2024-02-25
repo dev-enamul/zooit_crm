@@ -263,12 +263,15 @@ class FreelancerController extends Controller
             if ($request->hasFile('nid_file')) {
                 $nid_file = $this->uploadImage($request, 'nid_file', 'users', 'public');
             }
+
             if ($request->hasFile('birth_certificate_file')) {
                 $birth_certificate_file = $this->uploadImage($request, 'birth_certificate_file', 'users', 'public');
             }
+
             if ($request->hasFile('upload_passport')) {
                 $upload_passport = $this->uploadImage($request, 'upload_passport', 'users', 'public');
             }
+            
             $user_documents = [
                 'user_id'                   => $user->id,
                 'nid_number'                => $request->nid,

@@ -32,4 +32,15 @@ class DepositTarget extends Model
     {
         return $this->hasMany(DepositTargetProject::class);
     }
+
+    public static function getDepositTarget($user_id, $monthOffset)
+    {
+        $targetMonth = date('m', strtotime("-$monthOffset month"));
+        $targetYear = date('Y'); 
+            return self::where('assign_to', $user_id)
+            ->whereMonth('month', $targetMonth)
+            ->whereYear('month', $targetYear)
+            ->selectRaw('SUM(new_total_deposit) + SUM(existing_total_deposit) as total_deposit')
+            ->value('total_deposit');
+    }
 }

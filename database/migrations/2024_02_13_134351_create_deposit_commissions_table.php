@@ -15,7 +15,8 @@ return new class extends Migration
             $table->foreignId('designation_id')->constrainted('designations');
             $table->foreignId('project_id')->nullable()->constrained('projects');
             $table->foreignId('commission_id')->constrainted('commissions');
-            $table->decimal('commission', 10, 2)->default(0.00);
+            $table->integer('commission_percent');
+            $table->decimal('amount', 10, 2)->default(0.00);
             $table->date('date')->default(now()); 
             $table->timestamps();
         });

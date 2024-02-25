@@ -12,18 +12,18 @@
                 </div> 
                 <div class="col-md-9"> 
                     @include('includes.freelancer_profile_data')
-                    <div class="card overflow-hidden"> 
+                    {{-- <div class="card overflow-hidden"> 
                         <div class="card-body border-top">
                             <div class="d-flex justify-content-between mb-4">
                                 <h4 class="card-title">About</h4>
-                                {{-- <div>
+                                <div>
                                     <div class="btn btn-secondary cursor-pointer" title="Change Password"  data-bs-toggle="modal" data-bs-target="#change_password_modal">
                                         <i class="mdi mdi-key-change"></i> Change password 
                                     </div>  
                                     <a href="{{route('freelancer.create')}}" class="btn btn-primary cursor-pointer"> 
                                         <i class="mdi mdi-account-edit"></i> Edit Profile
                                     </a>  
-                                </div> --}}
+                                </div>
                                
                             </div> 
                             <p class="text-muted mb-4">Hi I'm Charlie Stone,has been the industry's standard dummy text To an English person, it will seem like simplified English, as a skeptical Cambridge.</p>
@@ -50,33 +50,18 @@
                                 </table>
                             </div>
                         </div>  
-                    </div> 
+                    </div>  --}}
         
                     <div class="row border-top">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="card"> 
                                 <div class="card-body">
-                                    <h4>Target Achive</h4>
+                                    <h4>Deposit Target Achive</h4>
                                     <div id="abc"
                                         data-colors='["--bs-primary", "--bs-success"]'
                                         class="apex-charts"
-                                        data-series='[{"name": "Target", "data": [90, 60, 70, 80, 90]}]'
-                                        data-xaxis-categories='["Last 7 Days", "This Month", "Last Month", "Last 1 Year", "Full Life"]'
-                                        data-height="300">
-                                    </div>
-                                </div> 
-                            </div>
-                        </div> 
-        
-                        <div class="col-md-6">
-                            <div class="card"> 
-                                <div class="card-body">
-                                    <h4>Task Complete</h4>
-                                    <div id="aaa"
-                                        data-colors='["--bs-primary", "--bs-success"]'
-                                        class="apex-charts"
-                                        data-series='[{"name": "Target", "data": [50, 95, 70, 80, 90]}]'
-                                        data-xaxis-categories='["Last 7 Days", "This Month", "Last Month", "Last 1 Year", "Full Life"]'
+                                        data-series='[{"name": "Target", "data": [{{$deposit_achive['this_month']}}, {{$deposit_achive['last_month']}}, {{$deposit_achive['last_2_month']}}, {{$deposit_achive['last_6_month']}} , {{$deposit_achive['last_12_month']}}, {{$deposit_achive['last_24_month']}}]}]'
+                                        data-xaxis-categories='["This Month", "Last Month", "Last Two Month", "Last Six Month" , "Last One Year", "Last Two Year"]'
                                         data-height="300">
                                     </div>
                                 </div> 
