@@ -46,7 +46,7 @@
                             @endif 
                                 @csrf
                                 <div class="row"> 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
@@ -54,8 +54,8 @@
                                                     Select a customer
                                                 </option>
                                                 @foreach ($cstmrs as $cstm)
-                                                    <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($cold_calling->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                        {{ @$cstm->customer->name }} ({{ $cstm->customer->user_id}})
+                                                    <option value="{{ $cstm->customer->id }}" {{ isset($selected_data['customer']) || isset($cold_calling->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                        {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -106,7 +106,7 @@
 
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Interested Project Name</label>
-                                        <select class="select2 reset-data" search name="project" id="project" required>
+                                        <select class="select2 reset-data" search name="project" id="project">
                                             <option data-display="Select a project *" value="">
                                                 Select a Project
                                             </option>
@@ -128,7 +128,7 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Interested Unit Name </label>
-                                        <select class="select2 reset-data" search name="unit" id="unit" required>
+                                        <select class="select2 reset-data" search name="unit" id="unit">
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>

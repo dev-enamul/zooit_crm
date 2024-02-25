@@ -42,9 +42,12 @@ class ProspectingController extends Controller
         } 
 
         $user_employee = my_all_employee($user_id);
-        $prospectings = Prospecting::whereHas('customer', function($q) use($user_employee){ 
-            $q->whereIn('ref_id', $user_employee);
-        }); 
+        $prospectings = Prospecting::where('status', 0)->whereIn('employee_id', $user_employee)
+        ->where(function ($query) {
+            $query->where('approve_by','!=',null)
+                ->orWhere('created_by', Auth::user()->id)
+                ->orWhere('employee_id', Auth::user()->id); 
+        });
 
         if(isset($request->date) && !empty($request->date)){ 
             $date_parts = explode(" - ", $request->date); 
@@ -81,7 +84,7 @@ class ProspectingController extends Controller
         $title = 'Prospecting Entry';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
-        $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
+        $customers = Customer::whereIn('ref_id', $my_all_employee)->where('status',0)->get();
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
         $priorities = $this->priority();
@@ -104,8 +107,7 @@ class ProspectingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'media'         => 'required',
-            'priority'      => 'required',
-            'customer'      => 'required',
+            'priority'      => 'required', 
             'employee'      => 'required',
             'remark'        => 'nullable|string|max:255',
         ]);
@@ -118,8 +120,7 @@ class ProspectingController extends Controller
             $prospecting->update([
                 'media'         => $request->media,
                 'priority'      => $request->priority,
-                'remark'        => $request->remark,
-                'customer_id'   => $request->customer,
+                'remark'        => $request->remark, 
                 'employee_id'   => $request->employee,
                 'updated_by'    => auth()->id(),
                 'updated_at'    => now(),

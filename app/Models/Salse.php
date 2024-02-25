@@ -61,4 +61,9 @@ class Salse extends Model
     {
         return $this->belongsTo(User::class, 'approve_by');
     }
+
+    public function deposit()
+    {
+        return $this->hasMany(Deposit::class,'salse_id');
+    }
 }

@@ -11,12 +11,18 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Prospecting List</h4>
+                        <p class="d-none">{{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="A4">
+                        <input type="hidden" id="fontSize" value="10">
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Prospecting List</li>
-                            </ol>
+                            <div class="dt-buttons btn-group flex-wrap mb-2">
+                                <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a>      
+                                <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                    <span><i class="fas fa-filter"></i> Filter</span>
+                                </button> 
+                            </div>
                         </div>
 
                     </div>
@@ -27,23 +33,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body"> 
-                            
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">
-                                        <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a>      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
+                        <div class="card-body">  
 
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -60,36 +52,48 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($prospectings as  $prospecting)
-                                    <tr class="">
+                                    <tr class="{{$prospecting->approve_by==null?"table-warning":""}}">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{ isset($prospecting) ? 'storage/' . $prospecting->customer->user->profile_image : '../assets/images/users/avatar-6.png' }}" alt="Header Avatar">
+                                                    <img class="rounded avatar-2xs p-0" src="{{@$prospecting->customer->user->image()}}" alt="Header Avatar">
                                                 </a>
                                                 
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('prospecting.delete',$prospecting->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="{{route('cold-calling.create',['customer' => $prospecting->customer->id])}}">Cold Calling</a>
+                                                    @can('prospecting-manage')
+                                                        @if ($prospecting->approve_by==null)
+                                                            <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a>
+                                                        @endif  
+                                                    @endcan
+                                                   
+
+                                                    @can('prospecting-delete')
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('prospecting.delete',$prospecting->id) }}')">Delete</a>  
+                                                    @endcan 
+                                                    @if ($prospecting->approve_by!=null) 
+                                                        @can('cold-calling-manage')
+                                                            <a class="dropdown-item" href="{{route('cold-calling.create',['customer' => $prospecting->customer->id])}}">Cold Calling</a>
+                                                        @endcan 
+                                                    @endif 
                                                 </div>
                                             </div> 
                                         </td> 
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->name }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->profession->name }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->union->name }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->userAddress->village->name }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">
+                                        <td class="">{{ @$prospecting->customer->name }} [{{@$prospecting->customer->customer_id}}]</td>
+                                        <td class="">{{ @$prospecting->customer->profession->name }}</td>
+                                        <td class="">{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
+                                        <td class="">{{ @$prospecting->customer->user->userAddress->union->name }}</td>
+                                        <td class="">{{ @$prospecting->customer->user->userAddress->village->name }}</td>
+                                        <td class="">
                                             @if ($prospecting->media == 1)
-                                                <span class="badge bg-primary">Phone</span>
+                                            Phone
                                             @elseif($prospecting->media == 2)
-                                                <span class="badge bg-success">Meet</span>
+                                            Meet
 
                                             @endif 
                                         </td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->customer->user->phone }}</td>
-                                        <td class="{{ $prospecting->status == 0 ? 'text-danger' : '' }}">{{ @$prospecting->employee->name }}</td>
+                                        <td class="">{{ @$prospecting->customer->user->phone }}</td>
+                                        <td class="">{{ @$prospecting->customer->reference->name }} [{{ @$prospecting->customer->reference->user_id }}]</td>
                                     </tr>
                                     @endforeach 
                                 </tbody>
@@ -157,6 +161,7 @@
 @endsection 
 
 @section('script') 
+@include('includes.data_table')
 <script>
      getDateRange('prospecting_date');
 </script>

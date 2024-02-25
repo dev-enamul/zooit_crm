@@ -130,7 +130,9 @@ class PermissionSeeder extends Seeder
             ['slug' => 'freelancer-interview', 'name' => 'Freelancer Interview', 'status' => 1],
             ['slug' => 'freelancer-meeting', 'name' => 'Freelancer Meeting', 'status' => 1],
             ['slug' => 'freelancer-training', 'name' => 'Freelancer Training', 'status' => 1],
-            ['slug' => 'freelancer-remark', 'name' => 'Freelancer-Remark', 'status' => 1],
+            ['slug' => 'freelancer-remark', 'name' => 'Freelancer Remark', 'status' => 1],
+            ['slug' => 'freelancer-id-create', 'name' => 'Freelancer ID Create', 'status' => 1],
+            ['slug' => 'complete-training', 'name' => "Complete Training"],
             
         ];
 

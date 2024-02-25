@@ -12,8 +12,7 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Employee List</h4>
                         <p class="d-none">Last Update: {{get_date($lastUpdateDate)}}</p> 
-                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)">
-                        {{-- <input type="hidden" id="pageOrientation" value="portrait"> --}}
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
                         <input type="hidden" id="pageSize" value="A3">
                         <input type="hidden" id="fontSize" value="10">
                     </div>
@@ -49,13 +48,17 @@
                                                     <img class="rounded avatar-2xs p-0" src="{{$data->image()}}">
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-animated">   
-                                                    @can('employee-permission')
+                                                    @can('employee-manage')
                                                         <a class="dropdown-item" href="{{route('employee.edit', encrypt($data->id))}}">Edit</a>
-                                                        <a class="dropdown-item" href="{{route('designation.user.edit', $data->id)}}">Change Designation</a>
-                                                        <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.employee', $data->id) }}')">Resign Employee</a>
-                                                        <a class="dropdown-item" href="{{route('user.area.edit', $data->id)}}">Change Area</a>
-                                                        <a class="dropdown-item" href="{{route('reporting.user.edit', $data->id)}}">Change Reporting User</a>
-                                                        <a class="dropdown-item" href="{{route('employee.permission', $data->id)}}">Change Permissin</a>
+                                                        <a class="dropdown-item" href="{{route('designation.user.edit', encrypt($data->id))}}">Change Designation</a>
+                                                        @can('employee-delete')
+                                                            <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.user', encrypt($data->id)) }}')">Resign Employee</a>
+                                                        @endcan 
+                                                        <a class="dropdown-item" href="{{route('user.area.edit', encrypt($data->id))}}">Change Area</a>
+                                                        <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data->id))}}">Change Reporting User</a>
+                                                        @can('employee-permission')
+                                                            <a class="dropdown-item" href="{{route('employee.permission', encrypt($data->id))}}">Change Permissin</a>
+                                                        @endcan 
                                                     @endcan
                                                 </div>
                                             </div> 

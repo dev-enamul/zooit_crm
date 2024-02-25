@@ -1,10 +1,7 @@
 @extends('layouts.dashboard')
 @section('title',"Customer List")
 
-@section('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
-@endsection
+ 
 
 @section('content')
 <div class="main-content">
@@ -16,12 +13,17 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Customer List</h4>
+                        <p class="d-none">Employee: MD Enamul Haque</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="A4">
+                        <input type="hidden" id="fontSize" value="10">
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Customer List</li>
-                            </ol>
+                            <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                    <span><i class="fas fa-filter"></i> Filter</span>
+                                </button> 
+                            </div>
                         </div>
 
                     </div>
@@ -34,19 +36,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
-                                <div class=""> </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-                           
-                            <table id="customer_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="">
                                         <th>Action</th>
@@ -63,16 +54,26 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
-                                        <tr class="">
+                                        <tr class="{{$data->approve_by==null?"table-warning":""}}">
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
-                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
+                                                    </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="{{ route('customer.print', $data->id) }}">Print Customer</a>
-                                                        <a class="dropdown-item" href="{{route('customer.profile')}}">View Profile</a>
-                                                        <a class="dropdown-item" href="{{route('customer.edit',$data->id)}}" >Edit</a>
-                                                        <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',$data->id) }}')">Delete</a>
-                                                        <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
+                                                        <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->id))}}">View Profile</a>
+                                                        @can('customer-manage')
+                                                            <a class="dropdown-item" href="{{route('customer.edit',encrypt($data->id))}}" >Edit</a>
+                                                        @endcan 
+
+                                                        @can('customer-delete')
+                                                            <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',encrypt($data->id)) }}')">Delete</a>
+                                                        @endcan
+                                                        
+                                                        @can('prospecting')
+                                                            <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
+                                                        @endcan 
                                                     </div>
                                                 </div> 
                                             </td> 
@@ -84,7 +85,7 @@
                                             <td>{{@$data->user->userAddress->union->name }}</td>
                                             <td>{{@$data->user->userAddress->village->name}}</td>
                                             <td>{{@$data->user->phone}}</td>
-                                            <td>{{@$data->user->user_id}}</td> 
+                                            <td>{{@$data->reference->user_id}}</td> 
                                         </tr> 
                                     @endforeach
                                 </tbody>
@@ -193,69 +194,8 @@
 @endsection
 
 @section('script')
-<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-<script src="{{asset('assets/js/print.js')}}"></script>
-
-    <script>
-       $(document).ready(function () {
-            $(window).on('load', function () {
-                console.log('DataTable initialized');
-                var table = $('#customer_table').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            extend: 'excel',
-                            text: 'Excel',
-                            filename: 'export',
-                            exportOptions: {
-                                columns: ':visible:not(:first-child)'
-                            }
-                        },
-                        {
-                            extend: 'print',
-                            text: 'Print',
-                            title: 'Customer Data',
-                            exportOptions: {
-                                columns: ':visible:not(:first-child)'
-                            }
-                        }
-                    ]
-                });
-            });
-        });
-
-        function resetFormFields() {
-            $("#division").val('');
-            $("#district").val('');
-            $("#upazila").val('');
-            $("#union").val('');
-            $("#village").val('');
-            $("#status").val('');
-            $("#daterange").val('');
-            $("#profession").val('');
-            $("#customer").val('');
-            $("#employee").val('');
-        
-            $("#status").trigger('change');
-            $("#division").trigger('change');
-            $("#district").trigger('change');
-            $("#upazila").trigger('change');
-            $("#union").trigger('change');
-            $("#village").trigger('change');
-            $("#daterange").trigger('change');
-            $("#profession").trigger('change');
-            $("#customer").trigger('change');
-            $("#employee").trigger('change');
-
-            $('#filter_button').prop('disabled', true);
-        }
-    
+@include('includes.data_table')
+    <script> 
         getDateRange('daterangepicker');
-    </script>
-
-    @yield('script-bottom')
+    </script> 
 @endsection

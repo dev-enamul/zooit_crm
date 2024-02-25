@@ -23,8 +23,9 @@ class EmployeeEditController extends Controller
 {
     use ImageUploadTrait;
     public function reporting_edit($id){
+        $id = decrypt($id);
         try{
-            $employees = User::where('user_type','1')->where('status',1)->select('id','name','user_id')->get();
+            $employees = User::whereIn('user_type',[1,2])->where('status',1)->select('id','name','user_id')->get();
             $user = User::find($id); 
             return view('employee.edit.update_reporting',compact('employees','user'));
         }catch(Exception $e){
@@ -62,19 +63,23 @@ class EmployeeEditController extends Controller
             if ($request->hasFile('image')) { 
                 $image = $this->uploadImage($request, 'image', 'reporting_users', 'public'); 
                 $reporting_user->change_reason_document = $image; 
-            } 
+            }  
+            $reporting_user->save(); 
+            DB::commit(); 
             
-            $reporting_user->save();
-
-            DB::commit();
-            return redirect()->route('employee.index')->with('success', 'Reporting updated successfully');
+            if($reporting_user->user->user_type == 1){
+                return redirect()->route('employee.index')->with('success', 'Reporting updated successfully'); 
+            }else{
+                return redirect()->route('freelancer.index')->with('success', 'Reporting updated successfully');
+            } 
         }catch(Exception $e){
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
     } 
 
-    public function area_edit($id){
+    public function area_edit($id){ 
+        $id = decrypt($id);
         $user = User::find($id);
         $zones = Zone::where('status',1)->get();
         $areas = Area::where('status',1)->get();
@@ -82,8 +87,15 @@ class EmployeeEditController extends Controller
     }
 
     public function area_update(Request $request, $id){
-        
-        
+        $validator = Validator::make($request->all(),[ 
+            'image'   => 'mimes:jpeg,jpg,png,gif|max:2048'
+        ]);
+
+        if ($validator->fails()) { 
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator)->with('error',  $validator->errors()->first());
+            }
+        }
         DB::beginTransaction();
         try{   
             
@@ -107,15 +119,20 @@ class EmployeeEditController extends Controller
             } 
             $user_address->save(); 
             DB::commit();
-            return redirect()->route('employee.index')->with('success', 'Area updated successfully');
+
+            if($user_address->user->user_type == 1){
+                return redirect()->route('employee.index')->with('success', 'Area updated successfully');
+            }else{
+                return redirect()->route('freelancer.index')->with('success', 'Area updated successfully');
+            }
         }catch(Exception $e){
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    public function deactive_employee($id){ 
-    
+    public function deactive_user($id){ 
+        $id = decrypt($id);
         DB::beginTransaction();
         try{
             $user = User::find($id); 
@@ -151,7 +168,8 @@ class EmployeeEditController extends Controller
         }
     }
 
-    public function designation_edit($id){
+    public function designation_edit($id){ 
+        $id = decrypt($id);
         $user = User::find($id);
         $designations = Designation::where('status',1)->where('designation_type',1)->get();
         return view('employee.edit.update_designation',compact('user','designations'));

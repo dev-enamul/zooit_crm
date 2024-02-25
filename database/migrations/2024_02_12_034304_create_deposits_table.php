@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained('customers');
+            $table->foreignId('customer_user_id')->constrained('users');
             $table->foreignId('deposit_category_id')->nullable()->constrained('deposit_categories')->comment('Null = Regular');
             $table->foreignId('project_id')->nullable()->constrained('projects');
             $table->foreignId('salse_id')->nullable()->constrained('salses');

@@ -72,6 +72,11 @@ class User extends Authenticatable
         return $this->hasOne(Employee::class, 'user_id');
     }
 
+    public function customer()
+    {
+        return $this->hasMany(Customer::class, 'user_id');
+    }
+
     public function reportingUser()
     {
         return $this->hasOne(ReportingUser::class, 'user_id')->whereNull('deleted_at');
@@ -97,22 +102,9 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    public static function generateNextUserId()
-    {
-        $lastUserId = self::latest('id')->value('user_id');
+ 
 
-        if ($lastUserId) {
-            $numericPart     = (int)substr($lastUserId, 4);
-            $nextNumericPart = $numericPart + 1;
-            $nextUserId      = 'FL-' . str_pad($nextNumericPart, 4, '0', STR_PAD_LEFT);
-        } else {
-            $nextUserId      = 'FL-0001';
-        }
-
-        return $nextUserId;
-    }
-
-    public static function generateNextEmployeeId(){ 
+    public static function generateNextEmployeeId(){
         $user_id = User::where('user_type',1)->latest('id')->first()->user_id;
         if($user_id == null){
             $user_id = 'EMP-000';
@@ -123,13 +115,25 @@ class User extends Authenticatable
         return $newValue;
     }
 
-    public static function generateNextFreelancerId(){ 
+    public static function generateNextCustomerId(){ 
+        $customer = Customer::latest('id')->first()->customer_id;
+        if($customer == null){
+            $customer = 'CUS-000';
+        }
+        $numericPart = substr($customer, 4);
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
+        $newValue = "CUS-" . $newNumericPart; 
+        return $newValue;
+    }
+
+    public static function generateNextFreelancerId()
+    {
         $user_id = User::where('user_type',2)->latest('id')->first()->user_id;
         if($user_id == null){
             $user_id = 'FL-000';
         }
         $numericPart = substr($user_id, 4);  
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT); 
         $newValue = "FL-" . $newNumericPart; 
         return $newValue;
     }

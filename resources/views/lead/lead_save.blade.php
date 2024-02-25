@@ -57,8 +57,8 @@
                                                 </option>
                                                 @isset($employees)
                                                     @foreach ($cstmrs as $cstm)
-                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($lead->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->user_id}})
+                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($lead->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -110,7 +110,7 @@
 
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Preferred Project Name </label>
-                                        <select class="form-select reset-data" name="project" id="project" required>
+                                        <select class="form-select reset-data" name="project" id="project" >
                                             <option data-display="Select a project *" value="">
                                                 Select a Project
                                             </option>
@@ -132,7 +132,7 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Preferred Unit Name </label>
-                                        <select class="form-select reset-data" name="unit" id="unit" required>
+                                        <select class="form-select reset-data" name="unit" id="unit">
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>

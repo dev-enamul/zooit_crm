@@ -5,7 +5,7 @@
     <title>@yield('title') | {{ config('app.name', 'ZOOM IT') }} </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
-
+    {{-- @vite(['resources/css/app.css' , 'resources/js/app.js']) --}}
     {{-- Select 2 --}}
     <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css">
 
@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}">
     
     <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
+
+    
     @yield('style') 
 
 </head>

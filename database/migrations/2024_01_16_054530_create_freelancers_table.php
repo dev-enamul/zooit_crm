@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('profession_id')->nullable()->constrained('professions');
             $table->foreignId('designation_id')->nullable()->constrained('designations');
 
+            $table->string('change_reason_document')->nullable();
             $table->foreignId('last_approve_by')->constrained('users');
-            $table->foreignId('ref_id')->nullable()->constrained('users'); 
+            $table->foreignId('ref_id')->nullable()->constrained('users');
             $table->tinyInteger('status')->default(1)->comment('1= Complete, 0= Pending');
             $table->softDeletes();
             $table->timestamps(); 
@@ -33,3 +34,15 @@ return new class extends Migration
         Schema::dropIfExists('freelancers');
     }
 };
+
+// ref_id = employee_id
+// created_by = auth:id 
+// status = complete or uncomplete  //when status will 1 user will get freelancer_id and can training
+// last_approve_by = employee_id
+
+// User table 
+// approve_by = final approve by 
+// status = active or inactive  // when status will 1 can work
+// ref_id = Employee id
+
+

@@ -3,42 +3,65 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid"> 
-            <!-- start page title -->
+        <div class="container-fluid">  
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-cjustify-content-between">
                         <h4 class="mb-sm-0">
-                            {{$title}}
-                        </h4>   
+                            {{$title}} 
+                        </h4>  
                     </div>
                 </div>
-            </div>
-            <!-- end page title -->
+            </div> 
 
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form action="{{route('customer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                            <form action="{{route('customer.update',$customer->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 @csrf
+                                @method('put')
+                                <input type="hidden" name="id" value="{{$customer->id}}">
+                                
                                 <div class="row">
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Personal Information</h6>
                                     <hr>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{old('full_name')}}" required>
+                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{ isset($customer) ? $customer->user->name : old('full_name')}}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-5 col-10">
                                         <div class="mb-3">
                                             <label for="profile_image" class="form-label">Profile Image <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</span></label> 
                                             <input type="file" name="profile_image" class="form-control" id="profile_image" > 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 col-2">
+                                        <img src="{{$customer->user->image()}}" alt="" height="50px">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="profession" id="profession" required>
+                                                <option value="">Select a Profession</option>
+                                                @isset($professions)
+                                                    @foreach ($professions as $profession)
+                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($profession) ? $customer->profession_id : null) == $profession->id ? 'selected' : '' }}>
+                                                            {{ $profession->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select> 
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -48,7 +71,7 @@
                                                 <option value="">Select a Marital Status</option>
                                                 @isset($maritalStatuses)
                                                     @foreach ($maritalStatuses as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('marital_status') == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('marital_status', isset($customer) ? $customer->user->marital_status : null) == $id ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -62,27 +85,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="profession" id="profession" required>
-                                                <option value="">Select a Profession</option>
-                                                @isset($professions)
-                                                    @foreach ($professions as  $profession)
-                                                        <option value="{{ $profession->id }}" {{ old('profession') == $profession->id ? 'selected' : '' }}>
-                                                            {{ $profession->name }}
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
-                                            </select> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
                                             <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                                            <input type="date" name="dob" class="form-control" id="dob" placeholder="Select date of birth" value="{{ old('dob')}}" required> 
+                                            <input type="date" name="dob" class="form-control" id="dob" placeholder="Select date of birth" value="{{ isset($customer) ? $customer->user->dob : old('dob')}}" required> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -92,7 +96,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="card_id" class="form-label">Card/Finger ID </label>
-                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="ID" value="{{ old('card_id') }}">  
+                                            <input type="text" name="card_id" class="form-control" id="card_id" placeholder="ID" value="{{ isset($customer) ? $customer->user->finger_id : old('card_id') }}">  
                                         </div>
                                     </div>
                                       
@@ -104,7 +108,7 @@
                                                 <option value="">Select Religion</option>
                                                 @isset($religions)
                                                     @foreach ($religions as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('religion')  == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('religion', isset($customer) && isset($customer->user->religion) && $customer->user->religion == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -125,7 +129,7 @@
                                                 <option value="">Select a Blood Group</option>
                                                 @isset($bloodGroups)
                                                     @foreach ($bloodGroups as $id => $blood)
-                                                        <option value="{{ $id }}" {{ old('blood_group') == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('blood_group', isset($customer) ? $customer->user->blood_group : null) == $id ? 'selected' : '' }}>
                                                             {{ $blood }}
                                                         </option>
                                                     @endforeach
@@ -144,7 +148,7 @@
                                                 <option value="">Select Gender</option>
                                                 @isset($genders)
                                                     @foreach ($genders as $id => $gender)
-                                                        <option value="{{ $id }}" {{ old('gender') == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('gender', isset($customer) ? $customer->user->gender : null) == $id ? 'selected' : '' }}>
                                                             {{ $gender }}
                                                         </option>
                                                     @endforeach
@@ -162,7 +166,7 @@
                                             <select class="form-select" name="nationality" id="nationality" required> 
                                                 @isset($nationalites)
                                                     @foreach ($nationalites as $id => $data)
-                                                        <option value="{{ $id }}" {{ old('nationality') == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('nationality', isset($customer) ? $customer->user->nationality : null) == $id ? 'selected' : '' }}>
                                                             {{ $data }}
                                                         </option>
                                                     @endforeach
@@ -181,7 +185,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone1" class="form-label">Mobile Number 1 <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ old('phone1') }}" required>
+                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ isset($customer) ? $customer->user->phone : old('phone1') }}" readonly>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -191,14 +195,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone2" class="form-label">Mobile Number 2 </label>
-                                            <input type="text" name="phone2" class="form-control" maxlength="15" id="phone2" placeholder="Phone 2 Number" value="{{ old('phone2') }}">
+                                            <input type="text" name="phone2" class="form-control" maxlength="15" id="phone2" placeholder="Phone 2 Number" value="{{ isset($customer) ? @$customer->user->userContact->office_phone : old('phone2') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="office_email" class="form-label">Office Email</label>
-                                           <input type="email" name="office_email" class="form-control" id="office_email" placeholder="Office Email ID" value="{{ old('office_email') }}"> 
+                                           <input type="email" name="office_email" class="form-control" id="office_email" placeholder="Office Email ID" value="{{ isset($customer) ? @$customer->user->userContact->office_email : old('office_email') }}"> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -208,7 +212,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Personal Email</label>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Personal Email ID" value={{old('email') }}> 
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Personal Email ID" value={{ isset($customer) ? @$customer->user->userContact->personal_email : old('email') }}> 
                                             <div class="invalid-feedback">
                                                 This field is invalid.
                                             </div>
@@ -218,34 +222,59 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="imo_whatsapp_number" class="form-label">Imo/WhatsApp Number</label>
-                                            <input type="text" name="imo_whatsapp_number" class="form-control" id="imo_whatsapp_number" placeholder="Imo/WhatsApp Number" value="{{ old('imo_whatsapp_number') }}">  
+                                            <input type="text" name="imo_whatsapp_number" class="form-control" id="imo_whatsapp_number" placeholder="Imo/WhatsApp Number" value="{{ isset($customer) ? @$customer->user->userContact->imo_number : old('imo_whatsapp_number') }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="facebook_id" class="form-label">Facebook ID</label>
-                                            <input type="text" name="facebook_id" class="form-control" id="facebook_id" placeholder="Facebook ID" value="{{old('facebook_id')}}">  
+                                            <input type="text" name="facebook_id" class="form-control" id="facebook_id" placeholder="Facebook ID" value="{{ isset($customer) ? @$customer->user->userContact->facebook_id : old('facebook_id') }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="emergency_contact_person_name" class="form-label">Emergency Contact Name</label>
-                                            <input type="text" name="emergency_contact_name" class="form-control" id="emergency_contact_person_name" placeholder="Emergency Contact Person Name" value="{{ old('emergency_contact_name') }}">  
+                                            <input type="text" name="emergency_contact_name" class="form-control" id="emergency_contact_person_name" placeholder="Emergency Contact Person Name" value="{{ isset($customer) ? @$customer->user->userContact->emergency_contact_person : old('emergency_contact_name') }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="emergency_contact_person_number" class="form-label">Emergency Contact Person Number</label>
-                                            <input type="text" name="emergency_person_number" class="form-control" id="emergency_contact_person_number" placeholder="Emergency Contact Person Number" value="{{ old('emergency_person_number') }}">  
+                                            <input type="text" name="emergency_person_number" class="form-control" id="emergency_contact_person_number" placeholder="Emergency Contact Person Number" value="{{ isset($customer) ? @$customer->user->userContact->emergency_contact_number : old('emergency_person_number') }}">  
                                         </div>
                                     </div> 
 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Address</h6>
                                     <hr>
-                                     
+                                    {{-- <div class="col-md-6 mb-3">
+                                        <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                                        <select class="form-select" name="country" id="country" required>
+                                            <option data-display="Select a country *" value="">
+                                                Select a country
+                                            </option>
+                                            @isset($countries)
+                                                @foreach ($countries as $country)
+                                                    <option value="{{ $country->id }}" 
+                                                        {{ (old('country') == $country->id) || (!isset($customer) && $country->id == 18) || (isset($customer) && $customer->user->userAddress->country_id == $country->id) ? 'selected' : '' }}>
+                                                        {{ $country->name }}
+                                                    </option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
+                                        
+                                        @if ($errors->has('country'))
+                                            <span class="text-danger" role="alert">
+                                                {{ $errors->first('country') }}
+                                            </span>
+                                        @endif
+                                    </div>  --}}
+
                                     @include('common.area', [
                                         'div'       => 'col-md-6',
                                         'mb'        => 'mb-3',
@@ -257,7 +286,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="1" name="address" placeholder="Address">{{old('address')}}</textarea> 
+                                            <textarea class="form-control" id="address" rows="1" name="address">{{isset($customer) ? @$customer->user->userAddress->address : old('address')}}</textarea> 
                                         </div>
                                     </div>
 
@@ -267,42 +296,42 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{old('father_name')}}">  
+                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{isset($customer) ? @$customer->user->userFamily->father_name : old('father_name')}}">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_phone" class="form-label">Father's Mobile</label>
-                                            <input type="text" name="father_phone" class="form-control" maxlength="15" id="father_phone" placeholder="Father's Mobile" value="{{old('father_phone')}}">  
+                                            <input type="text" name="father_phone" class="form-control" maxlength="15" id="father_phone" placeholder="Father's Mobile" value="{{isset($customer) ? @$customer->user->userFamily->father_mobile : old('father_phone')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mother_name" class="form-label">Mother's Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name" value="{{old('mother_name')}}">  
+                                            <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name" value="{{isset($customer) ? @$customer->user->userFamily->mother_name : old('mother_name')}}">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mother_phone" class="form-label">Mother Mobile</label>
-                                            <input type="text" name="mother_phone" class="form-control" maxlength="15" id="mother_phone" placeholder="Mother's Mobile" value="{{old('mother_phone')}}">  
+                                            <input type="text" name="mother_phone" class="form-control" maxlength="15" id="mother_phone" placeholder="Mother's Mobile" value="{{isset($customer) ? @$customer->user->userFamily->mother_mobile : old('mother_phone')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="spouse_name" class="form-label">Spouse Name</label>
-                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{old('spouse_name')}}">  
+                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{isset($customer) ? @$customer->user->userFamily->spouse_name : old('spouse_name')}}">  
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="spouse_phone" class="form-label">Spouse Mobile</label>
-                                            <input type="text" name="spouse_phone" class="form-control" maxlength="15" id="spouse_phone" placeholder="Spouse Mobile" value="{{old('spouse_phone')}}">  
+                                            <input type="text" name="spouse_phone" class="form-control" maxlength="15" id="spouse_phone" placeholder="Spouse Mobile" value="{{isset($customer) ? @$customer->user->userFamily->spouse_contact : old('spouse_phone')}}">  
                                         </div>
                                     </div>
 
@@ -316,7 +345,7 @@
                                                 <option value="">Select a Bank</option>
                                                 @isset($banks)
                                                     @foreach ($banks as $bank)
-                                                        <option value="{{ $bank->id }}" {{ old('bank') == $bank->id ? 'selected' : '' }}>
+                                                        <option value="{{ $bank->id }}" {{ old('bank', isset($customer) ? @$customer->user->userTransaction->bank_id : null) == $bank->id ? 'selected' : '' }}>
                                                             {{ $bank->name }}
                                                         </option>
                                                     @endforeach
@@ -328,21 +357,21 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="branch" class="form-label">Branch Name</label>
-                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Bank Branch" value="{{old('branch')}}">  
+                                            <input type="text" name="branch" id="branch" class="form-control" placeholder="Bank Branch" value="{{isset($customer) ? @$customer->user->userTransaction->branch : old('branch')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="account_number" class="form-label">Account Number</label>
-                                            <input type="text" name="account_number" id="account_number" class="form-control" placeholder="Bank Account Number" value="{{old('account_number')}}">  
+                                            <input type="text" name="account_number" id="account_number" class="form-control" placeholder="Bank Account Number" value="{{isset($customer) ? @$customer->user->userTransaction->bank_account_number : old('account_number')}}">  
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="account_holder_name" class="form-label">Account Holder Name</label>
-                                            <input type="text" name="account_holder_name" id="account_holder_name" class="form-control" placeholder="Bank Holder Name" value="{{old('account_holder_name')}}">  
+                                            <input type="text" name="account_holder_name" id="account_holder_name" class="form-control" placeholder="Bank Holder Name" value="{{isset($customer) ? @$customer->user->userTransaction->bank_details : old('account_holder_name')}}">  
                                         </div>
                                     </div>
 
@@ -353,7 +382,7 @@
                                                 <option value="">Select a Mobile Bank</option>
                                                 @isset($mobileBanks)
                                                     @foreach ($mobileBanks as $mobileBank)
-                                                        <option value="{{ $mobileBank->id }}" {{ old('mobile_bank') == $mobileBank->id ? 'selected' : '' }}>
+                                                        <option value="{{ $mobileBank->id }}" {{ old('mobile_bank', isset($customer) ? @$customer->user->userTransaction->mobile_bank_id : null) == $mobileBank->id ? 'selected' : '' }}>
                                                             {{ $mobileBank->name }}
                                                         </option>
                                                     @endforeach
@@ -365,7 +394,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="mobile_bank_number" class="form-label">Mobile Bank Number</label>
-                                            <input type="text" name="mobile_bank_number" id="mobile_bank_number" class="form-control" placeholder="Mobile Bank Number" value="{{old('mobile_bank_number')}}">  
+                                            <input type="text" name="mobile_bank_number" id="mobile_bank_number" class="form-control" placeholder="Mobile Bank Number" value="{{isset($customer) ? @$customer->user->userTransaction->mobile_bank_account_number : old('mobile_bank_number')}}">  
                                         </div>
                                     </div> 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> ID Detail</h6>
@@ -374,120 +403,70 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="nid" class="form-label">NID Number</label>
-                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="NID Number" value="{{old('nid')}}"> 
+                                            <input type="text" name="nid" id="nid" class="form-control" placeholder="NID Number" value="{{isset($customer) ? @$customer->user->userId->nid_number : old('nid')}}"> 
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-5 col-8">
                                         <div class="mb-3">
-                                            <label for="nid_file" class="form-label">Upload NID <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</span></label>
+                                            <label for="nid_file" class="form-label">Upload NID <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</label>
                                             <input type="file" name="nid_file" id="nid_file" class="form-control" > 
                                         </div>
+                                    </div>
+                                    <div class="col-md-1 col-2">
+                                        <img src="{{ $customer?->user?->userId?->nid_image()??"-" }}" alt="" width="100%">
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="birth_certificate_number" class="form-label">Birth Certificate Number</label>
-                                            <input type="text" name="birth_certificate_number" id="birth_certificate_number" class="form-control" placeholder="Birth Certificate Number" value="{{old('birth_certificate_number')}}"> 
-                                          
+                                            <input type="text" name="birth_certificate_number" id="birth_certificate_number" class="form-control" placeholder="Birth Certificate Number" value="{{isset($customer) ? @$customer->user->userId->birth_cirtificate_number : old('birth_certificate_number')}}"> 
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
+ 
+                                    <div class="col-md-5 col-10">
                                         <div class="mb-3">
-                                            <label for="birth_certificate_file" class="form-label">Upload Birth Certificate <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</span></label>
+                                            <label for="birth_certificate_file" class="form-label">Upload Birth Certificate <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</label>
                                             <input type="file" name="birth_certificate_file" id="birth_certificate_file" class="form-control" > 
-                                             
                                         </div>
+                                    </div>
+                                    <div class="col-md-1 col-2">
+                                        <img src="{{ $customer?->user?->userId?->birth_image() }}" alt="" width="100%">
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="passport_number" class="form-label">Passport Number</label>
-                                            <input type="text" name="passport_number" id="passport_number" class="form-control" placeholder="Passport Number" value="{{old('passport_number')}}"> 
+                                            <input type="text" name="passport_number" id="passport_number" class="form-control" placeholder="Passport Number" value="{{isset($customer) ?@ $customer->user->userId->passport_number : old('passport_number')}}"> 
                                         </div>
                                     </div>
                                     
-                                    <div class="col-md-6">
+                                    <div class="col-md-5 col-10">
                                         <div class="mb-3">
-                                            <label for="upload_passport" class="form-label">Upload Passport <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</span></label>
+                                            <label for="upload_passport" class="form-label">Upload Passport <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</label>
                                             <input type="file" name="upload_passport" id="upload_passport" class="form-control">
-                                             
+                                          
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-1 col-2">
+                                        <img src="{{ $customer?->user?->userId?->passport_image() }}" alt="" width="100%">
                                     </div>
  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="passport_expire_date" class="form-label">Passport Expire Date</label>
-                                            <input type="date" name="passport_expire_date" class="form-control w-100" id="passport_expire_date" placeholder="Select passport expire date" value="{{old('passport_expire_date')}}"> 
+                                            <input type="date" name="passport_expire_date" class="form-control w-100" id="passport_expire_date" placeholder="Select passport expire date" value="{{isset($customer) ? @$customer->user->userId->passport_exp_date : old('passport_expire_date')}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="tin_number" class="form-label">TIN Number</label>
-                                            <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="TIN Number" value="{{old('tin_number')}}"> 
+                                            <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="TIN Number" value="{{isset($customer) ? @$customer->user->userId->tin_number : old('tin_number')}}"> 
                                         </div>
-                                    </div>
-
-                                    <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Official Information</h6>
-                                    <hr>  
-
-                                    <div class="col-md-12 mb-3">
-                                        <label for="reporting_user" class="form-label">Employee/Freelancer<span class="text-danger">*</span></label>
-                                        <select class="form-select select2" search name="reporting_user" id="reporting_user" required>
-                                            <option value="">Select a Freelancer/Employee</option>
-                                            @isset($reporting_user)
-                                                @foreach ($reporting_user as $reporting)
-                                                <option value="{{$reporting->id}}" {{ old('reporting_user',auth()->user()->id) == $reporting->id ? 'selected' : '' }}>
-                                                    {{ @$reporting->name }} [{{$reporting->user_id}}]
-                                                </option>
-                                                @endforeach
-                                            @endisset
-                                        </select> 
-                                        <div class="invalid-feedback">
-                                            This field is required.
-                                        </div>
-                                         
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="zone" class="form-label">Zone <span class="text-danger">*</span></label>
-                                        <select class="form-select select2" search name="zone" id="zone" required>
-                                            <option data-display="Select a Zone" value=""> Select a Zone</option>
-                                            @isset($zones)
-                                                @foreach ($zones as $zone)
-                                                    <option value="{{ $zone->id }}" {{ old('zone') == $zone->id ? 'selected' : '' }}>
-                                                        {{ $zone->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>  
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="area" class="form-label">Area <span class="text-danger">*</span></label>
-                                        <select class="form-select select2" search name="area" id="area" required>
-                                            <option data-display="Select a Area *" value="">
-                                                Select a Area
-                                            </option>
-                                            @isset($areas)
-                                                @foreach ($areas as $area)
-                                                    <option value="{{ $area->id }}" {{ old('area') == $area->id ? 'selected' : '' }}>
-                                                        {{ $area->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select> 
-                                        
-                                        @if ($errors->has('area'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('area') }}
-                                            </span>
-                                        @endif
-                                    </div>
-
+                                    </div>  
                                 </div>
                                   
                                 <div>
@@ -507,4 +486,6 @@
 
 </div>
 @endsection 
+
+
  

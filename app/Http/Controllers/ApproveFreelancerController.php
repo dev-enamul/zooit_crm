@@ -16,11 +16,8 @@ class ApproveFreelancerController extends Controller
     public function index()
     {
         $trainings = TrainingCategory::where('status', '1')->get(); 
-        $datas = User::where('user_type', '2')->where('approve_by',null)->whereHas('freelancer', function($query){
-            $my_employee = my_employee(auth()->user()->id);
-         
-            $query->whereIn('last_approve_by',$my_employee);
-        })->get();
+        $my_employee = my_employee(auth()->user()->id); 
+        $datas = Freelancer::where('status',0)->whereIn('last_approve_by',$my_employee)->get();
         return view('freelancer.approve-freelancer',compact('datas','trainings'));
     }
 
@@ -37,9 +34,14 @@ class ApproveFreelancerController extends Controller
             $input['approve_by'] = auth()->user()->id;
             if($request->meeting_date && $request->meeting_time){
                 $input['meeting_date'] = $request->meeting_date . ' ' . $request->meeting_time;
+            } 
+
+            if(isset($request->user_id)){
+                $input['status'] = 1;
             }
+
+            FreelancerApprovel::create($input);  
             
-            FreelancerApprovel::create($input);   
             DB::commit(); 
             return redirect()->back()->with('success', 'Freelancer approved successfully');
         }catch(Exception $e){
@@ -50,35 +52,31 @@ class ApproveFreelancerController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+    public function complete_training($id){ 
+        $id = decrypt($id);
+        DB::beginTransaction();
+        try{
+            $user = User::find($id);
+            $user->status = 1;
+            $user->approve_by = auth()->user()->id;
+            $user->save(); 
+
+            FreelancerApprovel::create([
+                'freelancer_id' => $id,
+                'counselling' => 0,
+                'interview' => 0,
+                'remarks' => 'All Training Completed.',
+                'approve_by' => auth()->user()->id,
+                'complete_training' => 1
+            ]);
+
+            DB::commit();
+            return response()->json(['success' => 'Training Completed Successfully'], 200);
+       }catch(Exception $e){
+              DB::rollBack();
+              return response()->json(['error' => $e->getMessage()], 500); 
+       }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 }

@@ -89,6 +89,8 @@
                             <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Entry</a></li> 
                         @endcan
                         <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer List</a></li> 
+                        {{-- <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer Approve</a></li>  --}}
+                         
                     </ul>
                 </li> 
                 @endcan

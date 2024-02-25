@@ -51,14 +51,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="customer" id="customer" required>
+                                            <select class="form-control" name="customer" id="customer" disabled>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $cstm)
                                                         <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($prospecting->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->name }} ({{ @$cstm->user_id }})
+                                                            {{ @$cstm->name }} ({{ @$cstm->customer_id }})
                                                         </option>
                                                     @endforeach
                                                 @endisset
