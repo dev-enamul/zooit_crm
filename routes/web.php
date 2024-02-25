@@ -219,7 +219,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Rejection
         Route::resource('rejection', RejectionController::class);
-
+        Route::post('rejection-save/{id?}', [RejectionController::class, 'save'])->name('rejection.save');
+        Route::any('rejection-delete/{id}', [RejectionController::class, "rejectionDelete"])->name('rejection.delete');
+        Route::get('rejection-approve', [RejectionController::class, 'rejectionApprove'])->name('rejection.approve');
+        Route::post('rejection-save', [RejectionController::class, 'rejectionApproveSave'])->name('rejection.approve.save');
+        
         // Return
         Route::resource('return', SalseReturnController::class);
 

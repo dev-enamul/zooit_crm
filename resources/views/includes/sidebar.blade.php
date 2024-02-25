@@ -234,6 +234,7 @@
                             <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
                         @endcan
                         <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
+                        <li><a href="{{route('rejection.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Rejection Approve</a></li> 
                     </ul>
                 </li>  
                 @endcan
