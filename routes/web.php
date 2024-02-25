@@ -184,6 +184,10 @@ Route::group(['middleware' => 'auth'], function () {
         // Follow Up
         Route::resource('followup', FollowupController::class);
         Route::get('get-project-duration-type-name', [FollowupController::class, 'projectDurationTypeName'])->name('get-project-duration-type-name');
+        Route::post('follow-up-save/{id?}', [FollowupController::class, 'save'])->name('follow-up.save');
+        Route::any('follow-up-delete/{id}', [FollowupController::class, "followUpDelete"])->name('followUp.delete');
+        Route::get('follow-up-approve', [FollowupController::class, 'followUpApprove'])->name('followUp.approve');
+        Route::post('follow-up-approve-save', [FollowupController::class, 'followUpApproveSave'])->name('followUp.approve.save');
 
         // Follow Up Analysis
         Route::resource('followup-analysis', FollowupAnalysisController::class);

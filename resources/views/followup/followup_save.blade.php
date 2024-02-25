@@ -26,9 +26,14 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form class="needs-validation" novalidate>
+                            @if(isset($visit))
+                                <form action="{{route('follow-up.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <input type="hidden" name="id" value="{{$visit->id}}">
+                            @else 
+                                <form action="{{route('follow-up.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                            @endif 
+                                @csrf
                                 <div class="row"> 
-
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer</label>
@@ -38,8 +43,8 @@
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($cold_calling) ? $cold_calling->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->user->name }} ({{ $customer->user->user_id}})
+                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($follow) ? $follow->customer_id : null) == $customer->id ? 'selected' : '' }}>
+                                                            {{ @$customer->customer->user->name }} ({{ $customer->customer->user->user_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -48,7 +53,28 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="employee" id="employee" required>
+                                                <option data-display="Select a employee *" value="">
+                                                    Select a employee
+                                                </option>
+                                                @isset($employees)
+                                                    @foreach ($employees as $employee)
+                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($follow) ? $follow->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
+                                                            {{ $employee->name }} ({{ $employee->user_id}})
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -56,7 +82,7 @@
                                             <select class="select2" name="priority" id="priority" required>
                                                 @isset($priorities)
                                                     @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('media', isset($cold_calling) ? $cold_calling->priority : null) == $id ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('priority', isset($follow) ? $follow->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -127,9 +153,7 @@
                                         <div class="mb-3">
                                             <label for="select_type" class="form-label">Select Type <span class="text-danger">*</span></label>
                                             <select class="select2" name="select_type" id="select_type" required>
-                                                {{-- <option value="">Select Type</option>
-                                                <option value="">On Choice</option>
-                                                <option value="1">Lottery</option>  --}}
+                                               
                                             </select>  
                                         </div>
                                     </div> 
@@ -137,13 +161,13 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
-                                            <select class="select2" multiple name="project_unit" id="project_unit" required>
+                                            <select class="select2" multiple name="project_unit" id="project_unit_data" required>
                                                 <option data-display="Select a project unit *" value="">
                                                     Select a  Project unit
                                                 </option>
                                                 @isset($projectUnits)
                                                     @foreach ($projectUnits as $projectUnit)
-                                                        <option value="{{ $projectUnit->id }}" {{ old('project_unit', isset($cold_calling) ? $cold_calling->unit_id : null) == $projectUnit->id ? 'selected' : '' }}>
+                                                        <option value="{{ $projectUnit->id }}" {{ old('project_unit', isset($follow) ? $follow->unit_id : null) == $projectUnit->id ? 'selected' : '' }}>
                                                             {{ $projectUnit->name }}
                                                         </option>
                                                     @endforeach
@@ -155,21 +179,21 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="regular_amount" class="form-label"> Regular Amount</label>
-                                             <input value="453545457" type="number"  class="form-control" name="regular_amount" id="regular_amount" disabled> 
+                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($follow) ? $follow->regular_amount : old('regular_amount')}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="negotiation_amount" class="form-label"> Negotiation Amount</label>
-                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount"> 
+                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}"> 
                                         </div>
                                     </div> 
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark" placeholder="Enter Remark"></textarea>
+                                            <textarea class="form-control" id="remark" rows="3" name="remark" placeholder="Enter Remark">{{isset($follow) ? $follow->remark : old('remark')}}</textarea>
                                         </div>
                                     </div> 
                                 </div>
@@ -190,76 +214,12 @@
 
 @section('script')
     <script>
-        // $(document).ready(function() {
-        //     $("#project").on("change", function() {
-        //         var url = $("#url").val();
-        //         var formData = {
-        //             id: $(this).val(),
-        //         };
-        //         // get district
-        //         $.ajax({
-        //             type: "GET",
-        //             data: formData,
-        //             dataType: "json",
-        //             url: "{{ route('get-project-duration-type-name') }}",
-
-        //             success: function(data) {
-        //                 $("#unit").empty().append(
-        //                     $("<option>", {
-        //                         value: '',
-        //                         text: 'Select option',
-        //                     })
-        //                 );
-
-        //                 if (data.length) {
-        //                     $.each(data, function(i, unit) {
-        //                         $("#unit").append(
-        //                             $("<option>", {
-        //                                 value: unit.id,
-        //                                 text: unit,
-        //                             })
-        //                         );
-        //                         // $("#payment_duration").append(
-        //                         //     $("<option>", {
-        //                         //         value: duration.id,
-        //                         //         text: duration.payment_duration,
-        //                         //     })
-        //                         // );
-        //                         // $("#select_type").append(
-        //                         //     $("<option>", {
-        //                         //         value: type.id,
-        //                         //         text: type,
-        //                         //     })
-        //                         // );
-        //                         // $("#project_unit").append(
-        //                         //     $("<option>", {
-        //                         //         value: projectunitname.id,
-        //                         //         text: projectunitname.name,
-        //                         //     })
-        //                         // );
-        //                     });
-        //                 }
-
-        //                 $('#project').trigger('change');
-
-                        
-        //             },
-        //             error: function(data) {
-        //                 console.log('Error:', data);
-        //             },
-        //         });
-        //     });
-
-          
-        // });
-
         $(document).ready(function() {
             $("#project").on("change", function() {
                 var formData = {
                     id: $(this).val(),
                 };
 
-                // get district
                 $.ajax({
                     type: "GET",
                     data: formData,
@@ -283,12 +243,6 @@
                             $("<option>", {
                                 value: '',
                                 text: 'Select a type *',
-                            })
-                        );
-                        $("#project_unit").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select a Project Unit *',
                             })
                         );
 
@@ -325,7 +279,7 @@
                         }
                         if (data.project_unit.length) {
                             $.each(data.project_unit, function(i, project_unit) {
-                                $("#project_unit").append(
+                                $("#project_unit_data").append(
                                     $("<option>", {
                                         value: project_unit.id,
                                         text: project_unit.name,
@@ -334,12 +288,10 @@
                             });
                         }
 
-
-                        // Trigger change event after populating options
                         $('#unit').trigger('change');
                         $('#payment_duration').trigger('change');
                         $('#select_type').trigger('change');
-                        $('#project_unit').trigger('change');
+                        $('#project_unit_data').trigger('change');
                     },
                     error: function(data) {
                         console.log('Error:', data);

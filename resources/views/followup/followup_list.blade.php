@@ -64,27 +64,33 @@
                                         <th>Freelancer</th> 
                                     </tr>
                                 </thead>
-                                <tbody> 
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                    <a class="dropdown-item" href="negotiation_entry.html">Negotiation</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>1</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td><a href="customer_profile.html">Md Enamul Haque</a></td>
-                                        <td>01796351081</td>
-                                        <td>2/1, Mohammadpur, Dhaka-1230</td>
-                                        <td>$3555426</td> 
-                                        <td>Musafir Plaza</td>
-                                        <td>A-5</td> 
-                                        <td>Md Jamil [FL154]</td>  
-                                    </tr> 
+                                <tbody>
+                                    @foreach ($followUps as  $followUp)
+                                        <tr>
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
+                                                        <a class="dropdown-item" href="{{route('followup.edit',$followUp->id)}}">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followUp.delete',$followUp->id) }}')">Delete</a> 
+                                                        <a class="dropdown-item" href="{{route('followup-analysis.create',['customer'=>$followUp->customer->id])}}">Follow Up Analysis</a>
+                                                    </div>
+                                                </div> 
+                                            </td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration}}</td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}">{{ $followUp->created_at }}</td>
+                                           
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}">{{ @$followUp->customer->user->name }}</td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}"> {{ @$followUp->customer->user->phone }}</td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}"> {{ @$followUp->customer->user->userAddress->address }}</td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}"> {{ @$followUp->negotiation_amount }}</td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}"> {{ @$followUp->project->name }}</td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}">  2 #dummmy </td>
+                                            <td class="{{ $followUp->status == 0 ? 'text-danger' : '' }}">  {{ @$followUp->employee->user->name }} </td>
+                                           
+                                        </tr> 
+                                    @endforeach
 
                                 </tbody>
                             </table>

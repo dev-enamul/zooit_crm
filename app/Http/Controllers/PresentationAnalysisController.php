@@ -114,8 +114,6 @@ class PresentationAnalysisController extends Controller
             $visit->customer_id = $request->customer_id;
             $visit->employee_id = $request->employee;
             $visit->remark = $request->remark;
-            $visit->created_by = auth()->id();
-            $visit->created_at = now();
             $visit->status = 0;
             $visit->created_at = now();
             $visit->created_by = auth()->id();
