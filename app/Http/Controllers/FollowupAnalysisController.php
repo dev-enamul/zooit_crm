@@ -8,6 +8,7 @@ use App\Models\FollowUp;
 use App\Models\FollowUpAnalysis;
 use App\Models\Project;
 use App\Models\ProjectUnit;
+use App\Models\Unit;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -57,7 +58,7 @@ class FollowupAnalysisController extends Controller
         $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
-
+        $units          = Unit::all();
         $selected_data = 
         [
             'employee' => Auth::user()->id,
@@ -66,7 +67,7 @@ class FollowupAnalysisController extends Controller
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
         }
-        return view('followup_analysis.followup_analysis_save',compact('selected_data','priorities','projects','projectUnits','customers','employees'));
+        return view('followup_analysis.followup_analysis_save',compact('units','selected_data','priorities','projects','projectUnits','customers','employees'));
     }
 
     public function save(Request $request, $id = null)

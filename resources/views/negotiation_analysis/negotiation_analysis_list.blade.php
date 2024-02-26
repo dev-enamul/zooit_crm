@@ -75,7 +75,7 @@
                                                     <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
                                                     <a class="dropdown-item" href="{{route('negotiation-analysis.edit',$negotiation->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('negotiation.delete',$negotiation->id) }}')">Delete</a> 
-                                                    <a class="dropdown-item" href="{{route('rejection.create',['customer'=>$negotiation->customer->id])}}">Rejection Create</a>
+                                                    <a class="dropdown-item" href="{{route('salse.create',['customer'=>$negotiation->customer->id])}}">Sales Create</a>
                                                 </div>
                                             </div> 
                                         </td>
