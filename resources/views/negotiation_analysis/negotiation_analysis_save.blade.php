@@ -1,19 +1,20 @@
 @extends('layouts.dashboard')
-@section('title','Follow Up Entry')
+@section('title','Negotiation Analysis Create')
 
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">  
+        <div class="container-fluid"> 
+            <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Follow Up Entry</h4>
+                        <h4 class="mb-sm-0">Negotiation Analysis Entry</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Follow Up Entry</li>
+                                <li class="breadcrumb-item active">Negotiation Analysis Entry</li>
                             </ol>
                         </div>
 
@@ -26,14 +27,14 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            @if(isset($visit))
-                                <form action="{{route('follow-up.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                                <input type="hidden" name="id" value="{{$visit->id}}">
+                            @if(isset($negotiation))
+                                <form action="{{route('negotiation-analysis.save',$negotiation->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <input type="hidden" name="id" value="{{$negotiation->id}}">
                             @else 
-                                <form action="{{route('follow-up.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('negotiation-analysis.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
-                                <div class="row"> 
+                                <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer</label>
@@ -43,7 +44,7 @@
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($follow) ? $follow->customer_id : null) == $customer->id ? 'selected' : '' }}>
+                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($negotiation) ? $negotiation->customer_id : null) == $customer->id ? 'selected' : '' }}>
                                                             {{ @$customer->customer->user->name }} ({{ $customer->customer->user->user_id}})
                                                         </option>
                                                     @endforeach
@@ -54,7 +55,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
@@ -64,7 +64,7 @@
                                                 </option>
                                                 @isset($employees)
                                                     @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($follow) ? $follow->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
+                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($negotiation) ? $negotiation->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
                                                             {{ $employee->name }} ({{ $employee->user_id}})
                                                         </option>
                                                     @endforeach
@@ -82,7 +82,7 @@
                                             <select class="select2" name="priority" id="priority" required>
                                                 @isset($priorities)
                                                     @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('priority', isset($follow) ? $follow->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('priority', isset($negotiation) ? $negotiation->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -104,7 +104,7 @@
                                             </option>
                                             @isset($projects)
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($cold_calling) ? $cold_calling->project_id : null) == $project->id ? 'selected' : '' }}>
+                                                    <option value="{{ $project->id }}" {{ old('project', isset($negotiation) ? $negotiation->project_id : null) == $project->id ? 'selected' : '' }}>
                                                         {{ $project->name }}
                                                     </option>
                                                 @endforeach
@@ -126,7 +126,7 @@
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($cold_calling) ? $cold_calling->unit_id : null) == $unit->id ? 'selected' : '' }}>
+                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($negotiation) ? $negotiation->unit_id : null) == $unit->id ? 'selected' : '' }}>
                                                         {{ $unit->title }}
                                                     </option>
                                                 @endforeach
@@ -167,7 +167,7 @@
                                                 </option>
                                                 @isset($projectUnits)
                                                     @foreach ($projectUnits as $projectUnit)
-                                                        <option value="{{ $projectUnit->id }}" {{ old('project_unit', isset($follow) ? $follow->unit_id : null) == $projectUnit->id ? 'selected' : '' }}>
+                                                        <option value="{{ $projectUnit->id }}" {{ old('project_unit', isset($negotiation) ? $negotiation->unit_id : null) == $projectUnit->id ? 'selected' : '' }}>
                                                             {{ $projectUnit->name }}
                                                         </option>
                                                     @endforeach
@@ -179,23 +179,38 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="regular_amount" class="form-label"> Regular Amount</label>
-                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($follow) ? $follow->regular_amount : old('regular_amount')}}"> 
+                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($negotiation) ? $negotiation->regular_amount : old('regular_amount')}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="negotiation_amount" class="form-label"> Negotiation Amount</label>
-                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}"> 
+                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($negotiation) ? $negotiation->negotiation_amount : old('negotiation_amount')}}"> 
                                         </div>
-                                    </div> 
+                                    </div>  
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark" placeholder="Enter Remark">{{isset($follow) ? $follow->remark : old('remark')}}</textarea>
+                                            <label for="customer_emotion" class="form-label"> Customer Emotion's</label>
+                                             <input type="text" placeholder="Customer Emotion's" class="form-control" name="customer_emotion" id="customer_emotion"  value="{{isset($negotiation) ? $negotiation->customer_emotion : old('customer_emotion')}}"> 
                                         </div>
-                                    </div> 
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="customer_preferance" class="form-label"> Customer Preference</label>
+                                             <input type="text" placeholder="Customer Preference" class="form-control" name="customer_preferance" id="customer_preferance"  value="{{isset($negotiation) ? $negotiation->customer_preferance : old('customer_preferance')}}"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="plan_b" class="form-label"> Have a Plan "B"</label>
+                                             <input type="text" placeholder="Customer Plan B" class="form-control" name="plan_b" id="plan_b"  value="{{isset($negotiation) ? $negotiation->plan_b : old('plan_b')}}"> 
+                                        </div>
+                                    </div>
+
                                 </div>
                                   
                                 <div class="text-end ">
@@ -204,9 +219,12 @@
                             </form>
                         </div>
                     </div> 
-                </div>  
-            </div> 
-        </div>  
+                </div>
+                <!-- end col -->
+
+            </div>
+            <!-- end row -->
+        </div> <!-- container-fluid -->
     </div> 
     @include('includes.footer') 
 </div>

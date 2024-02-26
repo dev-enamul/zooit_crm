@@ -1,19 +1,20 @@
 @extends('layouts.dashboard')
-@section('title','Follow Up Entry')
+@section('title','Follow Up Analysis Entry')
 
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">  
+        <div class="container-fluid"> 
+            <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Follow Up Entry</h4>
+                        <h4 class="mb-sm-0">Follow Up Analysis Entry</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Follow Up Entry</li>
+                                <li class="breadcrumb-item active">Follow Up Analysis Entry</li>
                             </ol>
                         </div>
 
@@ -27,13 +28,12 @@
                     <div class="card"> 
                         <div class="card-body">
                             @if(isset($visit))
-                                <form action="{{route('follow-up.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('follow-up-analysis.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 <input type="hidden" name="id" value="{{$visit->id}}">
                             @else 
-                                <form action="{{route('follow-up.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('follow-up-analysis.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
-                                @csrf
-                                <div class="row"> 
+                                <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer</label>
@@ -54,7 +54,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
@@ -94,8 +94,6 @@
                                         </div>
                                     </div>
 
-
-
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Project<span class="text-danger">*</span></label>
                                         <select class="form-select reset-data" name="project" id="project" required>
@@ -116,9 +114,9 @@
                                                 {{ $errors->first('project') }}
                                             </span>
                                         @endif
-                                    </div> 
+                                    </div>  
 
-                                    <div class="col-md-6 mb-3">
+                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Unit Type <span class="text-danger">*</span></label>
                                         <select class="form-select reset-data" name="unit" id="unit" required>
                                             <option data-display="Select a unit *" value="">
@@ -158,7 +156,7 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-12">
+                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
                                             <select class="select2" multiple name="project_unit" id="project_unit_data" required>
@@ -174,7 +172,7 @@
                                                 @endisset
                                             </select>  
                                         </div>
-                                    </div>  
+                                    </div>   
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -190,12 +188,47 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark" placeholder="Enter Remark">{{isset($follow) ? $follow->remark : old('remark')}}</textarea>
+                                            <label for="customer_expectation" class="form-label"> Customer's Expectation</label>
+                                             <input type="text" placeholder="Customer Expectation" class="form-control" name="customer_expectation" id="customer_expectation" value="{{isset($follow) ? $follow->customer_expectation : old('customer_expectation')}}"> 
                                         </div>
-                                    </div> 
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="customer_need" class="form-label"> Need</label>
+                                             <input type="text" placeholder="Customer Need" class="form-control" name="customer_need" id="customer_need" value="{{isset($follow) ? $follow->customer_need : old('customer_need')}}"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="customer_ability" class="form-label"> Ability</label>
+                                             <input type="text" placeholder="Customer Ability" class="form-control" name="customer_ability" id="customer_ability"  value="{{isset($follow) ? $follow->customer_ability : old('customer_ability')}}"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="influencer_opinion" class="form-label"> Influencer Opinion</label>
+                                             <input type="text" placeholder="Influncer Opinion" class="form-control" name="influencer_opinion" id="influencer_opinion" value="{{isset($follow) ? $follow->influencer_opinion : old('influencer_opinion')}}"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="descision_maker" class="form-label"> Decision Maker</label>
+                                             <input type="text" placeholder="Enter Decision Maker" class="form-control" name="descision_maker" id="descision_maker" value="{{isset($follow) ? $follow->descision_maker : old('descision_maker')}}"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="decision_maker_opinion" class="form-label"> Decision Maker Opinion</label>
+                                             <input type="text" placeholder="Decision Maker Opinion" class="form-control" name="decision_maker_opinion" id="decision_maker_opinion" value="{{isset($follow) ? $follow->decision_maker_opinion : old('decision_maker_opinion')}}"> 
+                                        </div>
+                                    </div>
                                 </div>
                                   
                                 <div class="text-end ">
@@ -204,101 +237,28 @@
                             </form>
                         </div>
                     </div> 
-                </div>  
-            </div> 
-        </div>  
-    </div> 
-    @include('includes.footer') 
+                </div>
+                <!-- end col -->
+
+            </div>
+            <!-- end row -->
+        </div> <!-- container-fluid -->
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <script>document.write(new Date().getFullYear())</script> © Zoom IT.
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end d-none d-sm-block">
+                        Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="http://Zoom IT.in/" target="_blank" class="text-muted">Zoom IT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </div>
-@endsection
-
-@section('script')
-    <script>
-        $(document).ready(function() {
-            $("#project").on("change", function() {
-                var formData = {
-                    id: $(this).val(),
-                };
-
-                $.ajax({
-                    type: "GET",
-                    data: formData,
-                    dataType: "json",
-                    url: "{{ route('get-project-duration-type-name') }}",
-
-                    success: function(data) {
-                        $("#unit").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select a unit *',
-                            })
-                        );
-                        $("#payment_duration").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select a payment duration *',
-                            })
-                        );
-                        $("#select_type").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select a type *',
-                            })
-                        );
-
-                        if (data.unit_type.length) {
-                            $.each(data.unit_type, function(i, unit) {
-                                $("#unit").append(
-                                    $("<option>", {
-                                        value: unit.id,
-                                        text: unit.title,
-                                    })
-                                );
-                            });
-                        }
-                        if (data.payment_duration.length) {
-                            $.each(data.payment_duration, function(i, payment_duration) {
-                                $("#payment_duration").append(
-                                    $("<option>", {
-                                        value: payment_duration.id,
-                                        text: payment_duration.payment_duration + ' months',
-                                    })
-                                );
-                            });
-                        }
-                        if (data.payment_duration.length) {
-                            $.each(data.payment_duration, function(i, payment_duration) {
-                                var optionText = payment_duration.payment_duration + ' months - On Choice Price: ' + payment_duration.on_choice_price + ' - Lottery Price: ' + payment_duration.lottery_price;
-                                $("#select_type").append(
-                                    $("<option>", {
-                                        value: payment_duration.id,
-                                        text: optionText,
-                                    })
-                                );
-                            });
-                        }
-                        if (data.project_unit.length) {
-                            $.each(data.project_unit, function(i, project_unit) {
-                                $("#project_unit_data").append(
-                                    $("<option>", {
-                                        value: project_unit.id,
-                                        text: project_unit.name,
-                                    })
-                                );
-                            });
-                        }
-
-                        $('#unit').trigger('change');
-                        $('#payment_duration').trigger('change');
-                        $('#select_type').trigger('change');
-                        $('#project_unit_data').trigger('change');
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
-                    },
-                });
-            });
-        });
-
-    </script>
 @endsection

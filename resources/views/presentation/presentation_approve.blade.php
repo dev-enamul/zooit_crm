@@ -29,23 +29,15 @@
                             @csrf
                             <div class="card-body">
                                 <div class="d-flex justify-content-between"> 
-                                    <div class="">
-                                        <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                            <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                                <span><i class="fas fa-file-excel"></i> Excel</span>
-                                            </button>
+                                    <div class="mb-1">
+                                        <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
+                                        <label for="selectAll">Check All</label>
+                                    </div> 
 
-                                            <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                                <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                            </button> 
-                                        </div> 
-                                    </div>
-                                    <div class="">
-                                        <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                                <span><i class="fas fa-filter"></i> Filter</span>
-                                            </button> 
-                                        </div>
+                                    <div class="mb-1">
+                                        <button class="btn btn-primary" type="submit">
+                                            Approve
+                                        </button>
                                     </div>
                                 </div>
                             

@@ -188,13 +188,15 @@
                             <li><a href="{{route('followup.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Follow Up</a></li> 
                         @endcan
                         <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
-                        
+                        <li><a href="{{route('followUp.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Approve</a></li> 
+
                         @can('follow-up-analysis-manage')
                             <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis Form</a></li> 
                         @endcan
                        
                         @can('follow-up-analysis')
                             <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
+                            <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Analysis Approve</a></li> 
                         @endcan
                     </ul>
                 </li>
@@ -211,11 +213,13 @@
                             <li><a href="{{route('negotiation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Negotiations</a></li> 
                         @endcan
                             <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
+                            <li><a href="{{route('negotiation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Approve</a></li> 
                         @can('negotiation-analysis-manage')
                             <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
                         @endcan
                         @can('negotiation-analysis')
                             <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analysis List</a></li>  
+                            <li><a href="{{route('negotiation-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Analysis Approve</a></li> 
                         @endcan
                     </ul>
                 </li> 
@@ -232,6 +236,7 @@
                             <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
                         @endcan
                         <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
+                        <li><a href="{{route('rejection.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Rejection Approve</a></li> 
                     </ul>
                 </li>  
                 @endcan

@@ -69,9 +69,9 @@
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
                                                     <a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#view_visitor">View Details</a>
-                                                    <a class="dropdown-item" href="follow_up_create.html">Follow Up</a>
                                                     <a class="dropdown-item" href="{{route('presentation_analysis.edit',$visit->id)}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('visit.delete',$visit->id) }}')">Delete</a> 
+                                                    <a class="dropdown-item" href="follow_up_create.html">Follow Up</a>
                                                 </div>
                                             </div> 
                                         </td> 
