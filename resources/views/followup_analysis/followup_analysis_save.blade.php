@@ -32,20 +32,21 @@
                                 <input type="hidden" name="id" value="{{$visit->id}}">
                             @else 
                                 <form action="{{route('follow-up-analysis.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                            @endif 
+                            @endif  
+                            @csrf
                                 <div class="row">  
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer</label>
-                                            <select class="form-select" name="customer" id="customer" required>
+                                            <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>
                                                 @isset($customers)
-                                                    @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($follow) ? $follow->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->customer->user->name }} ({{ $customer->customer->user->user_id}})
-                                                        </option>
+                                                    @foreach ($customers as $cstm)
+                                                    <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->customer_id ? 'selected' : '' }}>
+                                                        {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
+                                                    </option>
                                                     @endforeach
                                                 @endisset
                                             </select>
@@ -109,68 +110,40 @@
                                             @endisset
                                         </select>
                                         
-                                        @if ($errors->has('project'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('project') }}
-                                            </span>
-                                        @endif
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
                                     </div>  
 
-                                     <div class="col-md-6 mb-3">
-                                        <label for="unit" class="form-label">Unit Type <span class="text-danger">*</span></label>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
                                         <select class="form-select reset-data" name="unit" id="unit" required>
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($cold_calling) ? $cold_calling->unit_id : null) == $unit->id ? 'selected' : '' }}>
+                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($lead) ? $lead->unit_id : null) == $unit->id ? 'selected' : '' }}>
                                                         {{ $unit->title }}
                                                     </option>
                                                 @endforeach
                                             @endisset
                                         </select>
                                         
-                                        @if ($errors->has('unit'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('unit') }}
-                                            </span>
-                                        @endif
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="payment_duration" class="form-label">Payment Duration <span class="text-danger">*</span></label>
-                                            <select class="select2" name="payment_duration" id="payment_duration" required>
-                                                
-                                            </select>  
+                                        <div class="invalid-feedback">
+                                            This field is required.
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="select_type" class="form-label">Select Type <span class="text-danger">*</span></label>
-                                            <select class="select2" name="select_type" id="select_type" required>
-                                               
-                                            </select>  
-                                        </div>
-                                    </div> 
+                                    </div>  
 
                                      <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
-                                            <select class="select2" multiple name="project_unit" id="project_unit_data" required>
-                                                <option data-display="Select a project unit *" value="">
-                                                    Select a  Project unit
-                                                </option>
-                                                @isset($projectUnits)
-                                                    @foreach ($projectUnits as $projectUnit)
-                                                        <option value="{{ $projectUnit->id }}" {{ old('project_unit', isset($follow) ? $follow->unit_id : null) == $projectUnit->id ? 'selected' : '' }}>
-                                                            {{ $projectUnit->name }}
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
+                                            <select class="select2" multiple name="project_unit[]" id="project_unit_data" required>
+                                               
                                             </select>  
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div>   
 
@@ -261,4 +234,54 @@
     </footer>
 
 </div>
+@endsection 
+
+@section('script')
+<script>
+    $(document).ready(function() {
+        $("#unit").on("change", function() {
+            var formData = {
+                project_id: $("#project").val(),
+                unit_id: $("#unit").val(),
+            };
+
+            $.ajax({
+                type: "GET",
+                data: formData,
+                dataType: "json",
+                url: "{{ route('get-project-duration-type-name') }}",
+
+                success: function(data) {
+                    $("#project_unit_data").empty(); 
+
+                    if (data.project_unit.length) {
+                        $.each(data.project_unit, function(i, project_unit) {
+                            $("#project_unit_data").append(
+                                $("<option>", {
+                                    value: project_unit.id,
+                                    text: project_unit.name+" #Floor:"+project_unit.floor+" #Type:"+project_unit.unit_category.title+" ("+project_unit.highest_price+"Tk)",
+                                    price: project_unit.highest_price,
+                                })
+                            );
+                        });
+                    } 
+                    $('#project_unit_data').trigger('change');
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                },
+            });
+        });
+    });
+
+    var totalSelectedPrice = 0;
+
+$('#project_unit_data').on('change', function() {
+    totalSelectedPrice = 0;   
+    $(this).find('option:selected').each(function() {
+        totalSelectedPrice += parseFloat($(this).attr('price') || 0); 
+    });
+    $('#regular_amount').val(totalSelectedPrice);
+}); 
+</script>
 @endsection

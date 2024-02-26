@@ -10,7 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Follow Ups</h4> 
+                        <h4 class="mb-sm-0">Follow Up List</h4> 
+                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="legal">
+                        <input type="hidden" id="fontSize" value="8">
                         <div class="page-title-right">
                             <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                 <span><i class="fas fa-filter"></i> Filter</span>
@@ -28,7 +32,7 @@
                         <div class="card-body">
  
 
-                            <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -52,10 +56,21 @@
                                                         <img class="rounded avatar-2xs p-0" src="{{@$followUp->customer->user->image()}}">
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
-                                                        <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                        <a class="dropdown-item" href="{{route('followup.edit',$followUp->id)}}">Edit</a>
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followUp.delete',$followUp->id) }}')">Delete</a> 
-                                                        <a class="dropdown-item" href="{{route('followup-analysis.create',['customer'=>$followUp->customer->id])}}">Follow Up Analysis</a>
+                                                        <a class="dropdown-item" href="{{route('customer.profile',encrypt($followUp->customer_id))}}">Customer Profile</a> 
+                                                        @if ($followUp->approve_by==null) 
+                                                            @can('follow-up-manage')
+                                                                <a class="dropdown-item" href="{{route('followup.edit',$followUp->id)}}">Edit</a>
+                                                            @endcan 
+                                                        @endif
+                                                        @can('follow-up-delete')
+                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followUp.delete',$followUp->id) }}')">Delete</a> 
+                                                        @endcan
+                                                        
+                                                        @if ($followUp->approve_by!=null) 
+                                                            @can('follow-up-analysis-manage')
+                                                            <a class="dropdown-item" href="{{route('followup-analysis.create',['customer'=>$followUp->customer->id])}}">Follow Up Analysis</a>
+                                                            @endcan 
+                                                        @endif 
                                                     </div>
                                                 </div> 
                                             </td>
@@ -65,7 +80,7 @@
                                             <td class="">{{ @$followUp->customer->user->name }}</td>
                                             <td class=""> {{ @$followUp->customer->user->phone }}</td>
                                             <td class=""> {{ @$followUp->customer->user->userAddress->address }}</td>
-                                            <td class=""> {{ @$followUp->negotiation_amount }}</td>
+                                            <td class=""> {{ get_price(@$followUp->negotiation_amount) }}</td>
                                             <td class=""> {{ @$followUp->project->name }}</td>
                                             <td class="">   {{count(json_decode($followUp->project_units))}} </td>
                                             <td class=""> {{ @$followUp->customer->reference->name }} [{{ @$followUp->customer->reference->user_id }}] </td>
@@ -248,6 +263,7 @@
 @endsection 
 
 @section('script')
+    @include('includes.data_table')
     <script>
         getDateRange('join_date');
         getDateRange('last_cold_calling');

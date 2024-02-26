@@ -62,16 +62,16 @@
                                             <td class="text-center">
                                                 <input class="form-check-input" type="checkbox" name="followUp_id[]" value="{{$followUp->id}}" id="flexCheckChecked" >
                                             </td>
-                                            <td>{{ $loop->iteration}}</td>
-                                            <td>{{ $followUp->created_at }}</td>
-                                        
-                                            <td>{{ @$followUp->customer->user->name }}</td>
-                                            <td> {{ @$followUp->customer->user->phone }}</td>
-                                            <td> {{ @$followUp->customer->user->userAddress->address }}</td>
-                                            <td> {{ @$followUp->negotiation_amount }}</td>
-                                            <td> {{ @$followUp->project->name }}</td>
-                                            <td>  2 #dummmy </td>
-                                            <td>  {{ @$followUp->employee->user->name }} </td>
+                                            <td class="">{{ $loop->iteration}}</td>
+                                            <td class="">{{ get_date($followUp->created_at) }}</td>
+                                           
+                                            <td class="">{{ @$followUp->customer->user->name }}</td>
+                                            <td class=""> {{ @$followUp->customer->user->phone }}</td>
+                                            <td class=""> {{ @$followUp->customer->user->userAddress->address }}</td>
+                                            <td class=""> {{ @$followUp->negotiation_amount }}</td>
+                                            <td class=""> {{ @$followUp->project->name }}</td>
+                                            <td class="">   {{count(json_decode($followUp->project_units))}} </td>
+                                            <td class=""> {{ @$followUp->customer->reference->name }} [{{ @$followUp->customer->reference->user_id }}] </td>
                                            
                                         </tr>
                                         @endforeach 

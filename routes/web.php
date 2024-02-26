@@ -248,7 +248,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('follow-up-analysis-save/{id?}', [FollowupAnalysisController::class, 'save'])->name('follow-up-analysis.save');
         Route::any('follow-up-analysis-delete/{id}', [FollowupAnalysisController::class, "followUpDelete"])->name('followUp-analysis.delete');
         Route::get('follow-up-analysis-approve', [FollowupAnalysisController::class, 'followUpApprove'])->name('followUp-analysis.approve');
-        Route::post('follow-up-analysis-approve-save', [FollowupAnalysisController::class, 'followUpApproveSave'])->name('followUp-analysis.approve.save');
+        Route::post('follow-up-analysis-approve-save', [FollowupAnalysisController::class, 'followUpsApproveSave'])->name('followUp-analysis.approve.save');
         
         // Negotation
         Route::resource('negotiation', NegotiationController::class);

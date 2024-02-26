@@ -11,11 +11,14 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Negotiations</h4> 
+                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="legal">
+                        <input type="hidden" id="fontSize" value="8"> 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Negotiation List</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
 
                     </div>
@@ -26,30 +29,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -66,28 +47,41 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($negotiations as  $negotiation)
-                                        <tr>
+                                        <tr class="{{$negotiation->approve_by==null?"table-warning":""}}">
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
-                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{@$negotiation->customer->user->image()}}">
+                                                    </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
-                                                        <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                        <a class="dropdown-item" href="{{route('negotiation.edit',$negotiation->id)}}">Edit</a>
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('negotiation.delete',$negotiation->id) }}')">Delete</a> 
-                                                        <a class="dropdown-item" href="{{route('negotiation-analysis.create',['customer'=>$negotiation->customer->id])}}">Negotiation Analysis</a>
+                                                        <a class="dropdown-item" href="{{route('customer.profile',encrypt($negotiation->customer_id))}}">Customer Profile</a> 
+                                                        @if ($negotiation->approve_by==null)
+                                                            @can('negotiation-manage')
+                                                                <a class="dropdown-item" href="{{route('negotiation.edit',$negotiation->id)}}">Edit</a>
+                                                            @endcan
+                                                        @endif 
+                                                        
+                                                        @can('negotiation-delete')
+                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('negotiation.delete',$negotiation->id) }}')">Delete</a> 
+                                                        @endcan
+                                                        
+                                                        @if ($negotiation->approve_by!=null)
+                                                            @can('negotiation-analysis-manage')
+                                                                <a class="dropdown-item" href="{{route('negotiation-analysis.create',['customer'=>$negotiation->customer->id])}}">Negotiation Analysis</a>
+                                                            @endcan 
+                                                        @endif 
                                                     </div>
                                                 </div> 
                                             </td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration}}</td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">{{ $negotiation->created_at }}</td>
-                                           
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">{{ @$negotiation->customer->user->name }}</td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->customer->user->phone }}</td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->customer->user->userAddress->address }}</td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->negotiation_amount }}</td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}"> {{ @$negotiation->project->name }}</td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">  2 #dummmy </td>
-                                            <td class="{{ $negotiation->status == 0 ? 'text-danger' : '' }}">  {{ @$negotiation->employee->user->name }} </td>
+                                            <td class="">{{ $loop->iteration}}</td>
+                                            <td class="">{{ get_date($negotiation->created_at) }}</td> 
+                                            <td class="">{{ @$negotiation->customer->user->name }}</td>
+                                            <td class=""> {{ @$negotiation->customer->user->phone }}</td>
+                                            <td class=""> {{ @$negotiation->customer->user->userAddress->address }}</td>
+                                            <td class=""> {{ get_price(@$negotiation->negotiation_amount) }}</td>
+                                            <td class=""> {{ @$negotiation->project->name }}</td>
+                                            <td class="">{{count(json_decode($negotiation->project_units))}} </td>
+                                            <td class="">{{ @$negotiation->customer->reference->name }} [{{ @$negotiation->customer->reference->user_id }}] </td>
                                            
                                         </tr> 
                                     @endforeach
@@ -267,6 +261,7 @@
 @endsection 
 
 @section('script')
+@include('includes.data_table')
     <script>
         getDateRange('join_date');
         getDateRange('last_cold_calling');

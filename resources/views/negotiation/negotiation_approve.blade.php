@@ -64,15 +64,14 @@
                                                 <input class="form-check-input" type="checkbox" name="negotiation_id[]" value="{{$negotiation->id}}" id="flexCheckChecked" >
                                             </td>
                                             <td>{{ $loop->iteration}}</td>
-                                            <td>{{ $negotiation->created_at }}</td>
-                                        
-                                            <td>{{ @$negotiation->customer->user->name }}</td>
-                                            <td> {{ @$negotiation->customer->user->phone }}</td>
-                                            <td> {{ @$negotiation->customer->user->userAddress->address }}</td>
-                                            <td> {{ @$negotiation->negotiation_amount }}</td>
-                                            <td> {{ @$negotiation->project->name }}</td>
-                                            <td>  2 #dummmy </td>
-                                            <td>  {{ @$negotiation->employee->user->name }} </td>
+                                            <td class="">{{ get_date($negotiation->created_at) }}</td> 
+                                            <td class="">{{ @$negotiation->customer->user->name }}</td>
+                                            <td class=""> {{ @$negotiation->customer->user->phone }}</td>
+                                            <td class=""> {{ @$negotiation->customer->user->userAddress->address }}</td>
+                                            <td class=""> {{ get_price(@$negotiation->negotiation_amount) }}</td>
+                                            <td class=""> {{ @$negotiation->project->name }}</td>
+                                            <td class="">{{count(json_decode($negotiation->project_units))}} </td>
+                                            <td class="">{{ @$negotiation->customer->reference->name }} [{{ @$negotiation->customer->reference->user_id }}] </td>
                                            
                                         </tr>
                                         @endforeach 
@@ -93,5 +92,11 @@
 @endsection 
 
 @section('script')
-
+    <script>
+        $(document).ready(function () { 
+                $('#selectAll').click(function () {
+                    $(':checkbox').prop('checked', this.checked);
+                });
+            });
+    </script>
 @endsection

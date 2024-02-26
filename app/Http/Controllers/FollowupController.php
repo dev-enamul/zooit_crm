@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Priority;
+use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\FollowUp;
 use App\Models\Project;
@@ -62,6 +63,7 @@ class FollowupController extends Controller
         $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
+        $units          = Unit::select('id','title')->get();
 
         $selected_data = 
         [
@@ -72,21 +74,26 @@ class FollowupController extends Controller
             $selected_data['customer'] = $request->customer;
         }
  
-        return view('followup.followup_save',compact('selected_data','priorities','projects','projectUnits','customers','employees'));
+        return view('followup.followup_save',compact('selected_data','priorities','projects','projectUnits','customers','employees','units'));
     }
     
     public function projectDurationTypeName(Request $request)
     {
         try {
-            $project = Project::find($request->id); 
+            $project = Project::find($request->project_id); 
             if (!$project) {
                 throw new Exception("Project not found");
             }  
             $project_unit = ProjectUnit::where('project_id', $project->id)->with('unitCategory')
                 ->join('unit_prices', 'project_units.id', '=', 'unit_prices.project_unit_id')
                 ->select('project_units.*', DB::raw('GREATEST(unit_prices.on_choice_price, unit_prices.lottery_price) AS highest_price'))
-                ->orderBy('highest_price', 'desc')
-                ->get();
+                ->orderBy('highest_price', 'desc');
+             
+                if(isset($request->unit_id) && !empty($request->unit_id)){
+                    $project_unit = $project_unit->where('project_units.unit_id',$request->unit_id);
+                }
+
+                $project_unit = $project_unit->get();
             $response_data = [ 
                 'project_unit' => $project_unit, 
             ]; 
@@ -102,6 +109,7 @@ class FollowupController extends Controller
             'customer'          => 'required',
             'employee'          => 'required',
             'priority'          => 'required',
+            'unit'              => 'required',
             'project'           => 'required',
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'required',
@@ -142,6 +150,11 @@ class FollowupController extends Controller
             $follow->regular_amount = $request->input('regular_amount');
             $follow->negotiation_amount = $request->input('negotiation_amount');
             $follow->remark = $request->remark;
+
+            $approve_setting = ApproveSetting::where('name','follow_up')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $follow->approve_by = auth()->user()->id;
+            }
 
             $follow->created_by = auth()->id();
             $follow->created_at = now();
@@ -200,7 +213,7 @@ class FollowupController extends Controller
         return view('followup.followup_approve', compact('followUps'));
     }
 
-    public function followUpsApproveSave(Request $request) {
+    public function followUpApproveSave(Request $request) {
         if($request->has('followUp_id') && $request->followUp_id !== '' & $request->followUp_id !== null) {
             DB::beginTransaction();
             try {
@@ -210,14 +223,14 @@ class FollowupController extends Controller
                     $lead->save();
                 }
                 DB::commit();
-                return redirect()->route('followUp.approve')->with('success', 'Status Updated Successfully');
+                return redirect()->route('followup.index')->with('success', 'Status Updated Successfully');
             } catch (Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
             
         } else {
-            return redirect()->route('followUp.approve')->with('error', 'Something went wrong!');
+            return redirect()->back()->with('error', 'Please Select At Least One Follow Up');
         }
     }
 }

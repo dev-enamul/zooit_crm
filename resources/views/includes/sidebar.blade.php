@@ -207,7 +207,10 @@
                             <li><a href="{{route('followup.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Follow Up</a></li> 
                         @endcan
                         <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
-                        <li><a href="{{route('followUp.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Approve</a></li> 
+                        
+                        @if (@$approve_setting['follow_up']==1)
+                            <li><a href="{{route('followUp.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Approve</a></li> 
+                        @endif 
 
                         @can('follow-up-analysis-manage')
                             <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis Form</a></li> 
@@ -215,7 +218,9 @@
                        
                         @can('follow-up-analysis')
                             <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
-                            <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Analysis Approve</a></li> 
+                            @if (@$approve_setting['follow_up_analysis']==1)
+                                <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Analysis Approve</a></li> 
+                            @endif
                         @endcan
                     </ul>
                 </li>
@@ -232,7 +237,10 @@
                             <li><a href="{{route('negotiation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Negotiations</a></li> 
                         @endcan
                             <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
-                            <li><a href="{{route('negotiation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Approve</a></li> 
+                            
+                            @if (@$approve_setting['negotiation']==1)
+                                <li><a href="{{route('negotiation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Approve</a></li> 
+                            @endif
                         @can('negotiation-analysis-manage')
                             <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
                         @endcan

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Priority;
+use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\FollowUp;
 use App\Models\FollowUpAnalysis;
 use App\Models\Project;
 use App\Models\ProjectUnit;
+use App\Models\Unit;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -57,6 +59,7 @@ class FollowupAnalysisController extends Controller
         $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
+        $units          = Unit::select('id','title')->get();
 
         $selected_data = 
         [
@@ -65,8 +68,8 @@ class FollowupAnalysisController extends Controller
         ];
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
-        }
-        return view('followup_analysis.followup_analysis_save',compact('selected_data','priorities','projects','projectUnits','customers','employees'));
+        } 
+        return view('followup_analysis.followup_analysis_save',compact('selected_data','priorities','projects','projectUnits','customers','employees','units'));
     }
 
     public function save(Request $request, $id = null)
@@ -75,9 +78,7 @@ class FollowupAnalysisController extends Controller
             'customer'          => 'required',
             'priority'          => 'required',
             'project'           => 'required',
-            'unit'              => 'required',
-            'payment_duration'  => 'required',
-            'select_type'       => 'required',
+            'unit'              => 'required', 
             'employee'          => 'required',
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'nullable',
@@ -99,9 +100,7 @@ class FollowupAnalysisController extends Controller
             $follow->employee_id = $request->employee;
             $follow->priority = $request->priority;
             $follow->project_id = $request->input('project');
-            $follow->unit_id = $request->input('unit');
-            $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
+            $follow->unit_id = $request->input('unit'); 
             $follow->project_units = json_encode($request->input('project_unit'));
             $follow->regular_amount = $request->input('regular_amount');
             $follow->negotiation_amount = $request->input('negotiation_amount');
@@ -139,6 +138,10 @@ class FollowupAnalysisController extends Controller
             $follow->decision_maker = $request->descision_maker;
             $follow->decision_maker_opinion = $request->decision_maker_opinion;
 
+            $approve_setting = ApproveSetting::where('name','follow_up_analysis')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $follow->approve_by = auth()->user()->id;
+            }
 
             $follow->created_by = auth()->id();
             $follow->created_at = now();
@@ -209,14 +212,14 @@ class FollowupAnalysisController extends Controller
                     $lead->save();
                 }
                 DB::commit();
-                return redirect()->route('presen')->with('success', 'Status Updated Successfully');
+                return redirect()->route('followup-analysis.index')->with('success', 'Successfully Approved');
             } catch (Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
             
         } else {
-            return redirect()->route('followUp-analysis.approve')->with('error', 'Something went wrong!');
+            return redirect()->back()->with('error', 'Please select at least one record');
         }
     }
 
