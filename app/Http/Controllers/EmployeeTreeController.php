@@ -11,7 +11,7 @@ class EmployeeTreeController extends Controller
         $topUser = ReportingUser::where('user_id', 1)
         ->select(['id', 'user_id'])
         ->first(); 
-        $organogram = getOrganogram($topUser);  
+        $organogram = getOrganogram($topUser); 
         return view('employee.employee_tree',compact('organogram'));
     } 
 }

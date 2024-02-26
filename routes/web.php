@@ -87,11 +87,15 @@ Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('id', [DashboardController::class, 'id'])->name('logout');
 
+
 Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/search',[SearchController::class,'search'])->name('search');
 
-        # Common
+        Route::post('update/password',[DashboardController::class,'change_password'])->name('update.password');
+
+        
+ 
         //Area
         Route::get('division-get-district', [AreaController::class, 'divisionGetDistrict'])->name('division-get-district');
         Route::get('district-get-upazila', [AreaController::class, 'districtGetUpazila'])->name('district-get-upazila');
@@ -101,7 +105,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         // Profile 
-        Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+        Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
+        Route::get('profile/hierarchy', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
+        Route::get('freelancer/join/process', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);

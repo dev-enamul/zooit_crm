@@ -139,17 +139,7 @@ if (!function_exists('user_reporting')) {
         }
     }
 }
-
-if (!function_exists('reporting_user')) {
-    function reporting_user($reporting_id)
-    {
-        $reporting_user = \App\Models\ReportingUser::find($reporting_id);
-        if ($reporting_user->user_id != null) {
-            return user_info($reporting_user->user_id);
-        }
-    }
-}
-
+ 
 
 if (!function_exists('user_info')) {
     function user_info($user_id)
