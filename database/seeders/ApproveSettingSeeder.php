@@ -29,7 +29,7 @@ class ApproveSettingSeeder extends Seeder
             'negotiation',
             'negotiation_analysis',
             'rejection',
-            'salse',
+            // 'salse',
             'salse_return',
         ];
 
