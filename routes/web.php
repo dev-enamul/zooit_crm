@@ -85,7 +85,7 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');
-Route::get('id', [DashboardController::class, 'id'])->name('logout');
+// Route::get('id', [DashboardController::class, 'id'])->name('logout');
 
 
 Route::group(['middleware' => 'auth'], function () {
@@ -105,9 +105,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         // Profile 
-        Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
-        Route::get('profile/hierarchy', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
-        Route::get('freelancer/join/process', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
+        Route::get('profile/{id}', [ProfileController::class, 'profile'])->name('profile');
+        Route::get('profile/hierarchy/{id}', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
+        Route::get('freelancer/join/process/{id}', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
@@ -184,6 +184,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Customer 
         Route::resource('customer', CustomerController::class);
         Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save'); 
+        Route::get('customer-approve', [CustomerController::class, 'customer_approve'])->name('customer.approve');
         Route::post('customer-approve-save', [CustomerController::class, 'customer_approve_save'])->name('customer.approve.save');
       
         Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');

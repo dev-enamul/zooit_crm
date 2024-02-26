@@ -22,7 +22,8 @@ return new class extends Migration
             $table->json('project_units')->nullable()->comment('Project Unit List');
             $table->decimal('regular_amount', 10, 2)->nullable()->comment('Total Amount');
             $table->decimal('sold_value', 10, 2); 
-            $table->decimal('down_payment', 10, 2);
+            $table->decimal('down_payment', 10, 2); 
+            $table->decimal('booking', 10, 2);
             $table->decimal('down_payment_pay', 10, 2);
             $table->date('rest_down_payment_date');
             $table->decimal('total_deposit', 10, 2);

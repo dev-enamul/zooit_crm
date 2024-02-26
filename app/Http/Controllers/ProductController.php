@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApproveSetting;
 use Exception;
 use App\Models\Unit;
 use App\Models\Project;
@@ -58,9 +59,9 @@ class ProductController extends Controller
 
         $user_id = Auth::user()->id;
 
-        if (!empty($id)) {
-
+        if (!empty($id)) { 
             $info = Project::find($id);
+            $approve_setting = ApproveSetting::where('name','project')->first();
 
             if (!empty($info)){
                 $info->name             = $request->name;
@@ -72,8 +73,15 @@ class ProductController extends Controller
                 $info->district_id      = $request->district;
                 $info->upazila_id       = $request->upazila;
                 $info->union_id         = $request->union;
-                $info->village_id       = $request->village; 
-                $info->status           = 1;
+                $info->village_id       = $request->village;
+
+                if($approve_setting->status == 1){
+                    $info->status           = 0;
+                }else{
+                    $info->status           = 1;
+                    $info->approved_by      = $user_id;
+                } 
+
                 $info->updated_by       = $user_id;
                 DB::beginTransaction();
                 try {
@@ -116,7 +124,14 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             $project = Project::create($data);
-            
+
+            $approve_setting = ApproveSetting::where('name','product')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $project->approved_by = auth()->user()->id;
+                $project->status = 1;
+                $project->save();
+            }
+
             if ($request->hasFile('image')) {
                 $p_images = new ProjectImage();
                 $p_images->project_id = $project->id;
@@ -239,6 +254,7 @@ class ProductController extends Controller
             try {
                 foreach ($request->project_id as $key => $project_id) {
                     $project = Project::where('status',0)->where('id',$project_id)->first();
+                    $project->approved_by = Auth::user()->id;
                     $project->status = 1;
                     $project->save();
                 }

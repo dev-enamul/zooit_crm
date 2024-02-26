@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Prospecting Entry')
+@section('title','Lead Analysis Entry')
 
 @section('content')
 <div class="main-content">
@@ -45,8 +45,8 @@
                                                 </option>
                                                 @isset($cstmrs)
                                                     @foreach ($cstmrs as $cstm)
-                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($lead_analysis->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->user_id}})
+                                                        <option value="{{ $cstm->customer->id }}" {{ isset($selected_data['customer']) || isset($lead_analysis->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -134,28 +134,7 @@
                                             <label for="income_range" class="form-label">Income Range</label>
                                             <input type="number" name="income_range" class="form-control" id="income_range" placeholder="Income Range" value="{{ isset($lead_analysis) ? $lead_analysis->income_range : old('income_range') }}"> 
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="religion" id="religion" required>
-                                                <option value="">Select Religion</option>
-                                                @isset($religions)
-                                                    @foreach ($religions as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('religion', isset($lead_analysis) && isset($lead_analysis->user->religion) && $lead_analysis->user->religion == $id) ? 'selected' : '' }}>
-                                                            {{ $name }}
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
-                                            </select>
-                                            
-                                            
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">

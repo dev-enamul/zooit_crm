@@ -72,9 +72,18 @@ class FreelancerController extends Controller
         $villages    = $this->getCachedVillages();
         $professions = Profession::where('status',1)->select('id','name')->get();
         $my_freelancer = my_all_employee(auth()->user()->id);  
-        $datas       =  Freelancer::whereIn('user_id',$my_freelancer)->whereHas('user', function($query){
-            $query->where('approve_by','!=',null)
-            ->orWhere('ref_id',auth()->user()->id);
+        // $datas       =  Freelancer::whereIn('user_id',$my_freelancer)->whereHas('user', function($query){
+        //     $query->where('approve_by','!=',null)
+        //     ->orWhere('ref_id',auth()->user()->id)
+        //     ->orWhere('created_by',auth()->user()->id);
+        // })->get();
+
+        $datas       =  Freelancer::whereIn('user_id',$my_freelancer)->where(function($q){
+            $q->where('status',1)->orWhereHas('user', function($query){
+                $query->Where('approve_by','!=',null)
+                ->orWhere('ref_id',auth()->user()->id)
+                ->orWhere('created_by',auth()->user()->id);
+            });
         })->get();
         
         $freelancers = Freelancer::whereIn('id',$my_freelancer)->where('status',1)->get();  
@@ -184,7 +193,7 @@ class FreelancerController extends Controller
 
         DB::beginTransaction(); 
        
-        try { 
+        try {
             $user = User::create([
                 'user_id'       => User::generateNextFreelancerId(),
                 'name'          => $request->full_name,

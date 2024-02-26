@@ -71,37 +71,25 @@ class FollowupController extends Controller
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
         }
+ 
         return view('followup.followup_save',compact('selected_data','priorities','projects','projectUnits','customers','employees'));
     }
     
     public function projectDurationTypeName(Request $request)
     {
         try {
-            $project = Project::find($request->id);
-            
+            $project = Project::find($request->id); 
             if (!$project) {
                 throw new Exception("Project not found");
-            }
-    
-            $unit_type = Unit::where('status', 1)->get(['title', 'id']);
-            $project_unit = ProjectUnit::where('project_id', $project->id)->first();
-            $payment_durations = UnitPrice::where('project_unit_id', $project_unit->id)->get();
-
-            $formatted_payment_durations = $payment_durations->map(function ($payment_duration) {
-                return [
-                    'id' => $payment_duration->id,
-                    'payment_duration' => $payment_duration->payment_duration,
-                    'on_choice_price' => $payment_duration->on_choice_price,
-                    'lottery_price' => $payment_duration->lottery_price,
-                ];
-            });
-    
-            $response_data = [
-                'unit_type' => $unit_type,
-                'project_unit' => $project_unit,
-                'payment_duration' => $formatted_payment_durations,
-            ];
-    
+            }  
+            $project_unit = ProjectUnit::where('project_id', $project->id)->with('unitCategory')
+                ->join('unit_prices', 'project_units.id', '=', 'unit_prices.project_unit_id')
+                ->select('project_units.*', DB::raw('GREATEST(unit_prices.on_choice_price, unit_prices.lottery_price) AS highest_price'))
+                ->orderBy('highest_price', 'desc')
+                ->get();
+            $response_data = [ 
+                'project_unit' => $project_unit, 
+            ]; 
             return response()->json($response_data);
         } catch (Exception $e) {
             return response()->json(["error" => $e->getMessage()], 404);
@@ -115,9 +103,6 @@ class FollowupController extends Controller
             'employee'          => 'required',
             'priority'          => 'required',
             'project'           => 'required',
-            'unit'              => 'required',
-            'payment_duration'  => 'required',
-            'select_type'       => 'required',
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'required',
             'remark'            => 'nullable',

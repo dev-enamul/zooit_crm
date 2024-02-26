@@ -7,6 +7,7 @@ use App\Enums\Gender;
 use App\Enums\MaritualStatus;
 use App\Enums\Nationality;
 use App\Enums\Religion;
+use App\Models\ApproveSetting;
 use App\Models\Area;
 use App\Models\Bank;
 use App\Models\Customer;
@@ -25,6 +26,7 @@ use App\Traits\AreaTrait;
 use App\Traits\ImageUploadTrait;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -74,7 +76,11 @@ class CustomerController extends Controller
         $unions      = $this->getCachedUnions();
         $villages    = $this->getCachedVillages();
         $professions = Profession::where('status',1)->select('id','name')->get();
-        $customers   = Customer::where('status', 1)->orderBy('id','desc')->get();
+        $customers   = Customer::where(function($q){
+                            $q->where('created_by',auth()->user()->id)
+                            ->orWhere('ref_id',auth()->user()->id)
+                            ->orWhere('approve_by','!=',null);
+                        })->get();
         return view('customer.customer_list',compact('datas','professions','countries','divisions','districts','upazilas','unions','villages','customers'));
 
     }
@@ -178,15 +184,24 @@ class CustomerController extends Controller
        
         try { 
             $old_user = User::where('phone', get_phone($request->phone1))->first();
+            $approve_setting = ApproveSetting::where('name','customer')->first(); 
+            if($approve_setting->status && $approve_setting->status ==1){
+                $approve_by = null;
+            }else{
+                $approve_by = auth()->user()->id;
+               
+            } 
+
             if ($old_user) {
                 Customer::create([
                     'user_id'       => $old_user->id,
-                    'customer_id'   => Customer::generateNextCustomerId(),
+                    'customer_id'   => User::generateNextCustomerId(),
                     'profession_id' => $request->profession,
                     'name'          => $request->full_name,
                     'ref_id'        => $request->reporting_user, 
                     'status'        => 0,
                     'created_at'    => now(),
+                    'approve_by'    => $approve_by,
                     'created_by'    => auth()->user()->id,
                 ]);
                 return redirect()->route('customer.index')->with('success', 'Customer created successfully');
@@ -294,7 +309,7 @@ class CustomerController extends Controller
             UserId::create($user_documents);
 
             $customer_data = [
-                'customer_id'      => Customer::generateNextCustomerId(),
+                'customer_id'      =>  User::generateNextCustomerId(),
                 'user_id'           => $user->id,
                 'profession_id'     => $request->profession, 
                 'name'              => $request->full_name, 
@@ -302,11 +317,12 @@ class CustomerController extends Controller
                 'status'            => 0,
                 'created_at'        => now(),
                 'created_by'        => auth()->user()->id,
+                'approve_by'        => $approve_by,
             ];  
             Customer::create($customer_data);   
             
             DB::commit(); 
-            return redirect()->route('freelancer.index')->with('success', 'Employee created successfully');
+            return redirect()->route('customer.index')->with('success', 'Employee created successfully');
         } catch (Exception $e) {   
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
@@ -688,5 +704,34 @@ class CustomerController extends Controller
 
         return view('customer.customer_print', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','customer','selected'));
     }  
+
+
+    public function customer_approve(){
+        $my_customer = my_employee(auth()->user()->id);
+        $customers = Customer::where('status',0)->whereIn('ref_id',$my_customer)->get();
+        return view('customer.customer_approve',compact('customers'));
+    }
+
+    public function customer_approve_save(Request $request) {
+        if($request->has('customer_id') && $request->customer_id !== '' & $request->customer_id !== null) {
+            DB::beginTransaction();
+            try {
+                foreach ($request->customer_id as $key => $customer_id) {
+                    $customer = Customer::find($customer_id);
+                    $customer->approve_by = Auth::user()->id;
+                    $customer->save();
+                }
+                DB::commit();
+                return redirect()->route('customer.index')->with('success', 'Approved Customer Successfully!');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+            
+        } else {
+            return redirect()->route('prospecting.approve')->with('error', 'Something went wrong!');
+        }
+
+    }
     
 }

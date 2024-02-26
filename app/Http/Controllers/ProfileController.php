@@ -33,8 +33,8 @@ class ProfileController extends Controller
         return view('profile.hierarchy',compact('user_id','deposit_achive','organogram','reporting_users','user'));
     }
 
-    public function profile(){
-        $user_id = auth()->user()->id; 
+    public function profile($id){
+        $user_id = decrypt($id); 
         $user = User::find($user_id); 
 
         $reporting_users = user_reporting($user_id);
@@ -50,8 +50,9 @@ class ProfileController extends Controller
         return view('profile.profile',compact('user_id','user','reporting_user','top_reporting_user'));
     }
 
-    public function freelancer_join_process(){  
-        $user_id = auth()->user()->id;
+    public function freelancer_join_process($id){ 
+
+        $user_id = decrypt($id);
         $user = User::find($user_id);
         $approve_process = FreelancerApprovel::where('freelancer_id',$user_id)->get();
   

@@ -301,8 +301,19 @@
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Lead Analysis by {{$communication['visit_analysis']->employee->name??"-"}}</p>
                                             <p class="m-0 fs-10">{{get_date($communication['visit_analysis']->created_at??date('y-m-d'))}}</p>
-                                            {{$communication['visit_analysis']->remark??""}}
-                                            {{-- <span class="badge badge-secondary mb-1">#project: {{$communication['visit_analysis']->project->name??"-"}} </span> --}}
+                                            {{$communication['visit_analysis']->remark??""}} 
+                     
+                                            <span class="badge badge-secondary mb-1">#project: 
+                                                @php
+                                                    $projects = json_decode($communication['visit_analysis']->projects);
+                                                @endphp
+                                                @foreach($projects as $key => $project)
+                                                    @if ($key!=0)
+                                                        ,
+                                                    @endif
+                                                    {{ $project }}
+                                            @endforeach
+                                            </span>
                                              
                                         </div>
                                     </div>

@@ -9,15 +9,14 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">
-                            <h4 class="mb-sm-0">Project visit 
-                                @if(isset($visit))
-                                    Edit
-                                @else
-                                    Entry
-                                @endif
-                            </h4>
-                        </h4>
+                  
+                        <h4 class="mb-sm-0">Project visit 
+                            @if(isset($visit))
+                                Edit
+                            @else
+                                Entry
+                            @endif
+                        </h4> 
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
@@ -52,10 +51,10 @@
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Visitor <span class="text-danger">*</span></label>
                                             <select id="freelancer" class="select2" tags search name="freelancer[]" multiple>
-                                                @isset($freelancers)
-                                                    @foreach ($freelancers as $freelancer)
-                                                        <option value="{{ $freelancer->name }}" {{ in_array($freelancer->name, old('freelancer', isset($visit) ? json_decode($visit->visitors) : [])) ? 'selected' : '' }}>
-                                                            {{ $freelancer->name }} ({{ $freelancer->user_id }})
+                                                @isset($visitors)
+                                                    @foreach ($visitors as $visitor)
+                                                        <option value="{{ $visitor->name }}" {{ in_array($visitor->name, old('freelancer', isset($visit) ? json_decode($visit->visitors) : [])) ? 'selected' : '' }}>
+                                                            {{ $visitor->name }} ({{ $visitor->customer[0]->customer_id }})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -103,13 +102,16 @@
                                         <div class="mb-3">
                                             <label for="customer_id" class="form-label">Negotiation Person </label>
                                             <select id="customer_id" class="select2" search name="customer_id">
+                                                <option data-display="Select a coustomer *" value="">
+                                                    Select a Negotiation Person
+                                                </option>
                                                 @isset($customers)
-                                                    @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($visit) ? $visit->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->customer->user->name }} ({{ $customer->customer->user->user_id}})
+                                                    @foreach ($customers as $cstm)
+                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($visit->customer_id) == $cstm->customer_id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
                                                         </option>
                                                     @endforeach
-                                                @endisset 
+                                                @endisset
                                             </select> 
                                         </div>
                                     </div> 
@@ -123,7 +125,7 @@
                                 </div>
                                   
                                 <div class="text-end ">
-                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> 
                                 </div> 
                             </form>
                         </div>

@@ -10,11 +10,14 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Visit Analysis</h4> 
+                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="a4">
+                        <input type="hidden" id="fontSize" value="8">
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Visit Analysis List</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
 
                     </div>
@@ -25,30 +28,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -62,30 +43,50 @@
                                 </thead>
                                 <tbody>                                     
                                     @foreach ($visits as  $visit)
-                                    <tr>
+                                    <tr class="{{$visit->approve_by==null?"table-warning":""}}">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img class="rounded avatar-2xs p-0" src="{{@$visit->customer->user->image()}}">
+                                                </a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
+                                                    <a class="dropdown-item" href="{{route('customer.profile',encrypt($visit->customer_id))}}">Customer Profile</a> 
                                                     <a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#view_visitor">View Details</a>
-                                                    <a class="dropdown-item" href="{{route('presentation_analysis.edit',$visit->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('visit.delete',$visit->id) }}')">Delete</a> 
-                                                    <a class="dropdown-item" href="follow_up_create.html">Follow Up</a>
+                                                   
+                                                    @if ($visit->approve_by==null)
+                                                        @can('visit-analysis-manage')
+                                                                <a class="dropdown-item" href="{{route('presentation_analysis.edit',$visit->id)}}">Edit</a>
+                                                            @endcan
+                                                    @endif 
+                                                    
+                                                    @can('visit-analysis-delete')
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('visit.delete',$visit->id) }}')">Delete</a> 
+                                                    @endcan
+                                                    
+                                                    @if ($visit->approve_by!=null)
+                                                        @can('follow-up-manage')
+                                                            <a class="dropdown-item" href="{{route('followup.create',['customer' => $visit->customer_id])}}">Follow Up</a>
+                                                        @endcan 
+                                                    @endif 
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration}}</td>
-                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}">{{ $visit->created_at }}</td>
-                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}"><a> @php
-                                            $projects = json_decode($visit->projects);
-                                        @endphp
-                                        @foreach($projects as $project)
-                                            <a>{{ $project }}</a><br>
-                                        @endforeach</a></td>
-                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}">{{ @$visit->customer->user->name }}</td>
-                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}"> {{ @$visit->customer->user->phone }}</td>
-                                        <td class="{{ $visit->status == 0 ? 'text-danger' : '' }}"><span class="badge badge-label-success"> 
+                                        <td class="">{{ $loop->iteration}}</td>
+                                        <td class="">{{ get_date($visit->created_at) }}</td>
+                                        <td class="">
+                                            @php
+                                                $projects = json_decode($visit->projects);
+                                            @endphp
+                                            @foreach($projects as $key => $project)
+                                            @if ($key!=0)
+                                                ,
+                                            @endif
+                                            {{ $project }}
+                                            @endforeach
+                                        </td>
+                                        <td class="">{{ @$visit->customer->user->name }}</td>
+                                        <td class=""> {{ @$visit->customer->user->phone }}</td>
+                                        <td class=""><span class="badge badge-label-success"> 
                                             @php
                                                 $visitors = json_decode($visit->visitors);
                                                 $totalVisitors = count($visitors);
@@ -327,5 +328,10 @@
     </div>
 </div>
 
-@endsection 
+@endsection  
+
+
+@section('script')
+    @include('includes.data_table')
+@endsection
  

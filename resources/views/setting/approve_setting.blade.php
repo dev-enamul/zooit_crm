@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Employee Create")
+@section('title',"Approve Setting")
 @section('content')
 <div class="main-content">
     <div class="page-content">

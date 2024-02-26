@@ -26,21 +26,23 @@ class ApproveFreelancerController extends Controller
     {
         DB::beginTransaction();
         try{
-            $freelancer = Freelancer::where('user_id',$request->freelancer_id)->first(); 
+            $freelancer = Freelancer::where('user_id',$request->user_id)->first(); 
             $freelancer->last_approve_by = auth()->user()->id;
             $freelancer->save(); 
 
             $input = $request->all();
             $input['approve_by'] = auth()->user()->id;
+            $input['freelancer_id'] = $request->user_id;
             if($request->meeting_date && $request->meeting_time){
                 $input['meeting_date'] = $request->meeting_date . ' ' . $request->meeting_time;
-            } 
-
-            if(isset($request->user_id)){
-                $input['status'] = 1;
-            }
+            }  
 
             FreelancerApprovel::create($input);  
+
+            if(isset($request->fl_id) && $request->fl_id != null){
+                $freelancer->status = 1; 
+                $freelancer->save();
+            }
             
             DB::commit(); 
             return redirect()->back()->with('success', 'Freelancer approved successfully');
@@ -65,7 +67,7 @@ class ApproveFreelancerController extends Controller
                 'freelancer_id' => $id,
                 'counselling' => 0,
                 'interview' => 0,
-                'remarks' => 'All Training Completed.',
+                'remarks' => 'Congratulations! You have completed all training. Now, you can work as a freelancer.',
                 'approve_by' => auth()->user()->id,
                 'complete_training' => 1
             ]);

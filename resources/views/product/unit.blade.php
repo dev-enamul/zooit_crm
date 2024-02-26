@@ -1,11 +1,6 @@
 @extends('layouts.dashboard')
 @section('title','Unit List')
-
-@section('style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
-@endsection
-
+ 
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -14,7 +9,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Unit List</h4> 
+                        <h4 class="mb-sm-0">Unit List</h4>
+                        <p class="d-none"></p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="A4">
+                        <input type="hidden" id="fontSize" value="10"> 
+
                         <div class="page-title-right">
                             <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                 <span><i class="fas fa-filter"></i> Filter</span>
@@ -29,7 +29,7 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <table id="unit_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="">
                                         <th>Action</th>
@@ -65,11 +65,7 @@
                                             <td>{{ @$projectUnit->unitCategory->title}}</td>
                                             <td>{{ @$projectUnit->unit->down_payment}}</td>
                                             <td>
-                                                @if($projectUnit->status == 1)
-                                                    <button class="btn btn-success">{{ __('Active') }}</button>
-                                                @else
-                                                    <button class="btn btn-danger">{{ __('Inactive') }}</button>
-                                                @endif
+                                                Unsold
                                             </td>
                                         </tr> 
                                     @endforeach
@@ -129,67 +125,6 @@
 </div>
 @endsection
 
-@section('script')
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-    <script src="{{asset('assets/js/print.js')}}"></script>
-    
-    <script>
-        function resetFormFields() {
-            $("#status").val('');
-            $("#project").val('');
-        
-            $("#status").trigger('change');
-            $("#project").trigger('change');
-        }
-    
-        $(document).ready(function () {
-        $(window).on('load', function () {
-            console.log('DataTable initialized');
-            var table = $('#unit_table').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    {
-                        extend: 'excel',
-                        text: 'Excel',
-                        filename: 'export',
-                        exportOptions: {
-                            columns: ':visible:not(:first-child)'
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: 'Print',
-                        title: 'Unit Data',
-                        exportOptions: {
-                            columns: ':visible:not(:first-child)'
-                        }
-                    }
-                ]
-            });
-        });
-    });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('.select2').select2();
-        
-            // $('#status').on('change', function () {
-            //     var status = $(this).val();
-            //     $('#status').val(status);
-            //     $('#filter_button').prop('disabled', false);
-            // });
-        
-            // $('#project').on('change', function () {
-            //     var project = $(this).val();
-            //     $('#project').val(project);
-            //     $('#filter_button').prop('disabled', false);
-            // });
-        });
-    </script>
-    
+@section('script') 
+@include('includes.data_table')
 @endsection

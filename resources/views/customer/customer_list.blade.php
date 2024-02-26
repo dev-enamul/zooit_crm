@@ -63,8 +63,10 @@
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="{{ route('customer.print', $data->id) }}">Print Customer</a>
                                                         <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->id))}}">View Profile</a>
-                                                        @can('customer-manage')
-                                                            <a class="dropdown-item" href="{{route('customer.edit',encrypt($data->id))}}" >Edit</a>
+                                                        @can('customer-manage') 
+                                                            @if ($data->approve_by==null)
+                                                                <a class="dropdown-item" href="{{route('customer.edit',encrypt($data->id))}}" >Edit</a>
+                                                            @endif
                                                         @endcan 
 
                                                         @can('customer-delete')
@@ -72,7 +74,9 @@
                                                         @endcan
                                                         
                                                         @can('prospecting')
-                                                            <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
+                                                            @if ($data->approve_by!=null)
+                                                                <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
+                                                            @endif 
                                                         @endcan 
                                                     </div>
                                                 </div> 

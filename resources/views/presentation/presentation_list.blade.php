@@ -11,11 +11,14 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Presentations</h4> 
+                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="a3">
+                        <input type="hidden" id="fontSize" value="8">
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Presentation List</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
 
                     </div>
@@ -26,30 +29,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <div class="card-body"> 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -62,7 +43,7 @@
                                         <th>Last Lead</th>
                                         <th>Project</th>
                                         <th>Unit</th> 
-                                        <th>Presentation</th> 
+                                        {{-- <th>Presentation</th>  --}}
                                         <th>Freelancer</th> 
                                     </tr>
                                 </thead>
@@ -71,27 +52,50 @@
                                     <tr class="">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img class="rounded avatar-2xs p-0" src="{{@$presentation->customer->user->image()}}">
+                                                </a>
 
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    <a class="dropdown-item" href="{{route('presentation.edit',$presentation->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('presentation.delete',$presentation->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                    <a class="dropdown-item" href="{{route('presentation_analysis.create',['customer_id' => $presentation->customer->id])}}">Project Visit Analysis</a>
+                                                    @can('presentation-management')
+                                                       @if ($presentation->approve_by==null)
+                                                        <a class="dropdown-item" href="{{route('presentation.edit',$presentation->id)}}">Edit</a>
+                                                       @endif
+                                                    @endcan
+                                                    
+                                                    @can('presentation-delete')
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('presentation.delete',$presentation->id) }}')">Delete</a>  
+                                                    @endcan 
+                                                    <a class="dropdown-item" href="{{route('customer.profile',encrypt($presentation->customer_id))}}">Customer Profile</a> 
+                                                    @if ($presentation->approve_by!=null)
+                                                        @can('visit-analysis')
+                                                        <a class="dropdown-item" href="{{route('presentation_analysis.create',['customer_id' => $presentation->customer->id])}}">Project Visit Analysis</a>
+                                                        @endcan 
+                                                    @endif
+                                                    
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->created_at }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->user->name }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->profession->name }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->user->userAddress->address }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->customer->user->marital_status }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->created_at }} #dummy</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->project->name }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->unit->title }}</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->created_at  }} #dummy</td>
-                                        <td class="{{ $presentation->status == 0 ? 'text-danger' : '' }}">{{ @$presentation->employee->name }}</td>
+                                        <td class="">{{ $loop->iteration }}</td>
+                                        <td class="">{{ get_date(@$presentation->created_at) }}</td>
+                                        <td class="">{{ @$presentation->customer->name }}</td>
+                                        <td class="">{{ @$presentation->customer->profession->name }}</td>
+                                        <td class="">{{ @$presentation->customer->user->userAddress->address }}</td>
+                                        <td class="">
+                                            @if (isset($presentation->customer->user->marital_status))
+                                                {{   \App\Enums\MaritualStatus::values()[$presentation->customer->user->marital_status]   }}
+                                            @endif 
+                                        </td> 
+
+                                        @php
+                                            $last_analysis = \App\Models\LeadAnalysis::where('customer_id',$presentation->customer_id)->first(); 
+                                            $last_analysis= $last_analysis->updated_at?? $last_analysis->created_at;
+                                        @endphp 
+                                        <td class="">{{ get_date($last_analysis) }}</td>
+                                        <td class="">{{ @$presentation->project->name }}</td>
+                                        <td class="">{{ @$presentation->unit->title }}</td>
+                                        {{-- <td class="">{{ @$presentation->created_at  }} #dummy</td> --}}
+                                        <td class="">{{ @$presentation->customer->reference->name }} [{{ @$presentation->customer->reference->user_id }}]</td>
                                     </tr>
                                     @endforeach 
                                 </tbody>
@@ -153,5 +157,5 @@
 @endsection 
 
 @section('script')
-
+    @include('includes.data_table')
 @endsection

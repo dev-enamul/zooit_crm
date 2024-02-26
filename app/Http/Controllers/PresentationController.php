@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Priority;
+use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\LeadAnalysis;
 use App\Models\Presentation;
@@ -112,7 +113,11 @@ class PresentationController extends Controller
             $presentation->customer_id   = $request->customer;
             $presentation->employee_id   = $request->employee;    
             $presentation->project_id    = $request->project;    
-            $presentation->unit_id       = $request->unit;
+            $presentation->unit_id       = $request->unit; 
+            $approve_setting = ApproveSetting::where('name','presentation')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $presentation->approve_by = auth()->user()->id;
+            }  
             $presentation->status        = 0;    
             $presentation->created_by    = auth()->id();
             $presentation->created_at    = now();

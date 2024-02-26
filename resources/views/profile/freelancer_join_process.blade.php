@@ -18,6 +18,18 @@
                             <h4 class="card-title">Approve Process</h4>
                             <hr>
                             <div class="timeline timeline-zigzag"> 
+                                <div class="timeline-item">
+                                    <div class="timeline-pin">
+                                        <i class="marker marker-circle text-danger"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <p class="mb-0">
+                                            </p><p class="m-0 bold-lg">Recruitment By {{@$user->freelancer->reference->name}}</p>
+                                            <p class="m-0 fs-10">{{get_date(@$user->freelancer->created_at)}}</p> 
+                                        <p></p>
+                                    </div>
+                                </div> 
+
                                @foreach ($approve_process as $approve)
                                 <div class="timeline-item">
                                         <div class="timeline-pin">
@@ -28,6 +40,10 @@
                                                 </p><p class="m-0 bold-lg">Approve By {{@$approve->approver->name}}</p>
                                                 <p class="m-0 fs-10">{{get_date(@$approve->created_at)}}</p>
                                                 <p>{{@$approve->remarks}}</p>
+                                                @if ($approve->id_making==1)
+                                                    Congratulations on receiving your ID. Now, you are required to complete the training.
+                                                    <span class="badge badge-secondary mb-1">ID: {{$approve->freelancer->user_id}} </span>
+                                                @endif
                                                 @if ($approve->counselling==1)
                                                     <span class="badge badge-secondary mb-1">#Counselling </span>
                                                 @endif
@@ -45,8 +61,7 @@
                                                     <span class="badge badge-secondary mb-1">#Training Category: {{@$approve->trainingCategory->title}} </span>
                                                 @endif 
 
-                                                @if ($approve->complete_training==1) 
-                                                    <p>Congratulations! You have completed all training. Now, you can work as a freelancer."</p>
+                                                @if ($approve->complete_training==1)  
                                                     <span class="badge badge-secondary mb-1">#Complete Training </span> 
                                                 @endif
                                                

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Priority;
+use App\Models\ApproveSetting;
 use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Profession;
@@ -137,6 +138,10 @@ class ColdCallingController extends Controller
             $cold_call->project_id    = $request->project;    
             $cold_call->unit_id       = $request->unit;
             $cold_call->status        = 0;    
+            $approve_setting = ApproveSetting::where('name','cold_calling')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $cold_call->approve_by = auth()->user()->id;
+            } 
             $cold_call->created_by    = auth()->id();
             $cold_call->created_at    = now();
             $cold_call->save();

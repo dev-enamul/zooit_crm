@@ -4,18 +4,20 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">
-
+        <div class="container-fluid"> 
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Lead Analysis List</h4> 
+                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="a3">
+                        <input type="hidden" id="fontSize" value="8">
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Lead Analysis List</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
                     </div>
                 </div>
@@ -26,29 +28,8 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> pdf</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+ 
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -64,7 +45,7 @@
                                         <th>Project</th>
                                         <th>Unit</th>
                                         <th>Capacity</th>
-                                        <th>Purchase Date</th>
+                                        <th>PP Date</th>
                                         <th>Mobile</th>
                                         <th>Freelancer</th> 
                                     </tr>
@@ -72,44 +53,75 @@
 
                                 <tbody>
                                     @foreach ($leads as  $lead)
-                                        <tr>
+                                        <tr class="{{$lead->approve_by==null?"table-warning":""}}">
+                                            
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
-                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{@$lead->customer->user->image()}}">
+                                                    </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
-                                                        <a class="dropdown-item" href="{{route('lead-analysis.edit',$lead->id)}}">Edit</a>
-                                                        <a class="dropdown-item" onclick="deleteItem('{{ route('lead-analysis.destroy',$lead->id) }}')">Delete</a>
-                                                        <a class="dropdown-item" href="lead_analysis_entry.html">Lead Analysis</a>
-                                                        <a class="dropdown-item" href="{{route('presentation.create',['customer'=> $lead->customer->id])}}">Entry Presentation</a>
+                                                        @if ($lead->approve_by==null) 
+                                                            @can('lead-analysis-manage')
+                                                                <a class="dropdown-item" href="{{route('lead-analysis.edit',$lead->id)}}">Edit</a>
+                                                            @endcan
+                                                        @endif
+                                                        
+                                                        @can('lead-analysis-delete')
+                                                            <a class="dropdown-item" onclick="deleteItem('{{ route('lead-analysis.destroy',$lead->id) }}')">Delete</a>
+                                                        @endcan 
+
+                                                        @if ($lead->approve_by!=null)
+                                                            <a class="dropdown-item" href="{{route('presentation.create',['customer'=> $lead->customer->id])}}">Entry Presentation</a>
+                                                        @endif
+                                                       
                                                     </div>
                                                 </div> 
                                             </td> 
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}" >{{ $loop->iteration }}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}" >{{ @$lead->created_at }}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->name }}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->profession->name }}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->user->userAddress->upazila->name}}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->user->userAddress->union->name}}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ @$lead->customer->user->userAddress->village->name }}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{ $lead->customer->user->marital_status}}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> #Dummy </td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ $lead->project->name }}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}"> {{  @$lead->unit->title}}</td>
+
+                                            <td class="" >{{ $loop->iteration }}</td>
+                                            <td class="" >{{ get_date($lead->created_at) }}</td>
+                                            <td class=""> {{ @$lead->customer->name }}</td>
+                                            <td class=""> {{ @$lead->customer->profession->name }}</td>
+                                            <td class=""> {{ @$lead->customer->user->userAddress->upazila->name}}</td>
+                                            <td class=""> {{ @$lead->customer->user->userAddress->union->name}}</td>
+                                            <td class=""> {{ @$lead->customer->user->userAddress->village->name }}</td>
+                                            @php
+                                               $marital_status =  @$lead->customer->user->marital_status;
+                                               if($marital_status == 1){
+                                                   $marital_status = "Married";
+                                                }elseif($marital_status == 2){
+                                                $marital_status = "Unmarried";
+                                                }elseif($marital_status == 3){
+                                                    $marital_status = "Divorce";
+                                                }else{
+                                                    $marital_status = "-";
+                                                }
+                                            @endphp
+                                            <td class=""> {{ $marital_status }}</td>
+                                            @php
+                                                $cold_lead = \App\Models\Lead::where('customer_id',$lead->customer_id)->first(); 
+                                                $last_lead= $cold_lead->updated_at?? $cold_lead->created_at;
+                                            @endphp 
+
+                                            <td class=""> {{get_date($last_lead)}} </td>
+                                            <td class="">{{ $lead->project->name }}</td>
+                                            <td class=""> {{  @$lead->unit->title}}</td>
                                             @php
                                                 $lead_capacity = App\Models\Lead::where('customer_id',$lead->customer_id)->first();
                                             @endphp
                                             <td class="text-primary"> 
-                                                @if($lead_capacity->purchase_capacity == 1)
+                                                @if(@$lead_capacity->purchase_capacity == 1)
                                                     High
-                                                @elseif($lead_capacity->purchase_capacity == 2)
+                                                @elseif(@$lead_capacity->purchase_capacity == 2)
                                                     Medium
                                                 @else
                                                     Low
                                                 @endif
                                             </td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{@$lead_capacity->possible_purchase_date }}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">{{ @$lead->customer->user->phone}}</td>
-                                            <td class="{{ $lead->status == 0 ? 'text-danger' : '' }}">Dummy</td> 
+                                            <td class="">{{get_date(@$lead_capacity->possible_purchase_date) }}</td>
+                                            <td class="">{{ @$lead->customer->user->phone}}</td>
+                                            <td class="">{{ @$lead->customer->reference->name}} {{ @$lead->customer->reference->user_id}}</td> 
                                         </tr>
                                     @endforeach 
                                 </tbody>
@@ -283,6 +295,7 @@
 @endsection 
 
 @section('script')
+@include('includes.data_table')
     <script>
         getDateRange('join_date');
         getDateRange('last_cold_calling');

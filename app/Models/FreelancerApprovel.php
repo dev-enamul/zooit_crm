@@ -17,6 +17,7 @@ class FreelancerApprovel extends Model
         'training_category_id',
         'remarks',
         'approve_by',
+        'complete_training',
     ];
 
  
