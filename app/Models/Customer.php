@@ -12,12 +12,13 @@ class Customer extends Model
 
     protected $fillable = [
         'user_id',
-        'customer_id',
-        'user_id',
+        'customer_id', 
         'profession_id',
         'name',
         'ref_id',
-        'status'
+        'status',
+        'created_by',
+        'approve_by'
     ];
 
     public function user()
@@ -33,16 +34,6 @@ class Customer extends Model
     public function profession(){
         return $this->belongsTo(Profession::class,'profession_id');
     }
-
-    public static function generateNextCustomerId(){ 
-        $user_id = User::where('user_type',2)->latest('id')->first()->user_id;
-        if($user_id == null){
-            $user_id = 'FL-000';
-        }
-        $numericPart = substr($user_id, 4);  
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "FL-" . $newNumericPart; 
-        return $newValue;
-    }
+ 
 
 }

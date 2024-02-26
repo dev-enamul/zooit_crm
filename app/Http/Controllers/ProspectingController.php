@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Priority;
 use App\Enums\ProspectingMedia;
+use App\Models\ApproveSetting;
 use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Employee;
@@ -84,7 +85,7 @@ class ProspectingController extends Controller
         $title = 'Prospecting Entry';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
-        $customers = Customer::whereIn('ref_id', $my_all_employee)->where('status',0)->get();
+        $customers = Customer::whereIn('ref_id', $my_all_employee)->where('status',0)->whereNotNull('approve_by')->get();
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
         $priorities = $this->priority();
@@ -136,7 +137,13 @@ class ProspectingController extends Controller
             $prospecting->employee_id   = $request->employee;
             $prospecting->status        = 0;
             $prospecting->created_by    = auth()->id();
-            $prospecting->created_at    = now();
+            $prospecting->created_at    = now();   
+            $approve_setting = ApproveSetting::where('name','prospecting')->first(); 
+            
+        if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $prospecting->approve_by = auth()->user()->id;
+            } 
+
             $prospecting->save();
 
             if($prospecting) {

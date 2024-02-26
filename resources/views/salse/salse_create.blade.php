@@ -68,13 +68,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="payment_duration" class="form-label">Payment Duration <span class="text-danger">*</span></label>
-                                            <select class="select2" name="payment_duration" id="payment_duration" required>
-                                                <option value="1">6 Month</option>
-                                                <option value="2">12 Month</option> 
-                                                <option value="3">18 Month</option>
-                                                <option value="4">24 Month</option>
-                                            </select>  
+                                            <label for="payment_duration" class="form-label">Payment Duration [Month]<span class="text-danger">*</span></label>
+                                             <input class="form-control" type="number" name="" id="">
                                         </div>
                                     </div> 
 

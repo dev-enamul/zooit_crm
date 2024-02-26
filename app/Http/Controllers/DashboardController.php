@@ -27,6 +27,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -190,6 +191,7 @@ class DashboardController extends Controller
             ->whereDate('created_at',today()) 
             ->count();
         
+    date_default_timezone_set('Asia/Dhaka');
     $hour = date('G'); 
 
         if ($hour >= 5 && $hour < 12) {
@@ -241,5 +243,24 @@ class DashboardController extends Controller
         Artisan::call('migrate:fresh');
         Artisan::call('db:seed'); 
         return redirect()->route('index');
+    }
+
+    public function change_password(Request $request)
+    { 
+        $validate = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'password'     => 'required|confirmed',
+        ]); 
+        if($validate->fails()){
+            return redirect()->back()->with('error',$validate->errors()->first());
+        } 
+        $user = User::find(auth()->id());  
+        if (password_verify($request->old_password, $user->password)) {
+            $user->password = bcrypt($request->password);
+            $user->save(); 
+            return redirect()->back()->with('success', 'Password changed successfully');
+        }
+    
+        return redirect()->back()->with('error', 'Invalid old password');
     }
 }

@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Employee List</h4>
+                        <h4 class="mb-sm-0">Freelancer List</h4>
                         <p class="d-none">Employee: MD Enamul Haque</p> 
                         <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
                         <input type="hidden" id="pageSize" value="A3">
@@ -61,7 +61,7 @@
                                                          
                                                         @can('freelancer-manage') 
                                                             <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
-                                                            <a class="dropdown-item" href="{{route('freelancer.profile', encrypt($data->id))}}">View Profile</a>
+                                                            <a class="dropdown-item" href="{{route('profile',encrypt($data->user_id))}}">View Profile</a>
                                                             @if ($data->status==1 && $data->user->approve_by==null) 
                                                                 @can('complete-training')
                                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="approveItem('{{route('complete.training',encrypt($data->user_id))}}')">Complete Training</a>

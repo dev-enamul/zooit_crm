@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Presentation Approve')
+@section('title','Presentation Analysis Approve')
 
 @section('content')
 <div class="main-content">
@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Presentations</h4> 
+                        <h4 class="mb-sm-0">Negotiations</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Presentation List</li>
+                                <li class="breadcrumb-item active">Negotiation List</li>
                             </ol>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <form action="{{route('presentation.approve.save')}}" method="POST">
+                        <form action="{{route('negotiation-approve.save')}}" method="POST">
                             @csrf
                             <div class="card-body">
                                 <div class="d-flex justify-content-between"> 
@@ -49,34 +49,31 @@
                                             <th>S/N</th>
                                             <th>Date</th>
                                             <th>Name</th>
-                                            <th>Profession</th>
+                                            <th>Mobile</th>
                                             <th>Address</th>
-                                            <th>M/S</th>
-                                            <th>Last Lead</th>
+                                            <th>Neg. Amount</th>
                                             <th>Project</th>
-                                            <th>Unit</th> 
-                                            <th>Presentation</th> 
+                                            <th>Product & Qty</th> 
                                             <th>Freelancer</th> 
                                         </tr>
                                     </thead>
                                     <tbody> 
-                                        @foreach ($presentations as  $presentation)
+                                        @foreach ($negotiations as  $negotiation)
                                         <tr class="">
                                             <td class="text-center">
-                                                <input class="form-check-input" type="checkbox" name="presentation[]" value="{{$presentation->id}}" id="flexCheckChecked" >
+                                                <input class="form-check-input" type="checkbox" name="negotiation_id[]" value="{{$negotiation->id}}" id="flexCheckChecked" >
                                             </td>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ @$presentation->created_at }}</td>
-                                            <td>{{ @$presentation->customer->user->name }}</td>
-                                            <td>{{ @$presentation->customer->profession->name }}</td>
-                                            <td>{{ @$presentation->customer->user->userAddress->address }}</td>
-                                            <td>{{ @$presentation->customer->user->marital_status }}</td>
-                                            <td>{{ @$presentation->created_at }} #dummy</td>
-                                            <td>{{ @$presentation->project->name }}</td>
-                                            <td>{{ @$presentation->unit->title }}</td>
-                                            <td> Dummy </td>
-                                            <td>{{ @$presentation->created_at  }} #dummy</td>
-                                            <td>{{ @$presentation->freelancer->user->name }}</td>
+                                            <td>{{ $loop->iteration}}</td>
+                                            <td>{{ $negotiation->created_at }}</td>
+                                        
+                                            <td>{{ @$negotiation->customer->user->name }}</td>
+                                            <td> {{ @$negotiation->customer->user->phone }}</td>
+                                            <td> {{ @$negotiation->customer->user->userAddress->address }}</td>
+                                            <td> {{ @$negotiation->negotiation_amount }}</td>
+                                            <td> {{ @$negotiation->project->name }}</td>
+                                            <td>  2 #dummmy </td>
+                                            <td>  {{ @$negotiation->employee->user->name }} </td>
+                                           
                                         </tr>
                                         @endforeach 
                                     </tbody>

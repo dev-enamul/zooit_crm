@@ -85,13 +85,17 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');
-Route::get('id', [DashboardController::class, 'id'])->name('logout');
+// Route::get('id', [DashboardController::class, 'id'])->name('logout');
+
 
 Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/search',[SearchController::class,'search'])->name('search');
 
-        # Common
+        Route::post('update/password',[DashboardController::class,'change_password'])->name('update.password');
+
+        
+ 
         //Area
         Route::get('division-get-district', [AreaController::class, 'divisionGetDistrict'])->name('division-get-district');
         Route::get('district-get-upazila', [AreaController::class, 'districtGetUpazila'])->name('district-get-upazila');
@@ -101,7 +105,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         // Profile 
-        Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+        Route::get('profile/{id}', [ProfileController::class, 'profile'])->name('profile');
+        Route::get('profile/hierarchy/{id}', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
+        Route::get('freelancer/join/process/{id}', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
@@ -178,6 +184,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Customer 
         Route::resource('customer', CustomerController::class);
         Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save'); 
+        Route::get('customer-approve', [CustomerController::class, 'customer_approve'])->name('customer.approve');
         Route::post('customer-approve-save', [CustomerController::class, 'customer_approve_save'])->name('customer.approve.save');
       
         Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
@@ -231,15 +238,31 @@ Route::group(['middleware' => 'auth'], function () {
         // Follow Up
         Route::resource('followup', FollowupController::class);
         Route::get('get-project-duration-type-name', [FollowupController::class, 'projectDurationTypeName'])->name('get-project-duration-type-name');
+        Route::post('follow-up-save/{id?}', [FollowupController::class, 'save'])->name('follow-up.save');
+        Route::any('follow-up-delete/{id}', [FollowupController::class, "followUpDelete"])->name('followUp.delete');
+        Route::get('follow-up-approve', [FollowupController::class, 'followUpApprove'])->name('followUp.approve');
+        Route::post('follow-up-approve-save', [FollowupController::class, 'followUpApproveSave'])->name('followUp.approve.save');
 
         // Follow Up Analysis
         Route::resource('followup-analysis', FollowupAnalysisController::class);
-
+        Route::post('follow-up-analysis-save/{id?}', [FollowupAnalysisController::class, 'save'])->name('follow-up-analysis.save');
+        Route::any('follow-up-analysis-delete/{id}', [FollowupAnalysisController::class, "followUpDelete"])->name('followUp-analysis.delete');
+        Route::get('follow-up-analysis-approve', [FollowupAnalysisController::class, 'followUpApprove'])->name('followUp-analysis.approve');
+        Route::post('follow-up-analysis-approve-save', [FollowupAnalysisController::class, 'followUpApproveSave'])->name('followUp-analysis.approve.save');
+        
         // Negotation
         Route::resource('negotiation', NegotiationController::class);
+        Route::post('negotiation-save/{id?}', [NegotiationController::class, 'save'])->name('negotiation.save');
+        Route::any('negotiation-delete/{id}', [NegotiationController::class, "negotiationDelete"])->name('negotiation.delete');
+        Route::get('negotiation-approve', [NegotiationController::class, 'negotiationApprove'])->name('negotiation.approve');
+        Route::post('negotiation-approve-save', [NegotiationController::class, 'negotiationApproveSave'])->name('negotiation-approve.save');
 
         // Negotation Analysis
         Route::resource('negotiation-analysis', NegotiationAnalysisController::class);
+        Route::post('negotiation-analysis-save/{id?}', [NegotiationAnalysisController::class, 'save'])->name('negotiation-analysis.save');
+        Route::any('negotiation-analysis-delete/{id}', [NegotiationAnalysisController::class, "negotiationAnalysisDelete"])->name('negotiation-analysis.delete');
+        Route::get('negotiation-analysis-approve', [NegotiationAnalysisController::class, 'negotiationAnalysisApprove'])->name('negotiation-analysis.approve');
+        Route::post('negotiation-analysis-approve-save', [NegotiationAnalysisController::class, 'negotiationAnalysisApproveSave'])->name('negotiation-analysis-approve.save');
 
 
         // Salse
@@ -250,7 +273,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Rejection
         Route::resource('rejection', RejectionController::class);
-
+        Route::post('rejection-save/{id?}', [RejectionController::class, 'save'])->name('rejection.save');
+        Route::any('rejection-delete/{id}', [RejectionController::class, "rejectionDelete"])->name('rejection.delete');
+        Route::get('rejection-approve', [RejectionController::class, 'rejectionApprove'])->name('rejection.approve');
+        Route::post('rejection-save', [RejectionController::class, 'rejectionApproveSave'])->name('rejection.approve.save');
+        
         // Return
         Route::resource('return', SalseReturnController::class);
 

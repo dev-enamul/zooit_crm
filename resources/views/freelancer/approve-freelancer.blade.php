@@ -49,22 +49,24 @@
                                     <tr class="">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
+                                                </a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
                                                     <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->id}},{{$data->user_id}})">Approve</a> 
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}},'{{$data->user->user_id}}')">Approve</a> 
                                                 </div>
                                             </div> 
                                         </td> 
                                         <td>{{$key+1}}</td>
                                         <td>{{get_date($data->created_at)}}</td>
-                                        <td>{{@$data->name}}</td>
-                                        <td>{{@$data->freelancer->profession->name}}</td>
-                                        <td>Badulgachhi</td>
-                                        <td>Mothorapur</td>
-                                        <td>Chalkmothor</td>
-                                        <td>01796351081</td>
-                                        <td>FL-154</td> 
+                                        <td>{{@$data->user->name}}</td>
+                                        <td>{{@$data->profession->name}}</td>
+                                        <td>{{@$data->user->userAddress->upazila->name}}</td>
+                                        <td>{{@$data->user->userAddress->union->name}}</td>
+                                        <td>{{@$data->user->userAddress->village->name}}</td>
+                                        <td>{{@$data->user->phone}}</td>
+                                        <td>-</td> 
                                     </tr> 
                                     @endforeach 
                                 </tbody>
@@ -84,12 +86,12 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header"> 
-                <h5 class="modal-title">Approve <span class="text-primary">Md Enamul Haque</span></h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                <h5 class="modal-title">Approve Freelancer</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
             </div>
 
             <form action="{{route('approve-freelancer.store')}}" method="POST">
                 @csrf 
-                <input type="hidden" name="freelancer_id">
+                <input type="hidden" name="user_id">
                 <div class="modal-body"> 
                     @can('freelancer-counselling')
                         <div class="form-group mb-2">
@@ -142,8 +144,8 @@
                     @endcan 
 
                     @can('freelancer-id-create')
-                        <label for="remark">Freelancer ID</label> 
-                        <input type="text" name="user_id" id="user_id" readonly>
+                        <label for="fl_id">Freelancer ID</label> 
+                        <input class="form-control" type="text" name="fl_id" id="fl_id" readonly>
                     @endcan
                 </div> 
                 <div class="modal-footer">
@@ -160,9 +162,9 @@
 
 @section('script')
 <script>
-    function approveFreelancer(id){ 
-        $('input[name="freelancer_id"]').val(id);
-        $('input[name="user_id"]').val(id);
+    function approveFreelancer(user_id, fl_id){ 
+        $('input[name="user_id"]').val(user_id);
+        $('input[name="fl_id"]').val(fl_id); 
         $('#approve_frelancer').modal('show');
     }
 </script>

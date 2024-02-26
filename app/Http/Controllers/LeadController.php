@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Priority;
+use App\Models\ApproveSetting;
 use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Lead;
@@ -135,6 +136,10 @@ class LeadController extends Controller
             $lead->updated_by               = auth()->id();
             $lead->purchase_capacity        = $request->priority;
             $lead->possible_purchase_date   = date('Y-m-d', strtotime($request->purchase_date));
+            $approve_setting = ApproveSetting::where('name','lead')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $lead->approve_by = auth()->user()->id;
+            } 
             $lead->status                   = 0;
             $lead->created_at               = now();
             $lead->save();

@@ -60,11 +60,11 @@ class PresentationAnalysisController extends Controller
         $title = 'Vist Analysis Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = LeadAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+        $customers          = Presentation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
         $employees          = User::whereIn('id', $my_all_employee)->get();
-        $freelancers        = User::where('user_type',2)->whereIn('ref_id',$my_all_employee)->get();
+        $visitors        = User::where('user_type',3)->get();
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
         $units              = Unit::select('id','title')->get();
@@ -73,11 +73,11 @@ class PresentationAnalysisController extends Controller
         [
             'employee' => Auth::user()->id,
         ];
-        if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
+        if ($request->has('customer_id')) {
+            $selected_data['customer'] = $request->customer_id;
         }
-
-        return view('presentation_analysis.presentation_analysis_save',compact('title','customers','priorities','projects','units','freelancers','employees','selected_data'));
+ 
+        return view('presentation_analysis.presentation_analysis_save',compact('title','customers','priorities','projects','units','visitors','employees','selected_data'));
     }
 
     public function save(Request $request, $id = null)
@@ -114,15 +114,13 @@ class PresentationAnalysisController extends Controller
             $visit->customer_id = $request->customer_id;
             $visit->employee_id = $request->employee;
             $visit->remark = $request->remark;
-            $visit->created_by = auth()->id();
-            $visit->created_at = now();
             $visit->status = 0;
             $visit->created_at = now();
             $visit->created_by = auth()->id();
             $visit->save();
 
             if($visit) {
-                $visit = Presentation::where('customer_id',$request->customer)->first();
+                $visit = Presentation::where('customer_id',$request->customer_id)->first();
                 $visit->status = 1;
                 $visit->save();
             }
@@ -159,27 +157,28 @@ class PresentationAnalysisController extends Controller
         $user_id        = Auth::user()->id; 
         $my_employee    = my_employee($user_id);
         $presentations  = VisitAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
-        return view('presentation.presentation_analysis_approve', compact('presentations'));
+        return view('presentation_analysis.presentation_analysis_approve', compact('presentations'));
     }
 
     public function presentationAnalysisApproveSave(Request $request) {
-        if($request->has('presentation_id') && $request->presentation_id !== '' & $request->presentation_id !== null) {
+        
+        if($request->has('customer_id') && $request->customer_id !== '' & $request->customer_id !== null) {
             DB::beginTransaction();
             try {
-                foreach ($request->presentation_id as $key => $presentation_id) {
-                    $lead = Presentation::where('id',$presentation_id)->first();
+                foreach ($request->customer_id as $key => $customer_id) { 
+                    $lead = VisitAnalysis::where('customer_id',$customer_id)->first(); 
                     $lead->approve_by = Auth::user()->id;
                     $lead->save();
                 }
                 DB::commit();
-                return redirect()->route('presen')->with('success', 'Status Updated Successfully');
+                return redirect()->route('presentation_analysis.index')->with('success', 'Status Updated Successfully');
             } catch (Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
             
         } else {
-            return redirect()->route('presentation.approve')->with('error', 'Something went wrong!');
+            return redirect()->back()->with('error', 'Please Select Customer');
         }
 
     }

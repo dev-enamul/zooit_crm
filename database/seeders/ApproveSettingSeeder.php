@@ -14,9 +14,9 @@ class ApproveSettingSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            'employee',
+            // 'employee',
             'product',
-            'freelancer',
+            // 'freelancer',
             'customer',
             'prospecting',
             'cold_calling',

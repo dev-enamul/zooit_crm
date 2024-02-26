@@ -57,8 +57,8 @@
                                                 </option>
                                                 @isset($cstmrs)
                                                     @foreach ($cstmrs as $cstm)
-                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($presentation->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->user_id}})
+                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($presentation->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -151,10 +151,11 @@
                                             </span>
                                         @endif
                                     </div> 
-                                    <div class="col-md-12">
+
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark">{{isset($presentation) ? $presentation->remark : old('remark')}}</textarea>
+                                            <textarea class="form-control" id="remark" rows="1" name="remark">{{isset($presentation) ? $presentation->remark : old('remark')}}</textarea>
                                         </div>
                                     </div>
                                 </div>

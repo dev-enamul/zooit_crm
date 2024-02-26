@@ -17,8 +17,7 @@ return new class extends Migration
             $table->float('on_choice_price');
             $table->float('lottery_price');
             $table->foreignId('project_unit_id')->constrained();
-            $table->timestamps();
-
+            $table->timestamps(); 
         });
     }
 

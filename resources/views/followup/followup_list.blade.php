@@ -12,10 +12,9 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Follow Ups</h4> 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Follow Up List</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
 
                     </div>
@@ -27,27 +26,7 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
+ 
 
                             <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
@@ -64,28 +43,35 @@
                                         <th>Freelancer</th> 
                                     </tr>
                                 </thead>
-                                <tbody> 
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                    <a class="dropdown-item" href="negotiation_entry.html">Negotiation</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>1</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td><a href="customer_profile.html">Md Enamul Haque</a></td>
-                                        <td>01796351081</td>
-                                        <td>2/1, Mohammadpur, Dhaka-1230</td>
-                                        <td>$3555426</td> 
-                                        <td>Musafir Plaza</td>
-                                        <td>A-5</td> 
-                                        <td>Md Jamil [FL154]</td>  
-                                    </tr> 
-
+                                <tbody>
+                                    @foreach ($followUps as  $followUp)
+                                        <tr class="{{$followUp->approve_by==null?"table-warning":""}}">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{@$followUp->customer->user->image()}}">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
+                                                        <a class="dropdown-item" href="{{route('followup.edit',$followUp->id)}}">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followUp.delete',$followUp->id) }}')">Delete</a> 
+                                                        <a class="dropdown-item" href="{{route('followup-analysis.create',['customer'=>$followUp->customer->id])}}">Follow Up Analysis</a>
+                                                    </div>
+                                                </div> 
+                                            </td>
+                                            <td class="">{{ $loop->iteration}}</td>
+                                            <td class="">{{ get_date($followUp->created_at) }}</td>
+                                           
+                                            <td class="">{{ @$followUp->customer->user->name }}</td>
+                                            <td class=""> {{ @$followUp->customer->user->phone }}</td>
+                                            <td class=""> {{ @$followUp->customer->user->userAddress->address }}</td>
+                                            <td class=""> {{ @$followUp->negotiation_amount }}</td>
+                                            <td class=""> {{ @$followUp->project->name }}</td>
+                                            <td class="">   {{count(json_decode($followUp->project_units))}} </td>
+                                            <td class=""> {{ @$followUp->customer->reference->name }} [{{ @$followUp->customer->reference->user_id }}] </td>
+                                           
+                                        </tr> 
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

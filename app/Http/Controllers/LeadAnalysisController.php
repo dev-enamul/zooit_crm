@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Religion;
+use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\LeadAnalysis;
@@ -54,8 +55,8 @@ class LeadAnalysisController extends Controller
     }
 
 
-    public function create()
-    {
+    public function create(Request $request)
+    { 
         $title = 'Lead Analysis Entry';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
@@ -63,11 +64,12 @@ class LeadAnalysisController extends Controller
                                 $q->whereIn('ref_id',$my_all_employee);
                             })->get();
         $projects = Project::where('status',1)->select('id','name')->get();
-        $units          = Unit::select('id','title')->get();
-        $religions = $this->religion();
-        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $units          = Unit::select('id','title')->get(); 
+        $employees          = User::whereIn('id', $my_all_employee)->where('status',1)->get();
+        $selected_data['customer'] = $request->customer;
+        $selected_data['employee'] = Auth::user()->id;
 
-        return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','religions','employees'));
+        return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','employees','selected_data'));
     }
 
     public function save(Request $request, $id = null)
@@ -77,23 +79,22 @@ class LeadAnalysisController extends Controller
             'employee' => ['required', 'numeric'],
             'project' => ['required', 'numeric'],
             'unit' => ['required', 'numeric'],
-            'hobby' => ['required', 'string', 'max:255'],
-            'income_range' => ['required', 'numeric'],
-            'religion' => ['required', 'numeric'],
-            'profession_year' => ['required', 'numeric'],
-            'customer_need' => ['required', 'string', 'max:255'],
-            'tentative_amount' => ['required', 'numeric'],
-            'facebook_id' => ['required', 'string', 'max:255'],
-            'customer_problem' => ['required', 'string', 'max:255'],
-            'refferal' => ['required', 'string', 'max:255'],
-            'influencer' => ['required', 'string', 'max:255'],
-            'family_member' => ['required', 'numeric'],
-            'decision_maker' => ['required', 'string', 'max:255'],
-            'previous_experiance' => ['required', 'string', 'max:255'],
-            'instant_investment' => ['required', 'string', 'max:255'],
-            'buyer' => ['required', 'string', 'max:255'],
-            'area' => ['required', 'string', 'max:255'],
-            'consumer' => ['required', 'string', 'max:255'],
+            'hobby' => ['nullable', 'string', 'max:255'],
+            'income_range' => ['nullable', 'numeric'], 
+            'profession_year' => ['nullable', 'numeric'],
+            'customer_need' => ['nullable', 'string', 'max:255'],
+            'tentative_amount' => ['nullable', 'numeric'],
+            'facebook_id' => ['nullable', 'string', 'max:255'],
+            'customer_problem' => ['nullable', 'string', 'max:255'],
+            'refferal' => ['nullable', 'string', 'max:255'],
+            'influencer' => ['nullable', 'string', 'max:255'],
+            'family_member' => ['nullable', 'numeric'],
+            'decision_maker' => ['nullable', 'string', 'max:255'],
+            'previous_experiance' => ['nullable', 'string', 'max:255'],
+            'instant_investment' => ['nullable', 'string', 'max:255'],
+            'buyer' => ['nullable', 'string', 'max:255'],
+            'area' => ['nullable', 'string', 'max:255'],
+            'consumer' => ['nullable', 'string', 'max:255'],
         ]);
         
         if ($validator->fails()) {
@@ -129,7 +130,15 @@ class LeadAnalysisController extends Controller
             ]);
             return redirect()->route('lead-analysis.index')->with('success','Lead Analysis update successfully');
 
-        } else {
+        } else { 
+
+            $approve_setting = ApproveSetting::where('name','lead_analysis')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $approve_by = auth()->user()->id;
+            }else{
+                $approve_by = null; 
+            }
+
             $lead_analysis = LeadAnalysis::create([
                 'customer_id'          => $request->customer,
                 'employee_id'          => $request->employee, 
@@ -154,8 +163,12 @@ class LeadAnalysisController extends Controller
                 'status'               => 0,    
                 'consumer'             => $request->consumer,
                 'created_by'           => auth()->id(),
+                'approve_by'           => $approve_by,
                 'created_at'           => now(),
             ]);
+            $lead = Lead::where('customer_id',$request->customer)->first();
+            $lead->status = 1;
+            $lead->save();
             return redirect()->route('lead-analysis.index')->with('success','Lead Analysis create successfully');
         }
     }

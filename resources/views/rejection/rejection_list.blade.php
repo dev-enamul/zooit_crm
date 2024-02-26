@@ -26,7 +26,6 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">
-
                             <div class="d-flex justify-content-between"> 
                                 <div class="">
                                     <div class="dt-buttons btn-group flex-wrap mb-2">      
@@ -64,27 +63,29 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr>
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
-                                                    <a class="dropdown-item" href="negotiation_entry.html">Negotiation</a>
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td>1</td>
-                                        <td>5 Dec, 2023</td>
-                                        <td><a href="customer_profile.html">Md Enamul Haque</a></td>
-                                        <td>01796351081</td>
-                                        <td>2/1, Mohammadpur, Dhaka-1230</td>
-                                        <td>$3555426</td> 
-                                        <td>Musafir Plaza</td>
-                                        <td>A-5</td> 
-                                        <td>Md Jamil [FL154]</td>  
-                                    </tr> 
-
+                                    @foreach ($rejections as  $rejection)
+                                        <tr>
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="customer_profile.html">Customer Profile</a> 
+                                                        <a class="dropdown-item" href="{{route('rejection.edit',$rejection->id)}}">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('rejection.delete',$rejection->id) }}')">Delete</a> 
+                                                    </div>
+                                                </div> 
+                                            </td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">{{ $loop->iteration}}</td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">{{ $rejection->created_at }}</td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">{{ @$rejection->customer->user->name }}</td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}"> {{ @$rejection->customer->user->phone }}</td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}"> {{ @$rejection->customer->user->userAddress->address }}</td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}"> {{ @$rejection->negotiation_amount }}</td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}"> {{ @$rejection->project->name }}</td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">  2 #dummmy </td>
+                                            <td class="{{ $rejection->status == 0 ? 'text-danger' : '' }}">  {{ @$rejection->employee->user->name }} </td>
+                                        </tr> 
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
