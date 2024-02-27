@@ -35,20 +35,20 @@ class EmployeeController extends Controller
     
     public function index(){ 
         $datas = User::where('status',1)->where('user_type',1)->latest('id')->get();
-        $latestUpdateUserAddress = UserAddress::orderBy('updated_at', 'desc')->first();
-        $latestUpdateReportingUser = ReportingUser::orderBy('updated_at', 'desc')->first();
+        // $latestUpdateUserAddress = UserAddress::orderBy('updated_at', 'desc')->first();
+        // $latestUpdateReportingUser = ReportingUser::orderBy('updated_at', 'desc')->first();
 
-        $lastUpdateDate = max(
-            optional($latestUpdateUserAddress)->updated_at,
-            optional($latestUpdateReportingUser)->updated_at
-        ); 
-        if($latestUpdateUserAddress->updated_at > $latestUpdateReportingUser->updated_at){
-            $lastUpdateDate = $latestUpdateUserAddress->updated_at;
-        }else{
-            $lastUpdateDate = $latestUpdateReportingUser->updated_at;
-        }
+        // $lastUpdateDate = max(
+        //     optional($latestUpdateUserAddress)->updated_at,
+        //     optional($latestUpdateReportingUser)->updated_at
+        // ); 
+        // if($latestUpdateUserAddress->updated_at > $latestUpdateReportingUser->updated_at){
+        //     $lastUpdateDate = $latestUpdateUserAddress->updated_at;
+        // }else{
+        //     $lastUpdateDate = $latestUpdateReportingUser->updated_at;
+        // }
 
-        return view('employee.employee_list',compact('datas','lastUpdateDate'));
+        return view('employee.employee_list',compact('datas'));
     }
 
     public function create(){    
