@@ -17,25 +17,25 @@ class SearchController extends Controller
         if(strpos($key,'cus-')!==false){ 
             $customer = Customer::where('customer_id',$key)->first();
             if($customer == null){
-                return redirect()->back()->with('error','No customer found with this id');
+                return redirect()->back()->with('error','Invalid customer id');
             } 
-            return redirect()->route('customer.profile', ['id' => $customer->id]);
+            return redirect()->route('customer.profile',encrypt($customer->id));
         }
 
         if(strpos($key,'emp-')!==false){
             $employee = User::where('user_id',$key)->first();
             if($employee == null){
-                return redirect()->back()->with('error','No employee found with this id');
+                return redirect()->back()->with('error','Invalid employee id');
             }
-            return redirect()->route('freelancer.profile');
+            return redirect()->route('profile',encrypt($employee->id));
         }
 
         if(strpos($key,'fl-')!==false){ 
             $freelancer = User::where('user_id',$key)->first();
             if($freelancer == null){
-                return redirect()->back()->with('error','No freelancer found with this id');
+                return redirect()->back()->with('error','Invalid freelancer id');
             }
-            return redirect()->route('freelancer.profile');
+            return redirect()->route('profile',encrypt($freelancer->id));
         }
 
         $datas = User::where('name','like','%'.$key.'%')
