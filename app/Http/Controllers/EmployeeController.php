@@ -42,11 +42,11 @@ class EmployeeController extends Controller
             optional($latestUpdateUserAddress)->updated_at,
             optional($latestUpdateReportingUser)->updated_at
         ); 
-        if($latestUpdateUserAddress->updated_at > $latestUpdateReportingUser->updated_at){
-            $lastUpdateDate = $latestUpdateUserAddress->updated_at;
-        }else{
-            $lastUpdateDate = $latestUpdateReportingUser->updated_at;
-        }
+        // if($latestUpdateUserAddress->updated_at > $latestUpdateReportingUser->updated_at){
+        //     $lastUpdateDate = $latestUpdateUserAddress->updated_at;
+        // }else{
+        //     $lastUpdateDate = $latestUpdateReportingUser->updated_at;
+        // }
 
         return view('employee.employee_list',compact('datas','lastUpdateDate'));
     }
@@ -555,5 +555,10 @@ class EmployeeController extends Controller
     public function nationality()
     {
         return Nationality::values();
+    }
+
+    public function employeePrint($id) {
+        $employee = Employee::find($id);
+        return view('employee.print',compact('employee'));
     }
 }
