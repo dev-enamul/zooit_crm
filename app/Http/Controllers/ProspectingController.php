@@ -43,11 +43,13 @@ class ProspectingController extends Controller
         } 
 
         $user_employee = my_all_employee($user_id);
-        $prospectings = Prospecting::where('status', 0)->whereIn('employee_id', $user_employee)
-        ->where(function ($query) {
-            $query->where('approve_by','!=',null)
-                ->orWhere('created_by', Auth::user()->id)
-                ->orWhere('employee_id', Auth::user()->id); 
+        $prospectings = Prospecting::where(function ($q){
+            $q->where('approve_by','!=',null)
+                ->orWhere('employee_id', Auth::user()->id)
+                ->orWhere('created_by', Auth::user()->id);
+        }) 
+        ->whereHas('customer', function($q) use($user_employee){ 
+            $q->whereIn('ref_id', $user_employee);
         });
 
         if(isset($request->date) && !empty($request->date)){ 

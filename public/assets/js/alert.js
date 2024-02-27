@@ -79,7 +79,7 @@ function approveItem(url) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Yes, complete it!"
     }).then(function (result) {
         if (result.isConfirmed) {
             approveNow();

@@ -60,14 +60,21 @@ class CustomerController extends Controller
         return Nationality::values();
     }
 
-    public function index(){
+    public function index(Request $request){
         $my_all_employee = my_all_employee(auth()->user()->id);
-        $datas       =  Customer::whereIn('ref_id',$my_all_employee)
-                        ->where('status',0)
+        $datas       =  Customer::whereIn('ref_id',$my_all_employee) 
                         ->where(function($q){
                             $q->where('created_by',auth()->user()->id)
-                            ->orWhere('approve_by','!=',null);
-                        })->get(); 
+                            ->orWhere('approve_by','!=',null)
+                            ->orWhere('ref_id',auth()->user()->id);
+                        }); 
+        
+        if(isset($request->status) && $request->status != null){
+            $datas = $datas->where('status',$request->status);
+        }else{
+            $datas = $datas->where('status',0);
+        } 
+        $datas = $datas->get();
 
         $countries   = $this->getCachedCountries();
         $divisions   = $this->getCachedDivisions();
