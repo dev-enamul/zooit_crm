@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Negotiation;
 use App\Models\NegotiationAnalysis;
+use App\Models\NegotiationWaitingDay;
 use App\Models\Rejection;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +19,7 @@ class RejectionController extends Controller
 {
      
     public function index(Request $request)
-    {
-
+    { 
         $my_all_employee = my_all_employee(auth()->user()->id);
         $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
         $employees = User::whereIn('id', $my_all_employee)->get();
@@ -27,15 +29,34 @@ class RejectionController extends Controller
         }else{
             $user_id = Auth::user()->id;
         } 
-      
+
+        $waiting_day = NegotiationWaitingDay::first();
+        if(isset($waiting_day) && $waiting_day != null){
+            $startDate = Carbon::now()->subDays($waiting_day->waiting_day)->startOfDay(); 
+        }else{
+            $startDate = Carbon::now()->subDays(7)->startOfDay(); 
+        }   
         $user_employee = my_all_employee($user_id);
-        $rejections = Rejection::whereHas('customer', function($q) use($user_employee){ 
+        $negotiations = NegotiationAnalysis::where('created_at','<',$startDate)
+        ->where(function($q){
+            $q->where('approve_by','!=',null)
+                ->orWhere('employee_id', Auth::user()->id)
+                ->orWhere('created_by', Auth::user()->id);
+        })
+        ->whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
         }); 
+  
 
-        $rejections = $rejections->orderBy('id','desc')->get();  
-        $filter =  $request->all();
-        return view('rejection.rejection_list', compact('rejections','employee_data','employees','filter'));
+         $negotiations = $negotiations->orderBY('id','desc')->get();  
+         $filter =  $request->all();
+        return view('rejection.rejection_list', compact([
+            'negotiations',
+            'employee_data',
+            'employees',
+            'filter',
+            'waiting_day'
+        ]));
     }
 
    
@@ -47,8 +68,7 @@ class RejectionController extends Controller
         $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
-        $employees          = User::whereIn('id', $my_all_employee)->get();
-
+       
         $selected_data = 
         [
             'employee' => Auth::user()->id,
@@ -58,14 +78,13 @@ class RejectionController extends Controller
             $selected_data['customer'] = $request->customer;
         }
 
-        return view('rejection.rejection_save',compact('customers','employees','selected_data'));
+        return view('rejection.rejection_save',compact('customers','selected_data'));
     }
 
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [
-            'customer'          => 'required',
-            'employee'          => 'required',
+            'customer'          => 'required', 
             'remark'            => 'nullable',
         ]);
         if ($validator->fails()) {
@@ -75,7 +94,7 @@ class RejectionController extends Controller
         if (!empty($id)) {
             $rejection = Rejection::findOrFail($id);
             $rejection->customer_id = $request->customer;
-            $rejection->employee_id = $request->employee;
+            $rejection->employee_id = Auth::user()->id;
 
             $rejection->remark = $request->remark;
             $rejection->updated_by = $request->updated_by;
@@ -85,21 +104,21 @@ class RejectionController extends Controller
         } else {
             $rejection = new Rejection();
             $rejection->customer_id = $request->customer;
-            $rejection->employee_id = $request->employee;
+            $rejection->employee_id = Auth::user()->id;
 
             $rejection->remark = $request->remark;
             $rejection->created_by = auth()->id();
             $rejection->created_at = now();
-            $rejection->status = 0;
+            $rejection->status = 1;
             $rejection->save();
 
-            if($rejection) {
-                $visit = NegotiationAnalysis::where('customer_id',$request->customer)->first();
-                $visit->status = 1;
-                $visit->save();
-            }
+            // if($rejection) {
+            //     $visit = NegotiationAnalysis::where('customer_id',$request->customer)->first();
+            //     $visit->status = 1;
+            //     $visit->save();
+            // }
             
-            return redirect()->route('rejection .index')->with('success','Rejection create successfully');
+            return redirect()->route('rejection.index')->with('success','Rejection create successfully');
         }
     }
 
@@ -111,8 +130,8 @@ class RejectionController extends Controller
         $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
-        $employees          = User::whereIn('id', $my_all_employee)->get();
 
+        $employees          = User::whereIn('id', $my_all_employee)->get(); 
         $selected_data = 
         [
             'employee' => Auth::user()->id,

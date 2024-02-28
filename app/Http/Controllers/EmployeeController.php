@@ -556,4 +556,9 @@ class EmployeeController extends Controller
     {
         return Nationality::values();
     }
+
+    public function employeePrint($id) {
+        $employee = Employee::find($id);
+        return view('employee.print',compact('employee'));
+    }
 }
