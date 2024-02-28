@@ -84,10 +84,7 @@ use Illuminate\Http\Request;
 */
 
 Auth::routes();
-Route::post('login', [LoginController::class, 'login'])->name('login');
-// Route::get('id', [DashboardController::class, 'id'])->name('logout');
-
-
+Route::post('login', [LoginController::class, 'login'])->name('login'); 
 Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/search',[SearchController::class,'search'])->name('search');
@@ -121,9 +118,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('designation/user/edit/{id}', [EmployeeEditController::class, 'designation_edit'])->name('designation.user.edit');
         Route::post('designation/user/update/{id}', [EmployeeEditController::class, 'designation_update'])->name('designation.user.update');
-        
         Route::any('deactive/user/{id}', [EmployeeEditController::class, 'deactive_user'])->name('deactive.user');
-        
+        Route::get('employee-form/{id}', [EmployeeController::class, "employeeForm"])->name('employee.print');
+
         #Employee Permission 
         Route::get('user-permission/{id}', [EmployeePermissionController::class, 'employee_permission'])->name('employee.permission');
         Route::post('user-permission-update', [EmployeePermissionController::class, 'user_permission_update'])->name('user.permission.update');
@@ -155,23 +152,9 @@ Route::group(['middleware' => 'auth'], function () {
  
         Route::get('designation/freelancer/edit/{id}', [FreelancerEditController::class, 'designation_edit'])->name('designation.freelancer.edit');
         Route::post('designation/freelancer/update/{id}', [FreelancerEditController::class, 'designation_update'])->name('designation.freelancer.update');
-        
         Route::any('deactive/freelancer/{id}', [FreelancerEditController::class, 'deactive_user'])->name('deactive.freelancer');
 
-
-        Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
-        Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');
-        
-        Route::get('area/user/edit/{id}', [EmployeeEditController::class, 'area_edit'])->name('user.area.edit');
-        Route::post('area/user/update/{id}', [EmployeeEditController::class, 'area_update'])->name('user.area.update');
-
-        Route::get('designation/user/edit/{id}', [EmployeeEditController::class, 'designation_edit'])->name('designation.user.edit');
-        Route::post('designation/user/update/{id}', [EmployeeEditController::class, 'designation_update'])->name('designation.user.update');
-        
-        Route::any('deactive/user/{id}', [EmployeeEditController::class, 'deactive_user'])->name('deactive.user');
-
-        Route::get('employee-print/{id}', [EmployeeController::class, "employeePrint"])->name('employee.print');
-
+ 
         //Route::any('/freelacer-delete/{id}', [FreelancerController::class, "freelancerDelete"])->name('freelancer.delete');
 
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');

@@ -97,8 +97,7 @@
 
         @if(session('warning'))
             Toast.fire({ icon: "warning", title: '{{ session('warning') }}' }); 
-        @endif 
- 
+        @endif  
     </script>
 </body>
  

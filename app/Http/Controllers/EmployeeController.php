@@ -557,8 +557,16 @@ class EmployeeController extends Controller
         return Nationality::values();
     }
 
-    public function employeePrint($id) {
+    public function employeeForm($id) {
         $employee = Employee::find($id);
-        return view('employee.print',compact('employee'));
+        $user = User::find($employee->user_id);
+        if(!$employee){
+            return redirect()->back()->with('error', 'Employee Not Found');
+        } 
+        if(!$user){
+            return redirect()->back()->with('error', 'User Not Found');
+        }
+
+        return view('employee.employee_details',compact('employee','user'));
     }
 }
