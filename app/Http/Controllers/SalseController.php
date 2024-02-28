@@ -31,6 +31,8 @@ class SalseController extends Controller
         return view('salse.salse_list');
     }
 
+    
+
     public function create(Request $request)
     {
         $title              = 'Sales Entry';
