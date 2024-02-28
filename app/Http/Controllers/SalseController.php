@@ -36,7 +36,7 @@ class SalseController extends Controller
         $title              = 'Sales Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = Negotiation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+        $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
         $projects           = Project::where('status',1)->get(['name', 'id']);
@@ -60,20 +60,28 @@ class SalseController extends Controller
             $selected_data['project'] = $neg_project->project_id;
             $selected_data['unit']  = $neg_project->unit_id;
             $selected_data['payment_duration'] = UnitPrice::find($neg_project->payment_duration);
-            $selected_data['select_type']   = $neg_project->select_type;
-            $selected_data['project_units'] = json_decode($neg_project->project_units);
-            #$selected_data['regular_amount'] = json_decode($neg_project->project_units);
+            $selected_data['select_type']   = 2;
+            $selected_data['project_units'] = json_decode($neg_project->project_units); 
             $u_id= Unit::find($neg_project->unit_id);
             $selected_data['booking']  = $u_id->booking;
-            $selected_data['down_payment']  = $u_id->down_payment;
-            
+            $selected_data['down_payment']  = $u_id->down_payment; 
 
             if (!is_array($selected_data['project_units'])) {
                 $selected_data['project_units'] = [];
             }
         }
 
-        return view('salse.salse_save', compact('facilities','unit_prices','units','selected_data','priorities','projects','projectUnits','customers','employees'));
+        return view('salse.salse_save', compact([
+            'facilities',
+            'unit_prices',
+            'units',
+            'selected_data',
+            'priorities',
+            'projects',
+            'projectUnits',
+            'customers',
+            'employees'
+        ]));
     }
 
     public function store(Request $request)

@@ -102,13 +102,7 @@ class NegotiationController extends Controller
             $follow->payment_duration = $request->payment_duration;
             $follow->project_units = json_encode($request->input('project_unit'));
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount');
-
-            $approve_setting = ApproveSetting::where('name','negotiation')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
-                $follow->approve_by = auth()->user()->id;
-            }
-
+            $follow->negotiation_amount = $request->input('negotiation_amount'); 
             $follow->remark = $request->remark;
             $follow->updated_by = $request->updated_by;
             $follow->updated_at = $request->updated_at;
@@ -126,8 +120,11 @@ class NegotiationController extends Controller
             $follow->project_units = json_encode($request->input('project_unit'));
             $follow->regular_amount = $request->input('regular_amount');
             $follow->negotiation_amount = $request->input('negotiation_amount');
-            $follow->remark = $request->remark;
-
+            $follow->remark = $request->remark; 
+            $approve_setting = ApproveSetting::where('name','negotiation')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $follow->approve_by = auth()->user()->id;
+            } 
             $follow->created_by = auth()->id();
             $follow->created_at = now();
             $follow->status = 0;

@@ -262,7 +262,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('negotiation-analysis-save/{id?}', [NegotiationAnalysisController::class, 'save'])->name('negotiation-analysis.save');
         Route::any('negotiation-analysis-delete/{id}', [NegotiationAnalysisController::class, "negotiationAnalysisDelete"])->name('negotiation-analysis.delete');
         Route::get('negotiation-analysis-approve', [NegotiationAnalysisController::class, 'negotiationAnalysisApprove'])->name('negotiation-analysis.approve');
-        Route::post('negotiation-analysis-approve-save', [NegotiationAnalysisController::class, 'negotiationAnalysisApproveSave'])->name('negotiation-analysis-approve.save');
+        Route::any('negotiation-analysis-approve-save', [NegotiationAnalysisController::class, 'negotiationAnalysisApproveSave'])->name('negotiation-analysis-approve.save');
+        Route::post('update-negotiation-waiting-day',[NegotiationAnalysisController::class,'update_waiting_day'])->name('update.negotiation.waiting.day');
 
 
         // Salse

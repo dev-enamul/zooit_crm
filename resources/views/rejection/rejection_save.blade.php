@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Prospecting Entry')
+@section('title','Prospecting Reason Entry')
 
 @section('content')
 <div class="main-content">
@@ -9,12 +9,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Rejection Entry</h4>
+                        <h4 class="mb-sm-0">Rejection Reason Entry</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Rejection Entry</li>
+                                <li class="breadcrumb-item active">Rejection Reason Entry</li>
                             </ol>
                         </div>
 
@@ -35,17 +35,17 @@
                             @endif 
                                 @csrf
                                 <div class="row"> 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer</label>
-                                            <select class="form-select" name="customer" id="customer" required>
+                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>
                                                 @isset($customers)
-                                                    @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->id }}" {{ old('customer', isset($rejection) ? $rejection->customer_id : null) == $customer->id ? 'selected' : '' }}>
-                                                            {{ @$customer->customer->user->name }} ({{ $customer->customer->user->user_id}})
+                                                    @foreach ($customers as $cstm)
+                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->customer_id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -55,29 +55,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="employee" id="employee" required>
-                                                <option data-display="Select a employee *" value="">
-                                                    Select a employee
-                                                </option>
-                                                @isset($employees)
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($rejection) ? $rejection->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
-                                                            {{ $employee->name }} ({{ $employee->user_id}})
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-
-
+                                   
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>

@@ -39,9 +39,9 @@
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $cstm)
-                                                    <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($sales->customer_id) == $cstm->customer_id ? 'selected' : '' }}>
-                                                        {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
-                                                    </option>
+                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->customer_id ? 'selected' : '' }}>
+                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
+                                                        </option>
                                                     @endforeach
                                                 @endisset
                                             </select>
@@ -74,7 +74,7 @@
 
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Project<span class="text-danger">*</span></label>
-                                        <select class="form-select reset-data" name="project" id="project" required>
+                                        <select class="select2" search name="project" id="project" required>
                                             <option data-display="Select a project *" value="">
                                                 Select a Project
                                             </option>
@@ -86,105 +86,89 @@
                                                     </option>
                                                 @endforeach
                                             @endisset
-                                        </select>
-                                        
-                                        @if ($errors->has('project'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('project') }}
-                                            </span>
-                                        @endif
+                                        </select> 
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
                                     </div> 
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Unit Type <span class="text-danger">*</span></label>
-                                        <select class="form-select reset-data" name="unit" id="unit" required>
+                                        <select class="select2" name="unit" id="unit" required>
                                             <option data-display="Select a unit *" value="">
                                                 Select a unit
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($sales) ? $sales->unit_id : null) == $unit->id || (isset($selected_data['unit']) && $selected_data['unit'] == $unit->id) ? 'selected' : '' }}>
+                                                    <option booking="{{$unit->booking}}" down_payment="{{$unit->down_payment}}" value="{{ $unit->id }}" {{ old('unit', isset($sales) ? $sales->unit_id : null) == $unit->id || (isset($selected_data['unit']) && $selected_data['unit'] == $unit->id) ? 'selected' : '' }}>
                                                         {{ $unit->title }}
                                                     </option>
                                                 @endforeach
                                             @endisset
                                         </select>
                                         
-                                        @if ($errors->has('unit'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('unit') }}
-                                            </span>
-                                        @endif
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
                                     </div> 
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="payment_duration" class="form-label">Payment Duration <span class="text-danger">*</span></label>
-                                            <select class="select2" name="payment_duration" id="payment_duration" required>
-                                                @isset($unit_prices)
-                                                    @foreach ($unit_prices as $unit_p)
-                                                        <option value="{{ $unit_p->id }}" {{ old('payment_duration', isset($sales) ? $sales->payment_duration : null) == $unit_p->id || (isset($selected_data['payment_duration']) && $selected_data['payment_duration']->id == $unit_p->id) ? 'selected' : '' }}>
-                                                            {{ $unit_p->payment_duration }}
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
-                                            </select>  
-                                        </div>
-                                    </div>
-
-                                    
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="select_type" class="form-label">Select Type <span class="text-danger">*</span></label>
                                             <select class="select2" name="select_type" id="select_type" required>
-                                                <option value="">Select Type</option>
                                                 <option value="1" {{ isset($selected_data['select_type']) && $selected_data['select_type'] == 1 ? 'selected' : '' }}>On Choice</option>
                                                 <option value="2" {{ isset($selected_data['select_type']) && $selected_data['select_type'] == 2 ? 'selected' : '' }}>Lottery</option> 
-                                            </select>
-                                            
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
-                                            <select class="select2" name="project_units[]" id="project_units" multiple required>
-                                                <option value="">Select Project Units</option>
-                                                @foreach ($projectUnits as $project_unit)
-                                                    <option value="{{ $project_unit->id }}" {{ in_array($project_unit->id, $selected_data['project_units']) ? 'selected' : '' }}>
-                                                        {{ $project_unit->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div> 
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="booking" class="form-label">Booking</label>
-                                            <input type="number" class="form-control" name="booking" id="booking" value="{{ isset($selected_data['booking']) ? $selected_data['booking'] : (isset($sales) ? $sales->booking : old('booking')) }}">
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="regular_amount" class="form-label"> Regular Amount</label>
-                                            <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($sales) ? $sales->regular_amount : old('regular_amount')}}"> 
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="amount" class="form-label">Sold Value</label>
-                                            <input type="number" class="form-control" name="sold_value" id="sold_value" value="{{ isset($sales) ? $sales->sold_value : old('sold_value') }}"> 
+                                            </select> 
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="unit_qty" class="form-label">Unit Qty <span class="text-danger">*</span></label>
+                                             <input class="form-control" min="1" type="number" name="unit_qty" id="unit_qty" value="1" required> 
+                                        </div>
+                                    </div>   
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="unit_price" class="form-label">Unit Price <span class="text-danger">*</span></label>
+                                            <input type="number"  class="form-control" name="unit_price" id="unit_price" value="{{isset($sales) ? $sales->regular_amount : old('regular_amount')}}" readonly> 
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="regular_amount" class="form-label"> Total Regular Price <span class="text-danger">*</span></label>
+                                            <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($sales) ? $sales->regular_amount : old('regular_amount')}}" readonly> 
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="payment_duration" class="form-label">Payment Duration [month] <span class="text-danger">*</span></label>
+                                             <input class="form-control" type="number" name="payment_duration" id="payment_duration" value="12" required> 
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="amount" class="form-label">Sold Price</label>
+                                            <input type="number" class="form-control" name="sold_value" id="sold_value" value="{{ isset($sales) ? $sales->sold_value : old('sold_value') }}"> 
+                                        </div>
+                                    </div> 
+ 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label">Discount</label>
                                             <input type="number" value="{{isset($sales) ? $sales->discount : old('discount')}}" class="form-control" name="discount" id="discount" disabled> 
                                         </div>
                                     </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="booking" class="form-label">Booking <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control" name="booking" id="booking" value="" required readonly>
+                                        </div>
+                                    </div>  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -226,6 +210,13 @@
                                                 <option value="semi-annually">Semi-Annually</option>
                                                 <option value="annually">Annually</option> 
                                             </select>  
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="total_installment" class="form-label">Total Installment <span class="text-danger">*</span>.</label>
+                                            <input type="number" value="" class="form-control" name="total_installment" id="total_installment" readonly> 
                                         </div>
                                     </div> 
 
@@ -280,52 +271,42 @@
                 var discount = regularAmount - soldValue;
                 $('#discount').val(discount.toFixed(2));
             });
+
             $('#down_payment, #down_payment_pay').on('input', function() {
                 var down_payment = parseFloat($('#down_payment').val()) || 0;
                 var down_payment_pay = parseFloat($('#down_payment_pay').val()) || 0;
                 var discount1 = down_payment - down_payment_pay;
                 $('#down_payment_due').val(discount1.toFixed(2));
-            });
+            }); 
+        });  
 
-            $('#installment_type, #sold_value').on('input change', function() {
-            var soldValue = parseFloat($('#sold_value').val()) || 0;
-            var installmentType = $('#installment_type').val();
-            var installmentValue = 0;
+        $(document).ready(function() {
+            getUnitPrice();
+            getBookingAndDownPayment();
+            calculateInstallmentAmount();
+        }); 
 
-            if (soldValue > 0 && installmentType) {
-                switch(installmentType) {
-                    case 'weekly':
-                        installmentValue = soldValue / 7;
-                        break;
-                    case 'bi-weekly':
-                        installmentValue = soldValue / 15;
-                        break;
-                    case 'monthly':
-                        installmentValue = soldValue / 30;
-                        break;
-                    case 'quarterly':
-                        installmentValue = soldValue / 90;
-                        break;
-                    case 'semi-annually':
-                        installmentValue = soldValue / 182;
-                        break;
-                    case 'annually':
-                        installmentValue = soldValue / 365;
-                        break;
-                    default:
-                        installmentValue = 0;
-                        break;
-                }
-            }
-
-            $('#installment_value').val(installmentValue.toFixed(2));
+        $('#unit').on('change', function() {
+            getUnitPrice();
+            getBookingAndDownPayment();
+        }); 
+        $('#project').on('change', function() {
+            getUnitPrice();
         });
 
-            $("#project").on("change", function() {
-                var formData = {
-                    id: $(this).val(),
-                };
+        $('#unit_qty').on('input', function() {
+             getTotalRegularAmount();
+        });
 
+        $('#unit_price').on('change', function() {
+            getTotalRegularAmount();
+        });
+
+        function getUnitPrice(){
+            var formData = {
+                    project_id: $("#project").val(),
+                    unit_id: $("#unit").val(),
+                }; 
                 $.ajax({
                     type: "GET",
                     data: formData,
@@ -333,78 +314,82 @@
                     url: "{{ route('get-project-duration-type-name') }}",
 
                     success: function(data) {
-                        $("#unit").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select a unit *',
-                            })
-                        );
-                        $("#payment_duration").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select a payment duration *',
-                            })
-                        );
-                        $("#select_type").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select a type *',
-                            })
-                        );
-
-                        if (data.unit_type.length) {
-                            $.each(data.unit_type, function(i, unit) {
-                                $("#unit").append(
-                                    $("<option>", {
-                                        value: unit.id,
-                                        text: unit.title,
-                                    })
-                                );
-                            });
-                        }
-                        if (data.payment_duration.length) {
-                            $.each(data.payment_duration, function(i, payment_duration) {
-                                $("#payment_duration").append(
-                                    $("<option>", {
-                                        value: payment_duration.id,
-                                        text: payment_duration.payment_duration + ' months',
-                                    })
-                                );
-                            });
-                        }
-                        if (data.payment_duration.length) {
-                            $.each(data.payment_duration, function(i, payment_duration) {
-                                var optionText = payment_duration.payment_duration + ' months - On Choice Price: ' + payment_duration.on_choice_price + ' - Lottery Price: ' + payment_duration.lottery_price;
-                                $("#select_type").append(
-                                    $("<option>", {
-                                        value: payment_duration.id,
-                                        text: optionText,
-                                    })
-                                );
-                            });
-                        }
+                        $("#project_unit_data").empty();  
                         if (data.project_unit.length) {
                             $.each(data.project_unit, function(i, project_unit) {
                                 $("#project_unit_data").append(
                                     $("<option>", {
                                         value: project_unit.id,
-                                        text: project_unit.name,
+                                        text: project_unit.name+" #Floor:"+project_unit.floor+" #Type:"+project_unit.unit_category.title+" ("+project_unit.highest_price+"Tk)",
+                                        price: project_unit.highest_price,
                                     })
                                 );
                             });
-                        }
-
-                        $('#unit').trigger('change');
-                        $('#payment_duration').trigger('change');
-                        $('#select_type').trigger('change');
+                        }  
+                        $('#unit_price').val(data.most_highest_price);
                         $('#project_unit_data').trigger('change');
+                        getTotalRegularAmount();
                     },
                     error: function(data) {
                         console.log('Error:', data);
                     },
                 });
-            });
-        });
+        }
+
+     
+    $('#installment_type').on('change', function() {
+        calculateInstallmentAmount();
+    });
+
+    function calculateInstallmentAmount() {  
+        var soldValue = parseFloat($('#sold_value').val()) || 0;
+        var downPayment = parseFloat($('#down_payment').val()) || 0;
+        var booking = parseFloat($('#booking').val()) || 0; 
+        var totalAmount = soldValue - (downPayment + booking);
+        var duration = $('#payment_duration').val()|| 0;
+        var installmentType = $('#installment_type').val(); 
+        var installment = 0
+
+        if(duration > 0 && totalAmount > 0 && installmentType) {
+            switch(installmentType) {
+                case 'weekly': 
+                    installment = duration * 4;
+                    break;
+                case 'bi-weekly':  
+                    installment = duration * 2;
+                    break;
+                case 'monthly': 
+                    installment = duration;
+                    break;
+                case 'quarterly': 
+                    installment = duration/3;
+                    break;
+                case 'semi-annually': 
+                    installment = duration/6;
+                    break;
+                case 'annually': 
+                    installment = duration/12;
+                    break;
+            } 
+        } 
+        var installmentAmount = totalAmount/installment;
+        $('#installment_value').val(installmentAmount.toFixed(2));
+        $('#total_installment').val(installment);
+    }
+
+        function getBookingAndDownPayment(){
+            var down_payment = $("#unit option:selected").attr('down_payment');
+            var booking = $("#unit option:selected").attr('booking');
+            $('#down_payment').val(down_payment);
+            $('#booking').val(booking);
+        }
+
+        function getTotalRegularAmount(){
+            var unit_qty = $("#unit_qty").val();
+            var unit_price = $("#unit_price").val();
+            var regular_amount = unit_qty * unit_price;
+            $('#regular_amount').val(regular_amount);
+        }
 
     </script>
 @endsection

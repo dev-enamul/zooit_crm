@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Priority;
+use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\Negotiation;
 use App\Models\NegotiationAnalysis;
+use App\Models\NegotiationWaitingDay;
 use App\Models\Project;
 use App\Models\ProjectUnit;
+use App\Models\Unit;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,15 +37,31 @@ class NegotiationAnalysisController extends Controller
         }else{
             $user_id = Auth::user()->id;
         } 
+
+        $waiting_day = NegotiationWaitingDay::first();
+        if(isset($waiting_day) && $waiting_day != null){
+            $startDate = Carbon::now()->subDays($waiting_day->waiting_day)->startOfDay(); 
+        }else{
+            $startDate = Carbon::now()->subDays(7)->startOfDay(); 
+        }
+        
+        $endDate = Carbon::now()->endOfDay();
       
         $user_employee = my_all_employee($user_id);
-        $negotiations = NegotiationAnalysis::whereHas('customer', function($q) use($user_employee){ 
+        $negotiations = NegotiationAnalysis::whereBetween('created_at',[$startDate,$endDate])
+        ->where(function($q){
+            $q->where('approve_by','!=',null)
+                ->orWhere('employee_id', Auth::user()->id)
+                ->orWhere('created_by', Auth::user()->id);
+        })
+        ->whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
         }); 
+  
 
          $negotiations = $negotiations->orderBY('id','desc')->get();  
          $filter =  $request->all();
-        return view('negotiation_analysis.negotiation_analysis_list',compact('negotiations','employee_data','employees','filter'));
+        return view('negotiation_analysis.negotiation_analysis_list',compact('negotiations','employee_data','employees','filter','waiting_day'));
     }
 
    
@@ -57,6 +77,7 @@ class NegotiationAnalysisController extends Controller
         $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
+        $units              = Unit::select('id','title')->get();
 
         $selected_data = 
         [
@@ -67,7 +88,7 @@ class NegotiationAnalysisController extends Controller
             $selected_data['customer'] = $request->customer;
         }
 
-        return view('negotiation_analysis.negotiation_analysis_save', compact('selected_data','priorities','projects','projectUnits','customers','employees'));
+        return view('negotiation_analysis.negotiation_analysis_save', compact('selected_data','priorities','projects','projectUnits','customers','employees','units'));
     }
 
     public function save(Request $request, $id = null)
@@ -77,9 +98,7 @@ class NegotiationAnalysisController extends Controller
             'employee'          => 'required',
             'priority'          => 'required',
             'project'           => 'required',
-            'unit'              => 'required',
-            'payment_duration'  => 'required',
-            'select_type'       => 'required',
+            'unit'              => 'required', 
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'required',
             'customer_emotion'  => 'nullable',
@@ -125,6 +144,11 @@ class NegotiationAnalysisController extends Controller
             $follow->customer_emotion = $request->input('customer_emotion');
             $follow->customer_preference = $request->input('customer_preference');
             $follow->plan_b = $request->input('plan_b');
+
+            $approve_setting = ApproveSetting::where('name','negotiation_analysis')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $follow->approve_by = auth()->user()->id;
+            }
 
             $follow->created_by = auth()->id();
             $follow->created_at = now();
@@ -195,15 +219,38 @@ class NegotiationAnalysisController extends Controller
                     $lead->save();
                 }
                 DB::commit();
-                return redirect()->route('negotiation-analysis-approve.save')->with('success', 'Status Updated Successfully');
+                return redirect()->route('negotiation-analysis.index')->with('success', 'Status Updated Successfully');
             } catch (Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
             
         } else {
-            return redirect()->route('negotiation-analysis.approve')->with('error', 'Something went wrong!');
+            return redirect()->back()->with('error', 'Please select at least one negotiation analysis');
         }
+    }
+
+    public function update_waiting_day(Request $request){
+        $validator = Validator::make($request->all(),[
+            'waiting_day' => 'required',
+        ]); 
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
+        }
+
+        try{
+            $waiting_day = NegotiationWaitingDay::first();
+            if(!isset($waiting_day) || $waiting_day== null){
+                $waiting_day  = new NegotiationWaitingDay();
+            }
+
+            $waiting_day->waiting_day = $request->waiting_day;
+            $waiting_day->save(); 
+            return redirect()->back()->with('success','Successfully Updated');
+        }catch(Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+        }
+
     }
 
 }

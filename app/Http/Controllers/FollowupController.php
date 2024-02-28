@@ -84,18 +84,27 @@ class FollowupController extends Controller
             if (!$project) {
                 throw new Exception("Project not found");
             }  
-            $project_unit = ProjectUnit::where('project_id', $project->id)->with('unitCategory')
-                ->join('unit_prices', 'project_units.id', '=', 'unit_prices.project_unit_id')
+            $project_units = ProjectUnit::where('project_id', $project->id)
+                ->with('unitCategory')
+                ->join('unit_prices', function ($join) {
+                    $join->on('project_units.id', '=', 'unit_prices.project_unit_id')
+                        ->whereRaw('GREATEST(unit_prices.on_choice_price, unit_prices.lottery_price) = (SELECT MAX(GREATEST(on_choice_price, lottery_price)) FROM unit_prices WHERE unit_prices.project_unit_id = project_units.id)');
+                })
                 ->select('project_units.*', DB::raw('GREATEST(unit_prices.on_choice_price, unit_prices.lottery_price) AS highest_price'))
-                ->orderBy('highest_price', 'desc');
-             
-                if(isset($request->unit_id) && !empty($request->unit_id)){
-                    $project_unit = $project_unit->where('project_units.unit_id',$request->unit_id);
-                }
+                ->orderBy('project_units.id')
+                ->distinct('project_units.id');
 
-                $project_unit = $project_unit->get();
+            if (isset($request->unit_id) && !empty($request->unit_id)) {
+                $project_units->where('project_units.unit_id', $request->unit_id);
+            }
+
+            $project_units = $project_units->get();
+
+                $most_highest_price = $project_units->max('highest_price');
+             
             $response_data = [ 
-                'project_unit' => $project_unit, 
+                'project_unit' => $project_units,
+                'most_highest_price' => $most_highest_price
             ]; 
             return response()->json($response_data);
         } catch (Exception $e) {

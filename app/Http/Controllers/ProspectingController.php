@@ -52,6 +52,14 @@ class ProspectingController extends Controller
             $q->whereIn('ref_id', $user_employee);
         });
 
+        if(isset($request->status) && !empty($request->status)){
+            $status = (int)$request->status;
+            $prospectings = $prospectings->where('status', $status);
+        }else{
+            $prospectings = $prospectings->where('status', 0);
+        }
+
+
         if(isset($request->date) && !empty($request->date)){ 
             $date_parts = explode(" - ", $request->date); 
             $start_date = $date_parts[0];
@@ -70,13 +78,15 @@ class ProspectingController extends Controller
             });
         } 
 
-        $prospectings = $prospectings->with('employee','customer.user')->where(function ($query) {
-            $query->where('status', 1)
-                ->orWhere(function ($subquery) {
-                    $subquery->where('status', 0)
-                            ->where('created_by', Auth::user()->id);
-                });
-        })->orderBy('id','desc')->get();
+        // $prospectings = $prospectings->with('employee','customer.user')->where(function ($query) {
+        //     $query->where('status', 1)
+        //         ->orWhere(function ($subquery) {
+        //             $subquery->where('status', 0)
+        //                     ->where('created_by', Auth::user()->id);
+        //         });
+        // })->orderBy('id','desc')->get();
+
+        $prospectings = $prospectings->get();
 
         $filter =  $request->all();
         return view('prospecting.prospecting_list', compact('prospectings','employee_data','professions','employees','filter'));

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rejections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained();
-            $table->text('renark')->nullable();
+            $table->text('remark')->nullable();
             $table->foreignId('employee_id')->constrained('users');
             $table->foreignId('approve_by')->nullable()->constrained('users');
 
