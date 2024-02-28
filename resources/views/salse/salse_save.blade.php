@@ -271,7 +271,6 @@
                 var discount = regularAmount - soldValue;
                 $('#discount').val(discount.toFixed(2));
             });
-
             $('#down_payment, #down_payment_pay').on('input', function() {
                 var down_payment = parseFloat($('#down_payment').val()) || 0;
                 var down_payment_pay = parseFloat($('#down_payment_pay').val()) || 0;

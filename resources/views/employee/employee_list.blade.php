@@ -58,7 +58,8 @@
                                                         <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data->id))}}">Change Reporting User</a>
                                                         @can('employee-permission')
                                                             <a class="dropdown-item" href="{{route('employee.permission', encrypt($data->id))}}">Change Permissin</a>
-                                                        @endcan 
+                                                        @endcan
+                                                        <a class="dropdown-item" href="{{route('employee.print', $data->id)}}">Print Employee</a>
                                                     @endcan
                                                 </div>
                                             </div> 

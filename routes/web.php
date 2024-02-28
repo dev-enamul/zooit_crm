@@ -169,7 +169,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('designation/user/update/{id}', [EmployeeEditController::class, 'designation_update'])->name('designation.user.update');
         
         Route::any('deactive/user/{id}', [EmployeeEditController::class, 'deactive_user'])->name('deactive.user');
- 
+
+        Route::get('employee-print/{id}', [EmployeeController::class, "employeePrint"])->name('employee.print');
+
         //Route::any('/freelacer-delete/{id}', [FreelancerController::class, "freelancerDelete"])->name('freelancer.delete');
 
         Route::get('freelancer-profile', [FreelancerProfileController::class, 'freelancer_profile'])->name('freelancer.profile');
