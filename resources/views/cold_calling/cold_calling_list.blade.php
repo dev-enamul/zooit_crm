@@ -69,7 +69,8 @@
                                                         @can('lead-manage')
                                                             <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
                                                         @endcan 
-                                                    @endif
+                                                    @endif 
+                                                    <a class="dropdown-item" href="{{route('user.details', encrypt($cold_calling->customer->user_id))}}">Print Customer</a>
                                                    
                                                 </div>
                                             </div> 

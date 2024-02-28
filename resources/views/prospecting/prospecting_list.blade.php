@@ -75,6 +75,7 @@
                                                             <a class="dropdown-item" href="{{route('cold-calling.create',['customer' => $prospecting->customer->id])}}">Cold Calling</a>
                                                         @endcan 
                                                     @endif 
+                                                    <a class="dropdown-item" href="{{route('user.details', encrypt($prospecting->customer->user_id))}}">Print Customer</a>
                                                 </div>
                                             </div> 
                                         </td> 

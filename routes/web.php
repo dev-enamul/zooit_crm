@@ -119,7 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('designation/user/edit/{id}', [EmployeeEditController::class, 'designation_edit'])->name('designation.user.edit');
         Route::post('designation/user/update/{id}', [EmployeeEditController::class, 'designation_update'])->name('designation.user.update');
         Route::any('deactive/user/{id}', [EmployeeEditController::class, 'deactive_user'])->name('deactive.user');
-        Route::get('employee-form/{id}', [EmployeeController::class, "employeeForm"])->name('employee.print');
+        Route::get('user-details/{id}', [EmployeeController::class, "userDetails"])->name('user.details');
 
         #Employee Permission 
         Route::get('user-permission/{id}', [EmployeePermissionController::class, 'employee_permission'])->name('employee.permission');

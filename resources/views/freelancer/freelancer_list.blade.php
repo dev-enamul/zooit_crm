@@ -74,7 +74,7 @@
                                                             <a class="dropdown-item" href="{{route('user.area.edit', encrypt($data->user_id))}}">Change Area</a>
                                                             <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data->user_id))}}">Change Reporting User</a>
                                                             @endif
-                                                            {{-- <a class="dropdown-item" href="{{route('employee.permission', $data->user->id)}}">Change Permissin</a> --}}
+                                                            <a class="dropdown-item" href="{{route('user.details', encrypt($data->user_id))}}">Print Freelancer</a>
                                                         @endcan
                                                         
                                                     </div>

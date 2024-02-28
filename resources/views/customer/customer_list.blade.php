@@ -77,7 +77,8 @@
                                                             @if ($data->approve_by!=null)
                                                                 <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
                                                             @endif 
-                                                        @endcan 
+                                                        @endcan  
+                                                        <a class="dropdown-item" href="{{route('user.details', encrypt($data->user_id))}}">Print Customer</a>
                                                     </div>
                                                 </div> 
                                             </td> 
