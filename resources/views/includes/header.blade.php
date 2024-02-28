@@ -48,7 +48,7 @@
             <div class="d-flex align-items-center gap-2"> 
                 <!-- Start Notification --> 
 
-                <form action="{{route('search')}}" class="app-search d-none d-lg-block pb-0">
+                <form action="{{route('search')}}" class="app-search pb-0">
                     <div class="position-relative">
                         <input type="text" class="form-control" name="key" placeholder="Search ">
                         <span class="fab fa-sistrix fs-17 align-middle"></span>

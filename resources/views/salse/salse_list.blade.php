@@ -11,13 +11,14 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Sales</h4> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="a3">
+                        <input type="hidden" id="fontSize" value="8">
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Sales</li>
-                            </ol>
-                        </div>
-
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -26,33 +27,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
+                        <div class="card-body"> 
                            <div class="table-box" style="overflow-x: scroll;">
-                            <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
-                                        {{-- <th>Action</th> --}}
+                                        <th>Action</th>
                                         <th>S/N</th>
                                         <th>Date</th>
                                         <th>CUS ID</th>
@@ -72,48 +52,72 @@
                                         <th>Installment Qty.</th>
                                         <th>Collection Amount</th>
                                         <th>DUE Amount</th>
-                                        <th>FL Name & ID</th>
-                                        <th> Executive</th>
-                                        <th>Area In Charge</th>
+                                        <th>FL Name & ID</th> 
                                         <th>Deed Status</th>
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr>
-                                        {{-- <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="customer_profile.html">Customer Profile</a>
-                                                    <a class="dropdown-item" href="salse_details.html">Salse Details</a>  
-                                                </div>
-                                            </div> 
-                                        </td> --}}
-                                        <td>1</td>
-                                        <td>2023-04-01</td>
-                                        <td>CUS001</td>
-                                        <td>John Doe</td>
-                                        <td>1234567890</td>
-                                        <td>Project A</td>
-                                        <td>Unit 101</td>
-                                        <td>1</td>
-                                        <td>2 BHK</td>
-                                        <td>A1</td>
-                                        <td>2nd Floor</td>
-                                        <td>101</td>
-                                        <td>Yes</td>
-                                        <td>1,000,000</td>
-                                        <td>950,000</td>
-                                        <td>25,000</td>
-                                        <td>12</td>
-                                        <td>200,000</td>
-                                        <td>150,000</td>
-                                        <td>FL01</td>
-                                        <td>Sr. Executive 001 - Alice</td>
-                                        <td>Area In Charge 001 - Bob</td>
-                                        <td>Completed</td>
-                                    </tr> 
-
+                                    @foreach ($datas as $key => $data)
+                                        <tr>
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{@$data->customer->user->image()}}">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="customer_profile.html">Customer Profile</a>
+                                                        <a class="dropdown-item" href="salse_details.html">Salse Details</a>  
+                                                    </div>
+                                                </div> 
+                                            </td>
+                                            <td>{{$key+1}}</td>
+                                            <td>{{get_date($data->created_at)}}</td>
+                                            <td>{{@$data->customer->customer_id}}</td>
+                                            <td>{{@$data->customer->name}}</td>
+                                            <td>{{@$data->customer->user->phone}}</td>
+                                            <td>{{$data->project->name}}</td>
+                                            <td>{{$data->unit->title}}</td>
+                                            <td>{{$data->unit_qty}}</td>
+                                            <td>{{$facilityText = App\Enums\UnitFacility::values()[$data->facility] ?? 'Unknown';}}</td>
+                                            @php
+                                                if($data->select_type==1){ 
+                                                    $project_unti = json_decode($data->project_units);
+                                                    $unit_type = "";
+                                                    $floor_no = "";
+                                                    $unit_no = "";
+                                                    foreach ($project_unti as $key => $value) {
+                                                        $unit = App\Models\ProjectUnit::find($value); 
+                                                        if(isset($unit) && $unit!=null){
+                                                            if($key!=0){
+                                                                $unit_type .= ', ';
+                                                                $floor_no .= ', ';
+                                                                $unit_no .= ', ';  
+                                                            }
+                                                            $unit_type .= $unit->unitCategory->title;
+                                                            $floor_no .= $unit->floor;
+                                                            $unit_no .= $unit->name;
+                                                        }
+                                                    }
+                                                }else{
+                                                    $unit_type = "-";
+                                                    $floor_no = "-";
+                                                    $unit_no = "-";
+                                                }
+                                            @endphp 
+                                            <td>{{$unit_type}}</td>
+                                            <td>{{$floor_no}}</td>
+                                            <td>{{$unit_no}}</td>
+                                            <td>{{$data->select_type==1?"onChoice":"Lottery"}}</td>
+                                            <td>{{get_price($data->regular_amount)}}</td>
+                                            <td>{{get_price($data->sold_value)}}</td>
+                                            <td>{{get_price($data->regular_amount-$data->sold_value)}}</td>
+                                            <td>{{$data->total_installment}}</td>
+                                            <td>{{$data->total_installment}}</td>
+                                            <td>{{get_price($data->total_deposit)}}</td>
+                                            <td>{{$data->customer->reference->name}} [{{$data->customer->reference->user_id}}]</td>
+                                            <td>{{$data->approve_by!=null?"Complete":"Pending"}}</td>
+                                        </tr>
+                                    @endforeach 
                                 </tbody>
                             </table>
                             </div> 
@@ -238,4 +242,8 @@
         </div>
     </div>
 </div>
+@endsection 
+
+@section('script')
+    @include('includes.data_table')
 @endsection

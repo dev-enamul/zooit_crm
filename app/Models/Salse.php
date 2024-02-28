@@ -8,26 +8,33 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Salse extends Model
 {
-    use HasFactory, SoftDeletes;
-
+    use HasFactory, SoftDeletes; 
     protected $fillable = [
         'customer_id',
+        'customer_user_id',
         'project_id',
         'unit_id',
         'payment_duration',
         'select_type',
         'project_units',
+        'unit_qty',
         'regular_amount',
         'sold_value',
         'down_payment',
-        'down_payment_pay',
+        'down_payment_due',
         'rest_down_payment_date',
-        'installment_type',
-        'installment_value',
+        'booking',
+        'booking_due',
         'total_deposit',
+        'installment_type',
+        'total_installment',
+        'installment_value',
+        'is_investment_package',
         'facility',
         'employee_id',
         'approve_by',
+        'status',
+        'is_all_paid',
         'created_by',
         'updated_by',
         'deleted_by',

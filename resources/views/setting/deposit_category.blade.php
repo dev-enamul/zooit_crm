@@ -46,13 +46,18 @@
                                     <tr>
                                         @can('deposit-category-manage')
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($item)}})">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('deposit-category.destroy',$item->id) }}')" >Delete</a>  
-                                                </div>
-                                            </div> 
+                                              {{-- id 1 and 2 are system default and cannot be deleted --}}
+                                              @if ($item->id == 1 || $item->id ==2) 
+                                               
+                                              @else  
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated"> 
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($item)}})">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('deposit-category.destroy',$item->id) }}')" >Delete</a>   
+                                                    </div>
+                                                </div> 
+                                              @endif
                                         </td> 
                                         @endcan
                                         <td>{{$key+1}}</td>

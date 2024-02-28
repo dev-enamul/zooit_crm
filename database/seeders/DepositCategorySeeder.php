@@ -15,23 +15,32 @@ class DepositCategorySeeder extends Seeder
     {
         $datas = [
             [
-               'name' => 'Regolar Deposit',
+                'name' => 'Regular',
+                'status' => '1'
+            ], 
+            [
+               'name' => 'Down Payment',
                'status' => '1'
-            ],
+            ], 
             [
-                'name' => 'Block Factory Share Deposit',
+                'name' => 'Booking',
+                'status' => '1'
+            ], 
+
+            [
+                'name' => 'Block Factory Share',
                 'status' => '1'
             ], 
             [
-                'name' => 'Franchise Partner Security Deposit',
+                'name' => 'Franchise Partner Security',
                 'status' => '1'
             ], 
             [
-                'name' => 'Build BD Share Deposit',
+                'name' => 'Build BD Share',
                 'status' => '1'
             ],
             [
-                'name' => 'S.T.I Deposit',
+                'name' => 'S.T.I',
                 'status' => '1'
             ]
         ];
