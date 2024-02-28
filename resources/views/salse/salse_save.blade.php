@@ -27,9 +27,9 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form class="needs-validation" novalidate>
+                            <form class="needs-validation" action="{{route('salse.store')}}" novalidate method="post">
+                                @csrf 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer</label>
@@ -115,8 +115,8 @@
                                         <div class="mb-3">
                                             <label for="select_type" class="form-label">Select Type <span class="text-danger">*</span></label>
                                             <select class="select2" name="select_type" id="select_type" required>
-                                                <option value="1" {{ isset($selected_data['select_type']) && $selected_data['select_type'] == 1 ? 'selected' : '' }}>On Choice</option>
                                                 <option value="2" {{ isset($selected_data['select_type']) && $selected_data['select_type'] == 2 ? 'selected' : '' }}>Lottery</option> 
+                                                <option value="1" {{ isset($selected_data['select_type']) && $selected_data['select_type'] == 1 ? 'selected' : '' }}>On Choice</option>
                                             </select> 
                                         </div>
                                     </div>
@@ -124,7 +124,10 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_qty" class="form-label">Unit Qty <span class="text-danger">*</span></label>
-                                             <input class="form-control" min="1" type="number" name="unit_qty" id="unit_qty" value="1" required> 
+                                            <input class="form-control" min="1" type="number" name="unit_qty" id="unit_qty" value="1" required> 
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div>   
 
@@ -132,13 +135,29 @@
                                         <div class="mb-3">
                                             <label for="unit_price" class="form-label">Unit Price <span class="text-danger">*</span></label>
                                             <input type="number"  class="form-control" name="unit_price" id="unit_price" value="{{isset($sales) ? $sales->regular_amount : old('regular_amount')}}" readonly> 
+                                           
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="regular_amount" class="form-label"> Total Regular Price <span class="text-danger">*</span></label>
-                                            <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($sales) ? $sales->regular_amount : old('regular_amount')}}" readonly> 
+                                            <label for="regular_amount" class="form-label">Total Regular Price <span class="text-danger">*</span></label>
+                                            <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($sales) ? $sales->regular_amount : old('regular_amount')}}" readonly required>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div> 
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
+                                            <select class="select2" multiple name="project_unit[]" id="project_unit_data" required>
+                                                <option data-display="Select a project unit *" value="">
+                                                    Select a  Project unit
+                                                </option>
+                                               
+                                            </select>  
                                         </div>
                                     </div> 
 
@@ -146,20 +165,26 @@
                                         <div class="mb-3">
                                             <label for="payment_duration" class="form-label">Payment Duration [month] <span class="text-danger">*</span></label>
                                              <input class="form-control" type="number" name="payment_duration" id="payment_duration" value="12" required> 
+                                             <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div>  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label">Sold Price</label>
-                                            <input type="number" class="form-control" name="sold_value" id="sold_value" value="{{ isset($sales) ? $sales->sold_value : old('sold_value') }}"> 
+                                            <input type="number" class="form-control" name="sold_value" id="sold_value" value="{{ isset($sales) ? $sales->sold_value : old('sold_value') }}" required> 
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div> 
  
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label">Discount</label>
-                                            <input type="number" value="{{isset($sales) ? $sales->discount : old('discount')}}" class="form-control" name="discount" id="discount" disabled> 
+                                            <input type="number" value="{{isset($sales) ? $sales->discount : old('discount')}}" class="form-control" name="discount" id="discount" readonly> 
                                         </div>
                                     </div> 
 
@@ -167,38 +192,28 @@
                                         <div class="mb-3">
                                             <label for="booking" class="form-label">Booking <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" name="booking" id="booking" value="" required readonly>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div>  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="qty" class="form-label">Down Payment</label>
-                                            <input type="number"  class="form-control" name="down_payment" id="down_payment" value="{{ isset($selected_data['down_payment']) ? $selected_data['down_payment'] : (isset($sales) ? $sales->down_payment : old('down_payment')) }}"> 
+                                            <label for="down_payment" class="form-label">Down Payment</label>
+                                            <input type="number"  class="form-control" name="down_payment" id="down_payment" value="{{ isset($selected_data['down_payment']) ? $selected_data['down_payment'] : (isset($sales) ? $sales->down_payment : old('down_payment')) }}" readonly > 
+                                             
                                         </div>
-                                    </div>
+                                    </div>  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="qty" class="form-label">Down Payment Pay</label>
-                                            <input type="number" class="form-control" name="down_payment_pay" id="down_payment_pay" value="{{isset($sales) ? $sales->down_payment_pay : old('down_payment_pay')}}"> 
+                                            <label for="total_due" class="form-label">Installment Due</label>
+                                            <input type="number"  class="form-control" name="total_due" id="total_due" value="" readonly> 
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="qty" class="form-label">Down Payment Due</label>
-                                            <input type="number"  class="form-control" name="down_payment_due" id="down_payment_due" value="{{isset($sales) ? $sales->down_payment_due : old('down_payment_due')}}" readonly> 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="qty" class="form-label">Rest Down Payment Date</label>
-                                            <input type="text" name="rest_down_payment" class="form-control datepicker w-100 p-1" id="rest_down_payment" placeholder="Rest Down Payment" required  value="{{isset($sales) ? $sales->rest_down_payment: old('rest_down_payment')}}"> 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="installment_type" class="form-label">Installment Type<span class="text-danger">*</span></label>
                                             <select class="select2" name="installment_type" id="installment_type" required>
@@ -209,23 +224,42 @@
                                                 <option value="quarterly">Quarterly</option>
                                                 <option value="semi-annually">Semi-Annually</option>
                                                 <option value="annually">Annually</option> 
-                                            </select>  
+                                            </select> 
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div> 
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="total_installment" class="form-label">Total Installment <span class="text-danger">*</span>.</label>
                                             <input type="number" value="" class="form-control" name="total_installment" id="total_installment" readonly> 
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="installment_value" class="form-label">Installment Amount <span class="text-danger">*</span>.</label>
                                             <input type="number" value="{{ isset($sales) ? $sales->installment_value : old('installment_value') }}" class="form-control" name="installment_value" id="installment_value" readonly> 
                                         </div>
                                     </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="facility" class="form-label">Investment Package <span class="text-danger">*</span></label>
+                                            <div class="d-flex">
+                                                <div class="form-check me-3">
+                                                    <input class="form-check-input" type="radio" name="is_investment_package" id="invest_package" value="1">
+                                                    <label class="form-check-label" for="invest_package">Yes</label>
+                                                </div> 
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="is_investment_package" id="not_invest_package" value="0" checked="checked">
+                                                    <label class="form-check-label" for="not_invest_package">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                    <div class="col-md-6">
                                         <div class="mb-3">
@@ -238,13 +272,17 @@
                                                         </option>
                                                     @endforeach
                                                 @endisset
-                                            </select>  
+                                            </select> 
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div> 
                                         </div>
                                     </div>  
+ 
                                 </div>
                                   
                                 <div class="text-end ">
-                                    <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button type="button" class="btn btn-outline-danger refresh_btn"><i class="mdi mdi-refresh"></i> Reset</button>
                                 </div> 
                             </form>
                         </div>
@@ -264,42 +302,76 @@
 @section('script')
 
     <script>
+     
         $(document).ready(function() {
+            getUnitPrice();
+            getBookingAndDownPayment();
+            calculateInstallmentAmount();
+
+            $('#unit').on('change', function() {
+                getUnitPrice();
+                getBookingAndDownPayment();
+            });  
+
+            $('#project').on('change', function() {
+                getUnitPrice();
+            });
+
+            $('#unit_qty').on('input', function() {
+                getTotalRegularAmount();
+            });
+
+            $('#unit_price').on('change', function() {
+                getTotalRegularAmount();
+            });
+
+            $('#down_payment_pay').on('input', function() {
+                    downPaymentDue();
+            }); 
+
+            $('#installment_type').on('change', function() {
+                calculateInstallmentAmount();
+            });
+
             $('#regular_amount, #sold_value').on('input', function() {
                 var regularAmount = parseFloat($('#regular_amount').val()) || 0;
                 var soldValue = parseFloat($('#sold_value').val()) || 0;
                 var discount = regularAmount - soldValue;
                 $('#discount').val(discount.toFixed(2));
+            }); 
+
+
+            $('#select_type').on('change', function() {
+                var select_type = $(this).val();
+                if(select_type == 1){
+                    $('#unit_qty').closest('.col-md-6').hide(); 
+                    $('#unit_price').closest('.col-md-6').hide(); 
+                    $('#project_unit_data').closest('.col-md-12').show();
+                }else{
+                    $('#unit_qty').closest('.col-md-6').show(); 
+                    $('#unit_price').closest('.col-md-6').show(); 
+                    $('#project_unit_data').closest('.col-md-12').hide();
+                }
             });
-            $('#down_payment, #down_payment_pay').on('input', function() {
+
+            $('#project_unit_data').on('change', function() {
+                totalSelectedPrice = 0;   
+                $(this).find('option:selected').each(function() {
+                    totalSelectedPrice += parseFloat($(this).attr('price') || 0); 
+                });
+                $('#regular_amount').val(totalSelectedPrice);
+            }); 
+
+        }); 
+
+       
+
+        function downPaymentDue(){
                 var down_payment = parseFloat($('#down_payment').val()) || 0;
                 var down_payment_pay = parseFloat($('#down_payment_pay').val()) || 0;
-                var discount1 = down_payment - down_payment_pay;
-                $('#down_payment_due').val(discount1.toFixed(2));
-            }); 
-        });  
-
-        $(document).ready(function() {
-            getUnitPrice();
-            getBookingAndDownPayment();
-            calculateInstallmentAmount();
-        }); 
-
-        $('#unit').on('change', function() {
-            getUnitPrice();
-            getBookingAndDownPayment();
-        }); 
-        $('#project').on('change', function() {
-            getUnitPrice();
-        });
-
-        $('#unit_qty').on('input', function() {
-             getTotalRegularAmount();
-        });
-
-        $('#unit_price').on('change', function() {
-            getTotalRegularAmount();
-        });
+                var due = down_payment - down_payment_pay;
+                $('#down_payment_due').val(due.toFixed(2));
+        }
 
         function getUnitPrice(){
             var formData = {
@@ -319,8 +391,9 @@
                                 $("#project_unit_data").append(
                                     $("<option>", {
                                         value: project_unit.id,
-                                        text: project_unit.name+" #Floor:"+project_unit.floor+" #Type:"+project_unit.unit_category.title+" ("+project_unit.highest_price+"Tk)",
-                                        price: project_unit.highest_price,
+                                        text: project_unit.name+" #Floor:"+project_unit.floor+" #Type:"+project_unit.unit_category.title,
+                                        // price: project_unit.highest_price,
+                                        price: data.most_highest_price,
                                     })
                                 );
                             });
@@ -335,11 +408,7 @@
                 });
         }
 
-     
-    $('#installment_type').on('change', function() {
-        calculateInstallmentAmount();
-    });
-
+      
     function calculateInstallmentAmount() {  
         var soldValue = parseFloat($('#sold_value').val()) || 0;
         var downPayment = parseFloat($('#down_payment').val()) || 0;
@@ -373,14 +442,15 @@
         } 
         var installmentAmount = totalAmount/installment;
         $('#installment_value').val(installmentAmount.toFixed(2));
-        $('#total_installment').val(installment);
+        $('#total_installment').val(installment); 
     }
 
         function getBookingAndDownPayment(){
             var down_payment = $("#unit option:selected").attr('down_payment');
             var booking = $("#unit option:selected").attr('booking');
             $('#down_payment').val(down_payment);
-            $('#booking').val(booking);
+            $('#booking').val(booking); 
+            downPaymentDue();
         }
 
         function getTotalRegularAmount(){

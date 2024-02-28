@@ -147,4 +147,58 @@ class DepositController extends Controller
     {
         //
     }
+
+    public function getCustomerFormDepositType(Request $request){
+        $deposit_categgory_id = $request->deposit_category;
+        if($deposit_categgory_id == 1){
+                $customers = Customer::where('approve_by','!=',null)->whereHas('salse',function($query){
+                    $query->where('status',1)
+                    ->where('is_all_paid',0);
+                })
+                ->select('id', 'name', 'customer_id','salse.')
+                ->get();
+        }elseif($deposit_categgory_id == 2){
+                $customers = Customer::where('approve_by','!=',null)
+                ->whereHas('salse', function ($query) {
+                    $query->where('status', 1)
+                        ->where('down_payment_due', '>', 0);
+                })
+                ->select('id', 'name', 'customer_id')
+                ->get();
+            }elseif($deposit_categgory_id == 3){
+                $customers = Customer::where('approve_by','!=',null)
+                ->whereHas('salse', function ($query) {
+                    $query->where('status', 1)
+                        ->where('booking_due', '>', 0);
+                })
+                ->select('id', 'name', 'customer_id')
+                ->get();
+            }else{
+                $customers = Customer::select('id', 'name', 'customer_id')->get();
+            }
+        return response()->json(['status'=>true,'customers'=>$customers]);
+        
+    }
+
+    public function get_customer_due(Request $request){
+        $customer_id = $request->customer_id;
+        $deposit_categgory_id = $request->deposit_category;
+        $due = 0;
+        if($deposit_categgory_id == 1){
+            $salse = Salse::where('customer_id',$customer_id)->first();
+            if(isset($salse) && !empty($salse)){
+                $due = $salse->installment_value;
+                $installment_type = $salse->installment_type;
+            }
+        }elseif($deposit_categgory_id == 2){ 
+            $salse = Salse::where('customer_id',$customer_id)->first();
+            if(isset($salse) && !empty($salse)){
+                $due = $salse->down_payment  - $salse->down_payment_pay;
+            } 
+        }elseif($deposit_categgory_id == 3){
+            $salse = Salse::where('customer_id',$customer_id)->first();
+            $due = $salse->booking - $salse->booking_pay; 
+        }
+        return response()->json(['status'=>true,'due'=>$due]); 
+    }
 }

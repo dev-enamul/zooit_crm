@@ -31,25 +31,10 @@
                                 <div class="row"> 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" search name="customer_id" id="customer_id" required>
-                                                @foreach ($customers as $data)
-                                                    <option value="{{$data->id}}">{{$data->name}} [{{$data->customer_id}}] [{{$data->user->phone}}]</option>
-                                                @endforeach
-                                            </select>    
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>  
-                                    
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
                                             <label for="deposit_category_id" class="form-label">Deposit Category <span class="text-danger">*</span></label>
                                             <select class="form-select select2" name="deposit_category_id" id="deposit_category_id" required>
-                                                <option value="0">Regular Deposit</option>
                                                 @foreach($deposit_categories as $data)
-                                                    <option {{$data->id==1?"selected":""}} value="{{$data->id}}">{{$data->name}}</option>
+                                                    <option {{$data->id==1?"selected":""}} value="{{$data->id}}"> {{$data->name}} </option>
                                                 @endforeach 
                                             </select> 
                                             <div class="invalid-feedback">
@@ -58,6 +43,18 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" search name="customer_id" id="customer_id" required>
+                                             
+                                            </select>    
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>  
+                
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Amount <span class="text-danger">*</span></label>
@@ -116,4 +113,76 @@
   @include('includes.footer')
 
 </div>
+@endsection 
+
+@section('script')
+    <script>
+        $(document).ready(function(){ 
+            $("#deposit_category_id").on('change',function(){
+                getCustomer();
+            });
+        });
+
+        function getCustomer(){
+            var formData = {
+                deposit_category: $("#deposit_category_id").val(),
+            }; 
+            $.ajax({
+                type: "GET",
+                data: formData,
+                dataType: "json",
+                url: "{{ route('get.customer.form.deposit.category') }}", 
+                success: function(data) {
+                    $("#customer_id").empty();  
+
+                    if (data.customers.length) {
+                        $.each(data.customers, function(i, customer) {
+                            $("#customer_id").append(
+                                $("<option>", {
+                                    value: customer.id,
+                                    text: customer.name+" ["+customer.customer_id+"]", 
+                                })
+                            );
+                        });
+                    }   
+                    $('#customer_id').trigger('change');
+                    // getTotalRegularAmount();
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                },
+            });
+        }
+
+        function getDue(){
+            var formData = {
+                customer_id: $("#customer_id").val(),
+            }; 
+            $.ajax({
+                type: "GET",
+                data: formData,
+                dataType: "json",
+                url: "{{ route('get.customer.due') }}", 
+                success: function(data) {
+                    $("#customer_id").empty();  
+
+                    if (data.customers.length) {
+                        $.each(data.customers, function(i, customer) {
+                            $("#customer_id").append(
+                                $("<option>", {
+                                    value: customer.id,
+                                    text: customer.name+" ["+customer.customer_id+"]", 
+                                })
+                            );
+                        });
+                    }   
+                    $('#customer_id').trigger('change');
+                    // getTotalRegularAmount();
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                },
+            });
+        }
+    </script>
 @endsection
