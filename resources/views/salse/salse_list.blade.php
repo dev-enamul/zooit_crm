@@ -58,7 +58,7 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
-                                        <tr>
+                                        <tr class="{{$data->approve_by==null?"table-warning":""}}">
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,7 +66,7 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="customer_profile.html">Customer Profile</a>
-                                                        <a class="dropdown-item" href="salse_details.html">Salse Details</a>  
+                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a>  
                                                     </div>
                                                 </div> 
                                             </td>

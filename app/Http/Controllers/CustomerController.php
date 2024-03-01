@@ -218,7 +218,7 @@ class CustomerController extends Controller
                 'name'          => $request->full_name,
                 'phone'         => get_phone($request->phone1),
                 'password'      => bcrypt('123456'),
-                'user_type'     => 2,
+                'user_type'     => 3,
                 'marital_status'=> $request->marital_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),
                 'finger_id'     => $request->card_id,
@@ -398,7 +398,7 @@ class CustomerController extends Controller
             }   
             $user->update([ 
                 'name'          => $request->full_name,  
-                'user_type'     => 2,
+                'user_type'     => 3,
                 'marital_status'=> $request->marital_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),
                 'finger_id'     => $request->card_id,
@@ -739,6 +739,14 @@ class CustomerController extends Controller
             return redirect()->route('prospecting.approve')->with('error', 'Something went wrong!');
         }
 
+    }
+
+    public function customerDetails($id){
+        $id = decrypt($id);
+        $customer = Customer::find($id);
+        $user = $customer->user;
+    
+        return view('customer.customer_details',compact('customer','user'));
     }
     
 }

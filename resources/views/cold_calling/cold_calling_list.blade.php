@@ -70,7 +70,7 @@
                                                             <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
                                                         @endcan 
                                                     @endif 
-                                                    <a class="dropdown-item" href="{{route('user.details', encrypt($cold_calling->customer->user_id))}}">Print Customer</a>
+                                                    <a class="dropdown-item" href="{{route('customer.details', encrypt($cold_calling->customer_id))}}">Print Customer</a>
                                                    
                                                 </div>
                                             </div> 

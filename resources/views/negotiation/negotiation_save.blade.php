@@ -135,17 +135,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="project_unit" class="form-label">Project Unit Name<span class="text-danger">*</span></label>
-                                            <select class="select2" multiple name="project_unit[]" id="project_unit_data" required>
-                                                <option data-display="Select a project unit *" value="">
-                                                    Select a  Project unit
-                                                </option>
-                                               
-                                            </select>  
+                                            <label for="unit_price" class="form-label"> Unit Price</label>
+                                             <input type="number"  class="form-control" name="unit_price" id="unit_price" value="" readonly> 
                                         </div>
-                                    </div>  
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="unit_qty" class="form-label"> Unit Qty <span class="text-danger">*</span></label>
+                                             <input type="number"  class="form-control" name="unit_qty" id="unit_qty" value="1" min="1" required> 
+                                        </div>
+                                    </div>   
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -184,52 +186,43 @@
 @endsection
 
 @section('script')
-    <script>
-          $(document).ready(function() {
-            $("#unit").on("change", function() {
-                var formData = {
-                    project_id: $("#project").val(),
-                    unit_id: $("#unit").val(),
-                };
+<script>
+    $(document).ready(function() { 
+        $('#unit_price, #unit').on('change', function() {
+            getUnitPrice(); 
+        });
 
+        $('#unit_qty, #unit_price').on('change', function() {
+            getRegularPrice(); 
+        });
+    });
+
+    var totalSelectedPrice = 0;
+
+    function getUnitPrice(){
+            var formData = {
+                    project_id: $("#project").val(),
+                    unit_id: $("#unit").val(), 
+                };  
                 $.ajax({
                     type: "GET",
                     data: formData,
                     dataType: "json",
-                    url: "{{ route('get-project-duration-type-name') }}",
-
+                    url: "{{ route('get-project-duration-type-name') }}", 
                     success: function(data) {
-                        $("#project_unit_data").empty(); 
- 
-                        if (data.project_unit.length) {
-                            $.each(data.project_unit, function(i, project_unit) {
-                                $("#project_unit_data").append(
-                                    $("<option>", {
-                                        value: project_unit.id,
-                                        text: project_unit.name+" #Floor:"+project_unit.floor+" #Type:"+project_unit.unit_category.title+" ("+project_unit.highest_price+"Tk)",
-                                        price: project_unit.highest_price,
-                                    })
-                                );
-                            });
-                        } 
-                        $('#project_unit_data').trigger('change');
+                        $('#unit_price').val(data.most_highest_price);  
+                        getRegularPrice();
                     },
                     error: function(data) {
                         console.log('Error:', data);
                     },
                 });
-            });
-        });
+        }
 
-        var totalSelectedPrice = 0;
- 
-        $('#project_unit_data').on('change', function() {
-            totalSelectedPrice = 0;   
-            $(this).find('option:selected').each(function() {
-                totalSelectedPrice += parseFloat($(this).attr('price') || 0); 
-            });
-            $('#regular_amount').val(totalSelectedPrice);
-        }); 
-
-    </script>
+        function getRegularPrice(){
+            $unit_qty = $('#unit_qty').val();
+            $unit_price = $('#unit_price').val();
+            $('#regular_amount').val($unit_qty * $unit_price);
+    }
+</script>
 @endsection

@@ -16,22 +16,22 @@ class UnitCategorySeeder extends Seeder
         DB::table('unit_categories')->delete();
         $data = [
             [
-                'title' => 'Housing Project Type A',
+                'title' => 'A',
                 'description' => 'Luxurious housing units with premium amenities.',
                 'status' => 1,
             ],
             [
-                'title' => 'Housing Project Type B',
+                'title' => 'B',
                 'description' => 'Modern and spacious residential units for families.',
                 'status' => 1,
             ],
             [
-                'title' => 'Housing Project Type C',
+                'title' => 'C',
                 'description' => 'Affordable housing options with essential facilities.',
                 'status' => 1,
             ],
             [
-                'title' => 'Housing Project Type D',
+                'title' => 'D',
                 'description' => 'Exclusive units designed for high-end living.',
                 'status' => 1,
             ],

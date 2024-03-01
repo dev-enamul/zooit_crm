@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('unit_id')->constrained(); 
 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->tinyInteger('sold_status')->default(0)->comment('0=Not Sold, 1= On Choice, 2 = Lottery');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Negotiation extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes; 
 
     protected $fillable = [
         'customer_id',
@@ -16,17 +16,20 @@ class Negotiation extends Model
         'project_id',
         'unit_id',
         'payment_duration',
-        'project_units',
-        'unit_amount',
+        'select_type',
+        'unit_qty',
+        'unit_price',
+        'regular_amount',
         'negotiation_amount',
         'remark',
+        'date',
         'employee_id',
         'approve_by',
         'status',
         'created_by',
         'updated_by',
         'deleted_by',
-    ];
+    ]; 
  
     public function customer()
     {

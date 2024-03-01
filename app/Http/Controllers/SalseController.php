@@ -11,6 +11,7 @@ use App\Models\Project;
 use App\Models\ProjectUnit;
 use App\Models\Salse;
 use App\Models\Unit;
+use App\Models\UnitCategory;
 use App\Models\UnitPrice;
 use App\Models\User;
 use Exception;
@@ -56,6 +57,7 @@ class SalseController extends Controller
         $facilities         = $this->facility();
         $units              = Unit::all();
         $unit_prices        = UnitPrice::all();
+        $unit_categories    = UnitCategory::all();
         
         $selected_data = 
         [
@@ -90,7 +92,8 @@ class SalseController extends Controller
             'projects',
             'projectUnits',
             'customers',
-            'employees'
+            'employees',
+            'unit_categories'
         ]));
     }
 
@@ -104,8 +107,7 @@ class SalseController extends Controller
             'select_type' => 'required',
             'unit_qty' => 'required|numeric|min:1',
             'payment_duration' => 'required|numeric|min:1',
-            'sold_value' => 'required|numeric|min:0',
-            'down_payment_pay' => 'required|numeric|min:0', 
+            'sold_value' => 'required|numeric|min:0', 
             'installment_type' => 'required',
             'total_installment' => 'required|numeric|min:1',
             'installment_value' => 'required|numeric|min:0',
@@ -135,7 +137,9 @@ class SalseController extends Controller
                 $sales->unit_qty = count($request->project_unit);
             }else{
                 $sales->unit_qty = $request->input('unit_qty');
-            }  
+            }
+            $sales->floor = $request->input('floor');
+            $sales->unit_category_id = $request->input('unit_category_id');
             $sales->regular_amount = $request->input('regular_amount');
             $sales->sold_value = $request->input('sold_value');
             $sales->down_payment = $request->input('down_payment');
@@ -144,27 +148,50 @@ class SalseController extends Controller
             $sales->booking_due = $request->input('booking');
             $sales->installment_type = $request->input('installment_type');
             $sales->total_installment = $request->input('total_installment');
-            $sales->installment_value = $request->input('installment_value');
-            $sales->facility = $request->input('facility');
+            $sales->installment_value = $request->input('installment_value'); 
             $sales->is_investment_package = $request->input('is_investment_package') ?? 0;
+            $sales->facility = $request->input('facility');
             $sales->employee_id = $request->input('employee');
             $sales->created_by = Auth::user()->id; 
-            $sales->save(); 
+            $sales->save();
+
+            if($request->input('select_type') == 1){
+                 $project_units = $request->project_unit;
+                    foreach($project_units as $project_unit){
+                        $unit = ProjectUnit::find($project_unit);
+                        $unit->sold_status = 1;
+                        $unit->save();
+                    }
+
+            }
+
+            $negotiation = NegotiationAnalysis::where('customer_id',$customer->id)->first();
+            if($negotiation){
+                $negotiation->status = 1;
+                $negotiation->save();
+            } 
+ 
             return redirect()->route('salse.index')->with('success', 'Sales created successfully'); 
         }catch(Exception $e){
             dd($e->getMessage());
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
-    }
+    } 
 
-    public function show(string $id)
-    {
-        //
-    }
+    public function salse_details($id){
+        try{
+            $id = decrypt($id);
+            $data = Salse::find($id);
+            $ref_employees = user_reporting($data->customer->ref_id);
+            $ref_users = User::whereIn('id',$ref_employees)->get(); 
 
-    public function edit(string $id)
-    {
-        //
+            if(!$data){
+                return redirect()->back()->with('error', 'Sales not found');
+            }
+            return view('salse.salse_details',compact('data','ref_users'));
+        }catch(Exception $e){
+            return redirect()->back()->with('error', 'Invalid request');
+        }
     }
 
 }

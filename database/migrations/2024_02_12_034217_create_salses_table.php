@@ -21,6 +21,8 @@ return new class extends Migration
             $table->unsignedInteger('select_type')->nullable()->comment('1= onChoice, 2= Lottery');
             $table->json('project_units')->nullable()->comment();
             $table->integer('unit_qty')->nullable()->comment();
+            $table->integer('floor')->nullable()->comment('Floor');
+            $table->integer('unit_category_id')->nullable()->comment('Unit Category');
             $table->decimal('regular_amount', 10, 2)->nullable()->comment('Total Amount');
             $table->decimal('sold_value', 10, 2)->default(0); 
             $table->decimal('down_payment', 10, 2)->default(0); 

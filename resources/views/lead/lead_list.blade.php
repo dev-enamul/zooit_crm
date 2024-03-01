@@ -76,7 +76,7 @@
                                                             <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $lead->customer->id])}}">Lead Analysis Form</a>
                                                         @endcan 
                                                     @endif  
-                                                    <a class="dropdown-item" href="{{route('user.details', encrypt($lead->customer->user_id))}}">Print Customer</a>
+                                                    <a class="dropdown-item" href="{{route('customer.details', encrypt($lead->customer_id))}}">Print Customer</a>
                                                 </div>
                                             </div> 
                                         </td> 

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
+use App\Models\Lead;
 use App\Models\Negotiation;
 use App\Models\NegotiationAnalysis;
 use App\Models\NegotiationWaitingDay;
+use App\Models\Presentation;
 use App\Models\Project;
 use App\Models\ProjectUnit;
 use App\Models\Unit;
@@ -100,6 +102,7 @@ class NegotiationAnalysisController extends Controller
             'project'           => 'required',
             'unit'              => 'required', 
             'regular_amount'    => 'required',
+            'unit_qty'          => 'required',
             'negotiation_amount'=> 'required',
             'customer_emotion'  => 'nullable',
             'customer_preference'=> 'nullable',
@@ -117,8 +120,9 @@ class NegotiationAnalysisController extends Controller
             $follow->project_id = $request->input('project');
             $follow->unit_id = $request->input('unit');
             $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->payment_duration = $request->payment_duration; 
+            $follow->unit_price = $request->unit_price;
+            $follow->unit_qty = $request->unit_qty; 
             $follow->regular_amount = $request->input('regular_amount');
             $follow->negotiation_amount = $request->input('negotiation_amount');
             $follow->customer_emotion = $request->input('customer_emotion');
@@ -137,8 +141,9 @@ class NegotiationAnalysisController extends Controller
             $follow->project_id = $request->input('project');
             $follow->unit_id = $request->input('unit');
             $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->payment_duration = $request->payment_duration; 
+            $follow->unit_price = $request->unit_price;
+            $follow->unit_qty = $request->unit_qty; 
             $follow->regular_amount = $request->input('regular_amount');
             $follow->negotiation_amount = $request->input('negotiation_amount');
             $follow->customer_emotion = $request->input('customer_emotion');
@@ -251,6 +256,26 @@ class NegotiationAnalysisController extends Controller
             return redirect()->back()->with('error',$e->getMessage());
         }
 
+    } 
+
+    public function negotiation_analysis_details($id){
+        $id = decrypt($id);
+        $data = NegotiationAnalysis::find($id);  
+        $last_lead = Lead::where('customer_id',$data->customer_id)->whereNotNull('approve_by')->select('created_at')->latest()->first();
+        $last_presentation_date = Presentation::where('customer_id',$data->customer_id)
+            ->whereNotNull('approve_by')
+            ->select('created_at')
+            ->latest()
+            ->first();
+        $last_follow_up = Negotiation::where('customer_id',$data->customer_id)
+                ->whereNotNull('approve_by')
+                ->select('created_at','negotiation_amount')
+                ->latest()
+                ->first();
+        return view('negotiation_analysis.negotiation_analysis_details',compact([
+            'data',
+            'last_lead','last_presentation_date','last_follow_up'
+        ])); 
     }
 
 }

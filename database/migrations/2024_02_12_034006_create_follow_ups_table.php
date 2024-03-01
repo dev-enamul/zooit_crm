@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained();  
             $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
-            $table->foreignId('project_id')->nullable()->constrained('projects');  
-            $table->json('project_units')->nullable()->comment('Project Unit List');
+            $table->foreignId('project_id')->nullable()->constrained('projects'); 
+            $table->foreignId('unit_id')->nullable()->constrained('units'); 
+            $table->integer('unit_qty')->default(1);
+            $table->decimal('unit_price', 10, 2)->nullable();
             $table->decimal('regular_amount', 10, 2)->nullable()->comment('Total Amount');
             $table->decimal('negotiation_amount', 10, 2)->nullable()->comment('Negotiation Amount');
             $table->string('remark')->nullable();  
+            $table->date('date')->default(now());
 
             $table->foreignId('employee_id')->constrained('users');  
             $table->foreignId('approve_by')->nullable()->constrained('users'); 

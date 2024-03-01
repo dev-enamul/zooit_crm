@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('buyer')->nullable();
             $table->string('area')->nullable();
             $table->string('consumer')->nullable();
+            $table->date('presentation_date')->nullable();
         
             $table->foreignId('employee_id')->constrained('users'); 
             $table->foreignId('approve_by')->nullable()->constrained('users');  

@@ -85,6 +85,8 @@ class FollowupController extends Controller
                 throw new Exception("Project not found");
             }  
             $project_units = ProjectUnit::where('project_id', $project->id)
+                ->where('status', 1)
+                ->where('sold_status','!=',1)
                 ->with('unitCategory')
                 ->join('unit_prices', function ($join) {
                     $join->on('project_units.id', '=', 'unit_prices.project_unit_id')
@@ -96,6 +98,14 @@ class FollowupController extends Controller
 
             if (isset($request->unit_id) && !empty($request->unit_id)) {
                 $project_units->where('project_units.unit_id', $request->unit_id);
+            }
+
+            if(isset($request->unit_category_id) && !empty($request->unit_category_id)){
+                $project_units->where('project_units.unit_category_id', $request->unit_category_id);
+            }
+
+            if(isset($request->floor) && !empty($request->floor)){
+                $project_units->where('project_units.floor', $request->floor);
             }
 
             $project_units = $project_units->get();
@@ -118,8 +128,9 @@ class FollowupController extends Controller
             'customer'          => 'required',
             'employee'          => 'required',
             'priority'          => 'required',
-            'unit'              => 'required',
             'project'           => 'required',
+            'unit'              => 'required',
+            'unit_qty'          => 'required', 
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'required',
             'remark'            => 'nullable',
@@ -134,13 +145,11 @@ class FollowupController extends Controller
             $follow->employee_id = $request->employee;
             $follow->priority = $request->priority;
             $follow->project_id = $request->input('project');
-            $follow->unit_id = $request->input('unit');
-            $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->unit_id = $request->input('unit');   
+            $follow->unit_price = $request->input('unit_price');
+            $follow->unit_qty = $request->input('unit_qty');
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount');
-
+            $follow->negotiation_amount = $request->input('negotiation_amount'); 
             $follow->remark = $request->remark;
             $follow->updated_by = $request->updated_by;
             $follow->updated_at = $request->updated_at;
@@ -152,12 +161,11 @@ class FollowupController extends Controller
             $follow->employee_id = $request->employee;
             $follow->priority = $request->priority;
             $follow->project_id = $request->input('project');
-            $follow->unit_id = $request->input('unit');
-            $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->unit_id = $request->input('unit');   
+            $follow->unit_price = $request->input('unit_price');
+            $follow->unit_qty = $request->input('unit_qty');
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->negotiation_amount = $request->input('negotiation_amount'); 
             $follow->remark = $request->remark;
 
             $approve_setting = ApproveSetting::where('name','follow_up')->first(); 
@@ -241,5 +249,7 @@ class FollowupController extends Controller
         } else {
             return redirect()->back()->with('error', 'Please Select At Least One Follow Up');
         }
-    }
+    } 
+
+   
 }

@@ -173,8 +173,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="refferal" class="form-label">Referral</label> 
-                                            <input type="text" name="refferal" class="form-control" id="refferal" placeholder="Referral" value="{{ isset($lead_analysis) ? $lead_analysis->refferal : old('refferal') }}"> 
+                                            <label for="referral" class="form-label">Referral</label> 
+                                            <input type="text" name="referral" class="form-control" id="referral" placeholder="Referral" value="{{ isset($lead_analysis) ? $lead_analysis->refferal : old('refferal') }}"> 
                                         </div>
                                     </div>
 
@@ -201,8 +201,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="previous_experiance" class="form-label">Previous Experiance to Purchase this kind of product</label> 
-                                            <input type="text" name="previous_experiance" class="form-control" id="previous_experiance" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->previous_experiance : old('previous_experiance') }}"> 
+                                            <label for="previous_experience" class="form-label">Previous Experiance to Purchase this kind of product</label> 
+                                            <input type="text" name="previous_experience" class="form-control" id="previous_experience" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->previous_experiance : old('previous_experiance') }}"> 
                                         </div>
                                     </div>
 
@@ -224,6 +224,13 @@
                                         <div class="mb-3">
                                             <label for="buyer" class="form-label">Area</label> 
                                             <input type="text" name="area" class="form-control" id="area" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->area : old('area') }}"> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="presentation_date" class="form-label">Presentation Date</label> 
+                                            <input type="date" name="presentation_date" class="form-control" id="presentation_date" placeholder="" value="{{ isset($lead_analysis) ? $lead_analysis->area : old('area') }}"> 
                                         </div>
                                     </div>
 
