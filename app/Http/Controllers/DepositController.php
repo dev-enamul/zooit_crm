@@ -188,6 +188,7 @@ class DepositController extends Controller
         $customer = Customer::find($customer_id);
         $deposit_categgory_id = $request->deposit_category_id;
         $due = 0;
+        
         if($deposit_categgory_id == 1){
             $salse = Salse::where('customer_id',$customer_id)->first();
             if(isset($salse) && !empty($salse)){
