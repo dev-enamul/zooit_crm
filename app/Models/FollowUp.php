@@ -14,11 +14,12 @@ class FollowUp extends Model
         'priority',
         'project_id',
         'unit_id',
-        'project_units',
-        'payment_duration',
-        'unit_amount',
+        'unit_qty',
+        'unit_price',
+        'regular_amount',
         'negotiation_amount',
         'remark',
+        'date',
         'employee_id',
         'approve_by',
         'status',
@@ -26,6 +27,7 @@ class FollowUp extends Model
         'updated_by',
         'deleted_by',
     ];
+    
 
     public function customer()
     {

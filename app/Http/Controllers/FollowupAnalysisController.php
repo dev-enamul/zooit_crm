@@ -7,6 +7,7 @@ use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\FollowUp;
 use App\Models\FollowUpAnalysis;
+use App\Models\Presentation;
 use App\Models\Project;
 use App\Models\ProjectUnit;
 use App\Models\Unit;
@@ -76,10 +77,11 @@ class FollowupAnalysisController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'customer'          => 'required',
+            'employee'          => 'required',
             'priority'          => 'required',
             'project'           => 'required',
             'unit'              => 'required', 
-            'employee'          => 'required',
+            'unit_qty'          => 'required',
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'nullable',
             'remark'            => 'nullable',
@@ -100,13 +102,12 @@ class FollowupAnalysisController extends Controller
             $follow->employee_id = $request->employee;
             $follow->priority = $request->priority;
             $follow->project_id = $request->input('project');
-            $follow->unit_id = $request->input('unit'); 
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->unit_id = $request->input('unit');  
+            $follow->unit_price = $request->unit_price;
+            $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount');
-
-            $follow->remark = $request->remark;
-
+            $follow->negotiation_amount = $request->input('negotiation_amount'); 
+            $follow->remark = $request->remark; 
             $follow->customer_expectation = $request->customer_expectation;
             $follow->need = $request->customer_need;
             $follow->ability = $request->customer_ability;
@@ -124,13 +125,12 @@ class FollowupAnalysisController extends Controller
             $follow->employee_id = $request->employee;
             $follow->priority = $request->priority;
             $follow->project_id = $request->input('project');
-            $follow->unit_id = $request->input('unit');
-            $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->unit_id = $request->input('unit');  
+            $follow->unit_price = $request->unit_price;
+            $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount');
-            $follow->remark = $request->remark;
+            $follow->negotiation_amount = $request->input('negotiation_amount'); 
+            $follow->remark = $request->remark; 
             $follow->customer_expectation = $request->customer_expectation;
             $follow->need = $request->customer_need;
             $follow->ability = $request->customer_ability;
@@ -221,6 +221,40 @@ class FollowupAnalysisController extends Controller
         } else {
             return redirect()->back()->with('error', 'Please select at least one record');
         }
-    }
+    } 
+
+    public function follow_analysis_up_details($id){
+        try{
+         $id = decrypt($id);
+         $data = FollowUpAnalysis::find($id);
+         $customer = Customer::find($data->customer_id);
+         $user = User::find($customer->ref_id);
+         $employee = User::find($data->employee_id);   
+         $presentation_date = Presentation::where('customer_id',$data->customer_id)->select('created_at')->latest()->first();
+         $product_unit_id = json_decode($data->project_units);
+         $product_unit = ProjectUnit::whereIn('id', $product_unit_id)->pluck('name')->implode(', ');
+        
+         $followUps = FollowUp::where('customer_id', $data->customer_id)->select('created_at')->get(); 
+         $firstFollowUp = $followUps->first();
+         $secondFollowUp = $followUps->slice(1, 1)->first(); 
+         $thirdFollowUp = $followUps->slice(2, 1)->first();
+         $lastFollowUp = $followUps->last();
+         $totalFollowUps = $followUps->count();
+
+        
+        }catch(Exception $e){
+         return redirect()->back()->with('error', $e->getMessage());
+        }
+         return view('followup_analysis.followup_analysis_details',compact([
+            'data',
+            'customer',
+            'user',
+            'employee',
+            'presentation_date',
+            'product_unit',
+            'followUps'
+         ]));
+ 
+     }
 
 }

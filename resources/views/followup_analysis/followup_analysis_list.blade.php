@@ -59,19 +59,16 @@
                                                         @can('follow-up-analysis-manage')
                                                             <a class="dropdown-item" href="{{route('followup-analysis.edit',$followUp->id)}}">Edit</a>
                                                         @endcan 
-                                                   @endif
-                                                    
-
+                                                   @endif 
                                                     @can('follow-up-analysis-delete')
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followup-analysis.destroy',$followUp->id) }}')">Delete</a> 
-                                                    @endcan
-                                                    
+                                                    @endcan 
                                                     @if ($followUp->approve_by!=null)
                                                          @can('negotiation-manage')
                                                             <a class="dropdown-item" href="{{route('negotiation.create',['customer'=>$followUp->customer->id])}}">Negotiation Create</a>
                                                          @endcan
-                                                    @endif
-                                                    
+                                                    @endif 
+                                                    <a class="dropdown-item" href="{{route('followup.analysis.details', encrypt($followUp->id))}}">Follow-up Analysis Print</a>
                                                 </div>
                                             </div> 
                                         </td>
@@ -82,9 +79,8 @@
                                         <td class=""> {{ @$followUp->customer->user->userAddress->address }}</td>
                                         <td class=""> {{ get_price(@$followUp->negotiation_amount) }}</td>
                                         <td class=""> {{ @$followUp->project->name }}</td>
-                                        <td class=""> {{count(json_decode($followUp->project_units))}} </td>
+                                        <td class=""> {{$followUp->unit_qty}}</td>
                                         <td class=""> {{ @$followUp->customer->reference->name }} [{{ @$followUp->customer->reference->user_id }}] </td>
-                                       
                                     </tr> 
                                 @endforeach
                                 </tbody>

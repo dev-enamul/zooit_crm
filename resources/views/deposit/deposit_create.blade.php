@@ -58,7 +58,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Amount <span class="text-danger">*</span></label>
-                                            <input type="number" name="amount" class="form-control" id="" min="0" placeholder="0" required> 
+                                            <input type="number" name="amount" id="amount" class="form-control" id="" min="0" placeholder="0" required> 
                                         </div>
                                     </div>   
                                     <div class="col-md-6">
@@ -121,6 +121,10 @@
             $("#deposit_category_id").on('change',function(){
                 getCustomer();
             });
+
+            $("#customer_id").on('change',function(){
+                getDue();
+            });
         });
 
         function getCustomer(){
@@ -157,27 +161,15 @@
         function getDue(){
             var formData = {
                 customer_id: $("#customer_id").val(),
+                deposit_category_id: $("#deposit_category_id").val(),
             }; 
             $.ajax({
                 type: "GET",
                 data: formData,
                 dataType: "json",
                 url: "{{ route('get.customer.due') }}", 
-                success: function(data) {
-                    $("#customer_id").empty();  
-
-                    if (data.customers.length) {
-                        $.each(data.customers, function(i, customer) {
-                            $("#customer_id").append(
-                                $("<option>", {
-                                    value: customer.id,
-                                    text: customer.name+" ["+customer.customer_id+"]", 
-                                })
-                            );
-                        });
-                    }   
-                    $('#customer_id').trigger('change');
-                    // getTotalRegularAmount();
+                success: function(data) {  
+                    $("#amount").val(data.due);
                 },
                 error: function(data) {
                     console.log('Error:', data);

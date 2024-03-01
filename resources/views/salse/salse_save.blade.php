@@ -113,6 +113,33 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="floor" class="form-label">Floor</label>
+                                            <input type="number"  class="form-control" value="1" name="floor" id="floor" value="" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="unit_category_id" class="form-label">Unit Type</label>
+                                        <select class="select2" name="unit_category_id" id="unit_category_id">
+                                            <option data-display="Select a unit *" value="">
+                                                Select a unit
+                                            </option>
+                                            @isset($units)
+                                                @foreach ($unit_categories as $unit_category)
+                                                    <option value="{{ $unit_category->id }}">
+                                                        {{ $unit_category->title }}
+                                                    </option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                        
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label for="select_type" class="form-label">Select Type <span class="text-danger">*</span></label>
                                             <select class="select2" name="select_type" id="select_type" required>
                                                 <option value="2" {{ isset($selected_data['select_type']) && $selected_data['select_type'] == 2 ? 'selected' : '' }}>Lottery</option> 
@@ -307,13 +334,22 @@
             getUnitPrice();
             getBookingAndDownPayment();
             calculateInstallmentAmount();
+            showHideUnitName();
 
             $('#unit').on('change', function() {
                 getUnitPrice();
                 getBookingAndDownPayment();
             });  
 
-            $('#project').on('change', function() {
+            $('#project').on('input change keyup', function() {
+                getUnitPrice();
+            });
+
+            $('#floor').on('input change keyup', function() {
+                getUnitPrice();
+            });
+
+            $('#unit_category_id').on('input change keyup', function() {
                 getUnitPrice();
             });
 
@@ -329,11 +365,12 @@
                     downPaymentDue();
             }); 
 
-            $('#installment_type').on('change', function() {
+            $('#installment_type, #payment_duration, #sold_value, #select_type').on('change input keyup', function() {
                 calculateInstallmentAmount();
             });
 
-            $('#regular_amount, #sold_value').on('input', function() {
+
+            $('#regular_amount, #sold_value').on('keyup', function() {
                 var regularAmount = parseFloat($('#regular_amount').val()) || 0;
                 var soldValue = parseFloat($('#sold_value').val()) || 0;
                 var discount = regularAmount - soldValue;
@@ -342,16 +379,7 @@
 
 
             $('#select_type').on('change', function() {
-                var select_type = $(this).val();
-                if(select_type == 1){
-                    $('#unit_qty').closest('.col-md-6').hide(); 
-                    $('#unit_price').closest('.col-md-6').hide(); 
-                    $('#project_unit_data').closest('.col-md-12').show();
-                }else{
-                    $('#unit_qty').closest('.col-md-6').show(); 
-                    $('#unit_price').closest('.col-md-6').show(); 
-                    $('#project_unit_data').closest('.col-md-12').hide();
-                }
+                showHideUnitName();
             });
 
             $('#project_unit_data').on('change', function() {
@@ -365,6 +393,20 @@
         }); 
 
        
+        function showHideUnitName(){
+            var select_type = $('#select_type').val();
+                if(select_type == 1){
+                    $('#unit_qty').closest('.col-md-6').hide(); 
+                    $('#unit_price').closest('.col-md-6').hide(); 
+                    $('#project_unit_data').closest('.col-md-12').show();
+                    $('#project_unit_data').prop('required', true);
+                }else{
+                    $('#unit_qty').closest('.col-md-6').show(); 
+                    $('#unit_price').closest('.col-md-6').show(); 
+                    $('#project_unit_data').closest('.col-md-12').hide();
+                    $('#project_unit_data').prop('required', false);
+                }
+        }
 
         function downPaymentDue(){
                 var down_payment = parseFloat($('#down_payment').val()) || 0;
@@ -377,7 +419,9 @@
             var formData = {
                     project_id: $("#project").val(),
                     unit_id: $("#unit").val(),
-                }; 
+                    floor: $("#floor").val(),
+                    unit_category_id: $("#unit_category_id").val(),
+                };  
                 $.ajax({
                     type: "GET",
                     data: formData,
@@ -409,41 +453,43 @@
         }
 
       
-    function calculateInstallmentAmount() {  
-        var soldValue = parseFloat($('#sold_value').val()) || 0;
-        var downPayment = parseFloat($('#down_payment').val()) || 0;
-        var booking = parseFloat($('#booking').val()) || 0; 
-        var totalAmount = soldValue - (downPayment + booking);
-        var duration = $('#payment_duration').val()|| 0;
-        var installmentType = $('#installment_type').val(); 
-        var installment = 0
+        function calculateInstallmentAmount() {
+            var soldValue = parseFloat($('#sold_value').val()) || 0;
+            var downPayment = parseFloat($('#down_payment').val()) || 0;
+            var booking = parseFloat($('#booking').val()) || 0; 
+            var totalAmount = soldValue - (downPayment + booking);
+            var duration = parseInt($('#payment_duration').val()) || 0; // Ensure duration is an integer
+            var installmentType = $('#installment_type').val(); 
+            var installment = 0; 
 
-        if(duration > 0 && totalAmount > 0 && installmentType) {
-            switch(installmentType) {
-                case 'weekly': 
-                    installment = duration * 4;
-                    break;
-                case 'bi-weekly':  
-                    installment = duration * 2;
-                    break;
-                case 'monthly': 
-                    installment = duration;
-                    break;
-                case 'quarterly': 
-                    installment = duration/3;
-                    break;
-                case 'semi-annually': 
-                    installment = duration/6;
-                    break;
-                case 'annually': 
-                    installment = duration/12;
-                    break;
+            if(duration > 0 && totalAmount > 0 && installmentType) {
+                switch(installmentType) {
+                    case 'weekly': 
+                        installment = duration * 4;
+                        break;
+                    case 'bi-weekly':  
+                        installment = duration * 2;
+                        break;
+                    case 'monthly': 
+                        installment = duration;
+                        break;
+                    case 'quarterly': 
+                        installment = duration/3;
+                        break;
+                    case 'semi-annually': 
+                        installment = duration/6;
+                        break;
+                    case 'annually': 
+                        installment = duration/12;
+                        break;
+                } 
             } 
-        } 
-        var installmentAmount = totalAmount/installment;
-        $('#installment_value').val(installmentAmount.toFixed(2));
-        $('#total_installment').val(installment); 
-    }
+ 
+            var installmentAmount = installment !== 0 ? totalAmount / installment : 0; 
+            $('#installment_value').val(installmentAmount.toFixed(2));
+            $('#total_installment').val(parseInt(installment)); 
+            $('#total_due').val(totalAmount.toFixed(2));
+        }
 
         function getBookingAndDownPayment(){
             var down_payment = $("#unit option:selected").attr('down_payment');

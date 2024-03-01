@@ -40,7 +40,7 @@ class DepositController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
+    { 
         $customers = Customer::where('status',1)->get();
         $deposit_categories =  DepositCategory::where('status',1)->get();
         $banks = Bank::where('status',1)->get();
@@ -149,56 +149,62 @@ class DepositController extends Controller
     }
 
     public function getCustomerFormDepositType(Request $request){
-        $deposit_categgory_id = $request->deposit_category;
+        try{
+            $deposit_categgory_id = $request->deposit_category; 
+   
         if($deposit_categgory_id == 1){
                 $customers = Customer::where('approve_by','!=',null)->whereHas('salse',function($query){
                     $query->where('status',1)
                     ->where('is_all_paid',0);
                 })
-                ->select('id', 'name', 'customer_id','salse.')
+                ->select('id', 'name', 'customer_id')
                 ->get();
         }elseif($deposit_categgory_id == 2){
                 $customers = Customer::where('approve_by','!=',null)
                 ->whereHas('salse', function ($query) {
-                    $query->where('status', 1)
-                        ->where('down_payment_due', '>', 0);
+                    $query->where('down_payment_due', '>', 0);
                 })
                 ->select('id', 'name', 'customer_id')
                 ->get();
             }elseif($deposit_categgory_id == 3){
                 $customers = Customer::where('approve_by','!=',null)
                 ->whereHas('salse', function ($query) {
-                    $query->where('status', 1)
-                        ->where('booking_due', '>', 0);
+                    $query->where('booking_due', '>', 0);
                 })
                 ->select('id', 'name', 'customer_id')
                 ->get();
             }else{
                 $customers = Customer::select('id', 'name', 'customer_id')->get();
-            }
-        return response()->json(['status'=>true,'customers'=>$customers]);
+            } 
+            return response()->json(['status'=>true,'customers'=>$customers]);
+        }catch(Exception $e){ 
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
         
     }
 
     public function get_customer_due(Request $request){
         $customer_id = $request->customer_id;
-        $deposit_categgory_id = $request->deposit_category;
+        $customer = Customer::find($customer_id);
+        $deposit_categgory_id = $request->deposit_category_id;
         $due = 0;
         if($deposit_categgory_id == 1){
             $salse = Salse::where('customer_id',$customer_id)->first();
             if(isset($salse) && !empty($salse)){
                 $due = $salse->installment_value;
-                $installment_type = $salse->installment_type;
+                $datas['installment_type'] = $salse->installment_type; 
+                $datas['next_payment_date'] = $customer->nextPaymentDate();
+                $datas['due_installment'] = $customer->dueInstallment(); 
             }
         }elseif($deposit_categgory_id == 2){ 
             $salse = Salse::where('customer_id',$customer_id)->first();
             if(isset($salse) && !empty($salse)){
-                $due = $salse->down_payment  - $salse->down_payment_pay;
+                $due = $salse->down_payment_due;
             } 
         }elseif($deposit_categgory_id == 3){
             $salse = Salse::where('customer_id',$customer_id)->first();
-            $due = $salse->booking - $salse->booking_pay; 
-        }
+            $due = $salse->booking_due; 
+        }  
         return response()->json(['status'=>true,'due'=>$due]); 
     }
 }

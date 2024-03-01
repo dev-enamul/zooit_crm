@@ -87,6 +87,19 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'ref_id');
     }
 
+    public function age(){
+        $dob = $this->dob;
+        if($dob != null){
+            $dob = date('Y-m-d', strtotime($dob));
+            $dobObject = new \DateTime($dob);
+            $nowObject = new \DateTime();
+            $diff = $dobObject->diff($nowObject);
+            return $diff->y;
+        }else{
+            return '';
+        }
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -190,6 +203,31 @@ class User extends Authenticatable
     public function my_customer(){
         $my_customer = Customer::where('ref_id',$this->id)->where('deleted_at',null)->pluck('id')->toArray();
         return $my_customer;
+    }
+    public function my_all_reporting(){
+        $my_all_reporting = user_reporting($this->id);
+        $user = User::whereIn('id',$my_all_reporting)->get();
+        return $user;
+    }
+
+    public function my_reporting(){
+        $my_reporting = user_reporting($this->id);
+        if(isset($my_reporting) && count($my_reporting) > 1){
+             $user  = User::where('id',$my_reporting['1'])->first();
+        }else{
+            $user = null;
+        }
+        return $user;
+    }
+
+    function my_top_reporting(){
+        $my_reporting = user_reporting($this->id);
+        if(isset($my_reporting) && count($my_reporting) > 1){
+             $user  = User::where('id',(count($my_reporting)-1))->first();
+        }else{
+            $user = null;
+        }
+        return $user;
     }
 
 

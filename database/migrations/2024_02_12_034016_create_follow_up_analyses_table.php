@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained();   
             $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
             $table->foreignId('project_id')->nullable()->constrained('projects');
-            $table->foreignId('unit_id')->nullable()->constrained('units'); 
-            $table->json('project_units')->nullable()->comment('Project Unit List');
+            $table->foreignId('unit_id')->nullable()->constrained('units');  
+            $table->integer('unit_qty')->nullable()->comment('Unit Quantity');
+            $table->decimal('unit_price', 10, 2)->nullable()->comment('Unit Price');
             $table->decimal('regular_amount', 10, 2)->nullable()->comment('Total Amount');
             $table->decimal('negotiation_amount', 10, 2)->nullable()->comment('Negotiation Amount');
             $table->string('customer_expectation')->nullable()->comment("Customer's Expectation");
@@ -26,10 +27,10 @@ return new class extends Migration
             $table->string('influencer_opinion')->nullable()->comment('Influencer Opinion');
             $table->string('decision_maker')->nullable()->comment('Decision Maker');
             $table->string('decision_maker_opinion')->nullable()->comment('Decision Maker Opinion');
-            $table->string('remark')->nullable();
-            
+            $table->string('remark')->nullable(); 
             $table->foreignId('employee_id')->constrained('users');  
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
+            $table->date('date')->default(now());
             
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();

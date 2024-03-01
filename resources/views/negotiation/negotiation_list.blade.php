@@ -4,9 +4,7 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">
-
-            <!-- start page title -->
+        <div class="container-fluid"> 
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -80,7 +78,7 @@
                                             <td class=""> {{ @$negotiation->customer->user->userAddress->address }}</td>
                                             <td class=""> {{ get_price(@$negotiation->negotiation_amount) }}</td>
                                             <td class=""> {{ @$negotiation->project->name }}</td>
-                                            <td class="">{{count(json_decode($negotiation->project_units))}} </td>
+                                            <td class=""> {{$negotiation->unit_qty}} </td>
                                             <td class="">{{ @$negotiation->customer->reference->name }} [{{ @$negotiation->customer->reference->user_id }}] </td>
                                            
                                         </tr> 

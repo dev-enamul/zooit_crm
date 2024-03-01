@@ -33,20 +33,13 @@
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
-@php
-    if($user->user_type==1){
-        $user_type = "Employee";
-    }elseif($user->user_type==2){
-        $user_type = "FL";
-    }
-@endphp
+     
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="align-items-center mt-3 pb-2 d-flex flex-column page_head"> 
                             <img src="{{asset('assets/images/logo-sm.png')}}" alt="" width="50px">
-                            <h4 class="card-title">{{$user_type}} Details</h4>  
+                            <h4 class="card-title">Customer Details</h4>  
                         </div>
                         <div class="card-body">
                             <form>  
@@ -63,8 +56,8 @@
 
                                     <div class="col-3">
                                         <div class="mb-3">
-                                            <label class="form-label">{{$user_type}} ID </label>
-                                            <input type="text" class="form-control"  value="{{$user->user_id==3?}}" disabled>
+                                            <label class="form-label">Customer ID </label>
+                                            <input type="text" class="form-control"  value="{{$customer->customer_id}}" disabled>
                                         </div>
                                     </div>  
 
@@ -78,37 +71,26 @@
                                         <img src="{{@$user->image()}}" alt="" height="50px">
                                     </div>
 
-                                    <div class="{{($user->user_type==2||$user->user_type==3)?"col-4":"col-6"}}">
+                                    <div class="col-4">
                                         <div class="mb-3">
                                             <label class="form-label">Date of Birth </label>
                                             <input type="text" class="form-control"  value="{{@$user->dob}}">  
                                         </div>
                                     </div>
 
-                                    <div class="{{($user->user_type==2||$user->user_type==3)?"col-4":"col-6"}}">
+                                    <div class="col-4">
                                         <div class="mb-3">
                                             <label  class="form-label">Card/Finger ID </label>
                                             <input type="text" class="form-control"  value="{{@$user->finger_id}}">  
                                         </div>
                                     </div>
 
-                                    @if ($user->user_type==2)
-                                        <div class="col-4">
-                                            <div class="mb-3">
-                                                <label class="form-label">Profession </label>
-                                                <input type="text" class="form-control"  value="{{@$user->freelancer->profession->name}}">  
-                                            </div>
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Profession </label>
+                                            <input type="text" class="form-control"  value="{{@$customer->profession->name}}">  
                                         </div>
-                                    @endif 
-
-                                    @if ($user->user_type==3)
-                                        <div class="col-4">
-                                            <div class="mb-3">
-                                                <label class="form-label">Profession </label>
-                                                <input type="text" class="form-control"  value="{{@$user->customer[0]->profession->name}}">  
-                                            </div>
-                                        </div>
-                                    @endif
+                                    </div>
                                       
  
                                     <div class="col-6">
@@ -376,79 +358,7 @@
                                             <label for="tin_number" class="form-label">TIN Number</label>
                                             <input value="{{ @$user->userId->tin_number }}" type="text" class="form-control">  
                                         </div>
-                                    </div>  
-
-                                    @if ($user->user_type==1)
-                                        <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Official Information</h6>
-                                        <hr> 
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Designation</label>
-                                                <input value="{{ @$user->employee->designation->title }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Reporting User</label>
-                                                @php
-                                                    $reporting_user_id = @user_reporting($user->id)[1];
-                                                    $reporting_user = @user_info($reporting_user_id)->name;
-                                                @endphp
-                                                <input value="{{ $reporting_user }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Zone</label>
-                                                <input value="{{ @$user->userAddress->zone->name }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Area</label>
-                                                <input value="{{ @$user->userAddress->area->name }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-                                    @endif 
-
-                                    @if ($user->user_type==2)
-                                        <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Official Information</h6>
-                                        <hr> 
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Designation</label>
-                                                <input value="{{ @$user->freelancer->designation->title }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Reporting User</label>
-                                                @php
-                                                    $reporting_user_id = @user_reporting($user->id)[1];
-                                                    $reporting_user = @user_info($reporting_user_id)->name;
-                                                @endphp
-                                                <input value="{{ $reporting_user }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Zone</label>
-                                                <input value="{{ @$user->userAddress->zone->name }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label for="tin_number" class="form-label">Area</label>
-                                                <input value="{{ @$user->userAddress->area->name }}" type="text" class="form-control">  
-                                            </div>
-                                        </div> 
-                                    @endif 
+                                    </div>   
                                 </div>  
                             </form>
                         </div>
@@ -466,7 +376,6 @@
         function printPage() {
             window.print();
         }
-    </script>
-    
+    </script> 
 @endsection
  

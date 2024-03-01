@@ -49,13 +49,23 @@
                                 <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Visitor <span class="text-danger">*</span></label>
-                                            <select id="freelancer" class="select2" tags search name="freelancer[]" multiple>
+                                            <label for="visitor" class="form-label">Visitor <span class="text-danger">*</span></label>
+                                            <select id="visitor" class="select2" tags search name="visitor[]" multiple>
                                                 @isset($visitors)
                                                     @foreach ($visitors as $visitor)
-                                                        <option value="{{ $visitor->name }}" {{ in_array($visitor->name, old('freelancer', isset($visit) ? json_decode($visit->visitors) : [])) ? 'selected' : '' }}>
-                                                            {{ $visitor->name }} ({{ $visitor->customer[0]->customer_id }})
-                                                        </option>
+                                                        @if ($visitor->user_type==3) 
+                                                        @php
+                                                            $customer = App\Models\Customer::where('user_id',$visitor->id)->first();
+                                                        @endphp
+                                                            <option value="{{ $visitor->id }}" {{ in_array($visitor->id, old('visitor', isset($visit) ? json_decode($visit->visitors) : [])) ? 'selected' : '' }}>
+                                                                {{ $customer->name }} ({{ $customer->customer_id }} )
+                                                            </option>
+                                                        @elseif($visitor->user_type==2 || $visitor->user_type==1)  
+                                                            <option value="{{ $visitor->id }}" {{ in_array($visitor->id, old('visitor', isset($visit) ? json_decode($visit->visitors) : [])) ? 'selected' : '' }}>
+                                                                {{ $visitor->name }} ({{ $visitor->user_id }})
+                                                            </option>
+                                                        @endif
+                                                       
                                                     @endforeach
                                                 @endisset
                                             </select>
@@ -100,8 +110,8 @@
                                                                    
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="customer_id" class="form-label">Negotiation Person </label>
-                                            <select id="customer_id" class="select2" search name="customer_id">
+                                            <label for="customer_id" class="form-label">Negotiation Person <span class="text-danger">*</span></label>
+                                            <select id="customer_id" class="select2" search name="customer_id" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a Negotiation Person
                                                 </option>

@@ -409,6 +409,11 @@ a{
   .app-search{
     padding: 0 !important;
   }
+  @media screen and ((max-width: 575.98px)) {
+    .page-title-box .page-title-right {
+        display: block;
+    }
+  }
 
  
 

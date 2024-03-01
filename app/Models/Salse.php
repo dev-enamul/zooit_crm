@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Salse extends Model
 {
-    use HasFactory, SoftDeletes; 
+    use HasFactory, SoftDeletes;  
     protected $fillable = [
         'customer_id',
         'customer_user_id',
@@ -18,6 +18,8 @@ class Salse extends Model
         'select_type',
         'project_units',
         'unit_qty',
+        'floor',
+        'unit_category_id',
         'regular_amount',
         'sold_value',
         'down_payment',

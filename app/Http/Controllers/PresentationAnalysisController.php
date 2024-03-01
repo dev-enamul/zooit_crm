@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Priority;
+use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Freelancer;
@@ -64,7 +65,13 @@ class PresentationAnalysisController extends Controller
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
         $employees          = User::whereIn('id', $my_all_employee)->get();
-        $visitors        = User::where('user_type',3)->get();
+        $visitors           = User::where('status', 1)
+                                ->with(['customer' => function ($query) {
+                                    $query->select('id', 'customer_id')->first();
+                                }])
+                                ->select('name', 'id', 'user_id','user_type')
+                                ->get();
+                                
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
         $units              = Unit::select('id','title')->get();
@@ -83,8 +90,8 @@ class PresentationAnalysisController extends Controller
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [
-            'freelancer'    => 'required|array',
-            'freelancer.*'  => 'string',
+            'visitor'       => 'required|array',
+            'visitor.*'     => 'string',
             'employee'      => 'required',
             'projects'      => 'required|array',
             'projects.*'    => 'string',
@@ -98,7 +105,7 @@ class PresentationAnalysisController extends Controller
         if (!empty($id)) {
             $visit = VisitAnalysis::findOrFail($id);
             $projectsJson = json_encode($request->input('projects'));
-            $visit->visitors = json_encode($request->input('freelancer'));
+            $visit->visitors = json_encode($request->input('visitor'));
             $visit->employee_id = $request->employee;
             $visit->projects = $projectsJson;
             $visit->customer_id = $request->customer_id;
@@ -109,16 +116,20 @@ class PresentationAnalysisController extends Controller
             return redirect()->route('presentation_analysis.index')->with('success','Presemtation analysis update successfully');
         } else {
             $visit = new VisitAnalysis();
-            $visit->visitors = json_encode($request->input('freelancer'));;
+            $visit->visitors = json_encode($request->input('visitor'));;
             $visit->projects = json_encode($request->input('projects'));;
             $visit->customer_id = $request->customer_id;
             $visit->employee_id = $request->employee;
             $visit->remark = $request->remark;
+            $approve_setting = ApproveSetting::where('name','visit_analysis')->first(); 
+            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+                $visit->approve_by = auth()->user()->id;
+            } 
             $visit->status = 0;
             $visit->created_at = now();
             $visit->created_by = auth()->id();
             $visit->save();
-
+ 
             if($visit) {
                 $visit = Presentation::where('customer_id',$request->customer_id)->first();
                 $visit->status = 1;
@@ -181,5 +192,31 @@ class PresentationAnalysisController extends Controller
             return redirect()->back()->with('error', 'Please Select Customer');
         }
 
+    } 
+
+    public function presentation_analysis_details($id){
+        try{ 
+            
+            $id = decrypt($id);
+           
+            $data = VisitAnalysis::find($id);  
+            $customer = Customer::find($data->customer_id);
+            $user = User::find($customer->user_id);
+            $employee = User::find($data->employee_id);
+            $project = json_decode($data->projects); 
+            $visitors_id = json_decode($data->visitors);
+            $visitors = User::whereIn('id',$visitors_id)->get();
+            return view('presentation_analysis.presentation_analysis_details',compact([
+                'data',
+                'customer',
+                'user',
+                'employee',
+                'project',
+                'visitors'
+            ]));
+
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

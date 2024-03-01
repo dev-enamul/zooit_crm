@@ -30,6 +30,7 @@ class LeadAnalysis extends Model
         'instant_investment',
         'buyer',
         'area',
+        'presentation_date',
         'consumer',
         'employee_id',
         'approve_by',
@@ -47,6 +48,10 @@ class LeadAnalysis extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function employee(){
+        return $this->belongsTo(User::class, 'employee_id');
     }
      
     public function unit()

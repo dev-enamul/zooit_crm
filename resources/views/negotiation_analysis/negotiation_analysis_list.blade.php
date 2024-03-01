@@ -72,7 +72,8 @@
                                                         @can('sales-manage')
                                                             <a class="dropdown-item" href="{{route('salse.create',['customer'=>$negotiation->customer->id])}}">Sales Create</a>
                                                         @endcan 
-                                                    @endif
+                                                    @endif 
+                                                    <a class="dropdown-item" href="{{route('negotiation.analysis.details', encrypt($negotiation->id))}}">Negotiation Analysis Print</a>
                                                 </div>
                                             </div> 
                                         </td>
@@ -83,7 +84,7 @@
                                         <td class=""> {{ @$negotiation->customer->user->userAddress->address }}</td>
                                         <td class=""> {{ get_price(@$negotiation->negotiation_amount) }}</td>
                                         <td class=""> {{ @$negotiation->project->name }}</td>
-                                        <td class="">{{count(json_decode($negotiation->project_units))}} </td>
+                                        <td class=""> {{ $negotiation->unit_qty??"-" }}</td>
                                         <td class="">{{ @$negotiation->customer->reference->name }} [{{ @$negotiation->customer->reference->user_id }}] </td>
                                     </tr> 
                                 @endforeach

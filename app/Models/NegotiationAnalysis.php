@@ -17,20 +17,22 @@ class NegotiationAnalysis extends Model
         'unit_id',
         'payment_duration',
         'select_type',
-        'project_units',
+        'unit_qty',
+        'unit_price',
         'regular_amount',
         'negotiation_amount',
         'customer_emotion',
         'customer_preference',
         'plan_b',
         'remark',
+        'date',
         'employee_id',
         'approve_by',
         'status',
         'created_by',
         'updated_by',
         'deleted_by',
-    ];
+    ]; 
 
     public function customer()
     {

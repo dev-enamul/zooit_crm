@@ -19,13 +19,15 @@ return new class extends Migration
             $table->foreignId('unit_id')->nullable()->constrained('units');
             $table->integer('payment_duration')->nullable()->comment('In Month');
             $table->unsignedInteger('select_type')->nullable()->comment('1= onChoice, 2= Lottery');
-            $table->json('project_units')->nullable()->comment('Project Unit List');
+            $table->integer('unit_qty')->nullable();
+            $table->decimal('unit_price', 10, 2)->nullable();
             $table->decimal('regular_amount', 10, 2)->nullable()->comment('Total Amount');
             $table->decimal('negotiation_amount', 10, 2)->nullable()->comment('Negotiation Amount');
             $table->string('customer_emotion')->nullable()->comment("Customer's Emotions");
             $table->string('customer_preference')->nullable()->comment("Customer's Preference");
             $table->string('plan_b')->nullable()->comment("Customer's Plan B");
             $table->string('remark')->nullable();
+            $table->date('date')->default(now());
 
             $table->foreignId('employee_id')->constrained('users');
             $table->foreignId('approve_by')->nullable()->constrained('users');

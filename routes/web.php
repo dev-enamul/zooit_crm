@@ -175,7 +175,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
         Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
-        Route::get('customer-print/{id}', [CustomerController::class, "customerPrint"])->name('customer.print');
+        Route::get('customer-details/{id}', [CustomerController::class, "customerDetails"])->name('customer.details');
 
         // Prospecting a
         Route::resource('prospecting', ProspectingController::class);
@@ -205,6 +205,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/get-customer-religion/{customerId}', [LeadAnalysisController::class, 'getCustomerReligion']);
         Route::get('lead-analysis-approve', [LeadAnalysisController::class, 'leadAnalysisApprove'])->name('lead-analysis.approve');
         Route::post('lead-analysis-approve-save', [LeadAnalysisController::class, 'leadAnalysisApproveSave'])->name('lead-analysis.approve.save');
+        Route::get('lead-analysis-details/{id}', [LeadAnalysisController::class, 'lead_analysis_details'])->name('lead.analysis.details');
 
         // Presentation
         Route::resource('presentation', PresentationController::class);
@@ -219,6 +220,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('visit-delete/{id}', [PresentationAnalysisController::class, "presentationDelete"])->name('visit.delete');
         Route::get('presentation-analysis-approve', [PresentationAnalysisController::class, 'presentationAnalysisApprove'])->name('presentation-analysis.approve');
         Route::post('presentation-analysis-approve-save', [PresentationAnalysisController::class, 'presentationAnalysisApproveSave'])->name('presentation-analysis.approve.save');
+        Route::get('presentation-analysis-details/{id}', [PresentationAnalysisController::class, 'presentation_analysis_details'])->name('presentation.analysis.details');
 
         // Follow Up
         Route::resource('followup', FollowupController::class);
@@ -227,6 +229,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('follow-up-delete/{id}', [FollowupController::class, "followUpDelete"])->name('followUp.delete');
         Route::get('follow-up-approve', [FollowupController::class, 'followUpApprove'])->name('followUp.approve');
         Route::post('follow-up-approve-save', [FollowupController::class, 'followUpApproveSave'])->name('followUp.approve.save');
+        
 
         // Follow Up Analysis
         Route::resource('followup-analysis', FollowupAnalysisController::class);
@@ -234,6 +237,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('follow-up-analysis-delete/{id}', [FollowupAnalysisController::class, "followUpDelete"])->name('followUp-analysis.delete');
         Route::get('follow-up-analysis-approve', [FollowupAnalysisController::class, 'followUpApprove'])->name('followUp-analysis.approve');
         Route::post('follow-up-analysis-approve-save', [FollowupAnalysisController::class, 'followUpsApproveSave'])->name('followUp-analysis.approve.save');
+        Route::get('follow-up-analysis-details/{id}', [FollowupAnalysisController::class, 'follow_analysis_up_details'])->name('followup.analysis.details');
         
         // Negotation
         Route::resource('negotiation', NegotiationController::class);
@@ -249,10 +253,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('negotiation-analysis-approve', [NegotiationAnalysisController::class, 'negotiationAnalysisApprove'])->name('negotiation-analysis.approve');
         Route::any('negotiation-analysis-approve-save', [NegotiationAnalysisController::class, 'negotiationAnalysisApproveSave'])->name('negotiation-analysis-approve.save');
         Route::post('update-negotiation-waiting-day',[NegotiationAnalysisController::class,'update_waiting_day'])->name('update.negotiation.waiting.day');
+        Route::get('negotiation-analysis-details/{id}', [NegotiationAnalysisController::class, 'negotiation_analysis_details'])->name('negotiation.analysis.details');
 
 
         // Salse
         Route::resource('salse', SalseController::class);
+        Route::get('salse-details/{id}', [SalseController::class, 'salse_details'])->name('salse.details');
 
         // Deposit
         Route::resource('deposit', DepositController::class);

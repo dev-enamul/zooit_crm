@@ -82,6 +82,7 @@ class NegotiationController extends Controller
             'employee'          => 'required',
             'priority'          => 'required',
             'project'           => 'required',
+            'unit_qty'          => 'required',
             'unit'              => 'required', 
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'required',
@@ -99,8 +100,9 @@ class NegotiationController extends Controller
             $follow->project_id = $request->input('project');
             $follow->unit_id = $request->input('unit');
             $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->payment_duration = $request->payment_duration; 
+            $follow->unit_price = $request->unit_price;
+            $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
             $follow->negotiation_amount = $request->input('negotiation_amount'); 
             $follow->remark = $request->remark;
@@ -116,15 +118,18 @@ class NegotiationController extends Controller
             $follow->project_id = $request->input('project');
             $follow->unit_id = $request->input('unit');
             $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration;
-            $follow->project_units = json_encode($request->input('project_unit'));
+            $follow->payment_duration = $request->payment_duration; 
+            $follow->unit_price = $request->unit_price;
+            $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount');
-            $follow->remark = $request->remark; 
+            $follow->negotiation_amount = $request->input('negotiation_amount'); 
+            $follow->remark = $request->remark;  
+
             $approve_setting = ApproveSetting::where('name','negotiation')->first(); 
             if(isset($approve_setting->status) && $approve_setting->status == 0){ 
                 $follow->approve_by = auth()->user()->id;
             } 
+            
             $follow->created_by = auth()->id();
             $follow->created_at = now();
             $follow->status = 0;

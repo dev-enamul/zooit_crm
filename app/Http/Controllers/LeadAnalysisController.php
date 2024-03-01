@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\Religion;
 use App\Models\ApproveSetting;
+use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\LeadAnalysis;
+use App\Models\Presentation;
 use App\Models\Profession;
 use App\Models\Project;
 use App\Models\Unit;
@@ -36,7 +38,19 @@ class LeadAnalysisController extends Controller
         $user_employee = my_all_employee($user_id);
         $leads = LeadAnalysis::whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
+        })
+        ->where(function($q){
+            $q->where('approve_by','!=',null)
+            ->orWhere('created_by',auth()->id())
+            ->orWhere('employee_id',auth()->id());
         }); 
+
+        if(isset($request->status) && !empty($request->status)){
+            $status = (int)$request->status;
+            $leads = $leads->where('status', $status);
+        }else{
+            $leads = $leads->where('status', 0);
+        }
 
          if(isset($request->profession) && !empty($request->profession)){
             $profession = (int)$request->profession;
@@ -116,11 +130,11 @@ class LeadAnalysisController extends Controller
                 'tentative_amount'   => $request->tentative_amount,
                 'facebook_id'   => $request->facebook_id,
                 'customer_problem'   => $request->customer_problem,
-                'refferal'   => $request->refferal,
+                'referral'   => $request->referral,
                 'influencer'   => $request->influencer,
                 'family_member'   => $request->family_member,
                 'decision_maker'   => $request->decision_maker,
-                'previous_experience'   => $request->previous_experiance,
+                'previous_experience'   => $request->previous_experience,
                 'instant_investment'   => $request->instant_investment,
                 'buyer'   => $request->buyer,
                 'area'   => $request->area,
@@ -152,7 +166,7 @@ class LeadAnalysisController extends Controller
                 'tentative_amount'     => $request->tentative_amount,
                 'facebook_id'          => $request->facebook_id,
                 'customer_problem'     => $request->customer_problem,
-                'refferal'             => $request->refferal,
+                'referral'             => $request->referral,
                 'influencer'           => $request->influencer,
                 'family_member'        => $request->family_member,
                 'decision_maker'       => $request->decision_maker,
@@ -236,5 +250,19 @@ class LeadAnalysisController extends Controller
             return redirect()->route('lead-analysis.approve')->with('error', 'Something went wrong!');
         }
 
+    } 
+
+    public function lead_analysis_details($id){
+        $id = decrypt($id);
+        $data = LeadAnalysis::find($id);
+        $customer = Customer::find($data->customer_id);
+        $user = User::find($customer->ref_id);
+        if(!$user){
+            return redirect()->back()->with('error','User not found');
+        }
+        $cold_calling = ColdCalling::where('customer_id',$customer->id)->latest()->select('created_at')->first();
+        $presentation = Presentation::where('customer_id',$customer->id)->latest()->select('created_at')->first();
+         
+        return view('lead_analysis.lead_analysis_details',compact('data','customer','user','cold_calling','presentation'));
     }
 }

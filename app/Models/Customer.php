@@ -45,6 +45,9 @@ class Customer extends Model
 
    public function nextPaymentDate(){
         $last_payment_date = $this->deposits()->latest()->first()->date;
+        if(!$last_payment_date){
+            return $next_payment_date = now();
+        }
         $installment_type = $this->salse->installment_type;
         switch ($installment_type) {
             case 'weekly':
