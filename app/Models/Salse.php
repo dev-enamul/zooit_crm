@@ -75,4 +75,9 @@ class Salse extends Model
     {
         return $this->hasMany(Deposit::class,'salse_id');
     }
+
+    public function unitCategory()
+    {
+        return $this->belongsTo(UnitCategory::class);
+    }
 }

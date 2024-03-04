@@ -39,6 +39,7 @@ return new class extends Migration
             
             $table->timestamps();
             $table->softDeletes();
+            
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

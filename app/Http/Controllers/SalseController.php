@@ -192,6 +192,19 @@ class SalseController extends Controller
         }catch(Exception $e){
             return redirect()->back()->with('error', 'Invalid request');
         }
+    } 
+
+    public function get_salse_info(Request $request){
+        $customer_id = $request->customer_id;
+        $data = Salse::where('customer_id', $customer_id)
+            ->with('customer.user') 
+            ->with('project')
+            ->with('unit')
+            ->with('unitCategory')
+            ->latest()
+            ->first();
+
+        return response()->json($data); 
     }
 
 }
