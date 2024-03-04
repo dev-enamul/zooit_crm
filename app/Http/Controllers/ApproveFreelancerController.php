@@ -71,6 +71,10 @@ class ApproveFreelancerController extends Controller
                 'approve_by' => auth()->user()->id,
                 'complete_training' => 1
             ]);
+            $user->freelancer->status = 1;
+            $user->freelancer->last_approve_by = auth()->user()->id;
+            
+            $user->freelancer->save();
 
             DB::commit();
             return response()->json(['success' => 'Training Completed Successfully'], 200);
