@@ -231,8 +231,7 @@ class FollowupAnalysisController extends Controller
          $user = User::find($customer->ref_id);
          $employee = User::find($data->employee_id);   
          $presentation_date = Presentation::where('customer_id',$data->customer_id)->select('created_at')->latest()->first();
-         $product_unit_id = json_decode($data->project_units);
-         $product_unit = ProjectUnit::whereIn('id', $product_unit_id)->pluck('name')->implode(', ');
+         
         
          $followUps = FollowUp::where('customer_id', $data->customer_id)->select('created_at')->get(); 
          $firstFollowUp = $followUps->first();
@@ -250,8 +249,7 @@ class FollowupAnalysisController extends Controller
             'customer',
             'user',
             'employee',
-            'presentation_date',
-            'product_unit',
+            'presentation_date', 
             'followUps'
          ]));
  

@@ -10,12 +10,9 @@
                 page-break-before: always;
             }  
         }
-
         .text-small{
             font-size: 11px;
-        }
-      
-        
+        } 
     </style>
 @endsection
 @section('content')
