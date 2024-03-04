@@ -12,7 +12,13 @@
         }
 
         .text-small{
-            font-size: 11px;
+            font-size: 9px;
+        }
+        label{
+            font-size: 9px;
+        }
+        input{
+            font-size: 9px;
         }
       
         
