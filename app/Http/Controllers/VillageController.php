@@ -61,7 +61,7 @@ class VillageController extends Controller
             });
         }  
 
-        $villages = $villages->paginate(2); 
+        $villages = $villages->paginate(20); 
         return view('location.village_list',compact('divisions','villages','districts','upazilas','unions'));
     }
 
