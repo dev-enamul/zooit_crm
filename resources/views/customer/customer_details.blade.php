@@ -103,7 +103,7 @@
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-label">Blood Group </label>
-                                            <input type="text" class="form-control"  value="{{ \App\Enums\BloodGroup::values()[$user->blood_group??1] }}">  
+                                            <input type="text" class="form-control"  value="{{ \App\Enums\BloodGroup::values()[1] }}">  
                                         </div>
                                     </div>
 
