@@ -19,6 +19,7 @@
         }
         input{
             font-size: 9px;
+            padding: 3px
         }
       
         
@@ -61,42 +62,42 @@
                             <form class="needs-validation"> 
                                 <div class="row"> 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="freelancer" class="form-label">Customer Name</label>
                                             <input value="{{$customer->name}} [{{$customer->customer_id}}]" type="text" class="form-control" > 
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="freelancer" class="form-label">Age</label>
                                             <input value="{{$customer->user->age()??""}}" type="text" class="form-control" > 
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="freelancer" class="form-label">Profession</label>
                                             <input value="{{$customer->profession->name}}" type="text" class="form-control" > 
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="income_range" class="form-label">Income Range</label>
                                             <input value="{{$data->income_range}} " type="text" class="form-control" >
                                         </div>
                                     </div> 
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="profession_year" class="form-label">Job/Business/Others Service Year</label> 
                                             <input value="{{$data->profession_year}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="customer_need" class="form-label">Customer's Need</label>  
                                             <input value="{{$data->customer_need}} " type="text" class="form-control" >
                                         </div>
@@ -107,98 +108,98 @@
                                         <input value="{{$data->project->name}} " type="text" class="form-control" >
                                     </div>
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="tentative_amount" class="form-label">Tentative Sales Amount</label> 
                                             <input value="{{$data->tentative_amount}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="customer_problem" class="form-label">Customer's Problem</label> 
                                             <input value="{{$data->customer_problem}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="influencer" class="form-label">Influencer</label> 
                                             <input value="{{$data->influencer}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="decision_maker" class="form-label">Decision Maker</label>  
                                             <input value="{{$data->decision_maker}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="instant_investment" class="form-label">Instant Investment</label> 
                                             <input value="{{$data->instant_investment}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="buyer" class="form-label">Buyer</label> 
                                             <input value="{{$data->buyer}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="consumer" class="form-label">Consumer</label> 
                                             <input value="{{$data->consumer}} " type="text" class="form-control" >
                                         </div>
                                     </div> 
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="consumer" class="form-label">Cold Calling</label> 
                                             <input value="{{get_date($cold_calling->created_at)}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="consumer" class="form-label">Presentation Date</label> 
                                             <input value="{{get_date($data->presentation_date)}} " type="text" class="form-control" >
                                         </div>
                                     </div> 
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="hobby" class="form-label">Hobby </label>
                                             <input value="{{$data->unit->hobby}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="hobby" class="form-label">Religion </label>
                                             <input value="{{ \App\Enums\Religion::values()[@$user->religion] }} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="hobby" class="form-label">Hobby </label>
                                             <input value="{{$user->phone}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="hobby" class="form-label">Address </label>
                                             <input value="{{@$user->userAddress->address}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="hobby" class="form-label">Email </label>
                                             <input value="{{$user->userContact->office_email??$user->userContact->personal_email??""}} " type="text" class="form-control" >
                                         </div>
@@ -206,7 +207,7 @@
  
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="facebook_id" class="form-label">Facebook Id</label> 
                                             <input value="{{$data->facebook_id}} " type="text" class="form-control" >
                                         </div>
@@ -215,7 +216,7 @@
                                    
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="refferal" class="form-label">Referral</label> 
                                             <input value="{{$data->referral}} " type="text" class="form-control" >
                                         </div>
@@ -224,7 +225,7 @@
                                     
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="family_member" class="form-label">Family Member Qty</label> 
                                             <input value="{{$data->family_member}} " type="text" class="form-control" >
                                         </div>
@@ -233,28 +234,28 @@
                                     
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="previous_experiance" class="form-label">Previous Experiance to Purchase this kind of product</label> 
                                             <input value="{{$data->previous_experience}} " type="text" class="form-control" >
                                         </div>
                                     </div> 
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="buyer" class="form-label">Executive Name & ID</label> 
                                             <input value="{{$data->employee->name}} [{{$data->employee->user_id}}]" type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="buyer" class="form-label">Area</label> 
                                             <input value="{{$data->area}} " type="text" class="form-control" >
                                         </div>
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="">
                                             <label for="buyer" class="form-label">Freelancer</label> 
                                             <input value="{{$customer->reference->name}} [{{$customer->reference->user_id}}]" type="text" class="form-control" >
                                         </div>
