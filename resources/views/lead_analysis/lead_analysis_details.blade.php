@@ -18,7 +18,7 @@
             font-size: 10px;
         }
         .form-control{
-            font-size: 10px;
+            font-size: 10px !important;
             padding: 3px
         }
       
