@@ -41,6 +41,7 @@ return new class extends Migration
             $table->foreignId('approve_by')->nullable()->constrained('users');
             $table->boolean('status')->default(0)->comment('0=Active, 1=Unactive');
             $table->boolean('is_all_paid')->default(0)->comment('0=No, 1=Yes');
+            $table->boolean('is_return')->default(0)->comment('0=No, 1=Yes');
             
             $table->timestamps();
             $table->softDeletes();

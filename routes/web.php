@@ -259,6 +259,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Salse
         Route::resource('salse', SalseController::class);
         Route::get('salse-details/{id}', [SalseController::class, 'salse_details'])->name('salse.details');
+        Route::get('get-salse-info', [SalseController::class, 'get_salse_info'])->name('get.salse.info');
 
         // Deposit
         Route::resource('deposit', DepositController::class);
@@ -278,7 +279,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Transfer
         Route::resource('transfer', SalseTransferController::class);
 
-        // Settings ============================= 
+        // Settings =============================
         // Profession
         Route::resource('profession', ProfessionController::class);
         Route::post('profession-update', [ProfessionController::class, 'update'])->name('profession.update');

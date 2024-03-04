@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Salse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalseReturnController extends Controller
 {
@@ -10,7 +12,7 @@ class SalseReturnController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {  
         return view(('return.return_list'));
     }
 
@@ -19,7 +21,14 @@ class SalseReturnController extends Controller
      */
     public function create()
     {
-        return view('return.return_create');
+        $my_all_employee = my_all_employee(Auth::user()->id);
+        $customers = Salse::where('approve_by','!=',null)
+        ->where('status',1)
+        ->where('is_return',0)
+        ->whereHas('customer',function($q) use($my_all_employee){
+            $q->whereIn('ref_id',$my_all_employee);
+        })->get();  
+        return view('return.return_create',compact('customers'));
     }
 
     /**
