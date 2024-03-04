@@ -12,13 +12,13 @@
         }
 
         .text-small{
-            font-size: 9px;
+            font-size: 10px;
         }
         label{
-            font-size: 9px;
+            font-size: 10px;
         }
-        input{
-            font-size: 9px;
+        .form-control{
+            font-size: 10px;
             padding: 3px
         }
       
