@@ -96,21 +96,21 @@
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-label">Religion </label>
-                                            <input type="text" class="form-control"  value="{{ \App\Enums\Religion::values()[@$user->religion] }}">  
+                                            <input type="text" class="form-control"  value="{{ \App\Enums\Religion::values()[$user->religion??1] }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-label">Blood Group </label>
-                                            <input type="text" class="form-control"  value="{{ \App\Enums\BloodGroup::values()[@$user->blood_group] }}">  
+                                            <input type="text" class="form-control"  value="{{ \App\Enums\BloodGroup::values()[$user->blood_group??1] }}">  
                                         </div>
                                     </div>
 
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label class="form-label">Gender </label>
-                                            <input type="text" class="form-control" value="{{ \App\Enums\Gender::values()[@$user->gender] }}">  
+                                            <input type="text" class="form-control" value="{{ \App\Enums\Gender::values()[$user->gender??1] }}">  
                                         </div>
                                     </div>
 
