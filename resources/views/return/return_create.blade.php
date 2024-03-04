@@ -231,8 +231,6 @@
                             $('#lottery').val("Yes"); 
                         } 
                         $('#installment').val(response.total_installment);
-                        
-
                     }
                 });
             }
