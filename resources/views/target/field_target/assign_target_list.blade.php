@@ -82,7 +82,7 @@
                                         <tr> 
                                             <td>1</td>
                                             <td>{{@$data->assignTo->name}}</td>  
-                                            <td class="align-middle">{{$data->freelancer}} </td>  
+                                            <td class="align-middle">{{$data->freelancer}}</td>  
                                             <td class="align-middle">{{$data->customer}}  </td>  
                                             <td class="align-middle">{{$data->prospecting}}</td>  
                                             <td class="align-middle">{{$data->cold_calling}}</td>  

@@ -132,8 +132,7 @@
         </button>
     </div>
     <div class="offcanvas-body">
-        <div class="row"> 
- 
+        <div class="row">  
             <div class="col-md-12">
                 <div class="mb-3">
                     <label for="freelancer" class="form-label">Freelancer</label>

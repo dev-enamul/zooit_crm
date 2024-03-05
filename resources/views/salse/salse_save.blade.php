@@ -32,7 +32,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer</label>
+                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer

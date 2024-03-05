@@ -72,6 +72,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'sales-transfer-delete', 'name' => 'Sales Transfer Delete', 'status' => 1],
             ['slug' => 'deposit', 'name' => 'Deposit', 'status' => 1],
             ['slug' => 'deposit-manage', 'name' => 'Deposit Manage', 'status' => 1],
+            ['slug' => 'approve-deposit', 'name' => 'Approve Deposit'],
             ['slug' => 'deposit-delete', 'name' => 'Deposit Delete', 'status' => 1], 
             // progress 
             ['slug' => 'field-target', 'name' => 'Field Target', 'status' => 1], 

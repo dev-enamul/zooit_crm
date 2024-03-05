@@ -8,17 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Deposit extends Model
 {
-    use HasFactory, SoftDeletes;
-
+    use HasFactory, SoftDeletes; 
     protected $fillable = [
         'customer_id',
+        'customer_user_id',
+        'employee_id',
         'deposit_category_id',
         'project_id',
         'salse_id',
         'amount',
         'date',
         'bank_id',
-        'cheque_no',
+        'tnx_id',
         'branch_name',
         'remark',
         'approve_by',

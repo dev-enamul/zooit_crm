@@ -10,13 +10,17 @@ class DepositCommission extends Model
     use HasFactory;
 
     protected $fillable = [
-        'deposit_id',
         'user_id',
-        'designation_id', 
+        'designation_id',
+        'salse_id',
+        'deposit_id',
         'project_id',
         'commission_id',
-        'commission',
-        'date',
+        'commission_percent',
+        'amount',
+        'applicable_commission',
+        'payble_commission',
+        'created_by',
     ];
 
     protected $dates = [

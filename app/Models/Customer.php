@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,11 +44,13 @@ class Customer extends Model
         return $this->hasMany(Deposit::class,'customer_id');
     }
 
-   public function nextPaymentDate(){
-        $last_payment_date = $this->deposits()->latest()->first()->date;
-        if(!$last_payment_date){
-            return $next_payment_date = now();
-        }
+   public function next_payment_date(){
+        $last_deposit = $this->deposits()->where('deposit_category_id', 1)->latest()->first();
+
+        if (!$last_deposit || $last_deposit == null) {
+            return Carbon::now()->toDateString();
+        } 
+        $last_payment_date =    Carbon::parse($last_deposit->date);
         $installment_type = $this->salse->installment_type;
         switch ($installment_type) {
             case 'weekly':
@@ -73,44 +76,87 @@ class Customer extends Model
                 break;
             default: 
                 break;
-        }
-        return $next_payment_date;
+        } 
+        return $next_payment_date->toDateString();
    }
 
    function dueInstallment(){
         $number_of_installments_due = 0; 
-        $current_date = now();
+        $current_date = Carbon::now()->endOfMonth(); 
         $number_of_installments_due = 0;
-        $next_payment_date = $this->nextPaymentDate();
+        $next_date = $this->next_payment_date();
+        $next_date = Carbon::parse($next_date);
         $installment_type = $this->salse->installment_type;
-        while ($next_payment_date <= $current_date) {
-            $number_of_installments_due++;
+        while ($next_date <= $current_date) { 
+            if ($next_date->isSameMonth(now())) {
+                $number_of_installments_due++;
+            } 
             switch ($installment_type) {
                     case 'weekly':
-                        $next_payment_date->addWeek();
+                        $next_date->addWeek();
                         break;
                     case 'bi-weekly':
-                        $next_payment_date->addWeeks(2);
+                        $next_date->addWeeks(2);
                         break;
                     case 'monthly':
-                        $next_payment_date->addMonth();
+                        $next_date->addMonth();
                         break;
                     case 'bi-monthly':
-                        $next_payment_date->addMonths(2);
+                        $next_date->addMonths(2);
                         break;
                     case 'quarterly':
-                        $next_payment_date->addMonths(3);
+                        $next_date->addMonths(3);
                         break;
                     case 'semi-annually':
-                        $next_payment_date->addMonths(6);
+                        $next_date->addMonths(6);
                         break;
                     case 'annually':
-                        $next_payment_date->addYear();
+                        $next_date->addYear();
                         break;
                     default: 
                         break;
-                }
             }
-        
         }
+        return $number_of_installments_due; 
+    }
+
+    function overDueInstallment(){
+        $number_of_installments_due = 0; 
+        $current_date = Carbon::now()->firstOfMonth()->subDay(1);
+        // $firstDayOfMonth = Carbon::now()->firstOfMonth(); 
+        // $lastDayOfMonth = Carbon::now()->endOfMonth(); 
+        $number_of_installments_due = 0;
+        $next_date = $this->next_payment_date();
+        $next_date = Carbon::parse($next_date);
+        $installment_type = $this->salse->installment_type;
+        while ($next_date <= $current_date) {
+            $number_of_installments_due++;
+            switch ($installment_type) {
+                    case 'weekly':
+                        $next_date->addWeek();
+                        break;
+                    case 'bi-weekly':
+                        $next_date->addWeeks(2);
+                        break;
+                    case 'monthly':
+                        $next_date->addMonth();
+                        break;
+                    case 'bi-monthly':
+                        $next_date->addMonths(2);
+                        break;
+                    case 'quarterly':
+                        $next_date->addMonths(3);
+                        break;
+                    case 'semi-annually':
+                        $next_date->addMonths(6);
+                        break;
+                    case 'annually':
+                        $next_date->addYear();
+                        break;
+                    default: 
+                        break;
+            }
+        }
+        return $number_of_installments_due; 
+    }
 }

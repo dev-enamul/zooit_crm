@@ -49,7 +49,8 @@ class SalseController extends Controller
         $my_all_employee    = my_all_employee($user_id);
         $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
+                                })->get(); 
+
         $projects           = Project::where('status',1)->get(['name', 'id']);
         $projectUnits       = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();

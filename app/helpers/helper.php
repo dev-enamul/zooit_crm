@@ -91,9 +91,9 @@ if (!function_exists('get_percent')) {
     function get_percent($numerator, $denominator)
     {
         if ($denominator != 0) {
-            return ($numerator / $denominator) * 100 .'%';
+            return round(($numerator / $denominator) * 100) .'%';
         } else {
-            return 0;  
+            return 0 .'%';  
         }
     }
 }

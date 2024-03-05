@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
  
     public function boot(): void
     {
-        Blade::directive('can', function ($permission) { 
+        Blade::directive('can', function ($permission) {
             return "<?php if(auth()->check() && auth()->user()->hasPermission({$permission})) : ?>";
         });
 

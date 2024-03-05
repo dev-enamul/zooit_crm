@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ColdCalling;
+use App\Models\Customer;
 use App\Models\FieldTarget;
+use App\Models\Lead;
+use App\Models\LeadAnalysis;
+use App\Models\Prospecting;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -87,8 +92,86 @@ class FieldTargetController extends Controller
         return view('target.today_target');
     } 
 
-    public function marketing_field_report(){
-        return view('target.marketing_field_report');
+    public function marketing_field_report(Request $request){
+        $my_all_employee = my_all_employee(auth()->user()->id); 
+
+        if(isset($request->month) && $request->month != ''){ 
+            $date = Carbon::parse($request->month);
+        }else{ 
+            $date = Carbon::now();
+        }
+
+        $employees = User::where('user_type',1)->whereHas('employee',function($q){
+            $q->where('designation_id',17);
+        })
+        ->whereIn('id',$my_all_employee)->where('status',1)
+        ->get(); 
+
+        $user = User::find(auth()->user()->id);
+        $employee_id = $user->id;
+        if($request->employee==null || $request->employee==''){
+            if($user->employee->designation_id!=17 && isset($employees[0]->id)){
+                $employee_id = $employees[0]->id;
+            }
+        }else{
+            $employee_id = $request->employee;
+            $employee_id = decrypt($employee_id);
+        } 
+        $employee = User::find($employee_id);
+        $my_all_employee = my_all_employee($employee_id); 
+
+        $monthly_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
+            ->where('user_type',2)
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count();
+
+        $monthly_achive['customer'] = Customer::whereIn('ref_id',$my_all_employee)
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count();
+            
+        $monthly_achive['prospecting'] = Prospecting::WhereHas('Customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count();
+
+        $monthly_achive['cold_calling'] = ColdCalling::WhereHas('Customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count(); 
+
+        $monthly_achive['lead'] = Lead::WhereHas('Customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count(); 
+
+        $monthly_achive['lead_analysis'] = LeadAnalysis::WhereHas('Customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count();  
+        $datas = User::where('user_type',2)->whereIn('id',$my_all_employee)->where('status',1)->get();
+        return view('target.marketing_field_report',compact([
+            'employees',
+            'datas',
+            'employee',
+            'date',
+            'monthly_achive'
+        ]));
     } 
 
     public function salse_field_report(){

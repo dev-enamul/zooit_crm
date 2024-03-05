@@ -7,12 +7,21 @@
 
             <!-- start page title -->
             <div class="row">
-                <div class="col-12"> 
-                    <div class="text-center">
-                        <h4 class="mb-sm-0">Way Housing Pvt. Ltd</h4> 
-                        <p class="m-0">Project Unit and Sales Executive Wise Deposit Report</p>
-                        <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
+                <div class="col-12">  
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">Deposit List</h4> 
+                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                        <input type="hidden" id="pageSize" value="a3">
+                        <input type="hidden" id="fontSize" value="8">
+                        <div class="page-title-right">
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
+                        </div>
+
                     </div>
+
                 </div>
             </div>
             <!-- end page title -->
@@ -22,87 +31,55 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-        
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div> 
+                        <div class="card-body"> 
                            <div class="table-box" style="overflow-x: scroll;">
-                            <table class="table table-hover align-middle text-center table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr class="align-middle"> 
-                                        <th>SL.</th>
-                                        <th>CUS ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Booking Date</th>
-                                        <th>Project Name</th>
-                                        <th>Unit Name</th>
-                                        <th>Unit Qty</th>
-                                        <th>Deposit Type</th>
-                                        @foreach ($designations as $designation)
-                                            <th>{{$designation->title}}</th>
+                                <table id="datatable"  class="table table-hover align-middle text-center table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr class="align-middle"> 
+                                            <th>SL.</th>
+                                            <th>CUS ID</th>
+                                            <th>Customer Name</th>
+                                            <th>Booking Date</th>
+                                            <th>Project Name</th>
+                                            <th>Unit Name</th>
+                                            <th>Unit Qty</th>
+                                            <th>Deposit Type</th>
+                                            @foreach ($designations as $designation)
+                                                <th>{{$designation->title}}</th>
+                                            @endforeach 
+                                        
+                                            <th>Declaration Price</th>
+                                            <th>Discount Amount</th>
+                                            <th>Sales Value </th>
+                                            <th>Deposit Amount</th>
+                                            <th>Total Deposit Amount</th>
+                                            <th>Total Due Amount</th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        @foreach ($datas as $key => $data)
+                                            <tr class=""> 
+                                                <td>{{$key +1}}</td>
+                                                <td>{{@$data->customer->customer_id}}</td>
+                                                <td>{{@$data->customer->name}}</td>
+                                                <td>{{get_date(@$data->salse->created_at)}}</td>
+                                                <td>{{$data->salse->project->name??'-'}}</td>
+                                                <td>{{$data->salse->unit->title??'-'}}</td>
+                                                <td>{{$data->salse->unit_qty}}</td> 
+                                                <td>{{$data->depositCategory->name}}</td>
+                                                @foreach ($designations as $designation)    
+                                                    <th>-</th>
+                                                @endforeach  
+                                                <td>{{get_price(@$data->salse->regular_amount)}}</td>
+                                                <td>{{get_price(@$data->salse->regular_amount-@$data->salse->sold_value)}}</td>
+                                                <td>{{get_price(@$data->salse->sold_value)}}</td>
+                                                <td>{{get_price($data->amount)}}</td>
+                                                <td>{{get_price(@$data->salse->total_deposit)}}</td>
+                                                <td>{{get_price(@$data->salse->sold_value-@$data->salse->total_deposit)}}</td>  
+                                            </tr>  
                                         @endforeach 
-                                    
-                                        <th>Declaration Price</th>
-                                        <th>Discount Amount</th>
-                                        <th>Sales Value </th>
-                                        <th>Deposit Amount</th>
-                                        <th>Total Deposit Amount</th>
-                                        <th>Total Due Amount</th>  
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    @foreach ($datas as $key => $data)
-                                        <tr class=""> 
-                                            <td>{{$key +1}}</td>
-                                            <td>{{@$data->customer->customer_id}}</td>
-                                            <td>{{@$data->customer->name}}</td>
-                                            <td>{{get_date(@$data->salse->created_at)}}</td>
-                                            <td>{{$data->salse->project->name??'-'}}</td>
-                                            <td>{{$data->salse->unit->title??'-'}}</td>
-                                            <td>
-                                                @if (isset($data->salse) && isset($data->salse->project_units) && count($data->salse->project_units) > 0)
-                                                    {{ count($data->salse->project_units) }}
-                                                @endif
-                                            </td> 
-                                            <td>{{$data->depositCategory->name??'Regular'}}</td>
-                                            @foreach ($designations as $designation)   
-                                                @php 
-                                                    $employee = $data->commissions->where('designation_id', $designation->id);
-                                                    if ($employee->isNotEmpty()) { 
-                                                        $employee = $employee->first()->user->name;
-                                                    } else {
-                                                        $employee = '-';
-                                                    }
-                                                @endphp
-                                                <th>{{$employee}}</th>
-                                            @endforeach  
-                                            <td>{{get_price(@$data->salse->regular_amount)}}</td>
-                                            <td>{{get_price(@$data->salse->regular_amount-@$data->salse->sold_value)}}</td>
-                                            <td>{{get_price(@$data->salse->sold_value)}}</td>
-                                            <td>{{get_price($data->amount)}}</td>
-                                            <td>{{get_price(@$data->salse->total_deposit)}}</td>
-                                            <td>{{get_price(@$data->salse->sold_value-@$data->salse->total_deposit)}}</td>  
-                                        </tr>  
-                                    @endforeach 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
                            </div>
                         </div>
                     </div>
@@ -292,12 +269,11 @@
         </div>
     </div>
 </div>
-@endsection
-
- 
+@endsection  
 
 @section('script')
+@include('includes.data_table')
     <script>
-        getDateRange('duration')
+        getDateRange('duration') 
     </script>
 @endsection

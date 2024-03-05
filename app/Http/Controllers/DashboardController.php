@@ -82,9 +82,9 @@ class DashboardController extends Controller
 
 
 
-        // achivement  
-
+        // achivement   
         $my_all_employee = my_all_employee(auth()->user()->id); 
+        
         $monthly_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
             ->where('user_type',2)
             ->where('approve_by','!=',null)

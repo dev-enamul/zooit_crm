@@ -115,6 +115,10 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
+    public function field_target(){
+        return $this->hasOne(FieldTarget::class,'assign_to');
+    }
+
  
 
     public static function generateNextEmployeeId(){

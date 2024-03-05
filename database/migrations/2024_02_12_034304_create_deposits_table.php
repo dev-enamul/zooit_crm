@@ -15,16 +15,17 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained('customers');
             $table->foreignId('customer_user_id')->constrained('users');
+            $table->foreignId('employee_id')->constrained('users');
             $table->foreignId('deposit_category_id')->nullable()->constrained('deposit_categories')->comment('Null = Regular');
             $table->foreignId('project_id')->nullable()->constrained('projects');
             $table->foreignId('salse_id')->nullable()->constrained('salses');
             $table->decimal('amount', 10, 2);
             $table->date('date');
             $table->foreignId('bank_id')->constrained('banks');
-            $table->string('cheque_no')->nullable();
+            $table->string('tnx_id')->nullable();
             $table->string('branch_name')->nullable();
-            $table->text('remark')->nullable(); 
-   
+            $table->text('remark')->nullable();   
+            
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
             
             $table->timestamps();
