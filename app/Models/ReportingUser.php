@@ -21,7 +21,7 @@ class ReportingUser extends Model
 
     public function downlines($date = null)
     { 
-        return $this->hasMany(ReportingUser::class, 'reporting_user_id', 'id')->whereNull('deleted_at')
+        return $this->hasMany(ReportingUser::class, 'reporting_user_id', 'id')->where('status',1)->whereNull('deleted_at')
         ->select(['id', 'user_id']);
     }
 

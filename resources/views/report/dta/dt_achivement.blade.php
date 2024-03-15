@@ -75,7 +75,7 @@
                                                 <td>{{get_price($total_target)}}</td>
                                                 @php
                                                     $my_all_employee = my_all_employee($employee->id);
-                                                    $deposit = App\Models\Deposit::where('approve_by', '!=', null)
+                                                    $deposit = App\Models\DepositDeposit::where('approve_by', '!=', null)
                                                         ->whereHas('customer', function ($query) use ($my_all_employee) {
                                                             $query->WhereIn('ref_id', $my_all_employee);
                                                         }) 

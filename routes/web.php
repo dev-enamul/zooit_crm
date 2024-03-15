@@ -194,21 +194,23 @@ Route::group(['middleware' => 'auth'], function () {
         // Lead 
         Route::resource('lead', LeadController::class);
         Route::post('lead-save/{id?}', [LeadController::class, 'save'])->name('lead.save');
+        Route::get('get-cold-calling-data', [LeadController::class, 'customer_data'])->name('get.cold.calling.data');
         Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
         Route::get('lead-approve', [LeadController::class, 'leadApprove'])->name('lead.approve');
         Route::post('lead-approve-save', [LeadController::class, 'leadApproveSave'])->name('lead.approve.save');
 
         // Lead Analysis
         Route::resource('lead-analysis', LeadAnalysisController::class);
+        Route::get('get-lead-data', [LeadAnalysisController::class, 'customer_data'])->name('get.lead.data');
         Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');
         Route::any('lead-analysis-delete/{id}', [LeadAnalysisController::class, "leadAnalysisDelete"])->name('lead_analysis.delete');
-        Route::get('/get-customer-religion/{customerId}', [LeadAnalysisController::class, 'getCustomerReligion']);
         Route::get('lead-analysis-approve', [LeadAnalysisController::class, 'leadAnalysisApprove'])->name('lead-analysis.approve');
         Route::post('lead-analysis-approve-save', [LeadAnalysisController::class, 'leadAnalysisApproveSave'])->name('lead-analysis.approve.save');
         Route::get('lead-analysis-details/{id}', [LeadAnalysisController::class, 'lead_analysis_details'])->name('lead.analysis.details');
 
         // Presentation
         Route::resource('presentation', PresentationController::class);
+        Route::get('get-lead-analysis-data', [PresentationController::class, 'customer_data'])->name('get.lead.analysis.data');
         Route::post('presentation-save/{id?}', [PresentationController::class, 'save'])->name('presentation.save');
         Route::any('presentation-delete/{id}', [PresentationController::class, "presentationDelete"])->name('presentation.delete');
         Route::get('presentation-approve', [PresentationController::class, 'presentationApprove'])->name('presentation.approve');
@@ -224,6 +226,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Follow Up
         Route::resource('followup', FollowupController::class);
+        Route::get('get-presentaion-data', [FollowupController::class, 'customer_data'])->name('get.presentation.data');
         Route::get('get-project-duration-type-name', [FollowupController::class, 'projectDurationTypeName'])->name('get-project-duration-type-name');
         Route::post('follow-up-save/{id?}', [FollowupController::class, 'save'])->name('follow-up.save');
         Route::any('follow-up-delete/{id}', [FollowupController::class, "followUpDelete"])->name('followUp.delete');
@@ -233,6 +236,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Follow Up Analysis
         Route::resource('followup-analysis', FollowupAnalysisController::class);
+        Route::get('get-follow-up-data', [FollowupAnalysisController::class, 'customer_data'])->name('get.follow.up.data');
         Route::post('follow-up-analysis-save/{id?}', [FollowupAnalysisController::class, 'save'])->name('follow-up-analysis.save');
         Route::any('follow-up-analysis-delete/{id}', [FollowupAnalysisController::class, "followUpDelete"])->name('followUp-analysis.delete');
         Route::get('follow-up-analysis-approve', [FollowupAnalysisController::class, 'followUpApprove'])->name('followUp-analysis.approve');
@@ -241,6 +245,7 @@ Route::group(['middleware' => 'auth'], function () {
         
         // Negotation
         Route::resource('negotiation', NegotiationController::class);
+        Route::get('get-follow-up-analysis-data', [NegotiationController::class, 'customer_data'])->name('get.follow.up.analysis.data');
         Route::post('negotiation-save/{id?}', [NegotiationController::class, 'save'])->name('negotiation.save');
         Route::any('negotiation-delete/{id}', [NegotiationController::class, "negotiationDelete"])->name('negotiation.delete');
         Route::get('negotiation-approve', [NegotiationController::class, 'negotiationApprove'])->name('negotiation.approve');
@@ -248,6 +253,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Negotation Analysis
         Route::resource('negotiation-analysis', NegotiationAnalysisController::class);
+        Route::get('get-negotiation-data', [NegotiationAnalysisController::class, 'customer_data'])->name('get.negotiation.data');
         Route::post('negotiation-analysis-save/{id?}', [NegotiationAnalysisController::class, 'save'])->name('negotiation-analysis.save');
         Route::any('negotiation-analysis-delete/{id}', [NegotiationAnalysisController::class, "negotiationAnalysisDelete"])->name('negotiation-analysis.delete');
         Route::get('negotiation-analysis-approve', [NegotiationAnalysisController::class, 'negotiationAnalysisApprove'])->name('negotiation-analysis.approve');
@@ -258,6 +264,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Salse
         Route::resource('salse', SalseController::class);
+        Route::get('get-negotiation-analysis-data', [SalseController::class, 'customer_data'])->name('get.negotiation.analysis.data');
         Route::get('salse-details/{id}', [SalseController::class, 'salse_details'])->name('salse.details');
         Route::get('get-salse-info', [SalseController::class, 'get_salse_info'])->name('get.salse.info');
 
@@ -373,11 +380,10 @@ Route::group(['middleware' => 'auth'], function () {
         // Training
         Route::resource('training-category', TrainingCategoryController::class);
         Route::post('training-category-update', [TrainingCategoryController::class, 'update'])->name('training.category.update');
-        Route::get('training-schedule-create', [TrainingController::class, 'training_schedule_create'])->name('training.schedule.create');
+        Route::resource('training', TrainingController::class);
+        // Route::get('training-create', [TrainingController::class, 'training_create'])->name('training.create');
         Route::get('training-schedule', [TrainingController::class, 'training_schedule'])->name('training.schedule');
-        Route::get('training-attendance', [TrainingController::class, 'training_attendance'])->name('training.attendance');
         Route::get('training-history', [TrainingController::class, 'training_history'])->name('training.history');
-        Route::get('training-details', [TrainingController::class, 'training_details'])->name('training.details');
 
         // Meeting  
         Route::resource('meeting', MeetingController::class);

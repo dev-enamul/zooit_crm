@@ -8,6 +8,7 @@ use App\Models\Unit;
 use App\Models\Project;
 use App\Traits\AreaTrait;
 use App\Models\ProjectImage;
+use App\Models\Salse;
 use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -233,9 +234,14 @@ class ProductController extends Controller
     }
 
     public function sold_unsold($id){
+        $id = decrypt($id);
         try{
             $product = Project::find($id); 
-            return view('product.sold_unsold',compact('product'));
+            $salse = Salse::where('project_id',$product->id)
+                        ->where('select_type',2)
+                        ->where('status',1)
+                        ->get();
+            return view('product.sold_unsold',compact('product','salse'));
         }catch(Exception $e){
             dd($e->getMessage());
         }

@@ -93,6 +93,11 @@ class NegotiationAnalysisController extends Controller
         return view('negotiation_analysis.negotiation_analysis_save', compact('selected_data','priorities','projects','projectUnits','customers','employees','units'));
     }
 
+    public function customer_data(Request $request){
+        $negotiation =  Negotiation::where('customer_id',$request->customer_id)->first();
+        return response()->json($negotiation);
+    }
+
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [

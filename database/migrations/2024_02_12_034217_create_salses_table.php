@@ -31,6 +31,8 @@ return new class extends Migration
             $table->decimal('booking', 10, 2)->default(0);
             $table->decimal('booking_due', 10, 2)->default(0); 
             $table->decimal('total_deposit', 10, 2)->default(0);
+            $table->decimal('first_payment', 10, 2)->default(0);
+            $table->date('first_payment_date')->nullable(); 
             $table->enum('installment_type', ['weekly', 'bi-weekly', 'monthly', 'bi-monthly', 'quarterly', 'semi-annually', 'annually']);
             $table->integer('total_installment')->nullable()->comment('Total Installment');
             $table->decimal('installment_value', 10, 2);

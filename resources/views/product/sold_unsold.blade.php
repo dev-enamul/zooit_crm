@@ -29,16 +29,31 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body"> 
-                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="text-center table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                  <tbody> 
-                                    @for ($i = 1; $i <= $product->total_floor; $i++)
+                                    @for ($i = $product->total_floor; $i >= 1; $i--)
                                     <tr class=""> 
                                         <td><b>Floor-{{$i}}</b></td>
                                         @php 
                                             $units = $product->units->where('floor',$i);
-                                        @endphp 
-                                        @foreach ($units as $unit)
-                                            <td class="bg-danger text-white">{{$unit->name}}</td>
+                                        @endphp  
+
+                                        @foreach ($units as $unit) 
+                                            @php
+                                            if($unit->sold_status==0){  
+                                                $sold = ''; 
+                                            }elseif ($unit->sold_status==1) { 
+                                                $sold = 'bg-danger';
+                                            }elseif($unit->sold_status==2){
+                                                $sold = 'bg-primary';
+                                            }else{
+                                                $sold = 'bg-danger';
+                                            }
+                                            @endphp   
+                                            <td class="{{$sold}}">
+                                                {{$unit->unit->title}} <br>
+                                                Type {{$unit->unitCategory->title}} 
+                                            </td>
                                         @endforeach 
                                     </tr>  
                                     @endfor 
@@ -74,6 +89,6 @@
     var title = $('.page-title-box').find('h4').text();
     var Period = $('.page-title-box').find('p').text(); 
 </script>
-    @include('includes.data_table')
+    {{-- @include('includes.data_table') --}}
     
 @endsection

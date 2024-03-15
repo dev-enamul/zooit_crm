@@ -49,7 +49,7 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($presentations as  $presentation)
-                                    <tr class="">
+                                    <tr class="{{$presentation->approve_by==null?"table-warning":""}}">
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">

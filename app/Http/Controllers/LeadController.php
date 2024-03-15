@@ -96,6 +96,11 @@ class LeadController extends Controller
             $selected_data['customer'] = $request->customer;
         }
         return view('lead.lead_save', compact('cstmrs','priorities','title','projects','units','selected_data','employees'));
+    } 
+
+    public function customer_data(Request $request){
+        $cold_calling  = ColdCalling::where('customer_id',$request->customer_id)->first();
+        return response()->json($cold_calling,200); 
     }
 
     public function save(Request $request, $id = null)

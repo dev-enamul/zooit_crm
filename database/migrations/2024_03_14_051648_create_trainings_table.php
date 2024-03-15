@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('unit_prices', function (Blueprint $table) {
+        Schema::create('trainings', function (Blueprint $table) {
             $table->id();
-            $table->integer('payment_duration')->comment('Month wise');
-            $table->float('on_choice_price');
-            $table->float('lottery_price');
-            $table->foreignId('project_unit_id')->constrained();
-            $table->timestamps(); 
+            $table->string('title');
+            $table->json('trainer');
+            $table->integer('seat');
+            $table->date('date');
+            $table->time('time');
+            $table->text('agenda');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unit_prices');
+        Schema::dropIfExists('trainings');
     }
 };

@@ -73,6 +73,12 @@ class FollowupAnalysisController extends Controller
         return view('followup_analysis.followup_analysis_save',compact('selected_data','priorities','projects','projectUnits','customers','employees','units'));
     }
 
+    public function customer_data(Request $request){
+         $followup = FollowUp::where('customer_id',$request->customer_id)->first();
+         return response()->json($followup);
+
+    }
+
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [

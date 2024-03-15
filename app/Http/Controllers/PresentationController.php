@@ -78,6 +78,11 @@ class PresentationController extends Controller
         return view('presentation.presentation_save',compact('title','cstmrs','priorities','projects','units','employees','selected_data'));
     }
 
+    public function customer_data(Request $request){
+        $lead_analysis  = LeadAnalysis::where('customer_id',$request->customer_id)->first();
+        return response()->json($lead_analysis,200);
+    }
+
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [

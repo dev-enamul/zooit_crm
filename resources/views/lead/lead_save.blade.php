@@ -50,7 +50,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
@@ -197,4 +197,35 @@
     </footer>
 
 </div>
+@endsection
+
+@section('script')
+    <script>   
+        $(document).ready(function(){
+            get_customer_data();
+            $('#customer').on('change', function() {
+                get_customer_data();
+            });
+        })
+      function get_customer_data(){
+            var formData = {
+                    customer_id: $("#customer").val()
+                };  
+                $.ajax({
+                    type: "GET",
+                    data: formData,
+                    dataType: "json",
+                    url: "{{ route('get.cold.calling.data') }}",
+
+                    success: function(data) {
+                        $('#priority').val(data.priority);
+                        $('#project').val(data.project_id);
+                        $('#unit').val(data.unit_id); 
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                    },
+                });
+        }
+    </script>
 @endsection

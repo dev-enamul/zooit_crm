@@ -114,7 +114,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="floor" class="form-label">Floor</label>
-                                            <input type="number"  class="form-control" value="1" name="floor" id="floor" value="" >
+                                            <input type="number"  class="form-control"  name="floor" id="floor" placeholder="Enter Floor" >
                                         </div>
                                     </div>
 
@@ -151,10 +151,8 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_qty" class="form-label">Unit Qty <span class="text-danger">*</span></label>
-                                            <input class="form-control" min="1" type="number" name="unit_qty" id="unit_qty" value="1" required> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
+                                            <input class="form-control"  type="number" name="unit_qty" id="unit_qty"   required> 
+                                             
                                         </div>
                                     </div>   
 
@@ -235,8 +233,22 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="first_payment" class="form-label">First Payment</label>
+                                            <input type="number"  class="form-control" name="first_payment" id="first_payment" value="" >  
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="first_payment_date" class="form-label">First Payment Date</label>
+                                            <input type="date"  class="form-control" name="first_payment_date" id="first_payment_date" value="" >  
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label for="total_due" class="form-label">Installment Due</label>
-                                            <input type="number"  class="form-control" name="total_due" id="total_due" value="" readonly> 
+                                            <input type="number"  class="form-control" min="0" name="total_due" id="total_due" value="" readonly> 
                                         </div>
                                     </div>
 
@@ -247,7 +259,7 @@
                                                 <option value="">Select Installment Type</option>
                                                 <option value="weekly">Weekly</option>
                                                 <option value="bi-weekly">Bi-Weekly</option> 
-                                                <option value="monthly">Monthly</option>
+                                                <option value="monthly" selected>Monthly</option>
                                                 <option value="quarterly">Quarterly</option>
                                                 <option value="semi-annually">Semi-Annually</option>
                                                 <option value="annually">Annually</option> 
@@ -268,7 +280,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="installment_value" class="form-label">Installment Amount <span class="text-danger">*</span>.</label>
-                                            <input type="number" value="{{ isset($sales) ? $sales->installment_value : old('installment_value') }}" class="form-control" name="installment_value" id="installment_value" readonly> 
+                                            <input type="number" min="0" value="{{ isset($sales) ? $sales->installment_value : old('installment_value') }}" class="form-control" name="installment_value" id="installment_value" readonly> 
                                         </div>
                                     </div> 
 
@@ -365,7 +377,7 @@
                     downPaymentDue();
             }); 
 
-            $('#installment_type, #payment_duration, #sold_value, #select_type').on('change input keyup', function() {
+            $('#installment_type, #payment_duration, #sold_value, #select_type, #first_payment').on('change input keyup', function() {
                 calculateInstallmentAmount();
             });
 
@@ -400,11 +412,13 @@
                     $('#unit_price').closest('.col-md-6').hide(); 
                     $('#project_unit_data').closest('.col-md-12').show();
                     $('#project_unit_data').prop('required', true);
+                    $('#unit_qty').prop('required', false);
                 }else{
                     $('#unit_qty').closest('.col-md-6').show(); 
                     $('#unit_price').closest('.col-md-6').show(); 
                     $('#project_unit_data').closest('.col-md-12').hide();
                     $('#project_unit_data').prop('required', false);
+                    $('#unit_qty').prop('required', true);
                 }
         }
 
@@ -436,12 +450,12 @@
                                     $("<option>", {
                                         value: project_unit.id,
                                         text: project_unit.name+" #Floor:"+project_unit.floor+" #Type:"+project_unit.unit_category.title,
-                                        // price: project_unit.highest_price,
                                         price: data.most_highest_price,
                                     })
                                 );
                             });
-                        }  
+                        }   
+                        $('#unit_qty').attr('max', data.project_unit.length);
                         $('#unit_price').val(data.most_highest_price);
                         $('#project_unit_data').trigger('change');
                         getTotalRegularAmount();
@@ -457,12 +471,13 @@
             var soldValue = parseFloat($('#sold_value').val()) || 0;
             var downPayment = parseFloat($('#down_payment').val()) || 0;
             var booking = parseFloat($('#booking').val()) || 0; 
-            var totalAmount = soldValue - (downPayment + booking);
+            var first_payment = parseFloat($('#first_payment').val()) || 0;
+            var totalAmount = soldValue - (downPayment + booking+ first_payment);
             var duration = parseInt($('#payment_duration').val()) || 0; // Ensure duration is an integer
             var installmentType = $('#installment_type').val(); 
             var installment = 0; 
 
-            if(duration > 0 && totalAmount > 0 && installmentType) {
+            if(duration > 0 && installmentType) {
                 switch(installmentType) {
                     case 'weekly': 
                         installment = duration * 4;
@@ -504,7 +519,41 @@
             var unit_price = $("#unit_price").val();
             var regular_amount = unit_qty * unit_price;
             $('#regular_amount').val(regular_amount);
-        }
+        } 
+    </script>  
 
+    {{-- get old data  --}} 
+    <script>   
+        $(document).ready(function(){
+            get_customer_data();
+            $('#customer').on('change', function() {
+                get_customer_data();
+            });
+        })
+        function get_customer_data(){
+            var formData = {
+                    customer_id: $("#customer").val()
+                };  
+                $.ajax({
+                    type: "GET",
+                    data: formData,
+                    dataType: "json",
+                    url: "{{ route('get.negotiation.analysis.data') }}", 
+                    success: function(data) {   
+                        $('#priority').val(data.priority).select2();
+                        $('#project').val(data.project_id).select2();
+                        $('#unit').val(data.unit_id).select2();
+                        $('#unit_qty').val(data.unit_qty);
+                        $("#sold_value").val(data.negotiation_amount);
+                        getUnitPrice();
+                        getBookingAndDownPayment();
+                        calculateInstallmentAmount();
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                    },
+                });
+            }
     </script>
+
 @endsection

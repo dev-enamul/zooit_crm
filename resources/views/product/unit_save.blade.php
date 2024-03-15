@@ -133,83 +133,27 @@
                                             <label for="description" class="form-label">Description</label>
                                             <textarea class="form-control reset-data" id="description" rows="2" name="description">{{ old('description', isset($project_unit) ? $project_unit->description : '') }}</textarea>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="container" id="unit_prices">
-                                        <div class="row">
-                                            @if(isset($project_unit) && $project_unit->unitPrices->isNotEmpty())
-                                                @foreach($project_unit->unitPrices as $index => $unitPrice)
-                                                    <div class="col-md-4">
-                                                        <div class="mb-3">
-                                                            <label for="payment_duration[]" class="form-label">Payment Duration Month<span class="text-danger">*</span></label>
-                                                            <input type="number" name="payment_duration[]" class="form-control reset-data" placeholder="Payment Duration Month" required value="{{ $unitPrice->payment_duration }}">
-                                                            <div class="invalid-feedback">
-                                                                This field is required.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                    
-                                                    <div class="col-md-4">
-                                                        <div class="mb-3">
-                                                            <label for="on_choice_price[]" class="form-label">On Choice Price<span class="text-danger">*</span></label>
-                                                            <input type="number" name="on_choice_price[]" class="form-control reset-data" placeholder="On Choice Price" required value="{{ $unitPrice->on_choice_price }}">
-                                                            <div class="invalid-feedback">
-                                                                This field is required.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                    
-                                                    <div class="col-md-4">
-                                                        <div class="mb-3">
-                                                            <label for="lottery_price[]" class="form-label">Lottery Select Price<span class="text-danger">*</span></label>
-                                                            <input type="number" name="lottery_price[]" class="form-control reset-data" placeholder="Lottery Select Price" required value="{{ $unitPrice->lottery_price }}">
-                                                            <div class="invalid-feedback">
-                                                                This field is required.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                    
-                                                    @if($index < $project_unit->unitPrices->count() - 1)
-                                                        <div class="col-md-12"> </div>
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                                <div class="col-md-4">
-                                                    <div class="mb-3">
-                                                        <label for="payment_duration[]" class="form-label">Payment Duration Month<span class="text-danger">*</span></label>
-                                                        <input type="number" name="payment_duration[]" class="form-control reset-data" placeholder="Payment Duration Month" required value="{{ old('payment_duration.0') }}">
-                                                        <div class="invalid-feedback">
-                                                            This field is required.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                    
-                                                <div class="col-md-4">
-                                                    <div class="mb-3">
-                                                        <label for="on_choice_price[]" class="form-label">On Choice Price<span class="text-danger">*</span></label>
-                                                        <input type="number" name="on_choice_price[]" class="form-control reset-data" placeholder="On Choice Price" required value="{{ old('on_choice_price.0') }}">
-                                                        <div class="invalid-feedback">
-                                                            This field is required.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                    
-                                                <div class="col-md-4">
-                                                    <div class="mb-3">
-                                                        <label for="lottery_price[]" class="form-label">Lottery Select Price<span class="text-danger">*</span></label>
-                                                        <input type="number" name="lottery_price[]" class="form-control reset-data" placeholder="Lottery Select Price" required value="{{ old('lottery_price.0') }}">
-                                                        <div class="invalid-feedback">
-                                                            This field is required.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                    
-                                            <div class="text-center">
-                                                <button class="btn btn-primary add-row" type="button">+</button>
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="lottery_price" class="form-label">Regular Price<span class="text-danger">*</span></label>
+                                            <input type="number" name="lottery_price" class="form-control reset-data" placeholder="Lottery Select Price" required value="{{ old('lottery_price', isset($project_unit) ? $project_unit->lottery_price : '') }}">
+                                            <div class="invalid-feedback">
+                                                This field is required.
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="on_choice_price" class="form-label">On Choice Price<span class="text-danger">*</span></label>
+                                            <input type="number" name="on_choice_price" class="form-control reset-data" placeholder="On Choice Price" required value="{{ old('on_choice_price', isset($project_unit) ? $project_unit->on_choice_price : '') }}">
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>  
                                     
                                     <div>
                                         <button class="btn btn-primary" type="submit">Submit</button>
@@ -225,77 +169,3 @@
     @include('includes.footer')
 </div>
  
-@section('script')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $(document).on("click", ".add-row", function() {
-                var newRow = $("<div class='row'></div>");
-                var cols = "";
-                var is_update = $("#is_update").val();
-    
-                cols += "<div class='col-md-4'><input type='number' name='payment_duration[]' class='form-control reset-data' placeholder='Payment Duration Month' required value='{{ old('payment_duration.*') }}'></div>";
-                cols += "<div class='col-md-4'><input type='number' name='on_choice_price[]' class='form-control reset-data' placeholder='On Choice Price' required value='{{ old('on_choice_price.*') }}'></div>";
-                cols += "<div class='col-md-4'><input type='number' name='lottery_price[]' class='form-control reset-data' placeholder='Lottery Select Price' required value='{{ old('lottery_price.*') }}'></div>";
-                cols += "<div class='text-center'><button class='btn btn-danger remove-row' type='button'>-</button></div>";
-    
-                newRow.append(cols);
-                $(".container .row:last-child").after(newRow);
-            });
-    
-            $("#unitSave").submit(function(event) {
-                event.preventDefault();
-                var formData = $(this).serialize();
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: $(this).attr('method'),
-                    data: formData,
-                    success: function(response) {
-                        console.log(response);
-                        setTimeout(function() {
-                            toastr.success(response.success);
-                        }, 100);
-
-                        if (is_update == null || is_update == '') {
-                            resetData();
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 422) {
-                            var errors = xhr.responseJSON.errors;
-                            updateUnitPrice(errors);
-    
-                            $.each(errors, function(key, value) {
-                                toastr.error(value[0]);
-                            });
-                        } else {
-                            console.error(xhr.responseText);
-                            toastr.error('An error occurred. Please try again.');
-                        }
-                    }
-                });
-            });
-    
-            $(".container").on("click", ".remove-row", function() {
-                $(this).closest(".row").remove();
-            });
-    
-            function resetData() {
-                $(".reset-data").val('');
-            }
-    
-            function updateUnitPrice(errors) {
-                $.each(errors, function(key, value) {
-                    var inputName = key.replace('[]', '');
-                    $("#unit_prices input[name='" + inputName + "']").each(function() {
-                        $(this).addClass('is-invalid').next('.invalid-feedback').text(value[0]);
-                    });
-                });
-            }
-        });
-    </script>
- @endsection

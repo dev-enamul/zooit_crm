@@ -1,5 +1,12 @@
 @extends('layouts.dashboard')
-@section('title',"Sales Executive Report")
+@section('title',"Marketing Target vs Achievemen")
+@section('style')
+    <style>
+        .select2{
+            min-width: 230px;
+        }
+    </style>
+@endsection
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -9,184 +16,208 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Salse Executive Report</h4>
+                        <h4 class="mb-sm-0">Marketing Target vs Achievement</h4>
+                        <p class="d-none">Name : {{$employee->name}}, </p>
+                        <p class="d-none">ID : {{$employee->user_id}}, </p>
+                        <p class="d-none">Area: {{@$employee->userAddress->area->name}},</p>
+                        <p class="d-none">Zone: {{@$employee->userAddress->zone->name}},</p>  
+                        <input type="hidden" id="hideExport" value=""> 
+                        <input type="hidden" id="pageSize" value="a3">
+                        <input type="hidden" id="fontSize" value="8">
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Salse Executive Report</li>
-                            </ol>
+                            <a class="btn btn-secondary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a> 
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
 
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
-
-         
-
+            <!-- end page title --> 
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
-                           <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-pdf"></i> PDF</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
-                                        <div class="input-group">  
-                                            <select class="select2" search name="profession" id="profession">
-                                                <option value="">Select Executive</option>
-                                                <option value="1">MD Enamul Haque #6767</option>
-                                                <option value="2">John Doe #1234</option>
-                                                <option value="3">Jane Smith #5678</option>
-                                                <option value="4">Ahmed Khan #9876</option>
-                                                <option value="5">Maria Rodriguez #3456</option>
-                                                <option value="6">Alex Johnson #7890</option>
-                                                <option value="7">Emily White #2345</option>
-                                                <option value="8">David Brown #6543</option>
-                                                <option value="9">Sara Miller #2109</option>
-                                                <option value="10">Chris Taylor #8765</option> 
-                                            </select> 
-                                            <button class="btn btn-secondary" type="submit">
-                                                <span><i class="fas fa-filter"></i> Filter</span>
-                                            </button> 
-                                        </div>
-                                    </div>
-                                </div>
-                           </div>
-                           <div class="text-center">
-                            <h5 class="m-0">{{ config('app.name', 'ZOOM IT') }}</h5>
-                            <p class="mb-1" ><b>Designation Wise Marketing & Sales Work - Target vs Achievement  </b> </p>
-                           </div>
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr class="">
-                                        <th>Name : MD Enamul Haque</th> 
-                                        <th>EMP-254</th>
-                                        <th>Region: </th>
-                                        <th>Zone: Noakhali</th>
-                                        <th>Reporting Name & ID : MR Kamruzzaman & 153</th>
-                                    </tr>
-                                </thead> 
-                            </table>
-                           
+                        <div class="card-body">  
                             <div class="table-box" style="overflow-x: scroll;">
-                                <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
                                         <tr class=""> 
-                                            <th rowspan="2" class="align-middle">S/N</th>
-                                            <th rowspan="2" class="align-middle">Freelancer Name & ID</th>
-                                            <th colspan="3">FL Recruitment</th>
-                                            <th colspan="3">Customer Data Collection</th>
-                                            <th colspan="3">Prospecting</th>
-                                            <th colspan="3">Cold calling</th>
-                                            <th colspan="3">LEAD</th>
-                                            <th colspan="3">Presentation</th> 
-                                            <th colspan="3">Follow Up</th>
-                                            <th colspan="3">Negotiation</th>
-                                            <th colspan="3">Rejection</th>
-                                            <th colspan="3">Rejection</th>
-                                            <th colspan="3">Project Visit</th>
-                                            <th colspan="3">Sales Unit</th>
-                                            <th colspan="3">Sales Deposite</th>
-                                        </tr>
-    
-                                        <tr class="">  
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                            <th>T</th>
-                                            <th>A</th>
-                                            <th>%</th>
-                                        </tr>
+                                            <th class="align-middle">S/N</th>
+                                            <th class="align-middle">Freelancer Name & ID</th>
+                                            <th>FL Recruitment [T-A-%]</th>  
+                                            <th>Customer [T-A-%]</th> 
+                                            <th>Prospecting [T-A-%]</th> 
+                                            <th>Cold calling [T-A-%]</th> 
+                                            <th>LEAD [T-A-%]</th> 
+                                            <th>LEAD Analysis [T-A-%]</th>   
+                                            <th>Presentation [T-A-%]</th>
+                                            <th>Visit Analysis [T-A-%]</th>
+                                            <th>Follow Up [T-A-%]</th>
+                                            <th>Follow Up Analysis [T-A-%]</th>
+                                            <th>Negotiation [T-A-%]</th>
+                                            <th>Negotiation Analysis [T-A-%]</th>
+                                        </tr> 
                                     </thead>
                                     <tbody> 
+                                        @php
+                                            $total_freelancer = 0;
+                                            $total_customer = 0;
+                                            $total_prospecting = 0;
+                                            $total_cold_calling = 0;
+                                            $total_lead = 0;
+                                            $total_lead_analysis = 0;
+                                            $total_presentation = 0;
+                                            $total_visit_analysis = 0;
+                                            $total_followup = 0;
+                                            $total_followup_analysis = 0;
+                                            $total_negotiation = 0;
+                                            $total_negotiation_analysis = 0;
+
+                                            $total_freelancer_target = 0;
+                                            $total_customer_target = 0;
+                                            $total_prospecting_target = 0;
+                                            $total_cold_calling_target = 0;
+                                            $total_lead_target = 0;
+                                            $total_lead_analysis_target = 0;
+                                            $total_presentation_target = 0;
+                                            $total_visit_analysis_target = 0;
+                                            $total_followup_target = 0;
+                                            $total_followup_analysis_target = 0;
+                                            $total_negotiation_target = 0;
+                                            $total_negotiation_analysis_target = 0; 
+                                        @endphp
+                                        @foreach ($datas as $key => $data)
+                                        @php
+                                            $target = App\Models\FieldTarget::where('assign_to',$data->id)
+                                                ->whereMonth('month',$date)
+                                                ->whereYear('month',$date)
+                                                ->first(); 
+                                                $freelancer = $data->freelanecr_achive($date);
+                                                $customer = $data->customer_achive($date);
+                                                $prospecting = $data->prospecting_achive($date);
+                                                $cold_calling = $data->cold_calling_achive($date);
+                                                $lead = $data->lead_achive($date);
+                                                $lead_analysis = $data->lead_analysis_achive($date);
+                                                $presentation = $data->presentation_achive($date);
+                                                $visit_analysis = $data->visit_analysis_achive($date);
+                                                $followup = $data->followup_achive($date);
+                                                $followup_analysis = $data->followup_analysis_achive($date);
+                                                $negotiation = $data->negotiation_achive($date);
+                                                $negotiation_analysis = $data->negotiation_analysis_achive($date); 
+
+                                                $total_freelancer += $freelancer;
+                                                $total_customer += $customer;
+                                                $total_prospecting += $prospecting;
+                                                $total_cold_calling += $cold_calling;
+                                                $total_lead += $lead;
+                                                $total_lead_analysis += $lead_analysis;
+                                                $total_presentation += $presentation;
+                                                $total_visit_analysis += $visit_analysis;
+                                                $total_followup += $followup;
+                                                $total_followup_analysis += $followup_analysis;
+                                                $total_negotiation += $negotiation;
+                                                $total_negotiation_analysis += $negotiation_analysis; 
+
+                                                $total_freelancer_target += $target->freelancer??0;
+                                                $total_customer_target += $target->customer??0;
+                                                $total_prospecting_target += $target->prospecting??0;
+                                                $total_cold_calling_target += $target->cold_calling??0;
+                                                $total_lead_target += $target->lead??0;
+                                                $total_lead_analysis_target += $target->lead_analysis??0;
+                                                $total_presentation_target += $target->presentation??0;
+                                                $total_visit_analysis_target += $target->visit_analysis??0;
+                                                $total_followup_target += $target->follow_up??0;
+                                                $total_followup_analysis_target += $target->follow_up_analysis??0;
+                                                $total_negotiation_target += $target->negotiation??0;
+                                                $total_negotiation_analysis_target += $target->negotiation_analysis??0;
+
+                                            @endphp 
+
+                                            <tr>
+                                                <td>{{$key+1}}</td>
+                                                <td>
+                                                    {{$data->name}} [{{$data->user_id}}]
+                                                </td>
+                                                <td>
+                                                    {{$target->freelancer??0}} - {{$freelancer}} - {{get_percent($freelancer,$target->freelancer??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->customer??0}} - {{$customer}} - {{get_percent($customer,$target->customer??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->prospecting??0}} - {{$prospecting}} -  {{get_percent($prospecting,$target->prospecting??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->cold_calling??0}} - {{$cold_calling}} - {{get_percent($cold_calling,$target->cold_calling??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->lead??0}} - {{$lead}} - {{get_percent($lead,$target->lead??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->lead_analysis??0}} - {{$lead_analysis}} - {{get_percent($lead_analysis,$target->lead_analysis??0)}}
+                                                </td> 
+                                                <td>
+                                                    {{$target->presentation??0}} - {{$presentation}} - {{get_percent($presentation,$target->presentation??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->visit_analysis??0}} - {{$visit_analysis}} - {{get_percent($visit_analysis,$target->visit_analysis??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->follow_up??0}} - {{$followup}} - {{get_percent($followup,$target->follow_up??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->follow_up_analysis??0}} - {{$followup_analysis}} - {{get_percent($followup_analysis,$target->follow_up_analysis??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->negotiation??0}} - {{$negotiation}} - {{get_percent($negotiation,$target->negotiation??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->negotiation_analysis??0}} - {{$negotiation_analysis}} -  {{get_percent($negotiation_analysis,$target->negotiation_analysis??0)}}
+                                                </td>
+                                            </tr> 
+                                        @endforeach 
                                         <tr>
-                                            <td>2</td>
-                                            <td>Jane Smith #456</td>
-                                            <td>8</td>
-                                            <td>7</td>
-                                            <td>87.5%</td>
-                                            <td>12</td>
-                                            <td>10</td>
-                                            <td>83.33%</td>
-                                            <td>18</td>
-                                            <td>16</td>
-                                            <td>88.89%</td>
-                                            <td>22</td>
-                                            <td>18</td>
-                                            <td>81.82%</td>
-                                            <td>28</td>
-                                            <td>24</td>
-                                            <td>85.71%</td>
-                                            <td>33</td>
-                                            <td>28</td>
-                                            <td>84.85%</td>
-                                            <td>8</td>
-                                            <td>7</td>
-                                            <td>87.5%</td>
-                                            <td>12</td>
-                                            <td>10</td>
-                                            <td>83.33%</td>
-                                            <td>18</td>
-                                            <td>16</td>
-                                            <td>88.89%</td>
-                                            <td>22</td>
-                                            <td>18</td>
-                                            <td>81.82%</td>
-                                            <td>28</td>
-                                            <td>24</td>
-                                            <td>85.71%</td>
-                                            <td>33</td>
-                                            <td>28</td>
-                                            <td>84.85%</td>
-                                            <td>33</td>
-                                            <td>28</td>
-                                            <td>84.85%</td>
-                                        </tr> 
+                                            <td><b>Total</b></td>
+                                            <td><b>-</b></td>
+                                            <td>
+                                                <b>{{$total_freelancer_target}} - {{$total_freelancer}} - {{get_percent($total_freelancer,$total_freelancer_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_customer_target}} - {{$total_customer}} - {{get_percent($total_customer,$total_customer_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_prospecting_target}} - {{$total_prospecting}} -  {{get_percent($total_prospecting,$total_prospecting_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_cold_calling_target}} - {{$total_cold_calling}} - {{get_percent($total_cold_calling,$total_cold_calling_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_lead_target}} - {{$total_lead}} - {{get_percent($total_lead,$total_lead_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_lead_analysis_target}} - {{$total_lead_analysis}} - {{get_percent($total_lead_analysis,$total_lead_analysis_target)}}</b>
+                                            </td> 
+                                            <td>
+                                                <b>{{$total_presentation_target}} - {{$total_presentation}} - {{get_percent($total_presentation,$total_presentation_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_visit_analysis_target}} - {{$total_visit_analysis}} - {{get_percent($total_visit_analysis,$total_visit_analysis_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_followup_target}} - {{$total_followup}} - {{get_percent($total_followup,$total_followup_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_followup_analysis_target}} - {{$total_followup_analysis}} - {{get_percent($total_followup_analysis,$total_followup_analysis_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_negotiation_target}} - {{$total_negotiation}} - {{get_percent($total_negotiation,$total_negotiation_target)}}</b>
+                                            </td>
+                                            <td>
+                                                <b>{{$total_negotiation_analysis_target}} - {{$total_negotiation_analysis}} -  {{get_percent($total_negotiation_analysis,$total_negotiation_analysis_target)}}</b>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div> 
@@ -196,27 +227,50 @@
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->
-    </div>
-
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <script>document.write(new Date().getFullYear())</script> © Zoom IT.
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end d-none d-sm-block">
-                        Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="http://Zoom IT.in/" target="_blank" class="text-muted">Zoom IT</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer> 
+    </div> 
+    @include('includes.footer')
 </div> 
  
+<div class="offcanvas offcanvas-end" id="offcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Filter Leads</h5>
+        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+            <i class="fa fa-times"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form action="" method="get">
+            <div class="row">  
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Marketing Executive</label>
+                        <select id="employee" class="select2" name="employee" search>
+                            @foreach ($employees as $data)
+                                <option {{$employee->id==$data->id?"selected":""}} value="{{encrypt($data->id)}}">{{$data->name}} [{{$data->user_id}}]</option> 
+                            @endforeach 
+                        </select> 
+                    </div>
+                </div>  
+    
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="month" class="form-label">Month</label>
+                        <input type="month" class="form-control" name="month" value="{{ date('Y-m', $date->timestamp) }}">
+                    </div>
+                </div> 
+     
+                <div class="text-end ">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button type="button" class="btn btn-outline-danger btn_refresh"><i class="mdi mdi-refresh"></i> Reset</button>
+                </div>  
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection 
 
 @section('script')
+@include('includes.data_table')
     <script>
         getDateRange('daterangepicker');
     </script>

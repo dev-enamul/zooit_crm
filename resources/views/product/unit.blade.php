@@ -57,13 +57,13 @@
                                                         <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
                                                     </div>
                                                 </div> 
-                                            </td> 
+                                            </td>  
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ @$projectUnit->name }}</td>
                                             <td>{{ @$projectUnit->project->name }}</td>
                                             <td>{{ @$projectUnit->unit->title}}</td>
                                             <td>{{ @$projectUnit->unitCategory->title}}</td>
-                                            <td>{{ @$projectUnit->unit->down_payment}}</td>
+                                            <td>{{ get_price(@$projectUnit->lottery_price)}}</td>
                                             <td>
                                                 Unsold
                                             </td>

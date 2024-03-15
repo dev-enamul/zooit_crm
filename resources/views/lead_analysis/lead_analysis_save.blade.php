@@ -263,29 +263,32 @@
 @endsection
 
 @section('script')
-<script>
-    $(document).ready(function () {
-        $('#customer').change(function () {
-            var customerId = $(this).val();
-            if (customerId) {
+    <script>   
+        $(document).ready(function(){
+            get_customer_data();
+            $('#customer').on('change', function() {
+                get_customer_data();
+            });
+        })
+      function get_customer_data(){
+            var formData = {
+                    customer_id: $("#customer").val()
+                };  
                 $.ajax({
                     type: "GET",
-                    url: "/get-customer-religion/" + customerId,
-                    success: function (response) {
-                        console.log(response.religions)
-                        if (response) {
-                            var options = '';
-                            $.each(response.religions, function (key, value) {
-                                options += '<option value="' + key + '">' + value + '</option>';
-                            });
-                            $('#religion').html(options);
-                        }
-                    }
+                    data: formData,
+                    dataType: "json",
+                    url: "{{ route('get.lead.data') }}",
+
+                    success: function(data) {
+                        $('#priority').val(data.priority);
+                        $('#project').val(data.project_id);
+                        $('#unit').val(data.unit_id); 
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                    },
                 });
-            } else {
-                $('#religion').html('<option value="">Select Religion</option>');
-            }
-        });
-    });
-</script>
+        }
+    </script>
 @endsection

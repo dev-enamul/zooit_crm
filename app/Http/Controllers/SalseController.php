@@ -56,8 +56,7 @@ class SalseController extends Controller
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
         $facilities         = $this->facility();
-        $units              = Unit::all();
-        $unit_prices        = UnitPrice::all();
+        $units              = Unit::all(); 
         $unit_categories    = UnitCategory::all();
         
         $selected_data = 
@@ -65,14 +64,14 @@ class SalseController extends Controller
             'employee' => Auth::user()->id,
             'priority' => Priority::Regular,
         ];
+        
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
 
             $neg_project = NegotiationAnalysis::where('customer_id',$request->customer)->first();
 
             $selected_data['project'] = $neg_project->project_id;
-            $selected_data['unit']  = $neg_project->unit_id;
-            $selected_data['payment_duration'] = UnitPrice::find($neg_project->payment_duration);
+            $selected_data['unit']  = $neg_project->unit_id; 
             $selected_data['select_type']   = 2;
             $selected_data['project_units'] = json_decode($neg_project->project_units); 
             $u_id= Unit::find($neg_project->unit_id);
@@ -85,8 +84,7 @@ class SalseController extends Controller
         }
 
         return view('salse.salse_save', compact([
-            'facilities',
-            'unit_prices',
+            'facilities', 
             'units',
             'selected_data',
             'priorities',
@@ -105,8 +103,7 @@ class SalseController extends Controller
             'employee' => 'required',
             'project' => 'required',
             'unit' => 'required',
-            'select_type' => 'required',
-            'unit_qty' => 'required|numeric|min:1',
+            'select_type' => 'required', 
             'payment_duration' => 'required|numeric|min:1',
             'sold_value' => 'required|numeric|min:0', 
             'installment_type' => 'required',
@@ -147,6 +144,8 @@ class SalseController extends Controller
             $sales->down_payment_due = $request->input('down_payment');
             $sales->booking = $request->input('booking'); 
             $sales->booking_due = $request->input('booking');
+            $sales->first_payment = $request->input('first_payment');
+            $sales->first_payment_date = $request->input('first_payment_date');
             $sales->installment_type = $request->input('installment_type');
             $sales->total_installment = $request->input('total_installment');
             $sales->installment_value = $request->input('installment_value'); 
@@ -155,15 +154,22 @@ class SalseController extends Controller
             $sales->employee_id = $request->input('employee');
             $sales->created_by = Auth::user()->id; 
             $sales->save();
-
-            if($request->input('select_type') == 1){
+ 
+            
+            if($request->input('select_type') == 1){ 
+                // set sold status 1 for selected project_unit 
                  $project_units = $request->project_unit;
                     foreach($project_units as $project_unit){
                         $unit = ProjectUnit::find($project_unit);
+                        if($unit->sold_status == 2){
+                             $this->book_lottery_unit($unit);
+                        }
                         $unit->sold_status = 1;
                         $unit->save();
                     }
 
+            }else{
+                $this->book_lottery_unit($sales);
             }
 
             $negotiation = NegotiationAnalysis::where('customer_id',$customer->id)->first();
@@ -173,11 +179,64 @@ class SalseController extends Controller
             } 
  
             return redirect()->route('salse.index')->with('success', 'Sales created successfully'); 
-        }catch(Exception $e){
-            dd($e->getMessage());
+        }catch(Exception $e){ 
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     } 
+
+    public function book_lottery_unit($unit,$limit = 1){
+        $unsold_units = ProjectUnit::where(function($q){
+            $q->where('sold_status',0)
+            ->orWhere('sold_status',3);
+        });  
+        if(isset($unit->unit_id) && $unit->unit_id != null){
+            $unsold_units =  $unsold_units->where('unit_id',$unit->unit_id);
+        } 
+
+        if(isset($unit->floor) && $unit->floor != null){
+            $unsold_units =  $unsold_units->where('floor',$unit->floor);
+        }
+
+        if(isset($unit->unit_category_id) && $unit->unit_category_id != null){
+            $unsold_units =  $unsold_units->where('unit_category_id',$unit->unit_category_id);
+        } 
+
+        $unsold_units = $unsold_units->take($limit)->get();
+        if($unsold_units && $unsold_units->count() <= 0){
+            $unsold_units = ProjectUnit::where(function($q){
+                $q->where('sold_status',0)
+                ->orWhere('sold_status',3);
+            }); 
+            if(isset($unit->unit_id) && $unit->unit_id != null){
+                $unsold_units =  $unsold_units->where('unit_id',$unit->unit_id);
+            }
+            if(isset($unit->floor) && $unit->floor != null){
+                $unsold_units =  $unsold_units->where('floor',$unit->floor);
+            } 
+            $unsold_units = $unsold_units->take($limit)->get();
+        }
+
+        if($unsold_units && $unsold_units->count() <= 0){
+            $unsold_units = ProjectUnit::where(function($q){
+                $q->where('sold_status',0)
+                ->orWhere('sold_status',3);
+            }); 
+            if(isset($unit->unit_id) && $unit->unit_id != null){
+                $unsold_units =  $unsold_units->where('unit_id',$unit->unit_id);
+            } 
+            $unsold_units = $unsold_units->take($limit)->get();
+        }
+
+        foreach ($unsold_units as $unsold_unit) {
+            $unsold_unit->sold_status = 2;
+            $unsold_unit->save();
+        }
+    }
+
+    public function customer_data(Request $request){ 
+        $negotiation_analysis = NegotiationAnalysis::where('customer_id',$request->customer_id)->first();
+        return response()->json($negotiation_analysis); 
+    }
 
     public function salse_details($id){
         try{
@@ -194,6 +253,8 @@ class SalseController extends Controller
             return redirect()->back()->with('error', 'Invalid request');
         }
     } 
+
+   
 
     public function get_salse_info(Request $request){
         $customer_id = $request->customer_id;

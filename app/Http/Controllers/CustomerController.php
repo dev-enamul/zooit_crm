@@ -74,7 +74,11 @@ class CustomerController extends Controller
         }else{
             $datas = $datas->where('status',0);
         } 
-        $datas = $datas->get();
+        $datas = $datas
+        ->with('user.userAddress')
+        ->with('user.userContact')
+        ->with('profession')
+        ->take(100)->get(); 
 
         $countries   = $this->getCachedCountries();
         $divisions   = $this->getCachedDivisions();

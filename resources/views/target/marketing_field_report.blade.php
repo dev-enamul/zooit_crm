@@ -55,24 +55,87 @@
                                         </tr> 
                                     </thead>
                                     <tbody> 
+                                        @php
+                                            $total_freelancer = 0;
+                                            $total_customer = 0;
+                                            $total_prospecting = 0;
+                                            $total_cold_calling = 0;
+                                            $total_lead = 0;
+                                            $total_lead_analysis = 0; 
+
+                                            $total_freelancer_target = 0;
+                                            $total_customer_target = 0;
+                                            $total_prospecting_target = 0;
+                                            $total_cold_calling_target = 0;
+                                            $total_lead_target = 0;
+                                            $total_lead_analysis_target = 0; 
+
+                                        @endphp
                                         @foreach ($datas as $key => $data)
                                         @php
                                             $target = App\Models\FieldTarget::where('assign_to',$data->id)
                                                 ->whereMonth('month',$date)
                                                 ->whereYear('month',$date)
                                                 ->first(); 
-                                        @endphp
+                                                $freelancer = $data->freelanecr_achive($date);
+                                                $customer = $data->customer_achive($date);
+                                                $prospecting = $data->prospecting_achive($date);
+                                                $cold_calling = $data->cold_calling_achive($date);
+                                                $lead = $data->lead_achive($date);
+                                                $lead_analysis = $data->lead_analysis_achive($date); 
+
+                                                $total_freelancer += $freelancer;
+                                                $total_customer += $customer;
+                                                $total_prospecting += $prospecting;
+                                                $total_cold_calling += $cold_calling;
+                                                $total_lead += $lead;
+                                                $total_lead_analysis += $lead_analysis;  
+
+                                                $total_freelancer_target += $target->freelancer??0;
+                                                $total_customer_target += $target->customer??0;
+                                                $total_prospecting_target += $target->prospecting??0;
+                                                $total_cold_calling_target += $target->cold_calling??0;
+                                                $total_lead_target += $target->lead??0;
+                                                $total_lead_analysis_target += $target->lead_analysis??0;
+                                                
+                                            @endphp 
+
                                             <tr>
                                                 <td>{{$key+1}}</td>
-                                                <td>{{$data->name}} [{{$data->user_id}}]</td>
-                                                <td>{{$target->freelancer??0}} - {{$monthly_achive['freelancer']??0}} - {{get_percent($monthly_achive['freelancer']??0, $target->freelancer??0)}}</td>
-                                                <td>{{$target->customer??0}} - {{$monthly_achive['customer']??0}} - {{get_percent($monthly_achive['customer']??0, $target->customer??0)}}</td>
-                                                <td>{{$target->prospecting??0}} - {{$monthly_achive['prospecting']??0}} - {{get_percent($monthly_achive['prospecting']??0, $target->prospecting??0)}}</td>
-                                                <td>{{$target->cold_calling??0}} - {{$monthly_achive['cold_calling']??0}} - {{get_percent($monthly_achive['cold_calling']??0, $target->cold_calling??0)}}</td>
-                                                <td>{{$target->lead??0}} - {{$monthly_achive['lead']??0}} - {{get_percent($monthly_achive['lead']??0, $target->lead??0)}}</td>
-                                                <td>{{$target->lead_analysis??0}} - {{$monthly_achive['lead_analysis']??0}} - {{get_percent($monthly_achive['lead_analysis']??0, $target->lead_analysis??0)}}</td> 
+                                                <td>
+                                                    {{$data->name}} [{{$data->user_id}}]
+                                                </td>
+                                                <td>
+                                                    {{$target->freelancer??0}} - {{$freelancer}} - {{get_percent($freelancer,$target->freelancer??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->customer??0}} - {{$customer}} - {{get_percent($customer,$target->customer??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->prospecting??0}} - {{$prospecting}} -  {{get_percent($prospecting,$target->prospecting??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->cold_calling??0}} - {{$cold_calling}} - {{get_percent($cold_calling,$target->cold_calling??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->lead??0}} - {{$lead}} - {{get_percent($lead,$target->lead??0)}}
+                                                </td>
+                                                <td>
+                                                    {{$target->lead_analysis??0}} - {{$lead_analysis}} - {{get_percent($lead_analysis,$target->lead_analysis??0)}}
+                                                </td> 
                                             </tr> 
-                                        @endforeach 
+                                        @endforeach  
+                                        <tr>
+                                            <td><b>Total </b></td>
+                                            <td><b>-</b></td>
+                                            <td><b>{{$total_freelancer_target}} - {{$total_freelancer}} - {{get_percent($total_freelancer,$total_freelancer_target)}}</b></td>
+                                            <td><b>{{$total_customer_target}} - {{$total_customer}} - {{get_percent($total_customer,$total_customer_target)}}</b></td>
+                                            <td><b>{{$total_prospecting_target}} - {{$total_prospecting}} - {{get_percent($total_prospecting,$total_prospecting_target)}}</b></td>
+                                            <td><b>{{$total_cold_calling_target}} - {{$total_cold_calling}} - {{get_percent($total_cold_calling,$total_cold_calling_target)}}</b></td>
+                                            <td><b>{{$total_lead_target}} - {{$total_lead}} - {{get_percent($total_lead,$total_lead_target)}}</b></td>
+                                            <td><b>{{$total_lead_analysis_target}} - {{$total_lead_analysis}} - {{get_percent($total_lead_analysis,$total_lead_analysis_target)}}</b></td>
+                                       
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div> 
@@ -98,8 +161,8 @@
             <div class="row">  
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label for="freelancer" class="form-label">Marketing Executive</label>
-                        <select id="freelancer" class="select2" name="freelancer" search>
+                        <label for="employee" class="form-label">Marketing Executive</label>
+                        <select id="employee" class="select2" name="employee" search>
                             @foreach ($employees as $data)
                                 <option {{$employee->id==$data->id?"selected":""}} value="{{encrypt($data->id)}}">{{$data->name}} [{{$data->user_id}}]</option> 
                             @endforeach 
@@ -109,7 +172,7 @@
     
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label for="freelancer" class="form-label">Month</label>
+                        <label for="month" class="form-label">Month</label>
                         <input type="month" class="form-control" name="month" value="{{ date('Y-m', $date->timestamp) }}">
                     </div>
                 </div> 

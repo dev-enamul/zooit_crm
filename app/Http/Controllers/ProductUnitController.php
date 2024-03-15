@@ -22,7 +22,7 @@ class ProductUnitController extends Controller
     {
         $projectUnits = ProjectUnit::where('status', 1)
                         ->with(['project:id,name','unit:id,title,down_payment','unitCategory:id,title'])
-                        ->get(['id','name','project_id','unit_id','unit_category_id','status']);
+                        ->get(['id','name','project_id','unit_id','unit_category_id','status','lottery_price']);
         $projects       = Project::where('status',1)->select('id','name')->get();
         return view('product.unit',compact('projectUnits','projects'));
     }
@@ -39,6 +39,7 @@ class ProductUnitController extends Controller
 
     public function save(Request $request, $id = null)
     {
+         
         $validator = Validator::make($request->all(), [
             'project'           => 'required|exists:projects,id',
             'name'              => 'required|string|max:190',
@@ -46,13 +47,12 @@ class ProductUnitController extends Controller
             'unit'              => 'required|exists:units,id',
             'category'          => 'required|exists:unit_categories,id',
             'description'       => 'nullable|string|max:5000',
-            'lottery_price.*'   => 'required|numeric',
-            'on_choice_price.*' => 'required|numeric',
-            'payment_duration.*'=> 'required|numeric',
+            'lottery_price'   => 'required|numeric',
+            'on_choice_price' => 'required|numeric',
         ]);
         
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }
 
         $user_id = Auth::user()->id;
@@ -69,43 +69,12 @@ class ProductUnitController extends Controller
                 $info->description      = $request->description;
                 $info->status           = 1;
                 $info->updated_by       = $user_id;
-                DB::beginTransaction();
-                try {
-                    $info->save();
-
-                    if ($info) {
-                        foreach ($request->payment_duration as $key => $value) {
-                            $unit_price = UnitPrice::where('project_unit_id', $info->id)
-                                ->where('payment_duration', $request->payment_duration[$key])->first();
-
-                            if ($unit_price) {
-                                $unit_price->update([
-                                    'lottery_price'     => $request->lottery_price[$key],
-                                    'on_choice_price'   => $request->on_choice_price[$key],
-                                    'status'            => 1,
-                                    'updated_at'        => now(),
-                                ]);
-                            } else {
-                                UnitPrice::create([
-                                    'project_unit_id'   => $info->id,
-                                    'payment_duration'  => $request->payment_duration[$key],
-                                    'lottery_price'     => $request->lottery_price[$key],
-                                    'on_choice_price'   => $request->on_choice_price[$key],
-                                    'status'            => 1,
-                                    'updated_at'        => now(),
-                                ]);
-                            }
-                        }
-                    }
-                    DB::commit();
-                    return response()->json(['success' => 'Unit updated successfully']);
-                } catch (Exception $e) {
-                    DB::rollback();
-                    return response()->json(['error' => $e->getMessage()], 422);
-                }
+                $info->lottery_price   = $request->lottery_price;
+                $info->on_choice_price = $request->on_choice_price;
+                $info->save();  
             }
             else{
-                return response()->json(['error' => 'Unit not found'], 422);
+                return redirect()->back()->with('error', 'Unit not found'); 
             }
         }
 
@@ -118,26 +87,15 @@ class ProductUnitController extends Controller
             'description'       => $request->description,
             'status'            => 1,
             'created_by'        => $user_id,
+            'lottery_price'   => $request->lottery_price,
+            'on_choice_price' => $request->on_choice_price,
         ];
-
-        DB::beginTransaction();
+ 
         try {
-            $project_unit = ProjectUnit::create($data);
-
-            foreach ($request->payment_duration as $key => $value) {
-                $unit_price = new UnitPrice();
-                $unit_price->project_unit_id = $project_unit->id;
-                $unit_price->payment_duration = $request->payment_duration[$key];
-                $unit_price->lottery_price = $request->lottery_price[$key];
-                $unit_price->on_choice_price = $request->on_choice_price[$key];
-                $unit_price->updated_at = now();
-                $unit_price->save();
-            }
-            DB::commit();
-            return response()->json(['success' => 'Unit created successfully']);
-        } catch (Exception $e) {
-            DB::rollback();
-            return response()->json(['error' => $e->getMessage()], 422);
+            ProjectUnit::create($data);  
+            return redirect()->route('unit.index')->with('success', 'Unit created successfully'); 
+        } catch (Exception $e) { 
+            return redirect()->back()->with('error', $e->getMessage()); 
         }
     }
 
@@ -152,12 +110,11 @@ class ProductUnitController extends Controller
 
     public function productUnitDelete($id){
         try{ 
-            $data  = ProjectUnit::find($id);
-            UnitPrice::where('project_unit_id', $id)->delete();
+            $data  = ProjectUnit::find($id); 
             $data->delete();
-            return response()->json(['success' => 'Project Unit Deleted'],200);
+            return redirect()->back()->with('success', 'Project Unit Deleted'); 
         }catch(Exception $e){
-            return response()->json(['error' => $e->getMessage()],500);
+            return redirect()->back()->with('error', $e->getMessage()); 
         }
     }
 

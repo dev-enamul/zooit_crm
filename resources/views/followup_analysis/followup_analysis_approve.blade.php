@@ -70,7 +70,7 @@
                                             <td class=""> {{ @$followUp->customer->user->userAddress->address }}</td>
                                             <td class=""> {{ get_price(@$followUp->negotiation_amount) }}</td>
                                             <td class=""> {{ @$followUp->project->name }}</td>
-                                            <td class=""> {{count(json_decode($followUp->project_units))}} </td>
+                                            <td class=""> {{$followUp->unit_qty}} </td>
                                             <td class=""> {{ @$followUp->customer->reference->name }} [{{ @$followUp->customer->reference->user_id }}] </td>
                                            
                                         </tr>

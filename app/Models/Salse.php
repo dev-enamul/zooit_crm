@@ -25,6 +25,8 @@ class Salse extends Model
         'down_payment',
         'down_payment_due',
         'rest_down_payment_date',
+        'first_payment',
+        'first_payment_date',
         'booking',
         'booking_due',
         'total_deposit',

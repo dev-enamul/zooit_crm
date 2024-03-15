@@ -86,6 +86,12 @@ class LeadAnalysisController extends Controller
         return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','employees','selected_data'));
     }
 
+    public function customer_data(Request $request){
+        $lead = Lead::where('customer_id',$request->customer)->first();
+        return response()->json($lead,200);
+
+    }
+
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [
@@ -213,15 +219,7 @@ class LeadAnalysisController extends Controller
         }
     }
 
-    public function getCustomerReligion($customerId)
-    {
-        $customer = Customer::findOrFail($customerId);
-        $religionId = $customer->user->religion;
-        $religionName = isset(Religion::values()[$religionId]) ? Religion::values()[$religionId] : 'Unknown';
-
-
-        return response()->json(['religions' => [$religionId => $religionName]]);
-    }
+    
 
     public function leadAnalysisApprove(){ 
         $user_id        = Auth::user()->id; 

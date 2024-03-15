@@ -6,6 +6,7 @@ use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\FollowUp;
+use App\Models\Presentation;
 use App\Models\Project;
 use App\Models\ProjectUnit;
 use App\Models\Unit;
@@ -76,6 +77,11 @@ class FollowupController extends Controller
  
         return view('followup.followup_save',compact('selected_data','priorities','projects','projectUnits','customers','employees','units'));
     }
+
+    public function customer_data(Request $request){
+        $presentation  =  Presentation::where('customer_id',$request->customer_id)->first();
+        return response()->json($presentation);
+    }
     
     public function projectDurationTypeName(Request $request)
     {
@@ -86,15 +92,8 @@ class FollowupController extends Controller
             }  
             $project_units = ProjectUnit::where('project_id', $project->id)
                 ->where('status', 1)
-                ->where('sold_status','!=',1)
-                ->with('unitCategory')
-                ->join('unit_prices', function ($join) {
-                    $join->on('project_units.id', '=', 'unit_prices.project_unit_id')
-                        ->whereRaw('GREATEST(unit_prices.on_choice_price, unit_prices.lottery_price) = (SELECT MAX(GREATEST(on_choice_price, lottery_price)) FROM unit_prices WHERE unit_prices.project_unit_id = project_units.id)');
-                })
-                ->select('project_units.*', DB::raw('GREATEST(unit_prices.on_choice_price, unit_prices.lottery_price) AS highest_price'))
-                ->orderBy('project_units.id')
-                ->distinct('project_units.id');
+                ->where('sold_status', '!=', 1)
+                ->with('unitCategory');
 
             if (isset($request->unit_id) && !empty($request->unit_id)) {
                 $project_units->where('project_units.unit_id', $request->unit_id);
@@ -108,13 +107,15 @@ class FollowupController extends Controller
                 $project_units->where('project_units.floor', $request->floor);
             }
 
-            $project_units = $project_units->get();
-
-                $most_highest_price = $project_units->max('highest_price');
+            $highest_price = $project_units->orderBy('lottery_price', 'desc')->first();
+            $project_units =  $project_units->get();
+            
+        
+ 
              
             $response_data = [ 
                 'project_unit' => $project_units,
-                'most_highest_price' => $most_highest_price
+                'most_highest_price' => $highest_price->lottery_price,
             ]; 
             return response()->json($response_data);
         } catch (Exception $e) {

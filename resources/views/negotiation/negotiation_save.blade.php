@@ -158,8 +158,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="negotiation_amount" class="form-label"> Negotiation Amount</label>
-                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($negotiation) ? $negotiation->negotiation_amount : old('negotiation_amount')}}"> 
+                                            <label for="negotiation_amount" class="form-label"> Negotiation Amount <span class="text-danger">*</span></label>
+                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($negotiation) ? $negotiation->negotiation_amount : old('negotiation_amount')}}" required> 
                                         </div>
                                     </div> 
 
@@ -224,5 +224,38 @@
             $unit_price = $('#unit_price').val();
             $('#regular_amount').val($unit_qty * $unit_price);
     }
+</script> 
+
+ {{-- get old data  --}} 
+ <script>   
+    $(document).ready(function(){
+        get_customer_data();
+        $('#customer').on('change', function() {
+            get_customer_data();
+        });
+    })
+  function get_customer_data(){
+        var formData = {
+                customer_id: $("#customer").val()
+            };  
+            $.ajax({
+                type: "GET",
+                data: formData,
+                dataType: "json",
+                url: "{{ route('get.follow.up.analysis.data') }}", 
+                success: function(data) {   
+                    $('#priority').val(data.priority).select2();
+                    $('#project').val(data.project_id).select2();
+                    $('#unit').val(data.unit_id).select2();
+                    $('#unit_qty').val(data.unit_qty);
+                    $("#negotiation_amount").val(data.negotiation_amount);
+                    getUnitPrice();
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                },
+            });
+    }
 </script>
+
 @endsection

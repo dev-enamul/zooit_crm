@@ -190,4 +190,35 @@
     </footer>
 
 </div>
+@endsection 
+
+@section('script')
+    <script>   
+        $(document).ready(function(){
+            get_customer_data();
+            $('#customer').on('change', function() {
+                get_customer_data();
+            });
+        })
+      function get_customer_data(){
+            var formData = {
+                    customer_id: $("#customer").val()
+                };  
+                $.ajax({
+                    type: "GET",
+                    data: formData,
+                    dataType: "json",
+                    url: "{{ route('get.lead.analysis.data') }}",
+
+                    success: function(data) {
+                        $('#priority').val(data.priority);
+                        $('#project').val(data.project_id);
+                        $('#unit').val(data.unit_id); 
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                    },
+                });
+        }
+    </script>
 @endsection

@@ -72,7 +72,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'sales-transfer-delete', 'name' => 'Sales Transfer Delete', 'status' => 1],
             ['slug' => 'deposit', 'name' => 'Deposit', 'status' => 1],
             ['slug' => 'deposit-manage', 'name' => 'Deposit Manage', 'status' => 1],
-            ['slug' => 'approve-deposit', 'name' => 'Approve Deposit'],
+            ['slug' => 'approve-deposit', 'name' => 'Approve Deposit', 'status' => 1],
             ['slug' => 'deposit-delete', 'name' => 'Deposit Delete', 'status' => 1], 
             // progress 
             ['slug' => 'field-target', 'name' => 'Field Target', 'status' => 1], 
@@ -134,9 +134,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'freelancer-remark', 'name' => 'Freelancer Remark', 'status' => 1],
             ['slug' => 'freelancer-id-create', 'name' => 'Freelancer ID Create', 'status' => 1],
             ['slug' => 'complete-training', 'name' => "Complete Training",'status' => 1],
-            ['slug' => 'super-admin', 'name' => "Super Admin",'status' => 1],
-
-            
+            ['slug' => 'super-admin', 'name' => "Super Admin",'status' => 1], 
         ];
 
         DB::table('permissions')->insert($permissions);
