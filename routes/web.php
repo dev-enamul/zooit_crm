@@ -70,6 +70,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Events\Message;
+use App\Http\Controllers\DisplayDataController;
 use Illuminate\Http\Request;
 
 /*
@@ -85,7 +86,11 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login'); 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth'], function () { 
+ 
+        Route::get('create',[DisplayDataController::class,'create']);
+        Route::get('index',[DisplayDataController::class,'index']);
+
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/search',[SearchController::class,'search'])->name('search');
 
