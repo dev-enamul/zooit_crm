@@ -17,6 +17,7 @@ class Training extends Model
         'agenda',
     ]; 
     
+    
     public function attendance()
     {
         return $this->hasMany(TrainingAttendance::class)->where('status', 1);
