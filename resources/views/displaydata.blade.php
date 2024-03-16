@@ -1,6 +1,9 @@
 @extends('layouts.dashboard')
 @section('title',"Freelancer Create")
+ @section('style')
+ <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
  
+ @endsection
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -47,8 +50,10 @@
 @section('script')
 <script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
- 
-{{ $dataTable->scripts() }}
+<script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
+<script src="/vendor/datatables/buttons.server-side.js"></script>
+{!! $dataTable->scripts() !!} 
 @endsection
  
 

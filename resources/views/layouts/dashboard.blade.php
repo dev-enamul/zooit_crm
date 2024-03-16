@@ -19,6 +19,7 @@
     
     <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
 
+   
     
     @yield('style') 
 

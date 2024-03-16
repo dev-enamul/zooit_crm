@@ -168,9 +168,10 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class, 
-        Barryvdh\Debugbar\ServiceProvider::class,
-        // Maatwebsite\Excel\ExcelServiceProvider::class, 
+        Barryvdh\Debugbar\ServiceProvider::class,  
+        
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Yajra\DataTables\ButtonsServiceProvider::class,
 
     ])->toArray(),
 
@@ -187,9 +188,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
-        'Datatables' => Yajra\Datatables\Facades\Datatables::class,
-        // 'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        // 'Example' => App\Facades\Example::class, 
+        'Datatables' => Yajra\Datatables\Facades\Datatables::class, 
+       
     ])->toArray(),
 
 ];
