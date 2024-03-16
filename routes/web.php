@@ -86,10 +86,11 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login'); 
+Route::get('create',[DisplayDataController::class,'create']);
+Route::get('index',[DisplayDataController::class,'index']);
 Route::group(['middleware' => 'auth'], function () { 
  
-        Route::get('create',[DisplayDataController::class,'create']);
-        Route::get('index',[DisplayDataController::class,'index']);
+       
 
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/search',[SearchController::class,'search'])->name('search');
