@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\UsersDataTable;
 use App\Models\Bank;
 use App\Models\ColdCalling;
 use App\Models\Customer;
@@ -31,6 +32,11 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
+    public function create(UsersDataTable $dataTable)
+    { 
+        return $dataTable->render('displaydata');
+    }
+    
     public function index(){
         $user= User::find(Auth::id());
         if($user->user_type==1){

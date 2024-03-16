@@ -88,11 +88,8 @@ Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login'); 
 Route::get('create',[DisplayDataController::class,'create']);
 Route::get('index',[DisplayDataController::class,'index']);
-Route::group(['middleware' => 'auth'], function () { 
- 
-       
-
-        Route::get('/', [DashboardController::class, 'index'])->name('index');
+Route::group(['middleware' => 'auth'], function () {  
+        Route::get('/', [DashboardController::class, 'create'])->name('index');
         Route::get('/search',[SearchController::class,'search'])->name('search');
 
         Route::post('update/password',[DashboardController::class,'change_password'])->name('update.password');
