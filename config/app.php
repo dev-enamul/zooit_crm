@@ -171,7 +171,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,  
         
         Yajra\Datatables\DatatablesServiceProvider::class,
-        Yajra\DataTables\ButtonsServiceProvider::class,
+        Yajra\DataTables\ButtonsServiceProvider::class, 
+        Barryvdh\Snappy\ServiceProvider::class,
 
     ])->toArray(),
 
@@ -189,6 +190,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class, 
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
        
     ])->toArray(),
 
