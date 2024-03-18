@@ -63,7 +63,7 @@ class CustomerController extends Controller
 
     public function index(CustomersDataTable $dataTable)
     {  
-        return $dataTable->render('displaydata');
+        return $dataTable->render('customer.customer_list');
     }
 
     public function create(){

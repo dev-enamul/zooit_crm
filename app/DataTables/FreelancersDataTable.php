@@ -44,6 +44,13 @@ class FreelancersDataTable extends DataTable
         })
         ->addColumn('vilage', function($data){
             return $data->user->userAddress->village->name??"-";
+        })
+        ->addColumn('fl_id', function($data){
+            if($data->status==1){
+                return $data->user->user_id;
+            }else{
+                return '-';
+            } 
         });
     }
 
@@ -65,6 +72,7 @@ class FreelancersDataTable extends DataTable
                 ->orWhere('created_by',auth()->user()->id);
             });
         })
+        ->latest()
         ->newQuery();
 
         return $data;
@@ -116,7 +124,8 @@ class FreelancersDataTable extends DataTable
             Column::make('union'), 
             Column::make('vilage'),
             Column::make('user.phone')->title('Mobile')->searchable(true),
-            Column::make('user.user_id')->title('FL ID')->searchable(true), 
+            Column::make('user.user_id')->visible(false)->searchable(true), 
+            Column::make('fl_id')->title('Freelancer ID'),
         ];
     }
 

@@ -65,7 +65,7 @@ class FreelancerController extends Controller
     }
     
     public function index(FreelancersDataTable $dataTable){
-        return $dataTable->render('displaydata');
+        return $dataTable->render('freelancer.freelancer_list');
     }
 
     public function create(){
