@@ -80,7 +80,8 @@ class ColdCallingController extends Controller
     {        
         $title = 'Cold Calling Entry';
         $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id); 
+        $my_all_employee    = my_all_employee($user_id);
+        $is_admin = Auth::user()->hasPermission('admin');
         $cstmrs             = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                 $q->whereIn('ref_id',$my_all_employee);
                               })->get();

@@ -301,6 +301,7 @@
                                 <li><a href="{{route('salse.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Sales</a></li> 
                             @endcan
                             <li><a href="{{route('salse.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Sales</a></li> 
+                            <li><a href="{{route('salse.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Sales Approve</a></li> 
                         </ul>
                     </li> 
                     @endcan

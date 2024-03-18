@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SalseApprove extends Model
-{
-    use HasFactory;
+{ 
+    use HasFactory; 
+    protected $fillable = [
+        'sales_id',
+        'customer_id',
+        'user_id',
+    ];
 }

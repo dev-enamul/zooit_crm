@@ -36,7 +36,7 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
+                        {{-- <div class="row mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -46,7 +46,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
@@ -54,42 +54,16 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
+                                {{-- @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </form>
                 </div> 
-            </div>
-            <div class="card mt-2">
-                <div class="card-header">
-                    Login Information
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <tr>
-                            <th>User</th>
-                            <th>Phone</th>
-                            <th>Password</th>
-                        </tr>
-                        {{-- get user list from database --}}
-                        @php
-                            $datas = App\Models\User::all();
-                        @endphp
-
-                        @foreach ($datas as $item)
-                        <tr>
-                            <td>{{$item->name}}</td>
-                            <td>{{$item->phone}}</td>
-                            <td>123456</td>
-                        </tr>
-                        @endforeach
-                    </table>
-                </div>
-            </div>
+            </div> 
         </div>
     </div>
 </div>

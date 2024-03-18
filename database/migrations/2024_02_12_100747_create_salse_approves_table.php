@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('salse_approves', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sales_id')->constrained('cold_callings');
+            $table->foreignId('customer_id')->constrained('customers');
+            $table->foreignId('user_id')->constrained(); 
             $table->timestamps();
         });
     }

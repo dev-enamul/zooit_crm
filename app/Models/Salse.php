@@ -73,6 +73,11 @@ class Salse extends Model
         return $this->belongsTo(User::class, 'approve_by');
     }
 
+    public function salseApprove()
+    {
+        return $this->hasMany(SalseApprove::class);
+    }
+
     public function deposit()
     {
         return $this->hasMany(Deposit::class,'salse_id');

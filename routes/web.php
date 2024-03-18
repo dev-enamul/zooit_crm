@@ -73,6 +73,7 @@ use App\Events\Message;
 use App\Http\Controllers\DisplayDataController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\FreelancerImportController;
+use App\Http\Controllers\SalseApproveController;
 use Illuminate\Http\Request;
 
 /*
@@ -268,6 +269,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Salse
         Route::resource('salse', SalseController::class);
+        Route::get('salse-approve', [SalseApproveController::class, 'salse_approve'])->name('salse.approve');
         Route::get('get-negotiation-analysis-data', [SalseController::class, 'customer_data'])->name('get.negotiation.analysis.data');
         Route::get('salse-details/{id}', [SalseController::class, 'salse_details'])->name('salse.details');
         Route::get('get-salse-info', [SalseController::class, 'get_salse_info'])->name('get.salse.info');
