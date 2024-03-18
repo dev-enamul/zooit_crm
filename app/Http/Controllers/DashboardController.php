@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\CustomersDataTable;
+use App\DataTables\EmployeesDataTable;
+use App\DataTables\FreelancersDataTable;
 use App\DataTables\UsersDataTable;
 use App\Models\Bank;
 use App\Models\ColdCalling;
@@ -32,7 +35,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
-    public function create(UsersDataTable $dataTable)
+    public function create(CustomersDataTable $dataTable)
     { 
         return $dataTable->render('displaydata');
     }

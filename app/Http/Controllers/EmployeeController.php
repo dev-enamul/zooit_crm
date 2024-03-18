@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\DataTables\EmployeesDataTable;
 use App\Enums\BloodGroup;
 use App\Enums\Gender;
 use App\Enums\MaritualStatus;
@@ -32,24 +34,12 @@ class EmployeeController extends Controller
 {
     use AreaTrait;
     use ImageUploadTrait;
-    
-    public function index(){ 
-        $datas = User::where('status',1)->where('user_type',1)->latest('id')->get();
-        // $latestUpdateUserAddress = UserAddress::orderBy('updated_at', 'desc')->first();
-        // $latestUpdateReportingUser = ReportingUser::orderBy('updated_at', 'desc')->first();
-
-        // $lastUpdateDate = max(
-        //     optional($latestUpdateUserAddress)->updated_at,
-        //     optional($latestUpdateReportingUser)->updated_at
-        // ); 
-        // if($latestUpdateUserAddress->updated_at > $latestUpdateReportingUser->updated_at){
-        //     $lastUpdateDate = $latestUpdateUserAddress->updated_at;
-        // }else{
-        //     $lastUpdateDate = $latestUpdateReportingUser->updated_at;
-        // }
-
-        return view('employee.employee_list',compact('datas'));
+      
+    public function index(EmployeesDataTable $dataTable)
+    { 
+        return $dataTable->render('employee.employee_list');
     }
+
 
     public function create(){    
         $title     = "Employee Create";
@@ -102,7 +92,7 @@ class EmployeeController extends Controller
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
-            'gender'                    => 'required|in:1,2',
+            'gender'                    => 'required|in:1,2,3',
             'phone1'                    => 'required|string|unique:users,phone|max:15',
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
@@ -147,7 +137,7 @@ class EmployeeController extends Controller
         if ($validator->fails()) { 
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         } 
-
+ 
         DB::beginTransaction(); 
        
         try { 
@@ -358,7 +348,7 @@ class EmployeeController extends Controller
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
-            'gender'                    => 'required|in:1,2', 
+            'gender'                    => 'required|in:1,2,3', 
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',

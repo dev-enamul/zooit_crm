@@ -37,7 +37,7 @@
                                             <select class="select2" search name="zone_id" id="zone_id"> 
                                                 <option value="">Select Zone</option>
                                                 @foreach ($zones as $zone)
-                                                    <option value="{{$zone->id}}" {{(old('zone_id') || $user->userAddress->zone_id==$zone->id) ? "selected" : ""}}> {{$zone->name}} </option>
+                                                    <option value="{{$zone->id}}" {{(old('zone_id',@$user->userAddress->zone_id==$zone->id?"selected":""))}}> {{$zone->name}} </option>
                                                 @endforeach 
                                             </select> 
                                         </div>
@@ -49,7 +49,7 @@
                                             <select class="select2" search name="area_id" id="area_id">
                                                 <option value="">Select Area</option> 
                                                 @foreach ($areas as $area)
-                                                    <option value="{{$area->id}}" {{(old('zone_id') || $user->userAddress->area_id==$area->id) ? "selected" : ""}}> {{$area->name}} </option>
+                                                    <option value="{{$area->id}}" {{(old('zone_id',@$user->userAddress->area_id==$area->id?"selected":""))}}> {{$area->name}} </option>
                                                 @endforeach 
                                             </select> 
                                         </div>

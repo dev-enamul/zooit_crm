@@ -64,7 +64,7 @@
                                     <div class="col-3">
                                         <div class="mb-3">
                                             <label class="form-label">{{$user_type}} ID </label>
-                                            <input type="text" class="form-control"  value="{{$user->user_id==3?}}" disabled>
+                                            <input type="text" class="form-control"  value="{{$user->user_id}}" disabled>
                                         </div>
                                     </div>  
 

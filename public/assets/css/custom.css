@@ -415,6 +415,13 @@ a{
     }
   }
 
+  div.dt-buttons{
+    position: absolute !important;
+  }
+  .table-box{
+    overflow-x: scroll !important;
+  }
+
  
 
 

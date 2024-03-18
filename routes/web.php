@@ -71,6 +71,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Events\Message;
 use App\Http\Controllers\DisplayDataController;
+use App\Http\Controllers\EmployeeImportController;
+use App\Http\Controllers\FreelancerImportController;
 use Illuminate\Http\Request;
 
 /*
@@ -85,16 +87,13 @@ use Illuminate\Http\Request;
 */
 
 Auth::routes();
-Route::post('login', [LoginController::class, 'login'])->name('login'); 
-Route::get('create',[DisplayDataController::class,'create']);
-Route::get('index',[DisplayDataController::class,'index']);
-Route::group(['middleware' => 'auth'], function () {  
+Route::post('login', [LoginController::class, 'login'])->name('login');  
+Route::group(['middleware' => 'auth'], function () { 
         Route::get('/', [DashboardController::class, 'create'])->name('index');
+        Route::get('/id', [DashboardController::class, 'id']);
         Route::get('/search',[SearchController::class,'search'])->name('search');
 
         Route::post('update/password',[DashboardController::class,'change_password'])->name('update.password');
-
-        
  
         //Area
         Route::get('division-get-district', [AreaController::class, 'divisionGetDistrict'])->name('division-get-district');
@@ -111,6 +110,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
+        Route::get('import', [EmployeeImportController::class, 'index'])->name('import');
+        Route::post('employee-import', [EmployeeImportController::class, 'import'])->name('employee.import');
         Route::post('employee-save', [EmployeeController::class, 'save'])->name('employee.save'); 
          
         Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
@@ -147,7 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/product-unit-search', [ProductUnitController::class, 'productUnitSearch'])->name('project.unit.search');
 
         // Freelancer 
-        Route::resource('freelancer', FreelancerController::class);
+        Route::resource('freelancer', FreelancerController::class); 
         Route::resource('approve-freelancer', ApproveFreelancerController::class);
         Route::get('complete-training/{id}', [ApproveFreelancerController::class, 'complete_training'])->name('complete.training');
         Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save'); 

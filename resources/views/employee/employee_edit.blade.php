@@ -20,11 +20,10 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form action="{{route('employee.update',$employee->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                            <form action="{{route('employee.update',$employee->user_id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 @csrf
                                 @method('put')
-                                <input type="hidden" name="id" value="{{$employee->id}}">
-                                
+                              
                                 <div class="row">
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Personal Information</h6>
                                     <hr>

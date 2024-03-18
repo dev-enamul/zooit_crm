@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\FreelancersDataTable;
 use App\Enums\BloodGroup;
 use App\Enums\Gender;
 use App\Models\Freelancer;
@@ -63,32 +64,8 @@ class FreelancerController extends Controller
         return Nationality::values();
     }
     
-    public function index(){  
-        $countries   = $this->getCachedCountries();
-        $divisions   = $this->getCachedDivisions();
-        $districts   = $this->getCachedDistricts();
-        $upazilas    = $this->getCachedUpazilas();
-        $unions      = $this->getCachedUnions();
-        $villages    = $this->getCachedVillages();
-        $professions = Profession::where('status',1)->select('id','name')->get();
-        $my_freelancer = my_all_employee(auth()->user()->id);  
-        // $datas       =  Freelancer::whereIn('user_id',$my_freelancer)->whereHas('user', function($query){
-        //     $query->where('approve_by','!=',null)
-        //     ->orWhere('ref_id',auth()->user()->id)
-        //     ->orWhere('created_by',auth()->user()->id);
-        // })->get();
-
-        $datas       =  Freelancer::whereIn('user_id',$my_freelancer)->where(function($q){
-            $q->where('status',1)->orWhereHas('user', function($query){
-                $query->Where('approve_by','!=',null)
-                ->orWhere('ref_id',auth()->user()->id)
-                ->orWhere('created_by',auth()->user()->id);
-            });
-        })->get();
-        
-        $freelancers = Freelancer::whereIn('id',$my_freelancer)->where('status',1)->get();  
-
-        return view('freelancer.freelancer_list',compact('datas','professions','countries','divisions','districts','upazilas','unions','villages','freelancers'));
+    public function index(FreelancersDataTable $dataTable){
+        return $dataTable->render('displaydata');
     }
 
     public function create(){
@@ -318,7 +295,7 @@ class FreelancerController extends Controller
                 ]);
             } 
             
-            $reportingUser = ReportingUser::where('user_id',$request->reporting_user)->where('deleted_at',null)->first(); 
+        $reportingUser = ReportingUser::where('user_id',$request->reporting_user)->where('deleted_at',null)->first(); 
             if ($reportingUser) {
                 $reportingUserId = $reportingUser->id;
                 ReportingUser::create([

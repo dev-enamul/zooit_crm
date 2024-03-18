@@ -39,7 +39,9 @@
                                             <label for="reporting_id" class="form-label">Reporting Employee <span class="text-danger">*</span></label>
                                             <select class="select2" search name="reporting_id" id="reporting_id" required> 
                                                 @foreach ($employees as $employee)
+                                                 @if (isset($employee->reportingUser->id))
                                                     <option value="{{@$employee->reportingUser->id}}" {{@$user->reportingUser->user_id==$employee->id?"selected":""}}> {{$employee->name}} [ {{$employee->user_id}} ] </option>
+                                                 @endif 
                                                 @endforeach 
                                             </select> 
                                         </div>

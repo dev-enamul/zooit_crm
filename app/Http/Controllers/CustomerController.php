@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\CustomersDataTable;
 use App\Enums\BloodGroup;
 use App\Enums\Gender;
 use App\Enums\MaritualStatus;
@@ -60,40 +61,9 @@ class CustomerController extends Controller
         return Nationality::values();
     }
 
-    public function index(Request $request){
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $datas       =  Customer::whereIn('ref_id',$my_all_employee) 
-                        ->where(function($q){
-                            $q->where('created_by',auth()->user()->id)
-                            ->orWhere('approve_by','!=',null)
-                            ->orWhere('ref_id',auth()->user()->id);
-                        }); 
-        
-        if(isset($request->status) && $request->status != null){
-            $datas = $datas->where('status',$request->status);
-        }else{
-            $datas = $datas->where('status',0);
-        } 
-        $datas = $datas
-        ->with('user.userAddress')
-        ->with('user.userContact')
-        ->with('profession')
-        ->take(100)->get(); 
-
-        $countries   = $this->getCachedCountries();
-        $divisions   = $this->getCachedDivisions();
-        $districts   = $this->getCachedDistricts();
-        $upazilas    = $this->getCachedUpazilas();
-        $unions      = $this->getCachedUnions();
-        $villages    = $this->getCachedVillages();
-        $professions = Profession::where('status',1)->select('id','name')->get();
-        $customers   = Customer::where(function($q){
-                            $q->where('created_by',auth()->user()->id)
-                            ->orWhere('ref_id',auth()->user()->id)
-                            ->orWhere('approve_by','!=',null);
-                        })->get();
-        return view('customer.customer_list',compact('datas','professions','countries','divisions','districts','upazilas','unions','villages','customers'));
-
+    public function index(CustomersDataTable $dataTable)
+    {  
+        return $dataTable->render('displaydata');
     }
 
     public function create(){

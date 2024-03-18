@@ -26,6 +26,7 @@ class User extends Authenticatable
         'marital_status',
         'dob',
         'finger_id',
+        'approve_by',
         'religion',
         'blood_group',
         'gender',

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('customer_id')->nullable();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('profession_id')->constrained()->nullable();
+            $table->foreignId('profession_id')->nullable()->constrained();
             $table->string('name')->nullable(); 
             $table->unsignedBigInteger('ref_id')->nullable();
             $table->foreign('ref_id')->references('id')->on('users');

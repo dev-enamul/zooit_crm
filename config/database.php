@@ -148,4 +148,8 @@ return [
 
     ],
 
+    'smart' => true,
+    'case_insensitive' => true,
+    'use_wildcards' => false,
+
 ];
