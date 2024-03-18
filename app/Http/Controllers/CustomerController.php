@@ -165,12 +165,10 @@ class CustomerController extends Controller
        
         try { 
             $old_user = User::where('phone', get_phone($request->phone1))->first();
-            $approve_setting = ApproveSetting::where('name','customer')->first(); 
-            if($approve_setting->status && $approve_setting->status ==1){
-                $approve_by = null;
-            }else{
+            $approve_setting = ApproveSetting::where('name','customer')->first();  
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting->status == 0 || $is_admin){ 
                 $approve_by = auth()->user()->id;
-               
             } 
 
             if ($old_user) {

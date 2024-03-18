@@ -142,9 +142,10 @@ class LeadController extends Controller
             $lead->purchase_capacity        = $request->priority;
             $lead->possible_purchase_date   = date('Y-m-d', strtotime($request->purchase_date));
             $approve_setting = ApproveSetting::where('name','lead')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $lead->approve_by = auth()->user()->id;
-            } 
+            }  
             $lead->status                   = 0;
             $lead->created_at               = now();
             $lead->save();

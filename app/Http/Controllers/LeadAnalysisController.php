@@ -152,12 +152,11 @@ class LeadAnalysisController extends Controller
 
         } else { 
 
-            $approve_setting = ApproveSetting::where('name','lead_analysis')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $approve_setting = ApproveSetting::where('name','lead_analysis')->first();  
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $approve_by = auth()->user()->id;
-            }else{
-                $approve_by = null; 
-            }
+            } 
 
             $lead_analysis = LeadAnalysis::create([
                 'customer_id'          => $request->customer,

@@ -94,28 +94,25 @@ class FollowupController extends Controller
                 ->where('status', 1)
                 ->where('sold_status', '!=', 1)
                 ->with('unitCategory');
-
+ 
             if (isset($request->unit_id) && !empty($request->unit_id)) {
-                $project_units->where('project_units.unit_id', $request->unit_id);
+                $project_units->where('unit_id', $request->unit_id);
             }
 
             if(isset($request->unit_category_id) && !empty($request->unit_category_id)){
-                $project_units->where('project_units.unit_category_id', $request->unit_category_id);
+                $project_units->where('unit_category_id', $request->unit_category_id);
             }
 
             if(isset($request->floor) && !empty($request->floor)){
-                $project_units->where('project_units.floor', $request->floor);
+                $project_units->where('floor', $request->floor);
             }
 
             $highest_price = $project_units->orderBy('lottery_price', 'desc')->first();
-            $project_units =  $project_units->get();
-            
-        
- 
-             
+            $project_units =  $project_units->get(); 
+  
             $response_data = [ 
                 'project_unit' => $project_units,
-                'most_highest_price' => $highest_price->lottery_price,
+                'most_highest_price' => $highest_price->lottery_price??"",
             ]; 
             return response()->json($response_data);
         } catch (Exception $e) {
@@ -170,9 +167,10 @@ class FollowupController extends Controller
             $follow->remark = $request->remark;
 
             $approve_setting = ApproveSetting::where('name','follow_up')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $follow->approve_by = auth()->user()->id;
-            }
+            } 
 
             $follow->created_by = auth()->id();
             $follow->created_at = now();

@@ -142,8 +142,11 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="unit_price" class="form-label"> Unit Price</label>
+                                            <label for="unit_price" class="form-label"> Unit Price <span class="text-danger">*</label>
                                              <input type="number"  class="form-control" name="unit_price" id="unit_price" value="" readonly> 
+                                             <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div> 
 
@@ -205,6 +208,7 @@
         var totalSelectedPrice = 0;
   
         function getUnitPrice(){
+           
                 var formData = {
                         project_id: $("#project").val(),
                         unit_id: $("#unit").val(), 

@@ -121,8 +121,9 @@ class PresentationAnalysisController extends Controller
             $visit->customer_id = $request->customer_id;
             $visit->employee_id = $request->employee;
             $visit->remark = $request->remark;
-            $approve_setting = ApproveSetting::where('name','visit_analysis')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $approve_setting = ApproveSetting::where('name','visit_analysis')->first();  
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $visit->approve_by = auth()->user()->id;
             } 
             $visit->status = 0;

@@ -149,15 +149,13 @@ class ProspectingController extends Controller
             $prospecting->employee_id   = $request->employee;
             $prospecting->status        = 0;
             $prospecting->created_by    = auth()->id();
-            $prospecting->created_at    = now();   
-            $approve_setting = ApproveSetting::where('name','prospecting')->first(); 
-            
-        if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $prospecting->created_at    = now();
+            $approve_setting = ApproveSetting::where('name','prospecting')->first();  
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $prospecting->approve_by = auth()->user()->id;
-            } 
-
-            $prospecting->save();
-
+            }  
+            $prospecting->save(); 
             if($prospecting) {
                 $customer = Customer::find($request->customer);
                 $customer->status = 1;

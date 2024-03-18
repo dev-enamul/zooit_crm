@@ -119,8 +119,9 @@ class PresentationController extends Controller
             $presentation->employee_id   = $request->employee;    
             $presentation->project_id    = $request->project;    
             $presentation->unit_id       = $request->unit; 
-            $approve_setting = ApproveSetting::where('name','presentation')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $approve_setting = ApproveSetting::where('name','presentation')->first();  
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $presentation->approve_by = auth()->user()->id;
             }  
             $presentation->status        = 0;    

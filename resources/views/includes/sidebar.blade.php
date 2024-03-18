@@ -1,6 +1,6 @@
 @php
     $approve_setting = App\Models\ApproveSetting::pluck('status', 'name')->toArray(); 
-    $is_admin = Auth::user()->hasPermission('admin');
+    $is_admin = Auth::user()->hasPermission('admin'); 
 @endphp
 <div class="sidebar-left"> 
     <div data-simplebar class="h-100"> 
@@ -85,10 +85,13 @@
                         <ul class="sub-menu" aria-expanded="false">
                             @can('freelancer-manage')
                                 <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
-                            @endcan   
-    
+                            @endcan    
                             <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search','freelancer.edit') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
-                            <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
+                            @if (!empty($approve_setting['freelancer']) && !$is_admin)
+                                @can('product-approve')
+                                <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
+                                @endcan
+                            @endif 
       
                         </ul>
                     </li> 

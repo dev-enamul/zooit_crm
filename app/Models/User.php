@@ -135,7 +135,7 @@ class User extends Authenticatable
     }
 
     public static function generateNextCustomerId(){ 
-        $customer = Customer::latest('id')->first()->customer_id;
+        $customer = Customer::latest('id')->first()?->customer_id;
         if($customer == null){
             $customer = 'CUS-000';
         }
@@ -147,7 +147,7 @@ class User extends Authenticatable
 
     public static function generateNextFreelancerId()
     {
-        $user_id = User::where('user_type',2)->latest('id')->first()->user_id;
+        $user_id = User::where('user_type',2)->latest('id')->first()?->user_id;
         if($user_id == null){
             $user_id = 'FL-000';
         }

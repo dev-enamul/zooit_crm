@@ -139,9 +139,11 @@ class ColdCallingController extends Controller
             $cold_call->unit_id       = $request->unit;
             $cold_call->status        = 0;    
             $approve_setting = ApproveSetting::where('name','cold_calling')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $cold_call->approve_by = auth()->user()->id;
-            } 
+            }  
+
             $cold_call->created_by    = auth()->id();
             $cold_call->created_at    = now();
             $cold_call->save();

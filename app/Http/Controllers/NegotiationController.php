@@ -130,8 +130,9 @@ class NegotiationController extends Controller
             $follow->negotiation_amount = $request->input('negotiation_amount'); 
             $follow->remark = $request->remark;  
 
-            $approve_setting = ApproveSetting::where('name','negotiation')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $approve_setting = ApproveSetting::where('name','negotiation')->first();  
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $follow->approve_by = auth()->user()->id;
             } 
             

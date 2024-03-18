@@ -144,8 +144,9 @@ class FollowupAnalysisController extends Controller
             $follow->decision_maker = $request->descision_maker;
             $follow->decision_maker_opinion = $request->decision_maker_opinion;
 
-            $approve_setting = ApproveSetting::where('name','follow_up_analysis')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
+            $approve_setting = ApproveSetting::where('name','follow_up_analysis')->first();  
+            $is_admin = Auth::user()->hasPermission('admin'); 
+            if($approve_setting?->status == 0 || $is_admin){ 
                 $follow->approve_by = auth()->user()->id;
             }
 
