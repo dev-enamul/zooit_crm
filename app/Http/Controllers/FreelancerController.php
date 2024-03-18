@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Enums\MaritualStatus;
 use App\Enums\Nationality;
 use App\Enums\Religion;
+use App\Models\ApproveSetting;
 use App\Models\Area;
 use App\Models\Bank;
 use App\Models\Designation;
@@ -305,6 +306,13 @@ class FreelancerController extends Controller
                     'created_at'            => now(),
                 ]);
             } 
+
+            $approve_setting = ApproveSetting::where('name','freelancer')->first();
+            $is_admin = Auth::user()->hasPermission('admin');
+            if($approve_setting?->status == 0 || $is_admin){ 
+            
+            }
+
             DB::commit(); 
             return redirect()->route('freelancer.index')->with('success', 'Employee created successfully');
         } catch (Exception $e) {   

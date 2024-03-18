@@ -20,7 +20,8 @@ class ProductController extends Controller
     use ImageUploadTrait;
     use AreaTrait;
 
-    public function index(){
+    public function index(){ 
+         
         $divisions      = $this->getCachedDivisions();
         $projects       = Project::where('status',1)->with('units')->select('id','name','address','total_floor')->get();
         $unit_headers   = Unit::where('status',1)->select('id','title')->get();
@@ -59,10 +60,12 @@ class ProductController extends Controller
         }
 
         $user_id = Auth::user()->id;
+        $approve_setting = ApproveSetting::where('name','product')->first();
+        $is_admin = Auth::user()->hasPermission('admin');
 
         if (!empty($id)) { 
-            $info = Project::find($id);
-            $approve_setting = ApproveSetting::where('name','project')->first();
+            $info = Project::find($id); 
+           
 
             if (!empty($info)){
                 $info->name             = $request->name;
@@ -76,11 +79,11 @@ class ProductController extends Controller
                 $info->union_id         = $request->union;
                 $info->village_id       = $request->village;
 
-                if($approve_setting->status == 1){
-                    $info->status           = 0;
-                }else{
+                if($approve_setting->status == 0 || $is_admin){ 
                     $info->status           = 1;
                     $info->approved_by      = $user_id;
+                }else{ 
+                    $info->status           = 0;
                 } 
 
                 $info->updated_by       = $user_id;
@@ -126,12 +129,13 @@ class ProductController extends Controller
         try {
             $project = Project::create($data);
 
-            $approve_setting = ApproveSetting::where('name','product')->first(); 
-            if(isset($approve_setting->status) && $approve_setting->status == 0){ 
-                $project->approved_by = auth()->user()->id;
-                $project->status = 1;
+            if($approve_setting?->status == 0 || $is_admin){ 
+                $project->status           = 1;
+                $project->approved_by      = $user_id;
                 $project->save();
             }
+
+           
 
             if ($request->hasFile('image')) {
                 $p_images = new ProjectImage();

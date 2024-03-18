@@ -9,7 +9,7 @@
             <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
             <a class="dropdown-item" href="{{route('profile',encrypt($data->user_id))}}">View Profile</a>
            
-            @if (($data->status==1 && $data->user->approve_by==null) || auth()->user()->id==1) 
+            @if (($data->status==1 && $data->user->approve_by==null) || auth()->user()->id==1)
                 @can('complete-training')
                     <a class="dropdown-item" href="javascript:void(0)" onclick="approveItem('{{route('complete.training',encrypt($data->user_id))}}')">Complete Training</a>
                 @endcan 
