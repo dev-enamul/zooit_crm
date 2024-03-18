@@ -85,7 +85,7 @@ class CustomerController extends Controller
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
         $my_all_employee = my_all_employee(auth()->user()->id);
-        $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->select('id','name','user_id')->get();
+        $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->whereNotNull('approve_by')->select('id','name','user_id')->get();
         return view('customer.customer_create', compact(
             'title',
             'countries',
