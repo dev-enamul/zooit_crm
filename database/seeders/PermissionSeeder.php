@@ -135,6 +135,7 @@ class PermissionSeeder extends Seeder
             ['slug' => 'freelancer-id-create', 'name' => 'Freelancer ID Create', 'status' => 1],
             ['slug' => 'complete-training', 'name' => "Complete Training",'status' => 1],
             ['slug' => 'admin', 'name' => "Admin",'status' => 1], 
+            ['slug' => 'salse-approve', 'name' => "Salse Approve",'status' => 1], 
         ];
 
         DB::table('permissions')->insert($permissions);

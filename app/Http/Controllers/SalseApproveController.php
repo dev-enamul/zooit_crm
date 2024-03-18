@@ -11,11 +11,12 @@ class SalseApproveController extends Controller
     public function salse_approve(){
         $designation = Auth::user()->employee->designation_id;
         if($designation==1){
-            $datas = Salse::whereHas('salseApprove', function($q){
-                $q->whereNot('user_id', Auth::user()->id);
-            })->get();
-        }
-
-        dd($datas);
+            $datas = Salse::whereDoesntHave('salseApprove')
+            ->orWhereHas('salseApprove', function ($q) {
+                $q->where('user_id', '!=', Auth::user()->id);
+            })
+            ->get();
+        } 
+        return view('salse.salse_approve',compact('datas'));
     }
 }
