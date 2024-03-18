@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Freelancer Create")
+@section('title',"Employee List")
  @section('style') 
     <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />

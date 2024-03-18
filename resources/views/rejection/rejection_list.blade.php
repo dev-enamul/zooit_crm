@@ -14,7 +14,7 @@
                         <input type="hidden" id="pageSize" value="legal">
                         <input type="hidden" id="fontSize" value="8"> 
                         <div class="page-title-right">
-                            <div class="dt-buttons flex-wrap mb-2">      
+                            <div class="flex-wrap mb-2">      
                                 <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                     <span><i class="fas fa-filter"></i> Filter</span>
                                 </button> 

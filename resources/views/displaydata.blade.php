@@ -17,7 +17,7 @@
                         <h4 class="mb-sm-0">Customer List</h4>  
 
                         <div class="page-title-right">
-                            <div class="dt-buttons btn-group flex-wrap mb-2">      
+                            <div class="btn-group flex-wrap mb-2">      
                                 <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                     <span><i class="fas fa-filter"></i> Filter</span>
                                 </button> 

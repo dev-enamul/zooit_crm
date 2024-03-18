@@ -13,7 +13,7 @@
                             <div class="card-header d-flex justify-content-between">
                                 <h4 class="mb-sm-0" id="#swal-11">{{$employee->name}} Permission</h4>  
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                    <div class="btn-group flex-wrap mb-2">      
                                         <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create_profession">
                                             <span><i class="fas fa-save"></i> Update</span>
                                         </button> 

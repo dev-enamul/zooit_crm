@@ -25,7 +25,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between"> 
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">      
+                                    <div class="btn-group flex-wrap mb-2">      
                                         <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
                                             <span><i class="fas fa-file-excel"></i> Excel</span>
                                         </button>
@@ -36,7 +36,7 @@
                                     </div> 
                                 </div>
                                 <div class="">
-                                    <div class="dt-buttons btn-group flex-wrap mb-2">     
+                                    <div class="btn-group flex-wrap mb-2">     
                                         <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button> 

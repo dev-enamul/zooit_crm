@@ -17,7 +17,7 @@
                         <input type="hidden" id="fontSize" value="10">
 
                         <div class="page-title-right">
-                            <div class="dt-buttons btn-group flex-wrap mb-2">
+                            <div class="btn-group flex-wrap mb-2">
                                 <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a>      
                                 <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                     <span><i class="fas fa-filter"></i> Filter</span>

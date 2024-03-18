@@ -14,7 +14,7 @@
                         <input type="hidden" id="pageSize" value="legal">
                         <input type="hidden" id="fontSize" value="8"> 
                         <div class="page-title-right">
-                            <div class="dt-buttons flex-wrap mb-2">     
+                            <div class="flex-wrap mb-2">     
                                 <button class="btn btn-secondary mr-3" data-bs-toggle="modal" data-bs-target="#wayting_day_setting">
                                     <span><i class="fas fa-cog"></i> Waiting Day</span>
                                 </button>  
