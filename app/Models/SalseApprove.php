@@ -9,7 +9,7 @@ class SalseApprove extends Model
 { 
     use HasFactory; 
     protected $fillable = [
-        'sales_id',
+        'salse_id',
         'customer_id',
         'user_id',
     ];

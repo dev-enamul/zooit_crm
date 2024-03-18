@@ -65,8 +65,9 @@
                                                         <img class="rounded avatar-2xs p-0" src="{{@$data->customer->user->image()}}">
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
-                                                        <a class="dropdown-item" href="customer_profile.html">Customer Profile</a>
-                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a>  
+                                                        <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
+                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a>
+                                                        <a class="dropdown-item" href="{{route('salse.approve.save',encrypt($data->id))}}">Approve Now</a>  
                                                     </div>
                                                 </div> 
                                             </td>
@@ -130,118 +131,7 @@
     </div> 
   @include('includes.footer') 
 </div> 
-
-<div class="offcanvas offcanvas-end" id="offcanvas">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Filter Leads</h5>
-        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-            <i class="fa fa-times"></i>
-        </button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row"> 
  
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="freelancer" class="form-label">Freelancer</label>
-                    <select id="freelancer" class="select2" name="freelancer" search>
-                        <option value="">All Freelancer</option> 
-                        <option value="">Md Enamul Haque </option> 
-                        <option value="">Jamil Hosain #FL1545 01796351081</option> 
-                        <option value="">Md Mehedi Hasan #FL1545 01796351081</option> 
-                        <option value="">Suvo Hasan #FL1545 01796351081</option>  
-                    </select> 
-                </div>
-            </div>  
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="project" class="form-label">Project</label>
-                    <select class="select2" name="project" id="project">
-                        <option value="">All Project</option>
-                        <option value="">Cidy Plaza</option>
-                        <option value="">Metro Housing</option> 
-                        <option value="">Rana House</option> 
-                    </select>  
-                </div>
-            </div> 
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="upazila" class="form-label">Thana/Upazila </label>
-                    <select class="select2" name="upazila" id="upazila" required>
-                        <option value="">All Thana/Upazila</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select> 
-                    <div class="invalid-feedback">
-                        This field is required.
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="union" class="form-label">Union </label>
-                    <select class="select2" name="union" id="union" required>
-                        <option value="">All Union</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select> 
-                    <div class="invalid-feedback">
-                        This field is required.
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="village" class="form-label">Village</label>
-                    <select class="select2" name="village" id="village">
-                        <option value="">All Village</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="maritial_status" class="form-label">Marital status</label>
-                    <select class="select2" name="maritial_status" id="maritial_status">
-                        <option value="">All Marital</option>
-                        <option value="">Married</option>
-                        <option value="">Unmarried</option> 
-                        <option value="">Devorce</option> 
-                    </select>  
-                </div>
-            </div>  
- 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
-        </div>
-    </div>
-</div>
 @endsection 
 
 @section('script')
