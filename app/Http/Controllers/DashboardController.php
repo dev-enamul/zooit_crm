@@ -35,10 +35,10 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
-    public function create(CustomersDataTable $dataTable)
-    { 
-        return $dataTable->render('displaydata');
-    }
+    // public function create(CustomersDataTable $dataTable)
+    // { 
+    //     return $dataTable->render('displaydata');
+    // }
     
     public function index(){
         $user= User::find(Auth::id());

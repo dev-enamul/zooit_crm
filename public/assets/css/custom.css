@@ -421,6 +421,27 @@ a{
   .table-box{
     overflow-x: scroll !important;
   }
+  .menu-title-box{
+    align-items: center;
+    background: #dddddd38;
+    display: flex;
+    margin-bottom: 2px;  
+    cursor: pointer;  
+  }
+
+  .menu-title {
+    padding: 12px 20px !important;
+    margin-bottom: 0px !important;
+    letter-spacing: .05em;
+    pointer-events: none;
+    cursor: default;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--bs-body-color);
+    font-weight: 600;
+    font-family: "Wix Madefor Text", sans-serif;
+    opacity: .5;
+  }
 
  
 

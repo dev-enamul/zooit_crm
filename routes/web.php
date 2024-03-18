@@ -89,7 +89,7 @@ use Illuminate\Http\Request;
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');  
 Route::group(['middleware' => 'auth'], function () { 
-        Route::get('/', [DashboardController::class, 'create'])->name('index');
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/id', [DashboardController::class, 'id']);
         Route::get('/search',[SearchController::class,'search'])->name('search');
 
