@@ -133,9 +133,9 @@ if (!function_exists('user_reporting')) {
     {
         $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->where('status',1)->latest()->first();
         if (!$reporting->reporting_user_id) {
-            return array_merge($users, [$user_id]);
+            return array_merge($users, [$reporting->user_id]);
         } else {
-            return user_reporting($reporting->reporting_user_id, array_merge($users, [$user_id]));
+            return user_reporting($reporting->reporting_user_id, array_merge($users, [$reporting->user_id]));
         }
     }
 }
