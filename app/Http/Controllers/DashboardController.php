@@ -42,7 +42,7 @@ class DashboardController extends Controller
     // }
     
     public function index(){ 
-        $data = DesignationPermission::select('designation_id', 'permission_id')->where('designation_id','11')->get()->toArray();
+        $data = DesignationPermission::select('designation_id', 'permission_id')->where('designation_id','2')->get()->toArray();
 
         return $data;
         $user= User::find(Auth::id());
@@ -252,8 +252,8 @@ class DashboardController extends Controller
     }
 
     public function migrate_fresh(){  
-        exec('composer update');
-        Artisan::call('migrate:fresh');
+        // exec('composer update');
+        // Artisan::call('migrate:fresh');
         Artisan::call('db:seed'); 
         return redirect()->route('index');
     }
