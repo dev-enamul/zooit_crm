@@ -243,18 +243,42 @@ class SalseController extends Controller
             $id = decrypt($id);
             $data = Salse::find($id);
             $ref_employees = user_reporting($data->customer->ref_id);
-            $ref_users = User::whereIn('id',$ref_employees)->get(); 
+            $ref_users = User::whereIn('id',$ref_employees)->get();
+
+            $unit_type = $data?->unitCategory?->title;
+            $floor_no = $data->floor;
+            $unit_no = "";
+            if($data->select_type==1){
+                $project_unti = json_decode($data->project_units); 
+                foreach ($project_unti as $key => $value) {
+                    $unit = ProjectUnit::find($value); 
+                    if(isset($unit) && $unit!=null){
+                        if($key!=0){
+                            $unit_type .= ', ';
+                            $floor_no .= ', ';
+                            $unit_no .= ', ';  
+                        }
+                        $unit_type .= $unit->unitCategory->title;
+                        $floor_no .= $unit->floor;
+                        $unit_no .= $unit->name;
+                    }
+                }
+            }
+
+            $unit_data = [
+                'unit_type' => $unit_type,
+                'floor_no' => $floor_no,
+                'unit_no' => $unit_no,
+            ];
 
             if(!$data){
                 return redirect()->back()->with('error', 'Sales not found');
             }
-            return view('salse.salse_details',compact('data','ref_users'));
+            return view('salse.salse_details',compact('data','ref_users','unit_data'));
         }catch(Exception $e){
             return redirect()->back()->with('error', 'Invalid request');
         }
-    } 
-
-   
+    }
 
     public function get_salse_info(Request $request){
         $customer_id = $request->customer_id;

@@ -94,7 +94,7 @@
                                     </tr>  
                                 </tbody>
                             </table>
-
+ 
                             <table class="table  table-bordered dt-responsive nowrap fs-14 mb-2" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <tbody>  
                                     <tr>
@@ -110,11 +110,11 @@
                                         </td> 
 
                                         <td class="p-1">
-                                            <label class="bold-lg"> Floor No : </label> 5
-                                        </td>  
+                                            <label class="bold-lg"> Floor No : </label> {{$unit_data['floor_no']}}
+                                        </td> 
 
                                         <td class="p-1">
-                                            <label class="bold-lg"> Unit No : </label> 5
+                                            <label class="bold-lg"> Unit No : {{$unit_data['unit_no']}}</label> 
                                         </td> 
                                     </tr>  
                                 </tbody>
@@ -124,23 +124,48 @@
                                 <tbody>  
                                     <tr>
                                         <td class="p-1">
-                                            <label class="bold-lg"> Booking Money : </label> $76766</td> 
+                                            <label class="bold-lg"> Booking Money : </label> {{get_price($data->booking)}}</td> 
                                         <td class="p-1">
-                                            <label class="bold-lg"> Duration : </label> 5 December, 2023
-                                        </td>  
-                                        <td class="p-1">
-                                            <label class="bold-lg"> Type : </label> A
+                                            <label class="bold-lg"> Installment Type : </label> {{$data->installment_type}}
                                         </td> 
                                         <td class="p-1">
+                                            <label class="bold-lg"> Total Installment : </label> {{$data->total_installment}}
+                                        </td>   
+                                        <td class="p-1">
+                                            <label class="bold-lg"> Type : </label> {{$unit_data['unit_type']}}
+                                        </td> 
+                                        {{-- <td class="p-1">
                                             <label class="bold-lg"> Floor No : </label> 5
-                                        </td> 
+                                        </td>  --}}
 
                                         <td class="p-1">
-                                            <label class="bold-lg"> Choice Type : </label> Lottery
+                                            <label class="bold-lg"> Choice Type : </label> {{$data->select_type==1? 'On Choice':'Lottery'}}
                                         </td> 
                                     </tr>  
                                 </tbody>
                             </table> 
+
+                            <table class="table  table-bordered dt-responsive nowrap fs-14 mb-2 mt-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <tbody>  
+                                    @foreach ($ref_users as $ref)
+                                        @if ($ref->user_type==1)
+                                            <tr>
+                                                <td class="p-3">
+                                                    {{$ref->name}} <br>
+                                                    <label class="bold-lg">  {{$ref->employee->designation->title}} </label>
+                                                </td> 
+                                                <td class="p-3">
+                                                    <label class="bold-lg"> Installment Type : </label> {{$data->installment_type}}
+                                                </td> 
+                                                <td class="p-3">
+                                                    <label class="bold-lg"> Total Installment : </label> {{$data->total_installment}}
+                                                </td>    
+                                            </tr>  
+                                        @endif 
+                                    @endforeach 
+                                </tbody>
+                            </table> 
+
                         </div> 
                     </div>
                 </div> <!-- end col -->
