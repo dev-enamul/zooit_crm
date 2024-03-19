@@ -105,6 +105,9 @@
                                                     @endforeach
                                                 @endisset
                                             </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div>
                                                                    
@@ -117,8 +120,8 @@
                                                 </option>
                                                 @isset($customers)
                                                     @foreach ($customers as $cstm)
-                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($visit->customer_id) == $cstm->customer_id ? 'selected' : '' }}>
-                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
+                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                            {{ @$cstm->name }} ({{ $cstm->customer_id}})
                                                         </option>
                                                     @endforeach
                                                 @endisset

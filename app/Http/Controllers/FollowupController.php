@@ -57,9 +57,15 @@ class FollowupController extends Controller
         $title = 'Follow Up Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = VisitAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = VisitAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+        $customers = $customers->customer->select('id','customer_id','name');
+        } 
         $projects       = Project::where('status',1)->get(['name', 'id']);
         $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();
@@ -179,8 +185,10 @@ class FollowupController extends Controller
 
             if($follow) {
                 $visit = VisitAnalysis::where('customer_id',$request->customer)->first();
-                $visit->status = 1;
-                $visit->save();
+                if(isset($visit) && $visit != null){
+                    $visit->status = 1;
+                    $visit->save();
+                } 
             }
             
             return redirect()->route('followup.index')->with('success','Follow Up create successfully');

@@ -61,9 +61,17 @@ class PresentationAnalysisController extends Controller
         $title = 'Vist Analysis Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = Presentation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
+        
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = Presentation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+        $customers = $customers->customer->select('id','customer_id','name');
+        } 
+
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $visitors           = User::where('status', 1)
                                 ->with(['customer' => function ($query) {
@@ -133,8 +141,10 @@ class PresentationAnalysisController extends Controller
  
             if($visit) {
                 $visit = Presentation::where('customer_id',$request->customer_id)->first();
-                $visit->status = 1;
-                $visit->save();
+                if(isset($visit) && $visit!=null){
+                    $visit->status = 1;
+                    $visit->save();
+                } 
             }
             
             return redirect()->route('presentation_analysis.index')->with('success','Presentation analysis create successfully');

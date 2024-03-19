@@ -71,10 +71,16 @@ class NegotiationAnalysisController extends Controller
     {
         $title = 'Negotiation Analysis Entry';
         $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
-        $customers          = Negotiation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
+        $my_all_employee    = my_all_employee($user_id); 
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = Negotiation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+            $customers = $customers->customer->select('id','customer_id','name');
+        } 
         $projects       = Project::where('status',1)->get(['name', 'id']);
         $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();
@@ -168,8 +174,11 @@ class NegotiationAnalysisController extends Controller
 
             if($follow) {
                 $visit = Negotiation::where('customer_id',$request->customer)->first();
-                $visit->status = 1;
-                $visit->save();
+                if(isset($visit) && $visit != null){
+                    $visit->status = 1;
+                    $visit->save();
+                }
+               
             }
             
             return redirect()->route('negotiation-analysis.index')->with('success','Negotiation Analysis create successfully');

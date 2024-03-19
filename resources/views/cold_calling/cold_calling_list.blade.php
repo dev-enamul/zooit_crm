@@ -29,71 +29,73 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body"> 
-                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>S/N</th>
-                                        <th>Full Name</th>
-                                        <th>Profession</th>
-                                        <th>Upazilla/Thana</th>
-                                        <th>Union</th>
-                                        <th>Village</th>
-                                        <th>Last Prospecting</th>
-                                        <th>Project</th>
-                                        <th>Unit</th>
-                                        <th>Mobile No</th>
-                                        <th>Freelancer</th>
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    @foreach ($cold_callings as  $cold_calling)
-                                    <tr class="{{$cold_calling->approve_by==null?"table-warning":""}}">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{@$cold_calling->customer->user->image()}}">
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    @if ($cold_calling->approve_by==null)
-                                                        @can('cold-calling-manage')
-                                                            <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>   
+                            <div class="table-box">
+                                <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>S/N</th>
+                                            <th>Full Name</th>
+                                            <th>Profession</th>
+                                            <th>Upazilla/Thana</th>
+                                            <th>Union</th>
+                                            <th>Village</th>
+                                            <th>Last Prospecting</th>
+                                            <th>Project</th>
+                                            <th>Unit</th>
+                                            <th>Mobile No</th>
+                                            <th>Freelancer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        @foreach ($cold_callings as  $cold_calling)
+                                        <tr class="{{$cold_calling->approve_by==null?"table-warning":""}}">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{@$cold_calling->customer->user->image()}}">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated"> 
+                                                        @if ($cold_calling->approve_by==null)
+                                                            @can('cold-calling-manage')
+                                                                <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>   
+                                                            @endcan 
+                                                        @endif 
+                                                        
+                                                        @can('cold-calling-delete')
+                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('cold_calling.delete',$cold_calling->id) }}')">Delete</a>  
                                                         @endcan 
-                                                    @endif 
-                                                    
-                                                    @can('cold-calling-delete')
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('cold_calling.delete',$cold_calling->id) }}')">Delete</a>  
-                                                    @endcan 
-                                                    
-                                                    @if ($cold_calling->approve_by!=null) 
-                                                        @can('lead-manage')
-                                                            <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
-                                                        @endcan 
-                                                    @endif 
-                                                    <a class="dropdown-item" href="{{route('customer.details', encrypt($cold_calling->customer_id))}}">Print Customer</a>
-                                                   
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td class="">{{ $loop->iteration }}</td>
-                                        <td class="">{{ @$cold_calling->customer->name }} [{{ @$cold_calling->customer->customer_id }}]</td>
-                                        <td class="">{{ @$cold_calling->customer->profession->name }}</td>
-                                        <td class="">{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
-                                        <td class="">{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
-                                        <td class="">{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
-                                        @php
-                                            $prospecting = \App\Models\Prospecting::where('customer_id',$cold_calling->customer->id)->first();
-                                            $last_prospecting = $prospecting->updated_at;
-                                        @endphp
-                                        <td class="">{{ get_date($last_prospecting) }}</td>
-                                        <td class="">{{ @$cold_calling->project->name }}</td>
-                                        <td class=""> {{@$cold_calling->unit->title }} </td>
-                                        <td class="">{{ @$cold_calling->customer->user->phone }}</td>
-                                        <td class="">{{ @$cold_calling->customer->reference->name }} [{{ @$cold_calling->customer->reference->user_id }}]</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                        
+                                                        @if ($cold_calling->approve_by!=null) 
+                                                            @can('lead-manage')
+                                                                <a class="dropdown-item" href="{{route('lead.create',['customer' => $cold_calling->customer->id])}}">Lead</a>
+                                                            @endcan 
+                                                        @endif 
+                                                        <a class="dropdown-item" href="{{route('customer.details', encrypt($cold_calling->customer_id))}}">Print Customer</a>
+                                                       
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td class="">{{ $loop->iteration }}</td>
+                                            <td class="">{{ @$cold_calling->customer->name }} [{{ @$cold_calling->customer->customer_id }}]</td>
+                                            <td class="">{{ @$cold_calling->customer->profession->name }}</td>
+                                            <td class="">{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
+                                            <td class="">{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
+                                            <td class="">{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
+                                            @php
+                                                $prospecting = \App\Models\Prospecting::where('customer_id',$cold_calling->customer->id)->first();
+                                                $last_prospecting = $prospecting?->created_at??$prospecting?->updated_at;
+                                            @endphp
+                                            <td class="">{{ get_date($last_prospecting) }}</td>
+                                            <td class="">{{ @$cold_calling->project->name }}</td>
+                                            <td class=""> {{@$cold_calling->unit->title }} </td>
+                                            <td class="">{{ @$cold_calling->customer->user->phone }}</td>
+                                            <td class="">{{ @$cold_calling->customer->reference->name }} [{{ @$cold_calling->customer->reference->user_id }}]</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div> <!-- end col -->

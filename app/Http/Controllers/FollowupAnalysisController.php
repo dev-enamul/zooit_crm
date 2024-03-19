@@ -53,9 +53,16 @@ class FollowupAnalysisController extends Controller
         $title = 'Follow Up Analysis Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = FollowUp::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = FollowUp::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+        $customers = $customers->customer->select('id','customer_id','name');
+        }
+         
         $projects       = Project::where('status',1)->get(['name', 'id']);
         $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees          = User::whereIn('id', $my_all_employee)->get();
@@ -145,7 +152,7 @@ class FollowupAnalysisController extends Controller
             $follow->decision_maker_opinion = $request->decision_maker_opinion;
 
             $approve_setting = ApproveSetting::where('name','follow_up_analysis')->first();  
-            $is_admin = Auth::user()->hasPermission('admin'); 
+            $is_admin = Auth::user()->hasPermission('admin');
             if($approve_setting?->status == 0 || $is_admin){ 
                 $follow->approve_by = auth()->user()->id;
             }
@@ -157,8 +164,10 @@ class FollowupAnalysisController extends Controller
 
             if($follow) {
                 $visit = FollowUp::where('customer_id',$request->customer)->first();
-                $visit->status = 1;
-                $visit->save();
+                if(isset($visit) && $visit != null){
+                    $visit->status = 1;
+                    $visit->save();
+                } 
             }
             
             return redirect()->route('followup-analysis.index')->with('success','Follow Up Analysis create successfully');

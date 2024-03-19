@@ -61,10 +61,16 @@ class PresentationController extends Controller
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
         $units              = Unit::select('id','title')->get();
-
-        $cstmrs             = LeadAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
+ 
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = LeadAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+        $customers = $customers->customer->select('id','customer_id','name');
+        } 
         $employees          = User::whereIn('id', $my_all_employee)->get();
 
         $selected_data = 
@@ -75,7 +81,7 @@ class PresentationController extends Controller
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
         }
-        return view('presentation.presentation_save',compact('title','cstmrs','priorities','projects','units','employees','selected_data'));
+        return view('presentation.presentation_save',compact('title','customers','priorities','projects','units','employees','selected_data'));
     }
 
     public function customer_data(Request $request){
@@ -131,8 +137,10 @@ class PresentationController extends Controller
 
             if($presentation) {
                 $lead_analysis = LeadAnalysis::where('customer_id',$request->customer)->first();
-                $lead_analysis->status = 1;
-                $lead_analysis->save();
+                if(isset($lead_analysis) && $lead_analysis != null){
+                    $lead_analysis->status = 1;
+                    $lead_analysis->save();
+                } 
             }
             return redirect()->route('presentation.index')->with('success','Presentation create successfully');
         }

@@ -89,7 +89,7 @@
 
                                         @php
                                             $last_analysis = \App\Models\LeadAnalysis::where('customer_id',$presentation->customer_id)->first(); 
-                                            $last_analysis= $last_analysis->updated_at?? $last_analysis->created_at;
+                                            $last_analysis= $last_analysis?->updated_at?? $last_analysis?->created_at;
                                         @endphp 
                                         <td class="">{{ get_date($last_analysis) }}</td>
                                         <td class="">{{ @$presentation->project->name }}</td>

@@ -74,16 +74,23 @@ class LeadAnalysisController extends Controller
         $title = 'Lead Analysis Entry';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
-        $cstmrs             = Lead::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                $q->whereIn('ref_id',$my_all_employee);
-                            })->get();
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = Lead::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+            $customers = $customers->customer->select('id','customer_id','name');
+        }  
+         
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get(); 
         $employees          = User::whereIn('id', $my_all_employee)->where('status',1)->get();
         $selected_data['customer'] = $request->customer;
         $selected_data['employee'] = Auth::user()->id;
 
-        return view('lead_analysis.lead_analysis_save',compact('title','cstmrs','projects','units','employees','selected_data'));
+        return view('lead_analysis.lead_analysis_save',compact('title','customers','projects','units','employees','selected_data'));
     }
 
     public function customer_data(Request $request){
@@ -186,8 +193,10 @@ class LeadAnalysisController extends Controller
                 'created_at'           => now(),
             ]);
             $lead = Lead::where('customer_id',$request->customer)->first();
-            $lead->status = 1;
-            $lead->save();
+            if(isset($lead) && $lead!=null){
+                $lead->status = 1;
+                $lead->save();
+            } 
             return redirect()->route('lead-analysis.index')->with('success','Lead Analysis create successfully');
         }
     }

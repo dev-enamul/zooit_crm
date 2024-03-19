@@ -78,10 +78,16 @@ class LeadController extends Controller
         $title = 'Lead Entry';
         $user_id   = Auth::user()->id; 
         $my_all_employee = my_all_employee($user_id);
-        $cstmrs             = ColdCalling::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
 
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = ColdCalling::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+            $customers = $customers->customer->select('id','customer_id','name');
+        }  
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
@@ -95,7 +101,7 @@ class LeadController extends Controller
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
         }
-        return view('lead.lead_save', compact('cstmrs','priorities','title','projects','units','selected_data','employees'));
+        return view('lead.lead_save', compact('customers','priorities','title','projects','units','selected_data','employees'));
     } 
 
     public function customer_data(Request $request){
@@ -152,8 +158,10 @@ class LeadController extends Controller
 
             if($lead) {
                 $cold_calling = ColdCalling::where('customer_id',$request->customer)->first();
-                $cold_calling->status = 1;
-                $cold_calling->save();
+                if(isset($cold_calling) && $cold_calling != null){
+                    $cold_calling->status = 1;
+                    $cold_calling->save();
+                } 
             }
             return redirect()->route('lead.index')->with('success','Lead create successfully');
         }

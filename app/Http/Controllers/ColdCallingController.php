@@ -81,10 +81,15 @@ class ColdCallingController extends Controller
         $title = 'Cold Calling Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $is_admin = Auth::user()->hasPermission('admin');
-        $cstmrs             = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                $q->whereIn('ref_id',$my_all_employee);
-                              })->get();
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+              })->get();
+            $customers = $customers->customer->select('id','customer_id','name');
+        }  
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
@@ -98,7 +103,7 @@ class ColdCallingController extends Controller
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
         }
-        return view('cold_calling.cold_calling_save',compact('title','cstmrs','priorities','projects','units','selected_data','employees'));
+        return view('cold_calling.cold_calling_save',compact('title','customers','priorities','projects','units','selected_data','employees'));
     }
 
     public function save(Request $request, $id = null)
@@ -152,8 +157,10 @@ class ColdCallingController extends Controller
             if($cold_call) {
                 $prospecting = Prospecting::where('customer_id',$request->customer)->first();
              
-                $prospecting->status = 1;
-                $prospecting->save();
+                if(isset($prospecting) && $prospecting != null){
+                    $prospecting->status = 1;
+                    $prospecting->save();
+                } 
             }
             return redirect()->route('cold-calling.index')->with('success','Cold Calling create successfully');
         }

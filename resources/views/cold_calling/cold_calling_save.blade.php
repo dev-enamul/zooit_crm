@@ -53,11 +53,13 @@
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>
-                                                @foreach ($cstmrs as $cstm)
-                                                    <option value="{{ $cstm->customer->id }}" {{ isset($selected_data['customer']) || isset($cold_calling->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                        {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
-                                                    </option>
-                                                @endforeach
+                                                @isset($customers)
+                                                    @foreach ($customers as $cstm)
+                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->id ? 'selected' : '' }}>
+                                                            {{ @$cstm->name }} ({{ $cstm->customer_id}})
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.

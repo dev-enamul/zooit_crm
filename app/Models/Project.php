@@ -31,7 +31,7 @@ class Project extends Model
     ];
 
     public function image(){
-        $image = $this->images()->first()->name;
+        $image = $this?->images()?->first()?->name;
         $imagePath = 'public/'.$image;  
         if($image != null && $image != '' && Storage::exists($imagePath)){
            return asset('storage/'.$image);

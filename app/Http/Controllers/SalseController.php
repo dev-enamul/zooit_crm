@@ -47,9 +47,15 @@ class SalseController extends Controller
         $title              = 'Sales Entry';
         $user_id            = Auth::user()->id; 
         $my_all_employee    = my_all_employee($user_id);
-        $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get(); 
+        $is_admin = Auth::user()->hasPermission('admin'); 
+        if($is_admin){
+            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
+        }else{
+            $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })->get();
+            $customers = $customers->customer->select('id','customer_id','name');
+        } 
 
         $projects           = Project::where('status',1)->get(['name', 'id']);
         $projectUnits       = ProjectUnit::where('status', 1)->get(['name', 'id']);

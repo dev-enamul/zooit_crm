@@ -64,7 +64,11 @@
                                                         @endif
                                                         @can('follow-up-delete')
                                                             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followUp.delete',$followUp->id) }}')">Delete</a> 
-                                                        @endcan
+                                                        @endcan 
+                                                        @if ($followUp->statis==0)
+                                                            <a class="dropdown-item" href="{{route('followup.create',['customer' => $followUp->customer_id])}}">Follow Up Again</a>
+                                                        @endif
+                                                        
                                                         
                                                         @if ($followUp->approve_by!=null) 
                                                             @can('follow-up-analysis-manage')

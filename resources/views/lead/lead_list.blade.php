@@ -30,89 +30,91 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body"> 
-                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>S/N</th>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Profession</th>
-                                        <th>Upazilla/Thana</th>
-                                        <th>Union</th>
-                                        <th>Village</th>
-                                        <th>Maritial</th>
-                                        <th>CC Call</th>
-                                        <th>Project</th>
-                                        <th>Unit</th>
-                                        <th>Capacity</th>
-                                        <th>PP Date</th>
-                                        <th>Mobile</th>
-                                        <th>Freelancer</th> 
-                                    </tr>
-                                </thead>
-                               
-                                <tbody> 
-                                    @foreach ($leads as  $lead)
-                                    <tr class="{{$lead->approve_by==null?"table-warning":""}}">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{@$lead->customer->user->image()}}">
-                                                </a> 
-                                                <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    @if ($lead->approve_by==null)
-                                                        @can('lead-manage')
-                                                            <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
-                                                        @endcan 
-                                                    @endif 
-
-                                                    @can('lead-delete')
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$lead->id) }}')">Delete</a>  
-                                                    @endcan
-                                                    
-                                                    @if ($lead->approve_by!=null)
-                                                        @can('lead-analysis')
-                                                            <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $lead->customer->id])}}">Lead Analysis Form</a>
-                                                        @endcan 
-                                                    @endif  
-                                                    <a class="dropdown-item" href="{{route('customer.details', encrypt($lead->customer_id))}}">Print Customer</a>
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td class="">{{ $loop->iteration }}</td>
-                                        <td class="">{{ get_date($lead->created_at) }}</td>
-                                        <td class="">{{ @$lead->customer->name }} {{ @$lead->customer->customer_id }}</td>
-                                        <td class="">{{ @$lead->customer->profession->name }}</td>
-                                        <td class="">{{ @$lead->customer->user->userAddress->upazila->name }}</td>
-                                        <td class="">{{ @$lead->customer->user->userAddress->union->name }}</td>
-                                        <td class="">{{ @$lead->customer->user->userAddress->village->name }}</td>
-                                        <td class="">{{ @$lead->customer->user->marital_status }}</td>
-
-                                        @php
-                                            $cold_calling = \App\Models\ColdCalling::where('customer_id',$lead->customer_id)->first(); 
-                                            $last_cold_calling = $cold_calling->updated_at?? $cold_calling->created_at;
-                                        @endphp
-
-                                        <td class="">{{ get_date($last_cold_calling) }}</td>
-                                        <td class="">{{ @$lead->project->name }}</td>
-                                        <td class="">{{ @$lead->unit->title }}</td>
-                                        <td class="text-primary">
-                                           @if ($lead->purchase_capacity ==1)
-                                               High
-                                           @elseif($lead->purchase_capacity ==2)
-                                               Regular
-                                            @else
-                                                Low
-                                           @endif
-                                        </td>
-                                        <td class="">{{ @$lead->possible_purchase_date }}</td>
-                                        <td class="">{{ @$lead->customer->user->phone }}</td>
-                                        <td class="">{{ @$lead->customer->reference->name ?? '-' }} [{{ @$lead->customer->reference->user_id }}]</td>
-                                    </tr>
-                                    @endforeach 
-                                </tbody>
-                            </table>
+                            <div class="table-box">
+                                <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>S/N</th>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Profession</th>
+                                            <th>Upazilla/Thana</th>
+                                            <th>Union</th>
+                                            <th>Village</th>
+                                            <th>Maritial</th>
+                                            <th>CC Call</th>
+                                            <th>Project</th>
+                                            <th>Unit</th>
+                                            <th>Capacity</th>
+                                            <th>PP Date</th>
+                                            <th>Mobile</th>
+                                            <th>Freelancer</th> 
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody> 
+                                        @foreach ($leads as  $lead)
+                                        <tr class="{{$lead->approve_by==null?"table-warning":""}}">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{@$lead->customer->user->image()}}">
+                                                    </a> 
+                                                    <div class="dropdown-menu dropdown-menu-animated"> 
+                                                        @if ($lead->approve_by==null)
+                                                            @can('lead-manage')
+                                                                <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
+                                                            @endcan 
+                                                        @endif 
+    
+                                                        @can('lead-delete')
+                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$lead->id) }}')">Delete</a>  
+                                                        @endcan
+                                                        
+                                                        @if ($lead->approve_by!=null)
+                                                            @can('lead-analysis')
+                                                                <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $lead->customer->id])}}">Lead Analysis Form</a>
+                                                            @endcan 
+                                                        @endif  
+                                                        <a class="dropdown-item" href="{{route('customer.details', encrypt($lead->customer_id))}}">Print Customer</a>
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td class="">{{ $loop->iteration }}</td>
+                                            <td class="">{{ get_date($lead->created_at) }}</td>
+                                            <td class="">{{ @$lead->customer->name }} {{ @$lead->customer->customer_id }}</td>
+                                            <td class="">{{ @$lead->customer->profession->name }}</td>
+                                            <td class="">{{ @$lead->customer->user->userAddress->upazila->name }}</td>
+                                            <td class="">{{ @$lead->customer->user->userAddress->union->name }}</td>
+                                            <td class="">{{ @$lead->customer->user->userAddress->village->name }}</td>
+                                            <td class="">{{ @$lead->customer->user->marital_status }}</td>
+    
+                                            @php
+                                                $cold_calling = \App\Models\ColdCalling::where('customer_id',$lead->customer_id)->first(); 
+                                                $last_cold_calling = $cold_calling?->updated_at?? $cold_calling?->created_at;
+                                            @endphp
+    
+                                            <td class="">{{ get_date($last_cold_calling) }}</td>
+                                            <td class="">{{ @$lead->project->name }}</td>
+                                            <td class="">{{ @$lead->unit->title }}</td>
+                                            <td class="text-primary">
+                                               @if ($lead->purchase_capacity ==1)
+                                                   High
+                                               @elseif($lead->purchase_capacity ==2)
+                                                   Regular
+                                                @else
+                                                    Low
+                                               @endif
+                                            </td>
+                                            <td class="">{{ @$lead->possible_purchase_date }}</td>
+                                            <td class="">{{ @$lead->customer->user->phone }}</td>
+                                            <td class="">{{ @$lead->customer->reference->name ?? '-' }} [{{ @$lead->customer->reference->user_id }}]</td>
+                                        </tr>
+                                        @endforeach 
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div> <!-- end col -->
