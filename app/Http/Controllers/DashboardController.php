@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\Deposit;
 use App\Models\DepositTarget;
 use App\Models\Designation;
+use App\Models\DesignationPermission;
 use App\Models\Task as ModelsTask;
 use App\Models\District;
 use App\Models\Division;
@@ -40,7 +41,10 @@ class DashboardController extends Controller
     //     return $dataTable->render('displaydata');
     // }
     
-    public function index(){
+    public function index(){ 
+        $data = DesignationPermission::select('designation_id', 'permission_id')->where('designation_id','11')->get()->toArray();
+
+        return $data;
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;

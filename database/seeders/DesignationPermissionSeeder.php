@@ -13,6 +13,12 @@ class DesignationPermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = Permission::all();
+        $data = [
+            [
+                'designation_id' => 1,
+                'permission_id' => 1,
+            ]
+        ];
         foreach ($permissions as $permission){
             DesignationPermission::create([
                 'designation_id'=> 1, 

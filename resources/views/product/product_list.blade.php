@@ -47,7 +47,7 @@
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{asset('storage/projects/1710824268_305583403_3102940796683872_1281535887396992525_n.jpg')}}" alt="Header Avatar">
+                                                    <img class="rounded avatar-2xs p-0" src="{{asset($project->image())}}" alt="Header Avatar">
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-animated"> 
                                                     <a class="dropdown-item" href="{{route('product.edit',$project->id)}}">Edit</a>
@@ -57,7 +57,7 @@
                                                 </div>
                                             </div> 
                                         </td> 
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration}} </td>
                                         <td>{{ @$project->name }}</td>
                                         <td>{{ @$project->address }}</td>
                                         <td>{{ @$project->total_floor}}</td>

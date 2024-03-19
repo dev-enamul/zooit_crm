@@ -89,8 +89,7 @@ class ProductController extends Controller
                 $info->updated_by       = $user_id;
                 DB::beginTransaction();
                 try {
-                    $info->save();
-
+                    $info->save(); 
                     if ($request->hasFile('image')) {
                         $p_images = new ProjectImage();
                         $p_images->project_id = $info->id;

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -49,15 +50,17 @@ class User extends Authenticatable
     ]; 
 
     protected $dates = ['deleted_at'];
-
+ 
     public function image(){
-         $image = $this->profile_image;
-         if($image != null && $image != '' && file_exists('storage/'.$image)){
-            return asset('storage/'.$image);
-         }else{
-            return asset('../assets/images/users/avatar-6.png');
-         }
-    } 
+        $image = $this->profile_image;
+        $imagePath = 'public/'.$image;  
+        if($image != null && $image != '' && Storage::exists($imagePath)){
+           return asset('storage/'.$image);
+        }else{
+           return asset('../assets/images/users/avatar-6.png');
+        }
+   }
+
 
     public function profession()
     {
