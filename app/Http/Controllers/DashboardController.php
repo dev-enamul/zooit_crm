@@ -42,7 +42,7 @@ class DashboardController extends Controller
     // }
     
     public function index(){ 
-        $data = DesignationPermission::select('designation_id', 'permission_id')->where('designation_id','2')->get()->toArray();
+        $data = DesignationPermission::select('designation_id', 'permission_id')->where('designation_id','15')->get()->toArray();
 
         return $data;
         $user= User::find(Auth::id());
