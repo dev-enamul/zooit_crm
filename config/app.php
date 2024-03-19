@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Way Housing Pvt. Ltd'),
+    'name' => 'Way Housing Pvt. Ltd',
 
     /*
     |--------------------------------------------------------------------------
