@@ -36,48 +36,28 @@ class CommissionSeeder extends Seeder
                 'status' => 1,
             ],
             [
-                'title' => 'Excutive Marketing',
+                'title' => 'Incharge Marketing',
                 'commission' => 0.4,
                 'status' => 1,
-            ],
+            ], 
             [
-                'title' => 'Junior Executive',
-                'commission' => 0,
-                'status' => 1,
-            ],
-            [
-                'title' => 'Sales Executive to DSM',
+                'title' => 'Incharge Sales to DSM',
                 'commission' => 1.1,
                 'status' => 1,
             ],
             [
                 'title' => 'Area Incharge',
-                'commission' => 0.6,
-                'status' => 1,
-            ],
-            [
-                'title' => 'Asst. Zonal Manager',
-                'commission' => 0.2,
+                'commission' => 0.5,
                 'status' => 1,
             ],
             [
                 'title' => 'Zonal Manager',
-                'commission' => 0.2,
-                'status' => 1,
-            ],
-            [
-                'title' => 'Senior Zonal Manager',
-                'commission' => 0.2,
-                'status' => 1,
-            ],
-            [
-                'title' => 'Zonal Co-Ordinator',
                 'commission' => 0,
                 'status' => 1,
-            ],
+            ],  
             [
                 'title' => 'Regional Manager',
-                'commission' => 0.15,
+                'commission' => 0.2,
                 'status' => 1,
             ],
             [
@@ -86,8 +66,18 @@ class CommissionSeeder extends Seeder
                 'status' => 1,
             ],
             [
-                'title' => 'A.G.M',
-                'commission' => 0,
+                'title' => 'A.G.M, Marketing',
+                'commission' => .15,
+                'status' => 1,
+            ],
+            [
+                'title' => 'A.G.M, Sales',
+                'commission' => .15,
+                'status' => 1,
+            ],
+            [
+                'title' => 'A.G.M (S & M)',
+                'commission' => .1,
                 'status' => 1,
             ],
             [
@@ -97,7 +87,17 @@ class CommissionSeeder extends Seeder
             ],
             [
                 'title' => 'G.M',
-                'commission' => 0.1,
+                'commission' => 0,
+                'status' => 1,
+            ],
+            [
+                'title' => 'M.D',
+                'commission' => 0,
+                'status' => 1,
+            ],
+            [
+                'title' => 'Ziro Commission',
+                'commission' => 0,
                 'status' => 1,
             ]
         ];  
