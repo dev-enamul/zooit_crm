@@ -26,6 +26,7 @@ return new class extends Migration
             $table->tinyInteger('blood_group')->nullable()->comment('1 = A+, 2 = A-, 3 = B+, 4 = B-, 5 = AB+, 6 = AB-, 7 = O+, 8 = O-');
             $table->tinyInteger('gender')->nullable()->comment('1= "Male" 2= "Female", 3= "Others"');
             $table->tinyInteger('nationality')->nullable()->comment('1= Bangladeshi, 0= Indian');
+            $table->string('signature')->nullable();
             
 
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
