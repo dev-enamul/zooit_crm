@@ -150,16 +150,24 @@
                                     @foreach ($ref_users as $ref)
                                         @if ($ref->user_type==1)
                                             <tr>
-                                                <td class="p-3">
-                                                    {{$ref->name}} <br>
+                                                <td class="p-2">
+                                                    {{$ref->name}} <hr>
                                                     <label class="bold-lg">  {{$ref->employee->designation->title}} </label>
                                                 </td> 
-                                                <td class="p-3">
-                                                    <label class="bold-lg"> Installment Type : </label> {{$data->installment_type}}
-                                                </td> 
-                                                <td class="p-3">
-                                                    <label class="bold-lg"> Total Installment : </label> {{$data->total_installment}}
-                                                </td>    
+                                                @php 
+                                                    $approve = \App\Models\SalseApprove::where('salse_id',$data->id)->where('user_id',$ref->id)->first(); 
+                                                @endphp
+                                                <td class="p-2">
+                                                    @if (isset($approve) && $approve !=null) 
+                                                        @if ($ref->signature()!=false)
+                                                            <img src="{{asset($ref->signature())}}" alt="" height="30px">
+                                                        @else 
+                                                            <label style="font-family: cursive"> {{$ref->name}} </label> 
+                                                        @endif  
+                                                        <hr>
+                                                            <label class="bold-lg"> {{get_date($approve->created_at)}} </label>
+                                                    @endif 
+                                                </td>  
                                             </tr>  
                                         @endif 
                                     @endforeach 

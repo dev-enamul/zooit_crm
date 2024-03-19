@@ -33,6 +33,7 @@ class User extends Authenticatable
         'gender',
         'professions_id',
         'ref_id',
+        'signature',
         'created_by',
         'updated_by',
         'deleted_by',
@@ -42,7 +43,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    
   
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -55,11 +56,21 @@ class User extends Authenticatable
         $image = $this->profile_image;
         $imagePath = 'public/'.$image;  
         if($image != null && $image != '' && Storage::exists($imagePath)){
-           return asset('storage/'.$image);
+            return asset('storage/'.$image);
         }else{
-           return asset('../assets/images/users/avatar-6.png');
+            return asset('../assets/images/users/avatar-6.png');
         }
-   }
+    }
+
+    public function signature(){
+        $image = $this->signature;
+        $imagePath = 'public/'.$image;  
+        if($image != null && $image != '' && Storage::exists($imagePath)){
+            return asset('storage/'.$image);
+        }else{
+            return false;
+        }
+    }
 
 
     public function profession()

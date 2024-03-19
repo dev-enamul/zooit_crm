@@ -72,7 +72,8 @@ class UserImport implements ToModel, WithHeadingRow
                 'status'        => 1,
                 'created_by'    => auth()->user()->id,
                 'approve_by'    => auth()->user()->id,
-                'ref_id'        => auth()->user()->id
+                'ref_id'        => auth()->user()->id,
+                'signature'     => $row['signature']? $row['signature']:null,
             ]); 
         }
         
