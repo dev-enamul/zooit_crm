@@ -43,18 +43,7 @@ class DashboardController extends Controller
     //     return $dataTable->render('displaydata');
     // }  
 
-    public function index(){ 
-        $data = Area::select('name', 'zone_id')
-        ->get()
-        ->map(function ($area) {
-            return [
-                'name' => $area->name,
-                'zone_id' => $area->zone_id,
-                'status' => 1
-            ];
-        })
-        ->toArray();
-         return $data;
+    public function index(){  
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;
@@ -263,7 +252,7 @@ class DashboardController extends Controller
 
     public function migrate_fresh(){  
         // exec('composer update');
-        // Artisan::call('migrate:fresh');
+        Artisan::call('migrate:fresh');
         Artisan::call('db:seed'); 
         return redirect()->route('index');
     }

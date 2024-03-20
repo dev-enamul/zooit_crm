@@ -33,17 +33,15 @@ class EmployeesDataTable extends DataTable
             ->addColumn('designation', function($employee){
                 $designations = json_decode($employee->employee->designations);
                 $des = '';
-                if(isset($designations) && $designations != null){
-                    foreach($designations as $key => $designation){
-                        $designation = Designation::find($designation)?->title;
+                if(isset($designations) && is_array($designations) && count($designations)>0){ 
+                    foreach($designations as $key => $des_id){
+                        $designation = Designation::find($des_id);
                         if(isset($designation) && $designation != null){
-                            if($key!=0){
-                                $des .= ', '.$designation;
-                            }else{
-                                $des .= $designation;
-                            } 
-                        }
-                        
+                            if($key > 0)
+                                $des .= ', '.$designation->title;
+                            else
+                                $des = $designation->title;
+                        } 
                     } 
                 } 
                 return $des;
@@ -68,7 +66,11 @@ class EmployeesDataTable extends DataTable
     {
         return $model->newQuery()
         ->where('user_type',1)
-        ->where('status',1);
+        ->where('status',1)
+        ->whereHas('employee',function($q){
+            $q->orderBy('serial','asc');
+        });
+        
     }
 
    

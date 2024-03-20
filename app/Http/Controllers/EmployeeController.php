@@ -247,7 +247,7 @@ class EmployeeController extends Controller
             $employee_data = [
                 'user_id'       => $user->id,
                 'designation_id'=> $request->designation,
-                'designations'  => json_encode([$request->designation]),
+                'designations'  => json_encode($request->designations),
                 'serial'        => $request->serial,
                 'status'        => 1,
                 'created_at'    => now(),
