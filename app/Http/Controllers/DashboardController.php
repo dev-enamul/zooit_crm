@@ -252,8 +252,9 @@ class DashboardController extends Controller
 
     public function migrate_fresh(){  
         // exec('composer update');
-        Artisan::call('migrate:fresh');
-        Artisan::call('db:seed'); 
+        // Artisan::call('migrate:fresh');
+        // Artisan::call('db:seed');  
+        Artisan::call('migrate');
         return redirect()->route('index');
     }
 
