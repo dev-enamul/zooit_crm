@@ -157,7 +157,8 @@ class EmployeeController extends Controller
                 'status'        => 1,
                 'created_by'    => auth()->user()->id,
                 'approve_by'    => auth()->user()->id,
-                'ref_id'        => auth()->user()->id
+                'ref_id'        => auth()->user()->id,
+                'serial'        => $request->serial,
             ]);
 
             if ($request->hasFile('profile_image')) {
@@ -247,8 +248,7 @@ class EmployeeController extends Controller
             $employee_data = [
                 'user_id'       => $user->id,
                 'designation_id'=> $request->designation,
-                'designations'  => json_encode($request->designations),
-                'serial'        => $request->serial,
+                'designations'  => json_encode($request->designations), 
                 'status'        => 1,
                 'created_at'    => now(),
             ]; 
@@ -351,7 +351,7 @@ class EmployeeController extends Controller
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required|in:1,2,3', 
-            'phone2'                    => 'nullable|string|max:15',
+            'phone1'                    => 'nullable|string|max:15',
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',
@@ -410,7 +410,8 @@ class EmployeeController extends Controller
                 'blood_group'   => $request->blood_group,
                 'gender'        => $request->gender,
                 'nationality'   => $request->nationality, 
-                'updated_by'    => auth()->user()->id,  
+                'updated_by'    => auth()->user()->id, 
+                'serial'        => $request->serial,
             ]);
 
             if ($request->hasFile('profile_image')) {
@@ -511,10 +512,7 @@ class EmployeeController extends Controller
             }else{
                 $user_documents['user_id'] = $user->id;
                 UserId::create($user_documents);
-            } 
-            $user->employee->update([ 
-                'serial'        => $request->serial, 
-            ]); 
+            }  
   
             DB::commit(); 
             return redirect()->route('employee.index')->with('success', 'Employee Updated successfully');

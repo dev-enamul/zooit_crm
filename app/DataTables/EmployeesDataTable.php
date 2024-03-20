@@ -52,7 +52,8 @@ class EmployeesDataTable extends DataTable
             ->addColumn('reporting', function($employee){
                 $reporting_user_id = @user_reporting($employee->id)[1];
                 if(isset($reporting_user_id) && $reporting_user_id != null){
-                    $reporting_user = user_info($reporting_user_id)->name;
+                    $data = user_info($reporting_user_id);
+                    $reporting_user = $data['name'].' ('.$data['user_id'].')';
                 }else{
                     $reporting_user = '-';
                 }
@@ -65,8 +66,9 @@ class EmployeesDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         return $model->newQuery()
-        ->where('users.user_type', 1)
-        ->where('users.status', 1);
+        ->where('user_type', 1)
+        ->where('status', 1)
+        ->orderBy('serial', 'asc');
     }
 
    
@@ -87,8 +89,7 @@ class EmployeesDataTable extends DataTable
  
     public function getColumns(): array
     {
-        return [
-            // Column::make('employee.serial'),
+        return [ 
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

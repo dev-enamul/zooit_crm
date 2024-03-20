@@ -74,6 +74,7 @@ class UserImport implements ToModel, WithHeadingRow
                 'approve_by'    => auth()->user()->id,
                 'ref_id'        => auth()->user()->id,
                 'signature'     => $row['signature']? $row['signature']:null,
+                'serial'        => $row['serial'],
             ]); 
         }
         
@@ -148,8 +149,7 @@ class UserImport implements ToModel, WithHeadingRow
             $employee_data = [
                 'user_id'       => $user->id,
                 'designation_id'=> $row['designation_id'],
-                'designations'  => json_encode([$row['designation_id']]),
-                'serial'        => $row['serial'],
+                'designations'  => json_encode([$row['designation_id']]), 
                 'status'        => 1,
                 'created_at'    => now(),
             ]; 
