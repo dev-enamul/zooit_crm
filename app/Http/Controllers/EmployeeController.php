@@ -352,6 +352,7 @@ class EmployeeController extends Controller
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required|in:1,2,3', 
             'phone2'                    => 'nullable|string|max:15',
+            'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',
             'imo_whatsapp_number'       => 'nullable|string',
@@ -401,7 +402,7 @@ class EmployeeController extends Controller
         try { 
             $user->update([ 
                 'name'          => $request->full_name,
-                // 'phone'         => get_phone($request->phone1),  
+                'phone'         => get_phone($request->phone1),  
                 'marital_status'=> $request->marital_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),
                 'finger_id'     => $request->card_id,
@@ -511,7 +512,9 @@ class EmployeeController extends Controller
                 $user_documents['user_id'] = $user->id;
                 UserId::create($user_documents);
             } 
-             
+            $user->employee->update([ 
+                'serial'        => $request->serial, 
+            ]); 
   
             DB::commit(); 
             return redirect()->route('employee.index')->with('success', 'Employee Updated successfully');

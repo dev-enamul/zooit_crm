@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('designations')->nullable(); // just for show in profile
 
             $table->string('change_reason_document')->nullable();
-            $table->float('serial', 8, 2)->nullable();
+            $table->integer('serial')->nullable();
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->softDeletes();
             $table->timestamps();

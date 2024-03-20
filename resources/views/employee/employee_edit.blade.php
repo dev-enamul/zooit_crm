@@ -167,7 +167,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone1" class="form-label">Mobile Number 1 <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ isset($employee) ? $employee->user->phone : old('phone1') }}" readonly>
+                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ isset($employee) ? $employee->user->phone : old('phone1') }}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -448,7 +448,13 @@
                                             <label for="tin_number" class="form-label">TIN Number</label>
                                             <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="TIN Number" value="{{isset($employee) ? @$employee->user->userId->tin_number : old('tin_number')}}"> 
                                         </div>
-                                    </div>  
+                                    </div> 
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="serial" class="form-label">Serial <span class="text-danger">*</span></label>
+                                            <input type="number" name="serial" id="serial" class="form-control" step="any" placeholder="Enter Serial" value="{{old('serial',$employee->serial)}}" required> 
+                                        </div>
+                                    </div>
                                 </div>
                                   
                                 <div>

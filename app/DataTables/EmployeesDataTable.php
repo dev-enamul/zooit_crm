@@ -65,12 +65,8 @@ class EmployeesDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         return $model->newQuery()
-        ->where('user_type',1)
-        ->where('status',1)
-        ->whereHas('employee',function($q){
-            $q->orderBy('serial','asc');
-        });
-        
+        ->where('users.user_type', 1)
+        ->where('users.status', 1);
     }
 
    
@@ -92,6 +88,7 @@ class EmployeesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            // Column::make('employee.serial'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

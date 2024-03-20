@@ -33,6 +33,7 @@ class User extends Authenticatable
         'gender',
         'professions_id',
         'ref_id',
+        'serial',
         'signature',
         'created_by',
         'updated_by',
