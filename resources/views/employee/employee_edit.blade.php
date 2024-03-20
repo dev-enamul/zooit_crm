@@ -452,7 +452,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="serial" class="form-label">Serial <span class="text-danger">*</span></label>
-                                            <input type="number" name="serial" id="serial" class="form-control" step="any" placeholder="Enter Serial" value="{{old('serial',$employee->serial)}}" required> 
+                                            <input type="number" name="serial" id="serial" class="form-control" step="any" placeholder="Enter Serial" value="{{old('serial',$employee->user->serial)}}" required> 
                                         </div>
                                     </div>
                                 </div>
