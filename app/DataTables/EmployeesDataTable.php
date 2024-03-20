@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
@@ -30,7 +31,22 @@ class EmployeesDataTable extends DataTable
                 return $employee->userContact->office_email??$employee->userContact->personal_email??"-";
             }) 
             ->addColumn('designation', function($employee){
-                return $employee?->employee?->designation?->title??"-";
+                $designations = json_decode($employee->employee->designations);
+                $des = '';
+                if(isset($designations) && $designations != null){
+                    foreach($designations as $key => $designation){
+                        $designation = Designation::find($designation)?->title;
+                        if(isset($designation) && $designation != null){
+                            if($key!=0){
+                                $des .= ', '.$designation;
+                            }else{
+                                $des .= $designation;
+                            } 
+                        }
+                        
+                    } 
+                } 
+                return $des;
             })
             ->addColumn('area', function($employee){
                 return  $employee?->userAddress?->area?->name??"-";
@@ -52,8 +68,7 @@ class EmployeesDataTable extends DataTable
     {
         return $model->newQuery()
         ->where('user_type',1)
-        ->where('status',1)
-        ->latest();
+        ->where('status',1);
     }
 
    

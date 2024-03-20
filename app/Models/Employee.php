@@ -16,6 +16,8 @@ class Employee extends Model
         'reporting_id',
         'reporting_person_id',
         'designation_id',
+        'designations',
+        'serial',
         'zone_id',
         'area_id',
         'status',

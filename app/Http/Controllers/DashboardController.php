@@ -6,6 +6,7 @@ use App\DataTables\CustomersDataTable;
 use App\DataTables\EmployeesDataTable;
 use App\DataTables\FreelancersDataTable;
 use App\DataTables\UsersDataTable;
+use App\Models\Area;
 use App\Models\Bank;
 use App\Models\ColdCalling;
 use App\Models\Customer;
@@ -43,7 +44,16 @@ class DashboardController extends Controller
     // }  
 
     public function index(){ 
-         $data = Zone::pluck('name')->toArray(); 
+        $data = Area::select('name', 'zone_id')
+        ->get()
+        ->map(function ($area) {
+            return [
+                'name' => $area->name,
+                'zone_id' => $area->zone_id,
+                'status' => 1
+            ];
+        })
+        ->toArray();
          return $data;
         $user= User::find(Auth::id());
         if($user->user_type==1){
@@ -61,7 +71,7 @@ class DashboardController extends Controller
 
         $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
                     ->whereDate('date', today())
-                    ->first(); 
+                    ->first();
                     
         $field_target = FieldTarget::where('assign_to', auth()->user()->id)
                     ->whereMonth('month', today())

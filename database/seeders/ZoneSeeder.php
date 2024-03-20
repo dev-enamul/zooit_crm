@@ -14,20 +14,26 @@ class ZoneSeeder extends Seeder
     public function run(): void
     {
         DB::table('zones')->delete();
-        $data = [ 
-            [
-                'name'=>'Dhaka',
+        $data= [
+                "Dhaka",
+                "Dinajpur",
+                "Noakhali",
+                "Lakshmipur",
+                "Jessore",
+                "Narayangonj",
+                "Cumilla",
+                "Chandpur",
+                "Feni",
+                "Chattogram"
+            ];
+        $datas = []; 
+        
+        foreach($data as $zone){
+            $datas[] = [
+                'name' => $zone,
                 'status' => 1
-            ],
-            [
-                'name'=>'Rajshahi',
-                'status' => 1
-            ],
-            [
-                'name'=>'Naogaon',
-                'status' => 1,
-            ]
-        ];
-        DB::table('zones')->insert($data);
+            ];
+        }
+        DB::table('zones')->insert($datas);
     }
 }

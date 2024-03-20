@@ -416,7 +416,24 @@
                                     <hr>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="designation" class="form-label">Designation <span class="text-danger">*</span></label>
+                                        <label for="designations" class="form-label">Designations <span class="text-danger">*</span></label>
+                                        <select class="form-select select2" search multiple name="designations[]" id="designations" required>
+                                            <option value=""> Select a Designation</option>
+                                            @isset($designations)
+                                                @foreach ($designations as $designation)
+                                                    <option value="{{ $designation->id }}" {{ in_array($designation->id, (array) old('designations')) ? 'selected' : '' }}>
+                                                        {{ $designation->title }}
+                                                    </option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div> 
+                                    </div> 
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="designation" class="form-label">Commission Designation <span class="text-danger">*</span></label>
                                         <select class="form-select select2" search name="designation" id="designation" required>
                                             <option value=""> Select a Designation</option>
                                             @isset($designations)
@@ -429,13 +446,7 @@
                                         </select> 
                                         <div class="invalid-feedback">
                                             This field is required.
-                                        </div>
-                                        
-                                        @if ($errors->has('zone'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('zone') }}
-                                            </span>
-                                        @endif
+                                        </div> 
                                     </div>
 
                                     <div class="col-md-6 mb-3">
@@ -452,9 +463,16 @@
                                         </select> 
                                         <div class="invalid-feedback">
                                             This field is required.
-                                        </div>
-                                         
+                                        </div> 
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="serial" class="form-label">Serial <span class="text-danger">*</span></label>
+                                            <input type="text" name="serial" id="serial" class="form-control" step="any" placeholder="Enter Serial" value="{{old('serial')}}" required> 
+                                        </div>
+                                    </div>
+
 
                                     <div class="col-md-6 mb-3">
                                         <label for="zone" class="form-label">Zone</label>
@@ -462,7 +480,7 @@
                                             <option data-display="Select a Zone" value=""> Select a Zone</option>
                                             @isset($zones)
                                                 @foreach ($zones as $zone)
-                                                    <option area="{{json_encode($zone->areas)}}" value="{{ $zone->id }}" {{ old('zone') == $zone->id ? 'selected' : '' }}>
+                                                    <option  value="{{ $zone->id }}" {{ old('zone') == $zone->id ? 'selected' : '' }}>
                                                         {{ $zone->name }}
                                                     </option>
                                                 @endforeach
