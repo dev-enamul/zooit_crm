@@ -81,8 +81,8 @@ class EmployeesDataTable extends DataTable
                   ->width(60)
                   ->addClass('text-center'),
             Column::make('serial')->title('S/N')->exportable(true), 
-            Column::make('name')->title('Name')->searchable(true),
             Column::make('user_id')->title('Emp ID')->searchable(true),
+            Column::make('name')->title('Name')->searchable(true), 
             Column::make('phone')->searchable(true),
             Column::make('email'),
             Column::make('designation'), 

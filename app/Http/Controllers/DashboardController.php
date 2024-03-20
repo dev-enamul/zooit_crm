@@ -28,6 +28,7 @@ use App\Models\Union;
 use App\Models\Upazila;
 use App\Models\User;
 use App\Models\Village;
+use App\Models\Zone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -39,9 +40,11 @@ class DashboardController extends Controller
     // public function create(CustomersDataTable $dataTable)
     // { 
     //     return $dataTable->render('displaydata');
-    // }
-    
+    // }  
+
     public function index(){ 
+         $data = Zone::pluck('name')->toArray(); 
+         return $data;
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;
