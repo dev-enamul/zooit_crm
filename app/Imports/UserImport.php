@@ -148,6 +148,7 @@ class UserImport implements ToModel, WithHeadingRow
             $employee_data = [
                 'user_id'       => $user->id,
                 'designation_id'=> $row['designation_id'],
+                'designations'  => json_encode($row['designation_id']),
                 'status'        => 1,
                 'created_at'    => now(),
             ]; 
