@@ -352,7 +352,10 @@
             getUnitPrice();
             getBookingAndDownPayment();
             calculateInstallmentAmount();
-            showHideUnitName();
+            showHideUnitName(); 
+
+            $('#rest_down_payment_date').closest('.col-md-6').prop('required', false);
+            $('#rest_down_payment_date').closest('.col-md-6').hide();
 
             $('#unit').on('change', function() {
                 getUnitPrice();
@@ -377,10 +380,6 @@
 
             $('#unit_price').on('change', function() {
                 getTotalRegularAmount();
-            });
-
-            $('#down_payment_pay').on('input', function() {
-                    downPaymentDue();
             }); 
 
             $('#installment_type, #payment_duration, #sold_value, #select_type, #total_installment_payment').on('change input keyup', function() {
@@ -441,12 +440,7 @@
                 }
         }
 
-        function downPaymentDue(){
-                var down_payment = parseFloat($('#down_payment').val()) || 0;
-                var down_payment_pay = parseFloat($('#down_payment_pay').val()) || 0;
-                var due = down_payment - down_payment_pay;
-                $('#down_payment_due').val(due.toFixed(2));
-        }
+     
 
         function getUnitPrice(){
             var formData = {
@@ -529,8 +523,7 @@
             var down_payment = $("#unit option:selected").attr('down_payment');
             var booking = $("#unit option:selected").attr('booking');
             $('#down_payment').val(down_payment);
-            $('#booking').val(booking); 
-            downPaymentDue();
+            $('#booking').val(booking);  
         }
 
         function getTotalRegularAmount(){

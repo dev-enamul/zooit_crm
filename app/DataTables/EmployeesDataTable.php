@@ -67,8 +67,8 @@ class EmployeesDataTable extends DataTable
     {
         return $model->newQuery()
         ->where('user_type', 1)
-        ->where('status', 1);
-        // ->orderBy('serial', 'asc');
+        ->where('status', 1)
+        ->orderBy('serial', 'asc');
     }
 
    
