@@ -192,6 +192,7 @@ class EmployeeEditController extends Controller
             $employee = Employee::where('user_id',$id)->first();
           
             $employee->designation_id = $request->designation_id;
+            $employee->designations = json_encode($request->designations);
             if ($request->hasFile('image')) {
                 $image = $this->uploadImage($request, 'image', 'employees', 'public'); 
                 $employee->change_reason_document = $image; 
