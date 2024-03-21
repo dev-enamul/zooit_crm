@@ -55,7 +55,7 @@ class EmployeesDataTable extends DataTable
                     $data = user_info($reporting_user_id);
                     $reporting_user = $data['name'].' ('.$data['user_id'].')';
                 }else{
-                    $reporting_user = '-';
+                    $reporting_user = $employee->id;
                 }
                 return $reporting_user; 
             });

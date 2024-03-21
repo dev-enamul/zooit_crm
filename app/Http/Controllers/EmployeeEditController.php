@@ -48,7 +48,7 @@ class EmployeeEditController extends Controller
         
         DB::beginTransaction();
         try{   
-            $user_reporting = ReportingUser::where('user_id',$id)->whereNull('deleted_at')->first();
+            $user_reporting = ReportingUser::where('user_id', $id)->where('status',1)->latest()->first(); 
             if($user_reporting != null){
                 $user_reporting->status = 0;
                 $user_reporting->deleted_by = auth()->user()->id; 
