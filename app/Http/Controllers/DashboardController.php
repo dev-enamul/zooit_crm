@@ -43,6 +43,8 @@ class DashboardController extends Controller
     //     return $dataTable->render('displaydata');
     // }  
 
+
+    
     public function index(){  
         dd("yes");
         $data = User::where('phone','01701203070')->first();
