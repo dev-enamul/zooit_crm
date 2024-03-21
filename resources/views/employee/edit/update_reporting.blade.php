@@ -39,14 +39,13 @@
                                             <label for="reporting_id" class="form-label">Reporting Employee <span class="text-danger">*</span></label>
                                             <select class="select2" search name="reporting_id" id="reporting_id" required> 
                                                 @foreach ($employees as $employee)
-                                                    @if (isset($employee->reportingUser()->id))
-                                                        <option value="{{$employee->reportingUser()->id}}" {{@$user->reportingUser()->user_id==$employee->id?"selected":""}}> {{$employee->name}} [ {{$employee->user_id}} ] </option>
+                                                    @if (isset($employee->reportingUser()->id) && $employee->id!=$user->id)
+                                                        <option value="{{$employee->reportingUser()->id}}" {{@$user->reportingUser()->id==$employee->reportingUser()->id?"selected":""}}> {{$employee->name}} [ {{$employee->user_id}} ] </option>
                                                     @endif 
                                                 @endforeach 
                                             </select> 
                                         </div>
-                                    </div> 
-
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="image" class="form-label">Valid Document <span class="text-danger">* [jpeg, jpg, png, gif | Max : 2MB ]</span></label>
@@ -67,9 +66,7 @@
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->
-    </div>
-
-    @include('includes.footer')
-
+    </div> 
+    @include('includes.footer') 
 </div>
 @endsection

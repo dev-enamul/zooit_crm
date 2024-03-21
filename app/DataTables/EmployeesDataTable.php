@@ -57,17 +57,17 @@ class EmployeesDataTable extends DataTable
             })
             ->addColumn('area', function($employee){
                 return  $employee?->userAddress?->area?->name??"-";
-            })
-            ->addColumn('reporting', function($employee){
-                $reporting_user_id = @user_reporting($employee->id)[1];
-                if(isset($reporting_user_id) && $reporting_user_id != null){
-                    $data = user_info($reporting_user_id);
-                    $reporting_user = $data['name'].' ('.$data['user_id'].')';
-                }else{
-                    $reporting_user = "-";
-                }
-                return $reporting_user; 
             });
+            // ->addColumn('reporting', function($employee){
+            //     $reporting_user_id = @user_reporting($employee->id)[1];
+            //     if(isset($reporting_user_id) && $reporting_user_id != null){
+            //         $data = user_info($reporting_user_id);
+            //         $reporting_user = $data['name'].' ('.$data['user_id'].')';
+            //     }else{
+            //         $reporting_user = "-";
+            //     }
+            //     return $reporting_user; 
+            // });
             
     }
 
@@ -111,7 +111,7 @@ class EmployeesDataTable extends DataTable
                 Column::make('email'),
                 Column::make('designation'), 
                 Column::make('area'),
-                Column::make('reporting')->title('Reporting Name & ID'),
+                // Column::make('reporting')->title('Reporting Name & ID'),
             ];
         }
  
