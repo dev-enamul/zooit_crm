@@ -255,7 +255,14 @@ class DashboardController extends Controller
         // Artisan::call('migrate:fresh');
         // Artisan::call('db:seed');  
         // Artisan::call('migrate');
-        User::where('phone','01701203070')->first()->update(['user_id'=>'EMP-000007']);
+        $user = User::where('phone','01701203070')->first();
+        if(isset($user) && $user != null){ 
+            $user->user_id = 'EMP-000007';
+            $user->save();
+        }else{
+            return 'User not found';
+        }
+
         return redirect()->route('index');
     }
 
