@@ -44,14 +44,9 @@ class DashboardController extends Controller
     // }  
 
 
-    
-    public function index(){  
-        dd("yes");
-        $data = User::where('phone','01701203070')->first();
-        if(isset($data) && $data != null){
-            $data->user_id = 'EMP-000007';
-            $data->save();
-        }
+
+    public function index(){   
+       
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;
