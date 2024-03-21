@@ -37,7 +37,7 @@ class UserImport implements ToModel, WithHeadingRow
         }
 
         
-         $old_user = User::where('phone', $phone)->first();
+         $old_user = User::where('phone', $phone)->orWhere('user_id',$row['user_id'])->first();
          if(isset($old_user) && $old_user != null){ 
             if($old_user->user_type==3){
                 
