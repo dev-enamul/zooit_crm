@@ -98,11 +98,11 @@ if (!function_exists('get_percent')) {
     }
 }
 
-function get_phone($phoneNumber) { 
+function get_phone($phoneNumber) {
     $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber); 
     if (substr($phoneNumber, 0, 4) === '8801') { 
         $phoneNumber = substr($phoneNumber, 4);
-    } elseif (substr($phoneNumber, 0, 2) === '01') { 
+    } elseif (substr($phoneNumber, 0, 2) === '0') { 
         $phoneNumber = substr($phoneNumber, 2);
     }
     
