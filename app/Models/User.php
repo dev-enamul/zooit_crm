@@ -96,7 +96,7 @@ class User extends Authenticatable
 
     public function reportingUser()
     {
-        return $this->hasOne(ReportingUser::class, 'user_id')->whereNull('deleted_at');
+        return ReportingUser::where('user_id', $this->id)->where('status',1)->latest()->first();;
     }
 
     public function referee()

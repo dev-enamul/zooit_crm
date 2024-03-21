@@ -13,9 +13,18 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+ 
+use CarlosMeneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
+ 
+ 
+ 
+ 
+ 
+
 
 class EmployeesDataTable extends DataTable
 { 
+     
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -55,7 +64,7 @@ class EmployeesDataTable extends DataTable
                     $data = user_info($reporting_user_id);
                     $reporting_user = $data['name'].' ('.$data['user_id'].')';
                 }else{
-                    $reporting_user = "-";
+                    $reporting_user = $employee->id;
                 }
                 return $reporting_user; 
             });

@@ -59,12 +59,18 @@ class EmployeeEditController extends Controller
             $reporting_user = new ReportingUser();
             $reporting_user->user_id = $id;
             $reporting_user->reporting_user_id = $request->reporting_id;
-
+ 
             if ($request->hasFile('image')) { 
                 $image = $this->uploadImage($request, 'image', 'reporting_users', 'public'); 
                 $reporting_user->change_reason_document = $image; 
             }  
             $reporting_user->save(); 
+
+            $my_employee = ReportingUser::where('reporting_user_id',$user_reporting->id)->where('status',1)->get();
+            foreach($my_employee as $employee){
+                $employee->reporting_user_id = $reporting_user->id;
+                $employee->save();
+            } 
             DB::commit(); 
             
             if($reporting_user->user->user_type == 1){
@@ -152,10 +158,10 @@ class EmployeeEditController extends Controller
             $user->status = 0;
             $user->save();  
 
-            $user->reportingUser->status = 0;
-            $user->reportingUser->deleted_by = auth()->user()->id;
-            $user->reportingUser->deleted_at = Carbon::now(); 
-            $user->reportingUser->save();
+            $user->reportingUser()->status = 0;
+            $user->reportingUser()->deleted_by = auth()->user()->id;
+            $user->reportingUser()->deleted_at = Carbon::now(); 
+            $user->reportingUser()->save();
 
             $user->employee->status = 0;
             $user->employee->save();

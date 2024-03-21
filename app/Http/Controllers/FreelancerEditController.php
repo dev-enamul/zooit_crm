@@ -49,10 +49,10 @@ class FreelancerEditController extends Controller
             $user->save();  
 
             #reporting user
-            $user->reportingUser->status = 0;
-            $user->reportingUser->deleted_by = auth()->user()->id;
-            $user->reportingUser->deleted_at = Carbon::now(); 
-            $user->reportingUser->save();
+            $user->reportingUser()->status = 0;
+            $user->reportingUser()->deleted_by = auth()->user()->id;
+            $user->reportingUser()->deleted_at = Carbon::now(); 
+            $user->reportingUser()->save();
 
             #freelancer
             $user->freelancer->status = 0;
