@@ -19,10 +19,9 @@
             @if ($user->user_type==2)  
                 <a href="{{route('freelancer.join.process',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('freelancer.join.process')?"active":""}}"> Join Process</a>
             @endif  
-            <a href="{{route('freelancer.book')}}" class="list-group-item list-group-item-action {{Route::is('freelancer.book')?"active":""}}">Book</a>
-            <a href="{{route('freelancer.field.work')}}" class="list-group-item list-group-item-action {{Route::is('freelancer.field.work')?"active":""}}">Field Work</a>
-            <a href="{{route('freelancer.wallet')}}" class="list-group-item list-group-item-action {{Route::is('freelancer.wallet')?"active":""}}">Wallet</a>
-            <a href="{{route('freelancer.salse')}}"  class="list-group-item list-group-item-action {{Route::is('freelancer.salse')?"active":""}}">Salse</a>
+            {{-- <a href="{{route('freelancer.book')}}" class="list-group-item list-group-item-action {{Route::is('freelancer.book')?"active":""}}">Book</a> --}}
+            <a href="{{route('profile.target.achive',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile.target.achive')?"active":""}}">Target Achive</a>
+            <a href="{{route('freelancer.wallet')}}" class="list-group-item list-group-item-action {{Route::is('freelancer.wallet')?"active":""}}">Wallet</a> 
         </div>
     </div>
 </div>

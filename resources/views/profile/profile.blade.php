@@ -10,10 +10,10 @@
            
             <div class="row"> 
                 <div class="col-md-3"> 
-                    @include('includes.freelancer_menu')
+                    @include('includes.profile_menu')
                 </div> 
                 <div class="col-md-9"> 
-                    @include('includes.freelancer_profile_data')
+                    {{-- @include('includes.freelancer_profile_data') --}}
                     <div class="card overflow-hidden"> 
                         <div class="card-body border-top">
                             <div class="d-flex justify-content-between mb-4">

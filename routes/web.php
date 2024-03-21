@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('profile/{id}', [ProfileController::class, 'profile'])->name('profile');
         Route::get('profile/hierarchy/{id}', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
         Route::get('freelancer/join/process/{id}', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
+        Route::get('profile.target.achive/{id}', [ProfileController::class, 'target_achive'])->name('profile.target.achive');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);

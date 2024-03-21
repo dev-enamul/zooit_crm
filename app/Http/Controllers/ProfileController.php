@@ -14,23 +14,17 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    public function hierarchy(){     
+    public function hierarchy(){   
+      
         $user_id = auth()->user()->id; 
         $user = User::find($user_id);
-        $deposit_achive['this_month'] = $this->target_achive($user_id, 0);
-        $deposit_achive['last_month'] = $this->target_achive($user_id, 1);
-        $deposit_achive['last_2_month'] = $this->target_achive($user_id, 2);
-        $deposit_achive['last_6_month'] = $this->target_achive($user_id, 6);
-        $deposit_achive['last_12_month'] = $this->target_achive($user_id, 12);
-        $deposit_achive['last_24_month'] = $this->target_achive($user_id, 24); 
-
-        $topUser = ReportingUser::where('user_id', $user_id)
+  
+        $topUser = ReportingUser::where('user_id', $user_id)->where('status', 1)
         ->select(['id', 'user_id'])
         ->first();
         $organogram = getOrganogram($topUser);   
-        
-        $reporting_users = array_reverse(user_reporting(8));
-        return view('profile.hierarchy',compact('user_id','deposit_achive','organogram','reporting_users','user'));
+         
+        return view('profile.hierarchy',compact('user_id','organogram','user'));
     }
 
     public function profile($id){
@@ -57,17 +51,16 @@ class ProfileController extends Controller
         $approve_process = FreelancerApprovel::where('freelancer_id',$user_id)->get();
   
         return view('profile.freelancer_join_process',compact('user_id','user','approve_process'));
-    }
+    } 
 
-
-     public function target_achive($user_id,$month){
-        $deposit_target = DepositTarget::getDepositTarget($user_id, $month);
-        $total_deposit = Deposit::getDeposit($user_id, $month); 
-        if($deposit_target > 0){
-            $achive = ($total_deposit / $deposit_target) * 100;
+    public function target_achive(Request $request){
+        if(isset($request->month)){
+            $month = $request->month;
         }else{
-            $achive = 0;
-        } 
-        return round($achive);
-     }
+            $month = date('m');
+        }
+        $user_id = auth()->user()->id; 
+        $user = User::find($user_id);
+        return view('profile.target_achive',compact('user_id','user'));
+    }     
 }
