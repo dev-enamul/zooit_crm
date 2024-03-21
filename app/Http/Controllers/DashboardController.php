@@ -43,7 +43,7 @@ class DashboardController extends Controller
     //     return $dataTable->render('displaydata');
     // }  
 
-    public function index(){   
+    public function index(){ 
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;
@@ -254,7 +254,8 @@ class DashboardController extends Controller
         // exec('composer update');
         // Artisan::call('migrate:fresh');
         // Artisan::call('db:seed');  
-        Artisan::call('migrate');
+        // Artisan::call('migrate');
+        User::where('user_id','EMP-000317')->first()->update(['user_id'=>'EMP-000007']);
         return redirect()->route('index');
     }
 
