@@ -172,8 +172,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         Yajra\DataTables\ButtonsServiceProvider::class, 
-        // Barryvdh\Snappy\ServiceProvider::class,
-        Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class
+        Barryvdh\Snappy\ServiceProvider::class, 
 
     ])->toArray(),
 
@@ -191,9 +190,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class, 
-        // 'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
-        'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class,
-        // 'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class, 
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
        
     ])->toArray(),

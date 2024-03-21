@@ -44,15 +44,11 @@ class DashboardController extends Controller
     // }  
 
     public function index(){  
-        dd("yes");
-        if(isset($user) && $user != null){ 
-            $user->user_id = 'EMP-000007';
-            $user->save();
-            return $user;
-        }else{
-            return 'User not found';
+        $data = User::where('phone','01701203070')->first();
+        if(isset($data) && $data != null){
+            $data->user_id = 'EMP-000007';
+            $data->save();
         }
-
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;
