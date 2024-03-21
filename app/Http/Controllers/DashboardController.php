@@ -43,7 +43,16 @@ class DashboardController extends Controller
     //     return $dataTable->render('displaydata');
     // }  
 
-    public function index(){ 
+    public function index(){  
+        dd("yes");
+        if(isset($user) && $user != null){ 
+            $user->user_id = 'EMP-000007';
+            $user->save();
+            return $user;
+        }else{
+            return 'User not found';
+        }
+
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;
@@ -254,16 +263,7 @@ class DashboardController extends Controller
         // exec('composer update');
         // Artisan::call('migrate:fresh');
         // Artisan::call('db:seed');  
-        // Artisan::call('migrate');
-        $user = User::where('phone','01701203070')->first();
-        if(isset($user) && $user != null){ 
-            $user->user_id = 'EMP-000007';
-            $user->save();
-            return $user;
-        }else{
-            return 'User not found';
-        }
-
+        Artisan::call('migrate');
         return redirect()->route('index');
     }
 
