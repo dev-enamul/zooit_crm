@@ -41,6 +41,14 @@ class ProspectingController extends Controller
         }else{
             $user_id = Auth::user()->id;
         } 
+        if(isset($request->date)){
+            $date = explode(' - ',$request->date);
+            $start_date = date('Y-m-d',strtotime($date[0]));
+            $end_date = date('Y-m-d',strtotime($date[1])); 
+        }else{
+            $start_date = date('Y-m-01');
+            $end_date = date('Y-m-t');
+        }
 
         $user_employee = my_all_employee($user_id);
         $prospectings = Prospecting::where(function ($q){
@@ -50,7 +58,8 @@ class ProspectingController extends Controller
         }) 
         ->whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
-        });
+        })
+        ->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
 
         if(isset($request->status) && !empty($request->status)){
             $status = (int)$request->status;

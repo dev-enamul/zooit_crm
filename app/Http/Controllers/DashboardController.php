@@ -44,6 +44,7 @@ class DashboardController extends Controller
     // }  
 
     public function index(){  
+        dd(user_reporting(37));
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;

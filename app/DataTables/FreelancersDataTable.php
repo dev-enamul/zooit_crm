@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Freelancer;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Http\Request;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -60,9 +61,20 @@ class FreelancersDataTable extends DataTable
      * @param \App\Models\Freelancer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Freelancer $model): QueryBuilder
+    public function query(Freelancer $model, Request $request): QueryBuilder 
     {
-        $my_freelancer = my_all_employee(auth()->user()->id);
+        if(isset($request->date)){
+            $date = explode(' - ',$request->date);
+            $start_date = date('Y-m-d',strtotime($date[0]));
+            $end_date = date('Y-m-d',strtotime($date[1]));
+            $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
+        } 
+
+        if(isset($request->employee)){
+            $my_freelancer = my_all_employee((int)$request->employee);
+        }else{
+            $my_freelancer = my_all_employee(auth()->user()->id);
+        }
          $data =  $model
         ->with('user')
         ->whereIn('user_id',$my_freelancer)->where(function($q){

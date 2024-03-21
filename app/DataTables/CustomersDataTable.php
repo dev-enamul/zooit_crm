@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Http\Request;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -61,9 +62,23 @@ class CustomersDataTable extends DataTable
      * @param \App\Models\Customer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Customer $model): QueryBuilder
+    public function query(Customer $model, Request $request): QueryBuilder
     {
+        if(isset($request->date)){
+            $date = explode(' - ',$request->date);
+            $start_date = date('Y-m-d',strtotime($date[0]));
+            $end_date = date('Y-m-d',strtotime($date[1]));
+            $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
+        } 
+
+        if(isset($request->employee)){
+            $my_employee = my_all_employee((int)$request->employee);
+        }else{
+            $my_employee = my_all_employee(auth()->user()->id);
+        }
+
         return $model->newQuery()
+        ->whereIn('ref_id',$my_employee)
         ->where('status',0)
         ->with(['user','profession','user.userAddress.village','user.userAddress.union','user.userAddress.upazila']);
     }

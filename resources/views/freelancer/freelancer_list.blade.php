@@ -42,7 +42,50 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div> 
-</div> 
+</div>  
+
+
+@php
+    $my_all_employee= my_all_employee(auth()->user()->id); 
+    $employees = \App\Models\User::where('status',1)->whereIn('id',$my_all_employee)->whereIn('user_type',[1])->select('id','name','user_id')->get();
+    $professions = \App\Models\Profession::where('status',1)->select('id','name')->get(); 
+@endphp
+<div class="offcanvas offcanvas-end" id="offcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Select Filter Item</h5>
+        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+            <i class="fa fa-times"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+       <form action="" method="get">
+        <div class="row">  
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label for="date_range" class="form-label">Date</label>
+                    <input class="form-control" id="date_range" name="date" default="This Month" type="text" value="" />   
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label for="employee" class="form-label">Employee</label>
+                    <select class="select2" search id="employee" name="employee">
+                        <option value="">Select Freelancer</option> 
+                        @foreach ($employees as $item)
+                            <option value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option> 
+                        @endforeach  
+                    </select> 
+                </div>
+            </div>   
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+            </div> 
+        </div>
+       </form>
+    </div>
+</div>
+
 @endsection  
 @section('script')
 <script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
@@ -55,7 +98,7 @@
 {!! $dataTable->scripts() !!}  
 
 <script>
-     
+    getDateRange('date_range');
 </script>
 @endsection
  

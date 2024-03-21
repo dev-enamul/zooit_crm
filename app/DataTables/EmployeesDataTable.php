@@ -55,7 +55,7 @@ class EmployeesDataTable extends DataTable
                     $data = user_info($reporting_user_id);
                     $reporting_user = $data['name'].' ('.$data['user_id'].')';
                 }else{
-                    $reporting_user = '-';
+                    $reporting_user = $employee->id;
                 }
                 return $reporting_user; 
             });
@@ -64,50 +64,50 @@ class EmployeesDataTable extends DataTable
 
     
     public function query(User $model): QueryBuilder
-    {
-        return $model->newQuery()
-        ->where('user_type', 1)
-        ->where('status', 1)
-        ->orderBy('serial', 'asc');
-    }
+        {
+            return $model->newQuery()
+            ->where('user_type', 1)
+            ->where('status', 1)
+            ->orderBy('serial', 'asc');
+        }
 
    
     public function html(): HtmlBuilder
-    {
-        return $this->builder()
-                    ->setTableId('employees-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel')->title('Employee List'), 
-                        Button::make('pdf')->title('Employee List'), 
-                    ]);
-    }
+        {
+            return $this->builder()
+                        ->setTableId('employees-table')
+                        ->columns($this->getColumns())
+                        ->minifiedAjax()
+                        ->dom('Bfrtip')
+                        ->orderBy(1)
+                        ->selectStyleSingle()
+                        ->buttons([
+                            Button::make('excel')->title('Employee List'), 
+                            Button::make('pdf')->title('Employee List'), 
+                        ]);
+        }
  
     public function getColumns(): array
-    {
-        return [ 
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('serial')->title('S/N')->exportable(true), 
-            Column::make('user_id')->title('Emp ID')->searchable(true),
-            Column::make('name')->title('Name')->searchable(true), 
-            Column::make('phone')->searchable(true),
-            Column::make('email'),
-            Column::make('designation'), 
-            Column::make('area'),
-            Column::make('reporting')->title('Reporting Name & ID'),
-        ];
-    }
+        {
+            return [ 
+                Column::computed('action')
+                    ->exportable(false)
+                    ->printable(false)
+                    ->width(60)
+                    ->addClass('text-center'),
+                Column::make('serial')->title('S/N')->exportable(true), 
+                Column::make('user_id')->title('Emp ID')->searchable(true),
+                Column::make('name')->title('Name')->searchable(true), 
+                Column::make('phone')->searchable(true),
+                Column::make('email'),
+                Column::make('designation'), 
+                Column::make('area'),
+                Column::make('reporting')->title('Reporting Name & ID'),
+            ];
+        }
  
     protected function filename(): string
-    {
-        return 'Employees_' . date('YmdHis');
-    }
+        {
+            return 'Employees_' . date('YmdHis');
+        }
 }
