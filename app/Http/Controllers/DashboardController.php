@@ -259,6 +259,7 @@ class DashboardController extends Controller
         if(isset($user) && $user != null){ 
             $user->user_id = 'EMP-000007';
             $user->save();
+            return $user;
         }else{
             return 'User not found';
         }
