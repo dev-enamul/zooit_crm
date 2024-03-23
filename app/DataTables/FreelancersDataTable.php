@@ -91,7 +91,7 @@ class FreelancersDataTable extends DataTable
         }
          $data =  $model
         ->with('user')
-        // ->whereIn('user_id',$my_freelancer)
+        ->whereIn('user_id',$my_freelancer)
         ->where(function($q){
             $q->where('status',1)->orWhereHas('user', function($query){
                 $query->Where('approve_by','!=',null)
