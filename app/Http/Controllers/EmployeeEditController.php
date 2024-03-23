@@ -230,7 +230,7 @@ class EmployeeEditController extends Controller
             'term' => ['nullable', 'string'],
         ]);
         $users = User::query()
-            ->where('user_id', 'like', "{$request->term}%")
+            ->where('user_id', 'like', "%{$request->term}%")
             ->limit(20)
             ->get();
     
