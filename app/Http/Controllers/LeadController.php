@@ -41,7 +41,7 @@ class LeadController extends Controller
         }) 
         ->whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
-        }); 
+        });  
 
          if(isset($request->profession) && !empty($request->profession)){
             $profession = (int)$request->profession;
@@ -62,7 +62,9 @@ class LeadController extends Controller
             $leads = $leads->where('status', $status);
         }else{
             $leads = $leads->where('status', 0);
-        } 
+        }
+        
+        dd($leads);
         $leads = $leads->get();
        
          $filter =  $request->all();
