@@ -412,8 +412,7 @@ Route::get('function_test', function () {
 
         try {   
                 $recordsToUpdate = User::where('phone', 'like', "011%")->get();
-         
-                dd($recordsToUpdate);
+          
                 foreach ($recordsToUpdate as $record) { 
                     $updatedValue = '01' . substr($record->your_column_name, 3);
         
@@ -421,11 +420,7 @@ Route::get('function_test', function () {
                     try {
                         $record->update(['phone' => $updatedValue]);
                     } catch (QueryException $exception) { 
-                        if ($exception->errorInfo[1] == 1062) {
-                            continue; 
-                        } else {
-                            throw $exception; 
-                        }
+                       
                     }
                 }
          
