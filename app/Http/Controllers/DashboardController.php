@@ -265,6 +265,11 @@ class DashboardController extends Controller
         // Artisan::call('migrate');
         Artisan::call('storage:link');
         Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        Artisan::call('clear-compiled'); 
+        Artisan::call('optimize:clear');
         return redirect()->route('index');
     }
 
