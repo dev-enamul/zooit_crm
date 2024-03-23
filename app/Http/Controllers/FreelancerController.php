@@ -88,8 +88,7 @@ class FreelancerController extends Controller
         $areas = Area::where('status',1)->select('id','name')->get();
         $designations = Designation::where('status',1)->where('designation_type',2)->select('id','title')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->select('id','name','user_id')->get();
+        $my_all_employee = my_all_employee(auth()->user()->id); 
         return view('freelancer.freelancer_save', compact(
             'title',
             'countries',
@@ -107,8 +106,7 @@ class FreelancerController extends Controller
             'zones',
             'areas',
             'nationalites',
-            'designations', 
-            'reporting_user',
+            'designations',  
             'professions' 
         ));
     }

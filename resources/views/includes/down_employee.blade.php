@@ -10,7 +10,7 @@
         {{ @$downline['user']->user->name }}
         [{{ @$downline['user']->user->user_id }}] 
 
-        @if (!empty($downline['downlines']) && $downline['user']->user->user_type==1)
+        @if (!empty($downline['downlines']))
             @include('includes.down_employee', ['organogram' => $downline])
         @endif
     </li>

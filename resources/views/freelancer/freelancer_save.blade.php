@@ -453,15 +453,8 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label for="reporting_user" class="form-label">Employee <span class="text-danger">*</span></label>
-                                        <select class="form-select select2" search name="reporting_user" id="reporting_user" required>
-                                            <option value="">Select a Reporting</option>
-                                            @isset($reporting_user)
-                                                @foreach ($reporting_user as $reporting)
-                                                <option value="{{$reporting->id}}" {{ old('reporting_user',auth()->user()->id) == $reporting->id ? 'selected' : '' }}>
-                                                    {{ @$reporting->name }} [{{$reporting->user_id}}]
-                                                </option>
-                                                @endforeach
-                                            @endisset
+                                        <select class="select2" search name="reporting_user" id="reporting_id" required> 
+                                               
                                         </select> 
                                         <div class="invalid-feedback">
                                             This field is required.
@@ -520,8 +513,31 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div> 
-  @include('includes.footer')
+  @include('includes.footer') 
+</div>  
+@endsection   
 
-</div>
-@endsection 
+@section('script')
+<script>
+    $(document).ready(function() {
+        $('#reporting_id').select2({
+            placeholder: "Select Employee",
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select2.reporting.user') }}',
+                dataType: 'json',
+                data: function (params) {
+                    console.log(params);
+                    var query = {
+                        term: params.term
+                    }
+                    return query;
+                }
+            }
+        });
+    });
+</script>
+@endsection
+ 
+ 
  

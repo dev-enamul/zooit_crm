@@ -28,7 +28,7 @@ class UserImport implements ToModel, WithHeadingRow
 
         if (empty($row['office_phone']) && empty($row['personal_phone'])) {
             return null; 
-        } 
+        }
 
         if(isset($row['office_phone']) && $row['office_phone'] != null){
             $phone = get_phone($row['office_phone']);
@@ -50,7 +50,12 @@ class UserImport implements ToModel, WithHeadingRow
             $user_id = null;
         }else{
             $user_id = $row['user_id'];
+        } 
+
+        if($row['user_id']==null){
+            return null;
         }
+        
  
        
         if(isset($old_user) && $old_user){
@@ -168,7 +173,7 @@ class UserImport implements ToModel, WithHeadingRow
         }elseif($row['user_type']==3){
             $customer_data = [
                 'user_id'       => $user->id,
-                'customer_id'   => $row['customer_id'],
+                'customer_id'   => $row['user_id'],
                 'profession_id' => is_int($row['profession_id'])? $row['profession_id']:null,
                 'name'          => $row['name'],
                 'ref_id'        => auth()->user()->id,
