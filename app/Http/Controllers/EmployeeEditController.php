@@ -28,8 +28,7 @@ class EmployeeEditController extends Controller
             $employees = User::whereIn('user_type', [1, 2])
                              ->where('status', 1)
                              ->select('id', 'name', 'user_id')
-                             ->get();
-            dd($employees);
+                             ->get(); 
      
             $user = User::findOrFail($id, ['id', 'name', 'user_id']); 
      
@@ -228,5 +227,29 @@ class EmployeeEditController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
        }
 
+    }
+
+    public function select2_reporting_user(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+        $users = User::query()
+            ->where('user_id', 'like', "{$request->term}%")
+            ->limit(20)
+            ->get();
+    
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ];
+    
+        foreach ($users as $user) {
+            $results[] = [
+                'id' => $user->id,
+                'text' => "{$user->name} ($user->user_id)"
+            ];
+        }
+        return response()->json([
+            'results' => $results
+        ]);
     }
 }

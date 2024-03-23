@@ -120,6 +120,7 @@ Route::group(['middleware' => 'auth'], function () {
          
         Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
         Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');
+        Route::get('select2-reporting-user', [EmployeeEditController::class, 'select2_reporting_user'])->name('select2.reporting.user');
         
         Route::get('area/user/edit/{id}', [EmployeeEditController::class, 'area_edit'])->name('user.area.edit');
         Route::post('area/user/update/{id}', [EmployeeEditController::class, 'area_update'])->name('user.area.update');

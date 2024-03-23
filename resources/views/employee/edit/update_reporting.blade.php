@@ -69,4 +69,26 @@
     </div> 
     @include('includes.footer') 
 </div>
+@endsection 
+
+@section('script')  
+    <script>
+        $(document).ready(function() { 
+            $('#reporting_id').select2({
+                placeholder: "Select Product",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.reporting.user') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    }
+                }
+            });
+        });
+    </script>
+    
 @endsection
