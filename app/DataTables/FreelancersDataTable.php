@@ -52,6 +52,20 @@ class FreelancersDataTable extends DataTable
             }else{
                 return '-';
             } 
+        })
+        ->addColumn('reporting', function($freelancer){
+            $reporting_user_id = @user_reporting($freelancer->user->id)[1];
+            if(isset($reporting_user_id) && $reporting_user_id != null){
+                $data = user_info($reporting_user_id);
+                if(isset($data) && $data != null){
+                    $reporting_user = $data['name'].' ('.$data['user_id'].')';
+                }else{
+                    $reporting_user = "-";
+                } 
+            }else{
+                $reporting_user = "-";
+            }
+            return $reporting_user; 
         });
     }
 
@@ -83,8 +97,7 @@ class FreelancersDataTable extends DataTable
                 ->orWhere('ref_id',auth()->user()->id)
                 ->orWhere('created_by',auth()->user()->id);
             });
-        })
-        ->latest()
+        }) 
         ->newQuery();
 
         return $data;
@@ -128,16 +141,16 @@ class FreelancersDataTable extends DataTable
                   ->printable(false)
                   ->searchable(false)
                   ->addClass('text-center'),
-            Column::make('serial')->searchable(true),
-            Column::make('date'),
+            Column::make('serial')->title('S/L')->searchable(true),
+            Column::make('user.user_id')->visible(false)->searchable(true), 
+            Column::make('fl_id'),
             Column::make('user.name')->title('Name')->searchable(true),
             Column::make('profession'),
             Column::make('thana')->title('Thana/Upazila'),
             Column::make('union'), 
             Column::make('vilage'),
-            Column::make('user.phone')->title('Mobile')->searchable(true),
-            Column::make('user.user_id')->visible(false)->searchable(true), 
-            Column::make('fl_id')->title('Freelancer ID'),
+            Column::make('user.phone')->title('Mobile')->searchable(true),  
+            Column::make('reporting')->title('Reporting'),
         ];
     }
 
