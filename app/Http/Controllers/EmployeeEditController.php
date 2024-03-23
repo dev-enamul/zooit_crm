@@ -25,14 +25,10 @@ class EmployeeEditController extends Controller
     public function reporting_edit($id){
         try{ 
             $id = decrypt($id); 
-            $employees = User::whereIn('user_type', [1, 2])
-                             ->where('status', 1)
-                             ->select('id', 'name', 'user_id')
-                             ->get(); 
+            
      
-            $user = User::findOrFail($id, ['id', 'name', 'user_id']); 
-     
-            return view('employee.edit.update_reporting', compact('employees', 'user'));
+            $user = User::findOrFail($id, ['id', 'name', 'user_id']);  
+            return view('employee.edit.update_reporting', compact('user'));
         } catch(Exception $e) { 
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -243,10 +239,13 @@ class EmployeeEditController extends Controller
         ];
     
         foreach ($users as $user) {
-            $results[] = [
-                'id' => $user->id,
-                'text' => "{$user->name} ($user->user_id)"
-            ];
+            if(isset($user->reportingUser()->id)){
+                $results[] = [
+                    'id' => $user->reportingUser()->id,
+                    'text' => "{$user->name} ($user->user_id)"
+                ];
+            } 
+            
         }
         return response()->json([
             'results' => $results
