@@ -410,10 +410,8 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 Route::get('function_test', function () { 
 
 
-        try { 
-                $user = User::where('phone', 'like', "011%")->first();
-                dd($user);
-                $recordsToUpdate = User::whereRaw("LEFT(phone, 3) = '011'")->get();
+        try {   
+                $recordsToUpdate = User::where('phone', 'like', "011%")->get();
          
                 foreach ($recordsToUpdate as $record) { 
                     $updatedValue = '01' . substr($record->your_column_name, 3);
