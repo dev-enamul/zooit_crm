@@ -46,6 +46,14 @@ class DashboardController extends Controller
 
 
     public function index(){   
+
+        $recordsToUpdate = User::whereRaw("LEFT(phone, 3) = '011'")->get();
+ 
+        foreach ($recordsToUpdate as $record) { 
+            $updatedValue = '01' . substr($record->phone, 3); 
+            $record->update(['phone' => $updatedValue]);
+        }
+
        
         $user= User::find(Auth::id());
         if($user->user_type==1){
