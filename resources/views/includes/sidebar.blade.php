@@ -717,12 +717,15 @@
                             </li> 
                         @endcan  
 
-                        <li>
-                            <a href="{{route('approve.setting')}}" class="">
-                                <i class="fas fa-desktop"></i>
-                                <span>Approve Setting</span>
-                            </a>
-                        </li> 
+                        @can('approve_setting')
+                            <li>
+                                <a href="{{route('approve.setting')}}" class="">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Approve Setting</span>
+                                </a>
+                            </li> 
+                        @endcan
+                      
                     </div>
                 </div> 
                   

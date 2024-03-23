@@ -76,6 +76,7 @@ use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\FreelancerImportController;
 use App\Http\Controllers\SalseApproveController;
 use App\Models\User;
+use App\Models\UserPermission;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -412,21 +413,8 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () { 
-
-
-        $recordsToUpdate = User::where('phone', 'like', "011%")->get();
-          
-                foreach ($recordsToUpdate as $record) { 
-                        try{
-                                $updatedValue = '01' . substr($record->phone, 3); 
-                                $record->update(['phone' => $updatedValue]);
-                        }catch(Exception $e){  
-
-                        }
-                   
-                }
-
+Route::get('function_test', function () {
+      
         // $topUser = \App\Models\ReportingUser::where('user_id', 1)
         //         ->select(['id', 'user_id'])
         //         ->first(); 

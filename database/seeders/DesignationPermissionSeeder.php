@@ -12,6 +12,7 @@ class DesignationPermissionSeeder extends Seeder
    
     public function run(): void
     {
+        DesignationPermission::truncate();
         $permissions = Permission::all();
 
         // Area Incharge to ASM Permission 
@@ -26,7 +27,7 @@ class DesignationPermissionSeeder extends Seeder
             110, 111, 112, 113, 114, 115
         ];
 
-        for($i=10; $i>=5;$i--){
+        for($i=11; $i>=5;$i--){
             foreach ($permissionIds as $id){
                 DesignationPermission::create([
                     'designation_id'=> $i, 
@@ -47,7 +48,7 @@ class DesignationPermissionSeeder extends Seeder
             110, 111, 112, 113, 114, 115
         ];
 
-        for($i=10; $i>=5;$i--){
+        for($i=15; $i>=12;$i--){
             foreach ($permissionIds as $id){
                 DesignationPermission::create([
                     'designation_id'=> $i, 
