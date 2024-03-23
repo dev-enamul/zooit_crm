@@ -199,6 +199,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Cold Calling 
         Route::resource('cold-calling', ColdCallingController::class); 
+        Route::get('select2-cold-calling-customer', [ColdCallingController::class, 'select2_customer'])->name('select2.cold_calling.customer');
         Route::post('cold-calling-save/{id?}', [ColdCallingController::class, 'save'])->name('cold_calling.save');
         Route::any('cold-calling-delete/{id}', [ColdCallingController::class, "colCallingDelete"])->name('cold_calling.delete');
         Route::get('cold-calling-approve', [ColdCallingController::class, 'coldCallingApprove'])->name('cold-calling.approve');
@@ -206,6 +207,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Lead 
         Route::resource('lead', LeadController::class);
+        Route::get('select2-lead-customer', [LeadController::class, 'select2_customer'])->name('select2.lead.customer');
         Route::post('lead-save/{id?}', [LeadController::class, 'save'])->name('lead.save');
         Route::get('get-cold-calling-data', [LeadController::class, 'customer_data'])->name('get.cold.calling.data');
         Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
@@ -214,6 +216,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Lead Analysis
         Route::resource('lead-analysis', LeadAnalysisController::class);
+        Route::get('select2-lead-analysis-customer', [LeadAnalysisController::class, 'select2_customer'])->name('select2.lead_analysis.customer');
         Route::get('get-lead-data', [LeadAnalysisController::class, 'customer_data'])->name('get.lead.data');
         Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');
         Route::any('lead-analysis-delete/{id}', [LeadAnalysisController::class, "leadAnalysisDelete"])->name('lead_analysis.delete');

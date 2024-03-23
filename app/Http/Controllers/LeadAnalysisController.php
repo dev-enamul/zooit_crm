@@ -24,11 +24,7 @@ class LeadAnalysisController extends Controller
 
     public function index(Request $request)
     {
-        $professions = Profession::all();  
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-        $employees = User::whereIn('id', $my_all_employee)->get();
-
+       
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
         }else{
@@ -58,9 +54,8 @@ class LeadAnalysisController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $leads     = $leads->with('lead')->orderBy('id','desc')->get();  
-         $filter    =  $request->all();
-        return view('lead_analysis.lead_analysis_list',compact('leads','employee_data','professions','employees','filter'));
+         $leads     = $leads->with('lead')->orderBy('id','desc')->get();   
+        return view('lead_analysis.lead_analysis_list',compact('leads'));
     }
 
     public function religion()
@@ -71,26 +66,16 @@ class LeadAnalysisController extends Controller
 
     public function create(Request $request)
     { 
-        $title = 'Lead Analysis Entry';
-        $user_id   = Auth::user()->id; 
-        $my_all_employee = my_all_employee($user_id);
-        $is_admin = Auth::user()->hasPermission('admin'); 
-        if($is_admin){
-            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
-        }else{
-            $customers = Lead::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })->get();
-            $customers = $customers->customer->select('id','customer_id','name');
-        }  
-         
-        $projects = Project::where('status',1)->select('id','name')->get();
-        $units          = Unit::select('id','title')->get(); 
-        $employees          = User::whereIn('id', $my_all_employee)->where('status',1)->get();
-        $selected_data['customer'] = $request->customer;
-        $selected_data['employee'] = Auth::user()->id;
-
-        return view('lead_analysis.lead_analysis_save',compact('title','customers','projects','units','employees','selected_data'));
+       try{
+            $title = 'Lead Analysis Entry';
+            $user_id   = Auth::user()->id;  
+            $projects = Project::where('status',1)->select('id','name')->get();
+            $units          = Unit::select('id','title')->get();  
+            $selected_data['customer'] = Customer::find($request->customer); 
+       }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+       } 
+        return view('lead_analysis.lead_analysis_save',compact('title','projects','units','selected_data'));
     }
 
     public function customer_data(Request $request){
@@ -270,5 +255,58 @@ class LeadAnalysisController extends Controller
         $presentation = Presentation::where('customer_id',$customer->id)->latest()->select('created_at')->first();
          
         return view('lead_analysis.lead_analysis_details',compact('data','customer','user','cold_calling','presentation'));
+    } 
+
+    public function select2_customer(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]); 
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id);   
+        $is_admin = Auth::user()->hasPermission('admin');
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ]; 
+       
+        if($is_admin){ 
+            $users = Customer::query()
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                })
+                ->whereDoesntHave('salse')
+                ->select('id', 'name', 'customer_id')
+                ->limit(10)
+                ->get();  
+                
+            foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->id,
+                    'text' => "{$user->name} [{$user->customer_id}]"
+                ]; 
+            } 
+        }else{
+            $users = Lead::where('status',0)->where('approve_by','!=',null)
+            ->whereHas('customer',function($q) use($my_all_employee,$request){
+                $q->whereIn('ref_id',$my_all_employee)
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                });
+              })->get(); 
+              foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->customer->id,
+                    'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
+                ]; 
+            }
+        }  
+       
+        
+        return response()->json([
+            'results' => $results
+        ]);
     }
 }

@@ -119,20 +119,11 @@
                 <div class="mb-3">
                     <label for="employee" class="form-label">Employee</label>
                     <select class="select2" search id="employee" name="employee">
-                        <option value="">Select Freelancer</option> 
-                        @foreach ($employees as $item)
-                            <option value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option> 
-                        @endforeach 
-                  
+                       
                     </select> 
                 </div>
             </div> 
-            {{-- <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="customer_name" class="form-label">Customer name <span class="text-danger">*</span></label>
-                    <input type="text" name="customer_name" class="form-control" id="customer_name" placeholder="Customer name" >
-                </div>
-            </div>   --}}
+          
             <div class="col-md-12">
                 <div class="mb-3">
                     <label for="profession" class="form-label">Profession </label>
@@ -153,5 +144,5 @@
 @endsection
 
 @section('script')
-@include('includes.data_table')
+    @include('includes.data_table')
 @endsection

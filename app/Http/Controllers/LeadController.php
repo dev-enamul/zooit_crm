@@ -21,12 +21,7 @@ class LeadController extends Controller
 {
 
     public function index(Request $request)
-    {
-        $professions = Profession::all();  
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-        $employees = User::whereIn('id', $my_all_employee)->get();
-
+    { 
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
         }else{
@@ -42,33 +37,15 @@ class LeadController extends Controller
         ->whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
         });  
-
-         if(isset($request->profession) && !empty($request->profession)){
-            $profession = (int)$request->profession;
-            $leads = $leads->whereHas('customer', function($q) use($profession){ 
-                $q->where('profession_id', $profession);
-            });
-         } 
-        //  $leads = $leads->with('employee','customer.user')->where(function ($query) {
-        //     $query->where('status', 1)
-        //         ->orWhere(function ($subquery) {
-        //             $subquery->where('status', 0)
-        //                     ->where('created_by', Auth::user()->id);
-        //         });
-        // })->orderBy('id','desc')->get(); 
-        
+ 
         if(isset($request->status) && !empty($request->status)){
             $status = (int)$request->status;
             $leads = $leads->where('status', $status);
         }else{
             $leads = $leads->where('status', 0);
-        }
- 
-        $leads = $leads->get();
-  
-       
-         $filter =  $request->all();
-        return view('lead.lead_list', compact('leads','employee_data','professions','employees','filter'));
+        } 
+        $leads = $leads->get();  
+        return view('lead.lead_list', compact('leads'));
     }
     public function priority()
     {
@@ -78,19 +55,7 @@ class LeadController extends Controller
     public function create(Request $request)
     {
         $title = 'Lead Entry';
-        $user_id   = Auth::user()->id; 
-        $my_all_employee = my_all_employee($user_id);
-
-        $is_admin = Auth::user()->hasPermission('admin'); 
-        if($is_admin){
-            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
-        }else{
-            $customers = ColdCalling::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })->get();
-            $customers = $customers->customer->select('id','customer_id','name');
-        }  
-        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $user_id   = Auth::user()->id;  
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
         $priorities = $this->priority();
@@ -101,9 +66,9 @@ class LeadController extends Controller
             'priority' => Priority::Regular,
         ];
         if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
+            $selected_data['customer'] = Customer::select('id','customer_id','name')->find($request->customer);
         }
-        return view('lead.lead_save', compact('customers','priorities','title','projects','units','selected_data','employees'));
+        return view('lead.lead_save', compact('priorities','title','projects','units','selected_data'));
     } 
 
     public function customer_data(Request $request){
@@ -220,5 +185,59 @@ class LeadController extends Controller
             return redirect()->route('lead.approve')->with('error', 'Something went wrong!');
         }
 
+    } 
+
+    public function select2_customer(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id);   
+        $is_admin = Auth::user()->hasPermission('admin');
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ]; 
+       
+        if($is_admin){ 
+            $users = Customer::query()
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                })
+                ->whereDoesntHave('salse')
+                ->select('id', 'name', 'customer_id')
+                ->limit(10)
+                ->get();  
+                
+            foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->id,
+                    'text' => "{$user->name} [{$user->customer_id}]"
+                ]; 
+            } 
+        }else{
+            $users = ColdCalling::where('status',0)->where('approve_by','!=',null)
+            ->whereHas('customer',function($q) use($my_all_employee,$request){
+                $q->whereIn('ref_id',$my_all_employee)
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                });
+              })->get(); 
+              foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->customer->id,
+                    'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
+                ]; 
+            }
+        }  
+       
+        
+        return response()->json([
+            'results' => $results
+        ]);
     }
 }

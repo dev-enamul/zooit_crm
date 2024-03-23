@@ -171,6 +171,5 @@
                 }
             });
         });
-    </script>
-    
+    </script> 
 @endsection
