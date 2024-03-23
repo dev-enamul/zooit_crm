@@ -413,9 +413,13 @@ Route::get('function_test', function () {
         $recordsToUpdate = User::where('phone', 'like', "011%")->get();
           
                 foreach ($recordsToUpdate as $record) { 
-                    $updatedValue = '01' . substr($record->phone, 3);
-        
-                    $record->update(['phone' => $updatedValue]);
+                        try{
+                                $updatedValue = '01' . substr($record->phone, 3); 
+                                $record->update(['phone' => $updatedValue]);
+                        }catch(Exception $e){  
+
+                        }
+                   
                 }
 
         // $topUser = \App\Models\ReportingUser::where('user_id', 1)
