@@ -416,12 +416,7 @@ Route::get('function_test', function () {
                 foreach ($recordsToUpdate as $record) { 
                     $updatedValue = '01' . substr($record->your_column_name, 3);
         
-                    // Update the column value
-                    try {
-                        $record->update(['phone' => $updatedValue]);
-                    } catch (QueryException $exception) { 
-                       
-                    }
+                    $record->update(['phone' => $updatedValue]);
                 }
          
             } catch (Exception $e) {
