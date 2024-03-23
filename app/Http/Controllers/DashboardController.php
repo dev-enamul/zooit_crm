@@ -31,6 +31,8 @@ use App\Models\User;
 use App\Models\Village;
 use App\Models\Zone;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -47,12 +49,29 @@ class DashboardController extends Controller
 
     public function index(){   
 
-        $recordsToUpdate = User::whereRaw("LEFT(phone, 3) = '011'")->get();
- 
-        foreach ($recordsToUpdate as $record) { 
-            $updatedValue = '01' . substr($record->phone, 3); 
-            $record->update(['phone' => $updatedValue]);
+        try {
+            // Find records where the column starts with '011'
+            $recordsToUpdate = User::whereRaw("LEFT(phone, 3) = '011'")->get();
+     
+            foreach ($recordsToUpdate as $record) { 
+                $updatedValue = '01' . substr($record->your_column_name, 3);
+    
+                // Update the column value
+                try {
+                    $record->update(['phone' => $updatedValue]);
+                } catch (QueryException $exception) { 
+                    if ($exception->errorInfo[1] == 1062) {
+                        continue; 
+                    } else {
+                        throw $exception; 
+                    }
+                }
+            }
+     
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
+        
 
        
         $user= User::find(Auth::id());
