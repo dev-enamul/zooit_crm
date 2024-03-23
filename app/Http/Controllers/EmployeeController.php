@@ -27,6 +27,7 @@ use App\Traits\AreaTrait;
 use App\Traits\ImageUploadTrait;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
 use Illuminate\Support\Facades\Validator;
 
@@ -558,5 +559,41 @@ class EmployeeController extends Controller
         }
 
         return view('employee.employee_details',compact('user'));
+    } 
+
+    public function select2_employee(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id); 
+
+        $users = User::query()
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('user_id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%");
+            })
+            ->whereIn('id', $my_all_employee)
+            ->where('status', 1)
+            ->limit(10)
+            ->get();
+    
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ];
+    
+        foreach ($users as $user) {
+            $results[] = [
+                'id' => $user->id,
+                'text' => "{$user->name} ($user->user_id)",
+                'selected' => $user->id == $user_id,
+            ];
+            
+        }
+        return response()->json([
+            'results' => $results
+        ]);
     }
 }

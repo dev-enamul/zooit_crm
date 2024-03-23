@@ -125,7 +125,7 @@ if (!function_exists('getOrganogram')) {
         }
         return $organogram;
     }
-} 
+}
  
 
 if (!function_exists('user_reporting')) {
@@ -137,7 +137,12 @@ if (!function_exists('user_reporting')) {
             return array_merge($users, [$reporting->user_id]);
         } else {
             $newreporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
-            return user_reporting($newreporting->user_id, array_merge($users, [$reporting->user_id]));
+            if(isset($newreporting->user_id) && $newreporting->user_id != null){
+                return user_reporting($newreporting->user_id, array_merge($users, [$reporting->user_id]));
+            }else{
+                return $users;
+            }
+           
         }
     }
 }

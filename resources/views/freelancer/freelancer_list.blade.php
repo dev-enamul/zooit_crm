@@ -42,14 +42,13 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div> 
-</div>  
-
+</div>    
 
 @php
     $my_all_employee= my_all_employee(auth()->user()->id); 
     $employees = \App\Models\User::where('status',1)->whereIn('id',$my_all_employee)->whereIn('user_type',[1])->select('id','name','user_id')->get();
-    $professions = \App\Models\Profession::where('status',1)->select('id','name')->get(); 
-@endphp
+@endphp 
+
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Select Filter Item</h5>

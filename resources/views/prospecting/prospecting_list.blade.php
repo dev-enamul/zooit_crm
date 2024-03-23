@@ -110,11 +110,8 @@
      @include('includes.footer')
 </div> 
 
-@php
-    $my_all_employee= my_all_employee(auth()->user()->id); 
-    $employees = \App\Models\User::where('status',1)->whereIn('id',$my_all_employee)->whereIn('user_type',[1,2])->select('id','name','user_id')->get();
-    $professions = \App\Models\Profession::where('status',1)->select('id','name')->get(); 
-    $projects = \App\Models\Project::where('status',1)->select('id','name')->get();
+@php 
+    $professions = \App\Models\Profession::where('status',1)->select('id','name')->get();  
 @endphp
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
@@ -136,11 +133,7 @@
             <div class="col-md-12">
                 <div class="mb-3">
                     <label for="employee" class="form-label">Employee</label>
-                    <select class="select2" search id="employee" name="employee">
-                        <option value="">Select Freelancer</option> 
-                        @foreach ($employees as $item)
-                            <option value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option> 
-                        @endforeach  
+                    <select class="select2" search id="employee" name="employee"> 
                     </select> 
                 </div>
             </div>    
@@ -158,5 +151,23 @@
 @include('includes.data_table')
 <script>
      getDateRange('date_range');
+
+     $(document).ready(function() { 
+            $('#employee').select2({
+                placeholder: "Select Employee",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.employee') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    }
+                }
+            });
+        });
+
 </script>
 @endsection

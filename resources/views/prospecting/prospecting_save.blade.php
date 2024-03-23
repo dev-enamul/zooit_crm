@@ -46,22 +46,14 @@
                                 <form action="{{route('prospecting.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                             @endif 
                                 @csrf
-                                <div class="row"> 
-
+                                <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer">
-                                                <option data-display="Select a coustomer *" value="">
-                                                    Select a customer
-                                                </option>
-                                                @isset($customers)
-                                                    @foreach ($customers as $cstm)
-                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($prospecting->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->name }} ({{ @$cstm->customer_id }})
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
+                                                @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
+                                                    <option value="{{$selected_data['customer']->id}}"  selected="selected">{{$selected_data['customer']->name}} [{{$selected_data['customer']->customer_id}}]</option>
+                                                @endif 
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -73,16 +65,7 @@
                                         <div class="mb-3">
                                             <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
                                             <select class="select2" search name="employee" id="employee" required>
-                                                <option data-display="Select a employee *" value="">
-                                                    Select a employee
-                                                </option>
-                                                @isset($employees)
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($prospecting) ? $prospecting->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
-                                                            {{ $employee->name }} ({{ $employee->user_id}})
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
+                                                <option value="{{auth()->user()->id}}" selected="selected">{{Auth::user()->name}}</option>
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -147,22 +130,47 @@
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->
-    </div>
-
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <script>document.write(new Date().getFullYear())</script> © Zoom IT.
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end d-none d-sm-block">
-                        Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="http://Zoom IT.in/" target="_blank" class="text-muted">Zoom IT</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+    </div> 
+    @include('includes.footer')
 </div>
+@endsection 
+
+@section('script')  
+    <script>
+        $(document).ready(function() { 
+            $('#employee').select2({
+                placeholder: "Select Employee",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.employee') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    }
+                }
+            });
+        });
+
+
+        $(document).ready(function() { 
+            $('#customer').select2({
+                placeholder: "Select Customer",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.prospecting.customer') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        } 
+                        return query;
+                    }
+                }
+            });
+        });
+    </script>
+    
 @endsection

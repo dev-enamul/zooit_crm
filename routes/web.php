@@ -116,6 +116,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
+        Route::get('select2-employee', [EmployeeController::class, 'select2_employee'])->name('select2.employee');
         Route::get('import', [EmployeeImportController::class, 'index'])->name('import');
         Route::post('employee-import', [EmployeeImportController::class, 'import'])->name('employee.import');
         Route::post('employee-save', [EmployeeController::class, 'save'])->name('employee.save'); 
@@ -179,24 +180,25 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Customer 
         Route::resource('customer', CustomerController::class);
+        
         Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save'); 
         Route::get('customer-approve', [CustomerController::class, 'customer_approve'])->name('customer.approve');
         Route::post('customer-approve-save', [CustomerController::class, 'customer_approve_save'])->name('customer.approve.save');
-      
-        Route::post('/customer-search', [CustomerController::class, 'customerSearch'])->name('customer.search');
+       
         Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
         Route::get('customer-details/{id}', [CustomerController::class, "customerDetails"])->name('customer.details');
 
         // Prospecting a
         Route::resource('prospecting', ProspectingController::class);
+        Route::get('select2-prospecting-customer', [ProspectingController::class, 'select2_customer'])->name('select2.prospecting.customer');
         Route::post('prospecting-save/{id?}', [ProspectingController::class, 'save'])->name('prospecting.save');
         Route::any('prospecting-delete/{id}', [ProspectingController::class, "prospectingDelete"])->name('prospecting.delete');
         Route::get('prospecting-approve', [ProspectingController::class, 'prospecting_approve'])->name('prospecting.approve');
         Route::post('product-approve-save', [ProspectingController::class, 'prospectingApprove'])->name('prospecting.approve.save');
 
         // Cold Calling 
-        Route::resource('cold-calling', ColdCallingController::class);
+        Route::resource('cold-calling', ColdCallingController::class); 
         Route::post('cold-calling-save/{id?}', [ColdCallingController::class, 'save'])->name('cold_calling.save');
         Route::any('cold-calling-delete/{id}', [ColdCallingController::class, "colCallingDelete"])->name('cold_calling.delete');
         Route::get('cold-calling-approve', [ColdCallingController::class, 'coldCallingApprove'])->name('cold-calling.approve');

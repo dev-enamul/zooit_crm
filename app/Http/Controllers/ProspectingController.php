@@ -31,11 +31,7 @@ class ProspectingController extends Controller
 
     public function index(Request $request)
     { 
-        $professions = Profession::all();  
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-        $employees = User::whereIn('id', $my_all_employee)->get();
-
+        $professions = Profession::all();   
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
         }else{
@@ -98,30 +94,28 @@ class ProspectingController extends Controller
         $prospectings = $prospectings->get();
 
         $filter =  $request->all();
-        return view('prospecting.prospecting_list', compact('prospectings','employee_data','professions','employees','filter'));
+        return view('prospecting.prospecting_list', compact('prospectings','professions','filter'));
     }
 
     public function create(Request $request)
     {
         $title = 'Prospecting Entry';
         $user_id   = Auth::user()->id; 
-        $my_all_employee = my_all_employee($user_id);
-        $customers = Customer::whereIn('ref_id', $my_all_employee)->where('status',0)->whereNotNull('approve_by')->get();
+        $my_all_employee = my_all_employee($user_id); 
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
         $priorities = $this->priority();
         $selected_data = 
-        [
-            'employee' => Auth::user()->id,
+        [ 
             'priority' => Priority::Regular,
             'media'    => ProspectingMedia::Phone,
         ];
 
         if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
+            $selected_data['customer'] = Customer::select('name','id','customer_id')->find($request->customer);
         }
-    
-        return view('prospecting.prospecting_save', compact('customers','prospectingMedias','priorities','title','employees','selected_data'));
+     
+        return view('prospecting.prospecting_save', compact('prospectingMedias','priorities','title','employees','selected_data'));
     }    
 
 
@@ -225,5 +219,40 @@ class ProspectingController extends Controller
             return redirect()->route('prospecting.approve')->with('error', 'Something went wrong!');
         }
 
+    }
+
+    public function select2_customer(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id);  
+        $users = Customer::query()
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('customer_id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%");
+            })
+            ->whereIn('ref_id', $my_all_employee)
+            ->where('status', 0)
+            ->whereNotNull('approve_by')
+            ->select('id', 'name', 'customer_id')
+            ->limit(10)
+            ->get();
+
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ]; 
+        foreach ($users as $user) {
+            $results[] = [
+                'id' => $user->id,
+                'text' => "{$user->name} ($user->customer_id)"
+            ];
+            
+        }
+        return response()->json([
+            'results' => $results
+        ]);
     }
 }
