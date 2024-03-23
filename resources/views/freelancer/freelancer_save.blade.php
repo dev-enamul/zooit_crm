@@ -516,7 +516,7 @@
 
 @section('script2')
 <script>
-    $(document).ready(function() {   
+    $(document).ready(function() {
         $('#reporting_id').select2({
             placeholder: "Select Employee",
             allowClear: true,

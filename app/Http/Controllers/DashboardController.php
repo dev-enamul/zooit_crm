@@ -24,6 +24,7 @@ use App\Models\Lead;
 use App\Models\LeadAnalysis;
 use App\Models\NegotiationAnalysis;
 use App\Models\Prospecting;
+use App\Models\ReportingUser;
 use App\Models\TaskList;
 use App\Models\Union;
 use App\Models\Upazila;
@@ -47,7 +48,8 @@ class DashboardController extends Controller
 
 
 
-    public function index(){   
+    public function index(){  
+        $reporting = ReportingUser::where('user_id',auth()->user()->id)->where('status',1)->update(['reporting_user_id'=> null]);
        
         $user= User::find(Auth::id());
         if($user->user_type==1){
