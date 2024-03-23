@@ -48,31 +48,6 @@ class DashboardController extends Controller
 
 
     public function index(){   
-
-        try {
-            // Find records where the column starts with '011'
-            $recordsToUpdate = User::whereRaw("LEFT(phone, 3) = '011'")->get();
-     
-            foreach ($recordsToUpdate as $record) { 
-                $updatedValue = '01' . substr($record->your_column_name, 3);
-    
-                // Update the column value
-                try {
-                    $record->update(['phone' => $updatedValue]);
-                } catch (QueryException $exception) { 
-                    if ($exception->errorInfo[1] == 1062) {
-                        continue; 
-                    } else {
-                        throw $exception; 
-                    }
-                }
-            }
-     
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-        
-
        
         $user= User::find(Auth::id());
         if($user->user_type==1){

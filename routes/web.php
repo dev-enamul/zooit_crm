@@ -75,6 +75,8 @@ use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\FreelancerImportController;
 use App\Http\Controllers\SalseApproveController;
+use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 /*
@@ -405,13 +407,39 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {
-        $topUser = \App\Models\ReportingUser::where('user_id', 1)
-                ->select(['id', 'user_id'])
-                ->first(); 
-        $organogram = getOrganogram($topUser);  
+Route::get('function_test', function () { 
+
+
+        try { 
+                $user = User::whereRaw("LEFT(phone, 3) = '011'")->first();
+                dd($user);
+                $recordsToUpdate = User::whereRaw("LEFT(phone, 3) = '011'")->get();
+         
+                foreach ($recordsToUpdate as $record) { 
+                    $updatedValue = '01' . substr($record->your_column_name, 3);
+        
+                    // Update the column value
+                    try {
+                        $record->update(['phone' => $updatedValue]);
+                    } catch (QueryException $exception) { 
+                        if ($exception->errorInfo[1] == 1062) {
+                            continue; 
+                        } else {
+                            throw $exception; 
+                        }
+                    }
+                }
+         
+            } catch (Exception $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+
+        // $topUser = \App\Models\ReportingUser::where('user_id', 1)
+        //         ->select(['id', 'user_id'])
+        //         ->first(); 
+        // $organogram = getOrganogram($topUser);  
  
-        return view('organogram', ['organogram' => $organogram]);
+        // return view('organogram', ['organogram' => $organogram]);
 });
 
 // test

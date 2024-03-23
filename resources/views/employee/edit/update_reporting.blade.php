@@ -71,7 +71,7 @@
     <script>
         $(document).ready(function() { 
             $('#reporting_id').select2({
-                placeholder: "Select Product",
+                placeholder: "Select Employee",
                 allowClear: true,
                 ajax: {
                     url: '{{ route('select2.reporting.user') }}',
