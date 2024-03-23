@@ -410,18 +410,13 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 Route::get('function_test', function () { 
 
 
-        try {   
-                $recordsToUpdate = User::where('phone', 'like', "011%")->get();
+        $recordsToUpdate = User::where('phone', 'like', "011%")->get();
           
                 foreach ($recordsToUpdate as $record) { 
                     $updatedValue = '01' . substr($record->your_column_name, 3);
         
                     $record->update(['phone' => $updatedValue]);
                 }
-         
-            } catch (Exception $e) {
-                return redirect()->back()->with('error', $e->getMessage());
-            }
 
         // $topUser = \App\Models\ReportingUser::where('user_id', 1)
         //         ->select(['id', 'user_id'])
