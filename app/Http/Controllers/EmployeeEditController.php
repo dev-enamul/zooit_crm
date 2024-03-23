@@ -29,6 +29,7 @@ class EmployeeEditController extends Controller
                              ->where('status', 1)
                              ->select('id', 'name', 'user_id')
                              ->get();
+            dd($employees);
      
             $user = User::findOrFail($id, ['id', 'name', 'user_id']); 
      
