@@ -413,7 +413,7 @@ Route::get('function_test', function () {
         $recordsToUpdate = User::where('phone', 'like', "011%")->get();
           
                 foreach ($recordsToUpdate as $record) { 
-                    $updatedValue = '01' . substr($record->your_column_name, 3);
+                    $updatedValue = '01' . substr($record->phone, 3);
         
                     $record->update(['phone' => $updatedValue]);
                 }
