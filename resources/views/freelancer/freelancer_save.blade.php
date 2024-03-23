@@ -506,20 +506,17 @@
                             </form>
                         </div>
                     </div> 
-                </div>
-                <!-- end col -->
-
-            </div>
-            <!-- end row -->
-        </div> <!-- container-fluid -->
+                </div> 
+            </div> 
+        </div> 
     </div> 
   @include('includes.footer') 
 </div>  
 @endsection   
 
-@section('script')
+@section('script2')
 <script>
-    $(document).ready(function() {
+    $(document).ready(function() {   
         $('#reporting_id').select2({
             placeholder: "Select Employee",
             allowClear: true,

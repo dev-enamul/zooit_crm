@@ -52,7 +52,7 @@ class UserImport implements ToModel, WithHeadingRow
             $user_id = $row['user_id'];
         } 
 
-        if($row['user_id']==null){
+        if(empty($row['user_id'])){
             return null;
         }
         
