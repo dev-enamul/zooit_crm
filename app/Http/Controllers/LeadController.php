@@ -65,7 +65,7 @@ class LeadController extends Controller
         }
  
         $leads = $leads->get();
-        dd($leads);
+  
        
          $filter =  $request->all();
         return view('lead.lead_list', compact('leads','employee_data','professions','employees','filter'));
