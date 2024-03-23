@@ -411,7 +411,7 @@ Route::get('function_test', function () {
 
 
         try { 
-                $user = User::whereRaw("LEFT(phone, 3) = '011'")->first();
+                $user = User::where('phone', 'like', "011%")->first();
                 dd($user);
                 $recordsToUpdate = User::whereRaw("LEFT(phone, 3) = '011'")->get();
          
