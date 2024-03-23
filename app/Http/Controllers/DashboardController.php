@@ -63,7 +63,7 @@ class DashboardController extends Controller
 
         $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
                     ->whereDate('date', today())
-                    ->first();
+                    ->first(); 
                     
         $field_target = FieldTarget::where('assign_to', auth()->user()->id)
                     ->whereMonth('month', today())
@@ -85,7 +85,7 @@ class DashboardController extends Controller
         
                 
         $total_day = Carbon::now()->daysInMonth; 
-        $today_target['freelancer'] = round($field_target?->customer/$total_day??0,1); 
+        $today_target['freelancer'] = round($field_target?->freelancer/$total_day??0,1); 
         $today_target['customer'] = round($field_target?->customer/$total_day??0,1);
         $today_target['prospecting'] = round($field_target?->prospecting/$total_day??0,1);
         $today_target['cold_calling'] = round($field_target?->cold_calling/$total_day??0,1);

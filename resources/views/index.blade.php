@@ -291,7 +291,7 @@
                                                     <div class="card-body">
                                                         <div class="d-flex"> 
                                                             <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Today Deposit TA </p> 
+                                                                <p class="fw-semibold mb-0">Deposit </p> 
                                                                 <h4 class="mb-0">{{$today_achive['deposit']}}/{{$today_target['deposit']}}</h4>
                                                             </div>
                                                         </div> 
@@ -367,7 +367,7 @@
                                                     <div class="card-body">
                                                         <div class="d-flex"> 
                                                             <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Today Deposit TA </p> 
+                                                                <p class="fw-semibold mb-0">TDeposit</p> 
                                                                 <h4 class="mb-0">{{$monthly_achive['deposit']}}/{{$deposit_target}}</h4>
                                                             </div>
                                                         </div> 
@@ -383,7 +383,7 @@
                                                 class="apex-charts"
                                                 data-series='[{"name": "Achivement", "data": [{{$monthly_achive['lead_analysis']}},{{$monthly_achive['follow_up_analysis']}}, {{$monthly_achive['negotiation_analysis']}}, {{$monthly_achive['deposit']}}]},
                                                 {"name": "Target", "data": [{{$field_target->lead_analysis??0}}, {{$field_target->follow_up_analysis??0}}, {{$field_target->negotiation_analysis??0}}, {{$deposit_target}}]}]'
-                                                data-xaxis-categories='["Freelancer", "Customer", "Prospecting", "Cold Calling","Lead","Lead Analysis"]'
+                                                data-xaxis-categories='["Lead Analysis", "Follow Up Analysis", "Negotiation Analysis", "Deposit"]'
                                                 data-height="400">
                                             </div>
                                         </div> 

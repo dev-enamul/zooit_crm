@@ -55,20 +55,20 @@ class ProfileController extends Controller
         return view('profile.freelancer_join_process',compact('user_id','user','approve_process'));
     } 
 
-    public function target_achive(Request $request){
+    public function target_achive(Request $request, $id){ 
+        $user_id = decrypt($id);
         if(isset($request->month) && $request->month != ''){ 
             $date = Carbon::parse($request->month);
         }else{ 
             $date = Carbon::now();
         }  
-
-        $user_id = auth()->user()->id; 
+ 
         $user = User::find($user_id); ;
         $target = FieldTarget::where('assign_to',$user_id)
                     ->whereMonth('month',$date)
                     ->whereYear('month',$date)
-                    ->first(); 
-
+                    ->first();  
+                    
         $achive['freelancer'] = $user->freelanecr_achive($date)??0;
         $achive['customer'] = $user->customer_achive($date)??0;
         $achive['prospecting'] = $user->prospecting_achive($date)??0;
@@ -88,17 +88,38 @@ class ProfileController extends Controller
         $per['cold_calling'] = get_percent($achive['cold_calling']??0,$target->cold_calling??0);
         $per['lead'] = get_percent($achive['lead']??0,$target->lead??0);
         $per['lead_analysis'] = get_percent($achive['lead_analysis']??0,$target->lead_analysis??0);
-        $per['presentation'] = get_percent($achive['presentation']??0,$target->presentation??0);
-        $per['visit_analysis'] = get_percent($achive['visit_analysis']??0,$target->visit_analysis??0);
-        $per['followup'] = get_percent($achive['followup']??0,$target->followup??0);
-        $per['followup_analysis'] = get_percent($achive['followup_analysis']??0,$target->followup_analysis??0);
+        $per['presentation'] = get_percent($achive['presentation']??0,$target->project_visit??0);
+        $per['visit_analysis'] = get_percent($achive['visit_analysis']??0,$target->project_visit_analysis??0);
+        $per['followup'] = get_percent($achive['followup']??0,$target->follow_up??0);
+        $per['followup_analysis'] = get_percent($achive['followup_analysis']??0,$target->follow_up_analysis??0);
         $per['negotiation'] = get_percent($achive['negotiation']??0,$target->negotiation??0);
         $per['negotiation_analysis'] = get_percent($achive['negotiation_analysis']??0,$target->negotiation_analysis??0);
         $date_range = $date->startOfMonth()->format('Y/m/d').' - '.$date->endOfMonth()->format('Y/m/d');
+
+        $total_achive = array_sum($per); 
+        $total_per = $total_achive/1200;
      
        
 
 
-        return view('profile.target_achive',compact('user_id','user','date','target','achive','per','date_range'));
-    }     
+        return view('profile.target_achive',compact('user_id','user','date','target','achive','per','date_range','total_per'));
+    }    
+
+    public function wallet(Request $request, $id){
+        $user_id = decrypt($id); 
+        $user = User::find($user_id); 
+        if(isset($request->month) && $request->month != ''){ 
+            $date = Carbon::parse($request->month);
+        }else{ 
+            $date = Carbon::now();
+        }  
+
+        $commissions = DepositCommission::where('user_id',$user_id)
+                        ->whereMonth('created_at',$date)
+                        ->whereYear('created_at',$date)
+                        ->get(); 
+        $total_commission = DepositCommission::where('user_id',$user_id)->sum('payble_commission');
+        $return_commission = 0;
+        return view('profile.wallet',compact('commissions','total_commission','return_commission','user','date'));
+    }
 }

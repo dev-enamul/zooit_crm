@@ -11,12 +11,15 @@
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Task Complete History </h4>
+                        <p class="d-none">{{$user->name}} [{{$user->user_id}}]</p> 
+                        <input type="hidden" id="hideExport" value=":nth-child(1)"> 
+                        <input type="hidden" id="pageSize" value="A4">
+                        <input type="hidden" id="fontSize" value="10">
 
                         <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Task History</li>
-                            </ol>
+                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                <span><i class="fas fa-filter"></i> Filter</span>
+                            </button> 
                         </div>
 
                     </div>
@@ -25,76 +28,57 @@
             <div class="row"> 
                 <div class="col-12"> 
                     <div class="card"> 
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between"> 
-                                <div class="">
-                                    <div class="btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-excel"></i> Excel</span>
-                                        </button>
-
-                                        <button class="btn btn-secondary buttons-excel buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
-                                            <span><i class="fas fa-file-csv"></i> CSV</span>
-                                        </button> 
-                                    </div> 
-                                </div>
-                                <div class="">
-                                    <div class="btn-group flex-wrap mb-2">      
-                                        <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button> 
-                                    </div>
-                                </div>
-                           </div>
-
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr> 
-                                        <th>Action</th> 
-                                        <th>S/N</th> 
-                                        <th>Date</th> 
-                                        <th>Assign Task</th>
-                                        <th>Complete Task</th>
-                                        <th>Progress</th>   
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    @foreach ($datas as $key => $data)
-                                    <tr> 
-                                        <td class="text-center"><a href="{{route('task.details',$data->id)}}" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</a></td>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{get_date($data->date)}}</td>
-                                        @php
-                                            if(isset($data->taskList) && $data->taskList->count() > 0){
-                                                $total_task = count($data->taskList);
-                                                $complete_task = count($data->taskList->where('status',1));
-
-                                                $completionPercentage = $total_task > 0 ? round(($complete_task / $total_task) * 100) : 0;
-                                                
-                                            }else{
-                                                $total_task = 0;
-                                                $complete_task = 0;
-                                                $completionPercentage = 0;
-                                            }  
- 
-                                        @endphp 
-
-                                        <td>{{$total_task}}</td>
-                                        <td>{{$complete_task}}</td> 
-                                        <td class="align-middle">
-                                            <div class="">
-                                                <div class="d-flex justify-content-between">
-                                                    <h6>{{$completionPercentage}}%</h6>  
+                        <div class="card-body"> 
+                            <div class="table-box">
+                                <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr> 
+                                            <th>Action</th> 
+                                            <th>S/N</th> 
+                                            <th>Date</th> 
+                                            <th>Assign Task</th>
+                                            <th>Complete Task</th>
+                                            <th>Progress</th>   
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        @foreach ($datas as $key => $data)
+                                        <tr> 
+                                            <td class="text-center"><a href="{{route('task.details',$data->id)}}" class="btn btn-sm btn-primary"><i class="mdi mdi-eye"></i> View</a></td>
+                                            <td>{{$key+1}}</td>
+                                            <td>{{get_date($data->date)}}</td>
+                                            @php
+                                                if(isset($data->taskList) && $data->taskList->count() > 0){
+                                                    $total_task = count($data->taskList);
+                                                    $complete_task = count($data->taskList->where('status',1));
+    
+                                                    $completionPercentage = $total_task > 0 ? round(($complete_task / $total_task) * 100) : 0;
+                                                    
+                                                }else{
+                                                    $total_task = 0;
+                                                    $complete_task = 0;
+                                                    $completionPercentage = 0;
+                                                }  
+     
+                                            @endphp 
+    
+                                            <td>{{$total_task}}</td>
+                                            <td>{{$complete_task}}</td> 
+                                            <td class="align-middle">
+                                                <div class="">
+                                                    <div class="d-flex justify-content-between">
+                                                        <h6>{{$completionPercentage}}%</h6>  
+                                                    </div>
+                                                    <div class="progress progress-sm">
+                                                        <div class="progress-bar bg-primary" style="width: {{$completionPercentage}}%"></div>
+                                                    </div>
                                                 </div>
-                                                <div class="progress progress-sm">
-                                                    <div class="progress-bar bg-primary" style="width: {{$completionPercentage}}%"></div>
-                                                </div>
-                                            </div>
-                                        </td>   
-                                    </tr>  
-                                    @endforeach 
-                                </tbody>
-                            </table>
+                                            </td>   
+                                        </tr>  
+                                        @endforeach 
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div> 
@@ -143,6 +127,7 @@
 @endsection 
 
 @section('script')
+    @include('includes.data_table')
     <script>
         getDateRange('daterangepicker')
     </script>

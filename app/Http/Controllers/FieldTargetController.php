@@ -52,8 +52,7 @@ class FieldTargetController extends Controller
                 $target->save(); 
                 return redirect()->back()->with('success', 'Target assigned successfully'); 
             } 
-        }catch(Exception $e){
-            dd($e->getMessage());
+        }catch(Exception $e){ 
             return redirect()->back()->with('error', $e->getMessage());
         }
      }
@@ -67,9 +66,17 @@ class FieldTargetController extends Controller
         }else{
             $data = $data->whereMonth('month',date('m'))->whereYear('month',date('Y'));
         }
-        $data =   $data->where('assign_to',auth()->user()->id)->first();  
-        $selected = $request->month; 
-        return view('target.field_target.my_field_target',compact('data','selected'));
+
+        if(isset($request->employee) && $request->employee!=null){
+            $user_id = decrypt($request->employee);
+        }else{
+            $user_id = auth()->user()->id;
+        }
+        $user = User::find($user_id); 
+        $data =   $data->where('assign_to',$user->id)->first(); 
+    
+        $selected = $request->month??Carbon::now()->format('Y-m');  
+        return view('target.field_target.my_field_target',compact('data','selected','user'));
      }
 
 
@@ -84,7 +91,7 @@ class FieldTargetController extends Controller
         }
 
         $datas =   $datas->where('assign_by',auth()->user()->id)->get();  
-        $selected = $request->month; 
+        $selected = $request->month??Carbon::now()->format('Y-m'); 
         return view('target.field_target.assign_target_list',compact('datas','selected'));
     }
 

@@ -26,7 +26,7 @@ class EmployeeEditController extends Controller
         $id = decrypt($id);
         try{
             $employees = User::whereIn('user_type',[1,2])->where('status',1)->select('id','name','user_id')->get();
-            $user = User::find($id); 
+            $user = User::select('id','name','user_id')->find($id); 
             return view('employee.edit.update_reporting',compact('employees','user'));
         }catch(Exception $e){
             return redirect()->back()->with('error', $e->getMessage());

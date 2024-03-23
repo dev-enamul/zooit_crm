@@ -109,7 +109,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('profile/{id}', [ProfileController::class, 'profile'])->name('profile');
         Route::get('profile/hierarchy/{id}', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
         Route::get('freelancer/join/process/{id}', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
-        Route::get('profile.target.achive/{id}', [ProfileController::class, 'target_achive'])->name('profile.target.achive');
+        Route::get('profile-target-achive/{id}', [ProfileController::class, 'target_achive'])->name('profile.target.achive');
+        Route::get('profile-wallet/{id}', [ProfileController::class, 'wallet'])->name('profile.wallet');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
@@ -371,7 +372,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');
         // task
         Route::get('task-complete', [TaskController::class, 'task_complete'])->name('task.complete');
-        Route::get('my-task', [TaskController::class, 'my_task'])->name('my.task');
+        Route::get('today-my-task', [TaskController::class, 'my_task'])->name('my.task');
         Route::get('submit-task/{id}', [TaskController::class, 'submit_task'])->name('submit.task');
         Route::get('reject-task/{id}', [TaskController::class, 'reject_task'])->name('reject.task');
         Route::get('assign-task-list',[TaskController::class,'assign_task_list'])->name('assign.task.list');

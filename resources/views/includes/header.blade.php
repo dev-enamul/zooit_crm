@@ -209,27 +209,27 @@
                                             <span class="grid-nav-content">Profile</span>
                                         </a>
 
-                                        <a href="wallet.html" class="grid-nav-item">
+                                        <a href="{{route('profile.wallet',encrypt(auth()->user()->id))}}" class="grid-nav-item">
                                             <div class="grid-nav-icon"><i class="far fa-comments"></i></div>
                                             <span class="grid-nav-content">Wallet</span>
                                         </a>
-                                        <a href="training_schedule.html" class="grid-nav-item">
+                                        <a href="{{route('training.schedule')}}" class="grid-nav-item">
                                             <div class="grid-nav-icon"><i class="far fa-clone"></i></div>
                                             <span class="grid-nav-content">Training</span>
                                         </a>
                                     </div>
                                     <div class="grid-nav-row">
-                                        <a href="today_task.html" class="grid-nav-item">
+                                        <a href="{{route('my.task')}}" class="grid-nav-item">
                                             <div class="grid-nav-icon"><i class="far fa-calendar-check"></i></div>
                                             <span class="grid-nav-content">Tasks</span>
                                         </a>
-                                        <a href="index.html" class="grid-nav-item">
+                                        <a href="{{route('index')}}" class="grid-nav-item">
                                             <div class="grid-nav-icon"><i class="far fa-sticky-note"></i></div>
                                             <span class="grid-nav-content">Dashboard</span>
                                         </a>
-                                        <a href="notification.html" class="grid-nav-item">
-                                            <div class="grid-nav-icon"><i class="far fa-bell"></i></div>
-                                            <span class="grid-nav-content">Notification</span>
+                                        <a href="{{route('profile.target.achive',encrypt(auth()->user()->id))}}" class="grid-nav-item">
+                                            <div class="grid-nav-icon"><i class="far fa-sticky-note"></i></div>
+                                            <span class="grid-nav-content">Achivement</span>
                                         </a>
                                     </div>
                                 </div>

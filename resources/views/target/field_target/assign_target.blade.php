@@ -97,28 +97,16 @@
                                             <label for="lead" class="form-label">Lead</label>
                                             <input type="number" class="form-control" id="lead" name="lead" value="0"> 
                                         </div>
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="lead" class="form-label">Lead</label>
-                                            <input type="number" class="form-control" id="lead" name="lead" value="0"> 
+                                            <label for="lead_analysis" class="form-label">Lead Analysis</label>
+                                            <input type="number" class="form-control" id="lead_analysis" name="lead_analysis" value="0"> 
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="lead" class="form-label">Lead Analysis</label>
-                                            <input type="number" class="form-control" id="lead" name="lead" value="0"> 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="cold_calling" class="form-label">Cold Calling</label>
-                                            <input type="number" class="form-control" id="cold_calling" name="cold_calling" value="0"> 
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-md-6">
                                         <div class="mb-3">

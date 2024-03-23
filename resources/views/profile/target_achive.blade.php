@@ -12,15 +12,42 @@
                 <div class="col-md-3"> 
                     @include('includes.profile_menu')
                 </div> 
-                <div class="col-md-9"> 
-                    {{-- @include('includes.freelancer_profile_data') --}}
+                <div class="col-md-9">  
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon text-muted"><i class="fa fa-boxes"></i></div>
+                            <h3 class="card-title">Average Achivement</h3> 
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between">
+                                    <h2 class="rich-list-title mb-0">{{ date('M-Y', $date->timestamp) }}</h2>
+                                    <p class="rich-list-subtitle mb-0">{{$total_per}}%</p>
+                                </div>
+                                <div class="progress progress-sm" style="height:8px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: {{$total_per}}%"></div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-header">
                             <div class="card-icon text-muted"><i class="fa fa-chalkboard fs14"></i></div>
-                            <h3 class="card-title">Field Work</h3>
+                            <h3 class="card-title">Field Work 
+                                <a href="{{route('my.field.target',['month'=>urldecode(date('Y-m', $date->timestamp)),'employee'=>encrypt($user->id)])}}" class="btn btn-secondary" type="submit">
+                                    <span><i class="fas fa-print"></i> Export</span>
+                                </a>  
+                            </h3>
                             <div class="card-addon">
-                                <input type="month" class="form-control" name="month" value="{{ date('Y-m', $date->timestamp) }}">
-                            </div>
+                                <form action="" method="get">
+                                    <div class="input-group">   
+                                        <input type="month" class="form-control" name="month" value="{{ date('Y-m', $date->timestamp) }}">
+                                        <button class="btn btn-secondary" type="submit">
+                                            <span><i class="fas fa-filter"></i> Filter</span>
+                                        </button>  
+                                    </div>
+                                </form>
+                            </div> 
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
@@ -106,7 +133,7 @@
                                         <p class="text-muted mb-2 bold"><a href="{{route('presentation.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Presentation</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">{{$achive['presentation']}}</span> / 
-                                            <span title="target">{{$target->presentation??0}}</span></h4>
+                                            <span title="target">{{$target->project_visit??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['presentation']}}"></div>
                                         </div>
@@ -119,7 +146,7 @@
                                         <p class="text-muted mb-2 bold"><a href="{{route('presentation_analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Visit Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">{{$achive['visit_analysis']}}</span> / 
-                                            <span title="target">{{$target->visit_analysis??0}}</span></h4>
+                                            <span title="target">{{$target->project_visit_analysis??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['visit_analysis']}}"></div>
                                         </div>
@@ -132,7 +159,7 @@
                                         <p class="text-muted mb-2 bold"><a href="{{route('followup.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Follow Up</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">{{$achive['followup']}}</span> / 
-                                            <span title="target">{{$target->followup??0}}</span></h4>
+                                            <span title="target">{{$target->follow_up??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['followup']}}"></div>
                                         </div>
@@ -145,7 +172,7 @@
                                         <p class="text-muted mb-2 bold"><a href="{{route('followup-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Follow Up Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">{{$achive['followup_analysis']}}</span> / 
-                                            <span title="target">{{$target->followup_analysis??0}}</span></h4>
+                                            <span title="target">{{$target->follow_up_analysis??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['followup_analysis']}}"></div>
                                         </div>

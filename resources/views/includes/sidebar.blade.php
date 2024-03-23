@@ -1,6 +1,15 @@
 @php
     $approve_setting = App\Models\ApproveSetting::pluck('status', 'name')->toArray(); 
     $is_admin = Auth::user()->hasPermission('admin'); 
+    $task_route = ['employee.create', 'employee.index', 'employees.tree', 'product.create', 'product.index', 'unit.create', 'unit.index', 'product.approve', 'freelancer.create', 'freelancer.index', 'approve-freelancer.index', 'customer.create', 'customer.index', 'customer.approve', 'prospecting.create', 'prospecting.index', 'prospecting.approve', 'cold-calling.create', 'cold-calling.index', 'cold-calling.approve', 'lead.create', 'lead.index', 'lead.approve', 'lead-analysis.create', 'lead-analysis.index', 'lead-analysis.approve', 'presentation.create', 'presentation.index', 'presentation.approve', 'presentation_analysis.create', 'presentation_analysis.index', 'presentation-analysis.approve', 'followup.create', 'followup.index', 'followUp.approve', 'followup-analysis.create', 'followup-analysis.index', 'followUp-analysis.approve', 'negotiation.create', 'negotiation.index', 'negotiation.approve', 'negotiation-analysis.create', 'negotiation-analysis.index', 'negotiation-analysis.approve', 'rejection.index', 'salse.create', 'salse.index', 'salse.approve', 'existing.salse', 'return.create', 'return.index', 'transfer.create', 'transfer.index', 'deposit.create', 'deposit.index'];
+    $progress_route = ['my.field.target', 'assign.field.target', 'assign.field.target.list', 'my.task', 'task.complete', 'assign.task', 'project.deposit.target', 'direct.deposit.target', 'deposit.target.asign.list', 'my.deposit.target', 'training.create', 'training.schedule', 'training.index', 'meeting.index'];
+    $report_route = ['monthly.target.achive', 'mst.commission', 'rsa.co.ordinator', 'monthly.dt.achivement', 'dt.achivement', 'daily.deposit', 'special-offer.index', 'special-offer.create', 'marketing.field.report', 'salse.field.report', 'due.report', 'floor.wise.sold.report', 'cc.report', 'pending.report'];
+    $setting_route = ['profession.index', 'village.index', 'zone.index', 'area.index', 'unit.type', 'unit.category', 'training-category.index', 'designation.index', 'commission.index', 'special-commission.index', 'commission-deducted-setting.index', 'bank.index', 'bank-day.index', 'deposit-category.index', 'approve.setting'];
+    $currentRoute = \Request::route()->getName(); 
+
+
+
+
 @endphp
 <div class="sidebar-left"> 
     <div data-simplebar class="h-100"> 
@@ -25,77 +34,75 @@
                             </button>
                         </div>
                     </div>
-                    <div class="collapse " id="collapseExample1">
+                    <div class="collapse {{in_array($currentRoute,$task_route)?"show":""}}" id="collapseExample1">
                         @can('employee')
-                        <li> 
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-network-wired"></i>
-                                <span>Employee</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('employee-manage')
-                                    <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
-                                @endcan
-                                <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li> 
-                                <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li> 
-                            </ul>
-                        </li>  
-                    @endcan
-    
-     
-                    @can('product')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-network-wired"></i>
-                                <span>Product</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('product-manage')
-                                    <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
-                                @endcan   
-    
-                                <li class="{{ Route::is('product.index', 'product.edit','product.search') ? 'mm-active' : '' }}">
-                                    <a href="{{ route('product.index') }}">
-                                        <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products
-                                    </a>
-                                </li>
-                                
-                                @can('product-manage')
-                                    <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
-                                @endcan
-                                <li class="{{ Route::is('unit.save', 'project.unit.delete','project.unit.search') ? 'mm-active' : '' }}">
-                                    <a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a>
-                                </li>
-
-                                @if (!empty($approve_setting['product']) && !$is_admin)
-                                    @can('product-approve')
-                                        <li><a href="{{ route('product.approve') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Product Approve</a></li>
+                            <li> 
+                                <a href="javascript: void(0);" class="has-arrow ">
+                                    <i class="fas fa-network-wired"></i>
+                                    <span>Employee</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    @can('employee-manage')
+                                        <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
                                     @endcan
-                                @endif
-                            </ul>
-                        </li> 
-                    @endcan 
+                                    <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li> 
+                                    <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li> 
+                                </ul>
+                            </li>  
+                        @endcan 
+                        @can('product')
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow ">
+                                    <i class="fas fa-network-wired"></i>
+                                    <span>Product</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    @can('product-manage')
+                                        <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
+                                    @endcan   
+        
+                                    <li class="{{ Route::is('product.index', 'product.edit','product.search') ? 'mm-active' : '' }}">
+                                        <a href="{{ route('product.index') }}">
+                                            <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products
+                                        </a>
+                                    </li>
+                                    
+                                    @can('product-manage')
+                                        <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
+                                    @endcan
+                                    <li class="{{ Route::is('unit.save', 'project.unit.delete','project.unit.search') ? 'mm-active' : '' }}">
+                                        <a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a>
+                                    </li>
+
+                                    @if (!empty($approve_setting['product']) && !$is_admin)
+                                        @can('product-approve')
+                                            <li><a href="{{ route('product.approve') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Product Approve</a></li>
+                                        @endcan
+                                    @endif
+                                </ul>
+                            </li> 
+                        @endcan 
                     
-                    @can('freelancer')
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="fas fa-network-wired"></i>
-                            <span>FL Recruitment</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            @can('freelancer-manage')
-                                <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
-                            @endcan    
-                            <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search','freelancer.edit') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
-                            @if (!empty($approve_setting['freelancer']) && !$is_admin)
-                                @can('product-approve')
-                                <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
-                                @endcan
-                            @endif 
-      
-                        </ul>
-                    </li> 
-                    @endcan
+                        @can('freelancer')
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow ">
+                                    <i class="fas fa-network-wired"></i>
+                                    <span>FL Recruitment</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    @can('freelancer-manage')
+                                        <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
+                                    @endcan    
+                                    <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search','freelancer.edit') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
+                                    @if (!empty($approve_setting['freelancer']) && !$is_admin)
+                                        @can('product-approve')
+                                        <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
+                                        @endcan
+                                    @endif 
+            
+                                </ul>
+                            </li> 
+                        @endcan
     
                     @can('customer')
                     <li>
@@ -365,7 +372,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="collapse " id="Progress">
+                    <div class="collapse {{in_array($currentRoute,$progress_route)?"show":""}}" id="Progress">
                         @can('field-target')
                         <li>
                             <a href="javascript: void(0);" class="has-arrow ">
@@ -387,10 +394,11 @@
                                     <span>Daily Task</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false"> 
-                                    <li><a href="{{route('my.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Task</a></li> 
+                                    <li><a href="{{route('assign.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task</a></li> 
+                                    <li><a href="{{route('my.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Today My Task</a></li> 
                                     <li class="{{ Route::is('task.details') ? 'mm-active' : '' }}"><a href="{{route('task.complete')}}"><i class=" mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
                                     {{-- <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li>  --}}
-                                    <li><a href="{{route('assign.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task</a></li> 
+                                   
                                 </ul>
                             </li>
                         @endcan 
@@ -477,7 +485,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="collapse " id="Report">
+                    <div class="collapse {{in_array($currentRoute,$report_route)?"show":""}}" id="Report">
                         @can('mst-commission')
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow ">
@@ -591,7 +599,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="collapse " id="Setting">
+                    <div class="collapse {{in_array($currentRoute,$setting_route)?"show":""}}" id="Setting">
                         @can('profession') 
                         <li>
                             <a href="{{route('profession.index')}}" class="">

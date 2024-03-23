@@ -43,10 +43,11 @@ class TaskController extends Controller
         }else{
             $user_id = auth()->user()->id;
         }
+        $user = User::find($user_id);
         $datas = $datas->where('assign_to',$user_id)->get(); 
         $my_employee = my_employee(auth()->user()->id);
         $employeies = User::whereIn('id',$my_employee)->where('status',1)->get();  
-        return view('task.task_complete',compact('datas','employeies'));
+        return view('task.task_complete',compact('datas','employeies','user'));
     }
 
     public function assign_task_list(){
