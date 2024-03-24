@@ -51,7 +51,8 @@ class CustomersDataTable extends DataTable
                 return $data->profession->name??'-';
             })
             ->addColumn('fl', function($data){
-                return $data->status==0?"-":$data->user->user_id;
+                // return $data->status==0?"-":$data->user->user_id;
+                return @$data->reference->name.' ['. @$data->reference->user_id.']';
             })
             ->setRowId('id');
     }

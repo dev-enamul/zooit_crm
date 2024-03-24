@@ -358,7 +358,7 @@ class CustomerController extends Controller
         if ($validator->fails()) { 
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         } 
-
+  
         DB::beginTransaction(); 
        
         try {  
@@ -485,6 +485,7 @@ class CustomerController extends Controller
                 'profession_id'     => $request->profession, 
                 'name'              => $request->full_name,  
                 'status'            => 0, 
+                'ref_id'            => $request->reporting_user,
             ];  
             $customer->update($customer_data);    
             DB::commit(); 
@@ -590,8 +591,7 @@ class CustomerController extends Controller
                 return view('customer.customer_list', compact('employees','professions','customers','datas','divisions','districts','upazilas','unions','villages','selected'));
             }
         }
-        catch (\Throwable $th) {
-            dd( $th);
+        catch (\Throwable $th) { 
             return redirect()->route('product.edit')->with('error', 'Something went wrong!');
          }
     }

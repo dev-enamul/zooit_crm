@@ -125,7 +125,7 @@ class FreelancersDataTable extends DataTable
             }')
             ->buttons([
                 Button::make('excel')->title('Freelancer List'), 
-                // Button::make('pdf')->title('Freelancer List'), 
+                Button::make('pdf')->title('Freelancer List'), 
             ]);
     }
 

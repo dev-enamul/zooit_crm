@@ -185,7 +185,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone1" class="form-label">Mobile Number 1 <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ isset($customer) ? $customer->user->phone : old('phone1') }}" readonly>
+                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ isset($customer) ? $customer->user->phone : old('phone1') }}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -466,7 +466,20 @@
                                             <label for="tin_number" class="form-label">TIN Number</label>
                                             <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="TIN Number" value="{{isset($customer) ? @$customer->user->userId->tin_number : old('tin_number')}}"> 
                                         </div>
-                                    </div>  
+                                    </div>   
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="reporting_user" class="form-label">Employee/Freelancer<span class="text-danger">*</span></label>
+                                        <select class="form-select select2" search name="reporting_user" id="reporting_user" required>
+                                            <option value="">Select a Freelancer/Employee</option>
+                                            <option value="{{$customer->ref_od}}" selected>
+                                                {{ $customer->reference->name }} ({{ $customer->reference->user_id }})
+                                            </option> 
+                                        </select> 
+                                        <div class="invalid-feedback">
+                                            This field is required.
+                                        </div> 
+                                    </div>
                                 </div>
                                   
                                 <div>
@@ -485,7 +498,28 @@
   @include('includes.footer')
 
 </div>
-@endsection 
+@endsection  
+
+@section('script2')
+<script>
+    $(document).ready(function() { 
+        $('#reporting_user').select2({
+            placeholder: "Select Employee",
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select2.employee') }}',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        term: params.term
+                    }
+                    return query;
+                }
+            }
+        });
+    });
+</script>
+@endsection
 
 
  

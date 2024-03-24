@@ -438,18 +438,13 @@
                                         <label for="reporting_user" class="form-label">Employee/Freelancer<span class="text-danger">*</span></label>
                                         <select class="form-select select2" search name="reporting_user" id="reporting_user" required>
                                             <option value="">Select a Freelancer/Employee</option>
-                                            @isset($reporting_user)
-                                                @foreach ($reporting_user as $reporting)
-                                                <option value="{{$reporting->id}}" {{ old('reporting_user',auth()->user()->id) == $reporting->id ? 'selected' : '' }}>
-                                                    {{ @$reporting->name }} [{{$reporting->user_id}}]
-                                                </option>
-                                                @endforeach
-                                            @endisset
+                                            <option value="{{ auth()->user()->id }}" selected>
+                                                {{ auth()->user()->name }} ({{ auth()->user()->user_id }})
+                                            </option> 
                                         </select> 
                                         <div class="invalid-feedback">
                                             This field is required.
-                                        </div>
-                                         
+                                        </div> 
                                     </div>
 
                                     <div class="col-md-6 mb-3">
@@ -506,5 +501,26 @@
   @include('includes.footer')
 
 </div>
-@endsection 
+@endsection  
+
+@section('script2')
+    <script>
+        $(document).ready(function() { 
+            $('#reporting_user').select2({
+                placeholder: "Select Employee",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.employee') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    }
+                }
+            });
+        });
+    </script>
+@endsection
  
