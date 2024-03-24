@@ -261,15 +261,15 @@ class DashboardController extends Controller
     public function migrate_fresh(){  
         // exec('composer update');
         // Artisan::call('migrate:fresh');
-        Artisan::call('db:seed');  
+        // Artisan::call('db:seed');  
         // Artisan::call('migrate');
         // Artisan::call('storage:link');
-        // Artisan::call('cache:clear');
-        // Artisan::call('config:clear');
-        // Artisan::call('route:clear');
-        // Artisan::call('view:clear');
-        // Artisan::call('clear-compiled'); 
-        // Artisan::call('optimize:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        Artisan::call('clear-compiled'); 
+        Artisan::call('optimize:clear');
         return redirect()->route('index');
     }
 
