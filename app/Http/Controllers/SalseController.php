@@ -54,8 +54,8 @@ class SalseController extends Controller
         $units              = Unit::all(); 
         $unit_categories    = UnitCategory::all();
         
-        $selected_data['priority'] = Priority::Regular;
-       
+        $selected_data['priority'] = Priority::Regular; 
+        
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
 
@@ -80,7 +80,7 @@ class SalseController extends Controller
             'selected_data',
             'priorities',
             'projects',
-            'projectUnits', 
+            'projectUnits',
             'unit_categories'
         ]));
     }
@@ -133,7 +133,7 @@ class SalseController extends Controller
             $sales->down_payment_due = $request->input('down_payment');
             $sales->booking = $request->input('booking'); 
             $sales->booking_due = $request->input('booking');
-            $sales->first_payment = $request->input('first_payment')??0;
+            $sales->first_payment = $request->input('first_payment');
             $sales->first_payment_date = $request->input('first_payment_date');
             $sales->installment_type = $request->input('installment_type');
             $sales->total_installment = $request->input('total_installment');

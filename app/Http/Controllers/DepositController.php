@@ -55,6 +55,7 @@ class DepositController extends Controller
      */
     public function store(Request $request)
     {  
+       
          
         $validator = Validator::make($request->all(), [
             'customer_id' => 'required',
@@ -66,7 +67,7 @@ class DepositController extends Controller
             'cheque_no' => 'nullable | string',
             'branch_name' => 'nullable | string',
         ]);
-   
+    
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         } 
@@ -78,13 +79,14 @@ class DepositController extends Controller
 
             $input['date'] = date('Y-m-d',strtotime($request->date)); 
             $input['customer_user_id'] = Customer::find($request->customer_id)->user_id;
-            $deposit = Deposit::create($input); 
-          
+            $deposit = Deposit::create($input);  
+           
             if($deposit->deposit_category_id==2){
                 $salse = Salse::where('customer_id',$request->customer_id)->first();
                 if(isset($salse) && !empty($salse) && $salse->down_payment_due > 0 && isset($request->rest_down_payment_date)){
                     $salse->rest_down_payment_date = date('Y-m-d', strtotime($request->rest_down_payment_date));
-                }
+                } 
+                $salse->save(); 
             }
 
             if($deposit->deposit_category_id==1 || $deposit->deposit_category_id==2 || $deposit->deposit_category_id==3){
@@ -92,10 +94,10 @@ class DepositController extends Controller
                 if(isset($salse) && !empty($salse)){ 
                     $deposit->salse_id = $salse->id;
                     $deposit->project_id = $salse->project_id; 
-                } 
-            }
-
-            $salse->save();
+                }  
+                $salse->save();
+              
+            } 
             $deposit->save();
 
             if(Auth::user()->hasPermission('approve-deposit')){
