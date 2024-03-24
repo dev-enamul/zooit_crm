@@ -17,7 +17,12 @@
                                     @endforeach 
                                 @endif
                             Wise Deposit Report</h4> 
-                            <p class="d-none">{{get_date($startDate)}} - {{get_date($endDate)}}</p>
+                            <p class="d-none">{{auth()->user()->name}}</p> 
+                            <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
+                            <input type="hidden" id="pageSize" value="A3">
+                            <input type="hidden" id="fontSize" value="8"> 
+
+                            <p class="d-none">{{get_date($startDate,'M-Y')}}</p>
                         </div>
 
                         <div class="d-flex">   
@@ -46,8 +51,7 @@
                                     <tr class="align-middle"> 
                                         <th>SL.</th>
                                         <th>Name of Employee</th>
-                                        <th>Total Target</th>
-                                        <th>Regolar Deposit</th>
+                                        <th>Total Target</th> 
                                         @foreach ($deposit_categories as $deposit_category)
                                             <th>{{ $deposit_category->name }}</th> 
                                         @endforeach  
@@ -75,7 +79,7 @@
                                                 <td>{{get_price($total_target)}}</td>
                                                 @php
                                                     $my_all_employee = my_all_employee($employee->id);
-                                                    $deposit = App\Models\DepositDeposit::where('approve_by', '!=', null)
+                                                    $deposit = App\Models\Deposit::where('approve_by', '!=', null)
                                                         ->whereHas('customer', function ($query) use ($my_all_employee) {
                                                             $query->WhereIn('ref_id', $my_all_employee);
                                                         }) 
@@ -84,7 +88,6 @@
                                                  @php
                                                     $clone_deposit = clone $deposit; 
                                                 @endphp 
-                                                <td>{{get_price($clone_deposit->where('deposit_category_id', null)->sum('amount'))}}</td>
                                                 @foreach ($deposit_categories as $deposit_category)  
                                                     @php
                                                         $clone_deposit = clone $deposit; 
@@ -99,10 +102,21 @@
 
                                                 <td>{{get_price($total_deposit)}} </td>
                                                 <td>{{get_percent($total_deposit,$total_target)}}</td>
-                                                <td>15%</td>
-                                                <td>{{get_price($total_target-$total_deposit)}}</td>
-                                                <td>10,000</td>
-                                                <td>40,000</td> 
+                                                @php
+                                                    $holl_target = $target->sum(function ($item) {
+                                                        return $item->new_total_deposit + $item->existing_total_deposit;
+                                                    });
+                                                @endphp
+                                                <td>{{get_percent($total_target, $holl_target)}}</td>
+                                                @php
+                                                    $remaining_target = $total_target-$total_deposit;
+                                                    if($remaining_target<0){
+                                                        $remaining_target = 0;
+                                                    }
+                                                @endphp
+                                                <td>{{get_price($remaining_target)}}</td>
+                                                <td>{{$total_target?get_price($total_target/count($bank_day)) : get_price(0)}}</td>
+                                                <td>{{$remaining_target?get_price($remaining_target/$remaining_day): get_price(0)}}</td> 
                                             </tr> 
                                             @endforeach    
                                             {{-- <tr>
@@ -150,14 +164,13 @@
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label for="duration" class="form-label">Month </label>
-                        <input class="form-control" id="duration" name="date" start="{{$startDate}}" end="{{$endDate}}" type="text" value=""/>   
+                        <input type="month" class="form-control" name="date" id=""> 
                     </div>
                 </div>  
                 <div class="col-md-12"> 
                     <div class="mb-3">
                         <label for="designation" class="form-label">Employee Position </label>
-                        <select class="select2" multiple  name="designation[]" id="designation"> 
-                            <option value="">All Designation</option>
+                        <select class="select2" multiple  name="designation[]" id="designation">  
                             @foreach ($designations as $designation) 
                                 <option value="{{$designation->id}}">{{$designation->title}}</option>
                             @endforeach 
@@ -174,6 +187,7 @@
 @endsection
 
 @section('script') 
+    @include('includes.data_table')
     <script>
         getDateRange('duration')
     </script>

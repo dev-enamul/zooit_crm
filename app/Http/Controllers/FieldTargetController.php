@@ -140,8 +140,7 @@ class FieldTargetController extends Controller
     public function salse_field_report(Request $request){ 
 
         $my_all_employee = my_all_employee(auth()->user()->id); 
-        
-        // Filte Date 
+         
         if(isset($request->month) && $request->month != ''){ 
             $date = Carbon::parse($request->month);
         }else{ 

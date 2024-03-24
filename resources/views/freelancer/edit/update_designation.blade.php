@@ -47,8 +47,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="image" class="form-label">Valid Document <span class="text-danger">* [jpeg, jpg, png, gif | Max : 2MB ]</span> </label>
-                                            <input class="form-control" type="file" name="image" id="image" accept="image" required>
+                                            <label for="image" class="form-label">Valid Document <span class="text-danger"> [jpeg, jpg, png, gif | Max : 2MB ]</span> </label>
+                                            <input class="form-control" type="file" name="image" id="image" accept="image">
                                         </div>
                                     </div> 
                                 </div>

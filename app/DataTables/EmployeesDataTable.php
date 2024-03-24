@@ -96,7 +96,7 @@ class EmployeesDataTable extends DataTable
                         ->selectStyleSingle()
                         ->buttons([
                             Button::make('excel')->title('Employee List'), 
-                            Button::make('pdf')->title('Employee List'), 
+                            // Button::make('pdf')->title('Employee List'), 
                         ]);
         }
  

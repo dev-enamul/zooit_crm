@@ -447,7 +447,7 @@
                         </li> 
                         @endcan 
                         @can('meeting') 
-                        
+
                         {{-- <li>
                             <a href="{{route('meeting.index')}}" class="">
                                 <i class="fas fa-calendar-alt"></i>
@@ -563,23 +563,23 @@
                                 </li> 
                             @endcan
 
-                            @can('sold-report')
+                            {{-- @can('sold-report')
                                 <li>
                                     <a href="{{route('floor.wise.sold.report')}}" class="">
                                         <i class="fas fa-desktop"></i>
                                         <span>Sold & Unsold Report</span>
                                     </a>
                                 </li> 
-                            @endcan 
+                            @endcan  --}}
 
-                            @can('cc-report')
+                            {{-- @can('cc-report')
                                 <li>
                                     <a href="{{route('cc.report')}}" class="">
                                         <i class="fas fa-desktop"></i>
                                         <span>CC Report</span>
                                     </a>
                                 </li>
-                            @endcan  
+                            @endcan   --}}
                             
                             @can('pending-report')
                             <li>
@@ -719,14 +719,12 @@
                             </li> 
                         @endcan  
 
-                        @can('approve_setting')
-                            <li>
-                                <a href="{{route('approve.setting')}}" class="">
-                                    <i class="fas fa-desktop"></i>
-                                    <span>Approve Setting</span>
-                                </a>
-                            </li> 
-                        @endcan
+                        <li>
+                            <a href="{{route('approve.setting')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Approve Setting</span>
+                            </a>
+                        </li> 
                       
                     </div>
                 </div> 

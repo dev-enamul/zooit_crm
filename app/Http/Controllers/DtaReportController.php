@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BankDay;
 use App\Models\Deposit;
 use App\Models\DepositCategory;
 use App\Models\DepositTarget;
@@ -15,12 +16,10 @@ class DtaReportController extends Controller
 {
     public function dt_achivement(Request $request){ 
         $employees= User::where('approve_by','!=',null)->where('status',1);
-
         if(isset($request->date) && $request->date != ''){
-            $date = $request->date;
-            $dateParts = explode(' - ', $date); 
-            $startDate = Carbon::createFromFormat('m/d/Y', $dateParts[0]);
-            $endDate = Carbon::createFromFormat('m/d/Y', $dateParts[1]); 
+            $date = Carbon::parse($request->date);
+            $startDate = $date->firstOfMonth()->toDateString(); 
+            $endDate = $date->endOfMonth()->toDateString();
         }else{
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth();
@@ -36,21 +35,28 @@ class DtaReportController extends Controller
         $designations = Designation::where('status', 1)->select('id','title')->get();
         $deposit_categories =  DepositCategory::where('status', 1)->select('id','name')->get();
 
-        $startMonth = date('m', strtotime($startDate));
-        $startYear = date('Y', strtotime($startDate));
-        $endMonth = date('m', strtotime($endDate));
-        $endYear = date('Y', strtotime($endDate));
+      
 
         // Perform the query
-        $deposit_target = DepositTarget::where(function ($query) use ($startMonth, $startYear, $endMonth, $endYear) {
-                $query->whereYear('month', '>=', $startYear)
-                    ->whereYear('month', '<=', $endYear)
-                    ->whereMonth('month', '>=', $startMonth)
-                    ->whereMonth('month', '<=', $endMonth);
+        $deposit_target = DepositTarget::where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('month',[$startDate,$endDate]);
             })
-            ->get(); 
+            ->get();  
 
-        
+            $bank_day = BankDay::where('month', 'LIKE', date('Y-m', strtotime($startDate)) . '%')->first();
+            if(isset($bank_day) && $bank_day != null){
+                $bank_day = json_decode($bank_day->bank_day);
+            }else{
+                $bank_day =  [];
+            } 
+            
+            $remaining_day = 0;
+            $today = Carbon::now()->format('d');
+            foreach ($bank_day as $value) {  
+                if ($value > $today) {
+                    $remaining_day++;
+                }
+            } 
        
         return view('report.dta.dt_achivement',compact([
             'startDate',
@@ -59,7 +65,9 @@ class DtaReportController extends Controller
             'designations',
             'deposit_categories',
             'is_all_designation',
-            'deposit_target'
+            'deposit_target',
+            'bank_day',
+            'remaining_day'
         ]));
     } 
     public function daily_deposit(Request $request){  

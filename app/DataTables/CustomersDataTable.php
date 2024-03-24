@@ -99,7 +99,7 @@ class CustomersDataTable extends DataTable
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'), 
-                        Button::make('pdf'), 
+                        // Button::make('pdf'), 
                     ]);
     }
 

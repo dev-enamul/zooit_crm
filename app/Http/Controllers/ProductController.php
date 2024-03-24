@@ -24,9 +24,10 @@ class ProductController extends Controller
          
         $divisions      = $this->getCachedDivisions();
         $projects       = Project::where('status',1)->with('units')->select('id','name','address','total_floor')->get();
-        $unit_headers   = Unit::where('status',1)->select('id','title')->get();
+        $unit_headers   = Unit::where('status',1)->select('id','title')->get(); 
+        $salse          = Salse::where('status',1)->get();
         
-        return view('product.product_list',compact('projects','divisions','unit_headers'));
+        return view('product.product_list',compact('projects','divisions','unit_headers','salse'));
     }
 
     public function create(){

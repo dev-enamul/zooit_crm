@@ -161,8 +161,7 @@ if (!function_exists('user_info')) {
 
 if (!function_exists('my_employee')) {
     function my_employee($user_id)
-    {
-        
+    { 
         $reporting_id = ReportingUser::where('user_id', $user_id)->whereNull('deleted_at')->first('id');
         if ($reporting_id) {  
             $my_employee_id = ReportingUser::where('reporting_user_id', $reporting_id->id)->whereNull('deleted_at')->pluck('user_id')->toArray();

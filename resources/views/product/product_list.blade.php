@@ -62,7 +62,7 @@
                                         <td>{{ @$project->address }}</td>
                                         <td>{{ @$project->total_floor}}</td>
                                         @foreach($unit_headers as $header)
-                                            <td>{{ $project->units->where('unit.title', $header->title)->count() }}</td>
+                                            <td>{{$salse->where('project_id',$project->id)->where('unit_id',$header->id)->count()}} / {{ $project->units->where('unit.title', $header->title)->count() }}</td>
                                         @endforeach
                                     </tr> 
                                     @endforeach
