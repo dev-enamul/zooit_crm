@@ -270,6 +270,7 @@ class DashboardController extends Controller
         Artisan::call('view:clear');
         Artisan::call('clear-compiled'); 
         Artisan::call('optimize:clear');
+        dd('complete');
         return redirect()->route('index');
     }
 
