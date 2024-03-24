@@ -3,15 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReportingUser;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeTreeController extends Controller
 {
-    public function tree(){ 
-        $topUser = ReportingUser::where('user_id', 1)
+    public function tree(Request $request){ 
+        if(isset($request->employee) && !empty($request->employee)){
+            $user_id = (int)$request->employee;
+        }else{
+            $user_id = Auth::user()->id;
+        } 
+        $topUser = ReportingUser::where('user_id',  $user_id)
         ->select(['id', 'user_id'])
         ->first(); 
+        $employee =  User::find($user_id);
         $organogram = getOrganogram($topUser); 
-        return view('employee.employee_tree',compact('organogram'));
+        return view('employee.employee_tree',compact('organogram','employee'));
     } 
 }
