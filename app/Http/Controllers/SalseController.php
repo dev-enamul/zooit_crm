@@ -45,34 +45,19 @@ class SalseController extends Controller
     public function create(Request $request)
     {
         $title              = 'Sales Entry';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
-        $is_admin = Auth::user()->hasPermission('admin'); 
-        if($is_admin){
-            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
-        }else{
-            $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })->get();
-            $customers = $customers->customer->select('id','customer_id','name');
-        } 
+        $user_id            = Auth::user()->id;  
 
         $projects           = Project::where('status',1)->get(['name', 'id']);
-        $projectUnits       = ProjectUnit::where('status', 1)->get(['name', 'id']);
-        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $projectUnits       = ProjectUnit::where('status', 1)->get(['name', 'id']); 
         $priorities         = $this->priority();
         $facilities         = $this->facility();
         $units              = Unit::all(); 
         $unit_categories    = UnitCategory::all();
         
-        $selected_data = 
-        [
-            'employee' => Auth::user()->id,
-            'priority' => Priority::Regular,
-        ];
-        
+        $selected_data['priority'] = Priority::Regular;
+       
         if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
+            $selected_data['customer'] = Customer::find($request->customer);
 
             $neg_project = NegotiationAnalysis::where('customer_id',$request->customer)->first();
 
@@ -95,9 +80,7 @@ class SalseController extends Controller
             'selected_data',
             'priorities',
             'projects',
-            'projectUnits',
-            'customers',
-            'employees',
+            'projectUnits', 
             'unit_categories'
         ]));
     }
@@ -150,7 +133,7 @@ class SalseController extends Controller
             $sales->down_payment_due = $request->input('down_payment');
             $sales->booking = $request->input('booking'); 
             $sales->booking_due = $request->input('booking');
-            $sales->first_payment = $request->input('first_payment');
+            $sales->first_payment = $request->input('first_payment')??0;
             $sales->first_payment_date = $request->input('first_payment_date');
             $sales->installment_type = $request->input('installment_type');
             $sales->total_installment = $request->input('total_installment');
@@ -297,6 +280,61 @@ class SalseController extends Controller
             ->first();
 
         return response()->json($data); 
-    }
+    } 
+
+
+    public function select2_customer(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id);   
+        $is_admin = Auth::user()->hasPermission('admin');
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ]; 
+       
+        if($is_admin){ 
+            $users = Customer::query()
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                })
+                ->whereDoesntHave('salse')
+                ->select('id', 'name', 'customer_id')
+                ->limit(10)
+                ->get();  
+                
+            foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->id,
+                    'text' => "{$user->name} [{$user->customer_id}]"
+                ]; 
+            } 
+        }else{
+            $users = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)
+            ->whereHas('customer',function($q) use($my_all_employee,$request){
+                $q->whereIn('ref_id',$my_all_employee)
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                });
+              })->get(); 
+              foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->customer->id,
+                    'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
+                ]; 
+            }
+        }  
+       
+        
+        return response()->json([
+            'results' => $results
+        ]);
+    } 
 
 }

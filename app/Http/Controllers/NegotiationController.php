@@ -28,57 +28,37 @@ class NegotiationController extends Controller
     }
 
     public function index(Request $request)
-    {
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-        $employees = User::whereIn('id', $my_all_employee)->get();
-
+    { 
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
         }else{
             $user_id = Auth::user()->id;
-        } 
-      
+        }  
         $user_employee = my_all_employee($user_id);
         $negotiations = Negotiation::whereHas('customer', function($q) use($user_employee){ 
             $q->whereIn('ref_id', $user_employee);
         }); 
 
          $negotiations = $negotiations->orderBY('id','desc')->get();  
-         $filter =  $request->all();
-        return view('negotiation.negotiation_list',compact('negotiations','employee_data','employees','filter'));
+      
+        return view('negotiation.negotiation_list',compact('negotiations'));
     }
 
     public function create(Request $request)
     {
         $title = 'Negotiation Entry';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
-        $is_admin = Auth::user()->hasPermission('admin'); 
-        if($is_admin){
-            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
-        }else{
-            $customers = FollowUpAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })->get();
-        $customers = $customers->customer->select('id','customer_id','name');
-        }  
+        $user_id            = Auth::user()->id;  
         $projects       = Project::where('status',1)->get(['name', 'id']);
-        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
-        $employees          = User::whereIn('id', $my_all_employee)->get();
+        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']); 
         $priorities         = $this->priority(); 
         $units              = Unit::select('id','title')->get();
 
-        $selected_data = 
-        [
-            'employee' => Auth::user()->id,
-            'priority' => Priority::Regular,
-        ];
+        $selected_data[]= Priority::Regular;
         if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
+            $selected_data['customer'] = Customer::find($request->customer);
         }
 
-        return view('negotiation.negotiation_save', compact('selected_data','priorities','projects','projectUnits','customers','employees','units'));
+        return view('negotiation.negotiation_save', compact('selected_data','priorities','projects','projectUnits','units'));
     }
 
     public function customer_data(Request $request){
@@ -220,6 +200,60 @@ class NegotiationController extends Controller
         } else {
             return redirect()->back()->with('error', 'Please select at least one negotiation');
         }
-    }
+    } 
+
+    public function select2_customer(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id);   
+        $is_admin = Auth::user()->hasPermission('admin');
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ]; 
+       
+        if($is_admin){ 
+            $users = Customer::query()
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                })
+                ->whereDoesntHave('salse')
+                ->select('id', 'name', 'customer_id')
+                ->limit(10)
+                ->get();  
+                
+            foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->id,
+                    'text' => "{$user->name} [{$user->customer_id}]"
+                ]; 
+            } 
+        }else{
+            $users = VisitAnalysis::where('status',0)->where('approve_by','!=',null)
+            ->whereHas('customer',function($q) use($my_all_employee,$request){
+                $q->whereIn('ref_id',$my_all_employee)
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                });
+              })->get(); 
+              foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->customer->id,
+                    'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
+                ]; 
+            }
+        }  
+       
+        
+        return response()->json([
+            'results' => $results
+        ]);
+    } 
 
 }

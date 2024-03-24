@@ -55,12 +55,10 @@
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
                                                 </option>
-                                                @isset($customers)
-                                                    @foreach ($customers as $cstm)
-                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->name }} ({{ $cstm->customer_id}})
-                                                        </option>
-                                                    @endforeach
+                                                @isset($selected_data['customer'])
+                                                    <option value="{{ $selected_data['customer']->id }}" selected>
+                                                        {{ $selected_data['customer']->name }} [{{ $selected_data['customer']->customer_id }}]
+                                                    </option>
                                                 @endisset
                                             </select>
                                             <div class="invalid-feedback">
@@ -73,16 +71,9 @@
                                         <div class="mb-3">
                                             <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
                                             <select class="select2" search name="employee" id="employee" required>
-                                                <option data-display="Select a employee *" value="">
-                                                    Select a employee
+                                                <option value="{{ Auth::user()->id }}" selected>
+                                                    {{ Auth::user()->name }}
                                                 </option>
-                                                @isset($employees)
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($presentation) ? $presentation->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
-                                                            {{ $employee->name }} ({{ $employee->user_id}})
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -192,7 +183,48 @@
 </div>
 @endsection 
 
-@section('script')
+@section('script') 
+
+    <script>
+        $(document).ready(function() {
+            $('#employee').select2({
+                placeholder: "Select Employee",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.employee') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    } 
+                }
+            });
+        });
+
+
+        $(document).ready(function() { 
+            $('#customer').select2({
+                placeholder: "Select Customer",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.presentation.customer') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        } 
+                        return query;
+                    },
+                    success: function(data) {
+                        get_customer_data();
+                    }
+                }
+            });
+        });
+    </script> 
+
     <script>   
         $(document).ready(function(){
             get_customer_data();
@@ -200,7 +232,7 @@
                 get_customer_data();
             });
         })
-      function get_customer_data(){
+      function get_customer_data(){  
             var formData = {
                     customer_id: $("#customer").val()
                 };  
@@ -210,7 +242,7 @@
                     dataType: "json",
                     url: "{{ route('get.lead.analysis.data') }}",
 
-                    success: function(data) {
+                    success: function(data) { 
                         $('#priority').val(data.priority);
                         $('#project').val(data.project_id);
                         $('#unit').val(data.unit_id); 

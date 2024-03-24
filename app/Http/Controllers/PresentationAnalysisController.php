@@ -28,11 +28,7 @@ class PresentationAnalysisController extends Controller
     }
     
     public function index(Request $request)
-    { 
-        $professions = Profession::all();  
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-        $employees = User::whereIn('id', $my_all_employee)->get();
+    {   
 
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
@@ -51,28 +47,15 @@ class PresentationAnalysisController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $visits = $visits->orderBY('id','desc')->get();  
-         $filter =  $request->all();
-        return view('presentation_analysis.presentation_analysis_list', compact('visits','employee_data','professions','employees','filter'));
+         $visits = $visits->orderBY('id','desc')->get();   
+        return view('presentation_analysis.presentation_analysis_list', compact('visits'));
     }
 
     public function create(Request $request)
     {        
         $title = 'Vist Analysis Entry';
         $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
-        
-        $is_admin = Auth::user()->hasPermission('admin'); 
-        if($is_admin){
-            $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();
-        }else{
-            $customers = Presentation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })->get();
-        $customers = $customers->customer->select('id','customer_id','name');
-        } 
-
-        $employees          = User::whereIn('id', $my_all_employee)->get();
+       
         $visitors           = User::where('status', 1)
                                 ->with(['customer' => function ($query) {
                                     $query->select('id', 'customer_id')->first();
@@ -84,15 +67,12 @@ class PresentationAnalysisController extends Controller
         $projects           = Project::where('status',1)->select('id','name')->get();
         $units              = Unit::select('id','title')->get();
 
-        $selected_data = 
-        [
-            'employee' => Auth::user()->id,
-        ];
+        $selected_data=[];
         if ($request->has('customer_id')) {
-            $selected_data['customer'] = $request->customer_id;
+            $selected_data['customer'] = Customer::find($request->customer_id);
         }
  
-        return view('presentation_analysis.presentation_analysis_save',compact('title','customers','priorities','projects','units','visitors','employees','selected_data'));
+        return view('presentation_analysis.presentation_analysis_save',compact('title','priorities','projects','units','visitors','selected_data'));
     }
 
     public function save(Request $request, $id = null)
@@ -228,6 +208,104 @@ class PresentationAnalysisController extends Controller
 
         }catch(Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
-        }
+        }  
+    }
+
+    public function select2_customer(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id);   
+        $is_admin = Auth::user()->hasPermission('admin');
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ]; 
+       
+        if($is_admin){ 
+            $users = Customer::query()
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                })
+                ->whereDoesntHave('salse')
+                ->select('id', 'name', 'customer_id')
+                ->limit(10)
+                ->get();  
+                
+            foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->id,
+                    'text' => "{$user->name} [{$user->customer_id}]"
+                ]; 
+            } 
+        }else{
+            $users = Presentation::where('status',0)->where('approve_by','!=',null)
+            ->whereHas('customer',function($q) use($my_all_employee,$request){
+                $q->whereIn('ref_id',$my_all_employee)
+                ->where(function ($query) use ($request) {
+                    $term = $request->term;
+                    $query->where('customer_id', 'like', "%{$term}%")
+                        ->orWhere('name', 'like', "%{$term}%");
+                });
+              })->get(); 
+              foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->customer->id,
+                    'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
+                ]; 
+            }
+        }  
+       
+        
+        return response()->json([
+            'results' => $results
+        ]);
+    } 
+
+    public function get_visitor(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]); 
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id);   
+        $is_admin = Auth::user()->hasPermission('admin');
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ];  
+
+        $employees = User::query()
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('user_id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%");
+            })
+            ->orWhereHas('customer', function($q) use($request) { 
+                $term = $request->term;
+                $q->where('customer_id', 'like', "%{$term}%");
+            })  
+            ->limit(10)
+            ->get();  
+        
+            foreach ($employees as $user) {
+                if($user->user_type==3){
+                    $results[] = [
+                        'id' => $user->id,
+                        'text' => "{$user->customer->first()->name} [{$user->customer->first()->customer_id}]"
+                    ];
+                }else{
+                    $results[] = [
+                        'id' => $user->id,
+                        'text' => "{$user->name} [{$user->user_id}]"
+                    ];
+                }
+                 
+            }   
+        
+        return response()->json([
+            'results' => $results
+        ]);
     }
 }

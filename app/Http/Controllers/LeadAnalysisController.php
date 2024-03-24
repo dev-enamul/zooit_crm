@@ -79,7 +79,7 @@ class LeadAnalysisController extends Controller
     }
 
     public function customer_data(Request $request){
-        $lead = Lead::where('customer_id',$request->customer)->first();
+        $lead = Lead::where('customer_id',$request->customer)->first(); 
         return response()->json($lead,200);
 
     }
@@ -308,5 +308,7 @@ class LeadAnalysisController extends Controller
         return response()->json([
             'results' => $results
         ]);
-    }
+    } 
+
+   
 }

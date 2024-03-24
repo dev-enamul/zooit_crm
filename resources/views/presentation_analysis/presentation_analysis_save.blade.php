@@ -51,23 +51,7 @@
                                         <div class="mb-3">
                                             <label for="visitor" class="form-label">Visitor <span class="text-danger">*</span></label>
                                             <select id="visitor" class="select2" tags search name="visitor[]" multiple>
-                                                @isset($visitors)
-                                                    @foreach ($visitors as $visitor)
-                                                        @if ($visitor->user_type==3) 
-                                                        @php
-                                                            $customer = App\Models\Customer::where('user_id',$visitor->id)->first();
-                                                        @endphp
-                                                            <option value="{{ $visitor->id }}" {{ in_array($visitor->id, old('visitor', isset($visit) ? json_decode($visit->visitors) : [])) ? 'selected' : '' }}>
-                                                                {{ $customer->name }} ({{ $customer->customer_id }} )
-                                                            </option>
-                                                        @elseif($visitor->user_type==2 || $visitor->user_type==1)  
-                                                            <option value="{{ $visitor->id }}" {{ in_array($visitor->id, old('visitor', isset($visit) ? json_decode($visit->visitors) : [])) ? 'selected' : '' }}>
-                                                                {{ $visitor->name }} ({{ $visitor->user_id }})
-                                                            </option>
-                                                        @endif
-                                                       
-                                                    @endforeach
-                                                @endisset
+                                               
                                             </select>
                                         </div>
                                     </div>
@@ -76,16 +60,7 @@
                                         <div class="mb-3">
                                             <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
                                             <select class="select2" search name="employee" id="employee" required>
-                                                <option data-display="Select a employee *" value="">
-                                                    Select a employee
-                                                </option>
-                                                @isset($employees)
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}" {{ old('employee', isset($visit) ? $visit->employee_id : null) == $employee->id || (isset($selected_data['employee']) && $selected_data['employee'] == $employee->id) ? 'selected' : '' }}>
-                                                            {{ $employee->name }} ({{ $employee->user_id}})
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
+                                               <option value="{{ auth()->user()->id }}" selected>{{ auth()->user()->name }} ({{ auth()->user()->user_id }})</option>
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -115,15 +90,11 @@
                                         <div class="mb-3">
                                             <label for="customer_id" class="form-label">Negotiation Person <span class="text-danger">*</span></label>
                                             <select id="customer_id" class="select2" search name="customer_id" required>
-                                                <option data-display="Select a coustomer *" value="">
-                                                    Select a Negotiation Person
-                                                </option>
-                                                @isset($customers)
-                                                    @foreach ($customers as $cstm)
-                                                        <option value="{{ $cstm->id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->id ? 'selected' : '' }}>
-                                                            {{ @$cstm->name }} ({{ $cstm->customer_id}})
-                                                        </option>
-                                                    @endforeach
+                                           
+                                                @isset($selected_data['customer'])
+                                                    <option value="{{ $selected_data['customer']->id }}" selected>
+                                                        {{ $selected_data['customer']->name }} ({{ $selected_data['customer']->customer_id }})
+                                                    </option>
                                                 @endisset
                                             </select> 
                                         </div>
@@ -152,4 +123,66 @@
     </div> 
     @include('includes.footer')
 </div>
+@endsection  
+
+@section('script')
+<script>
+    $(document).ready(function() {
+        $('#employee').select2({
+            placeholder: "Select Employee",
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select2.employee') }}',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        term: params.term
+                    }
+                    return query;
+                } 
+            }
+        });
+    });
+
+
+    $(document).ready(function() { 
+        $('#customer_id').select2({
+            placeholder: "Select Customer",
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select2.presentation_analysis.customer') }}',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        term: params.term
+                    } 
+                    return query;
+                },
+                success: function(data) {
+                    get_customer_data();
+                }
+            }
+        });
+    });
+
+    $(document).ready(function() { 
+        $('#visitor').select2({
+            placeholder: "Select Customer",
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select2.visitor') }}',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        term: params.term
+                    } 
+                    return query;
+                },
+                success: function(data) {
+                    get_customer_data();
+                }
+            }
+        });
+    });
+</script> 
 @endsection

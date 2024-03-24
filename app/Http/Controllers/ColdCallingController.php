@@ -205,7 +205,10 @@ class ColdCallingController extends Controller
         $user_id   = Auth::user()->id;
         $my_all_employee = my_all_employee($user_id);   
         $is_admin = Auth::user()->hasPermission('admin'); 
-       
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ]; 
+
         if($is_admin){ 
             $users = Customer::query()
                 ->where(function ($query) use ($request) {
@@ -216,7 +219,14 @@ class ColdCallingController extends Controller
                 ->whereDoesntHave('salse')
                 ->select('id', 'name', 'customer_id')
                 ->limit(10)
-                ->get(); 
+                ->get();  
+                
+            foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->id,
+                    'text' => "{$user->name} [{$user->customer_id}]"
+                ]; 
+            } 
         }else{
             $users = Prospecting::where('status',0)->where('approve_by','!=',null)
             ->whereHas('customer',function($q) use($my_all_employee,$request){
@@ -226,19 +236,15 @@ class ColdCallingController extends Controller
                     $query->where('customer_id', 'like', "%{$term}%")
                         ->orWhere('name', 'like', "%{$term}%");
                 });
-              })->get();
-            $users = $users->customer->select('id','customer_id','name');
+              })->get(); 
+              foreach ($users as $user) {
+                $results[] = [
+                    'id' => $user->customer->id,
+                    'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
+                ]; 
+            }
         }  
-        $results = [
-            ['id' => '', 'text' => 'Select Product']
-        ]; 
-        foreach ($users as $user) {
-            $results[] = [
-                'id' => $user->id,
-                'text' => "{$user->name} ($user->customer_id)"
-            ];
-            
-        }
+         
         return response()->json([
             'results' => $results
         ]);
