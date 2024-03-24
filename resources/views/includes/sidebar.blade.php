@@ -438,7 +438,7 @@
                                     <a href="{{route('training.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Create</a>
                                 </li> 
                                 
-                                <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li> 
+                                {{-- <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li>  --}}
                                 
                                 <li>
                                     <a href="{{route('training.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training History</a>
@@ -446,13 +446,15 @@
                             </ul>
                         </li> 
                         @endcan 
-                        @can('meeting')
-                        <li>
+                        @can('meeting') 
+                        
+                        {{-- <li>
                             <a href="{{route('meeting.index')}}" class="">
                                 <i class="fas fa-calendar-alt"></i>
                                 <span>Meeting Schedule</span>
                             </a>
-                        </li>   
+                        </li>    --}} 
+
                         @endcan
                     {{-- <li class="menu-title">Asign</li>  
                     <li>

@@ -36,8 +36,7 @@ class DepositTargetController extends Controller
        }
     }
 
-    public function target_asign_list(Request $request){ 
- 
+    public function target_asign_list(Request $request){  
         $my_employee = my_employee(auth()->user()->id);
         $employees = User::whereIn('id',$my_employee)->where('status',1)->get();   
         $selected = $request->month;  

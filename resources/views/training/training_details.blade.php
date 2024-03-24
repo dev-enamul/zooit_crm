@@ -8,8 +8,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box text-center">
-                        <h4 class="mb-sm-0 pb-1">Effective Communication with Homebuyers </h4> 
-                        <p class="m-0">20 December, 2023 <span class="badge badge-label-primary"> 4:20PM - 6:20 PM </span></p>
+                        <h4 class="mb-sm-0 pb-1">{{$data->title}}</h4> 
+                        <p class="m-0">{{get_date($data->date)}} <span class="badge badge-label-primary"> {{ date('h:i A', strtotime($data->time)) }} </span></p>
                     </div>
                 </div>
             </div>
@@ -23,116 +23,98 @@
                         </div>
                         <div class="card-body">
                             <div class="rich-list rich-list-flush">
-                                <div class="flex-column align-items-stretch">
-                                    <div class="rich-list-item">
-                                        <div class="rich-list-prepend">
-                                            <div class="avatar avatar-xs">
-                                                <div class=""><img src="../assets/images/users/avatar-1.png" alt="Avatar image" class="avatar-2xs"></div>
+                                @foreach ($trainers as $user)
+                                    <div class="flex-column align-items-stretch">
+                                        <div class="rich-list-item">
+                                            <div class="rich-list-prepend">
+                                                <div class="avatar avatar-xs">
+                                                    <div class=""><img src="{{$user->image()}}" class="avatar-2xs"></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="rich-list-content">
-                                            <h4 class="rich-list-title mb-1">Airi Satou</h4>
-                                            <p class="rich-list-subtitle mb-0">Accountant</p>
-                                        </div>
-                                        <div class="rich-list-append"><a href="freelancer_profile.html" class="btn btn-sm btn-label-primary">Profile</a></div>
-                                    </div>
-                                </div>
-
-                                <div class="flex-column align-items-stretch">
-                                    <div class="rich-list-item">
-                                        <div class="rich-list-prepend">
-                                            <div class="avatar avatar-xs">
-                                                <div class=""><img src="../assets/images/users/avatar-2.png" alt="Avatar image" class="avatar-2xs"></div>
+                                            <div class="rich-list-content">
+                                                <h4 class="rich-list-title mb-1">{{$user->name}}</h4>
+                                                <p class="rich-list-subtitle mb-0">{{@$user->employee->designation->title}} [{{@$user->user_id}}]</p>
                                             </div>
+                                            @if ($user->user_type==1 || $user->user_type==2)
+                                                <div class="rich-list-append">
+                                                    <a href="{{route('profile',encrypt($user->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                                </div> 
+                                            @else  
+                                                <div class="rich-list-append">
+                                                    <a href="{{route('customer.profile',encrypt(@$user->customer[0]->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                                </div>
+                                            @endif 
                                         </div>
-                                        <div class="rich-list-content">
-                                            <h4 class="rich-list-title mb-1">Cedric Kelly</h4>
-                                            <p class="rich-list-subtitle mb-0">Senior Developer</p>
-                                        </div>
-                                        <div class="rich-list-append"><a href="freelancer_profile.html" class="btn btn-sm btn-label-primary">Profile</a></div>
-                                    </div>
-                                </div>
-                                 
+                                    </div> 
+                                @endforeach
+                               
                             </div>
                         </div>
 
                         <div class="card-header card-header-bordered bg-primary">
                             <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
-                            <h3 class="card-title text-white">Attendance</h3>
+                            <h3 class="card-title text-white">Present</h3>
                         </div>
                         <div class="card-body">
                             <div class="rich-list rich-list-flush">
-                                <div class="flex-column align-items-stretch">
-                                    <div class="rich-list-item">
-                                        <div class="rich-list-prepend">
-                                            <div class="avatar avatar-xs">
-                                                <div class=""><img src="../assets/images/users/avatar-1.png" alt="Avatar image" class="avatar-2xs"></div>
+                                @foreach ($present as $user)
+                                    <div class="flex-column align-items-stretch">
+                                        <div class="rich-list-item">
+                                            <div class="rich-list-prepend">
+                                                <div class="avatar avatar-xs">
+                                                    <div class=""><img src="{{$user->image()}}" class="avatar-2xs"></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="rich-list-content">
-                                            <h4 class="rich-list-title mb-1">Airi Satou</h4>
-                                            <p class="rich-list-subtitle mb-0">Accountant</p>
-                                        </div>
-                                        <div class="rich-list-append"><a href="freelancer_profile.html" class="btn btn-sm btn-label-primary">Profile</a></div>
-                                    </div>
-                                </div>
-                                <div class="flex-column align-items-stretch">
-                                    <div class="rich-list-item">
-                                        <div class="rich-list-prepend">
-                                            <div class="avatar avatar-xs">
-                                                <div class=""><img src="../assets/images/users/avatar-2.png" alt="Avatar image" class="avatar-2xs"></div>
+                                            <div class="rich-list-content">
+                                                <h4 class="rich-list-title mb-1">{{$user->name}}</h4>
+                                                <p class="rich-list-subtitle mb-0">{{@$user->employee->designation->title}} [{{$user->user_id}}]</p>
                                             </div>
+                                            @if ($user->user_type==1 || $user->user_type==2)
+                                                <div class="rich-list-append">
+                                                    <a href="{{route('profile',encrypt($user->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                                </div> 
+                                            @else  
+                                                <div class="rich-list-append">
+                                                    <a href="{{route('customer.profile',encrypt(@$user->customer[0]->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                                </div>
+                                            @endif 
                                         </div>
-                                        <div class="rich-list-content">
-                                            <h4 class="rich-list-title mb-1">Cedric Kelly</h4>
-                                            <p class="rich-list-subtitle mb-0">Senior Developer</p>
-                                        </div>
-                                        <div class="rich-list-append"><a href="freelancer_profile.html" class="btn btn-sm btn-label-primary">Profile</a></div>
-                                    </div>
-                                </div>
-                                <div class="flex-column align-items-stretch">
-                                    <div class="rich-list-item">
-                                        <div class="rich-list-prepend">
-                                            <div class="avatar avatar-xs">
-                                                <div class=""><img src="../assets/images/users/avatar-4.png" alt="Avatar image" class="avatar-2xs"></div>
-                                            </div>
-                                        </div>
-                                        <div class="rich-list-content">
-                                            <h4 class="rich-list-title mb-1">Brielle Williamson</h4>
-                                            <p class="rich-list-subtitle mb-0">Integration Specialist</p>
-                                        </div>
-                                        <div class="rich-list-append"><a href="freelancer_profile.html" class="btn btn-sm btn-label-primary">Profile</a></div>
-                                    </div>
-                                </div>
+                                    </div> 
+                                @endforeach
+                            </div>
+                        </div> 
 
-                                <div class="flex-column align-items-stretch">
-                                    <div class="rich-list-item">
-                                        <div class="rich-list-prepend">
-                                            <div class="avatar avatar-xs">
-                                                <div class=""><img src="../assets/images/users/avatar-4.png" alt="Avatar image" class="avatar-2xs"></div>
+
+                        <div class="card-header card-header-bordered bg-primary">
+                            <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
+                            <h3 class="card-title text-white">Absent</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="rich-list rich-list-flush">
+                                @foreach ($absent as $user)
+                                    <div class="flex-column align-items-stretch">
+                                        <div class="rich-list-item">
+                                            <div class="rich-list-prepend">
+                                                <div class="avatar avatar-xs">
+                                                    <div class=""><img src="{{$user->image()}}" class="avatar-2xs"></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="rich-list-content">
-                                            <h4 class="rich-list-title mb-1">Brielle Williamson</h4>
-                                            <p class="rich-list-subtitle mb-0">Integration Specialist</p>
-                                        </div>
-                                        <div class="rich-list-append"><a href="freelancer_profile.html" class="btn btn-sm btn-label-primary">Profile</a></div>
-                                    </div>
-                                </div>
-                                <div class="flex-column align-items-stretch">
-                                    <div class="rich-list-item">
-                                        <div class="rich-list-prepend">
-                                            <div class="avatar avatar-xs">
-                                                <div class=""><img src="../assets/images/users/avatar-6.png" alt="Avatar image" class="avatar-2xs"></div>
+                                            <div class="rich-list-content">
+                                                <h4 class="rich-list-title mb-1">{{$user->name}}</h4>
+                                                <p class="rich-list-subtitle mb-0">{{@$user->employee->designation->title}} [{{$user->user_id}}]</p>
                                             </div>
+                                            @if ($user->user_type==1 || $user->user_type==2)
+                                                <div class="rich-list-append">
+                                                    <a href="{{route('profile',encrypt($user->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                                </div> 
+                                            @else  
+                                                <div class="rich-list-append">
+                                                    <a href="{{route('customer.profile',encrypt(@$user->customer[0]->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                                </div>
+                                            @endif 
                                         </div>
-                                        <div class="rich-list-content">
-                                            <h4 class="rich-list-title mb-1">Sonya Frost</h4>
-                                            <p class="rich-list-subtitle mb-0">Software Engineer</p>
-                                        </div>
-                                        <div class="rich-list-append"><a href="freelancer_profile.html" class="btn btn-sm btn-label-primary">Profile</a></div>
-                                    </div>
-                                </div>
+                                    </div> 
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -144,8 +126,9 @@
                             <div class="card-icon text-white"><i class="mdi mdi-view-agenda fs14"></i></div>
                             <h3 class="card-title text-white"> Agenda</h3>
                         </div>
-                        <div class="card-body">
-                            <h5>Welcome and Introduction (15 minutes)</h5>
+                        <div class="card-body"> 
+                            {{$data->agenda}}
+                            {{-- <h5>Welcome and Introduction (15 minutes)</h5>
                             <div class="timeline">
                                 <div class="timeline-item">
                                     <div class="timeline-pin">
@@ -235,7 +218,7 @@
                                         <p class="mb-0">Break (10 minutes)</p>
                                     </div>
                                 </div> 
-                            </div> 
+                            </div>  --}}
                         </div>
                     </div> 
                 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Training;
+use App\Models\TrainingAttendance;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -67,9 +68,17 @@ class TrainingController extends Controller
     public function training_schedule(){
         return view('training.training_schedule');
     }
- 
-
-    public function training_details(){
-        return view('training.training_details');
+  
+    public function show($id){
+        try{
+            $data = Training::find($id); 
+            $trainers = json_decode($data->trainer);
+            $trainers = User::whereIn('id',$trainers)->get();
+            $present = TrainingAttendance::where('training_id',$id)->where('status',1)->get();
+            $absent = TrainingAttendance::where('training_id',$id)->where('status',0)->get();
+            return view('training.training_details',compact('data','trainers','present','absent'));
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

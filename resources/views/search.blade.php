@@ -42,7 +42,7 @@
                                     
                                     @if ($data->user_type==1 || $data->user_type==2)
                                         <div class="rich-list-append">
-                                            <a href="{{route('freelancer.profile')}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                            <a href="{{route('profile',encrypt($data->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                         </div> 
                                     @else  
                                         <div class="rich-list-append">
