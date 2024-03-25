@@ -46,9 +46,7 @@ class DashboardController extends Controller
 
 
     public function index(){ 
-
-        $user = User::latest()->take(10)->get();
-        dd($user);
+ 
         $reporting = ReportingUser::Latest()->first();
         $reporting->update(['reporting_user_id'=>1]);
        
