@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Models\Freelancer;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -83,15 +84,23 @@ class FreelancersDataTable extends DataTable
             $end_date = date('Y-m-d',strtotime($date[1]));
             $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
         } 
+        $is_admin = Auth::user()->hasPermission('admin');
 
-        if(isset($request->employee)){
-            $my_freelancer = my_all_employee((int)$request->employee);
+        if($is_admin){
+
         }else{
-            $my_freelancer = my_all_employee(auth()->user()->id);
+            if(isset($request->employee)){
+                $my_freelancer = my_all_employee((int)$request->employee);
+            }else{
+                $my_freelancer = my_all_employee(auth()->user()->id);
+            }
+            $model = $model->whereIn('user_id',$my_freelancer);
         }
+
+       
+        
          $data =  $model
-        ->with('user')
-        ->whereIn('user_id',$my_freelancer)
+        ->with('user') 
         ->where(function($q){
             $q->where('status',1)->orWhereHas('user', function($query){
                 $query->Where('approve_by','!=',null)
