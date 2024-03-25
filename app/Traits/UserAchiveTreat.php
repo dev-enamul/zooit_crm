@@ -24,11 +24,13 @@ trait UserAchiveTreat
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
-        }   
-        $my_all_employee = my_all_employee($this->id);
-        $freelancer = User::whereIn('ref_id',$my_all_employee)
+        } 
+        $my_all_employee = my_all_employee($this->id); 
+        $freelancer = User::whereHas('freelancer',function($q) use($my_all_employee){
+            $q->whereIn('user_id',$my_all_employee);
+        })
         ->where('user_type',2)
-        ->where('approve_by','!=',null)
+        // ->where('approve_by','!=',null)
         ->whereMonth('created_at',$date)
         ->whereYear('created_at',$date)
         ->count(); 

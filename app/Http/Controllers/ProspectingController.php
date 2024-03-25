@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ProspectingDataTable;
 use App\Enums\Priority;
 use App\Enums\ProspectingMedia;
 use App\Models\ApproveSetting;
@@ -29,73 +30,12 @@ class ProspectingController extends Controller
         return Priority::values();
     }
 
-    public function index(Request $request)
-    { 
-        $professions = Profession::all();   
-        if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
-        }else{
-            $user_id = Auth::user()->id;
-        } 
-        if(isset($request->date)){
-            $date = explode(' - ',$request->date);
-            $start_date = date('Y-m-d',strtotime($date[0]));
-            $end_date = date('Y-m-d',strtotime($date[1])); 
-        }else{
-            $start_date = date('Y-m-01');
-            $end_date = date('Y-m-t');
-        }
-
-        $user_employee = my_all_employee($user_id);
-        $prospectings = Prospecting::where(function ($q){
-            $q->where('approve_by','!=',null)
-                ->orWhere('employee_id', Auth::user()->id)
-                ->orWhere('created_by', Auth::user()->id);
-        }) 
-        ->whereHas('customer', function($q) use($user_employee){ 
-            $q->whereIn('ref_id', $user_employee);
-        })
-        ->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
-
-        if(isset($request->status) && !empty($request->status)){
-            $status = (int)$request->status;
-            $prospectings = $prospectings->where('status', $status);
-        }else{
-            $prospectings = $prospectings->where('status', 0);
-        }
-
-
-        if(isset($request->date) && !empty($request->date)){ 
-            $date_parts = explode(" - ", $request->date); 
-            $start_date = $date_parts[0];
-            $end_date = $date_parts[1]; 
-            
-            $start_date = \Carbon\Carbon::createFromFormat('m/d/Y', $start_date)->format('Y-m-d');
-            $end_date = \Carbon\Carbon::createFromFormat('m/d/Y', $end_date)->format('Y-m-d'); 
-            $prospectings = $prospectings->whereBetween('created_at', [$start_date, $end_date]);
-            
-        }
-
-        if(isset($request->profession) && !empty($request->profession)){
-            $profession = (int)$request->profession;
-            $prospectings = $prospectings->whereHas('customer', function($q) use($profession){ 
-                $q->where('profession_id', $profession);
-            });
-        } 
-
-        // $prospectings = $prospectings->with('employee','customer.user')->where(function ($query) {
-        //     $query->where('status', 1)
-        //         ->orWhere(function ($subquery) {
-        //             $subquery->where('status', 0)
-        //                     ->where('created_by', Auth::user()->id);
-        //         });
-        // })->orderBy('id','desc')->get();
-
-        $prospectings = $prospectings->get();
-
-        $filter =  $request->all();
-        return view('prospecting.prospecting_list', compact('prospectings','professions','filter'));
+    public function index(ProspectingDataTable $dataTable)
+    {
+        $title = 'Prospecting List';
+        return $dataTable->render('prospecting.prospecting_list', compact('title'));
     }
+ 
 
     public function create(Request $request)
     {

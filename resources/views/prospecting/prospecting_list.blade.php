@@ -1,6 +1,10 @@
 @extends('layouts.dashboard')
-@section('title','Prospecting List')
-
+@section('title',$title)
+ @section('style') 
+    <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+ @endsection
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -10,15 +14,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Prospecting List</h4>
-                        <p class="d-none">{{auth()->user()->name}}</p> 
-                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
-                        <input type="hidden" id="pageSize" value="A4">
-                        <input type="hidden" id="fontSize" value="10">
+                        <h4 class="mb-sm-0">{{$title}}</h4>  
 
                         <div class="page-title-right">
-                            <div class="btn-group flex-wrap mb-2">
-                                <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a>      
+                            <div class="btn-group flex-wrap mb-2">      
                                 <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                     <span><i class="fas fa-filter"></i> Filter</span>
                                 </button> 
@@ -33,86 +32,27 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">  
-
-                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>S/N</th>
-                                        <th>Full Name</th>
-                                        <th>Profession</th>
-                                        <th>Upazilla/Thana</th>
-                                        <th>Union</th>
-                                        <th>Village</th>
-                                        <th>Media</th>
-                                        <th>Mobile No</th>
-                                        <th>Freelancer</th>
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    @foreach ($prospectings as  $prospecting)
-                                    <tr class="{{$prospecting->approve_by==null?"table-warning":""}}">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{@$prospecting->customer->user->image()}}" alt="Header Avatar">
-                                                </a>
-                                                
-                                                <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    @can('prospecting-manage')
-                                                        @if ($prospecting->approve_by==null)
-                                                            <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a>
-                                                        @endif  
-                                                    @endcan
-                                                   
-
-                                                    @can('prospecting-delete')
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('prospecting.delete',$prospecting->id) }}')">Delete</a>  
-                                                    @endcan 
-                                                    @if ($prospecting->approve_by!=null) 
-                                                        @can('cold-calling-manage')
-                                                            <a class="dropdown-item" href="{{route('cold-calling.create',['customer' => $prospecting->customer->id])}}">Cold Calling</a>
-                                                        @endcan 
-                                                    @endif 
-                                                    <a class="dropdown-item" href="{{route('customer.details', encrypt($prospecting->customer_id))}}">Print Customer</a>
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td class="">{{ @$prospecting->customer->name }} [{{@$prospecting->customer->customer_id}}]</td>
-                                        <td class="">{{ @$prospecting->customer->profession->name }}</td>
-                                        <td class="">{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
-                                        <td class="">{{ @$prospecting->customer->user->userAddress->union->name }}</td>
-                                        <td class="">{{ @$prospecting->customer->user->userAddress->village->name }}</td>
-                                        <td class="">
-                                            @if ($prospecting->media == 1)
-                                            Phone
-                                            @elseif($prospecting->media == 2)
-                                            Meet
-
-                                            @endif 
-                                        </td>
-                                        <td class="">{{ @$prospecting->customer->user->phone }}</td>
-                                        <td class="">{{ @$prospecting->customer->reference->name }} [{{ @$prospecting->customer->reference->user_id }}]</td>
-                                    </tr>
-                                    @endforeach 
-                                </tbody>
-                            </table>
+                        <div class="card-body"> 
+                            {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap']) }} 
                         </div>
                     </div>
                 </div> <!-- end col -->
             </div>
             <!-- end row -->
         </div> <!-- container-fluid -->
-    </div>
+    </div> 
+</div>  
 
-     @include('includes.footer')
-</div> 
+@php
+    $date = request('date');
+    $status = request('status')??0;
+    $start_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+    $end_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+    $employee = request('employee');
+    $employee = $employee ? App\Models\User::find($employee)?? App\Models\User::find(auth()->user()->id) :  App\Models\User::find(auth()->user()->id);
 
-@php 
-    $professions = \App\Models\Profession::where('status',1)->select('id','name')->get();  
-@endphp
+@endphp 
+
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Select Filter Item</h5>
@@ -121,53 +61,72 @@
         </button>
     </div>
     <div class="offcanvas-body">
-       <form action="" method="get">
-        <div class="row">  
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="date_range" class="form-label">Date</label>
-                    <input class="form-control" id="date_range" name="date" default="This Month" type="text" value="" />   
+        <form action="" method="get">
+            <div class="row"> 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="select2" id="status" name="status"> 
+                            <option value = "1" {{$status==1?"selected":""}}>Completed</option>
+                            <option value = "0" {{$status==0?"selected":""}}> Pending</option>
+                        </select> 
+                    </div>
+                </div> 
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="date_range" class="form-label">Date</label>
+                        <input class="form-control" start="{{$start_date}}" end="{{$end_date}}" id="date_range" name="date" default="This Month" type="text" value="" />   
+                    </div>
                 </div>
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Employee</label>
+                        <select class="select2" search id="employee" name="employee"> 
+                            <option value = "{{$employee->id}}" selected="selected">{{$employee->name}} [{{$employee->user_id}}]</option>
+                        </select> 
+                    </div>
+                </div>   
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+                </div> 
             </div>
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="employee" class="form-label">Employee</label>
-                    <select class="select2" search id="employee" name="employee"> 
-                    </select> 
-                </div>
-            </div>    
-            <div class="text-center">
-                <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
-            </div> 
-        </div>
-       </form>
+        </form>
     </div>
-</div>
+</div>  
 
-@endsection 
+@endsection  
+@section('script')
+<script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
+<script src="/vendor/datatables/buttons.server-side.js"></script>
+{!! $dataTable->scripts() !!}  
 
-@section('script') 
-@include('includes.data_table')
 <script>
-     getDateRange('date_range');
-
-     $(document).ready(function() { 
-            $('#employee').select2({
-                placeholder: "Select Employee",
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('select2.employee') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        var query = {
-                            term: params.term
-                        }
-                        return query;
-                    }
-                }
-            });
-        });
-
+    getDateRange('date_range'); 
+    $(document).ready(function() { 
+           $('#employee').select2({
+               placeholder: "Select Employee",
+               allowClear: true,
+               ajax: {
+                   url: '{{ route('select2.employee') }}',
+                   dataType: 'json',
+                   data: function (params) {
+                       var query = {
+                           term: params.term
+                       }
+                       return query;
+                   }
+               }
+           });
+       }); 
 </script>
 @endsection
+ 
+
+ 

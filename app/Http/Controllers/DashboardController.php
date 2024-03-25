@@ -41,14 +41,14 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
-    // public function create(CustomersDataTable $dataTable)
-    // { 
-    //     return $dataTable->render('displaydata');
-    // }  
+ 
 
 
 
-    public function index(){
+    public function index(){ 
+
+        $user = User::latest()->first();
+        dd($user);
         $reporting = ReportingUser::Latest()->first();
         $reporting->update(['reporting_user_id'=>1]);
        

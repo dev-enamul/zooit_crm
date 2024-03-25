@@ -42,48 +42,47 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div> 
-</div>    
+</div>      
 
-@php
-    $my_all_employee= my_all_employee(auth()->user()->id); 
-    $employees = \App\Models\User::where('status',1)->whereIn('id',$my_all_employee)->whereIn('user_type',[1])->select('id','name','user_id')->get();
-@endphp 
-
-<div class="offcanvas offcanvas-end" id="offcanvas">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Select Filter Item</h5>
-        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-            <i class="fa fa-times"></i>
-        </button>
-    </div>
-    <div class="offcanvas-body">
-       <form action="" method="get">
-        <div class="row">  
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="date_range" class="form-label">Date</label>
-                    <input class="form-control" id="date_range" name="date" default="This Month" type="text" value="" />   
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="employee" class="form-label">Employee</label>
-                    <select class="select2" search id="employee" name="employee">
-                        <option value="">Select Freelancer</option> 
-                        @foreach ($employees as $item)
-                            <option value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option> 
-                        @endforeach  
-                    </select> 
-                </div>
-            </div>   
-            <div class="text-center">
-                <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
-            </div> 
+    @php
+        $date = request('date');
+        $start_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = request('employee');
+        $employee = $employee ? App\Models\User::find($employee)?? App\Models\User::find(auth()->user()->id) :  App\Models\User::find(auth()->user()->id);
+    @endphp  
+    <div class="offcanvas offcanvas-end" id="offcanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Select Filter Item</h5>
+            <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
-       </form>
-    </div>
-</div>
+        <div class="offcanvas-body">
+            <form action="" method="get">
+                <div class="row">  
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="date_range" class="form-label">Date</label>
+                            <input class="form-control" start="{{$start_date}}" end="{{$end_date}}" id="date_range" name="date" default="This Month" type="text" value="" />   
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="employee" class="form-label">Employee</label>
+                            <select class="select2" search id="employee" name="employee"> 
+                                <option value = "{{$employee->id}}" selected="selected">{{$employee->name}} [{{$employee->user_id}}]</option>
+                            </select> 
+                        </div>
+                    </div>   
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+                    </div> 
+                </div>
+            </form>
+        </div>
+    </div> 
 
 @endsection  
 @section('script')
@@ -94,9 +93,25 @@
 {{-- <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script> --}}
 <script src="/vendor/datatables/buttons.server-side.js"></script>
-{!! $dataTable->scripts() !!}  
+{!! $dataTable->scripts() !!}   
+<script>  
+    $(document).ready(function() {
+            $('#employee').select2({
+                placeholder: "Select Employee",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('select2.employee') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    }
+                }
+            });
+        });
 
-<script>
     getDateRange('date_range');
 </script>
 @endsection
