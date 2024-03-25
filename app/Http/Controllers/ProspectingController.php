@@ -12,6 +12,7 @@ use App\Models\Employee;
 use App\Models\Profession;
 use App\Models\Prospecting;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +31,16 @@ class ProspectingController extends Controller
         return Priority::values();
     }
 
-    public function index(ProspectingDataTable $dataTable)
+    public function index(ProspectingDataTable $dataTable, Request $request)
     {
-        $title = 'Prospecting List';
-        return $dataTable->render('prospecting.prospecting_list', compact('title'));
+        $title = 'Prospecting List'; 
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+        return $dataTable->render('prospecting.prospecting_list', compact('title','employee','status','start_date','end_date'));
     }
  
 

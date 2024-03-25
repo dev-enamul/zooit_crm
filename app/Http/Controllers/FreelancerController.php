@@ -407,6 +407,7 @@ class FreelancerController extends Controller
         }
         try { 
             $user->update([ 
+                'user_id'       => $request->freelancer_id,
                 'name'          => $request->full_name, 
                 'marital_status'=> $request->marital_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),

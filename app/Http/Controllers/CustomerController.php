@@ -25,6 +25,7 @@ use App\Models\Zone;
 use App\Rules\AtLeastOneFilledRule;
 use App\Traits\AreaTrait;
 use App\Traits\ImageUploadTrait;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,9 +62,17 @@ class CustomerController extends Controller
         return Nationality::values();
     }
 
-    public function index(CustomersDataTable $dataTable)
+    public function index(CustomersDataTable $dataTable, Request $request)
     {  
-        return $dataTable->render('customer.customer_list');
+        $title = 'Prospecting List'; 
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+
+        return $dataTable->render('customer.customer_list', compact('title','employee','status','start_date','end_date'));
     }
 
     public function create(){

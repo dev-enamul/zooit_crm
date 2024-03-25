@@ -42,16 +42,7 @@
         </div> <!-- container-fluid -->
     </div> 
 </div>  
-
-@php
-    $date = request('date');
-    $status = request('status')??0;
-    $start_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-    $end_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
-    $employee = request('employee');
-    $employee = $employee ? App\Models\User::find($employee)?? App\Models\User::find(auth()->user()->id) :  App\Models\User::find(auth()->user()->id);
-
-@endphp 
+ 
 
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">

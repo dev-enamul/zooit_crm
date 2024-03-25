@@ -43,16 +43,7 @@
                 <!-- end row -->
             </div> <!-- container-fluid -->
         </div> 
-    </div> 
-
-    @php
-        $date = request('date');
-        $start_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
-        $employee = request('employee');
-        $employee = $employee ? App\Models\User::find($employee)?? App\Models\User::find(auth()->user()->id) :  App\Models\User::find(auth()->user()->id);
-    @endphp 
-
+    </div>  
     <div class="offcanvas offcanvas-end" id="offcanvas">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">Select Filter Item</h5>
@@ -63,6 +54,16 @@
         <div class="offcanvas-body">
         <form action="" method="get">
             <div class="row">  
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="select2" id="status" name="status"> 
+                            <option value = "1" {{$status==1?"selected":""}}>Completed</option>
+                            <option value = "0" {{$status==0?"selected":""}}> Pending</option>
+                        </select> 
+                    </div>
+                </div> 
+                
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label for="date_range" class="form-label">Date</label>

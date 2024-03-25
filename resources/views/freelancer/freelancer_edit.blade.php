@@ -454,19 +454,23 @@
                                     </div>
  
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="passport_expire_date" class="form-label">Passport Expire Date</label>
                                             <input type="date" name="passport_expire_date" class="form-control w-100" id="passport_expire_date" placeholder="Select passport expire date" value="{{isset($freelancer) ? @$freelancer->user->userId->passport_exp_date : old('passport_expire_date')}}"> 
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="tin_number" class="form-label">TIN Number</label>
                                             <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="TIN Number" value="{{isset($freelancer) ? @$freelancer->user->userId->tin_number : old('tin_number')}}"> 
                                         </div>
-                                    </div>  
+                                    </div> 
+                                    <div class="col-md-4 mb-3">
+                                        <label for="reporting_user" class="form-label">Freelancer ID <span class="text-danger">*</span> <span class="text-danger">*</span></label>
+                                         <input class="form-control" type="text" name="freelancer_id" placeholder="Freelancer ID" value="{{$freelancer->user->user_id}}" required>
+                                    </div>
                                 </div>
                                   
                                 <div>
