@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ColdCallingDataTable;
 use App\DataTables\CustomersDataTable;
 use App\DataTables\EmployeesDataTable;
 use App\DataTables\FreelancersDataTable;
@@ -41,194 +42,208 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
-  
-    public function index(){  
-        $reporting = ReportingUser::Latest()->first();
-        $reporting->update(['reporting_user_id'=>1]); 
-        $user= User::find(Auth::id());
-        if($user->user_type==1){
-            $user->e = $user->employee;
-            $designations = $user->employee->designation_id;
-        }else if($user->user_type==2){
-            $designations = $user->freelancer->designation_id;
-        }  
-        $old_tasks = TaskList::where('status',0)
-                    ->whereHas('task',function($q){
-                        $q->where('assign_to',auth()->user()->id);
-                    })
-                    ->where('time','<',today()) 
-                    ->get(); 
+    public function index(ColdCallingDataTable $dataTable, Request $request)
+    { 
+        $title = 'Cold Calling List'; 
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+        return $dataTable->render('displaydata', compact('title','employee','status','start_date','end_date'));
+    }  
 
-        $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
-                    ->whereDate('date', today())
-                    ->first(); 
+
+
+    // public function index(){
+    //     $reporting = ReportingUser::Latest()->first();
+    //     $reporting->update(['reporting_user_id'=>1]);
+       
+    //     $user= User::find(Auth::id());
+    //     if($user->user_type==1){
+    //         $user->e = $user->employee;
+    //         $designations = $user->employee->designation_id;
+    //     }else if($user->user_type==2){
+    //         $designations = $user->freelancer->designation_id;
+    //     }  
+    //     $old_tasks = TaskList::where('status',0)
+    //                 ->whereHas('task',function($q){
+    //                     $q->where('assign_to',auth()->user()->id);
+    //                 })
+    //                 ->where('time','<',today()) 
+    //                 ->get(); 
+
+    //     $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
+    //                 ->whereDate('date', today())
+    //                 ->first(); 
                     
-        $field_target = FieldTarget::where('assign_to', auth()->user()->id)
-                    ->whereMonth('month', today())
-                    ->whereYear('month', today())
-                    ->first();  
-        $deposit_target = DepositTarget::where('assign_to', auth()->user()->id)
-            ->whereMonth('month', today())
-            ->whereYear('month', today()) 
-            ->first();
-        if($deposit_target && $deposit_target == null){
-            if($deposit_target->is_project_wise==0){
-                $deposit_target = $deposit_target->project->selectRaw('sum(new_deposit) + sum(existing_deposit) as total_deposit')->total_deposit;
-            }else{
-                $deposit_target = $deposit_target->selectRaw('new_total_deposit + existing_total_deposit as total_deposit')->total_deposit;
-            } 
-        }else{
-            $deposit_target = 0;
-        }
+    //     $field_target = FieldTarget::where('assign_to', auth()->user()->id)
+    //                 ->whereMonth('month', today())
+    //                 ->whereYear('month', today())
+    //                 ->first();  
+    //     $deposit_target = DepositTarget::where('assign_to', auth()->user()->id)
+    //         ->whereMonth('month', today())
+    //         ->whereYear('month', today()) 
+    //         ->first();
+    //     if($deposit_target && $deposit_target == null){
+    //         if($deposit_target->is_project_wise==0){
+    //             $deposit_target = $deposit_target->project->selectRaw('sum(new_deposit) + sum(existing_deposit) as total_deposit')->total_deposit;
+    //         }else{
+    //             $deposit_target = $deposit_target->selectRaw('new_total_deposit + existing_total_deposit as total_deposit')->total_deposit;
+    //         } 
+    //     }else{
+    //         $deposit_target = 0;
+    //     }
         
                 
-        $total_day = Carbon::now()->daysInMonth; 
-        $today_target['freelancer'] = round($field_target?->freelancer/$total_day??0,1); 
-        $today_target['customer'] = round($field_target?->customer/$total_day??0,1);
-        $today_target['prospecting'] = round($field_target?->prospecting/$total_day??0,1);
-        $today_target['cold_calling'] = round($field_target?->cold_calling/$total_day??0,1);
-        $today_target['lead'] = round($field_target?->lead/$total_day??0,1);
-        $today_target['lead_analysis'] = round($field_target?->lead_analysis/$total_day??0,1);
-        $today_target['follow_up_analysis'] = round($field_target?->follow_up_analysis/$total_day??0,1);
-        $today_target['negotiation_analysis'] = round($field_target?->negotiation_analysis/$total_day??0,1);
-        $today_target['deposit'] = round($deposit_target/$total_day??0,1);
+    //     $total_day = Carbon::now()->daysInMonth; 
+    //     $today_target['freelancer'] = round($field_target?->freelancer/$total_day??0,1); 
+    //     $today_target['customer'] = round($field_target?->customer/$total_day??0,1);
+    //     $today_target['prospecting'] = round($field_target?->prospecting/$total_day??0,1);
+    //     $today_target['cold_calling'] = round($field_target?->cold_calling/$total_day??0,1);
+    //     $today_target['lead'] = round($field_target?->lead/$total_day??0,1);
+    //     $today_target['lead_analysis'] = round($field_target?->lead_analysis/$total_day??0,1);
+    //     $today_target['follow_up_analysis'] = round($field_target?->follow_up_analysis/$total_day??0,1);
+    //     $today_target['negotiation_analysis'] = round($field_target?->negotiation_analysis/$total_day??0,1);
+    //     $today_target['deposit'] = round($deposit_target/$total_day??0,1);
 
 
 
-        // achivement   
-        $my_all_employee = my_all_employee(auth()->user()->id); 
+    //     // achivement   
+    //     $my_all_employee = my_all_employee(auth()->user()->id); 
         
-        $monthly_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
-            ->where('user_type',2)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count();
+    //     $monthly_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
+    //         ->where('user_type',2)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count();
 
-        $monthly_achive['customer'] = Customer::whereIn('ref_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count();
+    //     $monthly_achive['customer'] = Customer::whereIn('ref_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count();
             
-        $monthly_achive['prospecting'] = Prospecting::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count();
+    //     $monthly_achive['prospecting'] = Prospecting::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count();
 
-        $monthly_achive['cold_calling'] = ColdCalling::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count(); 
+    //     $monthly_achive['cold_calling'] = ColdCalling::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count(); 
 
-        $monthly_achive['lead'] = Lead::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count(); 
+    //     $monthly_achive['lead'] = Lead::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count(); 
 
-        $monthly_achive['lead_analysis'] = LeadAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count();
+    //     $monthly_achive['lead_analysis'] = LeadAnalysis::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count();
 
-        $monthly_achive['follow_up_analysis'] = FollowUpAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count();
+    //     $monthly_achive['follow_up_analysis'] = FollowUpAnalysis::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count();
         
-        $monthly_achive['negotiation_analysis'] = NegotiationAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count();
+    //     $monthly_achive['negotiation_analysis'] = NegotiationAnalysis::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count();
 
-        $monthly_achive['deposit']= Deposit::whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',today())
-            ->whereYear('created_at',today())
-            ->count();
+    //     $monthly_achive['deposit']= Deposit::whereHas('customer',function($q) use($my_all_employee){
+    //             $q->whereIn('ref_id',$my_all_employee);
+    //         })
+    //         ->where('approve_by','!=',null)
+    //         ->whereMonth('created_at',today())
+    //         ->whereYear('created_at',today())
+    //         ->count();
 
-        // Daily Achive 
-        $today_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
-            ->where('user_type',2)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+    //     // Daily Achive 
+    //     $today_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
+    //         ->where('user_type',2)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
 
-        $today_achive['customer'] = Customer::whereIn('ref_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+    //     $today_achive['customer'] = Customer::whereIn('ref_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
             
-        $today_achive['prospecting'] = Prospecting::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+    //     $today_achive['prospecting'] = Prospecting::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
 
-        $today_achive['cold_calling'] = ColdCalling::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count(); 
+    //     $today_achive['cold_calling'] = ColdCalling::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count(); 
 
-        $today_achive['lead'] = Lead::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count(); 
+    //     $today_achive['lead'] = Lead::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count(); 
 
-        $today_achive['lead_analysis'] = LeadAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+    //     $today_achive['lead_analysis'] = LeadAnalysis::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
 
-        $today_achive['follow_up_analysis'] = FollowUpAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+    //     $today_achive['follow_up_analysis'] = FollowUpAnalysis::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
         
-        $today_achive['negotiation_analysis'] = NegotiationAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+    //     $today_achive['negotiation_analysis'] = NegotiationAnalysis::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
 
-        $today_achive['deposit']= Deposit::whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+    //     $today_achive['deposit']= Deposit::whereHas('customer',function($q) use($my_all_employee){
+    //             $q->whereIn('ref_id',$my_all_employee);
+    //         })
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
         
-    date_default_timezone_set('Asia/Dhaka');
-    $hour = date('G'); 
+    // date_default_timezone_set('Asia/Dhaka');
+    // $hour = date('G'); 
 
-        if ($hour >= 5 && $hour < 12) {
-            $greeting = 'Good morning';
-        } elseif ($hour >= 12 && $hour < 18) {
-            $greeting = 'Good afternoon';
-        } else {
-            $greeting = 'Good evening';
-        } 
+    //     if ($hour >= 5 && $hour < 12) {
+    //         $greeting = 'Good morning';
+    //     } elseif ($hour >= 12 && $hour < 18) {
+    //         $greeting = 'Good afternoon';
+    //     } else {
+    //         $greeting = 'Good evening';
+    //     } 
  
                     
-        return view('index',compact([
-            'today_tasks',
-            'old_tasks',
-            'field_target',
-            'total_day',
-            'designations',
-            'today_target',
-            'today_achive',
-            'monthly_achive',
-            'deposit_target',
-            'greeting'
-        ]));
-    }
+    //     return view('index',compact([
+    //         'today_tasks',
+    //         'old_tasks',
+    //         'field_target',
+    //         'total_day',
+    //         'designations',
+    //         'today_target',
+    //         'today_achive',
+    //         'monthly_achive',
+    //         'deposit_target',
+    //         'greeting'
+    //     ]));
+    // }
 
     public function id(){ 
         $designations = Designation::all();

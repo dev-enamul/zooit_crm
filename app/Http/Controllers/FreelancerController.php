@@ -32,6 +32,7 @@ use App\Models\UserPermission;
 use App\Models\UserTransaction;
 use App\Models\Zone;
 use App\Rules\AtLeastOneFilledRule;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
@@ -65,8 +66,15 @@ class FreelancerController extends Controller
         return Nationality::values();
     }
     
-    public function index(FreelancersDataTable $dataTable){
-        return $dataTable->render('freelancer.freelancer_list');
+    public function index(FreelancersDataTable $dataTable, Request $request){ 
+        $title = 'Freelancer List'; 
+        $date = $request->date??null; 
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+
+        return $dataTable->render('freelancer.freelancer_list',compact('title','employee','start_date','end_date'));
     }
 
     public function create(){  

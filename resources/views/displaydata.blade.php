@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
-@section('title',"Customer List")
+@section('title',$title)
  @section('style') 
     <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    {{-- <link href="{{asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" /> --}}
  @endsection
 @section('content')
 <div class="main-content">
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Customer List</h4>  
+                        <h4 class="mb-sm-0">{{$title}}</h4>  
 
                         <div class="page-title-right">
                             <div class="btn-group flex-wrap mb-2">      
@@ -33,7 +33,10 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body"> 
-                            {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap']) }} 
+                            <div class="table-box">
+                                {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap fs-10']) }} 
+                            </div>
+                            
                         </div>
                     </div>
                 </div> <!-- end col -->
@@ -43,16 +46,7 @@
     </div> 
 </div>  
 
-@php
-    $date = request('date');
-    $status = request('status')??0;
-    $start_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-    $end_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
-    $employee = request('employee');
-    $employee = $employee ? App\Models\User::find($employee)?? App\Models\User::find(auth()->user()->id) :  App\Models\User::find(auth()->user()->id);
-
-@endphp 
-
+ 
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Select Filter Item</h5>
@@ -102,8 +96,8 @@
 <script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
 <script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
+{{-- <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script> --}}
 <script src="/vendor/datatables/buttons.server-side.js"></script>
 {!! $dataTable->scripts() !!}  
 

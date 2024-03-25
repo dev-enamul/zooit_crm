@@ -76,11 +76,17 @@ class CustomersDataTable extends DataTable
             $my_employee = my_all_employee((int)$request->employee);
         }else{
             $my_employee = my_all_employee(auth()->user()->id);
+        } 
+
+        if(isset($request->status)){
+            $status = $request->status;
+        }else{
+            $status = 0;
         }
 
         return $model->newQuery()
         ->whereIn('ref_id',$my_employee)
-        ->where('status',0)
+        ->where('status',$status)
         ->with(['user','profession','user.userAddress.village','user.userAddress.union','user.userAddress.upazila']);
     }
 

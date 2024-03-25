@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title',"Freelancer Create")
+@section('title',$title)
  @section('style') 
     <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Freelancer List</h4>
+                        <h4 class="mb-sm-0">{{$title}}</h4>
                         <div class="page-title-right">
                             <div class="btn-group flex-wrap mb-2">      
                                 <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
@@ -43,14 +43,7 @@
         </div> <!-- container-fluid -->
     </div> 
 </div>      
-
-    @php
-        $date = request('date');
-        $start_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = \Carbon\Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
-        $employee = request('employee');
-        $employee = $employee ? App\Models\User::find($employee)?? App\Models\User::find(auth()->user()->id) :  App\Models\User::find(auth()->user()->id);
-    @endphp  
+ 
     <div class="offcanvas offcanvas-end" id="offcanvas">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">Select Filter Item</h5>

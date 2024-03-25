@@ -33,6 +33,10 @@ class ColdCalling extends Model
     public function employee()
     {
         return $this->belongsTo(User::class, 'employee_id');
+    } 
+
+    public function prospecting(){
+        return Prospecting::where('customer_id',$this->customer_id)->select('created_at')->latest()->first();
     }
 
     public function project()
@@ -63,5 +67,6 @@ class ColdCalling extends Model
     public function deletedBy()
     {
         return $this->belongsTo(User::class, 'deleted_by');
-    }
+    } 
+    
 }

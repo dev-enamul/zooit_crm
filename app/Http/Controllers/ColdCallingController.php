@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ColdCallingDataTable;
 use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\ColdCalling;
@@ -11,6 +12,7 @@ use App\Models\Project;
 use App\Models\Prospecting;
 use App\Models\Unit;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,44 +26,16 @@ class ColdCallingController extends Controller
         return Priority::values();
     }
 
-    public function index(Request $request)
+    public function index(ColdCallingDataTable $dataTable, Request $request)
     { 
-        $professions = Profession::all();  
-     
-        if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
-        }else{
-            $user_id = Auth::user()->id;
-        }  
-        $user_employee = my_all_employee($user_id);
-
-        $cold_callings = ColdCalling::where(function ($q){
-            $q->where('approve_by','!=',null)
-                ->orWhere('employee_id', Auth::user()->id)
-                ->orWhere('created_by', Auth::user()->id);
-        }) 
-        ->whereHas('customer', function($q) use($user_employee){ 
-            $q->whereIn('ref_id', $user_employee);
-        }); 
-
-         if(isset($request->profession) && !empty($request->profession)){
-            $profession = (int)$request->profession;
-            $cold_callings = $cold_callings->whereHas('customer', function($q) use($profession){ 
-                $q->where('profession_id', $profession);
-            });
-         } 
-          
- 
-        if(isset($request->status) && !empty($request->status)){
-            $status = (int)$request->status;
-            $cold_callings = $cold_callings->where('status', $status);
-        }else{
-            $cold_callings = $cold_callings->where('status', 0);
-        } 
-        $cold_callings = $cold_callings->get();
- 
-        $filter =  $request->all();
-        return view('cold_calling.cold_calling_list', compact('cold_callings','professions','filter'));
+        $title = 'Cold Calling List'; 
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+        return $dataTable->render('cold_calling.cold_calling_list', compact('title','employee','status','start_date','end_date'));
     }
 
     public function create(Request $request)
