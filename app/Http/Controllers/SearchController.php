@@ -40,6 +40,7 @@ class SearchController extends Controller
 
         $datas = User::where('name','like','%'.$key.'%')
             ->orWhere('phone','like','%'.$key.'%')
+            ->orWhere('user_id','like','%'.$key.'%')
             ->whereHas('userContact',function($q) use($key){
                 $q->orWhere('office_phone','like','%'.$key.'%')
                 ->orWhere('personal_phone','like','%'.$key.'%')

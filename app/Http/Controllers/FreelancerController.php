@@ -167,11 +167,10 @@ class FreelancerController extends Controller
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         } 
 
-        DB::beginTransaction(); 
-       
+        DB::beginTransaction();  
         try {
             $user = User::create([
-                'user_id'       => User::generateNextFreelancerId(),
+                'user_id'       => $request->freelancer_id??User::generateNextFreelancerId(),
                 'name'          => $request->full_name,
                 'phone'         => get_phone($request->phone1),
                 'password'      => bcrypt('123456'),
@@ -294,16 +293,12 @@ class FreelancerController extends Controller
                 ]);
             } 
             
-        $reportingUser = ReportingUser::where('user_id',$request->reporting_user)->where('deleted_at',null)->first(); 
-            if ($reportingUser) {
-                $reportingUserId = $reportingUser->id;
-                ReportingUser::create([
-                    'user_id'               => $user->id,
-                    'reporting_user_id'   => $reportingUserId,
-                    'status'                => 1,
-                    'created_at'            => now(),
-                ]);
-            } 
+            ReportingUser::create([
+                'user_id'               => $user->id,
+                'reporting_user_id'   =>   $request->reporting_user??1,
+                'status'                => 1,
+                'created_at'            => now(),
+            ]);
 
             // for freelancer approve 
             $approve_setting = ApproveSetting::where('name','freelancer')->first();

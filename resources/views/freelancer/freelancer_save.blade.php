@@ -432,9 +432,14 @@
                                     </div>
 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Official Information</h6>
-                                    <hr>
+                                    <hr> 
 
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="reporting_user" class="form-label">Freelancer ID <span class="text-danger">*</span></label>
+                                         <input class="form-control" type="text" name="freelancer_id" placeholder="Freelancer ID">
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
                                         <label for="designation" class="form-label">Designation <span class="text-danger">*</span></label>
                                         <select class="form-select select2" search name="designation" id="designation" required>
                                             <option value=""> Select a Designation</option>
@@ -451,7 +456,7 @@
                                         </div> 
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
                                         <label for="reporting_user" class="form-label">Employee <span class="text-danger">*</span></label>
                                         <select class="select2" search name="reporting_user" id="reporting_id" required> 
                                                
