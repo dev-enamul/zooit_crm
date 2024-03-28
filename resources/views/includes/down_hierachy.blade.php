@@ -5,6 +5,7 @@
 </style> --}}
 <ul>
     @foreach ($organogram['downlines'] as $downline) 
+        @if (@$downline['user']->user->user_type==1)
         <li>
             <a href="{{route('employees.hierarchy',['employee'=> @$downline['user']->user->id])}}">
                 <img src="{{@$downline['user']->user->image()}}">
@@ -13,7 +14,8 @@
             @if (!empty($downline['downlines'])) 
                 @include('includes.down_hierachy', ['organogram' => $downline,'depth' => $depth - 1])
             @endif
-        </li> 
+        </li>  
+        @endif  
     @endforeach 
 </ul>
  
