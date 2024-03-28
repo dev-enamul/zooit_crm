@@ -1,10 +1,25 @@
 @extends('layouts.dashboard') 
 @section('title','Employee Tree') 
 @section('style')  
-<link rel="stylesheet" href="{{asset('assets/libs/tree/tree.css')}}" />
- 
-@endsection 
+<link rel="stylesheet" href="{{asset('assets/libs/tree/tree.css')}}" /> 
+        <style> 
+            @media print {
+                @page {
+                    size: landscript;
+                    margin-top: 10mm; 
+                }
 
+                html, body {
+                    height:100vh; 
+                    margin: 0 !important; 
+                    padding: 0 !important;
+                    overflow: hidden;
+                }
+               
+            } 
+        </style> 
+
+@endsection  
 @section('content')
 <div class="main-content">
     <div class="page-content">
