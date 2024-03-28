@@ -47,7 +47,8 @@
                                     @endcan
                                     <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li> 
                                     <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li> 
-                                    <li><a href="{{route('employees.hierarchy')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Hierarchy</a></li> 
+                                    <li><a href="{{route('employees.hierarchy')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Hierarchy 1</a></li> 
+                                    <li><a href="{{route('employees.hierarchy2')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Hierarchy 2</a></li> 
                                 </ul>
                             </li>  
                         @endcan 

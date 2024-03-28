@@ -39,5 +39,22 @@ class EmployeeTreeController extends Controller
 
         // return view('employee.employee_hierarchy',compact('organogram','employee'));
         return view('employee.only_employee',compact('organogram','employee'));
+    } 
+
+    public function hierarchy2(Request $request){
+        if(isset($request->employee) && !empty($request->employee)){
+            $user_id = decrypt($request->employee);
+        }else{
+            $user_id = Auth::user()->id;
+        } 
+
+        $topUser = ReportingUser::where('user_id',  $user_id)
+        ->select(['id', 'user_id'])
+        ->first(); 
+        $employee =  User::find($user_id);
+        $organogram = getOrganogram($topUser);  
+
+        return view('employee.employee_hierarchy',compact('organogram','employee'));
+        // return view('employee.only_employee',compact('organogram','employee'));
     }
 }

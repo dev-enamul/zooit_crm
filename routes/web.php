@@ -142,6 +142,7 @@ Route::group(['middleware' => 'auth'], function () {
         #Employee Tree
         Route::get('employees/tree', [EmployeeTreeController::class, 'tree'])->name('employees.tree');
         Route::get('employees-hierarchy', [EmployeeTreeController::class, 'hierarchy'])->name('employees.hierarchy');
+        Route::get('employees-hierarchy-2', [EmployeeTreeController::class, 'hierarchy2'])->name('employees.hierarchy2');
 
         #Product  
         Route::resource('product', ProductController::class);

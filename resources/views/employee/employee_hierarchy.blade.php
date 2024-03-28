@@ -17,6 +17,9 @@
                 }
                
             } 
+            .tree{
+                overflow: none !important;
+            }
         </style> 
 
 @endsection  

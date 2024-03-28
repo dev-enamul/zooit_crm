@@ -54,21 +54,7 @@ class FreelancersDataTable extends DataTable
             }else{
                 return '-';
             } 
-        })
-        ->addColumn('reporting', function($freelancer){
-            $reporting_user_id = @user_reporting($freelancer->user->id)[1];
-            if(isset($reporting_user_id) && $reporting_user_id != null){
-                $data = user_info($reporting_user_id);
-                if(isset($data) && $data != null){
-                    $reporting_user = $data['name'].' ('.$data['user_id'].')';
-                }else{
-                    $reporting_user = "-";
-                } 
-            }else{
-                $reporting_user = "-";
-            }
-            return $reporting_user; 
-        });
+        }) ;
     }
 
     /**
@@ -99,15 +85,16 @@ class FreelancersDataTable extends DataTable
         }
         
         
-         $data =  $model
-        ->with('user') 
+         $model =  $model 
         ->where(function($q){
-            $q->where('status',1)->orWhereHas('user', function($query){
+            $q->where('freelancers.status',1)->orWhereHas('user', function($query){
                 $query->Where('approve_by','!=',null)
                 ->orWhere('ref_id',auth()->user()->id)
                 ->orWhere('created_by',auth()->user()->id);
             });
-        }) 
+        });
+
+        $data =  $model->with('user') 
         ->newQuery();
 
         return $data;
@@ -160,7 +147,7 @@ class FreelancersDataTable extends DataTable
             Column::make('union'), 
             Column::make('vilage'),
             Column::make('user.phone')->title('Mobile')->searchable(true),  
-            Column::make('reporting')->title('Reporting'),
+            // Column::make('reporting')->title('Reporting'),
         ];
     }
 
