@@ -33,7 +33,7 @@
                         <div>
                             <button class="btn btn-secondary buttons-pdf buttons-html5" id="print" type="button"><span><i class="fa fa-print"></i> Print</span></button> 
                         </div>
-
+{{-- 
                         <div class="">   
                             <form action="" method="get" action="">
                                 <div class="input-group">  
@@ -45,7 +45,7 @@
                                     </button> 
                                 </div>
                             </form> 
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>
