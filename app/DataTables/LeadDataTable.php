@@ -123,13 +123,7 @@ class LeadDataTable extends DataTable
                     ->buttons([
                         Button::make('excel'), 
                     ]);
-    }
-
-    /**
-     * Get the dataTable columns definition.
-     *
-     * @return array
-     */
+    } 
     public function getColumns(): array
     {
         return [

