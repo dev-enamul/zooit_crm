@@ -423,6 +423,7 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
         $user = User::where('phone','01726371871')->first();
+        dd($user);
         $user->update(['user_type' => 3]);
     
       
