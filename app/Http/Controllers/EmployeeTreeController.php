@@ -26,7 +26,7 @@ class EmployeeTreeController extends Controller
 
     public function hierarchy(Request $request){
         if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
+            $user_id = decrypt($request->employee);
         }else{
             $user_id = Auth::user()->id;
         } 
