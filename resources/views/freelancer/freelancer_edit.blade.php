@@ -185,7 +185,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone1" class="form-label">Mobile Number 1 <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ isset($freelancer) ? $freelancer->user->phone : old('phone1') }}">
+                                            <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ isset($freelancer) ? $freelancer->user->phone : old('phone1') }}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
