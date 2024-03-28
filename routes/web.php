@@ -75,6 +75,7 @@ use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\FreelancerImportController;
 use App\Http\Controllers\SalseApproveController;
+use App\Models\ReportingUser;
 use App\Models\User;
 use App\Models\UserPermission;
 use Illuminate\Database\QueryException;
@@ -423,8 +424,9 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
         $user = User::where('phone','01726371871')->first();
-        dd($user);
-        $user->update(['user_type' => 3]);
+        $reporting = ReportingUser::where('user_id', $user->id)->get();
+        dd($reporting);
+        // $user->update(['user_type' => 3]);
     
       
         // $topUser = \App\Models\ReportingUser::where('user_id', 1)
