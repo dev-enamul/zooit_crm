@@ -12,7 +12,7 @@
                 <span>{{ @$downline['user']?->user?->name }} <br>{{ @$downline['user']?->user?->user_id }} </span>
             </a>   
             @if (!empty($downline['downlines'])) 
-                @include('includes.down_hierachy', ['organogram' => $downline,'depth' => $depth - 1])
+                @include('includes.down_emp_hierachy', ['organogram' => $downline,'depth' => $depth - 1])
             @endif
         </li> 
     @endif 
