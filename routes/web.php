@@ -424,8 +424,8 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
         $user = User::where('phone','01726371871')->first();
-        $reporting = ReportingUser::where('user_id', $user->id)->first();
-         dd($reporting);
+        // $reporting = ReportingUser::where('user_id', $user->id)->first();
+         dd($user->freelancer);
         // $user->update(['user_type' => 3]);
     
       
