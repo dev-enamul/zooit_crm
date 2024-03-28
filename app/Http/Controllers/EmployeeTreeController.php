@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class EmployeeTreeController extends Controller
 {
-    public function tree(Request $request){ 
+    public function tree(Request $request){
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
         }else{
             $user_id = Auth::user()->id;
         } 
+
         $topUser = ReportingUser::where('user_id',  $user_id)
         ->select(['id', 'user_id'])
         ->first(); 
@@ -22,4 +23,20 @@ class EmployeeTreeController extends Controller
         $organogram = getOrganogram($topUser); 
         return view('employee.employee_tree',compact('organogram','employee'));
     } 
+
+    public function hierarchy(Request $request){
+        if(isset($request->employee) && !empty($request->employee)){
+            $user_id = (int)$request->employee;
+        }else{
+            $user_id = Auth::user()->id;
+        } 
+
+        $topUser = ReportingUser::where('user_id',  $user_id)
+        ->select(['id', 'user_id'])
+        ->first(); 
+        $employee =  User::find($user_id);
+        $organogram = getOrganogram($topUser);  
+
+        return view('employee.employee_hierarchy',compact('organogram','employee'));
+    }
 }

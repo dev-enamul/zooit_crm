@@ -141,6 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
         
         #Employee Tree
         Route::get('employees/tree', [EmployeeTreeController::class, 'tree'])->name('employees.tree');
+        Route::get('employees-hierarchy', [EmployeeTreeController::class, 'hierarchy'])->name('employees.hierarchy');
 
         #Product  
         Route::resource('product', ProductController::class);
@@ -425,7 +426,7 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 Route::get('function_test', function () {
         $user = User::where('phone','01726371871')->first();
         // $reporting = ReportingUser::where('user_id', $user->id)->first();
-         dd($user->freelancer->delete());
+        //  dd($user->freelancer->delete());
         // $user->update(['user_type' => 3]); 
       
         // $topUser = \App\Models\ReportingUser::where('user_id', 1)
