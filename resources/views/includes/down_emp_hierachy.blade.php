@@ -7,7 +7,7 @@
     @foreach ($organogram['downlines'] as $downline) 
     @if ($downline['user']->user->user_type==1)
         <li>
-            <a href="{{route('employees.hierarchy',['employee'=> encrypt($downline['user']->user->id)])}}" style="{{!empty($downline['downlines'])?'background:#ddd':''}}">
+            <a href="{{route('employees.hierarchy',['employee'=> encrypt($downline['user']->user->id)])}}">
                 <img src="{{@$downline['user']->user->image()}}">
                 <span>{{ @$downline['user']?->user?->name }} <br>{{ @$downline['user']?->user?->user_id }} </span>
             </a>   
