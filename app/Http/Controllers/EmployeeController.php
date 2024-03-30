@@ -413,6 +413,7 @@ class EmployeeController extends Controller
                 'nationality'   => $request->nationality, 
                 'updated_by'    => auth()->user()->id, 
                 'serial'        => $request->serial,
+                'user_id'       => $request->user_id,
             ]);
 
             if ($request->hasFile('profile_image')) {

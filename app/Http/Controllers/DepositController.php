@@ -24,7 +24,7 @@ class DepositController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {     
+    {       
         $designations = Designation::where('status',1)->get();
         $datas = Deposit::where('approve_by','!=',null);
         if(isset($request->date) && !empty($request->date)){ 
@@ -96,7 +96,6 @@ class DepositController extends Controller
                     $deposit->project_id = $salse->project_id; 
                 }  
                 $salse->save();
-              
             } 
             $deposit->save();
 
@@ -248,9 +247,58 @@ class DepositController extends Controller
         $deposit = Deposit::find($id);
         $customer = Customer::find($deposit->customer_id);
         $salse = Salse::where('customer_id',$deposit->customer_id)->first();
-        $all_employees = user_reporting($customer->ref_id);
-        
+        $all_employees = user_reporting($customer->ref_id);  
+        $commissions = Commission::where('status',1)->get(); 
+  
+        $user = User::whereIn('id',$all_employees); 
+        $datas = [];  
 
+        // Employee Commission 
+        foreach($commissions as $commission){   
+            $designations =  $commission->designations->pluck('id')->toArray();
+            $loopUser = clone $user; 
+            $commission_user = $loopUser->whereHas('employee',function($query) use($designations){
+                $query->whereIn('designation_id',$designations);
+            })->select('id')
+            ->get(); 
+            if($commission_user->count() > 0){
+                $datas[$commission->id] =  $commission_user;
+            } 
+        } 
+
+        // Freelancer Commission
+        foreach($commissions as $commission){   
+            $designations =  $commission->designations->pluck('id')->toArray();
+            $loopUser = clone $user; 
+            $commission_user = $loopUser->whereHas('freelancer',function($query) use($designations){
+                $query->whereIn('designation_id',$designations);
+            })->select('id','user_id','name')
+            ->get(); 
+            if($commission_user->count() > 0){
+                $datas[$commission->id] =  $commission_user;
+            } 
+        } 
+
+        foreach($datas as $key=>$data){ 
+            $commission = Commission::find($key);
+            $total_employee = count($data);
+            $total_commission =  ($deposit->amount * $commission->commission) / 100; 
+            $each_employee_commission = $total_commission / $total_employee;
+
+            foreach($data as $employee){    
+                $deposit_commission = new DepositCommission();
+                $deposit_commission->user_id = $employee->id;
+                $deposit_commission->designation_id = $employee->employee?$employee->employee->designation_id:$employee->freelancer->designation_id;
+                $deposit_commission->salse_id = $salse->id;
+                $deposit_commission->deposit_id = $deposit->id;
+                $deposit_commission->project_id = $salse->project_id;
+                $deposit_commission->commission_id = $commission->id;
+                $deposit_commission->share_ids = json_encode($data->pluck('id')->toArray()); 
+                $deposit_commission->commission_percent = $commission->commission;
+                $deposit_commission->amount = $each_employee_commission;
+                $deposit_commission->save();
+            }
+        } 
      
     }
 }

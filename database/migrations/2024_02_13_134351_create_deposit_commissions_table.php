@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('deposit_id')->constrained('deposits'); 
             $table->foreignId('project_id')->constrained('projects');
             $table->foreignId('commission_id')->constrained('commissions'); 
-            $table->integer('commission_percent');
+            $table->decimal('commission_percent', 10, 2);
+            $table->json('share_ids')->nullable();
             $table->decimal('amount', 10, 2);
-            $table->decimal('applicable_commission',10, 2);
-            $table->decimal('payble_commission',10, 2);
-            $table->foreignId('created_by')->constrained('users');
+            $table->decimal('applicable_commission',10, 2)->default(0);
+            $table->decimal('payble_commission',10, 2)->default(0);
             $table->timestamps();
         });
     }

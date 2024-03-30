@@ -455,6 +455,13 @@
                                             <input type="number" name="serial" id="serial" class="form-control" step="any" placeholder="Enter Serial" value="{{old('serial',$employee->user->serial)}}" required> 
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="user_id" class="form-label">Employee ID <span class="text-danger">*</span></label>
+                                            <input type="text" name="user_id" id="user_id" class="form-control" step="any" placeholder="Enter Employee Id" value="{{old('user_id',$employee->user->user_id)}}" required> 
+                                        </div>
+                                    </div>
                                 </div>
                                   
                                 <div>

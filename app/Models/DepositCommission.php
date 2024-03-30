@@ -16,6 +16,7 @@ class DepositCommission extends Model
         'deposit_id',
         'project_id',
         'commission_id',
+        'share_ids',
         'commission_percent',
         'amount',
         'applicable_commission',

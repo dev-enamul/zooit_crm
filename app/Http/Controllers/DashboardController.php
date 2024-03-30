@@ -272,13 +272,14 @@ class DashboardController extends Controller
         // Artisan::call('db:seed');  
         // Artisan::call('migrate');
         // Artisan::call('storage:link');
+        Artisan::call('migrate:refresh --path=/database/migrations/2024_02_13_134351_create_deposit_commissions_table.php');
         Artisan::call('cache:clear');
         Artisan::call('config:clear');
         Artisan::call('route:clear');
         Artisan::call('view:clear');
         Artisan::call('clear-compiled'); 
         Artisan::call('optimize:clear');
-        dd('complete');
+        
         return redirect()->route('index');
     }
 

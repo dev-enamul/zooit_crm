@@ -1,6 +1,5 @@
 @php
-    $approve_setting = App\Models\ApproveSetting::pluck('status', 'name')->toArray(); 
-    $is_admin = Auth::user()->hasPermission('admin'); 
+    $approve_setting = App\Models\ApproveSetting::pluck('status', 'name')->toArray();  
     $task_route = ['employee.create', 'employee.index', 'employees.tree', 'product.create', 'product.index', 'unit.create', 'unit.index', 'product.approve', 'freelancer.create', 'freelancer.index', 'approve-freelancer.index', 'customer.create', 'customer.index', 'customer.approve', 'prospecting.create', 'prospecting.index', 'prospecting.approve', 'cold-calling.create', 'cold-calling.index', 'cold-calling.approve', 'lead.create', 'lead.index', 'lead.approve', 'lead-analysis.create', 'lead-analysis.index', 'lead-analysis.approve', 'presentation.create', 'presentation.index', 'presentation.approve', 'presentation_analysis.create', 'presentation_analysis.index', 'presentation-analysis.approve', 'followup.create', 'followup.index', 'followUp.approve', 'followup-analysis.create', 'followup-analysis.index', 'followUp-analysis.approve', 'negotiation.create', 'negotiation.index', 'negotiation.approve', 'negotiation-analysis.create', 'negotiation-analysis.index', 'negotiation-analysis.approve', 'rejection.index', 'salse.create', 'salse.index', 'salse.approve', 'existing.salse', 'return.create', 'return.index', 'transfer.create', 'transfer.index', 'deposit.create', 'deposit.index'];
     $progress_route = ['my.field.target', 'assign.field.target', 'assign.field.target.list', 'my.task', 'task.complete', 'assign.task', 'project.deposit.target', 'direct.deposit.target', 'deposit.target.asign.list', 'my.deposit.target', 'training.create', 'training.schedule', 'training.index', 'meeting.index'];
     $report_route = ['monthly.target.achive', 'mst.commission', 'rsa.co.ordinator', 'monthly.dt.achivement', 'dt.achivement', 'daily.deposit', 'special-offer.index', 'special-offer.create', 'marketing.field.report', 'salse.field.report', 'due.report', 'floor.wise.sold.report', 'cc.report', 'pending.report'];
@@ -76,7 +75,7 @@
                                         <a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a>
                                     </li>
 
-                                    @if (!empty($approve_setting['product']) && !$is_admin)
+                                    @if (!empty($approve_setting['product']) )
                                         @can('product-approve')
                                             <li><a href="{{ route('product.approve') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Product Approve</a></li>
                                         @endcan
@@ -96,7 +95,7 @@
                                         <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
                                     @endcan    
                                     <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search','freelancer.edit') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
-                                    @if (!empty($approve_setting['freelancer']) && !$is_admin)
+                                    @if (!empty($approve_setting['freelancer']) )
                                         @can('product-approve')
                                         <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
                                         @endcan
@@ -118,7 +117,7 @@
                             @endcan
                             <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer List</a></li> 
                             
-                            @if (!empty($approve_setting['customer']) && !$is_admin)
+                            @if (!empty($approve_setting['customer']) )
                                 <li><a href="{{route('customer.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Approve</a></li>
                             @endif 
                         </ul>
@@ -137,7 +136,7 @@
                             @endcan  
                             <li><a href="{{route('prospecting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospectings</a></li> 
              
-                            @if (!empty($approve_setting['prospecting']) && !$is_admin)
+                            @if (!empty($approve_setting['prospecting']) )
                                 <li><a href="{{route('prospecting.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospecting Approve</a></li> 
                             @endif
                         </ul>
@@ -156,7 +155,7 @@
                             @endcan
                             <li><a href="{{route('cold-calling.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Callings</a></li> 
                              
-                            @if (!empty($approve_setting['cold_calling']) && !$is_admin)
+                            @if (!empty($approve_setting['cold_calling']) )
                                 <li><a href="{{route('cold-calling.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Calling Approve</a></li> 
                             @endif
                         </ul>
@@ -175,7 +174,7 @@
                             @endcan   
                             <li><a href="{{route('lead.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead List</a></li>                         
  
-                            @if (!empty($approve_setting['lead']) && !$is_admin)
+                            @if (!empty($approve_setting['lead']) )
                                 <li><a href="{{route('lead.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Approve</a></li> 
                             @endif
 
@@ -186,7 +185,7 @@
                             @can('lead-analysis')
                                 <li><a href="{{route('lead-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis List</a></li> 
                                  
-                                @if (!empty($approve_setting['lead_analysis']) && !$is_admin)
+                                @if (!empty($approve_setting['lead_analysis']) )
                                     <li><a href="{{route('lead-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis Approve</a></li> 
                                 @endif 
                             @endcan
@@ -206,7 +205,7 @@
                                 @endcan
                                 <li><a href="{{route('presentation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Presentation List</a></li>
                                  
-                                @if (!empty($approve_setting['presentation']) && !$is_admin)
+                                @if (!empty($approve_setting['presentation']) )
                                     <li><a href="{{route('presentation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Presentation Approve</a></li> 
                                 @endif 
     
@@ -216,7 +215,7 @@
      
                                 @can('visit-analysis')
                                     <li><a href="{{route('presentation_analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Visit Analysis List</a></li>  
-                                    @if (!empty($approve_setting['visit_analysis']) && !$is_admin)
+                                    @if (!empty($approve_setting['visit_analysis']) )
                                         <li><a href="{{route('presentation-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Visit Analysis Approve</a></li> 
                                     @endif 
                                 @endcan
@@ -236,7 +235,7 @@
                             @endcan
                             <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
                             
-                            @if (!empty($approve_setting['follow_up']) && !$is_admin)
+                            @if (!empty($approve_setting['follow_up']) )
                                 <li><a href="{{route('followUp.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Approve</a></li> 
                             @endif 
     
@@ -246,7 +245,7 @@
                            
                             @can('follow-up-analysis')
                                 <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
-                                @if (!empty($approve_setting['follow_up_analysis']) && !$is_admin)
+                                @if (!empty($approve_setting['follow_up_analysis']) )
                                     <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Analysis Approve</a></li> 
                                 @endif 
                             @endcan
@@ -266,7 +265,7 @@
                             @endcan
                                 <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
                                
-                                @if (!empty($approve_setting['negotiation']) && !$is_admin)
+                                @if (!empty($approve_setting['negotiation']) )
                                     <li><a href="{{route('negotiation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Approve</a></li> 
                                 @endif 
 
@@ -275,7 +274,7 @@
                             @endcan
                             @can('negotiation-analysis')
                                 <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analysis List</a></li>  
-                                @if (!empty($approve_setting['negotiation_analysis']) && !$is_admin)
+                                @if (!empty($approve_setting['negotiation_analysis']) )
                                     <li><a href="{{route('negotiation-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Analysis Approve</a></li> 
                                 @endif 
                             @endcan
