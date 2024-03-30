@@ -147,7 +147,7 @@ class DepositController extends Controller
             $deposit_categgory_id = $request->deposit_category; 
    
         if($deposit_categgory_id == 1){
-                $customers = Customer::where('approve_by','!=',null)->whereHas('salse',function($query){
+                $customers = Customer::whereHas('salse',function($query){
                     $query->where('status',1)
                     ->where('is_all_paid',0);
                 })

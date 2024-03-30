@@ -168,7 +168,7 @@ class DashboardController extends Controller
             ->where('approve_by','!=',null)
             ->whereMonth('created_at',today())
             ->whereYear('created_at',today())
-            ->count();
+            ->sum('amount');
 
         // Daily Achive 
         $today_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)

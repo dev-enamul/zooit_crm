@@ -224,4 +224,26 @@ trait UserAchiveTreat
         ->count(); 
         return $data; 
     } 
+
+    public function deposit_achive($date = null){
+        if($date == null){
+            $date = Carbon::now();
+        }else{
+            $date = Carbon::parse($date);
+        }   
+
+        $my_all_employee = my_all_employee($this->id);
+        $data = Deposit::whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            })
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->sum('amount');; 
+        return $data; 
+    } 
+
+    function deposit_achive_percent($date = null){ 
+        
+    }
 }

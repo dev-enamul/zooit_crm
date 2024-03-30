@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DepositCommission;
 use App\Models\DepositTarget;
 use App\Models\Project;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CommissionReportController extends Controller
@@ -19,8 +21,7 @@ class CommissionReportController extends Controller
             $year = date('Y',strtotime($request->month)); 
             $datas = $datas->whereMonth('month',$month)->whereYear('month',$year);
         }
-
-        
+ 
         $datas = $datas->get(); 
         $selected = $request->month; 
         if($selected == ''){
@@ -29,11 +30,19 @@ class CommissionReportController extends Controller
         return view('report.commission.monthly_target_achive', compact('datas','selected'));
     }
 
-    public function mst_commission(){ 
+    public function mst_commission(Request $request){ 
+        if($request->month){
+            $selected = Carbon::parse($request->month)->format('Y-m'); 
+        }else{
+            $selected = Carbon::now()->format('Y-m');
+        } 
+        $start = Carbon::parse($selected)->startOfMonth();
+        $end = Carbon::parse($selected)->endOfMonth();
         $projects = Project::where('status',1)->get();
-        $employees = User::where('status',1)->get();
-        $selected = date('Y-m');
-        return view('report.commission.mst_commission',compact('projects','employees','selected'));
+        $employees = User::where('status',1)->get(); 
+        $commission = DepositCommission::whereBetween('created_at',[$start,$end])->get(); 
+       
+        return view('report.commission.mst_commission',compact('projects','employees','selected','commission'));
     } 
 
     public function mst_commission_details($id){

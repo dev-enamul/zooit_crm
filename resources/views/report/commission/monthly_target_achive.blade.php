@@ -60,23 +60,12 @@
                                                     $target = $data->depositTargetProjects->sum('new_deposit') + $data->depositTargetProjects->sum('existing_deposit');
                                                 }
                                             @endphp
-                                            <td>{{get_price($target)}}</td> 
-
-                                            @php  
-                                                if(isset($data->assign_to) && $data->assign_to != null){ 
-                                                    $my_all_employee = my_all_employee($data->assign_to);
-                                                 
-                                                    $achive = \App\Models\Deposit::whereNotNull('approve_by') 
-                                                                ->whereMonth('created_at', date('m'))
-                                                                ->whereYear('created_at', date('Y'))
-                                                                ->whereHas('customer', function($q) use($my_all_employee){
-                                                                    $q->whereIn('ref_id', $my_all_employee);
-                                                                }) 
-                                                                ->sum('amount');
-                                                }
-                                            @endphp  
-                                            <td>{{get_price($achive)}}</td>
-                                            <td>{{get_percent($achive,$target)}}</td> 
+                                            <td>{{get_price($target)}}</td>  
+                                            @php
+                                                $deposit_achive = $data?->assignTo?->deposit_achive($selected);
+                                            @endphp
+                                            <td>{{get_price($deposit_achive)}}</td>
+                                            <td>{{get_percent($deposit_achive,$target)}}</td> 
                                         </tr>
                                     @endforeach 
                                 </tbody>
