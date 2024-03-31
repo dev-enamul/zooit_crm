@@ -35,26 +35,45 @@ class FreelancersDataTable extends DataTable
         })
         ->addColumn('date', function($data){
             return get_date($data->created_at);
+        })  
+        ->addColumn('area', function($data){
+            return $data->user->userAddress->area->name??"-";
         }) 
-        ->addColumn('profession', function($data){
-            return $data->profession->name??'-';
-        })
-        ->addColumn('thana', function($data){
-            return $data->user->userAddress->upazila->name??"-";
-        })
-        ->addColumn('union', function($data){
-            return $data->user->userAddress->union->name??"-";
-        })
-        ->addColumn('vilage', function($data){
-            return $data->user->userAddress->village->name??"-";
-        })
         ->addColumn('fl_id', function($data){
             if($data->status==1){
                 return $data->user->user_id;
             }else{
                 return '-';
             } 
-        }) ;
+        })
+        ->addColumn('reporting', function($employee){
+            $reporting_user_id = @user_reporting($employee->id)[1];
+            if(isset($reporting_user_id) && $reporting_user_id != null){
+                $data = user_info($reporting_user_id);
+                if(isset($data) && $data != null){
+                    $reporting_user = $data['name'].' ('.$data['user_id'].')';
+                }else{
+                    $reporting_user = "-";
+                } 
+            }else{
+                $reporting_user = "-";
+            }
+            return $reporting_user; 
+        })
+        ->addColumn('incharge', function($employee){
+            $reporting_user_id = @user_reporting($employee->id)[2];
+            if(isset($reporting_user_id) && $reporting_user_id != null){
+                $data = user_info($reporting_user_id);
+                if(isset($data) && $data != null){
+                    $reporting_user = $data['name'].' ('.$data['user_id'].')';
+                }else{
+                    $reporting_user = "-";
+                } 
+            }else{
+                $reporting_user = "-";
+            }
+            return $reporting_user; 
+        });
     }
 
     /**
@@ -142,12 +161,9 @@ class FreelancersDataTable extends DataTable
             Column::make('user.user_id')->visible(false)->searchable(true), 
             Column::make('fl_id'),
             Column::make('user.name')->title('Name')->searchable(true),
-            Column::make('profession'),
-            Column::make('thana')->title('Thana/Upazila'),
-            Column::make('union'), 
-            Column::make('vilage'),
             Column::make('user.phone')->title('Mobile')->searchable(true),  
-            // Column::make('reporting')->title('Reporting'),
+            Column::make('reporting')->title('Reporting'),
+            Column::make('incharge')->title('InCharge Sales'),
         ];
     }
 
