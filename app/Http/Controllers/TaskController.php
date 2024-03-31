@@ -14,19 +14,34 @@ use Illuminate\Support\Facades\DB;
 class TaskController extends Controller
 {
      
-    public function my_task()
+    public function my_task(Request $request)
     {
+        if(isset($request->date) && $request->date != ''){
+            $date = Carbon::parse($request->date);
+        }else{
+            $date = Carbon::now();
+        }
+
         $old_tasks = TaskList::where('status',0)
-                    ->whereHas('task',function($q){
+                    ->whereHas('taskModel',function($q){
                         $q->where('assign_to',auth()->user()->id);
                     })
-                    ->where('time','<',today()) 
+                    ->where('time','<',$date) 
                     ->get(); 
 
-        $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
-                    ->whereDate('date', today())
-                    ->first();
-        return view('task.my_task',compact('today_tasks','old_tasks'));
+        // $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
+        //             ->whereDate('date', $date)
+        //             ->first();
+
+        $today_tasks = TaskList::whereHas('taskModel',function($q){
+                        $q->where('assign_to',auth()->user()->id);
+                    })
+                    ->whereDate('time', $date) 
+                    ->get();
+        $selected_date = $date->format('Y-m-d');
+      
+
+        return view('task.my_task',compact('today_tasks','old_tasks','selected_date'));
     }
 
     public function task_complete(Request $request){
@@ -50,9 +65,19 @@ class TaskController extends Controller
         return view('task.task_complete',compact('datas','employeies','user'));
     }
 
-    public function assign_task_list(){
-        $datas = ModelsTask::where('assign_by',auth()->user()->id)->get()->groupBy('assign_to'); 
-        return view('task.assign_task_list',compact('datas'));
+    public function assign_task_list(Request $request){ 
+        if(isset($request->date) && $request->date != ''){
+            $date = Carbon::parse($request->date);
+        }else{
+            $date = Carbon::now();
+        }
+        $datas = TaskList::whereHas('taskModel',function($q){
+                        $q->where('assign_by',auth()->user()->id);
+                    })
+                    ->whereDate('time', $date)
+                    ->get();
+         $selected_date = $date->format('Y-m-d');
+        return view('task.assign_task_list',compact('datas','selected_date'));
     }
 
     public function assign_task(){
@@ -116,4 +141,6 @@ class TaskController extends Controller
         return redirect()->back()->with('success', 'Task rejected');
 
     }
+
+
 }

@@ -70,6 +70,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Events\Message;
+use App\Http\Controllers\CommonController;
 use App\Http\Controllers\DisplayDataController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
@@ -119,6 +120,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Employee 
         Route::resource('employee', EmployeeController::class);
         Route::get('select2-employee', [EmployeeController::class, 'select2_employee'])->name('select2.employee');
+        Route::get('all-employee', [CommonController::class, 'all_employee'])->name('all.employee');
         Route::get('import', [EmployeeImportController::class, 'index'])->name('import');
         Route::post('employee-import', [EmployeeImportController::class, 'import'])->name('employee.import');
         Route::post('employee-save', [EmployeeController::class, 'save'])->name('employee.save'); 
@@ -392,7 +394,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('salse-field-report', [FieldTargetController::class, 'salse_field_report'])->name('salse.field.report');
         // task
         Route::get('task-complete', [TaskController::class, 'task_complete'])->name('task.complete');
-        Route::get('today-my-task', [TaskController::class, 'my_task'])->name('my.task');
+        Route::get('my-task', [TaskController::class, 'my_task'])->name('my.task');
         Route::get('submit-task/{id}', [TaskController::class, 'submit_task'])->name('submit.task');
         Route::get('reject-task/{id}', [TaskController::class, 'reject_task'])->name('reject.task');
         Route::get('assign-task-list',[TaskController::class,'assign_task_list'])->name('assign.task.list');

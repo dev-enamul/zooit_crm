@@ -1,14 +1,10 @@
 @php
     $approve_setting = App\Models\ApproveSetting::pluck('status', 'name')->toArray();  
     $task_route = ['employee.create', 'employee.index', 'employees.tree', 'product.create', 'product.index', 'unit.create', 'unit.index', 'product.approve', 'freelancer.create', 'freelancer.index', 'approve-freelancer.index', 'customer.create', 'customer.index', 'customer.approve', 'prospecting.create', 'prospecting.index', 'prospecting.approve', 'cold-calling.create', 'cold-calling.index', 'cold-calling.approve', 'lead.create', 'lead.index', 'lead.approve', 'lead-analysis.create', 'lead-analysis.index', 'lead-analysis.approve', 'presentation.create', 'presentation.index', 'presentation.approve', 'presentation_analysis.create', 'presentation_analysis.index', 'presentation-analysis.approve', 'followup.create', 'followup.index', 'followUp.approve', 'followup-analysis.create', 'followup-analysis.index', 'followUp-analysis.approve', 'negotiation.create', 'negotiation.index', 'negotiation.approve', 'negotiation-analysis.create', 'negotiation-analysis.index', 'negotiation-analysis.approve', 'rejection.index', 'salse.create', 'salse.index', 'salse.approve', 'existing.salse', 'return.create', 'return.index', 'transfer.create', 'transfer.index', 'deposit.create', 'deposit.index'];
-    $progress_route = ['my.field.target', 'assign.field.target', 'assign.field.target.list', 'my.task', 'task.complete', 'assign.task', 'project.deposit.target', 'direct.deposit.target', 'deposit.target.asign.list', 'my.deposit.target', 'training.create', 'training.schedule', 'training.index', 'meeting.index'];
+    $progress_route = ['assign.task.list','my.field.target', 'assign.field.target', 'assign.field.target.list', 'my.task', 'task.complete', 'assign.task', 'project.deposit.target', 'direct.deposit.target', 'deposit.target.asign.list', 'my.deposit.target', 'training.create', 'training.schedule', 'training.index', 'meeting.index'];
     $report_route = ['monthly.target.achive', 'mst.commission', 'rsa.co.ordinator', 'monthly.dt.achivement', 'dt.achivement', 'daily.deposit', 'special-offer.index', 'special-offer.create', 'marketing.field.report', 'salse.field.report', 'due.report', 'floor.wise.sold.report', 'cc.report', 'pending.report'];
     $setting_route = ['profession.index', 'village.index', 'zone.index', 'area.index', 'unit.type', 'unit.category', 'training-category.index', 'designation.index', 'commission.index', 'special-commission.index', 'commission-deducted-setting.index', 'bank.index', 'bank-day.index', 'deposit-category.index', 'approve.setting'];
-    $currentRoute = \Request::route()->getName(); 
-
-
-
-
+    $currentRoute = \Request::route()->getName();
 @endphp
 <div class="sidebar-left"> 
     <div data-simplebar class="h-100"> 
@@ -392,13 +388,13 @@
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow ">
                                     <i class="mdi mdi-teach"></i>
-                                    <span>Daily Task</span>
+                                    <span>Todo List</span>
                                 </a>
-                                <ul class="sub-menu" aria-expanded="false"> 
+                                <ul class="sub-menu" aria-expanded="false">  
+                                    <li><a href="{{route('my.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Task</a></li> 
                                     <li><a href="{{route('assign.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task</a></li> 
-                                    <li><a href="{{route('my.task')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Today My Task</a></li> 
-                                    <li class="{{ Route::is('task.details') ? 'mm-active' : '' }}"><a href="{{route('task.complete')}}"><i class=" mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li> 
-                                    {{-- <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li>  --}}
+                                    {{-- <li class="{{ Route::is('task.details') ? 'mm-active' : '' }}"><a href="{{route('task.complete')}}"><i class=" mdi mdi-checkbox-blank-circle align-middle"></i>Task Complete</a></li>  --}}
+                                    <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li> 
                                    
                                 </ul>
                             </li>

@@ -34,10 +34,7 @@
                                         <div class="mb-3">
                                             <label for="assign_to" class="form-label">Task Asign To</label>
                                             <select class="select2" search id="assign_to" name="assign_to" required>
-                                                <option value="">Select Employee</option> 
-                                                @foreach ($employeies as $data)
-                                                 <option value="{{$data->id}}">{{$data->name}}-{{$data->phone}}-{{$data->user_id}}</option>
-                                                @endforeach 
+                                          
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -147,5 +144,24 @@
 
         document.getElementById('date').valueAsDate = new Date();
         }) 
-    </script>
+    </script> 
+
+    <script>
+        $(document).ready(function() { 
+            $('#assign_to').select2({
+                placeholder: "Select Employee",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('all.employee') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    }
+                }
+            });
+        }); 
+    </script> 
 @endsection

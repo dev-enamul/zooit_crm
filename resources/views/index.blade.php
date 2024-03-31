@@ -399,51 +399,55 @@
   
                     <div class="row">
                          
-                        <div class="col-12">  
-                            @if (isset($old_tasks) && count($old_tasks) > 0) 
+                        <div class="col-12">   
                             <div class="card"> 
-                                <div class="card-body">
-                                    <h3 class="card-title">Old Task</h3>
-                                    <div class="timeline timeline-timed">
-                                       
-                                            @foreach($old_tasks as $data)
-                                            <div class="timeline-item">
-                                                <span class="timeline-time">{{get_date($data->time,'H:i')}}</span>
-                                                <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{$data->status==1?"checked":""}}></div>
-                                                <div class="timeline-content">
-                                                    <div>
-                                                        <small>{{get_date($data->time)}}</small> <br>
-                                                        <span>{{$data->task}}</span>  <br>
-                                                        <a href="{{route('submit.task',$data->id)}}" class="btn btn-primary">Submit Task</a> <a href="{{route('reject.task',$data->id)}}" class="btn btn-danger">Skip Task</a>
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                            @endforeach 
-                                    </div>
-                                </div> 
-                            </div> 
-                            @endif 
-                            <div class="card"> 
-                                <div class="card-body">
-                                    <h3 class="card-title">Today Task</h3>
-                                    <div class="timeline timeline-timed">
-                                        @if ($today_tasks?->taskList && $today_tasks->taskList->count() > 0)
-                                            @foreach($today_tasks->taskList as $data)
-                                            <div class="timeline-item">
-                                                <span class="timeline-time">{{get_date($data->time,'H:i')}}</span>
-                                                <div class="timeline-pin"><input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" {{$data->status==1?"checked":""}}></div>
-                                                <div class="timeline-content">
-                                                    <div>
-                                                        <span>{{$data->task}}</span> <br>
-                                                        <a href="{{route('submit.task',$data->id)}}" class="btn btn-primary">Submit Task</a> <a href="{{route('reject.task',$data->id)}}" class="btn btn-danger">Skip Task</a>
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                            @endforeach
-                                        @else 
-                                             <p class="mt-3">No task asign today</p>
-                                        @endif
-                                    </div>
+                                <div class="card-body"> 
+                                    <h5>Pending Task</h5>
+                                    <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                @can('village-manage')
+                                                <th>Action</th>
+                                                @endcan
+                                                <th>S/N</th> 
+                                                <th>Date & Time</th>
+                                                <th>Assign By</th> 
+                                                <th>Particulars</th> 
+                                                <th>Status</th>       
+                                            </tr>
+                                        </thead>
+                                        <tbody> 
+                                            @foreach($today_tasks as $key => $data)
+                                            <tr> 
+                                                <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                    @if ($data->status==0)
+                                                        <div class="dropdown">
+                                                            <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-animated">
+                                                                <a class="dropdown-item" href="{{route('submit.task',$data->id)}}" >Completed</a>
+                                                                {{-- <a class="dropdown-item" href="{{route('reject.task',$data->id)}}" >Reject</a> --}}
+                                                            </div>
+                                                        </div> 
+                                                    @endif
+                                                   
+                                                </td>  
+                                                <td>{{$key+1}}</td>
+                                                <td>{{get_date($data->created_at)}} <span class="badge badge-primary">{{get_date($data->time,'g:i A')}}</span></td>  
+                                                <td>{{@$data->taskModel->assigner->name}} [{{@$data->taskModel->assigner->user_id}}]</td>
+                                                <td>{{$data->task}}</td>
+                                                <td>
+                                                    @if($data->status==0)
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    @else  
+                                                        <span  class="badge badge-success">Completed</span>
+                                                    @endif
+                                                </td>
+                                                {{-- <td></td>
+                                                <td></td>  --}}
+                                            </tr>   
+                                            @endforeach  
+                                        </tbody>  
+                                    </table> 
                                 </div> 
                             </div> 
                         </div> 

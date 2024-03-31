@@ -67,16 +67,13 @@ class DashboardController extends Controller
         }else if($user->user_type==2){
             $designations = $user->freelancer->designation_id;
         }  
-        $old_tasks = TaskList::where('status',0)
-                    ->whereHas('task',function($q){
-                        $q->where('assign_to',auth()->user()->id);
-                    })
-                    ->where('time','<',today()) 
-                    ->get(); 
+       
 
-        $today_tasks = ModelsTask::where('assign_to', auth()->user()->id)
-                    ->whereDate('date', today())
-                    ->first(); 
+        $today_tasks = TaskList::whereHas('taskModel',function($q){
+            $q->where('assign_to',auth()->user()->id);
+        }) 
+        ->where('status',0)
+        ->get();
                     
         $field_target = FieldTarget::where('assign_to', auth()->user()->id)
                     ->whereMonth('month', today())
@@ -232,8 +229,7 @@ class DashboardController extends Controller
  
                     
         return view('index',compact([
-            'today_tasks',
-            'old_tasks',
+            'today_tasks', 
             'field_target',
             'total_day',
             'designations',

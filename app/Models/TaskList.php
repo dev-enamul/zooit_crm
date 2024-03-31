@@ -13,9 +13,9 @@ class TaskList extends Model
         'task_id', 'task', 'approve_by', 'status','time',
     ];
 
-    public function task()
+    public function taskModel()
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(Task::class,'task_id');
     }
 
     public function approver()
