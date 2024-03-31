@@ -187,7 +187,7 @@
 
                                             <tr>
                                                 <th scope="row">Nationality :</th>
-                                                <td>{{$user->nationality==0?"Indian":"Bangla"}}</td>
+                                                <td>{{$user->nationality==0?"Bangladeshi":"Indian"}}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Imo/Whatsapp number :</th>
