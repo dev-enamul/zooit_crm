@@ -138,14 +138,21 @@ class User extends Authenticatable
 
  
 
-    public static function generateNextEmployeeId(){
-        $user_id = User::where('user_type',1)->latest('id')->first()->user_id;
+    public static function generateNextEmployeeId($user_id = null){
+        if($user_id == null){
+            $user_id = User::where('user_type',1)->latest('id')->first()->user_id;
+        }
+        
         if($user_id == null){
             $user_id = 'EMP-000';
         }
         $numericPart = substr($user_id, 4);  
         $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT); 
-        $newValue = "EMP-" . $newNumericPart; 
+        $newValue = "EMP-" . $newNumericPart;
+        $user = User::where('user_id',$newValue)->first();
+        if($user != null){
+            $newValue = self::generateNextEmployeeId($newValue);
+        }
         return $newValue;
     }
 

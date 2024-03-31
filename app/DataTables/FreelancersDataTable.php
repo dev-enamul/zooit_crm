@@ -59,7 +59,8 @@ class FreelancersDataTable extends DataTable
                 $reporting_user = "-";
             }
             return $reporting_user; 
-        })
+        }) 
+        
         ->addColumn('incharge', function($employee){
             $reporting_user_id = @user_reporting($employee->user->id)[2];
             if(isset($reporting_user_id) && $reporting_user_id != null){
