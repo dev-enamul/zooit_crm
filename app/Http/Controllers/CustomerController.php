@@ -123,7 +123,7 @@ class CustomerController extends Controller
             'full_name'                 => 'required|string|max:255', 
             'marital_status'            => 'required',
             'profession'                => 'required|numeric|exists:professions,id',
-            'dob'                       => 'required',
+            'dob'                       => 'nullable',
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
@@ -144,9 +144,9 @@ class CustomerController extends Controller
             'address'                   => 'nullable|string', 
             'father_name'               => 'required|string',
             'father_phone'              => 'nullable|string|max:15',
-            'mother_name'               => 'required|string',
+            'mother_name'               => 'nullable|string',
             'mother_phone'              => 'nullable|string|max:15',
-            'spouse_name'               => 'nullable|string',
+            'spouse_name'               => 'required|string',
             'spouse_phone'              => 'nullable|string|max:15',
             'bank'                      => 'nullable|numeric|exists:banks,id',
             'branch'                    => 'nullable|string',
@@ -161,9 +161,9 @@ class CustomerController extends Controller
             'nid_file'                  => 'image|max:2048',
             'birth_certificate_file'    => 'image|max:2048',
             'upload_passport'           => 'image|max:2048',  
-            'at_least_one_field' => [
-                'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
-            ],
+            // 'at_least_one_field' => [
+            //     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
+            // ],
         ]); 
 
         if ($validator->fails()) { 
@@ -324,7 +324,7 @@ class CustomerController extends Controller
             'full_name'                 => 'required|string|max:255', 
             'marital_status'            => 'required',
             'profession'                => 'required|numeric|exists:professions,id',
-            'dob'                       => 'required',
+            'dob'                       => 'nullable',
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
@@ -344,9 +344,9 @@ class CustomerController extends Controller
             'address'                   => 'nullable|string', 
             'father_name'               => 'required|string',
             'father_phone'              => 'nullable|string|max:15',
-            'mother_name'               => 'required|string',
+            'mother_name'               => 'nullable|string',
             'mother_phone'              => 'nullable|string|max:15',
-            'spouse_name'               => 'nullable|string',
+            'spouse_name'               => 'required|string',
             'spouse_phone'              => 'nullable|string|max:15',
             'bank'                      => 'nullable|numeric|exists:banks,id',
             'branch'                    => 'nullable|string',
@@ -361,9 +361,9 @@ class CustomerController extends Controller
             'nid_file'                  => 'image|max:2048',
             'birth_certificate_file'    => 'image|max:2048',
             'upload_passport'           => 'image|max:2048',  
-            'at_least_one_field' => [
-                'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
-            ],
+            // 'at_least_one_field' => [
+            //     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
+            // ],
         ]); 
 
         if ($validator->fails()) { 
