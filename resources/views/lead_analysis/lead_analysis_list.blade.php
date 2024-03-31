@@ -73,6 +73,7 @@
     
                                                             @if ($lead->approve_by!=null)
                                                                 <a class="dropdown-item" href="{{route('presentation.create',['customer'=> $lead->customer->id])}}">Entry Presentation</a>
+                                                                <a class="dropdown-item" href="{{route('presentation_analysis.create',['customer'=> $lead->customer->id])}}">Project Visit Analysis</a>
                                                             @endif 
     
                                                             <a class="dropdown-item" href="{{route('lead.analysis.details', encrypt($lead->id))}}">Lead Analysis Print</a>

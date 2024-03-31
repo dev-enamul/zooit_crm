@@ -13,7 +13,7 @@
                     @include('includes.profile_menu')
                 </div> 
                 <div class="col-md-9">  
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <div class="card-icon text-muted"><i class="fa fa-boxes"></i></div>
                             <h3 class="card-title">Average Achivement</h3> 
@@ -29,7 +29,8 @@
                                 </div>
                             </div> 
                         </div>
-                    </div>
+                    </div> --}}
+
                     <div class="card">
                         <div class="card-header">
                             <div class="card-icon text-muted"><i class="fa fa-chalkboard fs14"></i></div>

@@ -299,7 +299,7 @@
                                             <i class="marker marker-circle text-danger"></i>
                                         </div>
                                         <div class="timeline-content"> 
-                                            <p class="m-0 bold-lg">Lead Analysis by {{$communication['visit_analysis']->employee->name??"-"}}</p>
+                                            <p class="m-0 bold-lg">Project Visit by {{$communication['visit_analysis']->employee->name??"-"}}</p>
                                             <p class="m-0 fs-10">{{get_date($communication['visit_analysis']->created_at??date('y-m-d'))}}</p>
                                             {{$communication['visit_analysis']->remark??""}} 
                      

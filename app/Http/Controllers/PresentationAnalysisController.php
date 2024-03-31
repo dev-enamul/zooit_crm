@@ -47,7 +47,7 @@ class PresentationAnalysisController extends Controller
                 $q->where('profession_id', $profession);
             });
          } 
-         $visits = $visits->orderBY('id','desc')->get();   
+         $visits = $visits->orderBY('id','desc')->get(); 
         return view('presentation_analysis.presentation_analysis_list', compact('visits'));
     }
 
@@ -68,9 +68,9 @@ class PresentationAnalysisController extends Controller
         $units              = Unit::select('id','title')->get();
 
         $selected_data=[];
-        if ($request->has('customer_id')) {
-            $selected_data['customer'] = Customer::find($request->customer_id);
-        }
+        if ($request->has('customer')) {
+            $selected_data['customer'] = Customer::find($request->customer);
+        } 
  
         return view('presentation_analysis.presentation_analysis_save',compact('title','priorities','projects','units','visitors','selected_data'));
     }
@@ -186,10 +186,8 @@ class PresentationAnalysisController extends Controller
     } 
 
     public function presentation_analysis_details($id){
-        try{ 
-            
-            $id = decrypt($id);
-           
+        try{
+            $id = decrypt($id); 
             $data = VisitAnalysis::find($id);  
             $customer = Customer::find($data->customer_id);
             $user = User::find($customer->user_id);

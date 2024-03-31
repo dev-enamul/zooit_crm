@@ -36,5 +36,9 @@ class VisitAnalysis extends Model
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approve_by');
+    } 
+
+    public function isPresentation(){
+        return Presentation::where('customer_id',$this->customer_id)->exists();
     }
 }

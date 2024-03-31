@@ -59,11 +59,17 @@
                                                     @can('visit-analysis-delete')
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('visit.delete',$visit->id) }}')">Delete</a> 
                                                     @endcan 
-                                                    @if ($visit->approve_by!=null)
-                                                        @can('follow-up-manage')
-                                                            <a class="dropdown-item" href="{{route('followup.create',['customer' => $visit->customer_id])}}">Follow Up</a>
-                                                        @endcan 
-                                                    @endif  
+                                                    @if ($visit->approve_by!=null) 
+                                                        @if ($visit->isPresentation()) 
+                                                            @can('follow-up-manage')
+                                                                <a class="dropdown-item" href="{{route('followup.create',['customer' => $visit->customer_id])}}">Follow Up</a>
+                                                            @endcan 
+                                                        @else 
+                                                            @can('presentation-manage')
+                                                                <a class="dropdown-item" href="{{route('presentation.create',['customer'=> $visit->customer_id])}}">Entry Presentation</a>
+                                                            @endcan
+                                                            @endif   
+                                                        @endif  
 
                                                     <a class="dropdown-item" href="{{route('presentation.analysis.details', encrypt($visit->id))}}">Print Visit Analysis</a>
                                                 </div>
