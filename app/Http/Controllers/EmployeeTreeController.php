@@ -52,9 +52,10 @@ class EmployeeTreeController extends Controller
         ->select(['id', 'user_id'])
         ->first(); 
         $employee =  User::find($user_id);
+        $reporting = user_reporting($employee->id);
         $organogram = getOrganogram($topUser);  
 
-        return view('employee.employee_hierarchy',compact('organogram','employee'));
+        return view('employee.employee_hierarchy',compact('organogram','employee','reporting'));
         // return view('employee.only_employee',compact('organogram','employee'));
     }
 }

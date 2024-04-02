@@ -101,6 +101,7 @@ class CustomersDataTable extends DataTable
                     ->setTableId('customers-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
+                    ->pageLength(20)
                     ->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()

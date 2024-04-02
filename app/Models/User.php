@@ -58,8 +58,12 @@ class User extends Authenticatable
         $imagePath = 'public/'.$image;  
         if($image != null && $image != '' && Storage::exists($imagePath)){
             return asset('storage/'.$image);
-        }else{
-            return asset('../assets/images/users/avatar-6.png');
+        }else{ 
+            if($this->user_type==2){
+                return asset('../assets/images/users/avatar-1.png');
+            }else{
+                return asset('../assets/images/users/avatar-6.png');
+            }
         }
     }
 

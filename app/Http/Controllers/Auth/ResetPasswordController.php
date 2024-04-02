@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
@@ -19,7 +21,16 @@ class ResetPasswordController extends Controller
     |
     */
 
-    use ResetsPasswords;
+    // use ResetsPasswords; 
+
+    public function fresh($id){
+        $id = decrypt($id);
+        $user = User::find($id);
+        $user->update([
+            'password' => Hash::make(123456),
+        ]);
+        return redirect()->back()->with('success',"Password Updated");
+    }
 
     /**
      * Where to redirect users after resetting their password.

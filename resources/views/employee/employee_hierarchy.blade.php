@@ -32,6 +32,17 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <div>
                             <button class="btn btn-secondary buttons-pdf buttons-html5" id="print" type="button"><span><i class="fa fa-print"></i> Print</span></button> 
+                        </div> 
+                        <div> 
+                             @foreach ($reporting as $key => $val)
+                             @php
+                                 $user = user_info($val);
+                             @endphp 
+                                @if ($key!=0)
+                                    /
+                                @endif
+                                <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}">{{$user->name }}</a>   
+                             @endforeach                            
                         </div>
 {{-- 
                         <div class="">   
@@ -61,7 +72,7 @@
                             <div class="row">
                                 <div class="tree">
                                     <ul>
-                                        <li> <a href="#"><img src="{{$employee->image()}}"><span>{{$employee->name}} <br> {{$employee->user_id}}</span></a>
+                                        <li> <a href=""><img src="{{$employee->image()}}"><span>{{$employee->name}} <br> {{$employee->user_id}}</span></a>
                                         @include('includes.down_hierachy',[ 'depth' => 1])
                                      
                                     </ul>

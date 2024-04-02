@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApproveFreelancerController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\BankDayController;
 use App\Http\Controllers\ColdCallingController;
@@ -124,6 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('import', [EmployeeImportController::class, 'index'])->name('import');
         Route::post('employee-import', [EmployeeImportController::class, 'import'])->name('employee.import');
         Route::post('employee-save', [EmployeeController::class, 'save'])->name('employee.save'); 
+        Route::get('refresh-password/{id}',[ResetPasswordController::class,'fresh'])->name('refresh.password');
          
         Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
         Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');

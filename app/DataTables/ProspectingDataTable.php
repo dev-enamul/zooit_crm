@@ -109,6 +109,7 @@ class ProspectingDataTable extends DataTable
                 ->setTableId('prospecting-table')
                 ->columns($this->getColumns())
                 ->minifiedAjax()
+                ->pageLength(20)
                 ->dom('Bfrtip')
                 ->orderBy(1)
                 ->selectStyleSingle()

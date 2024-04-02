@@ -91,6 +91,7 @@ class EmployeesDataTable extends DataTable
                         ->setTableId('employees-table')
                         ->columns($this->getColumns())
                         ->minifiedAjax()
+                        ->pageLength(20)
                         ->dom('Bfrtip')
                         ->orderBy(1)
                         ->selectStyleSingle()

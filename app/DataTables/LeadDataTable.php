@@ -118,6 +118,7 @@ class LeadDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
+                    ->pageLength(20)
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([

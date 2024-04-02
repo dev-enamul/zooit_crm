@@ -130,6 +130,7 @@ class FreelancersDataTable extends DataTable
         return $this->builder()
             ->setTableId('employees-table')
             ->columns($this->getColumns())
+            ->pageLength(20)
             ->minifiedAjax()
             ->dom('Bfrtip')
             ->orderBy(1)
