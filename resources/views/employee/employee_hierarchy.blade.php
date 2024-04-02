@@ -44,7 +44,7 @@
                                 <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}">{{$user->name }}</a>   
                              @endforeach                            
                         </div>
-{{-- 
+                         {{-- 
                         <div class="">   
                             <form action="" method="get" action="">
                                 <div class="input-group">  

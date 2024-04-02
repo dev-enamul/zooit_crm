@@ -9,11 +9,13 @@
         <a href="{{route('employees.hierarchy2',['employee'=> encrypt($downline['user']->user->id)])}}" style="{{!empty($downline['downlines'])?'background:#ddd':''}}">
             <img src="{{@$downline['user']->user->image()}}">
             <span>{{ @$downline['user']?->user?->name }} <br>{{ @$downline['user']?->user?->user_id }} </span>
+            <br> 
+            
         </a>   
         @if (!empty($downline['downlines']) && $depth > 1) 
             @include('includes.down_hierachy', ['organogram' => $downline,'depth' => $depth - 1])
         @endif
-    </li>  
+    </li> 
     @endforeach 
 </ul>
  
