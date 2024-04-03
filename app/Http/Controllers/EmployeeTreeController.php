@@ -30,7 +30,7 @@ class EmployeeTreeController extends Controller
         }else{
             $user_id = Auth::user()->id;
         } 
-
+        
         $topUser = ReportingUser::where('user_id',  $user_id)
         ->select(['id', 'user_id'])
         ->first(); 

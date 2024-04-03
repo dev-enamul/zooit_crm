@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Union List')
+@section('title','Upazila List')
 
 @section('style')
 {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
@@ -13,11 +13,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Unions</h4>  
+                        <h4 class="mb-sm-0">Upazila</h4>  
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Union List</li>
+                                    <li class="breadcrumb-item active">Upazila List</li>
                                 </ol>
                             </div> 
                     </div>
@@ -34,21 +34,13 @@
                                 <div class=""> 
                                     @can('village-manage')
                                         <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#create_modal">
-                                            <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Union</span>
+                                            <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Upazila</span>
                                         </button> 
                                     @endcan
                                 </div>
 
                                 <div class="">
-                                    {{-- <div class="d-flex">   
-                                        <a class="btn btn-primary me-1" href="{{route(Route::currentRouteName())}}"><i class="mdi mdi-refresh"></i> </a> 
-                                        <div class="input-group">  
-                                            
-                                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#filter_offcanvas">
-                                                <span><i class="fas fa-filter"></i> Filter</span>
-                                            </button> 
-                                        </div>
-                                    </div>  --}}
+                                  
 
                                   
                                 </div>
@@ -61,7 +53,6 @@
                                         <th>Action</th>
                                         @endcan
                                         <th>S/N</th> 
-                                        <th>Union</th> 
                                         <th>Upazilla</th> 
                                         <th>District</th> 
                                         <th>Division</th>     
@@ -75,17 +66,17 @@
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($item)}})">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('union.destroy',$item->id) }}')" >Delete</a>  
+                                                    {{-- <a class="dropdown-item" href="javascript:void(0)" onclick="editItem({{json_encode($item)}})">Edit</a> --}}
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('upazila.destroy',$item->id) }}')" >Delete</a>  
                                                 </div>
                                             </div> 
                                         </td> 
                                         @endcan
                                         <td>{{$key+1}}</td>
                                         <td>{{$item->name}}</td>  
-                                        <td>{{@$item->upazilla->name}}</td>
-                                        <td>{{@$item->upazilla->district->name}}</td>
-                                        <td>{{@$item->upazilla->district->division->name}}</td> 
+                                        <td>{{@$item->name}}</td>
+                                        <td>{{@$item->district->name}}</td>
+                                        <td>{{@$item->district->division->name}}</td> 
                                     </tr>   
                                     @endforeach  
                                 </tbody>  
@@ -106,22 +97,22 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header"> 
-                <h5 class="modal-title">Create new Union</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                <h5 class="modal-title">Create new Upazila</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
             </div>
 
             <div class="modal-body">
-                <form action="{{route('union.store')}}" method="post"> 
+                <form action="{{route('upazila.store')}}" method="post"> 
                     @csrf 
                   <div class="row">
                     @include('common.area', [
                         'div'       => 'col-md-6',
                         'mb'        => 'mb-3',
-                        'visible'   => ['division', 'district', 'upazila'],
-                        'required'  => ['division', 'district', 'upazila'],
+                        'visible'   => ['division', 'district'],
+                        'required'  => ['division', 'district'],
                     ])
-                    <div class="col-md-6">
-                        <label class="mb-1" for="union">Union <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="union" name="union" placeholder="Enter Union" required>
+                    <div class="col-md-12">
+                        <label class="mb-1" for="upazila">Upazila <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="upazila" name="upazila" placeholder="Enter Upazila" required>
                     </div>
                   </div>  
                     

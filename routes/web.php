@@ -77,6 +77,7 @@ use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\FreelancerImportController;
 use App\Http\Controllers\SalseApproveController;
+use App\Http\Controllers\UpazilaController;
 use App\Models\ReportingUser;
 use App\Models\User;
 use App\Models\UserPermission;
@@ -121,6 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Employee 
         Route::resource('employee', EmployeeController::class);
         Route::get('select2-employee', [EmployeeController::class, 'select2_employee'])->name('select2.employee');
+        Route::get('select2-employee-encode', [EmployeeController::class, 'select2_employee_encode'])->name('select2-employee-encode');
         Route::get('all-employee', [CommonController::class, 'all_employee'])->name('all.employee');
         Route::get('import', [EmployeeImportController::class, 'index'])->name('import');
         Route::post('employee-import', [EmployeeImportController::class, 'import'])->name('employee.import');
@@ -327,7 +329,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('profession-update', [ProfessionController::class, 'update'])->name('profession.update');
         // Location
         Route::resource('union', UnionController::class);
-        Route::resource('village', VillageController::class);
+        Route::resource('village', VillageController::class); 
+        Route::resource('upazila', UpazilaController::class);
         Route::get('village-update', [VillageController::class, 'update'])->name('village.update');
         Route::resource('zone', ZoneController::class);
         Route::post('zone-update', [ZoneController::class, 'update'])->name('zone.update');

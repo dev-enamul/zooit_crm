@@ -615,7 +615,14 @@
                                     <span>Location</span>
                                 </a> 
                                 <ul class="sub-menu" aria-expanded="false"> 
-                                    {{-- <li><a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a></li>  --}}
+                                    <li>
+                                        <a href="{{route('upazila.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Thana</a>
+                                    </li> 
+
+                                    <li>
+                                        <a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a>
+                                    </li> 
+                                    
                                     @can('village')
                                         <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Village</a></li> 
                                     @endcan  

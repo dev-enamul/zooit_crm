@@ -44,20 +44,6 @@
                                 <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}">{{$user->name }}</a>   
                              @endforeach                            
                         </div>
-                         {{-- 
-                        <div class="">   
-                            <form action="" method="get" action="">
-                                <div class="input-group">  
-                                    <select class="select2" search name="employee" id="employee" required>
-                                        <option value="{{auth()->user()->id}}" selected="selected">{{Auth::user()->name}}</option>
-                                    </select>
-                                    <button class="btn btn-secondary" type="submit">
-                                        <span><i class="fas fa-filter"></i> Filter</span>
-                                    </button> 
-                                </div>
-                            </form> 
-                        </div> --}}
-
                     </div>
                 </div>
             </div>
@@ -65,8 +51,20 @@
             <div class="row">
                 <div class="col-12">  
                     <div class="card">
-                       <div class="card-header">
+                       <div class="card-header d-flex align-items-center justify-content-between">
                             <h4 class="card-title text-center">{{$employee->name}} [{{$employee->user_id}}]</h4>
+                            <div class="">   
+                                <form action="" method="get" action="">
+                                    <div class="input-group">  
+                                        <select class="select2" search name="employee" id="employee" required>
+                                            <option value="{{encrypt(auth()->user()->id)}}" selected="selected">{{Auth::user()->name}}</option>
+                                        </select>
+                                        <button class="btn btn-secondary" type="submit">
+                                            <span><i class="fas fa-filter"></i> Filter</span>
+                                        </button> 
+                                    </div>
+                                </form> 
+                            </div>
                        </div>
                         <div class="card-body">
                             <div class="row">
@@ -113,7 +111,7 @@
                 placeholder: "Select Employee",
                 allowClear: true,
                 ajax: {
-                    url: '{{ route('select2.employee') }}',
+                    url: '{{ route('select2-employee-encode') }}',
                     dataType: 'json',
                     data: function (params) {
                         var query = {

@@ -3,24 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Division;
-use App\Models\Union;
+use App\Models\Upazila;
 use Exception;
 use Illuminate\Http\Request;
 
-class UnionController extends Controller
+class UpazilaController extends Controller
 {
-    
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
-    { 
-        $datas = Union::paginate(20);
+    {
+        $datas = Upazila::paginate(20);
         $divisions = Division::select('id', 'name')->get();
-        return view('location.union_list',compact('datas','divisions'));
+        return view('location.upazila_list',compact('datas','divisions'));
     }
 
-   
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('location.union_create');
+        //
     }
 
     /**
@@ -28,10 +32,13 @@ class UnionController extends Controller
      */
     public function store(Request $request)
     {
-        $data = new Union();
-        $data->upazila_id = $request->upazila;
-        $data->name = $request->union;
-        return redirect()->back()->with('success',"Union Created");
+        $data = new Upazila();
+        $data->name = $request->upazila;
+        $data->bn_name =  $request->upazila;
+        $data->url = $request->upazila;
+        $data->district_id = $request->district;
+        $data->save();
+        return redirect()->back()->with('success','Upazila Created');
     }
 
     /**
@@ -63,8 +70,8 @@ class UnionController extends Controller
      */
     public function destroy(string $id)
     {
-       try{
-            $data = Union::find($id);
+        try{
+            $data = Upazila::find($id);
             $data->delete();
             return response()->json(['success' => 'Training Completed Successfully'], 200);
        }catch(Exception $e){

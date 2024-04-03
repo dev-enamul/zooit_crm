@@ -150,7 +150,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header"> 
-                <h5 class="modal-title">Create new Village</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                <h5 class="modal-title"> Update Village</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
             </div>
 
             <div class="modal-body">

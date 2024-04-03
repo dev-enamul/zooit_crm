@@ -596,5 +596,40 @@ class EmployeeController extends Controller
         return response()->json([
             'results' => $results
         ]);
+    } 
+
+    public function select2_employee_encode(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id); 
+
+        $users = User::query()
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('user_id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%");
+            })
+            ->whereIn('id', $my_all_employee)
+            ->where('status', 1)
+            ->limit(10)
+            ->get();
+    
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ];
+    
+        foreach ($users as $user) {
+            $results[] = [
+                'id' => encrypt($user->id),
+                'text' => "{$user->name} ($user->user_id)",
+            ];
+            
+        }
+        return response()->json([
+            'results' => $results
+        ]);
     }
 }
