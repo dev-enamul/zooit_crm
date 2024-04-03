@@ -30,7 +30,7 @@ class EmployeeTreeController extends Controller
         }else{
             $user_id = Auth::user()->id;
         } 
-        
+
         $topUser = ReportingUser::where('user_id',  $user_id)
         ->select(['id', 'user_id'])
         ->first(); 
@@ -53,6 +53,7 @@ class EmployeeTreeController extends Controller
         ->first(); 
         $employee =  User::find($user_id);
         $reporting = user_reporting($employee->id);
+        $reporting =  array_reverse($reporting);
         $organogram = getOrganogram($topUser);  
 
         return view('employee.employee_hierarchy',compact('organogram','employee','reporting'));

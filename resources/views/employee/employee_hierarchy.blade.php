@@ -19,6 +19,9 @@
             } 
             .tree{
                 overflow: none !important;
+            } 
+            a{
+                color: #000 !important;
             }
         </style> 
 
@@ -41,7 +44,7 @@
                                 @if ($key!=0)
                                     /
                                 @endif
-                                <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}">{{$user->name }}</a>   
+                                <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}">{{$user->user_id }}</a>   
                              @endforeach                            
                         </div>
                     </div>

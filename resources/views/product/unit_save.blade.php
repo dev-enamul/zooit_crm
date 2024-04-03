@@ -40,7 +40,8 @@
                         <div class="card-body">
                             <form id="unitSave" action="{{ isset($project_unit) ? route('unit.save', $project_unit->id) : route('unit.save') }}" method="POST" >
                                 <input type="hidden" id="is_update" value="{{isset($project_unit) ? $project_unit->id : ''}}">
-                                @csrf                                 
+                                @csrf  
+                                <input type="hidden" name="project_id" value="{{$project_unit->id??0}}">                                
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="project" class="form-label">Product <span class="text-danger">*</span></label>
