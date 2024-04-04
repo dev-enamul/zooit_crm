@@ -48,6 +48,7 @@ class FreelancersDataTable extends DataTable
         })
         ->addColumn('reporting', function($employee){
             $reporting_user_id = @user_reporting($employee->user->id)[1];
+
             if(isset($reporting_user_id) && $reporting_user_id != null){
                 $data = user_info($reporting_user_id);
                 if(isset($data) && $data != null){
@@ -61,7 +62,7 @@ class FreelancersDataTable extends DataTable
             return $reporting_user; 
         }) 
         
-        ->addColumn('incharge', function($employee){
+        ->addColumn('ex_co_ordinator', function($employee){
             $reporting_user_id = @user_reporting($employee->user->id)[2];
             if(isset($reporting_user_id) && $reporting_user_id != null){
                 $data = user_info($reporting_user_id);
@@ -164,8 +165,8 @@ class FreelancersDataTable extends DataTable
             Column::make('fl_id'),
             Column::make('user.name')->title('Name')->searchable(true),
             Column::make('user.phone')->title('Mobile')->searchable(true),  
-            Column::make('reporting')->title('Reporting'),
-            Column::make('incharge')->title('InCharge Sales'),
+            Column::make('reporting')->title('Co-Ordinator Name_ID'),
+            Column::make('ex_co_ordinator')->title('Executive Co-Ordinator Name_ID'),
         ];
     }
 
