@@ -72,7 +72,19 @@ class EmployeesDataTable extends DataTable
                 // }else{
                 //     $reporting_user = "-";
                 // }
-                // return $reporting_user_id; 
+                // return $reporting_user_id;  
+
+                if(isset($data->id) && $data->id !=null){
+                    $user = User::find($data->user_id);
+                    if(isset($user) && $user != null){
+                        return $user->name;
+                    }else{
+                        return "-";
+                    }
+
+                }else{
+                    return "-";
+                }
                 return $data->id??"-";
             });
             
