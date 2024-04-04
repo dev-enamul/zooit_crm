@@ -436,7 +436,7 @@ Route::get('function_test', function () {
         // $user = User::first();
         // dd($user);
         $reporting = ReportingUser::get();
-        dd($reporting);
+        dd($reporting->first());
         //  dd($user->freelancer->delete());
         // $user->update(['user_type' => 3]); 
       
