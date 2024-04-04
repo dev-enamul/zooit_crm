@@ -431,16 +431,17 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {
+Route::get('function_test', function () { 
+        dd("yes");
         // $user = User::where('phone','01726371871')->first();
         // $user = User::first();
         // dd($user);
-        $reporting = ReportingUser::latest()->first();
-        $reporting->update([
-                'status' => 0,
-        ]); 
-        
-        dd($reporting)
+        // $reporting = ReportingUser::latest()->first();
+        // $reporting->update([
+        //         'status' => 0,
+        // ]); 
+
+        // dd($reporting);
         // dd();
         //  dd($user->freelancer->delete());
         // $user->update(['user_type' => 3]); 
