@@ -437,9 +437,8 @@ Route::get('function_test', function () {
         // $user = User::first();
         // dd($user);
         $reporting = ReportingUser::latest()->first();
-        $reporting->update([
-                'status' => 0,
-        ]); 
+        $reporting->status = 0;
+        $reporting->save();
 
         dd($reporting);
         // dd();
