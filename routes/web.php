@@ -439,7 +439,7 @@ Route::get('function_test', function () {
         $reporting = ReportingUser::latest()->first();
         // $reporting->delete();
 
-        dd($reporting);
+        // dd($reporting);
         // dd();
         //  dd($user->freelancer->delete());
         // $user->update(['user_type' => 3]); 

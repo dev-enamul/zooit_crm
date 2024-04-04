@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Designation;
 use App\Models\Employee;
+use App\Models\ReportingUser;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -59,7 +60,8 @@ class EmployeesDataTable extends DataTable
                 return  $employee?->userAddress?->area?->name??"-";
             })
             ->addColumn('reporting', function($employee){
-                $reporting_user_id = user_reporting($employee->id);
+                // $reporting_user_id = user_reporting($employee->id);
+                $data = ReportingUser::where('user_id',$employee->id);
                 // if(isset($reporting_user_id) && $reporting_user_id != null){
                 //     $data = user_info($reporting_user_id);
                 //     if(isset($data) && $data != null){
@@ -70,7 +72,8 @@ class EmployeesDataTable extends DataTable
                 // }else{
                 //     $reporting_user = "-";
                 // }
-                return $reporting_user_id; 
+                // return $reporting_user_id; 
+                return $data->id;
             });
             
     }
