@@ -433,9 +433,10 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
         // $user = User::where('phone','01726371871')->first();
-        $user = User::first();
-        dd($user);
-        // $reporting = ReportingUser::where('user_id', $user->id)->first();
+        // $user = User::first();
+        // dd($user);
+        $reporting = ReportingUser::get();
+        dd($reporting);
         //  dd($user->freelancer->delete());
         // $user->update(['user_type' => 3]); 
       
