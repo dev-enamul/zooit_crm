@@ -59,7 +59,7 @@ class EmployeesDataTable extends DataTable
                 return  $employee?->userAddress?->area?->name??"-";
             })
             ->addColumn('reporting', function($employee){
-                $reporting_user_id = @user_reporting($employee->id)[1];
+                $reporting_user_id = user_reporting($employee->id);
                 // if(isset($reporting_user_id) && $reporting_user_id != null){
                 //     $data = user_info($reporting_user_id);
                 //     if(isset($data) && $data != null){
