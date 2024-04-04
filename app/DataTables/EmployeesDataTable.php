@@ -61,7 +61,7 @@ class EmployeesDataTable extends DataTable
             })
             ->addColumn('reporting', function($employee){
                 // $reporting_user_id = user_reporting($employee->id);
-                $data = ReportingUser::where('user_id',$employee->id);
+                $data = ReportingUser::where('user_id',$employee->id)->where('statis',1)->latest()->first();
                 // if(isset($reporting_user_id) && $reporting_user_id != null){
                 //     $data = user_info($reporting_user_id);
                 //     if(isset($data) && $data != null){
@@ -73,7 +73,7 @@ class EmployeesDataTable extends DataTable
                 //     $reporting_user = "-";
                 // }
                 // return $reporting_user_id; 
-                return $data->id;
+                return $data->id??"-";
             });
             
     }
