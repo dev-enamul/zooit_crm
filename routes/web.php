@@ -437,7 +437,7 @@ Route::get('function_test', function () {
         // $user = User::first();
         // dd($user);
         $reporting = ReportingUser::latest()->first();
-        $reporting->delete();
+        // $reporting->delete();
 
         dd($reporting);
         // dd();
