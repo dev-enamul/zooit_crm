@@ -60,7 +60,7 @@ class EmployeesDataTable extends DataTable
                 return  $employee?->userAddress?->area?->name??"-";
             })
             ->addColumn('reporting', function($employee){
-                $reporting_user_id = user_reporting($employee->id);
+                // $reporting_user_id = user_reporting($employee->id);
                 $data = ReportingUser::where('user_id',$employee->id)->where('status',1)->latest()->first();
                 // if(isset($reporting_user_id) && $reporting_user_id != null){
                 //     $data = user_info($reporting_user_id);
