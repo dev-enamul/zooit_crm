@@ -128,26 +128,37 @@ if (!function_exists('getOrganogram')) {
 }
  
 
+// if (!function_exists('user_reporting')) {
+//     function user_reporting($user_id, $users = [])
+//     {
+//         $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->where('status',1)->latest()->first();
+//         if(isset($reporting->reporting_user_id) && $reporting->reporting_user_id != null){
+//             $newreporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
+//             if(isset($newreporting->user_id) && $newreporting->user_id != null){
+//                 return user_reporting($newreporting->user_id, array_merge($users, [$reporting->user_id]));
+//             }else{
+//                 return $users;
+//             }
+//         }elseif(isset($reporting->user_id) && $reporting->user_id != null){
+//             return array_merge($users, [$reporting->user_id]);  
+//         }else{
+//             return $users;
+//         }
+//     }
+// }
+
+ 
 if (!function_exists('user_reporting')) {
     function user_reporting($user_id, $users = [])
     {
-        $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->where('status',1)->latest()->first();
-        if(isset($reporting->reporting_user_id) && $reporting->reporting_user_id != null){
-            $newreporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
-            if(isset($newreporting->user_id) && $newreporting->user_id != null){
-                return user_reporting($newreporting->user_id, array_merge($users, [$reporting->user_id]));
-            }else{
-                return $users;
-            }
-        }elseif(isset($reporting->user_id) && $reporting->user_id != null){
-            return array_merge($users, [$reporting->user_id]);  
-        }else{
-            return $users;
+        $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->first();
+        if (!$reporting->reporting_user_id) {
+            return array_merge($users, [$user_id]);
+        } else {
+            return user_reporting($reporting->reporting_user_id, array_merge($users, [$user_id]));
         }
     }
 }
-
- 
 
 if (!function_exists('user_info')) {
     function user_info($user_id)
