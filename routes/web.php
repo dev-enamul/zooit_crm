@@ -436,8 +436,8 @@ Route::get('function_test', function () {
         // $user = User::where('phone','01726371871')->first();
         // $user = User::first();
         // dd($user); 
-        // $data = user_reporting(3271);
-        // dd($data);
+        $data = user_reporting(3272);
+        dd($data);
         $reporting = ReportingUser::latest()->where('status',1)->first();
         // $reporting->delete();
 
