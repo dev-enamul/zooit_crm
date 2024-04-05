@@ -433,9 +433,9 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () { 
         // dd("yes");
-        $user = User::where('phone','01726371871')->first();
-        // $user = User::first();
-        // dd($user); 
+        // $user = User::where('phone','01726371871')->first();
+        $user = User::first();
+        dd($user); 
         $data = user_reporting(3);
         dd($data);
         $reporting = ReportingUser::latest()->where('status',1)->first();
