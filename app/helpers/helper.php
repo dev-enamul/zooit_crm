@@ -152,6 +152,10 @@ if (!function_exists('user_reporting')) {
     function user_reporting($user_id, $users = [])
     {
         $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->first();
+        if (!$reporting) {
+            return $users;
+        }
+
         if (!$reporting->reporting_user_id) {
             return array_merge($users, [$user_id]);
         } else {
