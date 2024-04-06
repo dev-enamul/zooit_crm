@@ -17,350 +17,7 @@
                         <i class="fas fa-desktop"></i>
                         <span>Dashboard</span>
                     </a>
-                </li> 
-
-                <div class="accordion" id="accordionExample-general"> 
-                    <div class="accordion-item"> 
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-general" aria-expanded="false" aria-controls="collapseOne-general">
-                                <b>Task</b>
-                            </button>
-                        </h2>
-                        <div id="collapseOne-general" class="accordion-collapse collapse" data-bs-parent="#accordionExample-general" style="">
-                            <div class="accordion-body">
-                                 
-                            </div>  @can('employee')
-                            <li> 
-                                <a href="javascript: void(0);" class="has-arrow ">
-                                    <i class="fas fa-network-wired"></i>
-                                    <span>Employee</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    @can('employee-manage')
-                                        <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
-                                    @endcan
-                                    <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li> 
-                                    <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li> 
-                                    <li><a href="{{route('employees.hierarchy')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Hierarchy 1</a></li> 
-                                    <li><a href="{{route('employees.hierarchy2')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Hierarchy 2</a></li> 
-                                </ul>
-                            </li>  
-                        @endcan 
-                        @can('product')
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow ">
-                                    <i class="fas fa-network-wired"></i>
-                                    <span>Product</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    @can('product-manage')
-                                        <li><a href="{{route('product.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Product</a></li> 
-                                    @endcan   
-        
-                                    <li class="{{ Route::is('product.index', 'product.edit','product.search') ? 'mm-active' : '' }}">
-                                        <a href="{{ route('product.index') }}">
-                                            <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Products
-                                        </a>
-                                    </li>
-                                    
-                                    @can('product-manage')
-                                        <li><a href="{{route('unit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Create Unit</a></li> 
-                                    @endcan
-                                    <li class="{{ Route::is('unit.save', 'project.unit.delete','project.unit.search') ? 'mm-active' : '' }}">
-                                        <a href="{{route('unit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Unit List</a>
-                                    </li>
-
-                                    @if (!empty($approve_setting['product']) )
-                                        @can('product-approve')
-                                            <li><a href="{{ route('product.approve') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Product Approve</a></li>
-                                        @endcan
-                                    @endif
-                                </ul>
-                            </li> 
-                        @endcan 
-                    
-                        @can('freelancer')
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow ">
-                                    <i class="fas fa-network-wired"></i>
-                                    <span>FL Recruitment</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    @can('freelancer-manage')
-                                        <li><a href="{{route('freelancer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>FL Recruitment</a></li> 
-                                    @endcan    
-                                    <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search','freelancer.edit') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
-                                    @if (!empty($approve_setting['freelancer']) )
-                                        @can('product-approve')
-                                        <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
-                                        @endcan
-                                    @endif 
-            
-                                </ul>
-                            </li> 
-                        @endcan
-    
-                    @can('customer')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i class="fas fa-handshake"></i>
-                                <span>Customer Data</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('customer-manage')
-                                    <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Entry</a></li> 
-                                @endcan
-                                <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer List</a></li> 
-                                
-                                @if (!empty($approve_setting['customer']) )
-                                    <li><a href="{{route('customer.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Approve</a></li>
-                                @endif 
-                            </ul>
-                        </li> 
-                    @endcan
-    
-                    @can('prospecting')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-project-diagram"></i>
-                                <span>Prospectings</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('prospecting-manage')
-                                    <li><a href="{{route('prospecting.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Prospectings</a></li> 
-                                @endcan  
-                                <li><a href="{{route('prospecting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospectings</a></li> 
-                
-                                @if (!empty($approve_setting['prospecting']) )
-                                    <li><a href="{{route('prospecting.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospecting Approve</a></li> 
-                                @endif
-                            </ul>
-                        </li>
-                    @endcan
-    
-                    @can('cold-calling')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-directions"></i>
-                                <span>Cold Calling</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('cold-calling-manage')
-                                    <li><a href="{{route('cold-calling.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Cold-Calling Entry</a></li> 
-                                @endcan
-                                <li><a href="{{route('cold-calling.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Callings</a></li> 
-                                
-                                @if (!empty($approve_setting['cold_calling']) )
-                                    <li><a href="{{route('cold-calling.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Calling Approve</a></li> 
-                                @endif
-                            </ul>
-                        </li> 
-                    @endcan
-                    
-                    @can('lead')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-people-arrows"></i>
-                                <span>Leads</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                            @can('lead-manage')
-                                    <li><a href="{{route('lead.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Lead</a></li> 
-                                @endcan   
-                                <li><a href="{{route('lead.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead List</a></li>                         
-    
-                                @if (!empty($approve_setting['lead']) )
-                                    <li><a href="{{route('lead.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Approve</a></li> 
-                                @endif
-
-                                @can('lead-analysis-manage')
-                                    <li><a href="{{route('lead-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead Analysis Form</a></li> 
-                                @endcan 
-        
-                                @can('lead-analysis')
-                                    <li><a href="{{route('lead-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis List</a></li> 
-                                    
-                                    @if (!empty($approve_setting['lead_analysis']) )
-                                        <li><a href="{{route('lead-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis Approve</a></li> 
-                                    @endif 
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
-      
-                    @can('presentation')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="mdi mdi-teach"></i>
-                                <span>Visit & Presentation</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('presentation-manage')
-                                    <li><a href="{{route('presentation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Presentation</a></li> 
-                                @endcan
-                                <li><a href="{{route('presentation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Presentation List</a></li>
-                                 
-                                @if (!empty($approve_setting['presentation']) )
-                                    <li><a href="{{route('presentation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Presentation Approve</a></li> 
-                                @endif 
-    
-                                @can('visit-analysis-manage')
-                                    <li><a href="{{route('presentation_analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Visit Analysis Form</a></li> 
-                                @endcan 
-     
-                                @can('visit-analysis')
-                                    <li><a href="{{route('presentation_analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Visit Analysis List</a></li>  
-                                    @if (!empty($approve_setting['visit_analysis']) )
-                                        <li><a href="{{route('presentation-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Visit Analysis Approve</a></li> 
-                                    @endif 
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
-     
-                    @can('follow-up')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="mdi mdi-human-greeting"></i>
-                                <span>Follow Up</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('follow-up-manage')
-                                    <li><a href="{{route('followup.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Follow Up</a></li> 
-                                @endcan
-                                <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
-                                
-                                @if (!empty($approve_setting['follow_up']) )
-                                    <li><a href="{{route('followUp.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Approve</a></li> 
-                                @endif 
-        
-                                @can('follow-up-analysis-manage')
-                                    <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis Form</a></li> 
-                                @endcan
-                            
-                                @can('follow-up-analysis')
-                                    <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
-                                    @if (!empty($approve_setting['follow_up_analysis']) )
-                                        <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Analysis Approve</a></li> 
-                                    @endif 
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
-     
-                    @can('negotiation')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-file-contract"></i>
-                                <span>Negotiation</span>
-                            </a> 
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('negotiation-manage')
-                                    <li><a href="{{route('negotiation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Negotiations</a></li> 
-                                @endcan
-                                    <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
-                                
-                                    @if (!empty($approve_setting['negotiation']) )
-                                        <li><a href="{{route('negotiation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Approve</a></li> 
-                                    @endif 
-
-                                @can('negotiation-analysis-manage')
-                                    <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
-                                @endcan
-                                @can('negotiation-analysis')
-                                    <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analysis List</a></li>  
-                                    @if (!empty($approve_setting['negotiation_analysis']) )
-                                        <li><a href="{{route('negotiation-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Analysis Approve</a></li> 
-                                    @endif 
-                                @endcan
-                            </ul>
-                        </li> 
-                    @endcan
-    
-                    @can('rejection')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-user-times"></i>
-                                <span>Rejection</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                {{-- @can('rejection-manage')
-                                    <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
-                                @endcan --}}
-                                <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
-                                {{-- <li><a href="{{route('rejection.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Rejection Approve</a></li>  --}}
-                            </ul>
-                        </li>  
-                    @endcan
-
-                    
-      
-                    @can('sales')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class=" fas fa-check-double"></i>
-                                <span>Sales</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('sales-manage')
-                                    <li><a href="{{route('salse.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Sales</a></li> 
-                                @endcan
-                                <li><a href="{{route('salse.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Sales</a></li> 
-                                <li><a href="{{route('salse.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Approve</a></li>
-                                <li><a href="{{route('existing.salse')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Existing Sales Create</a></li>
-                            </ul>
-                        </li> 
-                    @endcan
-    
-                     
-    
-                    @can('sales-return')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-user-times"></i>
-                                <span>Sales Return</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('sales-return-manage')
-                                    <li><a href="{{route('return.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Return</a></li> 
-                                @endcan
-                                <li><a href="{{route('return.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Return List</a></li> 
-                            </ul>
-                        </li> 
-                    @endcan
-    
-                    @can('sales-transfer')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-user-times"></i>
-                                <span>Sales Transfer</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('sales-transfer-manage')
-                                    <li><a href="{{route('transfer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Transfer</a></li> 
-                                @endcan
-                                <li><a href="{{route('transfer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Transfer List</a></li> 
-                            </ul>
-                        </li> 
-                    @endcan
-      
-                    @can('deposit')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-user-times"></i>
-                                <span>Deposit</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                               @can('deposit-manage')
-                                    <li><a href="{{route('deposit.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Deposit</a></li> 
-                                @endcan
-                                <li><a href="{{route('deposit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit List</a></li> 
-                            </ul>
-                        </li>  
-                    @endcan 
-                        </div> 
-                    </div>
-                </div>
+                </li>
                  
                 
                 <div class="">
@@ -445,91 +102,91 @@
                         @endcan
     
                     @can('customer')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i class="fas fa-handshake"></i>
-                                <span>Customer Data</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('customer-manage')
-                                    <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Entry</a></li> 
-                                @endcan
-                                <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer List</a></li> 
-                                
-                                @if (!empty($approve_setting['customer']) )
-                                    <li><a href="{{route('customer.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Approve</a></li>
-                                @endif 
-                            </ul>
-                        </li> 
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow">
+                            <i class="fas fa-handshake"></i>
+                            <span>Customer Data</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            @can('customer-manage')
+                                <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Entry</a></li> 
+                            @endcan
+                            <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer List</a></li> 
+                            
+                            @if (!empty($approve_setting['customer']) )
+                                <li><a href="{{route('customer.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Approve</a></li>
+                            @endif 
+                        </ul>
+                    </li> 
                     @endcan
     
                     @can('prospecting')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-project-diagram"></i>
-                                <span>Prospectings</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('prospecting-manage')
-                                    <li><a href="{{route('prospecting.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Prospectings</a></li> 
-                                @endcan  
-                                <li><a href="{{route('prospecting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospectings</a></li> 
-                
-                                @if (!empty($approve_setting['prospecting']) )
-                                    <li><a href="{{route('prospecting.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospecting Approve</a></li> 
-                                @endif
-                            </ul>
-                        </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Prospectings</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            @can('prospecting-manage')
+                                <li><a href="{{route('prospecting.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Prospectings</a></li> 
+                            @endcan  
+                            <li><a href="{{route('prospecting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospectings</a></li> 
+             
+                            @if (!empty($approve_setting['prospecting']) )
+                                <li><a href="{{route('prospecting.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Prospecting Approve</a></li> 
+                            @endif
+                        </ul>
+                    </li>
                     @endcan
     
                     @can('cold-calling')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-directions"></i>
-                                <span>Cold Calling</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('cold-calling-manage')
-                                    <li><a href="{{route('cold-calling.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Cold-Calling Entry</a></li> 
-                                @endcan
-                                <li><a href="{{route('cold-calling.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Callings</a></li> 
-                                
-                                @if (!empty($approve_setting['cold_calling']) )
-                                    <li><a href="{{route('cold-calling.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Calling Approve</a></li> 
-                                @endif
-                            </ul>
-                        </li> 
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="fas fa-directions"></i>
+                            <span>Cold Calling</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            @can('cold-calling-manage')
+                                <li><a href="{{route('cold-calling.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Cold-Calling Entry</a></li> 
+                            @endcan
+                            <li><a href="{{route('cold-calling.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Callings</a></li> 
+                             
+                            @if (!empty($approve_setting['cold_calling']) )
+                                <li><a href="{{route('cold-calling.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Cold Calling Approve</a></li> 
+                            @endif
+                        </ul>
+                    </li> 
                     @endcan
                     
                     @can('lead')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-people-arrows"></i>
-                                <span>Leads</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                            @can('lead-manage')
-                                    <li><a href="{{route('lead.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Lead</a></li> 
-                                @endcan   
-                                <li><a href="{{route('lead.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead List</a></li>                         
-    
-                                @if (!empty($approve_setting['lead']) )
-                                    <li><a href="{{route('lead.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Approve</a></li> 
-                                @endif
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="fas fa-people-arrows"></i>
+                            <span>Leads</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                           @can('lead-manage')
+                                <li><a href="{{route('lead.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Lead</a></li> 
+                            @endcan   
+                            <li><a href="{{route('lead.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead List</a></li>                         
+ 
+                            @if (!empty($approve_setting['lead']) )
+                                <li><a href="{{route('lead.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Approve</a></li> 
+                            @endif
 
-                                @can('lead-analysis-manage')
-                                    <li><a href="{{route('lead-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead Analysis Form</a></li> 
-                                @endcan 
-        
-                                @can('lead-analysis')
-                                    <li><a href="{{route('lead-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis List</a></li> 
-                                    
-                                    @if (!empty($approve_setting['lead_analysis']) )
-                                        <li><a href="{{route('lead-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis Approve</a></li> 
-                                    @endif 
-                                @endcan
-                            </ul>
-                        </li>
+                            @can('lead-analysis-manage')
+                                <li><a href="{{route('lead-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead Analysis Form</a></li> 
+                            @endcan 
+    
+                            @can('lead-analysis')
+                                <li><a href="{{route('lead-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis List</a></li> 
+                                 
+                                @if (!empty($approve_setting['lead_analysis']) )
+                                    <li><a href="{{route('lead-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Lead Analysis Approve</a></li> 
+                                @endif 
+                            @endcan
+                        </ul>
+                    </li>
                     @endcan
       
                     @can('presentation')
@@ -563,112 +220,112 @@
                     @endcan
      
                     @can('follow-up')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="mdi mdi-human-greeting"></i>
-                                <span>Follow Up</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('follow-up-manage')
-                                    <li><a href="{{route('followup.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Follow Up</a></li> 
-                                @endcan
-                                <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
-                                
-                                @if (!empty($approve_setting['follow_up']) )
-                                    <li><a href="{{route('followUp.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Approve</a></li> 
-                                @endif 
-        
-                                @can('follow-up-analysis-manage')
-                                    <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis Form</a></li> 
-                                @endcan
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="mdi mdi-human-greeting"></i>
+                            <span>Follow Up</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            @can('follow-up-manage')
+                                <li><a href="{{route('followup.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Follow Up</a></li> 
+                            @endcan
+                            <li><a href="{{route('followup.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up List</a></li>
                             
-                                @can('follow-up-analysis')
-                                    <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
-                                    @if (!empty($approve_setting['follow_up_analysis']) )
-                                        <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Analysis Approve</a></li> 
-                                    @endif 
-                                @endcan
-                            </ul>
-                        </li>
+                            @if (!empty($approve_setting['follow_up']) )
+                                <li><a href="{{route('followUp.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Follow Up Approve</a></li> 
+                            @endif 
+    
+                            @can('follow-up-analysis-manage')
+                                <li><a href="{{route('followup-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis Form</a></li> 
+                            @endcan
+                           
+                            @can('follow-up-analysis')
+                                <li><a href="{{route('followup-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Follow Up Analysis</a></li>  
+                                @if (!empty($approve_setting['follow_up_analysis']) )
+                                    <li><a href="{{route('followUp-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Analysis Approve</a></li> 
+                                @endif 
+                            @endcan
+                        </ul>
+                    </li>
                     @endcan
      
                     @can('negotiation')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-file-contract"></i>
-                                <span>Negotiation</span>
-                            </a> 
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('negotiation-manage')
-                                    <li><a href="{{route('negotiation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Negotiations</a></li> 
-                                @endcan
-                                    <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
-                                
-                                    @if (!empty($approve_setting['negotiation']) )
-                                        <li><a href="{{route('negotiation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Approve</a></li> 
-                                    @endif 
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Negotiation</span>
+                        </a> 
+                        <ul class="sub-menu" aria-expanded="false">
+                            @can('negotiation-manage')
+                                <li><a href="{{route('negotiation.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Negotiations</a></li> 
+                            @endcan
+                                <li><a href="{{route('negotiation.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation List</a></li>
+                               
+                                @if (!empty($approve_setting['negotiation']) )
+                                    <li><a href="{{route('negotiation.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Negotiation Approve</a></li> 
+                                @endif 
 
-                                @can('negotiation-analysis-manage')
-                                    <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
-                                @endcan
-                                @can('negotiation-analysis')
-                                    <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analysis List</a></li>  
-                                    @if (!empty($approve_setting['negotiation_analysis']) )
-                                        <li><a href="{{route('negotiation-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Analysis Approve</a></li> 
-                                    @endif 
-                                @endcan
-                            </ul>
-                        </li> 
+                            @can('negotiation-analysis-manage')
+                                <li><a href="{{route('negotiation-analysis.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiations Analysis Form</a></li> 
+                            @endcan
+                            @can('negotiation-analysis')
+                                <li><a href="{{route('negotiation-analysis.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Negotiation Analysis List</a></li>  
+                                @if (!empty($approve_setting['negotiation_analysis']) )
+                                    <li><a href="{{route('negotiation-analysis.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Analysis Approve</a></li> 
+                                @endif 
+                            @endcan
+                        </ul>
+                    </li> 
                     @endcan
     
                     @can('rejection')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-user-times"></i>
-                                <span>Rejection</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                {{-- @can('rejection-manage')
-                                    <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
-                                @endcan --}}
-                                <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
-                                {{-- <li><a href="{{route('rejection.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Rejection Approve</a></li>  --}}
-                            </ul>
-                        </li>  
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="fas fa-user-times"></i>
+                            <span>Rejection</span>
+                        </a>  
+                        <ul class="sub-menu" aria-expanded="false">
+                            {{-- @can('rejection-manage')
+                                <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
+                            @endcan --}}
+                            <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
+                            {{-- <li><a href="{{route('rejection.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Rejection Approve</a></li>  --}}
+                        </ul>
+                    </li>  
                     @endcan
       
                     @can('sales')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class=" fas fa-check-double"></i>
-                                <span>Sales</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('sales-manage')
-                                    <li><a href="{{route('salse.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Sales</a></li> 
-                                @endcan
-                                <li><a href="{{route('salse.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Sales</a></li> 
-                                <li><a href="{{route('salse.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Approve</a></li>
-                                <li><a href="{{route('existing.salse')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Existing Sales Create</a></li>
-                            </ul>
-                        </li> 
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class=" fas fa-check-double"></i>
+                            <span>Sales</span>
+                        </a>  
+                        <ul class="sub-menu" aria-expanded="false">
+                            @can('sales-manage')
+                                <li><a href="{{route('salse.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Sales</a></li> 
+                            @endcan
+                            <li><a href="{{route('salse.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Sales</a></li> 
+                            <li><a href="{{route('salse.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Sales Approve</a></li>
+                            <li><a href="{{route('existing.salse')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Existing Sales Create</a></li>
+                        </ul>
+                    </li> 
                     @endcan
     
                      
     
                     @can('sales-return')
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="fas fa-user-times"></i>
-                                <span>Sales Return</span>
-                            </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                @can('sales-return-manage')
-                                    <li><a href="{{route('return.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Return</a></li> 
-                                @endcan
-                                <li><a href="{{route('return.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Return List</a></li> 
-                            </ul>
-                        </li> 
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow ">
+                            <i class="fas fa-user-times"></i>
+                            <span>Sales Return</span>
+                        </a>  
+                        <ul class="sub-menu" aria-expanded="false">
+                            @can('sales-return-manage')
+                                <li><a href="{{route('return.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Return</a></li> 
+                            @endcan
+                            <li><a href="{{route('return.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Return List</a></li> 
+                        </ul>
+                    </li> 
                     @endcan
     
                     @can('sales-transfer')
