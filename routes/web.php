@@ -431,9 +431,25 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {
-        $user = User::where('phone','01701203070')->first();
-        dd($user);
+Route::get('function_test', function () { 
+       
+        // $data = user_reporting(3);
+        // dd($data);
+        // $reporting = ReportingUser::latest()->where('status',1)->first();
+        // $reporting->delete();
+
+        // dd($reporting);
+        // dd();
+        //  dd($user->freelancer->delete());
+        // $user->update(['user_type' => 3]); 
+      
+        $topUser = \App\Models\ReportingUser::where('user_id', 1)
+                ->select(['id', 'user_id'])
+                ->first(); 
+        $organogram = getOrganogram($topUser);  
+        dd($organogram);
+ 
+        // return view('organogram', ['organogram' => $organogram]);
 });
 
 // test
