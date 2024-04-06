@@ -55,7 +55,7 @@ class FreelancersDataTable extends DataTable
                 if(isset($reporting) && $reporting!=null){
                     $user = User::find($reporting->user_id);
                     if(isset($user) && $user != null){
-                        return $user->name.' ['.$user->user_id.']';
+                     
                         if($user?->freelancer?->designation_id==18){
                             return $user->name.' ['.$user->user_id.']';
                         }
@@ -166,8 +166,8 @@ class FreelancersDataTable extends DataTable
                 if(isset($reporting) && $reporting!=null){
                     $user = User::find($reporting->user_id);
                     if(isset($user) && $user != null){
-                        if($user?->employee?->designation_id==15){
-                            return $user->name.' ['.$user->user_id.']';
+                        if ($user && $user->employee && in_array($user->employee->designation_id, [12, 13, 14, 15])) {
+                            return $user->name . ' [' . $user->user_id . ']';
                         }
                     }
                 }
@@ -180,8 +180,8 @@ class FreelancersDataTable extends DataTable
                     if(isset($reporting) && $reporting!=null){
                         $user = User::find($reporting->user_id);
                         if(isset($user) && $user != null){
-                            if($user?->employee?->designation_id==15){
-                                return $user->name.' ['.$user->user_id.']';
+                            if ($user && $user->employee && in_array($user->employee->designation_id, [12, 13, 14, 15])) {
+                                return $user->name . ' [' . $user->user_id . ']';
                             }
                         }
                     }
@@ -195,8 +195,8 @@ class FreelancersDataTable extends DataTable
                     if(isset($reporting) && $reporting!=null){
                         $user = User::find($reporting->user_id);
                         if(isset($user) && $user != null){
-                            if($user?->employee?->designation_id==15){
-                                return $user->name.' ['.$user->user_id.']';
+                            if ($user && $user->employee && in_array($user->employee->designation_id, [12, 13, 14, 15])) {
+                                return $user->name . ' [' . $user->user_id . ']';
                             }
                         }
                     }
