@@ -157,7 +157,7 @@ class FreelancersDataTable extends DataTable
             }
             return "-";
         })
-        ->addColumn('ex_co_ordinator', function($employee){
+        ->addColumn('incharge', function($employee){
             $user = null;
             $data = ReportingUser::where('user_id',$employee->user_id)->where('status',1)->latest()->first();
             if(isset($data) && $data->user_id !=null){
@@ -165,7 +165,7 @@ class FreelancersDataTable extends DataTable
                 if(isset($reporting) && $reporting!=null){
                     $user = User::find($reporting->user_id);
                     if(isset($user) && $user != null){
-                        if($user?->freelancer?->designation_id==15){
+                        if($user?->employee?->designation_id==15){
                             return $user->name.' ['.$user->user_id.']';
                         }
                     }
@@ -179,7 +179,7 @@ class FreelancersDataTable extends DataTable
                     if(isset($reporting) && $reporting!=null){
                         $user = User::find($reporting->user_id);
                         if(isset($user) && $user != null){
-                            if($user?->freelancer?->designation_id==15){
+                            if($user?->employee?->designation_id==15){
                                 return $user->name.' ['.$user->user_id.']';
                             }
                         }
@@ -194,7 +194,7 @@ class FreelancersDataTable extends DataTable
                     if(isset($reporting) && $reporting!=null){
                         $user = User::find($reporting->user_id);
                         if(isset($user) && $user != null){
-                            if($user?->freelancer?->designation_id==15){
+                            if($user?->employee?->designation_id==15){
                                 return $user->name.' ['.$user->user_id.']';
                             }
                         }
@@ -295,6 +295,7 @@ class FreelancersDataTable extends DataTable
             Column::make('user.phone')->title('Mobile')->searchable(true),  
             Column::make('reporting')->title('Co-Ordinator Name_ID'),
             Column::make('ex_co_ordinator')->title('Executive Co-Ordinator Name_ID'),
+            Column::make('incharge')->title('InCharge Sales'),
         ];
     }
 
