@@ -15,12 +15,14 @@
                 
             @endcan 
 
-            <a class="dropdown-item" href="{{route('employee.permission', encrypt($data->id))}}">Change Permissin</a>
+            
 
             {{-- @can('refresh-password') --}}
                 <a class="dropdown-item" href="{{route('refresh.password', encrypt($data->id))}}">Refresh Password</a>
             {{-- @endcan --}}
             <a class="dropdown-item" href="{{route('user.details', encrypt($data->id))}}">Print Employee</a>
-        @endcan
+        @endcan 
+
+        <a class="dropdown-item" href="{{route('employee.permission', encrypt($data->id))}}">Change Permissin</a>
     </div>
 </div> 
