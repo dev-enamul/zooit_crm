@@ -59,26 +59,16 @@ class EmployeesDataTable extends DataTable
             ->addColumn('area', function($employee){
                 return  $employee?->userAddress?->area?->name??"-";
             })
-            ->addColumn('reporting', function($employee){
-                // $reporting_user_id = user_reporting($employee->id);
+            ->addColumn('reporting', function($employee){ 
+                if($employee->id==187){
+                    return "-";
+                } 
                 $data = ReportingUser::where('user_id',$employee->id)->where('status',1)->latest()->first();
-                // if(isset($reporting_user_id) && $reporting_user_id != null){
-                //     $data = user_info($reporting_user_id);
-                //     if(isset($data) && $data != null){
-                //         $reporting_user = $data['name'].' ('.$data['user_id'].')';
-                //     }else{
-                //         $reporting_user = "-";
-                //     } 
-                // }else{
-                //     $reporting_user = "-";
-                // }
-                // return $reporting_user_id;  
-
                 if(isset($data->id) && $data->id !=null){
                     $reporting = ReportingUser::find($data->reporting_user_id);
                     $user = User::find($reporting?->user_id);
                     if(isset($user) && $user != null){
-                        return $user->name;
+                        return $user->name.' ['.$user->user_id.']';
                     }else{
                         return "-";
                     }
