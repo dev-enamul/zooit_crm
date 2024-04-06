@@ -75,7 +75,8 @@ class EmployeesDataTable extends DataTable
                 // return $reporting_user_id;  
 
                 if(isset($data->id) && $data->id !=null){
-                    $user = User::find($data->user_id);
+                    $reporting = ReportingUser::find($data->reporting_user_id);
+                    $user = User::find($reporting?->user_id);
                     if(isset($user) && $user != null){
                         return $user->name;
                     }else{
