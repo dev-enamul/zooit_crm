@@ -52,8 +52,8 @@ class EmployeeTreeController extends Controller
         ->select(['id', 'user_id'])
         ->first(); 
         $employee =  User::find($user_id);
-        dd('yes');
         $reporting = user_reporting($employee->id);
+        dd('yes');
         $reporting =  array_reverse($reporting);
         $organogram = getOrganogram($topUser); 
         dd('yes');
