@@ -432,9 +432,8 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () { 
-        $data = UserPermission::where('user_id',1)->get();
-        dd($data);
-        
+        $user = User::where('phone','01701203070')->first();
+        dd($user);
 });
 
 // test
