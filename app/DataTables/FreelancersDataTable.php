@@ -55,6 +55,7 @@ class FreelancersDataTable extends DataTable
                 if(isset($reporting) && $reporting!=null){
                     $user = User::find($reporting->user_id);
                     if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
                         if($user?->freelancer?->designation_id==18){
                             return $user->name.' ['.$user->user_id.']';
                         }
