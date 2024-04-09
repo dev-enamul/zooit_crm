@@ -443,13 +443,14 @@ Route::get('function_test', function () {
         //  dd($user->freelancer->delete());
         // $user->update(['user_type' => 3]); 
         $user = User::where('phone','01329656349')->first();
-        dd($user);
+    
       
-        $topUser = \App\Models\ReportingUser::where('user_id', 1)
+        $topUser = \App\Models\ReportingUser::where('user_id', $user->id)
                 ->select(['id', 'user_id'])
+                ->latest()
                 ->first();
-        $organogram = getOrganogram($topUser);  
-        dd($organogram);
+        // $organogram = getOrganogram($topUser);
+        dd($topUser);
  
         // return view('organogram', ['organogram' => $organogram]);
 });
