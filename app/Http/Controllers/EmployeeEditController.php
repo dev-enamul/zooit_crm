@@ -72,12 +72,14 @@ class EmployeeEditController extends Controller
             }  
             $reporting_user->save(); 
 
-            dd($user_reporting);
-            $my_employee = ReportingUser::where('reporting_user_id',$user_reporting->id)->where('status',1)->get();
-            foreach($my_employee as $employee){
-                $employee->reporting_user_id = $reporting_user->id;
-                $employee->save();
-            } 
+            
+            if(isset($user_reporting) && $user_reporting!=null){
+                $my_employee = ReportingUser::where('reporting_user_id',$user_reporting->id)->where('status',1)->get();
+                foreach($my_employee as $employee){
+                    $employee->reporting_user_id = $reporting_user->id;
+                    $employee->save();
+                } 
+            }
             DB::commit(); 
             
             if($reporting_user->user->user_type == 1){
