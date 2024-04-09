@@ -34,7 +34,8 @@ class EmployeeEditController extends Controller
         }
     }
 
-    public function reporting_update(Request $request, $id){
+    public function reporting_update(Request $request, $id){ 
+        dd($id);
       
         $validator = Validator::make($request->all(), [
             'reporting_id' => 'required',
