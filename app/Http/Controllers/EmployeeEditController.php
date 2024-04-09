@@ -51,7 +51,7 @@ class EmployeeEditController extends Controller
         try{   
             $user_reporting = ReportingUser::where('user_id', $id)->where('status',1)->latest()->first();
 
-            dd($user_reporting);
+           
             if(isset($user_reporting) && $user_reporting != null && $request->reporting_id == $user_reporting->id){
                 return redirect()->back()->with('error', 'You can not select own reporting user');
             }
@@ -61,6 +61,8 @@ class EmployeeEditController extends Controller
                 $user_reporting->deleted_at = Carbon::now();
                 $user_reporting->save();
             }
+
+            dd($user_reporting);
             
             $reporting_user = new ReportingUser();
             $reporting_user->user_id = $id;
