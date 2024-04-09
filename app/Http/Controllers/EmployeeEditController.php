@@ -50,11 +50,9 @@ class EmployeeEditController extends Controller
         DB::beginTransaction();
         try{   
             $user_reporting = ReportingUser::where('user_id', $id)->where('status',1)->latest()->first();
- 
-            if($request->reporting_id == $user_reporting->id){
+            if(isset($user_reporting->id) && $request->reporting_id == $user_reporting->id){
                 return redirect()->back()->with('error', 'You can not select own reporting user');
             }
-
             if($user_reporting != null){
                 $user_reporting->status = 0;
                 $user_reporting->deleted_by = auth()->user()->id; 

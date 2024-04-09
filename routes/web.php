@@ -450,7 +450,7 @@ Route::get('function_test', function () {
                 ->latest()
                 ->first();
         // $organogram = getOrganogram($topUser);
-        dd($topUser);
+        // dd($organogram);
  
         // return view('organogram', ['organogram' => $organogram]);
 });
