@@ -61,8 +61,6 @@ class EmployeeEditController extends Controller
                 $user_reporting->deleted_at = Carbon::now();
                 $user_reporting->save();
             }
-
-            dd($user_reporting);
             
             $reporting_user = new ReportingUser();
             $reporting_user->user_id = $id;
@@ -74,6 +72,7 @@ class EmployeeEditController extends Controller
             }  
             $reporting_user->save(); 
 
+            dd($user_reporting);
             $my_employee = ReportingUser::where('reporting_user_id',$user_reporting->id)->where('status',1)->get();
             foreach($my_employee as $employee){
                 $employee->reporting_user_id = $reporting_user->id;
