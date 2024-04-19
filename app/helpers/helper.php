@@ -160,7 +160,10 @@ if (!function_exists('user_reporting')) {
             return array_merge($users, [$user_id]);  
             dd('yes');
         } else { 
-            $next_reporting = \App\Models\ReportingUser::find($reporting->reporting_user_id); 
+            $next_reporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
+            if(isset($next_reporting->user_id) && $next_reporting->user_id != null){
+                return array_merge($users, [$user_id]);  
+            }
             return user_reporting($next_reporting->user_id, array_merge($users, [$user_id]));
         }
     }
