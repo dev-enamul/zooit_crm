@@ -158,8 +158,7 @@ if (!function_exists('user_reporting')) {
         if (!$reporting->reporting_user_id || $reporting->reporting_user_id == null) {
             return array_merge($users, [$user_id]);  
             dd('yes');
-        } else {
-            dd('no');
+        } else { 
             return user_reporting($reporting->reporting_user_id, array_merge($users, [$user_id]));
         }
     }
