@@ -73,8 +73,8 @@
                             <div class="row">
                                 <div class="tree">
                                     <ul>
-                                        {{-- <li> <a href=""><img src="{{$employee->image()}}"><span>{{$employee->name}} <br> {{$employee->user_id}}</span></a>
-                                        @include('includes.down_hierachy',[ 'depth' => 1])  --}}
+                                        <li> <a href=""><img src="{{$employee->image()}}"><span>{{$employee->name}} <br> {{$employee->user_id}}</span></a>
+                                        @include('includes.down_hierachy',[ 'depth' => 1]) 
                                     </ul>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@
     @foreach ($organogram['downlines'] as $downline) 
     <li> 
         @php
-            $all_employee = my_all_employee($downline['user']->user->id);
+            // $all_employee = my_all_employee($downline['user']->user->id);
             // $employee = \App\Models\User::whereIn('id',$all_employee)->where('user_type',1)->count();
             // $freelancer = \App\Models\User::whereIn('id',$all_employee)->where('user_type',2)->count();
         @endphp
