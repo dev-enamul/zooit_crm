@@ -161,6 +161,7 @@ if (!function_exists('user_reporting')) {
             dd('yes');
         } else { 
             $next_reporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
+            dd($next_reporting->user_id);
             return user_reporting($next_reporting->user_id, array_merge($users, [$user_id]));
         }
     }
