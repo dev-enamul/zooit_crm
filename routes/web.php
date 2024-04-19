@@ -447,7 +447,8 @@ Route::get('function_test', function () {
       
         $topUser =ReportingUser:: where('user_id',$user->id)->where('status',1)->latest()->first(); 
         $data = ReportingUser::latest()->first(); 
-        dd($topUser,$data);
+        $new_user = User::find($data->user_id);
+        dd($new_user);
         // $organogram = getOrganogram($topUser);
         // dd($organogram);
  
@@ -458,7 +459,7 @@ Route::get('function_test', function () {
 Route::get('/messae', function () {
         return view('message');
     });  
-    
+
     Route::post('send-message',function (Request $request){
         event(new Message($request->username, $request->message));
         return ['success' => true];
