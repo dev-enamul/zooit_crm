@@ -98,14 +98,15 @@
 
         @if(session('warning'))
             Toast.fire({ icon: "warning", title: '{{ session('warning') }}' }); 
-        @endif   
+        @endif    
+        // for remove double click  
 
-        // for remove double click 
-        $(document).ready(function(){
-            $('button').click(function(){
-                $('button').prop('disabled', true);
+        $(document).ready(function(){ 
+            $('form').submit(function() {
+                $(this).find('button').prop('disabled', true); 
             });
         });
+
     </script>
 </body>
  
