@@ -32,7 +32,7 @@ class ProfileController extends Controller
     public function profile($id){ 
      
         $user_id = decrypt($id);
-        $reporting = ReportingUser::where('user_id', $user_id)->latest()->first(); 
+        $reporting = ReportingUser::where('user_id', $user_id)->latest()->where('status',1)->first(); 
         dd($reporting);
         $user = User::find($user_id);  
         $reporting_users = user_reporting($user_id);
