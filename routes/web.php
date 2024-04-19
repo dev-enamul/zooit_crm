@@ -445,10 +445,7 @@ Route::get('function_test', function () {
         $user = User::where('phone','01611477337')->first();
     
       
-        $topUser = \App\Models\ReportingUser::where('user_id', $user->id)
-                ->select(['id', 'user_id'])
-                ->latest()
-                ->first();
+        $topUser =ReportingUser:: where('user_id',$user->id)->where('status',1)->latest()->first(); 
         dd($topUser);
         // $organogram = getOrganogram($topUser);
         // dd($organogram);
