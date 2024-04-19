@@ -151,7 +151,7 @@ if (!function_exists('getOrganogram')) {
 if (!function_exists('user_reporting')) {
     function user_reporting($user_id, $users = [])
     {
-        $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->first();
+        $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->latest()->first();
         if (!$reporting) {
             return $users;
         }
