@@ -58,7 +58,7 @@ class EmployeeTreeController extends Controller
         // $reporting =  array_reverse($reporting);
         //  dd('yes');
         $organogram = getOrganogram($topUser); 
-       
+        dd($organogram);
        
         return view('employee.employee_hierarchy',compact('organogram','employee'));
         // return view('employee.only_employee',compact('organogram','employee'));
