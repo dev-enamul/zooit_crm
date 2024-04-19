@@ -30,10 +30,10 @@ class ProfileController extends Controller
     }
 
     public function profile($id){ 
-        dd("yes");
+     
         $user_id = decrypt($id); 
         $user = User::find($user_id); 
-
+        dd($user);
         $reporting_users = user_reporting($user_id);
 
         $data = ReportingUser::where('user_id', $user_id)->where('status',1)->latest()->first();
