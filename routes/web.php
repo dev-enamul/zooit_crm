@@ -446,7 +446,8 @@ Route::get('function_test', function () {
     
       
         $topUser =ReportingUser:: where('user_id',$user->id)->where('status',1)->latest()->first(); 
-        dd($topUser);
+        $data = ReportingUser::latest()->first(); 
+        dd($topUser,$data);
         // $organogram = getOrganogram($topUser);
         // dd($organogram);
  
