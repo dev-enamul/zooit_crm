@@ -155,11 +155,13 @@ if (!function_exists('user_reporting')) {
         if (!$reporting) {
             return $users;
         } 
+
         if (!$reporting->reporting_user_id || $reporting->reporting_user_id == null) {
             return array_merge($users, [$user_id]);  
             dd('yes');
         } else { 
-            return user_reporting($reporting->reporting_user_id, array_merge($users, [$user_id]));
+            $next_reporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
+            return user_reporting($next_reporting->user_id, array_merge($users, [$user_id]));
         }
     }
 }
