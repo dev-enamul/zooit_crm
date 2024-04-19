@@ -442,13 +442,14 @@ Route::get('function_test', function () {
         // dd();
         //  dd($user->freelancer->delete());
         // $user->update(['user_type' => 3]); 
-        $user = User::where('phone','01329656349')->first();
+        $user = User::where('phone','01611477337')->first();
     
       
         $topUser = \App\Models\ReportingUser::where('user_id', $user->id)
                 ->select(['id', 'user_id'])
                 ->latest()
                 ->first();
+        dd($topUser);
         // $organogram = getOrganogram($topUser);
         // dd($organogram);
  

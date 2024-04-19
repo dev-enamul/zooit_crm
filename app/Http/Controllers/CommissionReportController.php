@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommissionDeductedSetting;
 use App\Models\DepositCommission;
 use App\Models\DepositTarget;
 use App\Models\Project;
@@ -39,10 +40,24 @@ class CommissionReportController extends Controller
         $start = Carbon::parse($selected)->startOfMonth();
         $end = Carbon::parse($selected)->endOfMonth();
         $projects = Project::where('status',1)->get();
-        $employees = User::where('status',1)->get(); 
-        $commission = DepositCommission::whereBetween('created_at',[$start,$end])->get(); 
        
-        return view('report.commission.mst_commission',compact('projects','employees','selected','commission'));
+        $commission = DepositCommission::whereBetween('created_at',[$start,$end])->get(); 
+        // $employees = User::where('status',1)->get(); 
+
+        $employees = User::where('user_type', 1)
+            ->join('deposit_commissions', 'users.id', '=', 'deposit_commissions.user_id')
+            ->selectRaw('users.id as id, 
+                    MAX(users.name) as name, 
+                    MAX(users.user_id) as user_id, 
+                    SUM(deposit_commissions.amount) as total_commission,
+                    SUM(deposit_commissions.applicable_commission) as applicable_commission')
+            ->whereBetween('deposit_commissions.created_at', [$start, $end])
+            ->groupBy('users.id')
+            ->get();
+            $gtbi_deduction = CommissionDeductedSetting::where('status', 1)->get();
+ 
+       
+        return view('report.commission.mst_commission',compact('projects','employees','selected','commission','gtbi_deduction'));
     } 
 
     public function mst_commission_details($id){

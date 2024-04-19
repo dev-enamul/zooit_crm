@@ -49,8 +49,31 @@
                                         <th>Achivement</th> 
                                     </tr>
                                 </thead>
-                                <tbody> 
+                                <tbody>  
                                     @foreach ($employees as $employee)
+                                    <tr class="">
+                                        <td style="white-space: nowrap;">
+                                            <a href="{{route('mst.commission.details',1)}}">{{$employee->name}} [{{$employee->user_id}}]</a>
+                                        </td>
+                                        <td>Manager</td> 
+                                        
+                                        @foreach ($projects as $project)  
+                                            @php
+                                                $cloneCommission = clone $commission;
+                                                $project_commission =  $commission->where('project_id',$project->id)->where('user_id',$employee->id)->sum('amount');
+                                            @endphp
+                                            <td>{{get_price($project_commission)}}</td> 
+                                        @endforeach   
+                                        <td>{{get_price($employee->total_commission)}}</td>
+                                        <td>{{get_price($employee->applicable_commission)}}</td> 
+                                        <td>8%</td>
+                                        <td>৳432</td>
+                                        <td>৳100</td>
+                                        <td>৳332</td>
+                                        <td>75%</td> 
+                                    </tr>
+                                @endforeach 
+                                    {{-- @foreach ($employees as $employee)
                                         <tr class="">
                                             <td style="white-space: nowrap;">
                                                 <a href="{{route('mst.commission.details',1)}}">{{$employee->name}} [{{$employee->user_id}}]</a>
@@ -77,7 +100,7 @@
                                             <td>৳332</td>
                                             <td>75%</td> 
                                         </tr>
-                                    @endforeach 
+                                    @endforeach  --}}
                                 </tbody>
                             </table>
                            </div>
