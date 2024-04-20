@@ -4,9 +4,7 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">
-
-            <!-- start page title -->
+        <div class="container-fluid"> 
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -29,9 +27,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body">
- 
-
+                        <div class="card-body"> 
                             <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>

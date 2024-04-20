@@ -31,6 +31,10 @@ class DepositCommission extends Model
     public function deposit()
     {
         return $this->belongsTo(Deposit::class);
+    } 
+    public function salse()
+    {
+        return $this->belongsTo(Salse::class);
     }
 
     public function user()

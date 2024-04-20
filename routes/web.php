@@ -369,12 +369,11 @@ Route::group(['middleware' => 'auth'], function () {
         //Approve Setting 
         Route::get('approve-setting', [ApproveSettingController::class, 'index'])->name('approve.setting');
         Route::post('approve-setting-save', [ApproveSettingController::class, 'save'])->name('approve.setting.save');
-
-
+ 
         //Reports 
         Route::get('monthly-target-achive', [CommissionReportController::class, 'monthly_target_achive'])->name('monthly.target.achive');
         Route::get('mst-commission', [CommissionReportController::class, 'mst_commission'])->name('mst.commission');
-        Route::get('mst-commission-details/{id}', [CommissionReportController::class, 'mst_commission_details'])->name('mst.commission.details');
+        Route::get('mst-commission-details/{id}/{month}', [CommissionReportController::class, 'mst_commission_details'])->name('mst.commission.details');
         Route::get('rsa-co-ordinator', [CommissionReportController::class, 'rsa_co_ordinator'])->name('rsa.co.ordinator');
         Route::get('cc-report', [CommissionReportController::class, 'cc_report'])->name('cc.report');
         Route::get('pending-report',[PendingReportController::class,'pending_report'])->name('pending.report');

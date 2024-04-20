@@ -37,12 +37,13 @@ class CommissionReportController extends Controller
         }else{
             $selected = Carbon::now()->format('Y-m');
         } 
+        
         $start = Carbon::parse($selected)->startOfMonth();
         $end = Carbon::parse($selected)->endOfMonth();
         $projects = Project::where('status',1)->get();
        
         $commission = DepositCommission::whereBetween('created_at',[$start,$end])->get(); 
-        // $employees = User::where('status',1)->get(); 
+       
 
         $employees = User::where('user_type', 1)
             ->join('deposit_commissions', 'users.id', '=', 'deposit_commissions.user_id')
@@ -50,18 +51,25 @@ class CommissionReportController extends Controller
                     MAX(users.name) as name, 
                     MAX(users.user_id) as user_id, 
                     SUM(deposit_commissions.amount) as total_commission,
+                    SUM(deposit_commissions.payble_commission) as payble_commission,
                     SUM(deposit_commissions.applicable_commission) as applicable_commission')
             ->whereBetween('deposit_commissions.created_at', [$start, $end])
             ->groupBy('users.id')
             ->get();
             $gtbi_deduction = CommissionDeductedSetting::where('status', 1)->get();
- 
-       
+
         return view('report.commission.mst_commission',compact('projects','employees','selected','commission','gtbi_deduction'));
     } 
 
-    public function mst_commission_details($id){
-        return view('report.commission.mst_commission_details');
+    public function mst_commission_details($id,$month){
+        $id = decrypt($id);  
+        $start = Carbon::parse($month)->startOfMonth();
+        $end = Carbon::parse($month)->endOfMonth();
+        $commissions = DepositCommission::where('user_id',$id)
+                            ->whereBetween('created_at', [$start, $end])->get();  
+        $user = User::find($id);
+
+        return view('report.commission.mst_commission_details',compact('commissions','month','user'));
     }
 
     public function rsa_co_ordinator(){

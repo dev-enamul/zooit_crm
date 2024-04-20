@@ -65,19 +65,18 @@
             @yield('content')
         </main>
     </div>
-</body> 
-
-<script> 
-    document.addEventListener('DOMContentLoaded', function() {
-        var forms = document.querySelectorAll('form');
-        forms.forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                var button = this.querySelector('button');
-                if (button) {
-                    button.disabled = true;
-                }
+</body>  
+    <script> 
+        document.addEventListener('DOMContentLoaded', function() {
+            var forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    var button = this.querySelector('button');
+                    if (button) {
+                        button.disabled = true;
+                    }
+                });
             });
-        });
-    }); 
-</script>
-</html>
+        }); 
+    </script>
+</html> 
