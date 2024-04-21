@@ -430,7 +430,10 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () { 
+Route::get('function_test', function () {  
+
+        $employee = User::where('user_type',1)->get();
+        dd($employee);
 
         $data = UserPermission::all();
         dd($data);
