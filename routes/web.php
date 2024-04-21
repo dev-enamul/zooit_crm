@@ -433,7 +433,7 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 Route::get('function_test', function () {  
 
         $data = User::where('phone','01713552903')->first();
-        dd($data->id);
+  
         $employees = User::where('user_type',1)->get();
         foreach($employees as $employee){
                 if($employee->id != 1 || $employee->id != 3){
