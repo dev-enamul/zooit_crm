@@ -36,7 +36,7 @@
                         <div>
                             <button class="btn btn-secondary buttons-pdf buttons-html5" id="print" type="button"><span><i class="fa fa-print"></i> Print</span></button> 
                         </div> 
-                        {{-- <div> 
+                        <div> 
                              @foreach ($reporting as $key => $val)
                              @php
                                  $user = user_info($val);
@@ -46,7 +46,7 @@
                                 @endif
                                 <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}">{{$user->user_id }}</a>   
                              @endforeach                            
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
