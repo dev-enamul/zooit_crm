@@ -432,9 +432,11 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
 
-        $employee = User::where('user_type',1)->get();
-        dd($employee);
-
+        $employees = User::where('user_type',1)->get();
+        foreach($employees as $employee){
+                dd($employee->id);
+        }
+         
         $data = UserPermission::all();
         dd($data);
         
