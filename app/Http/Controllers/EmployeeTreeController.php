@@ -47,7 +47,7 @@ class EmployeeTreeController extends Controller
         }else{
             $user_id = Auth::user()->id;
         } 
-        $reporting = user_reporting($user_id);
+        // $reporting = user_reporting($user_id);
         // dd($reporting);
 
         $topUser = ReportingUser::where('user_id',  $user_id)
