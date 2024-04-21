@@ -186,6 +186,8 @@ if (!function_exists('my_employee')) {
         if ($reporting_id) {  
             $my_employee_id = ReportingUser::where('reporting_user_id', $reporting_id->id)->whereNull('deleted_at')->pluck('user_id')->toArray();
             return $my_employee_id;
+        }else{
+            return [];
         }
     }
 }

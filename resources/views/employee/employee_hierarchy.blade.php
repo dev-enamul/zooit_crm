@@ -74,7 +74,24 @@
                                 <div class="tree">
                                     <ul>
                                         <li> <a href=""><img src="{{$employee->image()}}"><span>{{$employee->name}} <br> {{$employee->user_id}}</span></a>
-                                        @include('includes.down_hierachy',[ 'depth' => 1]) 
+                                        {{-- @include('includes.down_hierachy',[ 'depth' => 1])  --}} 
+
+                                        <ul>
+                                            @foreach ($my_emplyees as $employee) 
+                                            @php
+                                                $user = App\Models\User::find($employee);  
+                                            @endphp
+                                            <li>  
+                                                <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}" style="{{!empty($user['downlines'])?'background:#ddd':''}}">
+                                                    <img src="{{@$user->image()}}">
+                                                    <span>{{ @$user?->name }} <br>{{ @$user?->user_id }}  <br>  
+                                                        {{-- Total Employee: {{ $employee }}
+                                                        <br>  
+                                                        Total Freelancer: {{ $freelancer }} </span>  --}}
+                                                </a>   
+                                            </li> 
+                                            @endforeach 
+                                        </ul>
                                     </ul>
                                 </div>
                             </div>
