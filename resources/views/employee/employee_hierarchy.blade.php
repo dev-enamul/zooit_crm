@@ -80,9 +80,10 @@
                                             @foreach ($my_emplyees as $employee) 
                                             @php
                                                 $user = App\Models\User::find($employee);  
+                                                $next_employees = my_employee($employee);
                                             @endphp
                                             <li>  
-                                                <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}" style="{{!empty($user['downlines'])?'background:#ddd':''}}">
+                                                <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}" style="{{!empty($next_employees)?'background:#ddd':''}}">
                                                     <img src="{{@$user->image()}}">
                                                     <span>{{ @$user?->name }} <br>{{ @$user?->user_id }}  <br>  
                                                         {{-- Total Employee: {{ $employee }}

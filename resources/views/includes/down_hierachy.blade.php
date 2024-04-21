@@ -10,8 +10,7 @@
             // $all_employee = my_all_employee($downline['user']->user->id);
             // $employee = \App\Models\User::whereIn('id',$all_employee)->where('user_type',1)->count();
             // $freelancer = \App\Models\User::whereIn('id',$all_employee)->where('user_type',2)->count();
-        @endphp 
-        
+        @endphp  
         <a href="{{route('employees.hierarchy2',['employee'=> encrypt($downline['user']->user->id)])}}" style="{{!empty($downline['downlines'])?'background:#ddd':''}}">
             <img src="{{@$downline['user']->user->image()}}">
             <span>{{ @$downline['user']?->user?->name }} <br>{{ @$downline['user']?->user?->user_id }}  <br>  
