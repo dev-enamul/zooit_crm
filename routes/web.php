@@ -434,7 +434,7 @@ Route::get('function_test', function () {
 
         $data = User::where('phone','01713552903')->first();
   
-        $employees = User::where('user_type',1)->get();
+        $employees = User::where('user_type',1)->whereNotIn('id',[1,3])->get();
         foreach($employees as $employee){
                 if($employee->id != 1 || $employee->id != 3){
                      dd($employee);   
