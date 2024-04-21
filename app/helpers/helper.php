@@ -158,8 +158,8 @@ if (!function_exists('user_reporting')) {
 
         if (!$reporting->reporting_user_id || $reporting->reporting_user_id == null) {
             return array_merge($users, [$user_id]);  
-            dd('yes');
-        } else { 
+         
+        } else {
             $next_reporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
             if(isset($next_reporting) && $next_reporting->user_id != null){
                 return array_merge($users, [$user_id]);  

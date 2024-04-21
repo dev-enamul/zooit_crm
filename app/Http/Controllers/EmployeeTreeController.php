@@ -46,12 +46,16 @@ class EmployeeTreeController extends Controller
             $user_id = decrypt($request->employee);
         }else{
             $user_id = Auth::user()->id;
-        }  
+        } 
+        $reporting = user_reporting($user_id);
+        // dd($reporting);
+
         $topUser = ReportingUser::where('user_id',  $user_id)
         ->select(['id', 'user_id'])
         ->first(); 
-        $employee =  User::find($user_id); 
+        $employee =  User::find($user_id);
+       
         $organogram = getOrganogram($topUser);  
-        return view('employee.employee_hierarchy',compact('organogram','employee')); 
+        return view('employee.employee_hierarchy',compact('organogram','employee','reporting')); 
     }
 }
