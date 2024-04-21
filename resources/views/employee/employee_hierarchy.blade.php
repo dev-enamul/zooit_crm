@@ -85,8 +85,10 @@
                                                     $all_employee = my_all_employee($employee);
                                                     $employee = \App\Models\User::whereIn('id',$all_employee)->where('user_type',1)->count();
                                                     $freelancer = \App\Models\User::whereIn('id',$all_employee)->where('user_type',2)->count();
+                                                }else{
+                                                    $employee = 0;
+                                                    $freelancer = 0;
                                                 }
-                                                
                                             @endphp
                                             <li>  
                                                 <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}" style="{{!empty($next_employees)?'background:#ddd':''}}">
