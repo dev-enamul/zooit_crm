@@ -80,18 +80,18 @@
                                             @foreach ($my_emplyees as $employee) 
                                             @php
                                                 $user = App\Models\User::find($employee);  
-                                                $next_employees = my_employee($employee);
-                                                      $all_employee = my_all_employee($employee);
-                                                    // $employee = \App\Models\User::whereIn('id',$all_employee)->where('user_type',1)->count();
-                                                    // $freelancer = \App\Models\User::whereIn('id',$all_employee)->where('user_type',2)->count();
+                                                $next_employees = my_employee($employee); 
+                                                $all_employee = my_all_employee($employee);
+                                                $employee = \App\Models\User::whereIn('id',$all_employee)->where('user_type',1)->count();
+                                                $freelancer = \App\Models\User::whereIn('id',$all_employee)->where('user_type',2)->count();
                                             @endphp
                                             <li>  
                                                 <a href="{{route('employees.hierarchy2',['employee'=> encrypt($user->id)])}}" style="{{!empty($next_employees)?'background:#ddd':''}}">
                                                     <img src="{{@$user->image()}}">
                                                     <span>{{ @$user?->name }} <br>{{ @$user?->user_id }}  <br>  
-                                                        {{-- Total Employee: {{ $employee }}
+                                                        Total Employee: {{ $employee }}
                                                         <br>  
-                                                        Total Freelancer: {{ $freelancer }} </span>  --}}
+                                                        Total Freelancer: {{ $freelancer }} </span> 
                                                 </a>   
                                             </li> 
                                             @endforeach 
