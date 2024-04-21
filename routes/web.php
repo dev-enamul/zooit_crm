@@ -437,8 +437,14 @@ Route::get('function_test', function () {
         $employees = User::where('user_type',1)->whereNotIn('id',[1,3])->get();
         foreach($employees as $employee){
                 if($employee->id != 1 || $employee->id != 3){  
-                        $permission = UserPermission::where('user_id',3)->get();
-                        dd($permission);
+                        $permissions = UserPermission::where('user_id',3)->get();
+                        UserPermission::where('user_id',$employee->id)->delete();
+                        foreach($permissions as $permission){
+                                $userPermission = new UserPermission();
+                                $userPermission->user_id = $employee->id;
+                                $userPermission->permission_id = $permission->permission_id;
+                                $userPermission->save();
+                        } 
                 }
         }
          
