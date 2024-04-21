@@ -48,6 +48,6 @@ class EmployeeTreeController extends Controller
             $user_id = Auth::user()->id;
         }  
         $my_emplyees = my_employee($user_id); 
-        return view('employee.employee_hierarchy',compact('organogram','employee','my_emplyees')); 
+        return view('employee.employee_hierarchy',compact('my_emplyees')); 
     }
 }
