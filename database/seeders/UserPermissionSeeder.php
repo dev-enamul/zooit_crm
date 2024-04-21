@@ -16,6 +16,8 @@ class UserPermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        $data = UserPermission::all();
+        dd($data);
         // $permissions = Permission::all(); 
         // foreach($permissions as $permission){
         //     UserPermission::create([
