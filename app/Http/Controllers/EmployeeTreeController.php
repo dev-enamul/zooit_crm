@@ -46,8 +46,10 @@ class EmployeeTreeController extends Controller
             $user_id = decrypt($request->employee);
         }else{
             $user_id = Auth::user()->id;
-        }  
+        } 
+     
         $my_emplyees = my_employee($user_id); 
-        return view('employee.employee_hierarchy',compact('my_emplyees')); 
+        $employee =  User::find($user_id);  
+        return view('employee.employee_hierarchy',compact('employee','my_emplyees')); 
     }
 }
