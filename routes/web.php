@@ -431,6 +431,9 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () { 
+
+        $data = UserPermission::all();
+        dd($data);
         
         // $organogram = getOrganogram($topUser);
         // dd($organogram);
