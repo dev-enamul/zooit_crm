@@ -436,8 +436,8 @@ Route::get('function_test', function () {
         dd($data->id);
         $employees = User::where('user_type',1)->get();
         foreach($employees as $employee){
-                if($employee->id != 1 || $employee->id != 2){
-                        
+                if($employee->id != 1 || $employee->id != 3){
+                     dd($employee);   
                 }
         }
          
