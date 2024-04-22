@@ -446,7 +446,7 @@ Route::get('function_test', function () {
                         foreach($permissions as $permission){
                                 $userPermission = new UserPermission();
                                 $userPermission->user_id = 1;
-                                $userPermission->permission_id = $permission->permission_id;
+                                $userPermission->permission_id = $permission->id;
                                 $userPermission->save();
                         } 
         $reporting_user = UserPermission::where('user_id',1)->get();
