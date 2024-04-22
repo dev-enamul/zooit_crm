@@ -6,8 +6,8 @@
  
          
         @can('freelancer-manage') 
-            <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
-            <a class="dropdown-item" href="{{route('profile',encrypt($data?->user_id))}}">View Profile</a>
+            <a class="dropdown-item" href="{{route('profile',encrypt($data?->user_id))}}">Profile</a>
+            <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a> 
             <a class="dropdown-item" href="{{route('designation.freelancer.edit', encrypt($data?->user_id))}}">Change Designation</a>
             @if (($data->status==1 && $data?->user?->approve_by==null) || auth()->user()->id==1)
                 @can('complete-training')

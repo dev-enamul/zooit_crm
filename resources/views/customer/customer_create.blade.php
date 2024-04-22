@@ -250,7 +250,7 @@
                                         'div'       => 'col-md-6',
                                         'mb'        => 'mb-3',
                                         'visible'   => ['division', 'district', 'upazila','union','village'],
-                                        'required'  => ['division', 'district', 'upazila','union'],
+                                        'required'  => [],
                                         'selected'  => $selected ?? null,
                                     ]) 
 
