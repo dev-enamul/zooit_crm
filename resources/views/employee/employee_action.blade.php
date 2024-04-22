@@ -4,6 +4,7 @@
     </a>
     <div class="dropdown-menu dropdown-menu-animated">   
         @can('employee-manage')
+            <a class="dropdown-item" href="{{route('profile', encrypt($data->id))}}">Profile</a>
             <a class="dropdown-item" href="{{route('employee.edit', encrypt($data->id))}}">Edit</a>
             <a class="dropdown-item" href="{{route('designation.user.edit', encrypt($data->id))}}">Change Designation</a>
             @can('employee-delete')

@@ -204,6 +204,56 @@ class FreelancersDataTable extends DataTable
                 } 
             }
             return "-";
+        })
+        ->addColumn('area_incharge', function($employee){
+            $user = null; 
+            $reporting = user_reporting($employee->user->id);
+        
+            
+            $data = ReportingUser::where('user_id',$employee->user_id)->where('status',1)->latest()->first();
+            if(isset($data) && $data->user_id !=null){
+                $reporting = ReportingUser::find($data->reporting_user_id);
+                if(isset($reporting) && $reporting!=null){
+                    $user = User::find($reporting->user_id);
+                    if(isset($user) && $user != null){
+                        if($user?->freelancer?->designation_id==17){
+                            return $user->name.' ['.$user->user_id.']';
+                        }
+                    }
+                }
+            }
+
+            if(isset($user) && $user!=null){
+                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
+                if(isset($data) && $data->reporting_user_id !=null){
+                    $reporting = ReportingUser::find($data->reporting_user_id);
+                    if(isset($reporting) && $reporting!=null){
+                        $user = User::find($reporting->user_id);
+                        if(isset($user) && $user != null){
+                            if($user?->freelancer?->designation_id==17){
+                                return $user->name.' ['.$user->user_id.']';
+                            }
+                        }
+                    }
+                } 
+            }
+
+            if(isset($user) && $user!=null){
+                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
+                if(isset($data) && $data->user_id !=null){
+                    $reporting = ReportingUser::find($data->reporting_user_id);
+                    if(isset($reporting) && $reporting!=null){
+                        $user = User::find($reporting->user_id);
+                        if(isset($user) && $user != null){
+                            if($user?->freelancer?->designation_id==17){
+                                return $user->name.' ['.$user->user_id.']';
+                            }
+                        }
+                    }
+    
+                } 
+            }
+            return "-";
         });
     }
 

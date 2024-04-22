@@ -138,10 +138,10 @@ class FreelancerController extends Controller
             'facebook_id'               => 'nullable|string',
             'emergency_contact_name'    => 'nullable|string',
             'emergency_person_number'   => 'nullable|string', 
-            'division'                  => 'required|numeric|exists:divisions,id',
-            'district'                  => 'required|numeric|exists:districts,id',
-            'upazila'                   => 'required|numeric|exists:upazilas,id',
-            'union'                     => 'required|numeric|exists:unions,id',
+            'division'                  => 'nullable|numeric|exists:divisions,id',
+            'district'                  => 'nullable|numeric|exists:districts,id',
+            'upazila'                   => 'nullable|numeric|exists:upazilas,id',
+            'union'                     => 'nullable|numeric|exists:unions,id',
             'village'                   => 'nullable|numeric|exists:villages,id',
             'address'                   => 'nullable|string',
             'zone'                      => 'nullable|numeric|exists:zones,id',
@@ -202,7 +202,7 @@ class FreelancerController extends Controller
 
             UserAddress::create([
                 'user_id'       => $user->id,
-                'country_id'    => $request->country,
+                'country_id'    => 18,
                 'division_id'   => $request->division,
                 'district_id'   => $request->district,
                 'upazila_id'    => $request->upazila,
