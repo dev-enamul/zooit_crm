@@ -439,16 +439,17 @@ Route::get('function_test', function () {
         User::where('user_type', 2)->update(['created_at' => $last_month]);
         Freelancer::query()->update(['created_at' => $last_month]);
      
-        $reporting_user = UserPermission::where('user_id',1)->get();
+        
 
-        $permissions = Permission::where('status',1)->get(); 
+        $permissions = Permission::where('status',1)->get();
+                        UserPermission::where('user_id',1)->delete();
                         foreach($permissions as $permission){
                                 $userPermission = new UserPermission();
                                 $userPermission->user_id = 1;
-                                $userPermission->permission_id = $permission->id;
+                                $userPermission->permission_id = $permission->permission_id;
                                 $userPermission->save();
                         } 
-
+        $reporting_user = UserPermission::where('user_id',1)->get();
         dd($reporting_user);
        
         $data = User::where('phone','01713552903')->first(); 
