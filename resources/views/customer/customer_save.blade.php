@@ -89,8 +89,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="marital_status" id="marital_status" required>
+                                            <label for="marital_status" class="form-label">Marital Status</label>
+                                            <select class="form-select" name="marital_status" id="marital_status">
                                                 <option value="">Select a Marital Status</option>
                                                 @isset($maritalStatuses)
                                                     @foreach ($maritalStatuses as $id => $name)
@@ -305,9 +305,9 @@
                                     ])
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="zone" class="form-label">Zone <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="zone" id="zone" required>
-                                            <option data-display="Select a Zone *" value="">
+                                        <label for="zone" class="form-label">Zone</label>
+                                        <select class="form-select" name="zone" id="zone">
+                                            <option data-display="Select a Zone " value="">
                                                 Select a Zone
                                             </option>
                                             @isset($zones)
@@ -330,8 +330,8 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="area" class="form-label">Area <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="area" id="area" required>
+                                        <label for="area" class="form-label">Area</label>
+                                        <select class="form-select" name="area" id="area">
                                             <option data-display="Select a Area *" value="">
                                                 Select a Area
                                             </option>

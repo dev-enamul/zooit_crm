@@ -123,7 +123,7 @@ class FreelancerController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'full_name'                 => 'required|string|max:255', 
-            'marital_status'            => 'required',
+            'marital_status'            => 'nullable',
             'profession'                => 'required|numeric|exists:professions,id',
             'dob'                       => 'nullable',
             'card_id'                   => 'nullable|string',
@@ -360,7 +360,7 @@ class FreelancerController extends Controller
        
         $validator = Validator::make($request->all(), [
             'full_name'                 => 'required|string|max:255', 
-            'marital_status'            => 'required',
+            'marital_status'            => 'nullable',
             'profession'                => 'required|numeric|exists:professions,id',
             'dob'                       => 'nullable',
             'card_id'                   => 'nullable|string',

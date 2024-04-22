@@ -121,7 +121,7 @@ class CustomerController extends Controller
     { 
         $validator = Validator::make($request->all(), [
             'full_name'                 => 'required|string|max:255', 
-            'marital_status'            => 'required',
+            'marital_status'            => 'nullable',
             'profession'                => 'required|numeric|exists:professions,id',
             'dob'                       => 'nullable',
             'card_id'                   => 'nullable|string',
@@ -146,7 +146,7 @@ class CustomerController extends Controller
             'father_phone'              => 'nullable|string|max:15',
             'mother_name'               => 'nullable|string',
             'mother_phone'              => 'nullable|string|max:15',
-            'spouse_name'               => 'required|string',
+            'spouse_name'               => 'nullable|string',
             'spouse_phone'              => 'nullable|string|max:15',
             'bank'                      => 'nullable|numeric|exists:banks,id',
             'branch'                    => 'nullable|string',
@@ -322,7 +322,7 @@ class CustomerController extends Controller
     public function update(Request $request, $id){
         $validator = Validator::make($request->all(), [
             'full_name'                 => 'required|string|max:255', 
-            'marital_status'            => 'required',
+            'marital_status'            => 'nullable',
             'profession'                => 'required|numeric|exists:professions,id',
             'dob'                       => 'nullable',
             'card_id'                   => 'nullable|string',
@@ -346,7 +346,7 @@ class CustomerController extends Controller
             'father_phone'              => 'nullable|string|max:15',
             'mother_name'               => 'nullable|string',
             'mother_phone'              => 'nullable|string|max:15',
-            'spouse_name'               => 'required|string',
+            'spouse_name'               => 'nullable|string',
             'spouse_phone'              => 'nullable|string|max:15',
             'bank'                      => 'nullable|numeric|exists:banks,id',
             'branch'                    => 'nullable|string',
