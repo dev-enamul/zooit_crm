@@ -432,7 +432,8 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
         $reporting_user = ReportingUser::find(4354);
-        dd($reporting_user);
+        $user = User::find($reporting_user->user_id);
+        dd($user);
 
         $data = User::where('phone','01713552903')->first(); 
         $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
