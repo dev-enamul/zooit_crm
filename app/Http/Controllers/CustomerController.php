@@ -142,7 +142,7 @@ class CustomerController extends Controller
             'union'                     => 'nullable|numeric|exists:unions,id',
             'village'                   => 'nullable|numeric|exists:villages,id',
             'address'                   => 'nullable|string', 
-            'father_name'               => 'required|string',
+            'father_name'               => 'nullable|string',
             'father_phone'              => 'nullable|string|max:15',
             'mother_name'               => 'nullable|string',
             'mother_phone'              => 'nullable|string|max:15',

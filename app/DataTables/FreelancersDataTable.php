@@ -208,6 +208,9 @@ class FreelancersDataTable extends DataTable
         ->addColumn('area_incharge', function($employee){
             $user = null; 
             $reporting = user_reporting($employee->user->id);
+            if(isset($reporting) && $reporting!= null){
+            
+            }
         
             
             $data = ReportingUser::where('user_id',$employee->user_id)->where('status',1)->latest()->first();

@@ -81,11 +81,9 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                                            <input type="date" name="dob" class="form-control" id="dob" placeholder="Select date of birth" value="{{ old('dob')}}" required> 
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
+                                            <label for="dob" class="form-label">Date of Birth</label>
+                                            <input type="date" name="dob" class="form-control" id="dob" placeholder="Select date of birth" value="{{ old('dob')}}"> 
+                                          
                                         </div>
                                     </div>
 
@@ -266,7 +264,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
+                                            <label for="father_name" class="form-label">Father's Name </label>
                                             <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{old('father_name')}}">  
                                         </div>
                                     </div> 

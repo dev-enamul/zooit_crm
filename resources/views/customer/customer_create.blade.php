@@ -266,7 +266,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
+                                            <label for="father_name" class="form-label">Father's Name</label>
                                             <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{old('father_name')}}" required>  
                                         </div>
                                     </div> 

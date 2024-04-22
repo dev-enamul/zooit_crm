@@ -85,8 +85,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                                            <input type="date" name="dob" class="form-control" id="dob" placeholder="Select date of birth" value="{{ isset($freelancer) ? $freelancer->user->dob : old('dob')}}" required> 
+                                            <label for="dob" class="form-label">Date of Birth </label>
+                                            <input type="date" name="dob" class="form-control" id="dob" placeholder="Select date of birth" value="{{ isset($freelancer) ? $freelancer->user->dob : old('dob')}}"> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -295,7 +295,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
+                                            <label for="father_name" class="form-label">Father's Name </label>
                                             <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{isset($freelancer) ? @$freelancer->user->userFamily->father_name : old('father_name')}}">  
                                         </div>
                                     </div> 
@@ -309,7 +309,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="mother_name" class="form-label">Mother's Name <span class="text-danger">*</span></label>
+                                            <label for="mother_name" class="form-label">Mother's Name </label>
                                             <input type="text" name="mother_name" class="form-control" id="mother_name" placeholder="Mother's Name" value="{{isset($freelancer) ? @$freelancer->user->userFamily->mother_name : old('mother_name')}}">  
                                         </div>
                                     </div> 
