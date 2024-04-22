@@ -279,7 +279,7 @@
                                         'div'       => 'col-md-6',
                                         'mb'        => 'mb-3',
                                         'visible'   => ['division', 'district', 'upazila','union','village'],
-                                        'required'  => ['division', 'district', 'upazila','union'],
+                                        'required'  => [],
                                         'selected'  => $selected ?? null,
                                     ]) 
 
@@ -468,8 +468,8 @@
                                         </div>
                                     </div> 
                                     <div class="col-md-4 mb-3">
-                                        <label for="reporting_user" class="form-label">Freelancer ID <span class="text-danger">*</span> <span class="text-danger">*</span></label>
-                                         <input class="form-control" type="text" name="freelancer_id" placeholder="Freelancer ID" value="{{$freelancer->user->user_id}}" required>
+                                        <label for="reporting_user" class="form-label">Freelancer ID <span class="text-danger">*</span> </label>
+                                         <input class="form-control" type="text" name="freelancer_id" placeholder="Freelancer ID" value="{{$freelancer->user->user_id}}" required @can('admin') @else readonly @endcan>
                                     </div>
                                 </div>
                                   

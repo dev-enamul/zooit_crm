@@ -167,9 +167,9 @@ class FreelancerController extends Controller
             'upload_passport'           => 'image|max:2048',
             'reporting_user'            => 'required|numeric|exists:users,id',
             'designation'               => 'required|numeric|exists:designations,id',
-            'at_least_one_field' => [
-                'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
-            ],
+            // 'at_least_one_field' => [
+            //     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
+            // ],
         ]);
         if ($validator->fails()) { 
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -374,10 +374,10 @@ class FreelancerController extends Controller
             'facebook_id'               => 'nullable|string',
             'emergency_contact_name'    => 'nullable|string',
             'emergency_person_number'   => 'nullable|string', 
-            'division'                  => 'required|numeric|exists:divisions,id',
-            'district'                  => 'required|numeric|exists:districts,id',
-            'upazila'                   => 'required|numeric|exists:upazilas,id',
-            'union'                     => 'required|numeric|exists:unions,id',
+            'division'                  => 'nullable|numeric|exists:divisions,id',
+            'district'                  => 'nullable|numeric|exists:districts,id',
+            'upazila'                   => 'nullable|numeric|exists:upazilas,id',
+            'union'                     => 'nullable|numeric|exists:unions,id',
             'village'                   => 'nullable|numeric|exists:villages,id',
             'address'                   => 'nullable|string', 
             'father_name'               => 'required|string',
@@ -399,9 +399,9 @@ class FreelancerController extends Controller
             'nid_file'                  => 'image|max:2048',
             'birth_certificate_file'    => 'image|max:2048',
             'upload_passport'           => 'image|max:2048', 
-            'at_least_one_field' => [
-                'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
-            ],
+            // 'at_least_one_field' => [
+            //     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
+            // ],
         ]);
 
         if ($validator->fails()) { 

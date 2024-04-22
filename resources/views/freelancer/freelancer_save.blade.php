@@ -434,10 +434,12 @@
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Official Information</h6>
                                     <hr> 
 
-                                    <div class="col-md-4 mb-3">
-                                        <label for="reporting_user" class="form-label">Freelancer ID <span class="text-danger">*</span></label>
-                                         <input class="form-control" type="text" name="freelancer_id" placeholder="Freelancer ID">
-                                    </div>
+                                    @can('admin') 
+                                        <div class="col-md-4 mb-3">
+                                            <label for="reporting_user" class="form-label">Freelancer ID <span class="text-danger">*</span></label>
+                                            <input class="form-control" type="text" name="freelancer_id" placeholder="Freelancer ID">
+                                        </div>
+                                    @endcan
 
                                     <div class="col-md-4 mb-3">
                                         <label for="designation" class="form-label">Designation <span class="text-danger">*</span></label>
