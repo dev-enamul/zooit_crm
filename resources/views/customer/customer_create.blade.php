@@ -41,6 +41,7 @@
                                             <input type="file" name="profile_image" class="form-control" id="profile_image" > 
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="marital_status" class="form-label">Marital Status</label>
@@ -267,7 +268,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="father_name" class="form-label">Father's Name</label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{old('father_name')}}" required>  
+                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{old('father_name')}}">  
                                         </div>
                                     </div> 
 
