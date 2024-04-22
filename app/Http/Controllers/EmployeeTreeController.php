@@ -51,6 +51,7 @@ class EmployeeTreeController extends Controller
         $my_emplyees = my_employee($user_id); 
         $employee =  User::find($user_id); 
         $reporting=user_reporting($user_id); 
+        $reporting = array_reverse($reporting);
         return view('employee.employee_hierarchy',compact('employee','my_emplyees','reporting')); 
     }
 }
