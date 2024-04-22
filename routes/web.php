@@ -78,9 +78,11 @@ use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\FreelancerImportController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\UpazilaController;
+use App\Models\Freelancer;
 use App\Models\ReportingUser;
 use App\Models\User;
 use App\Models\UserPermission;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -430,10 +432,14 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {  
+Route::get('function_test', function () {   
+        $last_month = Carbon::now()->subMonth(1);
+      
+        User::where('user_type', 2)->update(['created_at' => $last_month]);
+        Freelancer::query()->update(['created_at' => $last_month]);
+        dd('updated');
         $reporting_user = ReportingUser::latest()->first();
-        dd($reporting_user);
-
+       
         $data = User::where('phone','01713552903')->first(); 
         $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
         dd($employees);
