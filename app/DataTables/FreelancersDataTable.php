@@ -111,151 +111,40 @@ class FreelancersDataTable extends DataTable
             // return $reporting_user; 
         }) 
         
-        ->addColumn('ex_co_ordinator', function($employee){
-            $user = null;
-            $data = ReportingUser::where('user_id',$employee->user_id)->where('status',1)->latest()->first();
-            if(isset($data) && $data->user_id !=null){
-                $reporting = ReportingUser::find($data->reporting_user_id);
-                if(isset($reporting) && $reporting!=null){
-                    $user = User::find($reporting->user_id);
-                    if(isset($user) && $user != null){
-                        if($user?->freelancer?->designation_id==17){
-                            return $user->name.' ['.$user->user_id.']';
-                        }
-                    }
-                }
-            }
-
-            if(isset($user) && $user!=null){
-                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
-                if(isset($data) && $data->reporting_user_id !=null){
-                    $reporting = ReportingUser::find($data->reporting_user_id);
-                    if(isset($reporting) && $reporting!=null){
-                        $user = User::find($reporting->user_id);
-                        if(isset($user) && $user != null){
-                            if($user?->freelancer?->designation_id==17){
-                                return $user->name.' ['.$user->user_id.']';
-                            }
-                        }
-                    }
-                } 
-            }
-
-            if(isset($user) && $user!=null){
-                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
-                if(isset($data) && $data->user_id !=null){
-                    $reporting = ReportingUser::find($data->reporting_user_id);
-                    if(isset($reporting) && $reporting!=null){
-                        $user = User::find($reporting->user_id);
-                        if(isset($user) && $user != null){
-                            if($user?->freelancer?->designation_id==17){
-                                return $user->name.' ['.$user->user_id.']';
-                            }
-                        }
-                    }
-    
-                } 
-            }
-            return "-";
-        })
-        ->addColumn('incharge', function($employee){
-            $user = null;
-            $data = ReportingUser::where('user_id',$employee->user_id)->where('status',1)->latest()->first();
-            if(isset($data) && $data->user_id !=null){
-                $reporting = ReportingUser::find($data->reporting_user_id);
-                if(isset($reporting) && $reporting!=null){
-                    $user = User::find($reporting->user_id);
-                    if(isset($user) && $user != null){
-                        if ($user && $user->employee && in_array($user->employee->designation_id, [12, 13, 14, 15])) {
-                            return $user->name . ' [' . $user->user_id . ']';
-                        }
-                    }
-                }
-            }
-
-            if(isset($user) && $user!=null){
-                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
-                if(isset($data) && $data->reporting_user_id !=null){
-                    $reporting = ReportingUser::find($data->reporting_user_id);
-                    if(isset($reporting) && $reporting!=null){
-                        $user = User::find($reporting->user_id);
-                        if(isset($user) && $user != null){
-                            if ($user && $user->employee && in_array($user->employee->designation_id, [12, 13, 14, 15])) {
-                                return $user->name . ' [' . $user->user_id . ']';
-                            }
-                        }
-                    }
-                } 
-            }
-
-            if(isset($user) && $user!=null){
-                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
-                if(isset($data) && $data->user_id !=null){
-                    $reporting = ReportingUser::find($data->reporting_user_id);
-                    if(isset($reporting) && $reporting!=null){
-                        $user = User::find($reporting->user_id);
-                        if(isset($user) && $user != null){
-                            if ($user && $user->employee && in_array($user->employee->designation_id, [12, 13, 14, 15])) {
-                                return $user->name . ' [' . $user->user_id . ']';
-                            }
-                        }
-                    }
-    
-                } 
-            }
-            return "-";
-        })
-        ->addColumn('area_incharge', function($employee){
-            $user = null; 
+        ->addColumn('ex_co_ordinator', function($employee){ 
             $reporting = user_reporting($employee->user->id);
             if(isset($reporting) && $reporting!= null){
-            
-            }
-        
-            
-            $data = ReportingUser::where('user_id',$employee->user_id)->where('status',1)->latest()->first();
-            if(isset($data) && $data->user_id !=null){
-                $reporting = ReportingUser::find($data->reporting_user_id);
-                if(isset($reporting) && $reporting!=null){
-                    $user = User::find($reporting->user_id);
-                    if(isset($user) && $user != null){
-                        if($user?->freelancer?->designation_id==17){
-                            return $user->name.' ['.$user->user_id.']';
-                        }
-                    }
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereIn('designation_id',[17]);
+                })->first();  
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
                 }
-            }
-
-            if(isset($user) && $user!=null){
-                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
-                if(isset($data) && $data->reporting_user_id !=null){
-                    $reporting = ReportingUser::find($data->reporting_user_id);
-                    if(isset($reporting) && $reporting!=null){
-                        $user = User::find($reporting->user_id);
-                        if(isset($user) && $user != null){
-                            if($user?->freelancer?->designation_id==17){
-                                return $user->name.' ['.$user->user_id.']';
-                            }
-                        }
-                    }
-                } 
-            }
-
-            if(isset($user) && $user!=null){
-                $data = ReportingUser::where('user_id',$user->id)->where('status',1)->latest()->first();
-                if(isset($data) && $data->user_id !=null){
-                    $reporting = ReportingUser::find($data->reporting_user_id);
-                    if(isset($reporting) && $reporting!=null){
-                        $user = User::find($reporting->user_id);
-                        if(isset($user) && $user != null){
-                            if($user?->freelancer?->designation_id==17){
-                                return $user->name.' ['.$user->user_id.']';
-                            }
-                        }
-                    }
-    
-                } 
-            }
+            } 
+            return "-";  
+        })
+        ->addColumn('incharge', function($employee){  
+            $reporting = user_reporting($employee->user->id);
+            if(isset($reporting) && $reporting!= null){
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereIn('designation_id',[12, 13, 14, 15]);
+                })->first();  
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
+                }
+            } 
+            return "-"; 
+        })
+        ->addColumn('area_incharge', function($employee){ 
+            $reporting = user_reporting($employee->user->id);
+            if(isset($reporting) && $reporting!= null){
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereIn('designation_id',[11]);
+                })->first();
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
+                }
+            } 
             return "-";
         });
     }
@@ -350,6 +239,7 @@ class FreelancersDataTable extends DataTable
             Column::make('reporting')->title('Co-Ordinator Name_ID'),
             Column::make('ex_co_ordinator')->title('Executive Co-Ordinator Name_ID'),
             Column::make('incharge')->title('InCharge Sales'),
+            Column::make('area_incharge')->title('Area InCharge'),
         ];
     }
 
