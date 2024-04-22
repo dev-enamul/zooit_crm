@@ -214,14 +214,14 @@ class EmployeeEditController extends Controller
             }
             $employee->save();
 
-            UserPermission::where('user_id', $id)->delete();
-            $permissions = DesignationPermission::where('designation_id', $request->designation)->pluck('permission_id')->toArray();
-            foreach($permissions as $permission){
-                UserPermission::create([
-                    'user_id'       => $employee->id,
-                    'permission_id' => $permission,
-                ]);
-            }
+            // UserPermission::where('user_id', $id)->delete();
+            // $permissions = DesignationPermission::where('designation_id', $request->designation)->pluck('permission_id')->toArray();
+            // foreach($permissions as $permission){
+            //     UserPermission::create([
+            //         'user_id'       => $employee->id,
+            //         'permission_id' => $permission,
+            //     ]);
+            // }
             
             DB::commit();
             return redirect()->route('employee.index')->with('success', 'Designation updated successfully');
