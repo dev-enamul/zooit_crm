@@ -432,7 +432,7 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
 
-        $data = User::where('phone','01713552903')->first();
+        $data = User::where('phone','01611477337')->first();
         dd($data);
   
         // $employees = User::where('user_type',1)->whereNotIn('id',[1,3])->get();
