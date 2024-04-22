@@ -438,7 +438,7 @@ Route::get('function_test', function () {
         User::where('user_type', 2)->update(['created_at' => $last_month]);
         Freelancer::query()->update(['created_at' => $last_month]);
      
-        $reporting_user = ReportingUser::where('user_id',1)->get();
+        $reporting_user = UserPermission::where('user_id',1)->get();
         dd($reporting_user);
        
         $data = User::where('phone','01713552903')->first(); 
