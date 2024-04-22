@@ -411,15 +411,18 @@
                                 <i class="mdi mdi-teach"></i>
                                 <span>Deposit Target</span>
                             </a>  
-                            <ul class="sub-menu" aria-expanded="false">
-                                @if (auth()->user()->id == 1)
+                            <ul class="sub-menu" aria-expanded="false"> 
+                                <li><a href="{{route('project.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Project Wise Target</a></li> 
+                                <li><a href="{{route('direct.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Target</a></li> 
+                                <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Assign List</a></li>
+                                {{-- @if (auth()->user()->id == 1)
                                     <li><a href="{{route('project.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Project Wise Target</a></li> 
                                     <li><a href="{{route('direct.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Target</a></li> 
                                     <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Assign List</a></li>
                                 @else 
                                 <li><a href="{{route('project.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Project Wise Target</a></li> 
                                     <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Asign List</a></li>
-                                @endif 
+                                @endif  --}}
                             </ul>
                         </li> 
                         @endcan 
