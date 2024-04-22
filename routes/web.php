@@ -435,22 +435,21 @@ Route::get('function_test', function () {
         $data = User::where('phone','01713552903')->first();
         dd($data);
   
-        $employees = User::where('user_type',1)->whereNotIn('id',[1,3])->get();
-        foreach($employees as $employee){
-                if($employee->id != 1 || $employee->id != 3){  
-                        $permissions = UserPermission::where('user_id',3)->get();
-                        UserPermission::where('user_id',$employee->id)->delete();
-                        foreach($permissions as $permission){
-                                $userPermission = new UserPermission();
-                                $userPermission->user_id = $employee->id;
-                                $userPermission->permission_id = $permission->permission_id;
-                                $userPermission->save();
-                        } 
-                }
-        }
-         
-        $data = UserPermission::all();
-        dd($data);
+        // $employees = User::where('user_type',1)->whereNotIn('id',[1,3])->get();
+        // foreach($employees as $employee){
+        //         if($employee->id != 1 || $employee->id != 3){  
+        //                 $permissions = UserPermission::where('user_id',3)->get();
+        //                 UserPermission::where('user_id',$employee->id)->delete();
+        //                 foreach($permissions as $permission){
+        //                         $userPermission = new UserPermission();
+        //                         $userPermission->user_id = $employee->id;
+        //                         $userPermission->permission_id = $permission->permission_id;
+        //                         $userPermission->save();
+        //                 } 
+        //         }
+        // } 
+        // $data = UserPermission::all();
+     
         
         // $organogram = getOrganogram($topUser);
         // dd($organogram);
