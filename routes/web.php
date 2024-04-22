@@ -435,7 +435,7 @@ Route::get('function_test', function () {
         $data = User::where('phone','01713552903')->first();
       
   
-        $employees = User::where('serial'>1)->where('user_type',1)->get();
+        $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get();
         dd($employees);
         // foreach($employees as $employee){
         //         if($employee->id != 1 || $employee->id != 3){  
