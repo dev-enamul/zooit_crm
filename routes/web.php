@@ -431,11 +431,11 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
+        $reporting_user = ReportingUser::latest()->first();
+        dd($reporting_user);
 
-        $data = User::where('phone','01713552903')->first();
-      
-  
-        $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get();
+        $data = User::where('phone','01713552903')->first(); 
+        $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
         dd($employees);
         // foreach($employees as $employee){
         //         if($employee->id != 1 || $employee->id != 3){  

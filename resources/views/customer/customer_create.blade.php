@@ -43,8 +43,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="marital_status" id="marital_status" required>
+                                            <label for="marital_status" class="form-label">Marital Status</label>
+                                            <select class="form-select" name="marital_status" id="marital_status">
                                                 <option value="">Select a Marital Status</option>
                                                 @isset($maritalStatuses)
                                                     @foreach ($maritalStatuses as $id => $name)
@@ -294,8 +294,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="spouse_name" class="form-label">Spouse Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{old('spouse_name')}}" required>  
+                                            <label for="spouse_name" class="form-label">Spouse Name</label>
+                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{old('spouse_name')}}">  
                                         </div>
                                     </div> 
 
@@ -448,8 +448,8 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="zone" class="form-label">Zone <span class="text-danger">*</span></label>
-                                        <select class="form-select select2" search name="zone" id="zone" required>
+                                        <label for="zone" class="form-label">Zone</label>
+                                        <select class="form-select select2" search name="zone" id="zone">
                                             <option data-display="Select a Zone" value=""> Select a Zone</option>
                                             @isset($zones)
                                                 @foreach ($zones as $zone)
@@ -462,8 +462,8 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="area" class="form-label">Area <span class="text-danger">*</span></label>
-                                        <select class="form-select select2" search name="area" id="area" required>
+                                        <label for="area" class="form-label">Area</label>
+                                        <select class="form-select select2" search name="area" id="area">
                                             <option data-display="Select a Area *" value="">
                                                 Select a Area
                                             </option>
