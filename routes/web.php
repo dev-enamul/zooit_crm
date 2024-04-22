@@ -432,10 +432,11 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
 
-        $data = User::where('phone','01611477337')->first();
-        dd($data);
+        $data = User::where('phone','01713552903')->first();
+      
   
-        // $employees = User::where('user_type',1)->whereNotIn('id',[1,3])->get();
+        $employees = User::where('serial'>1)->where('user_type',1)->get();
+        dd($employees);
         // foreach($employees as $employee){
         //         if($employee->id != 1 || $employee->id != 3){  
         //                 $permissions = UserPermission::where('user_id',3)->get();
