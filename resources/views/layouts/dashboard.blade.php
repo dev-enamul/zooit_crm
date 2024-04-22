@@ -101,11 +101,11 @@
         @endif    
         // for remove double click  
 
-        $(document).ready(function(){ 
-            $('form').submit(function() {
-                $(this).find('button').prop('disabled', true); 
-            });
-        });
+        // $(document).ready(function(){ 
+        //     $('form').submit(function() {
+        //         $(this).find('button').prop('disabled', true); 
+        //     });
+        // });
 
     </script>
 </body>
