@@ -79,6 +79,7 @@ use App\Http\Controllers\FreelancerImportController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\UpazilaController;
 use App\Models\Freelancer;
+use App\Models\Permission;
 use App\Models\ReportingUser;
 use App\Models\User;
 use App\Models\UserPermission;
@@ -439,6 +440,15 @@ Route::get('function_test', function () {
         Freelancer::query()->update(['created_at' => $last_month]);
      
         $reporting_user = UserPermission::where('user_id',1)->get();
+
+        $permissions = Permission::where('status',1)->get(); 
+                        foreach($permissions as $permission){
+                                $userPermission = new UserPermission();
+                                $userPermission->user_id = 1;
+                                $userPermission->permission_id = $permission->id;
+                                $userPermission->save();
+                        } 
+
         dd($reporting_user);
        
         $data = User::where('phone','01713552903')->first(); 
