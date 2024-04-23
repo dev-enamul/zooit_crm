@@ -89,8 +89,9 @@ class FieldTargetController extends Controller
         }else{
             $datas = $datas->whereMonth('month',date('m'))->whereYear('month',date('Y'));
         }
-
-        $datas =   $datas->where('assign_by',auth()->user()->id)->get();  
+        $datas =   $datas->with('assignTo')->where('assign_by',auth()->user()->id)->get();  
+        
+        
         $selected = $request->month??Carbon::now()->format('Y-m'); 
         return view('target.field_target.assign_target_list',compact('datas','selected'));
     }

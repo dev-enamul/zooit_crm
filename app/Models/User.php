@@ -121,6 +121,9 @@ class User extends Authenticatable
         }
     }
 
+    public function prospecting(){
+        $this->hasMany(Prospecting::class,'user_id');
+    }
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

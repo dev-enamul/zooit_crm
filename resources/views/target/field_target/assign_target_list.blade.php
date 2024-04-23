@@ -61,6 +61,34 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
+                                    <tr> 
+                                        <td>{{++$key}}</td>
+                                        <td><a href="{{route('my.field.target', ['month'=>urldecode($selected),'employee'=>encrypt($data->assignTo->id)])}}">{{@$data->assignTo->name}} [{{@$data->assignTo->user_id}}]</a> </td>  
+                                        @php 
+                                            $my_all_employee = my_all_employee($data->assignTo->id);
+                                            $user = $data->assignTo;
+                                        @endphp 
+                                        
+                                        <td class="align-middle">
+                                            {{$user->freelanecr_achive($selected,$my_all_employee)}} / {{$data->freelancer}}
+                                        </td>  
+                                        <td class="align-middle">
+                                            {{$user->customer_achive($selected,$my_all_employee)}} / {{$data->customer}}
+                                         </td>  
+                                         <td class="align-middle">{{$user->prospecting_achive($selected,$my_all_employee)}} / {{$data->prospecting}}</td>  
+                                        <td class="align-middle">{{$user->cold_calling_achive($selected,$my_all_employee)}} / {{$data->cold_calling}}</td>  
+                                        <td class="align-middle">{{$user->lead_achive($selected,$my_all_employee)}} / {{$data->lead}}</td>  
+                                        <td class="align-middle">{{$user->lead_analysis_achive($selected,$my_all_employee)}} / {{$data->lead_analysis}}</td>  
+                                        <td class="align-middle">{{$user->presentation_achive($selected,$my_all_employee)}} / {{$data->project_visit}}</td>  
+                                        <td class="align-middle">{{$user->visit_analysis_achive($selected,$my_all_employee)}} / {{$data->project_visit_analysis}}</td>  
+                                        <td class="align-middle">{{$user->followup_achive($selected,$my_all_employee)}} / {{$data->follow_up}}</td>  
+                                        <td class="align-middle">{{$user->followup_analysis_achive($selected,$my_all_employee)}} / {{$data->follow_up_analysis}}</td>  
+                                        <td class="align-middle">{{$user->negotiation_achive($selected,$my_all_employee)}} / {{$data->negotiation}}</td>  
+                                        <td class="align-middle">{{$user->negotiation_analysis_achive($selected,$my_all_employee)}} / {{$data->negotiation_analysis}}</td>
+                                    </tr>
+                                @endforeach 
+
+                                    {{-- @foreach ($datas as $key => $data)
                                         <tr> 
                                             <td>{{++$key}}</td>
                                             <td><a href="{{route('my.field.target', ['month'=>urldecode($selected),'employee'=>encrypt($data->assign_to)])}}">{{@$data->assignTo->name}} [{{@$data->assignTo->user_id}}]</a> </td>  
@@ -80,7 +108,7 @@
                                             <td class="align-middle">{{$user->negotiation_achive($selected)}} / {{$data->negotiation}}</td>  
                                             <td class="align-middle">{{$user->negotiation_analysis_achive($selected)}} / {{$data->negotiation_analysis}}</td>   
                                         </tr>
-                                    @endforeach 
+                                    @endforeach  --}}
                                 </tbody>
                             </table>
                            </div> 

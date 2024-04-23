@@ -19,13 +19,16 @@ use Carbon\Carbon;
 
 trait UserAchiveTreat
 {  
-    public function freelanecr_achive($date = null){
+    public function freelanecr_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         } 
-        $my_all_employee = my_all_employee($this->id); 
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+         
         $freelancer = User::whereHas('freelancer',function($q) use($my_all_employee){
             $q->whereIn('user_id',$my_all_employee);
         })
@@ -38,13 +41,15 @@ trait UserAchiveTreat
         return $freelancer;
     } 
 
-    public function customer_achive($date = null){
+    public function customer_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
         $customer = Customer::whereIn('ref_id',$my_all_employee)
             ->where('approve_by','!=',null)
             ->whereMonth('created_at',$date)
@@ -54,13 +59,16 @@ trait UserAchiveTreat
         return $customer; 
     }
 
-    public function prospecting_achive($date = null){
+    public function prospecting_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $prospecting = Prospecting::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -71,13 +79,16 @@ trait UserAchiveTreat
         return $prospecting; 
     }
 
-    public function cold_calling_achive($date = null){
+    public function cold_calling_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
         $cold_calling = ColdCalling::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -88,13 +99,17 @@ trait UserAchiveTreat
         return $cold_calling; 
     } 
 
-    public function lead_achive($date = null){
+    public function lead_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $lead = Lead::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -105,13 +120,17 @@ trait UserAchiveTreat
         return $lead; 
     } 
 
-    public function lead_analysis_achive($date = null){
+    public function lead_analysis_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $lead_analysis = LeadAnalysis::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -122,13 +141,17 @@ trait UserAchiveTreat
         return $lead_analysis; 
     } 
 
-    public function presentation_achive($date = null){
+    public function presentation_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+       
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $presentation = Presentation::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -139,13 +162,16 @@ trait UserAchiveTreat
         return $presentation; 
     } 
 
-    public function visit_analysis_achive($date = null){
+    public function visit_analysis_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
         $presentation = VisitAnalysis::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -157,13 +183,17 @@ trait UserAchiveTreat
     }
 
 
-    public function followup_achive($date = null){
+    public function followup_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $followup = FollowUp::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -173,13 +203,17 @@ trait UserAchiveTreat
         ->count(); 
         return $followup; 
     }  
-    public function followup_analysis_achive($date = null){
+    public function followup_analysis_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $data = FollowUpAnalysis::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -191,13 +225,17 @@ trait UserAchiveTreat
     } 
 
 
-    public function negotiation_achive($date = null){
+    public function negotiation_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+        
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $data = Negotiation::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -208,13 +246,17 @@ trait UserAchiveTreat
         return $data; 
     } 
 
-    public function negotiation_analysis_achive($date = null){
+    public function negotiation_analysis_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
-        $my_all_employee = my_all_employee($this->id);
+       
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+
         $data = NegotiationAnalysis::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -225,14 +267,17 @@ trait UserAchiveTreat
         return $data; 
     } 
 
-    public function deposit_achive($date = null){
+    public function deposit_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
         }else{
             $date = Carbon::parse($date);
         }   
 
-        $my_all_employee = my_all_employee($this->id);
+        if($my_all_employee==null){
+            $my_all_employee = my_all_employee($this->id);
+        }
+        
         $data = Deposit::whereHas('customer',function($q) use($my_all_employee){
                 $q->whereIn('ref_id',$my_all_employee);
             })
