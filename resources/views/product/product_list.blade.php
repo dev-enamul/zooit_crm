@@ -27,47 +27,49 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body"> 
-                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr class="">
-                                        <th>Action</th>
-                                        <th>S/N</th> 
-                                        <th>Name & ID</th>
-                                        <th>Address</th>
-                                        <th>Floor</th>
-                                        @foreach($unit_headers as $header)
-                                            <th>{{ ucfirst($header->title) }}</th>
-                                        @endforeach 
-                                    </tr>
-                                </thead>
-                                
-                                <tbody> 
-                                    @foreach ($projects as  $project)
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{asset($project->image())}}" alt="Header Avatar">
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-animated"> 
-                                                    <a class="dropdown-item" href="{{route('product.edit',$project->id)}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('product.delete',$project->id) }}')">Delete</a>  
-                                                    <a class="dropdown-item" href="{{route('sold.unsold',encrypt($project->id))}}">Sold & Unsold</a>
-                                                    <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>{{ $loop->iteration}} </td>
-                                        <td>{{ @$project->name }}</td>
-                                        <td>{{ @$project->address }}</td>
-                                        <td>{{ @$project->total_floor}}</td>
-                                        @foreach($unit_headers as $header)
-                                            <td>{{$salse->where('project_id',$project->id)->where('unit_id',$header->id)->count()}} / {{ $project->units->where('unit.title', $header->title)->count() }}</td>
+                            <div class="table-box">
+                                <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr class="">
+                                            <th>Action</th>
+                                            <th>S/N</th> 
+                                            <th>Name & ID</th>
+                                            <th>Address</th>
+                                            <th>Floor</th>
+                                            @foreach($unit_headers as $header)
+                                                <th>{{ ucfirst($header->title) }}</th>
+                                            @endforeach 
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody> 
+                                        @foreach ($projects as  $project)
+                                        <tr class="">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{asset($project->image())}}" alt="Header Avatar">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated"> 
+                                                        <a class="dropdown-item" href="{{route('product.edit',$project->id)}}">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('product.delete',$project->id) }}')">Delete</a>  
+                                                        <a class="dropdown-item" href="{{route('sold.unsold',encrypt($project->id))}}">Sold & Unsold</a>
+                                                        <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>  
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td>{{ $loop->iteration}} </td>
+                                            <td>{{ @$project->name }}</td>
+                                            <td>{{ @$project->address }}</td>
+                                            <td>{{ @$project->total_floor}}</td>
+                                            @foreach($unit_headers as $header)
+                                                <td>{{$salse->where('project_id',$project->id)->where('unit_id',$header->id)->count()}} / {{ $project->units->where('unit.title', $header->title)->count() }}</td>
+                                            @endforeach
+                                        </tr> 
                                         @endforeach
-                                    </tr> 
-                                    @endforeach
-                                </tbody>
-                            </table> <!-- end table -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
