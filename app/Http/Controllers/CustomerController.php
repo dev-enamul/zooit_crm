@@ -312,7 +312,7 @@ class CustomerController extends Controller
             Customer::create($customer_data);   
             
             DB::commit(); 
-            return redirect()->route('customer.index')->with('success', 'Employee created successfully');
+            return redirect()->route('customer.index')->with('success', 'Customer created successfully');
         } catch (Exception $e) {   
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());

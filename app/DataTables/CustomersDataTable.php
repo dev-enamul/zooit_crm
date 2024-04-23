@@ -77,8 +77,7 @@ class CustomersDataTable extends DataTable
         }else{
             $my_employee = my_all_employee(auth()->user()->id);
         } 
-        
-
+         
         if(isset($request->status)){
             $status = $request->status;
         }else{
