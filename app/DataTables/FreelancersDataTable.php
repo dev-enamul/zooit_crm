@@ -164,12 +164,12 @@ class FreelancersDataTable extends DataTable
             $end_date = date('Y-m-d',strtotime($date[1]));
             $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
         } 
-        
-        $is_admin = auth()->user->hasPermission('admin');
+        $user = User::find(auth()->user()->id);
+        $is_admin = $user->hasPermission('admin');
         if(!$is_admin){
             $user_id = $request->employee??auth()->user()->id;
             $user_id = (int)$user_id;
-            $my_freelancer = my_all_employee(auth()->user()->id);
+            $my_freelancer = my_all_employee($user_id);
             $model = $model->whereIn('id',$my_freelancer);
         }
         
