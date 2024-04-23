@@ -78,6 +78,7 @@ use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\FreelancerImportController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\UpazilaController;
+use App\Models\Customer;
 use App\Models\Freelancer;
 use App\Models\Permission;
 use App\Models\ReportingUser;
@@ -434,23 +435,9 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {   
-        $last_month = Carbon::now()->subMonth(1);
-      
-        User::where('user_type', 2)->update(['created_at' => $last_month]);
-        Freelancer::query()->update(['created_at' => $last_month]);
-     
-        
-
-        $permissions = Permission::where('status',1)->get();
-                        UserPermission::where('user_id',1)->delete();
-                        foreach($permissions as $permission){
-                                $userPermission = new UserPermission();
-                                $userPermission->user_id = 1;
-                                $userPermission->permission_id = $permission->id;
-                                $userPermission->save();
-                        } 
-        $reporting_user = UserPermission::where('user_id',1)->get();
-        dd($reporting_user);
+         
+        $customer = Customer::query()->update(['status' => 1]);
+        dd('updated');
        
         $data = User::where('phone','01713552903')->first(); 
         $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
