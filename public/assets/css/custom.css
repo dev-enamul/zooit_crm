@@ -454,6 +454,9 @@ a{
     width: max-content;
     float: right;
   }
+  .dataTable{
+    display: inline-block;
+  }
 
 
  
