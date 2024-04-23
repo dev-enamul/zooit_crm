@@ -172,10 +172,13 @@ class FreelancersDataTable extends DataTable
                     $my_freelancer = my_all_employee((int)$request->employee);
                 }else{
                     $my_freelancer = my_all_employee(auth()->user()->id);
-                }
-                $model = $model->whereIn('id',$my_freelancer);
+                } 
             }
+        }else{
+            $my_freelancer = my_all_employee(auth()->user()->id);
         }
+
+        $model = $model->whereIn('id',$my_freelancer);
         
         
          $model =  $model 
