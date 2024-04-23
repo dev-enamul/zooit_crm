@@ -122,7 +122,8 @@ class FreelancersDataTable extends DataTable
                 }
             } 
             return "-";  
-        })
+        }) 
+
         ->addColumn('incharge', function($employee){  
             $reporting = user_reporting($employee->user->id);
             if(isset($reporting) && $reporting!= null){
@@ -172,7 +173,7 @@ class FreelancersDataTable extends DataTable
                 }else{
                     $my_freelancer = my_all_employee(auth()->user()->id);
                 }
-                $model = $model->whereIn('user_id',$my_freelancer);
+                $model = $model->whereIn('id',$my_freelancer);
             }
         }
         
