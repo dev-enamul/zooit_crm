@@ -84,6 +84,9 @@ class EmployeesDataTable extends DataTable
     
     public function query(User $model): QueryBuilder
         {
+            $my_freelancer = my_all_employee(auth()->user()->id);
+            $model = $model->whereIn('id',$my_freelancer);
+
             return $model->newQuery()
             ->where('user_type', 1)
             ->where('status', 1)
