@@ -443,6 +443,19 @@ a{
     opacity: .5;
   }
 
+
+  @media screen and (max-width: 767px){
+    div.dt-buttons { 
+      width: max-content !important; 
+  }
+  } 
+
+  .dataTables_filter{
+    width: max-content;
+    float: right;
+  }
+
+
  
 
 
