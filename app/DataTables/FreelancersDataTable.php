@@ -112,9 +112,9 @@ class FreelancersDataTable extends DataTable
         }) 
         
         ->addColumn('ex_co_ordinator', function($employee){ 
-            $reporting = user_reporting($employee->user->id);
+            $reporting = user_reporting($employee->user_id);
             if(isset($reporting) && $reporting!= null){
-                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                     $q->whereIn('designation_id',[17]);
                 })->first();  
                 if(isset($user) && $user != null){
@@ -137,7 +137,7 @@ class FreelancersDataTable extends DataTable
             return "-"; 
         })
         ->addColumn('area_incharge', function($employee){ 
-            $reporting = user_reporting($employee->user->id);
+            $reporting = user_reporting($employee->user_id);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                     $q->whereIn('designation_id',[11]);
