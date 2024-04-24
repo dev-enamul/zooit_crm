@@ -434,11 +434,11 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {   
-         
-        $customer = Customer::query()->update(['status' => 1]);
-        dd('updated');
-       
+Route::get('function_test', function () {  
+
+        $user_reporting = ReportingUser::latest()->first();
+        dd($user_reporting);
+          
         $data = User::where('phone','01713552903')->first(); 
         $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
         dd($employees);

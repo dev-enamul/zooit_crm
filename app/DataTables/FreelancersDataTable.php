@@ -48,7 +48,6 @@ class FreelancersDataTable extends DataTable
             } 
         })
         ->addColumn('reporting', function($employee){
-
             $reporting = user_reporting($employee->user_id);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
@@ -57,7 +56,7 @@ class FreelancersDataTable extends DataTable
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
                 }
-            } 
+            }
             return "-";  
         }) 
         
