@@ -62,8 +62,7 @@ class EmployeesDataTable extends DataTable
             ->addColumn('reporting', function($employee){ 
                 if($employee->id==187){
                     return "-";
-                }
-                
+                } 
                 $data = ReportingUser::where('user_id',$employee->id)->where('status',1)->latest()->first();
                 if(isset($data->id) && $data->id !=null){
                     $reporting = ReportingUser::find($data->reporting_user_id);

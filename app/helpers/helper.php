@@ -212,8 +212,18 @@ if (!function_exists('my_employee')) {
 }
 
 if (!function_exists('my_all_employee')) {
-    function my_all_employee($user)
+    function my_all_employee($user, $cacheKey=null)
     {
+        if($cacheKey == null){
+            $cacheKey = 'key-' . $user; 
+        }
+
+        $cacheData = Cache::get($cacheKey);
+        if($cacheData){ 
+            return $cacheData;
+        } 
+
+
         if (is_int($user)) {
             $user = \App\Models\ReportingUser::where('user_id', $user)->whereNull('deleted_at')
                 ->select(['id', 'user_id'])
@@ -224,10 +234,11 @@ if (!function_exists('my_all_employee')) {
         $downlines = $user->downlines;
         if ($downlines) {
             foreach ($downlines as $downline) {
-                $userIds = array_merge($userIds, my_all_employee($downline));
+                $userIds = array_merge($userIds, my_all_employee($downline,$cacheKey));
             }
         }
 
+        Cache::put($cacheKey, $userIds, now()->addHour());
         return $userIds;
     }
 }
