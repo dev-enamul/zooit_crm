@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permission;
+use App\Models\UserPermission;
 use Brian2694\Toastr\Facades\Toastr as FacadesToastr;
 use Brian2694\Toastr\Toastr;
 use Illuminate\Http\Request; 
@@ -21,7 +22,8 @@ class PermissionController extends Controller
     {
         $input = $request->all();
         $input['slug'] = getSlug(Permission::class, $request->name);
-        Permission::create($input);  
+        $permission = Permission::create($input);  
+        UserPermission::create(['permission_id'=>$permission->id,'user_id'=>auth()->user()->id]);
         return redirect()->back()->with('success','Permission Created');
     }
 

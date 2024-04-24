@@ -726,19 +726,25 @@
                             </li> 
                         @endcan   
 
-                        <li>
-                            <a href="{{route('approve.setting')}}" class="">
-                                <i class="fas fa-desktop"></i>
-                                <span>Approve Setting</span>
-                            </a>
-                        </li> 
 
-                        <li>
-                            <a href="{{route('submit.time.setting')}}" class="">
-                                <i class="fas fa-desktop"></i>
-                                <span>Submit Time Setting</span>
-                            </a>
-                        </li> 
+                        @can('approve-setting')
+                            <li>
+                                <a href="{{route('approve.setting')}}" class="">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Approve Setting</span>
+                                </a>
+                            </li>     
+                        @endcan 
+                        
+                        @can('submit-time-setting')
+                            <li>
+                                <a href="{{route('submit.time.setting')}}" class="">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Submit Time Setting</span>
+                                </a>
+                            </li> 
+                        @endcan
+                        
 
                       
                     </div>
