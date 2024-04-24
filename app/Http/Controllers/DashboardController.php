@@ -56,10 +56,7 @@ class DashboardController extends Controller
 
 
 
-    public function index(){
-        $reporting = ReportingUser::Latest()->first();
-        $reporting->update(['reporting_user_id'=>1]);
-       
+    public function index(){ 
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;

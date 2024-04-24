@@ -3,7 +3,7 @@
  @section('style') 
     <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    {{-- <link href="{{asset('assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" /> --}}
  @endsection
 @section('content')
 <div class="main-content">
@@ -33,7 +33,10 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body"> 
-                            {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap']) }} 
+                            <div class="table-box">
+                                {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap']) }} 
+                            </div>
+                            
                         </div>
                     </div>
                 </div> <!-- end col -->
@@ -93,8 +96,8 @@
 <script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
 <script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script>
+{{-- <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script> --}}
 <script src="/vendor/datatables/buttons.server-side.js"></script>
 {!! $dataTable->scripts() !!}  
 

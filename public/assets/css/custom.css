@@ -446,17 +446,18 @@ a{
 
   @media screen and (max-width: 767px){
     div.dt-buttons { 
-      width: max-content !important; 
-  }
+        width: max-content !important; 
+    }
+    .dataTables_filter{
+      width: max-content;
+      float: right;
+    }
+    .dataTable{
+      display: inline-block;
+    }
+    
   } 
-
-  .dataTables_filter{
-    width: max-content;
-    float: right;
-  }
-  .dataTable{
-    display: inline-block;
-  }
+ 
 
 
  
