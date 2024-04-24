@@ -283,7 +283,7 @@ class DashboardController extends Controller
     }
 
     public function change_password(Request $request)
-    { 
+    {
         $validate = Validator::make($request->all(), [
             'old_password' => 'required',
             'password'     => 'required|confirmed',

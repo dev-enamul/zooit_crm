@@ -148,7 +148,9 @@ class LeadAnalysisController extends Controller
             $is_admin = Auth::user()->hasPermission('admin'); 
             if($approve_setting?->status == 0 || $is_admin){ 
                 $approve_by = auth()->user()->id;
-            } 
+            }else{
+                $approve_by = null;
+            }
 
             $lead_analysis = LeadAnalysis::create([
                 'customer_id'          => $request->customer,
