@@ -436,6 +436,10 @@ Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
 
+        $user = User::where('phone','01329656325')->first(); 
+
+        $customers = Customer::where('created_by',$user->id)->get();
+        dd($customers);
         $user_reporting = ReportingUser::latest()->first();
         dd($user_reporting);
           
