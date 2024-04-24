@@ -263,6 +263,9 @@ class DashboardController extends Controller
     }
 
     public function migrate_fresh(){  
+        $user_reporting = ReportingUser::latest()->first();
+        dd($user_reporting);
+        
         // exec('composer update');
         // Artisan::call('migrate:fresh');
         // Artisan::call('db:seed');  
