@@ -735,7 +735,7 @@
                                 </a>
                             </li>     
                         @endcan 
-                        
+
                         @can('submit-time-setting')
                             <li>
                                 <a href="{{route('submit.time.setting')}}" class="">
@@ -744,9 +744,6 @@
                                 </a>
                             </li> 
                         @endcan
-                        
-
-                      
                     </div>
                 </div> 
                   

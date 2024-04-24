@@ -425,8 +425,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {   
-                $user_reporting = ReportingUser::latest()->first();
-                dd($user_reporting);
+                 $reporting = user_reporting(Auth::user()->id);
+                 dd($reporting);
                 
                 $data = User::where('phone','01713552903')->first(); 
                 $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 

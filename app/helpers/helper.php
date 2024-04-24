@@ -5,6 +5,7 @@ use App\Models\ReportingUser;
 use App\Models\Union;
 use App\Models\Upazila;
 use App\Models\Village;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 use function Laravel\Prompts\select;
@@ -149,21 +150,37 @@ if (!function_exists('getOrganogram')) {
 
  
 if (!function_exists('user_reporting')) {
-    function user_reporting($user_id, $users = [])
-    {
+    function user_reporting($user_id, $users = [],$cacheKey = null)
+    { 
+
+        if($cacheKey == null){
+            $cacheKey = 'user_reporting_' . $user_id; 
+        } 
+
+        $cacheData = Cache::get($cacheKey);
+        if($cacheData){  
+            return $cacheData;
+        } 
+        
         $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->latest()->where('status',1)->first(); 
         if (!$reporting) {
+            Cache::put($cacheKey, $users, now()->addHour());
+           
             return $users;
         }
 
         if (!$reporting->reporting_user_id || $reporting->reporting_user_id == null) {
+            
+            Cache::put($cacheKey, array_merge($users, [$user_id]), now()->addHour());
             return array_merge($users, [$user_id]);  
          
         } else {
             $next_reporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
-            if(isset($next_reporting) && $next_reporting->user_id != null){ 
-                return user_reporting($next_reporting->user_id, array_merge($users, [$user_id]));
+            if(isset($next_reporting) && $next_reporting->user_id != null){  
+                return user_reporting($next_reporting->user_id, array_merge($users, [$user_id]),$cacheKey);
             } 
+             
+            Cache::put($cacheKey, array_merge($users, [$user_id]), now()->addHour());
             return array_merge($users, [$user_id]);  
             
         }
