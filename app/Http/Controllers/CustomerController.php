@@ -698,11 +698,11 @@ class CustomerController extends Controller
 
     public function customer_approve(){
         $my_customer = my_employee(auth()->user()->id);
-        $customers = Customer::where('status',0)->whereIn('ref_id',$my_customer)->get();
+        $customers = Customer::where('approve_by',null)->whereIn('ref_id',$my_customer)->get();
         return view('customer.customer_approve',compact('customers'));
     }
 
-    public function customer_approve_save(Request $request) {
+    public function customer_approve_save(Request $request) { 
         if($request->has('customer_id') && $request->customer_id !== '' & $request->customer_id !== null) {
             DB::beginTransaction();
             try {

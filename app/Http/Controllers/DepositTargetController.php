@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DepositTargetController extends Controller
@@ -37,11 +38,25 @@ class DepositTargetController extends Controller
     }
 
     public function target_asign_list(Request $request){  
-        $my_employee = my_employee(auth()->user()->id);
-        $employees = User::whereIn('id',$my_employee)->where('status',1)->get();   
+        $my_employee = my_employee(auth()->user()->id);  
         $selected = $request->month;  
+        if(isset($selected) && $selected != ''){ 
+            $month = date('m',strtotime($selected));
+            $year = date('Y',strtotime($selected)); 
+        }else{
+            $month = date('m');
+            $year = date('Y');
+        } 
+
+        $deposit_targets = DepositTarget::where('assign_by',Auth::user()->id)
+                    ->whereMonth('month',$month)
+                    ->whereYear('month',$year)
+                    ->where('is_project_wise',1)
+                    ->with('assignTo')
+                    ->first(); 
+        $employees = User::whereIn('id',$my_employee)->where('status',1)->get(); 
         $projects = Project::where('status', 1)->get();
-        return view('target.deposit_target_asign_list',compact('selected','projects','employees'));
+        return view('target.deposit_target_asign_list',compact('selected','projects','employees','deposit_targets'));
     }
 
     public function project_deposit_target(){ 

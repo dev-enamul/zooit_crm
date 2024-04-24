@@ -8,6 +8,7 @@ use App\Models\FieldTarget;
 use App\Models\Lead;
 use App\Models\LeadAnalysis;
 use App\Models\Prospecting;
+use App\Models\SubmitTime;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -25,8 +26,7 @@ class FieldTargetController extends Controller
         try{
             $validatedData = $request->validate([
                 'assign_to' => 'required|exists:users,id',
-                'month' => 'required|date_format:Y-m',
-                'submit_time' => 'required|date_format:H:i',
+                'month' => 'required|date_format:Y-m', 
                 'freelancer' => 'nullable|numeric',
                 'customer' => 'nullable|numeric',
                 'prospecting' => 'nullable|numeric',
@@ -39,8 +39,11 @@ class FieldTargetController extends Controller
                 'follow_up_analysis' => 'nullable|numeric',
                 'negotiation' => 'nullable|numeric',
                 'negotiation_analysis' => 'nullable|numeric',
-            ]);
+            ]); 
+            
             $input = $request->all();
+            $submit_time = SubmitTime::first();
+            $input['submit_time'] = $submit_time->submit_time??'00:00:00';
             $input['assign_by'] = auth()->user()->id; 
             $input['month'] = date('Y-m-d',strtotime($input['month']));
             $old = FieldTarget::where('assign_to',$input['assign_to'])->where('month',$input['month'])->first();

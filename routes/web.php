@@ -70,6 +70,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController; 
 use App\Http\Controllers\SalseApproveController;
+use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController; 
 use App\Models\ReportingUser;
 use App\Models\User; 
@@ -360,6 +361,8 @@ Route::group(['middleware' => 'auth'], function () {
         //Approve Setting 
         Route::get('approve-setting', [ApproveSettingController::class, 'index'])->name('approve.setting');
         Route::post('approve-setting-save', [ApproveSettingController::class, 'save'])->name('approve.setting.save');
+        Route::get('submit/time/setting',[LastSubmitTimeSettingController::class,'index'])->name('submit.time.setting');
+        Route::post('submit/time/setting/update',[LastSubmitTimeSettingController::class,'update'])->name('submit.time.setting.update');
  
         //Reports 
         Route::get('monthly-target-achive', [CommissionReportController::class, 'monthly_target_achive'])->name('monthly.target.achive');
@@ -419,16 +422,15 @@ Route::group(['middleware' => 'auth'], function () {
         // Header Route 
         Route::get('notification', [NotificationController::class, 'index'])->name('notification.index');
 });
-Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
+        Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {  
- 
-        $user_reporting = ReportingUser::latest()->first();
-        dd($user_reporting);
-          
-        $data = User::where('phone','01713552903')->first(); 
-        $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
-        dd($employees);
+Route::get('function_test', function () {   
+                $user_reporting = ReportingUser::latest()->first();
+                dd($user_reporting);
+                
+                $data = User::where('phone','01713552903')->first(); 
+                $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
+                dd($employees);
         // foreach($employees as $employee){
         //         if($employee->id != 1 || $employee->id != 3){  
         //                 $permissions = UserPermission::where('user_id',3)->get();

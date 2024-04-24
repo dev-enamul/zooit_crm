@@ -724,7 +724,7 @@
                                     <span>Deposit Category</span>
                                 </a>
                             </li> 
-                        @endcan  
+                        @endcan   
 
                         <li>
                             <a href="{{route('approve.setting')}}" class="">
@@ -732,6 +732,14 @@
                                 <span>Approve Setting</span>
                             </a>
                         </li> 
+
+                        <li>
+                            <a href="{{route('submit.time.setting')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Submit Time Setting</span>
+                            </a>
+                        </li> 
+
                       
                     </div>
                 </div> 

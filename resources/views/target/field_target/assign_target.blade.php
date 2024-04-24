@@ -45,7 +45,7 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="month" class="form-label">Month<span class="text-danger">*</span></label>
                                             <input type="month" class="form-control" id="month" name="month" value="{{ date('Y-m') }}" required>
@@ -54,7 +54,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="submit_time" class="form-label">Daily Submit Last Time <span class="text-danger">*</span></label>
                                             <input type="time" class="form-control" id="submit_time" name="submit_time" value="23:00" required>
@@ -62,7 +62,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
