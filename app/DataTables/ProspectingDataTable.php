@@ -49,7 +49,12 @@ class ProspectingDataTable extends DataTable
             })
             ->addColumn('fl_id', function($prospecting){
                  return $prospecting->customer->reference->name.' '.$prospecting->customer->reference->user_id??"-";
-            })
+            }) 
+
+            ->addColumn('employee', function($employee){
+                return $employee->employee->name;
+           })
+
             ->setRowId('id');
     }
 
@@ -140,6 +145,7 @@ class ProspectingDataTable extends DataTable
             Column::make('media')->title('Media'),
             Column::make('phone')->title('Phone'),
             Column::make('fl_id')->title('FL ID'), 
+            Column::make('employee')->title('Employee'),
         ];
     }
 
