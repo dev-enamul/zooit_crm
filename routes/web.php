@@ -434,7 +434,7 @@ Route::get('function_test', function () {
                         $data->save();
                 };
                 
-                dd($prospecting);
+                dd($prospectings);
                  $reporting = user_reporting(1);
                  dd($reporting);
                 
