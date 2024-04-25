@@ -424,9 +424,9 @@ Route::group(['middleware' => 'auth'], function () {
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {   
-                $my_all_employee = my_all_employee(1);
-              dd($my_all_employee);
+Route::get('function_test', function () {
+                 $reporting = user_reporting(1);
+                 dd($reporting);
                 
                 $data = User::where('phone','01713552903')->first(); 
                 $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 

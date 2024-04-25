@@ -48,13 +48,12 @@ class EmployeeEditController extends Controller
         }
         
         DB::beginTransaction();
-        try{   
+        try{
             $user_reporting = ReportingUser::where('user_id', $id)->where('status',1)->latest()->first();
-
-           
             if(isset($user_reporting) && $user_reporting != null && $request->reporting_id == $user_reporting->id){
                 return redirect()->back()->with('error', 'You can not select own reporting user');
-            }
+            } 
+
             if($user_reporting != null){
                 $user_reporting->status = 0;
                 $user_reporting->deleted_by = auth()->user()->id; 
@@ -80,7 +79,16 @@ class EmployeeEditController extends Controller
                     $employee->save();
                 } 
             }
-            DB::commit(); 
+            DB::commit();
+
+            // set reporting_user in user table
+            $user_reporting = user_reporting($id);
+            foreach($user_reporting as $key => $value){
+                $user = User::find($value);
+                $user->user_reporting = json_encode($user_reporting);
+                $user->save();
+            }
+
             
             if($reporting_user->user->user_type == 1){
                 return redirect()->route('employee.index')->with('success', 'Reporting updated successfully'); 
