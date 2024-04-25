@@ -71,7 +71,8 @@ use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController; 
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
-use App\Http\Controllers\UpazilaController; 
+use App\Http\Controllers\UpazilaController;
+use App\Models\Prospecting;
 use App\Models\ReportingUser;
 use App\Models\User; 
 use Illuminate\Http\Request;
@@ -425,7 +426,10 @@ Route::group(['middleware' => 'auth'], function () {
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {
+Route::get('function_test', function () { 
+                $user = User::find(auth()->user()->id);
+                $prospecting = Prospecting::where('created_by',$user->id)->get();
+                dd($prospecting);
                  $reporting = user_reporting(1);
                  dd($reporting);
                 
