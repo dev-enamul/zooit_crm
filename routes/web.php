@@ -428,7 +428,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () { 
                 $user = User::find(auth()->user()->id);
-                $prospecting = Prospecting::where('created_by',$user->id)->get();
+                $prospecting = Prospecting::where('created_by',$user->id)->where('approve_by',null)->get();
                 dd($prospecting);
                  $reporting = user_reporting(1);
                  dd($reporting);
