@@ -31,6 +31,9 @@ class UnionController extends Controller
         $data = new Union();
         $data->upazila_id = $request->upazila;
         $data->name = $request->union;
+        $data->bn_name = $request->union;
+        $data->url = $request->union;
+        $data->save();
         return redirect()->back()->with('success',"Union Created");
     }
 

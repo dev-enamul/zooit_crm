@@ -46,15 +46,16 @@
                                         <img src="{{$customer->user->image()}}" alt="" height="50px">
                                     </div>
 
+                                   
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="profession" id="profession" required>
-                                                <option value="">Select a Profession</option>
-                                                @isset($professions)
-                                                    @foreach ($professions as $profession)
-                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($profession) ? $customer->profession_id : null) == $profession->id ? 'selected' : '' }}>
-                                                            {{ $profession->name }}
+                                            <label for="marital_status" class="form-label">Marital Status </label>
+                                            <select class="form-select" name="marital_status" id="marital_status">
+                                                <option value="">Select a Marital Status</option>
+                                                @isset($maritalStatuses)
+                                                    @foreach ($maritalStatuses as $id => $name)
+                                                        <option value="{{ $id }}" {{ old('marital_status', isset($customer) ? $customer->user->marital_status : null) == $id ? 'selected' : '' }}>
+                                                            {{ $name }}
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -64,15 +65,16 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="marital_status" class="form-label">Marital Status <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="marital_status" id="marital_status" required>
-                                                <option value="">Select a Marital Status</option>
-                                                @isset($maritalStatuses)
-                                                    @foreach ($maritalStatuses as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('marital_status', isset($customer) ? $customer->user->marital_status : null) == $id ? 'selected' : '' }}>
-                                                            {{ $name }}
+                                            <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="profession" id="profession" required>
+                                                <option value="">Select a Profession</option>
+                                                @isset($professions)
+                                                    @foreach ($professions as $profession)
+                                                        <option value="{{ $profession->id }}" {{ old('profession', isset($profession) ? $customer->profession_id : null) == $profession->id ? 'selected' : '' }}>
+                                                            {{ $profession->name }}
                                                         </option>
                                                     @endforeach
                                                 @endisset
@@ -279,7 +281,7 @@
                                         'div'       => 'col-md-6',
                                         'mb'        => 'mb-3',
                                         'visible'   => ['division', 'district', 'upazila','union','village'],
-                                        'required'  => ['division', 'district', 'upazila','union'],
+                                        'required'  => [],
                                         'selected'  => $selected ?? null,
                                     ]) 
 
@@ -295,8 +297,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="father_name" class="form-label">Father's Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{isset($customer) ? @$customer->user->userFamily->father_name : old('father_name')}}" required>  
+                                            <label for="father_name" class="form-label">Father's Name</label>
+                                            <input type="text" name="father_name" class="form-control" id="father_name" placeholder="Father's Name" value="{{isset($customer) ? @$customer->user->userFamily->father_name : old('father_name')}}">  
                                         </div>
                                     </div> 
 
@@ -323,8 +325,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="spouse_name" class="form-label">Spouse Name <span>*</span></label>
-                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{isset($customer) ? @$customer->user->userFamily->spouse_name : old('spouse_name')}}" required>  
+                                            <label for="spouse_name" class="form-label">Spouse Name </label>
+                                            <input type="text" name="spouse_name" class="form-control" id="spouse_name" placeholder="Spouse Name" value="{{isset($customer) ? @$customer->user->userFamily->spouse_name : old('spouse_name')}}">  
                                         </div>
                                     </div> 
 
@@ -471,8 +473,8 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="reporting_user" class="form-label">Employee/Freelancer<span class="text-danger">*</span></label>
                                         <select class="form-select select2" search name="reporting_user" id="reporting_user" required>
-                                            <option value="">Select a Freelancer/Employee</option>
-                                            <option value="{{$customer->ref_od}}" selected>
+                                            
+                                            <option value="{{$customer->ref_id}}" selected>
                                                 {{ $customer->reference->name }} ({{ $customer->reference->user_id }})
                                             </option> 
                                         </select> 

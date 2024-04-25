@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\EloquentDataTable;
@@ -30,9 +31,6 @@ class CustomersDataTable extends DataTable
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
-            })
-            ->addColumn('date', function($data){
-                return get_date($data->created_at);
             })  
             ->addColumn('thana', function($data){
                 return $data->user->userAddress->upazila->name??"-";
@@ -49,7 +47,69 @@ class CustomersDataTable extends DataTable
             })
             ->addColumn('profession', function($data){
                 return $data->profession->name??'-';
-            })
+            }) 
+            
+            ->addColumn('freelancer', function($data){
+                if($data->ref_id==null){
+                    return '-';
+                } 
+                $reporting = user_reporting($data->ref_id);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                        $q->whereIn('designation_id',[20]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+
+            ->addColumn('co-ordinator-applicant', function($data){
+                if($data->ref_id==null){
+                    return '-';
+                } 
+                $reporting = user_reporting($data->ref_id);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                        $q->whereIn('designation_id',[19]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+            ->addColumn('co-ordinator', function($data){
+                if($data->ref_id==null){
+                    return '-';
+                } 
+                $reporting = user_reporting($data->ref_id);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                        $q->whereIn('designation_id',[18]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+            ->addColumn('ex-co-ordinator', function($data){
+                if($data->ref_id==null){
+                    return '-';
+                } 
+                $reporting = user_reporting($data->ref_id);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                        $q->whereIn('designation_id',[17]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
             ->addColumn('fl', function($data){
                 // return $data->status==0?"-":$data->user->user_id;
                 return @$data->reference->name.' ['. @$data->reference->user_id.']';
@@ -125,15 +185,14 @@ class CustomersDataTable extends DataTable
                   ->width(60)
                   ->addClass('text-center'), 
             Column::make('serial')->title('S/L'),
-            Column::make('date'),
+            Column::make('customer_id')->title('Provable CUS ID')->searchable(true), 
             Column::make('name')->title('Customer Name')->searchable(true),
-            Column::make('customer_id')->title('Cus ID')->searchable(true),
+            Column::make('user.phone')->title('Phone Number')->searchable(true),
             Column::make('profession'),
-            Column::make('thana'),
-            Column::make('union'),
-            Column::make('vilage'),
-            Column::make('user.phone'),
-            Column::make('fl')->title('FL ID'), 
+            Column::make('freelancer')->title('Franchise Partner Name & ID'),
+            Column::make('co-ordinator-applicant')->title('Co-ordinator Applicant Name & ID'),
+            Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
+            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),  
         ];
     }
 

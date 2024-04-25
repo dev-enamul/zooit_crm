@@ -342,7 +342,7 @@ class CustomerController extends Controller
             'union'                     => 'nullable|numeric|exists:unions,id',
             'village'                   => 'nullable|numeric|exists:villages,id',
             'address'                   => 'nullable|string', 
-            'father_name'               => 'required|string',
+            'father_name'               => 'nullable|string',
             'father_phone'              => 'nullable|string|max:15',
             'mother_name'               => 'nullable|string',
             'mother_phone'              => 'nullable|string|max:15',
@@ -494,8 +494,7 @@ class CustomerController extends Controller
 
             $customer_data = [  
                 'profession_id'     => $request->profession, 
-                'name'              => $request->full_name,  
-                'status'            => 0, 
+                'name'              => $request->full_name,
                 'ref_id'            => $request->reporting_user,
             ];  
             $customer->update($customer_data);    
