@@ -114,6 +114,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Employee 
         Route::resource('employee', EmployeeController::class);
         Route::get('select2-employee', [EmployeeController::class, 'select2_employee'])->name('select2.employee');
+        Route::get('select2-employee-freelancer', [EmployeeController::class, 'select2_employee_freelancer'])->name('select2.employee.freelancer');
         Route::get('select2-employee-encode', [EmployeeController::class, 'select2_employee_encode'])->name('select2-employee-encode');
         Route::get('all-employee', [CommonController::class, 'all_employee'])->name('all.employee');
         Route::get('import', [EmployeeImportController::class, 'index'])->name('import');

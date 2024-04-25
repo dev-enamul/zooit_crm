@@ -37,18 +37,18 @@
                             <button class="btn btn-secondary buttons-pdf buttons-html5" id="print" type="button"><span><i class="fa fa-print"></i> Print</span></button> 
                         </div>
 
-                        {{-- <div class="">   
+                        <div class="">   
                             <form action="" method="get" action="">
                                 <div class="input-group">  
                                     <select class="select2" search name="employee" id="employee" required>
-                                        <option value="{{auth()->user()->id}}" selected="selected">{{Auth::user()->name}}</option>
+                                        <option value="{{encrypt(auth()->user()->id)}}" selected="selected">{{Auth::user()->name}}</option>
                                     </select>
                                     <button class="btn btn-secondary" type="submit">
                                         <span><i class="fas fa-filter"></i> Filter</span>
                                     </button> 
                                 </div>
                             </form> 
-                        </div> --}}
+                        </div>
 
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                 placeholder: "Select Employee",
                 allowClear: true,
                 ajax: {
-                    url: '{{ route('select2.employee') }}',
+                    url: '{{ route('select2-employee-encode') }}',
                     dataType: 'json',
                     data: function (params) {
                         var query = {

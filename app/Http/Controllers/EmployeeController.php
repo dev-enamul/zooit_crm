@@ -578,6 +578,7 @@ class EmployeeController extends Controller
             })
             ->whereIn('id', $my_all_employee)
             ->where('status', 1)
+            ->where('user_type',1)
             ->limit(10)
             ->get();
     
@@ -597,6 +598,43 @@ class EmployeeController extends Controller
             'results' => $results
         ]);
     } 
+
+    public function select2_employee_freelancer(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $user_id   = Auth::user()->id;
+        $my_all_employee = my_all_employee($user_id); 
+
+        $users = User::query()
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('user_id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%");
+            })
+            ->whereIn('id', $my_all_employee)
+            ->where('status', 1) 
+            ->limit(10)
+            ->get();
+    
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ];
+    
+        foreach ($users as $user) {
+            $results[] = [
+                'id' => $user->id,
+                'text' => "{$user->name} ($user->user_id)",
+                'selected' => $user->id == $user_id,
+            ];
+            
+        }
+        return response()->json([
+            'results' => $results
+        ]);
+    } 
+
 
     public function select2_employee_encode(Request $request){
         $request->validate([

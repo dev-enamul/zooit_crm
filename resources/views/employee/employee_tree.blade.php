@@ -99,7 +99,7 @@
                 placeholder: "Select Employee",
                 allowClear: true,
                 ajax: {
-                    url: '{{ route('select2.employee') }}',
+                    url: '{{ route('select2.employee.freelancer') }}',
                     dataType: 'json',
                     data: function (params) {
                         var query = {
