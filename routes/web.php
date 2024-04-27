@@ -429,7 +429,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
 
-        $users = User::whereIn('user_type',[1])->get();
+        $users = User::whereIn('user_type',[1])->skip(27)->get();
         foreach($users as $user){
                 $my_all_employee = my_all_employee($user->id);
                 $user_reporting = user_reporting($user->id); 
