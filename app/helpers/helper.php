@@ -205,16 +205,19 @@ if (!function_exists('my_all_employee')) {
                 ->select(['id', 'user_id'])
                 ->first();
         }
-
-        $userIds = [$user->user_id]; 
-        $downlines = $user->downlines;
-        if ($downlines) {
-            foreach ($downlines as $downline) {
-                $userIds = array_merge($userIds, my_all_employee($downline));
+ 
+        if(isset($user->user_id) && $user->user_id != null){
+            $userIds = [$user->user_id]; 
+            $downlines = $user->downlines;
+            if ($downlines) {
+                foreach ($downlines as $downline) {
+                    $userIds = array_merge($userIds, my_all_employee($downline));
+                }
             }
         }
+        
 
-        return $userIds;
+        return $userIds??[];
     }
 }
 
