@@ -431,7 +431,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
         UserCreatedEvent::dispatch(1);
-        dd("done")
+        dd("done");
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
