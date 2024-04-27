@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreatedEvent;
 use App\Models\Area;
 use App\Models\Designation;
 use App\Models\DesignationPermission;
@@ -49,16 +50,16 @@ class EmployeeEditController extends Controller
         
         DB::beginTransaction();
         try{
-            $user_reporting = ReportingUser::where('user_id', $id)->where('status',1)->latest()->first();
-            if(isset($user_reporting) && $user_reporting != null && $request->reporting_id == $user_reporting->id){
+            $ex_reporting_user = ReportingUser::where('user_id', $id)->where('status',1)->latest()->first();
+            if(isset($ex_reporting_user) && $ex_reporting_user != null && $request->reporting_id == $ex_reporting_user->id){
                 return redirect()->back()->with('error', 'You can not select own reporting user');
             } 
 
-            if($user_reporting != null){
-                $user_reporting->status = 0;
-                $user_reporting->deleted_by = auth()->user()->id; 
-                $user_reporting->deleted_at = Carbon::now();
-                $user_reporting->save();
+            if($ex_reporting_user != null){
+                $ex_reporting_user->status = 0;
+                $ex_reporting_user->deleted_by = auth()->user()->id; 
+                $ex_reporting_user->deleted_at = Carbon::now();
+                $ex_reporting_user->save();
             }
             
             $reporting_user = new ReportingUser();
@@ -70,25 +71,25 @@ class EmployeeEditController extends Controller
                 $reporting_user->change_reason_document = $image; 
             }  
             $reporting_user->save(); 
-
-            
-            if(isset($user_reporting) && $user_reporting!=null){
-                $my_employee = ReportingUser::where('reporting_user_id',$user_reporting->id)->where('status',1)->get();
+ 
+            if(isset($ex_reporting_user) && $ex_reporting_user!=null){
+                $my_employee = ReportingUser::where('reporting_user_id',$ex_reporting_user->id)->where('status',1)->get();
                 foreach($my_employee as $employee){
                     $employee->reporting_user_id = $reporting_user->id;
                     $employee->save();
                 } 
-            }
+            } 
+ 
             DB::commit();
 
-            // set reporting_user in user table
-            $user_reporting = user_reporting($id);
-            foreach($user_reporting as $key => $value){
-                $user = User::find($value);
-                $user->user_reporting = json_encode($user_reporting);
-                $user->save();
-            }
-
+            if($ex_reporting_user != null && $ex_reporting_user->reporting_user_id != null){
+                $ex_senior_id = ReportingUser::find($ex_reporting_user->reporting_user_id);
+                if($ex_senior_id != null && $ex_senior_id->user_id != null){ 
+                    UserCreatedEvent::dispatch((int)$ex_senior_id->user_id);
+                } 
+            } 
+            UserCreatedEvent::dispatch((int)$id);
+          
             
             if($reporting_user->user->user_type == 1){
                 return redirect()->route('employee.index')->with('success', 'Reporting updated successfully'); 
@@ -96,6 +97,7 @@ class EmployeeEditController extends Controller
                 return redirect()->route('freelancer.index')->with('success', 'Reporting updated successfully');
             } 
         }catch(Exception $e){
+            dd($e);
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }

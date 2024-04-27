@@ -8,6 +8,7 @@ use App\Enums\Gender;
 use App\Enums\MaritualStatus;
 use App\Enums\Nationality;
 use App\Enums\Religion;
+use App\Events\UserCreatedEvent;
 use App\Models\Area;
 use App\Models\Bank; 
 use App\Models\Designation;
@@ -272,8 +273,11 @@ class EmployeeController extends Controller
                     'status'                => 1,
                     'created_at'            => now(),
                 ]);
-            } 
-            DB::commit(); 
+            }   
+            DB::commit();  
+ 
+           UserCreatedEvent::dispatch($user->id);
+
             return redirect()->route('employee.index')->with('success', 'Employee created successfully');
         } catch (Exception $e) {   
             DB::rollback();

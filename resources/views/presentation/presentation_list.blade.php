@@ -125,34 +125,62 @@
         </button>
     </div>
     <div class="offcanvas-body">
-        <div class="row"> 
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="employee" class="form-label">Employee</label>
-                    <select class="select2" search id="employee" name="employee">
-                      
-                    </select> 
+        <form action="" method="get">
+            <div class="row"> 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="select2" id="status" name="status"> 
+                            <option value = "1" >Previous</option>
+                            <option value = "0" >Present</option>
+                        </select> 
+                    </div>
+                </div> 
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="date_range" class="form-label">Date</label>
+                        <input class="form-control" start="" end="" id="date_range" name="date" default="This Month" type="text" value="" />   
+                    </div>
                 </div>
-            </div> 
-            {{-- <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="customer_name" class="form-label">Customer name <span class="text-danger">*</span></label>
-                    <input type="text" name="customer_name" class="form-control" id="customer_name" placeholder="Customer name" >
-                </div>
-            </div>   --}}
-            <div class="col-md-12">
-                <div class="mb-3">
-                
-                </div>
-            </div>  
-            <div class="text-center">
-                <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
-            </div> 
-        </div>
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Employee</label>
+                        <select class="select2" search id="employee" name="employee"> 
+                            <option value = "" selected="selected"></option>
+                        </select> 
+                    </div>
+                </div>   
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+                </div> 
+            </div>
+        </form>
     </div>
-</div>
+</div> 
 @endsection 
 
 @section('script')
-    @include('includes.data_table')
+    @include('includes.data_table') 
+    <script>
+        getDateRange('date_range'); 
+        $(document).ready(function() { 
+               $('#employee').select2({
+                   placeholder: "Select Employee",
+                   allowClear: true,
+                   ajax: {
+                       url: '{{ route('select2.employee') }}',
+                       dataType: 'json',
+                       data: function (params) {
+                           var query = {
+                               term: params.term
+                           }
+                           return query;
+                       }
+                   }
+               });
+           }); 
+    </script>
+
 @endsection

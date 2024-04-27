@@ -69,20 +69,17 @@ class CustomerController extends Controller
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
         $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
-        $employee = $request->employee??null;
-        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
-
+        if(isset($request->employee) && $request->employee != null){
+            $employee = User::find($request->employee);
+        }else{
+            $employee = User::find(auth()->user()->id);
+        } 
         return $dataTable->render('customer.customer_list', compact('title','employee','status','start_date','end_date'));
     }
 
     public function create(){
-        $title     = "Customer Create";
-        $countries = $this->getCachedCountries();
-        $divisions = $this->getCachedDivisions();
-        $districts = $this->getCachedDistricts();
-        $upazilas  = $this->getCachedUpazilas();
-        $unions    = $this->getCachedUnions();
-        $villages  = $this->getCachedVillages();
+        $title     = "Customer Create"; 
+        $divisions = $this->getCachedDivisions(); 
         $nationalites = $this->nationality(); 
         $maritalStatuses = $this->maritalStatus();
         $religions = $this->religion();
@@ -93,16 +90,11 @@ class CustomerController extends Controller
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = my_all_employee(auth()->user()->id);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->whereNotNull('approve_by')->select('id','name','user_id')->get();
         return view('customer.customer_create', compact(
-            'title',
-            'countries',
-            'divisions',
-            'districts',
-            'upazilas',
-            'unions',
-            'villages', 
+            'title', 
+            'divisions', 
             'maritalStatuses',
             'religions',
             'bloodGroups',
@@ -694,14 +686,13 @@ class CustomerController extends Controller
         return view('customer.customer_print', compact('title','countries','divisions','districts','upazilas','unions','villages','professions','maritalStatuses','religions','bloodGroups','genders','banks','mobileBanks','zones','areas','customer','selected'));
     }  
 
-
     public function customer_approve(){
         $my_customer = my_employee(auth()->user()->id);
         $customers = Customer::where('approve_by',null)->whereIn('ref_id',$my_customer)->get();
         return view('customer.customer_approve',compact('customers'));
     }
 
-    public function customer_approve_save(Request $request) { 
+    public function customer_approve_save(Request $request) {
         if($request->has('customer_id') && $request->customer_id !== '' & $request->customer_id !== null) {
             DB::beginTransaction();
             try {
@@ -720,9 +711,7 @@ class CustomerController extends Controller
         } else {
             return redirect()->route('prospecting.approve')->with('error', 'Something went wrong!');
         }
-
-    }
-
+    } 
     public function customerDetails($id){
         $id = decrypt($id);
         $customer = Customer::find($id);

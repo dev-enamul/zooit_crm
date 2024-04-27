@@ -13,6 +13,7 @@ class SearchController extends Controller
         if($key == null){
             return redirect()->back()->with('error','Please enter a valid keyword');
         }
+        
         $key = strtolower($key); 
         if(strpos($key,'cus-')!==false){ 
             $customer = Customer::where('customer_id',$key)->first();

@@ -53,7 +53,7 @@ class DepositTargetController extends Controller
                     ->whereYear('month',$year)
                     ->where('is_project_wise',1)
                     ->with('assignTo')
-                    ->first(); 
+                    ->get(); 
         $employees = User::whereIn('id',$my_employee)->where('status',1)->get(); 
         $projects = Project::where('status', 1)->get();
         return view('target.deposit_target_asign_list',compact('selected','projects','employees','deposit_targets'));

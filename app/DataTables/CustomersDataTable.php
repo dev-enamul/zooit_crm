@@ -52,8 +52,8 @@ class CustomersDataTable extends DataTable
             ->addColumn('freelancer', function($data){
                 if($data->ref_id==null){
                     return '-';
-                } 
-                $reporting = user_reporting($data->ref_id);
+                }  
+                $reporting = json_decode($data->reference->user_employee);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[20]);
@@ -69,7 +69,7 @@ class CustomersDataTable extends DataTable
                 if($data->ref_id==null){
                     return '-';
                 } 
-                $reporting = user_reporting($data->ref_id);
+                $reporting = json_decode($data->reference->user_employee);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[19]);
@@ -84,7 +84,7 @@ class CustomersDataTable extends DataTable
                 if($data->ref_id==null){
                     return '-';
                 } 
-                $reporting = user_reporting($data->ref_id);
+                $reporting = json_decode($data->reference->user_employee);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[18]);
@@ -99,7 +99,7 @@ class CustomersDataTable extends DataTable
                 if($data->ref_id==null){
                     return '-';
                 } 
-                $reporting = user_reporting($data->ref_id);
+                $reporting = json_decode($data->reference->user_employee);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[17]);
@@ -133,10 +133,12 @@ class CustomersDataTable extends DataTable
         } 
 
         if(isset($request->employee)){
-            $my_employee = my_all_employee((int)$request->employee);
+            $user_id = (int)$request->employee; 
         }else{
-            $my_employee = my_all_employee(auth()->user()->id);
+            $user_id = auth()->user()->id;
         } 
+        $user = User::find($user_id);
+        $my_employee = json_decode($user->user_employee);
          
         if(isset($request->status)){
             $status = $request->status;
@@ -146,8 +148,8 @@ class CustomersDataTable extends DataTable
 
         return $model->newQuery()
         ->whereIn('ref_id',$my_employee)
-        ->where('status',$status)
-        ->with(['user','profession','user.userAddress.village','user.userAddress.union','user.userAddress.upazila']);
+        ->where('status',$status) 
+        ->with(['reference','user','profession','user.userAddress.village','user.userAddress.union','user.userAddress.upazila']);
     }
 
     /**
@@ -167,7 +169,7 @@ class CustomersDataTable extends DataTable
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'), 
-                        // Button::make('pdf'), 
+                        Button::make('pdf')->title('Customer List'), 
                     ]);
     }
 

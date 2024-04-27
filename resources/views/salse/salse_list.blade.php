@@ -133,117 +133,67 @@
 
 <div class="offcanvas offcanvas-end" id="offcanvas">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Filter Leads</h5>
+        <h5 class="offcanvas-title">Select Filter Item</h5>
         <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
             <i class="fa fa-times"></i>
         </button>
     </div>
     <div class="offcanvas-body">
-        <div class="row"> 
- 
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="freelancer" class="form-label">Freelancer</label>
-                    <select id="freelancer" class="select2" name="freelancer" search>
-                        <option value="">All Freelancer</option> 
-                        <option value="">Md Enamul Haque </option> 
-                        <option value="">Jamil Hosain #FL1545 01796351081</option> 
-                        <option value="">Md Mehedi Hasan #FL1545 01796351081</option> 
-                        <option value="">Suvo Hasan #FL1545 01796351081</option>  
-                    </select> 
-                </div>
-            </div>  
+        <form action="" method="get">
+            <div class="row"> 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="select2" id="status" name="status"> 
+                            <option value = "1" >Previous</option>
+                            <option value = "0" >Present</option>
+                        </select> 
+                    </div>
+                </div> 
 
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="project" class="form-label">Project</label>
-                    <select class="select2" name="project" id="project">
-                        <option value="">All Project</option>
-                        <option value="">Cidy Plaza</option>
-                        <option value="">Metro Housing</option> 
-                        <option value="">Rana House</option> 
-                    </select>  
-                </div>
-            </div> 
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="upazila" class="form-label">Thana/Upazila </label>
-                    <select class="select2" name="upazila" id="upazila" required>
-                        <option value="">All Thana/Upazila</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select> 
-                    <div class="invalid-feedback">
-                        This field is required.
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="date_range" class="form-label">Date</label>
+                        <input class="form-control" start="" end="" id="date_range" name="date" default="This Month" type="text" value="" />   
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="union" class="form-label">Union </label>
-                    <select class="select2" name="union" id="union" required>
-                        <option value="">All Union</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select> 
-                    <div class="invalid-feedback">
-                        This field is required.
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Employee</label>
+                        <select class="select2" search id="employee" name="employee"> 
+                            <option value = "" selected="selected"></option>
+                        </select> 
                     </div>
-                </div>
+                </div>   
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+                </div> 
             </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="village" class="form-label">Village</label>
-                    <select class="select2" name="village" id="village">
-                        <option value="">All Village</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="maritial_status" class="form-label">Marital status</label>
-                    <select class="select2" name="maritial_status" id="maritial_status">
-                        <option value="">All Marital</option>
-                        <option value="">Married</option>
-                        <option value="">Unmarried</option> 
-                        <option value="">Devorce</option> 
-                    </select>  
-                </div>
-            </div>  
- 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
-        </div>
+        </form>
     </div>
-</div>
+</div> 
 @endsection 
 
 @section('script')
-    @include('includes.data_table')
+    @include('includes.data_table') 
+    <script>
+        getDateRange('date_range'); 
+        $(document).ready(function() {
+               $('#employee').select2({
+                   placeholder: "Select Employee",
+                   allowClear: true,
+                   ajax: {
+                       url: '{{ route('select2.employee') }}',
+                       dataType: 'json',
+                       data: function (params) {
+                           var query = {
+                               term: params.term
+                           }
+                           return query;
+                       }
+                   }
+               });
+           }); 
+    </script>
 @endsection

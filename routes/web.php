@@ -66,6 +66,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Events\Message;
+use App\Events\UserCreatedEvent;
 use App\Http\Controllers\CommonController; 
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController; 
@@ -427,20 +428,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () { 
-                $user = User::find(auth()->user()->id);
-                $prospectings = Prospecting::where('created_by',$user->id)->where('approve_by',null)->get();
-                foreach($prospectings as $data){
-                        $data->employee_id = $user->id;
-                        $data->save();
-                };
-                
-                dd($prospectings);
-                 $reporting = user_reporting(1);
-                 dd($reporting);
-                
-                $data = User::where('phone','01713552903')->first(); 
-                $employees = User::where('serial','>',$data->serial)->where('user_type',1)->get(); 
-                dd($employees);
+          dd(Auth::user()->user_employee);
         // foreach($employees as $employee){
         //         if($employee->id != 1 || $employee->id != 3){  
         //                 $permissions = UserPermission::where('user_id',3)->get();

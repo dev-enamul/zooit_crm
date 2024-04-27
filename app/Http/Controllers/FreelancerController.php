@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Enums\MaritualStatus;
 use App\Enums\Nationality;
 use App\Enums\Religion;
+use App\Events\UserCreatedEvent;
 use App\Models\ApproveSetting;
 use App\Models\Area;
 use App\Models\Bank;
@@ -299,14 +300,16 @@ class FreelancerController extends Controller
                     'user_id'       => $user->id,
                     'permission_id' => $permission,
                 ]);
+            }  
+
+            if(isset($request->reporting_user) && $request->reporting_user != null){
+                ReportingUser::create([
+                    'user_id'               => $user->id,
+                    'reporting_user_id'   =>   $request->reporting_user,
+                    'status'                => 1,
+                    'created_at'            => now(),
+                ]);
             } 
-            
-            ReportingUser::create([
-                'user_id'               => $user->id,
-                'reporting_user_id'   =>   $request->reporting_user??1,
-                'status'                => 1,
-                'created_at'            => now(),
-            ]);
 
             // for freelancer approve 
             $approve_setting = ApproveSetting::where('name','freelancer')->first();
@@ -314,9 +317,11 @@ class FreelancerController extends Controller
             if($approve_setting?->status == 0 || $is_admin){ 
                 $controller = new ApproveFreelancerController();
                 $controller->complete_training(encrypt($user->id)); 
-            }
+            } 
+            DB::commit();  
+            
+            UserCreatedEvent::dispatch($user->id);
 
-            DB::commit(); 
             return redirect()->route('freelancer.index')->with('success', 'Employee created successfully');
         } catch (Exception $e) {   
             DB::rollback();

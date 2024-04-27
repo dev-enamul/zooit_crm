@@ -121,6 +121,7 @@ class ColdCallingDataTable extends DataTable
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'), 
+                        Button::make('pdf')->title('Cold Calling List'), 
                     ]);
     }
 

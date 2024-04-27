@@ -38,6 +38,8 @@ class User extends Authenticatable
         'created_by',
         'updated_by',
         'deleted_by',
+        'user_reporting',
+        'user_employee',
     ]; 
  
     protected $hidden = [
@@ -164,13 +166,13 @@ class User extends Authenticatable
     }
 
     public static function generateNextCustomerId(){ 
-        $customer = Customer::latest('id')->first()?->customer_id;
+        $customer = Customer::where('customer_id','like','PID-%')->latest('user_id')->first()?->customer_id;
         if($customer == null){
-            $customer = 'CUS-000';
+            $customer = 'PID-001';
         }
         $numericPart = substr($customer, 4);
         $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "CUS-" . $newNumericPart; 
+        $newValue = "PID-" . $newNumericPart; 
         return $newValue;
     }
 

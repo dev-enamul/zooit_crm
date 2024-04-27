@@ -16,12 +16,7 @@ use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
  
 use CarlosMeneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
- 
- 
- 
- 
- 
-
+use Illuminate\Support\Facades\Auth;
 
 class EmployeesDataTable extends DataTable
 { 
@@ -84,7 +79,7 @@ class EmployeesDataTable extends DataTable
     
     public function query(User $model): QueryBuilder
         {
-            $my_freelancer = my_all_employee(auth()->user()->id);
+            $my_freelancer = json_decode(Auth::user()->user_employee);
             $model = $model->whereIn('id',$my_freelancer);
 
             return $model->newQuery()
@@ -107,7 +102,7 @@ class EmployeesDataTable extends DataTable
                         ->selectStyleSingle()
                         ->buttons([
                             Button::make('excel')->title('Employee List'), 
-                            // Button::make('pdf')->title('Employee List'), 
+                            Button::make('pdf')->title('Employee List'), 
                         ]);
         }
  

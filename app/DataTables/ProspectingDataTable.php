@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Prospecting;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,9 +68,9 @@ class ProspectingDataTable extends DataTable
     public function query(Prospecting $model, Request $request): QueryBuilder
     {  
         if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
+            $user = User::find($request->employee);
         }else{
-            $user_id = Auth::user()->id;
+            $user = Auth::user();
         } 
         if(isset($request->date)){
             $date = explode(' - ',$request->date);
@@ -79,7 +80,7 @@ class ProspectingDataTable extends DataTable
             $start_date = date('Y-m-01');
             $end_date = date('Y-m-t');
         } 
-        $user_employee = my_all_employee($user_id);
+        $user_employee = json_decode($user->user_employee);
 
         if(isset($request->status) && !empty($request->status)){
             $status = $request->status; 
@@ -120,6 +121,7 @@ class ProspectingDataTable extends DataTable
                 ->selectStyleSingle()
                 ->buttons([
                     Button::make('excel'), 
+                    Button::make('pdf')->title('Prospecting List'), 
                 ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,8 +26,12 @@ class LeadDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action',function($prospecting){ 
-                return view('prospecting.prospecting_action',compact('prospecting'))->render();
+            ->addColumn('action',function($lead){ 
+                return view('lead.lead_action',compact('lead'))->render();
+            })
+
+            ->addColumn('date', function($data){
+                return get_date($data->created_at);
             })
             
             ->addColumn('profession', function($data){
@@ -41,9 +46,7 @@ class LeadDataTable extends DataTable
             ->addColumn('vilage', function($data){
                 return $data->customer->user->userAddress->village->name??"-";
             })
-            ->addColumn('last_prospecting', function($data){ 
-                return get_date($data->prospecting()->created_at);
-            })
+           
             ->addColumn('project', function($data){
                 return $data->project->name??'-';
             })
@@ -75,6 +78,7 @@ class LeadDataTable extends DataTable
         }else{
             $user_id = Auth::user()->id;
         } 
+
         if(isset($request->date)){
             $date = explode(' - ',$request->date);
             $start_date = date('Y-m-d',strtotime($date[0]));
@@ -83,7 +87,8 @@ class LeadDataTable extends DataTable
             $start_date = date('Y-m-01');
             $end_date = date('Y-m-t');
         } 
-        $user_employee = my_all_employee($user_id);
+        $user = User::find($user_id);
+        $user_employee = json_decode($user->user_employee);
 
         if(isset($request->status) && !empty($request->status)){
             $status = $request->status; 
@@ -101,7 +106,9 @@ class LeadDataTable extends DataTable
         })
         ->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59'])
         ->where('status', $status)
-        ->with('customer')
+        ->with('customer.reference')
+        ->with('customer.user.userAddress')
+        ->with('customer.profession')
         ->newQuery(); 
         return $datas;
     }
@@ -123,6 +130,7 @@ class LeadDataTable extends DataTable
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'), 
+                        Button::make('pdf')->title('Lead List'),
                     ]);
     } 
     public function getColumns(): array
@@ -133,7 +141,17 @@ class LeadDataTable extends DataTable
                   ->printable(false)
                   ->width(60)
                   ->addClass('text-center'),
-            Column::make('id'),
+            Column::make('serial')->title('S/L'),
+            Column::make('date')->title('Date'), 
+            Column::make('customer.name')->title('Customer Name'),
+            Column::make('profession')->title('Profession'), 
+            Column::make('thana')->title('Thana'),
+            Column::make('union')->title('Union'),
+            Column::make('vilage')->title('Vilage'), 
+            Column::make('project')->title('Project'),
+            Column::make('unit')->title('Unit'),
+            Column::make('phone')->title('Phone'),
+            Column::make('fl_id')->title('Freelancer Name & ID'),
            
         ];
     }

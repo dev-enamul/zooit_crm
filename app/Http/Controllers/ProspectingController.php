@@ -48,7 +48,7 @@ class ProspectingController extends Controller
     {
         $title = 'Prospecting Entry';
         $user_id   = Auth::user()->id; 
-        $my_all_employee = my_all_employee($user_id); 
+        $my_all_employee = json_decode(Auth::user()->user_employee); 
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
         $priorities = $this->priority();
