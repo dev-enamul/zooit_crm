@@ -103,8 +103,8 @@ class DashboardController extends Controller
         $today_target['negotiation_analysis'] = round($field_target?->negotiation_analysis/$total_day??0,1);
         $today_target['deposit'] = round($deposit_target/$total_day??0,1);
  
-        // achivement   
-        $my_all_employee = json_decode(Auth::user()->user_employee)??[]; 
+        // achivement
+        $my_all_employee = json_decode(Auth::user()->user_employee); 
          
         $date = Carbon::now();
         $monthly_achive['freelancer'] = $user->freelanecr_achive($date,$my_all_employee);
