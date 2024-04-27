@@ -431,8 +431,8 @@ Route::get('function_test', function () {
 
         $users = User::whereIn('user_type',[1])->latest()->get();
         foreach($users as $user){
-                $my_all_employee = my_all_employee($user->id);
-                $user_reporting = user_reporting($user->id); 
+                $my_all_employee = my_all_employee((int)$user->id);
+                $user_reporting = user_reporting((int)$user->id); 
                 User::where('id', $user->id)
                     ->update(['user_reporting' => $user_reporting, 'user_employee' => $my_all_employee]);
         }
