@@ -168,7 +168,7 @@ class User extends Authenticatable
     public static function generateNextCustomerId(){ 
         $customer = Customer::where('customer_id','like','PID-%')->latest('user_id')->first()?->customer_id;
         if($customer == null){
-            $customer = 'PID-001';
+            $customer = 'PID-000';
         }
         $numericPart = substr($customer, 4);
         $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);

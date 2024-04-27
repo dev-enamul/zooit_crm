@@ -431,23 +431,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
  
-        $firstDayOfLastMonth = Carbon::now()->startOfMonth(); 
-      
-        $customers = Customer::where('created_at', '<', $firstDayOfLastMonth)->get(); 
-        $users = User::where('created_at', '<', $firstDayOfLastMonth)->where('user_type',3)->get();  
-         
+       
+        $customers = Customer::get(); 
+ 
         foreach ($customers as $customer) {
-                $customer->deleted_by = 1;
-                $customer->save();
-        $customer->delete(); 
+                $customer->customer_id = User::generateNextCustomerId();
+                $customer->save(); 
         } 
-        foreach ($users as $user) { 
-                $user->deleted_by = 1;
-                $user->save();
-                    $user->delete();
-                } 
-
-                dd($customers, $users);
+       
+                dd($customers);
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
         //         $my_all_employee = my_all_employee((int)$user->id);
