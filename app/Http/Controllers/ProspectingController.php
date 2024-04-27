@@ -124,8 +124,7 @@ class ProspectingController extends Controller
         $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
-        $priorities = $this->priority();
-
+        $priorities = $this->priority(); 
         return view('prospecting.prospecting_save', compact('prospecting','customers','employees','prospectingMedias','priorities','title'));
     }
 
