@@ -73,9 +73,11 @@ use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
+use App\Models\Customer;
 use App\Models\Prospecting;
 use App\Models\ReportingUser;
-use App\Models\User; 
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 /*
@@ -428,16 +430,33 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
+ 
+        $firstDayOfLastMonth = Carbon::now()->startOfMonth(); 
+      
+        $customers = Customer::where('created_at', '<', $firstDayOfLastMonth)->get(); 
+        $users = User::where('created_at', '<', $firstDayOfLastMonth)->where('user_type',3)->get();  
+         
+        foreach ($customers as $customer) {
+                $customer->deleted_by = 1;
+                $customer->save();
+        $customer->delete(); 
+        } 
+        foreach ($users as $user) { 
+                $user->deleted_by = 1;
+                $user->save();
+                    $user->delete();
+                } 
 
-        $users = User::whereIn('user_type',[1])->latest()->get();
-        foreach($users as $user){
-                $my_all_employee = my_all_employee((int)$user->id);
-                $user_reporting = user_reporting((int)$user->id); 
-                User::where('id', $user->id)
-                    ->update(['user_reporting' => $user_reporting, 'user_employee' => $my_all_employee]);
-        }
+                dd($customers, $users);
+        // $users = User::whereIn('user_type',[1])->latest()->get();
+        // foreach($users as $user){
+        //         $my_all_employee = my_all_employee((int)$user->id);
+        //         $user_reporting = user_reporting((int)$user->id); 
+        //         User::where('id', $user->id)
+        //             ->update(['user_reporting' => $user_reporting, 'user_employee' => $my_all_employee]);
+        // }
         
-        dd("chane reporting success"); 
+       
 
         // foreach($employees as $employee){
         //         if($employee->id != 1 || $employee->id != 3){  
