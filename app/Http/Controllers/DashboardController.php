@@ -109,7 +109,7 @@ class DashboardController extends Controller
         
         $date = Carbon::now();
         $monthly_achive['freelancer'] = $user->freelanecr_achive($date,$my_all_employee);
-        dd($my_all_employee);
+        
         $monthly_achive['customer'] = $user->customer_achive($date,$my_all_employee);
             
         $monthly_achive['prospecting'] = $user->prospecting_achive($date,$my_all_employee);
@@ -174,6 +174,7 @@ class DashboardController extends Controller
             ->where('approve_by','!=',null)
             ->whereDate('created_at',today()) 
             ->count();
+            dd($my_all_employee);
         
     date_default_timezone_set('Asia/Dhaka');
     $hour = date('G'); 
