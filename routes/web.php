@@ -435,7 +435,7 @@ Route::get('function_test', function () {
         $customers = Customer::get(); 
  
         foreach ($customers as $key => $customer) {
-                $customer->customer_id = "PID-".$key+1;
+                $customer->customer_id = "PID-00".$key+1;
                 $customer->save(); 
         } 
        
