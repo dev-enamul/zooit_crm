@@ -430,16 +430,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
- 
-       
-        $customers = Customer::get(); 
- 
-        foreach ($customers as $key => $customer) {
-                $customer->customer_id = "PID-00".$key+1;
-                $customer->save(); 
-        } 
-       
-                dd($customers);
+        UserCreatedEvent::dispatch(1);
+        dd("done")
+  
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
         //         $my_all_employee = my_all_employee((int)$user->id);
