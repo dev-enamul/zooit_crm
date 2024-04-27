@@ -106,10 +106,10 @@ class DashboardController extends Controller
         // achivement
         $my_all_employee = json_decode(Auth::user()->user_employee); 
          
-        dd($my_all_employee);
+        
         $date = Carbon::now();
         $monthly_achive['freelancer'] = $user->freelanecr_achive($date,$my_all_employee);
-
+        dd($my_all_employee);
         $monthly_achive['customer'] = $user->customer_achive($date,$my_all_employee);
             
         $monthly_achive['prospecting'] = $user->prospecting_achive($date,$my_all_employee);
