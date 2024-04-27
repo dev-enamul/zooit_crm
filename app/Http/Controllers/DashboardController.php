@@ -174,7 +174,7 @@ class DashboardController extends Controller
             ->where('approve_by','!=',null)
             ->whereDate('created_at',today()) 
             ->count();
-            dd($my_all_employee);
+           
         
     date_default_timezone_set('Asia/Dhaka');
     $hour = date('G'); 

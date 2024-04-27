@@ -428,9 +428,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        User::whereIn('user_type',[1,2])->update(['user_reporting'=> [], 'user_employee'=> []]);
-        dd("done"); 
+
+        $users = User::whereIn('user_type',[1,2])->get();
+        foreach($users as $user){
+                $my_all_employee = my_all_employee($user->id);
+                $user_reporting = user_reporting($user->id); 
+                User::where('id', $user->id)
+                    ->update(['user_reporting' => $user_reporting, 'user_employee' => $my_all_employee]);
+        }
         
+        dd("chane reporting success"); 
+
         // foreach($employees as $employee){
         //         if($employee->id != 1 || $employee->id != 3){  
         //                 $permissions = UserPermission::where('user_id',3)->get();
