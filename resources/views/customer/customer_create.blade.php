@@ -504,7 +504,8 @@
 </div>
 @endsection  
 
-@section('script2')
+@section('script2') 
+@can('data-input-for-others')
     <script>
         $(document).ready(function() { 
             $('#reporting_user').select2({
@@ -522,6 +523,7 @@
                 }
             });
         });
-    </script>
+    </script> 
+@endcan
 @endsection
  
