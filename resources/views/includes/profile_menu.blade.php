@@ -22,6 +22,7 @@
             {{-- <a href="{{route('freelancer.book')}}" class="list-group-item list-group-item-action {{Route::is('freelancer.book')?"active":""}}">Book</a> --}}
             <a href="{{route('profile.target.achive',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile.target.achive')?"active":""}}">Target Achive</a>
             <a href="{{route('profile.wallet',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile.wallet')?"active":""}}">Wallet</a> 
+            <a href="{{route('profile.document',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile.document')?"active":""}}">Document</a> 
         </div>
     </div>
 </div>

@@ -73,6 +73,7 @@ use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
+use App\Http\Controllers\UserDocumentController;
 use App\Models\Customer;
 use App\Models\Prospecting;
 use App\Models\ReportingUser;
@@ -115,6 +116,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('freelancer/join/process/{id}', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
         Route::get('profile-target-achive/{id}', [ProfileController::class, 'target_achive'])->name('profile.target.achive');
         Route::get('profile-wallet/{id}', [ProfileController::class, 'wallet'])->name('profile.wallet');
+        Route::get('profile-document/{id}', [UserDocumentController::class, 'index'])->name('profile.document');
+        Route::post('profile-document', [UserDocumentController::class, 'store'])->name('profile.document.store');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
