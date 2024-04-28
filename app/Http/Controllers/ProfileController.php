@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MaritualStatus;
 use App\Models\Deposit;
 use App\Models\DepositCommission;
 use App\Models\DepositTarget;
@@ -46,6 +47,7 @@ class ProfileController extends Controller
         }else{
             $top_reporting_user = $reporting_user = null;
         }
+        $user['marital_status'] = MaritualStatus::values()[$user->marital_status];
         
 
         return view('profile.profile',compact('user_id','user','reporting_user','top_reporting_user'));
@@ -73,19 +75,19 @@ class ProfileController extends Controller
                     ->whereMonth('month',$date)
                     ->whereYear('month',$date)
                     ->first();  
-                    
-        $achive['freelancer'] = $user->freelanecr_achive($date)??0;
-        $achive['customer'] = $user->customer_achive($date)??0;
-        $achive['prospecting'] = $user->prospecting_achive($date)??0;
-        $achive['cold_calling'] = $user->cold_calling_achive($date)??0;
-        $achive['lead'] = $user->lead_achive($date)??0;
-        $achive['lead_analysis'] = $user->lead_analysis_achive($date)??0;
-        $achive['presentation'] = $user->presentation_achive($date)??0;
-        $achive['visit_analysis'] = $user->visit_analysis_achive($date)??0;
-        $achive['followup'] = $user->followup_achive($date)??0;
-        $achive['followup_analysis'] = $user->followup_analysis_achive($date)??0;
-        $achive['negotiation'] = $user->negotiation_achive($date)??0;
-        $achive['negotiation_analysis'] = $user->negotiation_analysis_achive($date)??0;
+        $my_all_employee = json_decode($user->user_employee);
+        $achive['freelancer'] = $user->freelanecr_achive($date, $my_all_employee)??0;
+        $achive['customer'] = $user->customer_achive($date, $my_all_employee)??0;
+        $achive['prospecting'] = $user->prospecting_achive($date, $my_all_employee)??0;
+        $achive['cold_calling'] = $user->cold_calling_achive($date, $my_all_employee)??0;
+        $achive['lead'] = $user->lead_achive($date, $my_all_employee)??0;
+        $achive['lead_analysis'] = $user->lead_analysis_achive($date, $my_all_employee)??0;
+        $achive['presentation'] = $user->presentation_achive($date, $my_all_employee)??0;
+        $achive['visit_analysis'] = $user->visit_analysis_achive($date, $my_all_employee)??0;
+        $achive['followup'] = $user->followup_achive($date, $my_all_employee)??0;
+        $achive['followup_analysis'] = $user->followup_analysis_achive($date, $my_all_employee)??0;
+        $achive['negotiation'] = $user->negotiation_achive($date, $my_all_employee)??0;
+        $achive['negotiation_analysis'] = $user->negotiation_analysis_achive($date, $my_all_employee)??0;
 
         $per['freelancer'] = get_percent($achive['freelancer']??0,$target->freelancer??0);
         $per['customer'] = get_percent($achive['customer']??0,$target->customer??0);

@@ -118,9 +118,8 @@ class ProspectingController extends Controller
     public function edit(string $id)
     {
         $title = 'Prospecting Edit';
-        $prospecting = Prospecting::find($id);
-        $user_id   = Auth::user()->id; 
-        $my_all_employee = my_all_employee($user_id);
+        $prospecting = Prospecting::find($id);  
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
@@ -171,9 +170,8 @@ class ProspectingController extends Controller
         $request->validate([
             'term' => ['nullable', 'string'],
         ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id);  
+ 
+        $my_all_employee = json_decode(Auth::user()->user_employee);  
         $users = Customer::query()
             ->where(function ($query) use ($request) {
                 $term = $request->term;
