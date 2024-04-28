@@ -47,8 +47,8 @@ class FreelancersDataTable extends DataTable
                 return '-';
             } 
         })
-        ->addColumn('reporting', function($employee){
-            $reporting = user_reporting($employee->user_id);
+        ->addColumn('reporting', function($freelancer){
+            $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                     $q->whereIn('designation_id',[18]);
@@ -60,8 +60,8 @@ class FreelancersDataTable extends DataTable
             return "-";  
         }) 
         
-        ->addColumn('ex_co_ordinator', function($employee){ 
-            $reporting = user_reporting($employee->user_id);
+        ->addColumn('ex_co_ordinator', function($freelancer){ 
+            $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                     $q->whereIn('designation_id',[17]);
@@ -73,8 +73,8 @@ class FreelancersDataTable extends DataTable
             return "-";  
         }) 
 
-        ->addColumn('incharge', function($employee){  
-            $reporting = user_reporting($employee->user->id);
+        ->addColumn('incharge', function($freelancer){  
+            $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                     $q->whereIn('designation_id',[12, 13, 14, 15]);
@@ -85,8 +85,8 @@ class FreelancersDataTable extends DataTable
             } 
             return "-"; 
         })
-        ->addColumn('area_incharge', function($employee){ 
-            $reporting = user_reporting($employee->user_id);
+        ->addColumn('area_incharge', function($freelancer){ 
+            $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                     $q->whereIn('designation_id',[11]);
@@ -117,10 +117,15 @@ class FreelancersDataTable extends DataTable
         $user = User::find(auth()->user()->id);
         $is_admin = $user->hasPermission('admin');
         if(!$is_admin){
-            $user_id = $request->employee??auth()->user()->id;
-            $user_id = (int)$user_id;
-            $my_freelancer = my_all_employee($user_id);
-            $model = $model->whereIn('user_id',$my_freelancer);
+            if(isset($request->employee)){ 
+                $filter_user = User::find($request->employee);
+                $my_freelancer = json_decode($filter_user->user_employee);
+                $model = $model->whereIn('user_id',$my_freelancer);
+            }else{
+                $my_freelancer = json_decode($user->user_employee);
+                $model = $model->whereIn('user_id',$my_freelancer);
+            }
+            
         }  
          $model =  $model  
         ->where(function($q){
