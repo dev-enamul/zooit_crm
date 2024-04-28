@@ -430,9 +430,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        $user_reporting = ReportingUser::find(582);
-        $user_reporting->delete();
-        dd($user_reporting, @$user_reporting->user);
+         dd("nothing");
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
