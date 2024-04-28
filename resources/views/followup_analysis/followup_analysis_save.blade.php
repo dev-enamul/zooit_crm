@@ -225,26 +225,30 @@
 </div>
 @endsection 
 
-@section('script') 
-    <script>
-        $(document).ready(function() {
-            $('#employee').select2({
-                placeholder: "Select Employee",
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('select2.employee') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        var query = {
-                            term: params.term
+@section('script')
+
+    @can('data-input-for-others')
+        <script>
+            $(document).ready(function() { 
+                $('#employee').select2({
+                    placeholder: "Select Employee",
+                    allowClear: true,
+                    ajax: {
+                        url: '{{ route('select2.employee') }}',
+                        dataType: 'json',
+                        data: function (params) {
+                            var query = {
+                                term: params.term
+                            }
+                            return query;
                         }
-                        return query;
-                    } 
-                }
+                    }
+                });
             });
-        });
+        </script>
+    @endcan  
 
-
+    <script> 
         $(document).ready(function() { 
             $('#customer').select2({
                 placeholder: "Select Customer",

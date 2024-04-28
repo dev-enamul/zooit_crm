@@ -155,7 +155,7 @@
             });
         });
     </script>
-    @endcan 
+    @endcan
 
     <script> 
         $(document).ready(function() { 
