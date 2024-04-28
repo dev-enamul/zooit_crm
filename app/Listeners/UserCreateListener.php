@@ -23,6 +23,7 @@ class UserCreateListener
     {
         $my_all_employee = my_all_employee($event->user_id);
         $user_reporting = user_reporting($event->user_id);
+        
         $users = array_merge($my_all_employee, $user_reporting);
         foreach($users as $user){
             UserReportingUpdate::dispatch($user);
