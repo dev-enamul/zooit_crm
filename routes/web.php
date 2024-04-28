@@ -431,7 +431,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
         $user_reporting = ReportingUser::find(582)->get();
-        dd($user_reporting, $user_reporting->user);
+        dd($user_reporting, @$user_reporting->user);
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
