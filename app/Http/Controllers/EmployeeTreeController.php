@@ -21,6 +21,7 @@ class EmployeeTreeController extends Controller
         ->first(); 
         $employee =  User::find($user_id);
         $organogram = getOrganogram($topUser); 
+        // dd($organogram);
         return view('employee.employee_tree',compact('organogram','employee'));
     } 
 
