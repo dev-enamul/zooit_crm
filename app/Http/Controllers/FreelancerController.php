@@ -70,12 +70,13 @@ class FreelancerController extends Controller
     public function index(FreelancersDataTable $dataTable, Request $request){ 
         $title = 'Freelancer List'; 
         $date = $request->date??null; 
+        $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
         $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
 
-        return $dataTable->render('freelancer.freelancer_list',compact('title','employee','start_date','end_date'));
+        return $dataTable->render('freelancer.freelancer_list',compact('title','status','employee','start_date','end_date'));
     }
 
     public function create(){  

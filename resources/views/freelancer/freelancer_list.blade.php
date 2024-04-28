@@ -56,6 +56,15 @@
                 <div class="row">  
                     <div class="col-md-12">
                         <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="select2" id="status" name="status"> 
+                                <option value = "1" {{$status==1?"selected":""}}>Previous</option>
+                                <option value = "0" {{$status==0?"selected":""}}>Present</option>
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
                             <label for="date_range" class="form-label">Date</label>
                             <input class="form-control" start="{{$start_date}}" end="{{$end_date}}" id="date_range" name="date" default="This Month" type="text" value="" />   
                         </div>

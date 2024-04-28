@@ -33,7 +33,7 @@ trait UserAchiveTreat
             $q->whereIn('user_id',$my_all_employee);
         })
         ->where('user_type',2)
-        // ->where('approve_by','!=',null)
+         ->where('approve_by','!=',null)
         ->whereMonth('created_at',$date)
         ->whereYear('created_at',$date)
         ->count(); 
