@@ -21,19 +21,22 @@
                                 <div>
                                     <button data-bs-toggle="modal" data-bs-target="#change_password" class="btn btn-secondary cursor-pointer" title="Change Password"  data-bs-toggle="modal" data-bs-target="#change_password_modal">
                                         <i class="mdi mdi-key-change"></i> Change password 
-                                    </button> 
-                                    @if ($user->id == auth()->id()) 
+                                    </button>  
                                         @if ($user->user_type==1)
                                             <a href="{{route('employee.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
                                                 <i class="mdi mdi-account-edit"></i> Edit Profile
-                                            </a>
+                                            </a> 
+                                             
+                                            @can('bypass-login')
+                                                <a href="{{route('bypass',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
+                                                     Login
+                                                </a>
+                                            @endcan  
                                         @else 
                                             <a href="{{route('freelancer.create',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
                                                 <i class="mdi mdi-account-edit"></i> Edit Profile
                                             </a>
-                                        @endif
-                                    @endif
-                                     
+                                        @endif   
                                 </div>
                                
                             </div> 

