@@ -430,12 +430,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        $customers = Customer::all(); 
-        foreach($customers as $customer){
-                $customer->approve_by = Auth::user()->id;
-                $customer->save();
-        }
-         dd("approved");
+       
+         dd("nothing");
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
