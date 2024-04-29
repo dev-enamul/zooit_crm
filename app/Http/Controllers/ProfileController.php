@@ -129,8 +129,8 @@ class ProfileController extends Controller
         $total_commission = DepositCommission::where('user_id',$user_id)->sum('payble_commission');
         $return_commission = 0; 
 
-        $user_commission = UserCommission::where('user_id',$user_id)->first()??null;
+        // $user_commission = UserCommission::where('user_id',$user_id)->first()??null;
 
-        return view('profile.wallet',compact('commissions','total_commission','return_commission','user','date','user_commission'));
+        return view('profile.wallet',compact('commissions','total_commission','return_commission','user','date'));
     }
 }
