@@ -36,7 +36,8 @@ class UserCommissionController extends Controller
             }
             return redirect()->back()->with('success', 'User Commission Updated');
         }catch(\Exception $e){
-            return redirect()->back()->with('error', 'Something went wrong');
+            dd($e);
+            // return redirect()->back()->with('error', 'Something went wrong');
         }
         
         
