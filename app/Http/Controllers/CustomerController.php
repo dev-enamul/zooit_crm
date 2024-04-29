@@ -185,7 +185,8 @@ class CustomerController extends Controller
                     'created_at'    => now(),
                     'approve_by'    => $approve_by,
                     'created_by'    => auth()->user()->id,
-                ]);
+                ]); 
+                
                 return redirect()->route('customer.index')->with('success', 'Customer created successfully');
             } 
 

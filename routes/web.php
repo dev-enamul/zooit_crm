@@ -440,8 +440,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-       $user = User::where('phone','01818575699')->with('customer')->first();
-       dd($user);
+//        $user = User::where('phone','01818575699')->with('customer')->first();
+        $customer = Customer::latest()->with('user')->take(10)->get();
+       dd($customer);
          dd("nothing");
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
