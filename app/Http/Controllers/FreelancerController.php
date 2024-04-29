@@ -288,7 +288,7 @@ class FreelancerController extends Controller
                 'profession_id'     => $request->profession,
                 'designation_id'    => $request->designation, 
                 'ref_id'            => $request->reporting_user,
-                'last_approve_by'   => $request->reporting_user,
+                'last_approve_by'   => Auth::user()->id,
                 'status'            => 0,
                 'created_at'        => now(),
                 'created_by'        =>Auth::user()->id,
