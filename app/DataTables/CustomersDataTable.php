@@ -53,7 +53,7 @@ class CustomersDataTable extends DataTable
                 if($data->ref_id==null){
                     return '-';
                 }  
-                $reporting = json_decode($data->reference->user_employee);
+                $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[20]);
@@ -69,7 +69,7 @@ class CustomersDataTable extends DataTable
                 if($data->ref_id==null){
                     return '-';
                 } 
-                $reporting = json_decode($data->reference->user_employee);
+                $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[19]);
@@ -84,7 +84,7 @@ class CustomersDataTable extends DataTable
                 if($data->ref_id==null){
                     return '-';
                 } 
-                $reporting = json_decode($data->reference->user_employee);
+                $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[18]);
@@ -99,7 +99,7 @@ class CustomersDataTable extends DataTable
                 if($data->ref_id==null){
                     return '-';
                 } 
-                $reporting = json_decode($data->reference->user_employee);
+                $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[17]);

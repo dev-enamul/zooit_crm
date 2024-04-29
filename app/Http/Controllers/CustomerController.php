@@ -186,8 +186,8 @@ class CustomerController extends Controller
                     'approve_by'    => $approve_by,
                     'created_by'    => auth()->user()->id,
                 ]); 
-                
-                return redirect()->route('customer.index')->with('success', 'Customer created successfully');
+
+                return redirect()->route('customer.index')->with('success', 'Customer added successfully');
             } 
 
             $user = User::create([ 
@@ -289,8 +289,7 @@ class CustomerController extends Controller
                 'tin_number'                => $request->tin_number,
                 'created_at'                => now(),
             ];
-            UserId::create($user_documents);
-
+            UserId::create($user_documents); 
             $customer_data = [
                 'customer_id'      =>  User::generateNextCustomerId(),
                 'user_id'           => $user->id,
