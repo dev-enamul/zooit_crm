@@ -609,7 +609,7 @@ class EmployeeController extends Controller
         ]);
 
         $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id); 
+        $my_all_employee = json_decode(Auth::user()->user_employee); 
 
         $users = User::query()
             ->where(function ($query) use ($request) {
