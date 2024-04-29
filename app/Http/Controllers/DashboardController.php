@@ -229,7 +229,7 @@ class DashboardController extends Controller
         // exec('composer update');
         // Artisan::call('migrate:fresh');
         // Artisan::call('db:seed');  
-        // Artisan::call('migrate');
+        Artisan::call('migrate');
         // Artisan::call('storage:link');
         
         Artisan::call('cache:clear');
