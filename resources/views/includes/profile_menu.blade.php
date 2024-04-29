@@ -4,10 +4,11 @@
             <img class="w-100 mb-3" src="{{$user->image()}}" alt="">
             <h5 class="mb-0">{{$user->name}}</h5>
             @if ($user->user_type==1)
-                <p>{{@$user->employee->designation->title}}</p>
+                <p class="m-0">{{@$user->employee->designation->title}}</p>
             @else  
-                <p>{{@$user->freelancer->designation->title}}</p>
-            @endif 
+                <p class="m-0">{{@$user->freelancer->designation->title}}</p>
+            @endif  
+            <p>{{@$user->userAddress->area->name}}</p>
         </div>
     </div>
     <div class="card-body">

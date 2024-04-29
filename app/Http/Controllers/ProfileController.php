@@ -18,9 +18,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    public function hierarchy(){   
-      
-        $user_id = auth()->user()->id; 
+    public function hierarchy($id){  
+        $user_id = decrypt($id); 
         $user = User::find($user_id);
   
         $topUser = ReportingUser::where('user_id', $user_id)->where('status', 1)
