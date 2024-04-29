@@ -503,8 +503,7 @@
 
 </div>
 @endsection  
-
-@can('data-input-for-others')
+ 
     @section('script2')  
         <script>
             $(document).ready(function() { 
@@ -524,7 +523,5 @@
                 });
             });
         </script>  
-    @endsection
-
-@endcan
+    @endsection 
  

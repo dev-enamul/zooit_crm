@@ -688,7 +688,7 @@ class CustomerController extends Controller
 
     public function customer_approve(){
         $my_customer = my_employee(auth()->user()->id);
-        $customers = Customer::where('approve_by',null)->whereIn('ref_id',$my_customer)->get();
+        $customers = Customer::where('approve_by',null)->whereIn('created_by',$my_customer)->get();
         return view('customer.customer_approve',compact('customers'));
     }
 
