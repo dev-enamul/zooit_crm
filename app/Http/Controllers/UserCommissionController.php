@@ -24,20 +24,19 @@ class UserCommissionController extends Controller
             if($ex_commission){
                 $ex_commission->total_commission = $request->total_commission;
                 $ex_commission->paid_commission = $request->paid_commission;
-                // $ex_commission->pending_commission = $request->total_commission - $request->paid_commission;
+                $ex_commission->pending_commission = $request->total_commission - $request->paid_commission;
                 $ex_commission->save();
             }else{
                 UserCommission::create([
                     'user_id' => $request->user_id,
                     'total_commission' => $request->total_commission,
                     'paid_commission' => $request->paid_commission,
-                    // 'pending_commission' => $request->total_commission - $request->paid_commission
+                    'pending_commission' => $request->total_commission - $request->paid_commission
                 ]);
             }
             return redirect()->back()->with('success', 'User Commission Updated');
         }catch(\Exception $e){
-            dd($e);
-            // return redirect()->back()->with('error', 'Something went wrong');
+            return redirect()->back()->with('error', 'Something went wrong');
         }
         
         
