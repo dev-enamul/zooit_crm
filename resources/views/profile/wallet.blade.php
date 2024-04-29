@@ -18,14 +18,14 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 align-self-center">
                                             <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
-                                                <span class="avatar-title">
-                                                    <i class="mdi mdi-check-circle-outline fs-24"></i>
+                                                <span class="avatar-title"> 
+                                                    <i class="mdi mdi-chart-line fs-24"></i>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-muted fw-medium mb-2">Total Commission</p>
-                                            <h4 class="mb-0">{{get_price($total_commission)}}</h4>
+                                            <h4 class="mb-0">{{get_price($user_commission->total_commission??0)}}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -37,14 +37,14 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 align-self-center">
                                             <div class="avatar-sm rounded bg-warning-subtle text-warning d-flex align-items-center justify-content-center">
-                                                <span class="avatar-title">
-                                                    <i class="mdi mdi-timer-sand fs-24"></i>
+                                                <span class="avatar-title"> 
+                                                    <i class="mdi mdi-check-circle-outline fs-24"></i>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <p class="text-muted fw-medium mb-2">Return Commission</p>
-                                            <h4 class="mb-0">{{get_price($return_commission)}}</h4>
+                                            <p class="text-muted fw-medium mb-2">Paid Commission</p>
+                                            <h4 class="mb-0">{{get_price($user_commission->paid_commission??0)}}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -57,13 +57,13 @@
                                         <div class="flex-shrink-0 align-self-center">
                                             <div class="avatar-sm rounded bg-danger-subtle text-danger d-flex align-items-center justify-content-center">
                                                 <span class="">
-                                                    <i class="mdi mdi-chart-line fs-24"></i>
+                                                    <i class="mdi mdi-timer-sand fs-24"></i>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <p class="text-muted fw-medium mb-2">Paid Commission</p>
-                                            <h4 class="mb-0">{{get_price($total_commission-$return_commission)}}</h4>
+                                            <p class="text-muted fw-medium mb-2">Pending Commission</p>
+                                            <h4 class="mb-0">{{get_price($user_commission->pending_commission??0)}}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                         </div>
                     </div>
 
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <div class="card-icon text-muted"><i class="fa fa-chalkboard fs14"></i></div>
                             <h3 class="card-title">Commission</h3>
@@ -128,7 +128,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div> 
         </div> 

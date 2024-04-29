@@ -73,6 +73,7 @@ use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
+use App\Http\Controllers\UserCommissionController;
 use App\Http\Controllers\UserDocumentController;
 use App\Models\Customer;
 use App\Models\Prospecting;
@@ -372,6 +373,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('approve-setting-save', [ApproveSettingController::class, 'save'])->name('approve.setting.save');
         Route::get('submit/time/setting',[LastSubmitTimeSettingController::class,'index'])->name('submit.time.setting');
         Route::post('submit/time/setting/update',[LastSubmitTimeSettingController::class,'update'])->name('submit.time.setting.update');
+
+
+        // User Commission 
+        Route::get('user-commission', [UserCommissionController::class, 'index'])->name('user.commission');
+        Route::post('user-commission-save', [UserCommissionController::class, 'save'])->name('user.commission.save');
  
         //Reports 
         Route::get('monthly-target-achive', [CommissionReportController::class, 'monthly_target_achive'])->name('monthly.target.achive');

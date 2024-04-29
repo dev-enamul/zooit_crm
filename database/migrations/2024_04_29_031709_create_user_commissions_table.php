@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('total_commission');
             $table->string('paid_commission');
+            $table->string('pending_commission');
             $table->timestamps();
         });
     }

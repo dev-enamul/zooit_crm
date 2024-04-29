@@ -10,6 +10,7 @@ use App\Models\FieldTarget;
 use App\Models\FreelancerApprovel;
 use App\Models\ReportingUser;
 use App\Models\User;
+use App\Models\UserCommission;
 use App\Models\Withdraw;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -126,7 +127,10 @@ class ProfileController extends Controller
                         ->whereYear('created_at',$date)
                         ->get(); 
         $total_commission = DepositCommission::where('user_id',$user_id)->sum('payble_commission');
-        $return_commission = 0;
-        return view('profile.wallet',compact('commissions','total_commission','return_commission','user','date'));
+        $return_commission = 0; 
+
+        $user_commission = UserCommission::where('user_id',$user_id)->first();
+
+        return view('profile.wallet',compact('commissions','total_commission','return_commission','user','date','user_commission'));
     }
 }

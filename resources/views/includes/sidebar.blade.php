@@ -734,14 +734,23 @@
                                     <span>Approve Setting</span>
                                 </a>
                             </li>     
-                        @endcan 
+                        @endcan  
 
                         <li>
                             <a href="{{route('submit.time.setting')}}" class="">
                                 <i class="fas fa-desktop"></i>
                                 <span>Submit Time Setting</span>
                             </a>
-                        </li>
+                        </li> 
+
+                        @if (auth()->user()->id == 1)
+                            <li>
+                                <a href="{{route('user.commission')}}" class="">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>User Commission</span>
+                                </a>
+                            </li> 
+                        @endif  
                     </div>
                 </div> 
                   
