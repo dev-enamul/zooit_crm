@@ -30,17 +30,12 @@ class ProfileController extends Controller
         return view('profile.hierarchy',compact('user_id','organogram','user'));
     }
 
-    public function profile($id){ 
-     
-        $user_id = decrypt($id);
-      
+    public function profile($id){  
+        $user_id = decrypt($id); 
         $user = User::find($user_id);  
-        $reporting_users = user_reporting($user_id);
-      
+        $reporting_users = user_reporting($user_id); 
         $data = ReportingUser::where('user_id', $user_id)->where('status',1)->latest()->first();
-        $boss = ReportingUser::find($data->reporting_user_id);
-       
-        
+        $boss = ReportingUser::find($data->reporting_user_id); 
         if(count($reporting_users) > 1){
             $reporting_user = user_info($reporting_users[1]);
             $top_reporting_user = user_info($reporting_users[count($reporting_users)-1]);
