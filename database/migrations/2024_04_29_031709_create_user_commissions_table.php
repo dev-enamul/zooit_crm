@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('user_commissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('total_commission');
-            $table->string('paid_commission');
-            $table->string('pending_commission');
+            $table->float('total_regular_commission');
+            $table->float('total_special_commission');
+            $table->float('total_commission');
+            $table->float('paid_commission');
+            $table->float('pending_commission');
             $table->timestamps();
         });
     }

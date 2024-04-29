@@ -48,15 +48,29 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="remark" class="form-label">Total Commission <span class="text-danger">*</span></label>
-                                            <input type="number" name="total_commission" class="form-control" placeholder="Enter Total Commission" required>
+                                            <label for="remark" class="form-label">Total Regular Commission <span class="text-danger">*</span></label>
+                                            <input type="number" name="total_regular_commission" class="form-control" value="0" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="remark" class="form-label">Total Special Commission <span class="text-danger">*</span></label>
+                                            <input type="number" name="total_special_commission" class="form-control" value="0" required>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Paid Commission <span class="text-danger">*</span></label>
-                                            <input type="number" name="paid_commission" class="form-control" placeholder="Enter Pain Commission" required>
+                                            <input type="number" name="paid_commission" class="form-control" value="0" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="remark" class="form-label">Last Paid Date <span class="text-danger">*</span></label>
+                                            <input type="date" name="updated_at" class="form-control"  required>
                                         </div>
                                     </div>
                                 </div>
