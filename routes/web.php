@@ -79,6 +79,7 @@ use App\Models\Customer;
 use App\Models\Prospecting;
 use App\Models\ReportingUser;
 use App\Models\User;
+use App\Models\UserCommission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -440,10 +441,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-//        $user = User::where('phone','01818575699')->with('customer')->first();
-        $customer = Customer::latest()->with('user')->take(10)->get();
-       dd($customer);
-         dd("nothing");
+        
+        UserCommission::query()->update(['updated_at' => '2024-04-29 00:00:00']);
+         dd("updated");
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
