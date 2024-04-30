@@ -14,7 +14,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <p class="m-0 float-center w-100 f-15"> <b>{{get_date($user_commission->updated_at)}}</b> </p>
+                                <p class="m-0 float-center w-100 f-15"> <b>{{get_date(@$user_commission->updated_at)}}</b> </p>
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-muted fw-medium mb-2">Regular Commission</p>
-                                            <h4 class="mb-0">{{get_price($user_commission->total_regular_commission)}}</h4>
+                                            <h4 class="mb-0">{{get_price(@$user_commission->total_regular_commission)}}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -51,7 +51,7 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-muted fw-medium mb-2">Special Commission</p>
-                                            <h4 class="mb-0">{{get_price($user_commission->total_special_commission)}}</h4>
+                                            <h4 class="mb-0">{{get_price(@$user_commission->total_special_commission)}}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -70,7 +70,7 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-muted fw-medium mb-2">Total Commission</p>
-                                            <h4 class="mb-0">{{get_price($user_commission->total_commission)}}</h4>
+                                            <h4 class="mb-0">{{get_price(@$user_commission->total_commission)}}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-muted fw-medium mb-2">Withdraw Commission</p>
-                                            <h4 class="mb-0">{{get_price($user_commission->paid_commission)}}</h4>
+                                            <h4 class="mb-0">{{get_price(@$user_commission->paid_commission)}}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-muted fw-medium mb-2">Due Commission</p>
-                                            <h4 class="mb-0">{{get_price($user_commission->pending_commission)}}</h4>
+                                            <h4 class="mb-0">{{get_price(@$user_commission->pending_commission)}}</h4>
                                         </div>
                                     </div>
                                 </div>
