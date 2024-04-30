@@ -442,8 +442,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
         
-        UserCommission::query()->update(['updated_at' => '2024-04-29 00:00:00']);
-         dd("updated");
+        $datas = UserCommission::query()->update(['updated_at' => '2024-04-29 00:00:00']);
+         dd($datas);
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){
