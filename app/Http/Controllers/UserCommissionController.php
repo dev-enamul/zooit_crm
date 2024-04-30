@@ -29,6 +29,7 @@ class UserCommissionController extends Controller
                 $ex_commission->total_commission = $request->total_regular_commission + $request->total_special_commission;
                 $ex_commission->paid_commission = $request->paid_commission;
                 $ex_commission->pending_commission = $ex_commission->total_commission - $request->paid_commission;
+                $ex_commission->updated_at = $request->updated_at;
                 $ex_commission->save();
             }else{
                 UserCommission::create([
@@ -38,6 +39,7 @@ class UserCommissionController extends Controller
                     'total_commission' => $request->total_regular_commission + $request->total_special_commission,
                     'paid_commission' => $request->paid_commission,
                     'pending_commission' => $request->total_regular_commission + $request->total_special_commission - $request->paid_commission,
+                    'updated_at'  => $request->updated_at,
                 ]);
             }
             return redirect()->back()->with('success', 'User Commission Updated');

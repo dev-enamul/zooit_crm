@@ -37,8 +37,14 @@ class EmployeeController extends Controller
     use AreaTrait;
     use ImageUploadTrait;
       
-    public function index(EmployeesDataTable $dataTable)
+    public function index(Request $request)
     { 
+        // if($request->draw && $request->action === 'pdf'){
+        //     $request->dd();
+        //     need to write your pdf logic here
+        // }
+        $dataTable = app(EmployeesDataTable::class);
+        dd($dataTable);
         return $dataTable->render('employee.employee_list');
     }
 
