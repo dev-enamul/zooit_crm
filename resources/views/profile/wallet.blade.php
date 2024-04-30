@@ -14,7 +14,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <p class="m-0 float-center w-100">{{get_date($user_commission->updated_at)}}</p>
+                                <p class="m-0 float-center w-100 f-15"> <b>{{get_date($user_commission->updated_at)}}</b> </p>
                             </div>
                         </div>
                     </div>

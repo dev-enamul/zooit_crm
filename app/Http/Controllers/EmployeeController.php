@@ -44,7 +44,7 @@ class EmployeeController extends Controller
         //     need to write your pdf logic here
         // }
         $dataTable = app(EmployeesDataTable::class);
-        dd($dataTable);
+        // dd($dataTable);
         return $dataTable->render('employee.employee_list');
     }
 
