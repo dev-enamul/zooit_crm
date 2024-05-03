@@ -69,9 +69,11 @@
                                         </th>
                                         <th>{{$item->commission}}%</th> 
                                     </tr> 
-                                    @endforeach
-                                    
-
+                                    @endforeach  
+                                    <tr>
+                                        <td colspan="4"> Total </td>
+                                        <td>{{$datas->sum('commission')}} %</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
