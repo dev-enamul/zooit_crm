@@ -31,6 +31,8 @@ class Negotiation extends Model
         'deleted_by',
     ]; 
  
+ 
+    
     public function customer()
     {
         return $this->belongsTo(Customer::class);

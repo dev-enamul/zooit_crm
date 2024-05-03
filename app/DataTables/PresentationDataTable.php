@@ -1,8 +1,8 @@
 <?php
 
 namespace App\DataTables;
- 
-use App\Models\LeadAnalysis;
+
+use App\Models\Presentation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class LeadAnalysisDataTable extends DataTable
+class PresentationDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -26,8 +26,8 @@ class LeadAnalysisDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action',function($lead){ 
-                return view('lead_analysis.lead_analysis_action',compact('lead'))->render();
+            ->addColumn('action',function($presentation){ 
+                return view('presentation.presentation_action',compact('presentation'))->render();
             })  
             ->addColumn('profession', function($data){
                 return $data->customer->profession->name??'-';
@@ -41,6 +41,9 @@ class LeadAnalysisDataTable extends DataTable
             ->addColumn('income_range', function($data){
                 return get_price($data->income_range??0);
             }) 
+            ->addColumn('date', function($data){
+                return get_date($data->created_at);
+            })
             ->addColumn('freelancer', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
@@ -131,17 +134,16 @@ class LeadAnalysisDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\LeadAnalysi $model
+     * @param \App\Models\Presentation $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(LeadAnalysis $model, Request $request): QueryBuilder
+    public function query(Presentation $model, Request $request): QueryBuilder
     {
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
         }else{
             $user_id = Auth::user()->id;
-        } 
-
+        }  
         if(isset($request->date)){
             $date = explode(' - ',$request->date);
             $start_date = date('Y-m-d',strtotime($date[0]));
@@ -157,8 +159,7 @@ class LeadAnalysisDataTable extends DataTable
             $status = $request->status; 
         }else{
             $status = 0; 
-        }
-
+        } 
         $datas =$model->where(function ($q){
             $q->where('approve_by','!=',null)
                 ->orWhere('employee_id', Auth::user()->id)
@@ -172,7 +173,7 @@ class LeadAnalysisDataTable extends DataTable
         ->with('customer.reference')
         ->with('customer.user.userAddress')
         ->with('customer.profession')
-        ->newQuery(); 
+        ->newQuery();  
 
         $datas->user_reporting = $user->user_reporting;
         return $datas;
@@ -218,10 +219,7 @@ class LeadAnalysisDataTable extends DataTable
             Column::make('profession')->title('Profession'), 
             Column::make('project')->title('Preferred Project Name'),
             Column::make('unit')->title('Preferred Unit Name'), 
-            Column::make('income_range')->title('Income Range'),
-            Column::make('profession_year')->title('Service Year'),
-            Column::make('influencer')->title('Influencer Person Name'),
-            Column::make('decision_maker')->title('Decision Maker Person Name'),
+            Column::make('date')->title('Presentation Date'),
             Column::make('freelancer')->title('Frinchise Partner Name & ID'),  
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
             Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
@@ -237,6 +235,6 @@ class LeadAnalysisDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'LeadAnalysis_' . date('YmdHis');
+        return 'Presentation_' . date('YmdHis');
     }
 }

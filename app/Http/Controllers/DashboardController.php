@@ -2,40 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\ColdCallingDataTable;
-use App\DataTables\CustomersDataTable;
-use App\DataTables\EmployeesDataTable;
-use App\DataTables\FreelancersDataTable;
-use App\DataTables\LeadDataTable;
-use App\DataTables\UsersDataTable;
-use App\Models\Area;
+use App\DataTables\FollowupAnalysisDataTable;
+use App\DataTables\FollowUpDataTable;
+use App\DataTables\NegotiationAnalysisDataTable;
+use App\DataTables\NegotiationDataTable;
+use App\DataTables\PresentationAnalysisDataTable;
+use App\DataTables\PresentationDataTable;  
 use App\Models\Bank;
 use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Deposit;
 use App\Models\DepositTarget;
-use App\Models\Designation;
-use App\Models\DesignationPermission;
-use App\Models\Task as ModelsTask;
+use App\Models\Designation;  
 use App\Models\District;
 use App\Models\Division;
 use App\Models\FieldTarget;
 use App\Models\FollowUpAnalysis;
-use App\Models\Freelancer;
 use App\Models\Lead;
 use App\Models\LeadAnalysis;
 use App\Models\NegotiationAnalysis;
 use App\Models\Prospecting;
-use App\Models\ReportingUser;
 use App\Models\TaskList;
 use App\Models\Union;
 use App\Models\Upazila;
 use App\Models\User;
-use App\Models\Village;
-use App\Models\Zone;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Database\QueryException;
+use App\Models\Village; 
+use Carbon\Carbon;  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -43,9 +35,9 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
-    // public function index(LeadDataTable $dataTable, Request $request)
+    // public function index(NegotiationAnalysisDataTable $dataTable, Request $request)
     // { 
-    //     $title = 'Lead List'; 
+    //     $title = 'Negotiation Analysis'; 
     //     $date = $request->date??null;
     //     $status = $request->status??0;
     //     $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');

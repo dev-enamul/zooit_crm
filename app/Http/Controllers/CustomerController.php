@@ -90,8 +90,7 @@ class CustomerController extends Controller
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = json_decode(Auth::user()->user_employee);
-        $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->whereNotNull('approve_by')->select('id','name','user_id')->get();
+        
         return view('customer.customer_create', compact(
             'title', 
             'divisions', 
@@ -102,8 +101,7 @@ class CustomerController extends Controller
             'banks',
             'mobileBanks', 
             'nationalites', 
-            'professions',
-            'reporting_user',
+            'professions', 
             'areas',
             'zones'
         ));
@@ -615,9 +613,7 @@ class CustomerController extends Controller
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->select('id','name','user_id')->get();
-        
+         
         $customer = Customer::find($id);
         $selected['country_id']   = $customer->user->userAddress->country_id??1;
         $selected['division_id']  = $customer->user->userAddress->division_id??1;

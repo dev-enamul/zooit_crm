@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\NegotiationAnalysisDataTable;
 use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
@@ -28,41 +29,17 @@ class NegotiationAnalysisController extends Controller
         return Priority::values();
     }
 
-    public function index(Request $request)
-    {
-        
-        if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
-        }else{
-            $user_id = Auth::user()->id;
-        } 
-
-        $waiting_day = NegotiationWaitingDay::first();
-        if(isset($waiting_day) && $waiting_day != null){
-            $startDate = Carbon::now()->subDays($waiting_day->waiting_day)->startOfDay(); 
-        }else{
-            $startDate = Carbon::now()->subDays(7)->startOfDay(); 
-        }
-        
-        $endDate = Carbon::now()->endOfDay();
-      
-        $user_employee = my_all_employee($user_id);
-        $negotiations = NegotiationAnalysis::whereBetween('created_at',[$startDate,$endDate])
-        ->where(function($q){
-            $q->where('approve_by','!=',null)
-                ->orWhere('employee_id', Auth::user()->id)
-                ->orWhere('created_by', Auth::user()->id);
-        })
-        ->whereHas('customer', function($q) use($user_employee){ 
-            $q->whereIn('ref_id', $user_employee);
-        }); 
-  
-
-         $negotiations = $negotiations->orderBY('id','desc')->get();  
-      
-        return view('negotiation_analysis.negotiation_analysis_list',compact('negotiations','waiting_day'));
-    }
-
+    public function index(NegotiationAnalysisDataTable $dataTable, Request $request)
+    { 
+        $title = 'Negotiation Analysis'; 
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+        return $dataTable->render('negotiation_analysis.negotiation_analysis_list', compact('title','employee','status','start_date','end_date'));
+    }   
    
     public function create(Request $request)
     {
@@ -152,15 +129,9 @@ class NegotiationAnalysisController extends Controller
             $follow->created_by = auth()->id();
             $follow->created_at = now();
             $follow->status = 0;
-            $follow->save();
-
+            $follow->save(); 
             if($follow) {
-                $visit = Negotiation::where('customer_id',$request->customer)->first();
-                if(isset($visit) && $visit != null){
-                    $visit->status = 1;
-                    $visit->save();
-                }
-               
+                Negotiation::where('customer_id',$request->customer)->update(['status' => 1]);
             }
             
             return redirect()->route('negotiation-analysis.index')->with('success','Negotiation Analysis create successfully');
@@ -169,9 +140,8 @@ class NegotiationAnalysisController extends Controller
 
     public function edit(string $id, Request $request)
     {
-        $title = 'Negotiation Analysis Edit';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
+        $title = 'Negotiation Analysis Edit'; 
+        $my_all_employee    = json_decode(Auth::user()->my_employee);
         $customers          = Negotiation::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
@@ -279,9 +249,8 @@ class NegotiationAnalysisController extends Controller
         $request->validate([
             'term' => ['nullable', 'string'],
         ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id);   
+ 
+        $my_all_employee = json_decode(Auth::user()->my_employee);   
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']

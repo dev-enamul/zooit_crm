@@ -65,7 +65,8 @@
                                         <td>{{++$key}}</td>
                                         <td><a href="{{route('my.field.target', ['month'=>urldecode($selected),'employee'=>encrypt($data->assignTo->id)])}}">{{@$data->assignTo->name}} [{{@$data->assignTo->user_id}}]</a> </td>  
                                         @php 
-                                            $my_all_employee = my_all_employee($data->assignTo->id);
+                                            $user = User::find($data->assignTo->id);
+                                            $my_all_employee = json_decode($user->user_employee);
                                             $user = $data->assignTo;
                                         @endphp 
                                         

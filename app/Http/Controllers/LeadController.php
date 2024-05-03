@@ -123,9 +123,8 @@ class LeadController extends Controller
 
     public function edit($id)
     {
-        $title = 'Lead Edit';
-        $user_id   = Auth::user()->id; 
-        $my_all_employee = my_all_employee($user_id);
+        $title = 'Lead Edit'; 
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
         $projects = Project::where('status',1)->select('id','name')->get();
         $units          = Unit::select('id','title')->get();
@@ -175,12 +174,11 @@ class LeadController extends Controller
     } 
 
     public function select2_customer(Request $request){
-        $request->validate([
+    $request->validate([
             'term' => ['nullable', 'string'],
         ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id);   
+ 
+        $my_all_employee = json_decode(Auth::user()->user_employee);   
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']

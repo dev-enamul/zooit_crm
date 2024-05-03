@@ -441,13 +441,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        
-        $datas = UserCommission::query()->update(['updated_at' => '2024-04-29 00:00:00']);
-         dd($datas);
+         dd("nothing");
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
-        // foreach($users as $user){
-        //         $my_all_employee = my_all_employee((int)$user->id);
+        // foreach($users as $user){ 
         //         $user_reporting = user_reporting((int)$user->id); 
         //         User::where('id', $user->id)
         //             ->update(['user_reporting' => $user_reporting, 'user_employee' => $my_all_employee]);

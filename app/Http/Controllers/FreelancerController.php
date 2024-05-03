@@ -83,10 +83,7 @@ class FreelancerController extends Controller
         $title     = "Freelancer Create";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
-        $districts = $this->getCachedDistricts();
-        $upazilas  = $this->getCachedUpazilas();
-        $unions    = $this->getCachedUnions();
-        $villages  = $this->getCachedVillages();
+       
         $nationalites = $this->nationality(); 
         $maritalStatuses = $this->maritalStatus();
         $religions = $this->religion();
@@ -98,15 +95,11 @@ class FreelancerController extends Controller
         $areas = Area::where('status',1)->select('id','name')->get();
         $designations = Designation::where('status',1)->where('designation_type',2)->select('id','title')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = my_all_employee(auth()->user()->id); 
+         
         return view('freelancer.freelancer_save', compact(
             'title',
             'countries',
             'divisions',
-            'districts',
-            'upazilas',
-            'unions',
-            'villages', 
             'maritalStatuses',
             'religions',
             'bloodGroups',

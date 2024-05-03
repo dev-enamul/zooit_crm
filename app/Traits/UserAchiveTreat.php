@@ -26,7 +26,8 @@ trait UserAchiveTreat
             $date = Carbon::parse($date);
         } 
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
          
         $freelancer = User::whereHas('freelancer',function($q) use($my_all_employee){
@@ -48,7 +49,8 @@ trait UserAchiveTreat
             $date = Carbon::parse($date);
         }   
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
         $customer = Customer::whereIn('ref_id',$my_all_employee)
             ->where('approve_by','!=',null)
@@ -66,7 +68,8 @@ trait UserAchiveTreat
             $date = Carbon::parse($date);
         }   
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $prospecting = Prospecting::WhereHas('customer',function($q) use($my_all_employee){
@@ -87,7 +90,8 @@ trait UserAchiveTreat
         }   
         
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
         $cold_calling = ColdCalling::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
@@ -107,7 +111,8 @@ trait UserAchiveTreat
         }   
         
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $lead = Lead::WhereHas('customer',function($q) use($my_all_employee){
@@ -128,7 +133,8 @@ trait UserAchiveTreat
         }   
         
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $lead_analysis = LeadAnalysis::WhereHas('customer',function($q) use($my_all_employee){
@@ -149,7 +155,8 @@ trait UserAchiveTreat
         }   
        
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $presentation = Presentation::WhereHas('customer',function($q) use($my_all_employee){
@@ -170,7 +177,8 @@ trait UserAchiveTreat
         }   
         
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
         $presentation = VisitAnalysis::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
@@ -191,7 +199,8 @@ trait UserAchiveTreat
         }   
         
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $followup = FollowUp::WhereHas('customer',function($q) use($my_all_employee){
@@ -211,7 +220,8 @@ trait UserAchiveTreat
         }   
         
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $data = FollowUpAnalysis::WhereHas('customer',function($q) use($my_all_employee){
@@ -233,7 +243,8 @@ trait UserAchiveTreat
         }   
         
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $data = Negotiation::WhereHas('customer',function($q) use($my_all_employee){
@@ -254,7 +265,8 @@ trait UserAchiveTreat
         }   
        
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
 
         $data = NegotiationAnalysis::WhereHas('customer',function($q) use($my_all_employee){
@@ -275,7 +287,8 @@ trait UserAchiveTreat
         }   
 
         if($my_all_employee==null){
-            $my_all_employee = my_all_employee($this->id);
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
         }
         
         $data = Deposit::whereHas('customer',function($q) use($my_all_employee){

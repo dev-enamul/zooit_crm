@@ -33,7 +33,7 @@ class SalseController extends Controller
 
     public function index()
     {
-        $my_all_employee = my_all_employee(Auth::user()->id);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $datas = Salse::whereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })->get();
@@ -286,10 +286,8 @@ class SalseController extends Controller
     public function select2_customer(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id);   
+        ]); 
+        $my_all_employee = json_decode(Auth::user()->user_employee);   
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']

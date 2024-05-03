@@ -1,8 +1,9 @@
 <?php
 
 namespace App\DataTables;
- 
+
 use App\Models\LeadAnalysis;
+use App\Models\Negotiation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class LeadAnalysisDataTable extends DataTable
+class NegotiationDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -24,11 +25,13 @@ class LeadAnalysisDataTable extends DataTable
      * @return \Yajra\DataTables\EloquentDataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
-    {
+    {  
+         
         return (new EloquentDataTable($query))
-            ->addColumn('action',function($lead){ 
-                return view('lead_analysis.lead_analysis_action',compact('lead'))->render();
+            ->addColumn('action',function($negotiation){ 
+                return view('negotiation.negotiation_action',compact('negotiation'))->render();
             })  
+            
             ->addColumn('profession', function($data){
                 return $data->customer->profession->name??'-';
             }) 
@@ -38,14 +41,28 @@ class LeadAnalysisDataTable extends DataTable
             ->addColumn('unit', function($data){
                 return $data->unit->name??'-';
             }) 
-            ->addColumn('income_range', function($data){
-                return get_price($data->income_range??0);
+            ->addColumn('customer_expectation', function($data){ 
+                return $data->customer->followup_analysis->customer_expectation??'-';
             }) 
+            ->addColumn('need', function($data){
+                return $data->customer->followup_analysis->need??'-';
+            }) 
+            ->addColumn('ability', function($data){
+                return $data->customer->followup_analysis->ability??'-';
+            }) 
+            ->addColumn('influencer_opinion', function($data){
+                return $data->customer->followup_analysis->abiliinfluencer_opinionty??'-';
+            }) 
+            ->addColumn('decision_maker_opinion', function($data){
+                return $data->customer->followup_analysis->decision_maker_opinion??'-';
+            })  
+            ->addColumn('negotiation_amount', function($data){
+                return get_price($data->negotiation_amount??0);
+            })
             ->addColumn('freelancer', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
                 }  
-
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
@@ -131,17 +148,17 @@ class LeadAnalysisDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\LeadAnalysi $model
+     * @param \App\Models\Negotiation $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(LeadAnalysis $model, Request $request): QueryBuilder
+    public function query(Negotiation $model, Request $request): QueryBuilder
     {
         if(isset($request->employee) && !empty($request->employee)){
             $user_id = (int)$request->employee;
         }else{
             $user_id = Auth::user()->id;
-        } 
-
+        }  
+        
         if(isset($request->date)){
             $date = explode(' - ',$request->date);
             $start_date = date('Y-m-d',strtotime($date[0]));
@@ -157,7 +174,7 @@ class LeadAnalysisDataTable extends DataTable
             $status = $request->status; 
         }else{
             $status = 0; 
-        }
+        } 
 
         $datas =$model->where(function ($q){
             $q->where('approve_by','!=',null)
@@ -170,9 +187,12 @@ class LeadAnalysisDataTable extends DataTable
         ->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59'])
         ->where('status', $status)
         ->with('customer.reference')
+        ->with('customer.followup_analysis')
         ->with('customer.user.userAddress')
         ->with('customer.profession')
-        ->newQuery(); 
+        ->with('project')
+        ->with('unit')
+        ->newQuery();  
 
         $datas->user_reporting = $user->user_reporting;
         return $datas;
@@ -186,16 +206,16 @@ class LeadAnalysisDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('leadanalysis-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'), 
-                        Button::make('pdf')->title('Lead List'),
-                    ]);
+        ->setTableId('leadanalysis-table')
+        ->columns($this->getColumns())
+        ->minifiedAjax()
+        ->dom('Bfrtip')
+        ->orderBy(1)
+        ->selectStyleSingle()
+        ->buttons([
+            Button::make('excel'), 
+            Button::make('pdf')->title('Lead List'),
+        ]);
     }
 
     /**
@@ -204,30 +224,33 @@ class LeadAnalysisDataTable extends DataTable
      * @return array
      */
     public function getColumns(): array
-    {
+    { 
         return [
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
-                  ->addClass('text-center'),
-            Column::make('serial')->title('S/L'), 
-            Column::make('customer.customer_id')->title('Provable Cus ID'),
-            Column::make('customer.name')->title('Customer Name'), 
-            Column::make('customer.user.phone')->title('Mobile Number'),
-            Column::make('profession')->title('Profession'), 
-            Column::make('project')->title('Preferred Project Name'),
-            Column::make('unit')->title('Preferred Unit Name'), 
-            Column::make('income_range')->title('Income Range'),
-            Column::make('profession_year')->title('Service Year'),
-            Column::make('influencer')->title('Influencer Person Name'),
-            Column::make('decision_maker')->title('Decision Maker Person Name'),
-            Column::make('freelancer')->title('Frinchise Partner Name & ID'),  
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
-            Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
-        ];
+                  ->addClass('text-center')
+                  ->sortable(false), 
+            Column::make('serial')->title('S/L')->sortable(false),
+            Column::make('customer.customer_id')->title('Provable Cus ID')->sortable(false), 
+            Column::make('customer.name')->title('Customer Name')->sortable(false), 
+            Column::make('customer.user.phone')->title('Mobile Number')->sortable(false),
+            Column::make('profession')->title('Profession')->sortable(false),
+            Column::make('project')->title('Preferred Project Name')->sortable(false),
+            Column::make('unit')->title('Preferred Unit Name')->sortable(false),
+            Column::make('customer_expectation')->title('Customer Expectation')->sortable(false), 
+            Column::make('need')->title('Customer Need')->sortable(false),
+            Column::make('ability')->title('Customer Ability')->sortable(false),
+            Column::make('influencer_opinion')->title('Influencer Openion')->sortable(false),
+            Column::make('decision_maker_opinion')->title('Decision Maker Openion')->sortable(false),
+            Column::make('negotiation_amount')->title('Negotiation Amount')->sortable(false), 
+            Column::make('freelancer')->title('Franchise Partner Name & ID')->sortable(false),
+            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID')->sortable(false), 
+            Column::make('salse-incharge')->title('Incharge Sales Name & ID')->sortable(false),
+            Column::make('area-incharge')->title('Area Incharge Name & ID')->sortable(false),
+            Column::make('zonal-manager')->title('Zonal Manager Name & ID')->sortable(false),
+        ];   
     }
 
     /**
@@ -237,6 +260,6 @@ class LeadAnalysisDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'LeadAnalysis_' . date('YmdHis');
+        return 'Negotiation_' . date('YmdHis');
     }
 }

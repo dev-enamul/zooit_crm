@@ -649,10 +649,8 @@ class EmployeeController extends Controller
     public function select2_employee_encode(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id); 
+        ]); 
+        $my_all_employee = json_decode(Auth::user()->user_employee); 
 
         $users = User::query()
             ->where(function ($query) use ($request) {

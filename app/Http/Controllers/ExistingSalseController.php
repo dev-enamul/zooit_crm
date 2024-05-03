@@ -28,9 +28,8 @@ class ExistingSalseController extends Controller
     
     public function create(Request $request)
     {
-        $title              = 'Sales Entry';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
+        $title              = 'Sales Entry';  
+        $my_all_employee    = json_decode(Auth::user()->user_employee);
         $is_admin = Auth::user()->hasPermission('admin'); 
         if($is_admin){
             $customers = Customer::whereDoesntHave('salse')->select('id','customer_id','name')->get();

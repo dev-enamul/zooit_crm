@@ -227,10 +227,7 @@ class User extends Authenticatable
         return $this->hasOne(UserId::class);
     }
 
-    public function my_all_employee(){
-         $my_all_employee =  my_all_employee($this->id); 
-         return $my_all_employee;
-    } 
+     
 
     public function my_employee(){
          $my_employee =  my_employee($this->id); 

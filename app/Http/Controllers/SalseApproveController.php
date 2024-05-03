@@ -17,7 +17,7 @@ class SalseApproveController extends Controller
             $q->where('user_id', '!=', Auth::user()->id);
         });
         $datas =  $datas->whereHas('customer', function ($q) { 
-            $my_all_employee = my_all_employee(auth()->user()->id);
+            $my_all_employee = json_decode(Auth::user()->user_employee);
             $q->whereIn('ref_id', $my_all_employee);
         })->get();  
         return view('salse.salse_approve',compact('datas'));

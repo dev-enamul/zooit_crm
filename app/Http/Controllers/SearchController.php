@@ -15,6 +15,14 @@ class SearchController extends Controller
         }
         
         $key = strtolower($key); 
+        if(strpos($key,'pid-')!==false){ 
+            $customer = Customer::where('customer_id',$key)->first();
+            if($customer == null){
+                return redirect()->back()->with('warning','Provable ID Not Found');
+            } 
+            return redirect()->route('customer.profile',encrypt($customer->id));
+        }
+
         if(strpos($key,'cus-')!==false){ 
             $customer = Customer::where('customer_id',$key)->first();
             if($customer == null){
