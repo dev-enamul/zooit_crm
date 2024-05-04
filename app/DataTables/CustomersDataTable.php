@@ -99,7 +99,7 @@ class CustomersDataTable extends DataTable
             }) 
 
             ->addColumn('marketing-incharge', function($data){
-                if(@$data->customer->ref_id==null){
+                if(@$data->ref_id==null){
                     return '-';
                 }  
                 $reporting = json_decode($data->reference->user_reporting);
@@ -115,23 +115,22 @@ class CustomersDataTable extends DataTable
             }) 
 
             ->addColumn('salse-incharge', function($data){
-                if(@$data->customer->ref_id==null){
+                if(@$data->ref_id==null){
                     return '-';
-                }  
-
+                }   
                 $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                         $q->whereIn('designation_id',[12,13,14,15]);
-                    })->first();  
+                    })->first();   
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
+                // return "-";  
             })  
             ->addColumn('area-incharge', function($data){
-                if(@$data->customer->ref_id==null){
+                if(@$data->ref_id==null){
                     return '-';
                 }  
 
@@ -147,7 +146,7 @@ class CustomersDataTable extends DataTable
                 return "-";  
             }) 
             ->addColumn('zonal-manager', function($data){
-                if(@$data->customer->ref_id==null){
+                if(@$data->ref_id==null){
                     return '-';
                 }   
                 $reporting = json_decode($data->reference->user_reporting);
