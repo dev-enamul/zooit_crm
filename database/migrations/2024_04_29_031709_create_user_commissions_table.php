@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_commissions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->float('total_regular_commission');
-            $table->float('total_special_commission');
-            $table->float('total_commission');
-            $table->float('paid_commission');
-            $table->float('pending_commission');
-            $table->timestamps();
-        });
+        // Schema::create('user_commissions', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        //     $table->float('total_regular_commission');
+        //     $table->float('total_special_commission');
+        //     $table->float('total_commission');
+        //     $table->float('paid_commission');
+        //     $table->float('pending_commission');
+        //     $table->timestamps();
+        // });
     }
 
     /**
