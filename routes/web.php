@@ -74,13 +74,7 @@ use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\UserCommissionController;
-use App\Http\Controllers\UserDocumentController;
-use App\Models\Customer;
-use App\Models\Prospecting;
-use App\Models\ReportingUser;
-use App\Models\User;
-use App\Models\UserCommission;
-use Carbon\Carbon;
+use App\Http\Controllers\UserDocumentController; 
 use Illuminate\Http\Request;
 
 /*

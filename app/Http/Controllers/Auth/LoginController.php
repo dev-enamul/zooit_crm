@@ -30,7 +30,8 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {
+    { 
+ 
         $request->validate([
             'phone'    => 'required|exists:users,phone',
             'password' => 'required|string',
