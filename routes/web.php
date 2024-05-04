@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Profile 
         Route::get('profile/{id}', [ProfileController::class, 'profile'])->name('profile');
         Route::get('profile/hierarchy/{id}', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
+        Route::get('profile/hierarchy/tree/{id}', [ProfileController::class, 'hierarchy_tree'])->name('profile.hierarchy.tree'); 
         Route::get('freelancer/join/process/{id}', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
         Route::get('profile-target-achive/{id}', [ProfileController::class, 'target_achive'])->name('profile.target.achive');
         Route::get('profile-wallet/{id}', [ProfileController::class, 'wallet'])->name('profile.wallet');

@@ -8,14 +8,16 @@
             @else  
                 <p class="m-0">{{@$user->freelancer->designation->title}}</p>
             @endif  
-            <p>{{@$user->userAddress->area->name}}</p>
+            <p class="m-0">{{@$user->userAddress->area->name}}</p>
+            <p>{{@$user->user_id}}</p>
         </div>
     </div>
     <div class="card-body">
         <div class="list-group"> 
             <a href="{{route('profile',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile')?"active":""}}">About </a>
             @if ($user->user_type==1)
-                <a href="{{route('profile.hierarchy',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile.hierarchy')?"active":""}} ">Hierarchy</a> 
+                <a href="{{route('profile.hierarchy',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile.hierarchy')?"active":""}} ">Hierarchy</a>
+                <a href="{{route('profile.hierarchy.tree',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('profile.hierarchy.tree')?"active":""}} ">Hierarchy Tree</a> 
             @endif 
             @if ($user->user_type==2)  
                 <a href="{{route('freelancer.join.process',encrypt($user->id))}}" class="list-group-item list-group-item-action {{Route::is('freelancer.join.process')?"active":""}}"> Join Process</a>

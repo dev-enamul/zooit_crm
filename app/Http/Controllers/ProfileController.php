@@ -30,6 +30,20 @@ class ProfileController extends Controller
         return view('profile.hierarchy',compact('user_id','organogram','user'));
     }
 
+    public function hierarchy_tree(Request $request, $id){
+        if(isset($request->employee) && !empty($request->employee)){ 
+            $employee_id = decrypt($request->employee);  
+        }else{ 
+            $employee_id = decrypt($id); 
+        }
+        $user_id = decrypt($id);
+        $user =  User::find($user_id);
+        $employee = User::find($employee_id);
+        $my_emplyees = my_employee($employee_id);
+         
+        return view('profile.hierarchy_tree',compact('user_id','user','my_emplyees','employee')); 
+    }
+
     public function profile($id){  
         $user_id = decrypt($id); 
         $user = User::find($user_id);  
