@@ -1,7 +1,12 @@
 @extends('layouts.dashboard')
-@section('title',"Profile")
- 
-
+@section('title',"Profile") 
+@section('style')
+    <style>
+        .card-title{
+            font-size: 12px !important;
+        }
+    </style>
+@endsection
 @section('content')
 <div class="main-content">
 
@@ -34,16 +39,16 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-icon text-muted"><i class="fa fa-chalkboard fs14"></i></div>
-                            <h4 class="card-title">Field Work & Deposit Work Summery
+                            <h6 class="card-title">Field Work & Deposit Work Summery
                                 <a href="{{route('my.field.target',['month'=>urldecode(date('Y-m', $date->timestamp)),'employee'=>encrypt($user->id)])}}" class="btn btn-secondary" type="submit">
                                     <span><i class="fas fa-print"></i> Export</span>
                                 </a>  
-                            </h4>
+                            </h6>
                             <div class="card-addon">
                                 <form action="" method="get">
                                     <div class="input-group">   
                                         <input type="month" class="form-control" name="month" value="{{ date('Y-m', $date->timestamp) }}">
-                                        <button class="btn btn-secondary" type="submit">
+                                        <button class="btn btn-secondary btn-sm" type="submit">
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button>  
                                     </div>
@@ -56,8 +61,8 @@
                                     <div class="border rounded p-2">
                                         <p class="text-muted mb-2 bold"><a href="{{route('freelancer.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>FL Recruitment</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['freelancer']}}</span> / 
-                                            <span title="target">{{$target->freelancer??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['freelancer']}}</span> / 
+                                            <span title="target">T-{{$target->freelancer??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['freelancer']}}"></div>
                                         </div>
@@ -68,8 +73,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('customer.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Customer Data</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['customer']}}</span> / 
-                                            <span title="target">{{$target->customer??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['customer']}}</span> / 
+                                            <span title="target">T-{{$target->customer??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['customer']}}"></div>
                                         </div>
@@ -81,8 +86,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('prospecting.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Prospectings</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['prospecting']}}</span> / 
-                                            <span title="target">{{$target->prospecting??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['prospecting']}}</span> / 
+                                            <span title="target">T-{{$target->prospecting??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['prospecting']}}"></div>
                                         </div>
@@ -94,8 +99,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('cold-calling.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Cold Calling</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['cold_calling']}}</span> / 
-                                            <span title="target">{{$target->cold_calling??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['cold_calling']}}</span> / 
+                                            <span title="target">T-{{$target->cold_calling??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['cold_calling']}}"></div>
                                         </div>
@@ -107,8 +112,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('lead.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Lead</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['lead']}}</span> / 
-                                            <span title="target">{{$target->lead??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['lead']}}</span> / 
+                                            <span title="target">T-{{$target->lead??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['lead']}}"></div>
                                         </div>
@@ -120,8 +125,8 @@
                                         <p class="text-muted mb-2"></p>
                                         <p class="text-muted mb-2 bold"><a href="{{route('lead-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Lead Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['lead_analysis']}}</span> / 
-                                            <span title="target">{{$target->lead_analysis??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['lead_analysis']}}</span> / 
+                                            <span title="target">T-{{$target->lead_analysis??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['lead_analysis']}}"></div>
                                         </div>
@@ -133,8 +138,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('presentation.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Presentation</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['presentation']}}</span> / 
-                                            <span title="target">{{$target->project_visit??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['presentation']}}</span> / 
+                                            <span title="target">T-{{$target->project_visit??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['presentation']}}"></div>
                                         </div>
@@ -146,8 +151,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('presentation_analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Visit Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['visit_analysis']}}</span> / 
-                                            <span title="target">{{$target->project_visit_analysis??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['visit_analysis']}}</span> / 
+                                            <span title="target">T-{{$target->project_visit_analysis??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['visit_analysis']}}"></div>
                                         </div>
@@ -159,8 +164,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('followup.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Follow Up</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['followup']}}</span> / 
-                                            <span title="target">{{$target->follow_up??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['followup']}}</span> / 
+                                            <span title="target">T-{{$target->follow_up??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['followup']}}"></div>
                                         </div>
@@ -172,8 +177,8 @@
                                     <div class="border rounded p-2">
                                         <p class="text-muted mb-2 bold"><a href="{{route('followup-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Follow Up Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['followup_analysis']}}</span> / 
-                                            <span title="target">{{$target->follow_up_analysis??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['followup_analysis']}}</span> / 
+                                            <span title="target">T-{{$target->follow_up_analysis??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['followup_analysis']}}"></div>
                                         </div>
@@ -185,8 +190,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('negotiation.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Negotiation</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['negotiation']}}</span> / 
-                                            <span title="target">{{$target->negotiation??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['negotiation']}}</span> / 
+                                            <span title="target">T-{{$target->negotiation??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['negotiation']}}"></div>
                                         </div>
@@ -198,8 +203,8 @@
                                     <div class="border rounded p-2"> 
                                         <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Negotiation Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
-                                            <span title="Achivement">{{$achive['negotiation_analysis']}}</span> / 
-                                            <span title="target">{{$target->negotiation_analysis??0}}</span></h4>
+                                            <span title="Achivement">A-{{$achive['negotiation_analysis']}}</span> / 
+                                            <span title="target">T-{{$target->negotiation_analysis??0}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['negotiation_analysis']}}"></div>
                                         </div>
