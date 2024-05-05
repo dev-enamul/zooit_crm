@@ -165,40 +165,43 @@ class User extends Authenticatable
         return $newValue;
     }
 
-    public static function generateNextCustomerId(){ 
-        $customer = Customer::where('customer_id','like','PID-%')->latest('user_id')->first()?->customer_id;
-        if($customer == null){
-            $customer = 'PID-000';
-        }
-        $numericPart = substr($customer, 4);
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "PID-" . $newNumericPart; 
-        return $newValue;
+    public static function generateNextCustomerId(){
+        $largest_user_id = Customer::where('customer_id', 'like', 'PID-%')
+        ->get()
+        ->map(function ($user) {
+                return (int)substr($user->customer_id, 4);  
+        })
+        ->max(); 
+        $largest_user_id++; 
+        $new_user_id = 'PID-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
+        return $new_user_id;
+    }
+
+    public static function generateNextUserCustomerId(){
+        $largest_user_id = Customer::where('customer_id', 'like', 'CUS-%')
+        ->get()
+        ->map(function ($user) {
+                return (int)substr($user->customer_id, 4);  
+        })
+        ->max(); 
+        $largest_user_id++; 
+        $new_user_id = 'CUS-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
+        return $new_user_id;
     }
 
     public static function generateNextFreelancerId()
     {
-        $user_id = User::where('user_type',2)->latest('id')->first()?->user_id;
-        if($user_id == null){
-            $user_id = 'FL-000';
-        }
-        $numericPart = substr($user_id, 4);  
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT); 
-        $newValue = "FL-" . $newNumericPart; 
-        return $newValue;
-    }
-
-    public static function generateNextUserCustomerId()
-    {
-        $customer_id = Customer::latest('id')->first()->customer_id;
-        if($customer_id == null){
-            $customer_id = 'CUS-000';
-        }
-        $numericPart = substr($customer_id, 4);
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "CUS-" . $newNumericPart; 
-        return $newValue;
-    }
+        $largest_user_id = User::where('user_type', 2)
+            ->where('user_id', 'like', 'FL-%')
+            ->get()
+            ->map(function ($user) {
+                    return (int)substr($user->user_id, 3);  
+            })
+            ->max(); 
+        $largest_user_id++; 
+        $new_user_id = 'FL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
+        return $new_user_id;
+    } 
  
  
 

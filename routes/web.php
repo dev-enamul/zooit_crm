@@ -438,31 +438,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
 
-        $largest_user_id = User::where('user_type', 2)
-    ->where('user_id', 'like', 'FL-%')
-    ->get()
-    ->map(function ($user) {
-        return (int)substr($user->user_id, 3); // Extract the numeric part after 'FL-'
-    })
-    ->max();
-
-$largest_user_id++; // Increment the numeric part by one
-
-$new_user_id = 'FL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT); // Reconstruct the user_id with the incremented numeric part
-
-echo $new_user_id;
-
-        $largest_user_id = User::where('user_type', 2)
-        ->where('user_id', 'like', 'FL-%')
-        ->get()
-        ->map(function ($user) {
-            return (int)substr($user->user_id, 3); // Extract the numeric part after 'FL-'
-        })
-        ->max();
-    
-    $largest_user_id = 'FL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT); // Reconstruct the user_id
-    
-    dd($largest_user_id,$new_user_id);
+        dd(User::generateNextCustomerId());
     
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
