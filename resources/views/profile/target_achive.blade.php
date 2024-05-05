@@ -211,6 +211,62 @@
                                         <p class="text-muted mb-0 mt-1">{{$per['negotiation_analysis']}} <span>Avg</span></p>
                                     </div>
                                 </div> 
+
+ 
+                                <div class="col-4">
+                                    <div class="border rounded p-2"> 
+                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Rejection</b></a></p>
+                                        <h4 class="fs-16 mb-2">
+                                            <span title="Achivement">{{$achive['rejection']}}</span>  
+                                    </div>
+                                </div> 
+
+                                <div class="col-4">
+                                    <div class="border rounded p-2"> 
+                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Sales Return</b></a></p>
+                                        <h4 class="fs-16 mb-2">
+                                            <span title="Achivement">{{$achive['return']}}</span>
+                                           
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="border rounded p-2"> 
+                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Sales Transfer</b></a></p>
+                                        <h4 class="fs-16 mb-2">
+                                            <span title="Achivement">0</span> 
+                                    </div>
+                                </div>
+
+
+                                <div class="col-4">
+                                    <div class="border rounded p-2"> 
+                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Unit</b></a></p>
+                                        <h4 class="fs-16 mb-2">
+                                            <span title="Achivement">A-{{$achive['sales']}}</span> / 
+                                            <span title="target">T-{{$deposit_target->total_unit??0}}</span></h4>
+                                        <div class="progress progress-sm" style="height:4px;">
+                                            <div class="progress-bar bg-success" style="width: {{$per['sales']}}"></div>
+                                        </div>
+                                        <p class="text-muted mb-0 mt-1">{{$per['sales']}} <span>Avg</span></p>
+                                    </div>
+                                </div> 
+
+                                <div class="col-4">
+                                    <div class="border rounded p-2"> 
+                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Deposit</b></a></p>
+                                        <h4 class="fs-16 mb-2">
+                                            <span title="Achivement">A-{{$achive['deposit']}}</span> / 
+                                            <span title="target">T-{{$deposit_target->total_deposit??0}}</span></h4>
+                                        <div class="progress progress-sm" style="height:4px;">
+                                            <div class="progress-bar bg-success" style="width: {{$per['deposit']}}"></div>
+                                        </div>
+                                        <p class="text-muted mb-0 mt-1">{{$per['deposit']}} <span>Avg</span></p>
+                                    </div>
+                                </div>
+
+                                
+
                             </div> 
                         </div>
                     </div>

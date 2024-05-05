@@ -59,14 +59,13 @@ class ProfileController extends Controller
         }else{
             $top_reporting_user = $reporting_user = null;
         }
-        $user['marital_status'] = MaritualStatus::values()[$user->marital_status];
+        $user['marital_status'] = MaritualStatus::values()[$user->marital_status??1];
         
 
         return view('profile.profile',compact('user_id','user','reporting_user','top_reporting_user'));
     }
 
-    public function freelancer_join_process($id){ 
-
+    public function freelancer_join_process($id){  
         $user_id = decrypt($id);
         $user = User::find($user_id);
         $approve_process = FreelancerApprovel::where('freelancer_id',$user_id)->get();
@@ -86,7 +85,23 @@ class ProfileController extends Controller
         $target = FieldTarget::where('assign_to',$user_id)
                     ->whereMonth('month',$date)
                     ->whereYear('month',$date)
-                    ->first();  
+                    ->first();
+
+        $deposit_target = DepositTarget::where('assign_to', $user_id)
+            ->whereMonth('month', $date)
+            ->whereYear('month', $date)
+            ->with(['depositTargetProjects' => function ($query) {
+                $query->select('deposit_target_id')
+                        ->selectRaw('SUM(new_unit + existing_unit) as total_unit')
+                        ->groupBy('deposit_target_id');
+            }])
+            ->selectRaw('SUM(new_total_deposit + existing_total_deposit) as total_deposit')
+            ->whereHas('depositTargetProjects')
+            ->first();
+        
+        
+        
+
         $my_all_employee = json_decode($user->user_employee);
         $achive['freelancer'] = $user->freelanecr_achive($date, $my_all_employee)??0;
         $achive['customer'] = $user->customer_achive($date, $my_all_employee)??0;
@@ -100,6 +115,14 @@ class ProfileController extends Controller
         $achive['followup_analysis'] = $user->followup_analysis_achive($date, $my_all_employee)??0;
         $achive['negotiation'] = $user->negotiation_achive($date, $my_all_employee)??0;
         $achive['negotiation_analysis'] = $user->negotiation_analysis_achive($date, $my_all_employee)??0;
+        $achive['rejection'] = $user->rejection($date, $my_all_employee)??0;
+        $achive['sales'] = $user->sales_achive($date, $my_all_employee)??0;
+        $achive['deposit'] = $user->deposit_achive($date, $my_all_employee)??0; 
+
+        $achive['rejection'] = $user->rejection($date, $my_all_employee);
+        $achive['return'] = $user->return($date, $my_all_employee);
+        // $transfer = $user->transfer($date, $my_all_employee);
+
 
         $per['freelancer'] = get_percent($achive['freelancer']??0,$target->freelancer??0);
         $per['customer'] = get_percent($achive['customer']??0,$target->customer??0);
@@ -113,7 +136,10 @@ class ProfileController extends Controller
         $per['followup_analysis'] = get_percent($achive['followup_analysis']??0,$target->follow_up_analysis??0);
         $per['negotiation'] = get_percent($achive['negotiation']??0,$target->negotiation??0);
         $per['negotiation_analysis'] = get_percent($achive['negotiation_analysis']??0,$target->negotiation_analysis??0);
+        $per['sales'] = get_percent($achive['sales']??0,$deposit_target->total_unit??0);
+        $per['deposit'] = get_percent($achive['deposit']??0,$deposit_target->total_deposit??0);
         $date_range = $date->startOfMonth()->format('Y/m/d').' - '.$date->endOfMonth()->format('Y/m/d');
+        
 
         $total_achive = array_sum($per); 
         $total_per = $total_achive/1200;
@@ -121,7 +147,7 @@ class ProfileController extends Controller
        
 
 
-        return view('profile.target_achive',compact('user_id','user','date','target','achive','per','date_range','total_per'));
+        return view('profile.target_achive',compact('user_id','user','date','target','achive','per','date_range','total_per','deposit_target'));
     }    
 
     public function wallet(Request $request, $id){

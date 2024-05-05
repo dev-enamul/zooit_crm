@@ -13,6 +13,9 @@ use App\Models\Negotiation;
 use App\Models\NegotiationAnalysis;
 use App\Models\Presentation;
 use App\Models\Prospecting;
+use App\Models\Rejection;
+use App\Models\Salse;
+use App\Models\SalseReturn;
 use App\Models\User;
 use App\Models\VisitAnalysis;
 use Carbon\Carbon;
@@ -279,6 +282,72 @@ trait UserAchiveTreat
         return $data; 
     } 
 
+    public function rejection($date = null, $my_all_employee = null){
+        if($date == null){
+            $date = Carbon::now();
+        }else{
+            $date = Carbon::parse($date);
+        }   
+
+        if($my_all_employee==null){
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
+        }
+        
+        $data = Rejection::whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            }) 
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count();
+        return $data; 
+    }
+
+    public function sales_achive($date = null, $my_all_employee = null){
+        if($date == null){
+            $date = Carbon::now();
+        }else{
+            $date = Carbon::parse($date);
+        }   
+
+        if($my_all_employee==null){
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
+        }
+        
+        $data = Salse::whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            }) 
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count();
+        return $data; 
+    }
+
+    public function return($date = null, $my_all_employee = null){
+        if($date == null){
+            $date = Carbon::now();
+        }else{
+            $date = Carbon::parse($date);
+        }   
+
+        if($my_all_employee==null){
+            $user = User::find($this->id);
+            $my_all_employee = json_decode($user->user_employee);
+        }
+        
+        $data = SalseReturn::whereHas('customer',function($q) use($my_all_employee){
+                $q->whereIn('ref_id',$my_all_employee);
+            }) 
+            ->where('approve_by','!=',null)
+            ->whereMonth('created_at',$date)
+            ->whereYear('created_at',$date)
+            ->count();
+        return $data; 
+    }
+
+      
+
     public function deposit_achive($date = null, $my_all_employee = null){
         if($date == null){
             $date = Carbon::now();
@@ -297,7 +366,7 @@ trait UserAchiveTreat
             ->where('approve_by','!=',null)
             ->whereMonth('created_at',$date)
             ->whereYear('created_at',$date)
-            ->sum('amount');; 
+            ->sum('amount');
         return $data; 
     } 
 

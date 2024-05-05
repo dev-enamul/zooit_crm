@@ -153,12 +153,12 @@ class CustomersDataTable extends DataTable
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                         $q->whereIn('designation_id',[10]);
-                    })->first();  
+                    })->first(); 
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
+                // return "-";  
             }) 
             ->setRowId('id');
     }

@@ -29,32 +29,128 @@ class ProspectingDataTable extends DataTable
             ->addColumn('action',function($prospecting){ 
                 return view('prospecting.prospecting_action',compact('prospecting'))->render();
             })
-            ->addColumn('profession', function($prospecting){
-                return $prospecting->customer->profession->name??'-';
-            })
-            ->addColumn('thana', function($prospecting){
-                return $prospecting->customer->user->userAddress->upazila->name??"-";
-            })
-            ->addColumn('union', function($prospecting){
-                return $prospecting->customer->user->userAddress->union->name??"-";
-            })
-            ->addColumn('vilage', function($prospecting){
-                return $prospecting->customer->user->userAddress->village->name??"-";
-            })
-            ->addColumn('media', function($prospecting){
-                return $prospecting->media == 1 ? 'Phone' : ($prospecting->media == 2 ? 'Meet' : '-');
+            ->addColumn('profession', function($data){
+                return $data->customer->profession->name??'-';
+            }) 
+            ->addColumn('phone', function($data){
+                return $data->customer->user->phone??"-";
+            }) 
+            ->addColumn('freelancer', function($data){
+                if(@$data->customer->ref_id==null){
+                    return '-';
+                }  
 
-            })
-            ->addColumn('phone', function($prospecting){
-                return $prospecting->customer->user->phone??"-";
-            })
-            ->addColumn('fl_id', function($prospecting){
-                 return $prospecting->customer->reference->name.' '.$prospecting->customer->reference->user_id??"-";
+                $reporting = json_decode($data->customer->reference->user_reporting);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                        $q->whereIn('designation_id',[20]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+            ->addColumn('co-ordinator', function($data){
+                if(@$data->customer->ref_id==null){
+                    return '-';
+                }  
+
+                $reporting = json_decode($data->customer->reference->user_reporting);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                        $q->whereIn('designation_id',[18]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+            ->addColumn('ex-co-ordinator', function($data){
+                if(@$data->customer->ref_id==null){
+                    return '-';
+                }  
+
+                $reporting = json_decode($data->customer->reference->user_reporting);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                        $q->whereIn('designation_id',[17]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+            ->addColumn('marketing-incharge', function($data){
+                if(@$data->customer->ref_id==null){
+                    return '-';
+                }  
+
+                $reporting = json_decode($data->customer->reference->user_reporting);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                        $q->whereIn('designation_id',[16]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
             }) 
 
-            ->addColumn('employee', function($employee){
-                return $employee->employee->name;
-           })
+            ->addColumn('salse-incharge', function($data){
+                if(@$data->customer->ref_id==null){
+                    return '-';
+                }  
+
+                $reporting = json_decode($data->customer->reference->user_reporting);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                        $q->whereIn('designation_id',[12,13,14,15]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            })  
+            ->addColumn('area-incharge', function($data){
+                if(@$data->customer->ref_id==null){
+                    return '-';
+                }  
+
+                $reporting = json_decode($data->customer->reference->user_reporting);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                        $q->whereIn('designation_id',[11]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+            ->addColumn('zonal-manager', function($data){
+                if(@$data->customer->ref_id==null){
+                    return '-';
+                }   
+                $reporting = json_decode($data->customer->reference->user_reporting);
+                if(isset($reporting) && $reporting!= null){
+                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                        $q->whereIn('designation_id',[10]);
+                    })->first();  
+                    if(isset($user) && $user != null){
+                        return $user->name.' ['.$user->user_id.']';
+                    }
+                }
+                return "-";  
+            }) 
+            ->addColumn('serial', function () {
+                static $serial = 0;
+                return ++$serial;
+            })
 
             ->setRowId('id');
     }
@@ -134,20 +230,22 @@ class ProspectingDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id')->title('S/N'),
-            Column::make('customer.name')->title('Full Name'), 
-            Column::make('profession')->title('Profession'),
-            Column::make('thana')->title('Thana'),
-            Column::make('union')->title('Union'),
-            Column::make('vilage')->title('Village'),
-            Column::make('media')->title('Media'),
-            Column::make('phone')->title('Phone'),
-            Column::make('fl_id')->title('FL ID'), 
-            Column::make('employee')->title('Employee'),
+            ->exportable(false)
+            ->printable(false)
+            ->width(60)
+            ->addClass('text-center'),
+        Column::make('serial')->title('S/N'), 
+        Column::make('customer.customer_id')->title('Provable Cus ID'),
+        Column::make('customer.name')->title('Customer Name'), 
+        Column::make('phone')->title('Phone'),
+        Column::make('profession')->title('Profession'), 
+        Column::make('freelancer')->title('Frinchise Partner Name & ID'), 
+        Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
+        Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
+        Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
+        Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
+        Column::make('area-incharge')->title('Area Incharge Name & ID'),
+        Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
         ];
     }
 
