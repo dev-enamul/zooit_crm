@@ -35,9 +35,9 @@ class DepositTargetController extends Controller
        }catch(Exception $e){
            return redirect()->back()->with('error',$e->getMessage());
        }
-    }
-
-    public function target_asign_list(Request $request){  
+    } 
+    
+    public function target_asign_list(Request $request){
         $my_employee = my_employee(auth()->user()->id);  
         $selected = $request->month;  
         if(isset($selected) && $selected != ''){ 
@@ -53,7 +53,8 @@ class DepositTargetController extends Controller
                     ->whereYear('month',$year)
                     ->where('is_project_wise',1)
                     ->with('assignTo')
-                    ->get(); 
+                    ->get();  
+
         $employees = User::whereIn('id',$my_employee)->where('status',1)->get(); 
         $projects = Project::where('status', 1)->get();
         return view('target.deposit_target_asign_list',compact('selected','projects','employees','deposit_targets'));
@@ -101,10 +102,10 @@ class DepositTargetController extends Controller
                         DepositTargetProject::create([
                             'deposit_target_id' => $deposit_target->id,
                             'project_id' => $project_id,
-                            'new_unit' => $request->new_unit[$key],
-                            'new_deposit' => $request->new_deposit[$key],
-                            'existing_unit' => $request->existing_unit[$key],
-                            'existing_deposit' => $request->existing_deposit[$key],
+                            'new_unit' => $request->new_unit[$key]??0,
+                            'new_deposit' => $request->new_deposit[$key]??0,
+                            'existing_unit' => $request->existing_unit[$key]??0,
+                            'existing_deposit' => $request->existing_deposit[$key]??0,
                         ]);
                     }
                 }

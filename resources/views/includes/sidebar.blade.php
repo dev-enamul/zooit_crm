@@ -92,9 +92,7 @@
                                     @endcan    
                                     <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search','freelancer.edit') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
                                     @if (!empty($approve_setting['freelancer']) )
-                                        @can('product-approve')
                                         <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
-                                        @endcan
                                     @endif 
             
                                 </ul>
