@@ -364,7 +364,7 @@ class CustomerController extends Controller
        
         try {  
             $customer = Customer::find($id);
-            $user = $customer->user; 
+            $user = $customer->user;
 
             if($user==null){
                 return redirect()->back()->with('Invalid Customer');
@@ -596,7 +596,7 @@ class CustomerController extends Controller
          }
     }
 
-    public function edit($id){ 
+    public function edit($id){
         $id = decrypt($id);
         $title     = "Customer Edit";
         $countries = $this->getCachedCountries();

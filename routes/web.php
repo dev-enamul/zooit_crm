@@ -74,7 +74,8 @@ use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\UserCommissionController;
-use App\Http\Controllers\UserDocumentController; 
+use App\Http\Controllers\UserDocumentController;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 /*
@@ -436,7 +437,33 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-         dd("nothing");
+
+        $largest_user_id = User::where('user_type', 2)
+    ->where('user_id', 'like', 'FL-%')
+    ->get()
+    ->map(function ($user) {
+        return (int)substr($user->user_id, 3); // Extract the numeric part after 'FL-'
+    })
+    ->max();
+
+$largest_user_id++; // Increment the numeric part by one
+
+$new_user_id = 'FL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT); // Reconstruct the user_id with the incremented numeric part
+
+echo $new_user_id;
+
+        $largest_user_id = User::where('user_type', 2)
+        ->where('user_id', 'like', 'FL-%')
+        ->get()
+        ->map(function ($user) {
+            return (int)substr($user->user_id, 3); // Extract the numeric part after 'FL-'
+        })
+        ->max();
+    
+    $largest_user_id = 'FL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT); // Reconstruct the user_id
+    
+    dd($largest_user_id,$new_user_id);
+    
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
         // foreach($users as $user){ 

@@ -222,7 +222,7 @@ class LeadAnalysisDataTable extends DataTable
             Column::make('profession_year')->title('Service Year'),
             Column::make('influencer')->title('Influencer Person Name'),
             Column::make('decision_maker')->title('Decision Maker Person Name'),
-            Column::make('freelancer')->title('Frinchise Partner Name & ID'),  
+            Column::make('freelancer')->title('Franchise Partner Name & ID'),  
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
             Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
             Column::make('area-incharge')->title('Area Incharge Name & ID'),

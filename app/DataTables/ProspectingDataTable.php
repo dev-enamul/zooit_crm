@@ -239,7 +239,7 @@ class ProspectingDataTable extends DataTable
         Column::make('customer.name')->title('Customer Name'), 
         Column::make('phone')->title('Phone'),
         Column::make('profession')->title('Profession'), 
-        Column::make('freelancer')->title('Frinchise Partner Name & ID'), 
+        Column::make('freelancer')->title('Franchise Partner Name & ID'), 
         Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
         Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
         Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),

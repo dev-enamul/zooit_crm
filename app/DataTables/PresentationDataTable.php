@@ -220,7 +220,7 @@ class PresentationDataTable extends DataTable
             Column::make('project')->title('Preferred Project Name'),
             Column::make('unit')->title('Preferred Unit Name'), 
             Column::make('date')->title('Presentation Date'),
-            Column::make('freelancer')->title('Frinchise Partner Name & ID'),  
+            Column::make('freelancer')->title('Franchise Partner Name & ID'),  
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
             Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
             Column::make('area-incharge')->title('Area Incharge Name & ID'),

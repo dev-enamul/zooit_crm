@@ -215,7 +215,7 @@
  
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Rejection</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href=""><b>Rejection</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">{{$achive['rejection']}}</span>  
                                     </div>
@@ -223,7 +223,7 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Sales Return</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href=""><b>Sales Return</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">{{$achive['return']}}</span>
                                            
@@ -232,7 +232,7 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Sales Transfer</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href=""><b>Sales Transfer</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">0</span> 
                                     </div>
@@ -241,7 +241,7 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Unit</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href=""><b>Unit</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['sales']}}</span> / 
                                             <span title="target">T-{{$deposit_target->total_unit??0}}</span></h4>
@@ -254,7 +254,7 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Deposit</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href=""><b>Deposit</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['deposit']}}</span> / 
                                             <span title="target">T-{{$deposit_target->total_deposit??0}}</span></h4>

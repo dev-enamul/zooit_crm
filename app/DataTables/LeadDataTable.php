@@ -243,7 +243,7 @@ class LeadDataTable extends DataTable
             Column::make('profession')->title('Profession'), 
             Column::make('project')->title('Preferred Project Name'),
             Column::make('unit')->title('Preferred Unit Name'), 
-            Column::make('freelancer')->title('Frinchise Partner Name & ID'), 
+            Column::make('freelancer')->title('Franchise Partner Name & ID'), 
             Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
             Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),

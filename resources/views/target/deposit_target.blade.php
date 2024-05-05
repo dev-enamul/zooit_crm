@@ -25,7 +25,7 @@
                     <div class="card"> 
                         <div class="card-body">
                            <div class="d-flex justify-content-between"> 
-                                <div class="">
+                                {{-- <div class="">
                                     <div class="btn-group flex-wrap mb-2">      
                                         <button class="btn btn-primary buttons-copy buttons-html5" tabindex="0" aria-controls="datatable-buttons" type="button">
                                             <span><i class="fas fa-file-excel"></i> Excel</span>
@@ -35,7 +35,6 @@
                                             <span><i class="fas fa-file-csv"></i> CSV</span>
                                         </button> 
                                     </div> 
-                              
                                 </div>
                                 <div class="">  
                                     <div class="input-group">  
@@ -44,13 +43,13 @@
                                             <span><i class="fas fa-filter"></i> Filter</span>
                                         </button> 
                                     </div>
-                                </div>
+                                </div> --}}
                            </div>
 
                             <table class="table table-hover table-bordered table-striped dt-responsive nowrap text-center" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr class="align-middle"> 
-                                        <th>Action</th>
+                                        {{-- <th>Action</th> --}}
                                         <th>S/N</th>
                                         <th>Project</th> 
                                         <th>Existing Unit</th>
@@ -60,18 +59,19 @@
                                     </tr>   
                                 </thead>
                                 <tbody> 
-                                    @if ($datas->is_project_wise==1) 
+                                  
+                                    @if (isset($datas) && $datas->is_project_wise==1) 
                                         @if (isset($datas->depositTargetProjects) && count($datas->depositTargetProjects)>0)
                                             @foreach ($datas->depositTargetProjects as $key => $data)
                                                 <tr> 
-                                                    <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                    {{-- <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                         <div class="dropdown">  
                                                             <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                             <div class="dropdown-menu dropdown-menu-animated">
                                                                 <a class="dropdown-item" href="{{route('deposit.target.asign',$data->id)}}">Asign Target</a>
                                                             </div>
                                                         </div> 
-                                                    </td>
+                                                    </td> --}}
                                                     <td>{{$key+1}}</td>
                                                     <td>{{@$data->project->name}}</td>
                                                     <td class="align-middle">{{$data->existing_unit}}</td> 
@@ -83,7 +83,12 @@
                                             @endforeach 
                                         @endif 
                                     @else
-                                        
+                                        <th>1</th>
+                                        <th>-</th> 
+                                        <th>-</th>
+                                        <th>{{get_price($datas->existing_total_deposit)}}</th>
+                                        <th></th> 
+                                        <th>{{get_price($datas->new_total_deposit)}}</th> 
                                     @endif
                                     
                                 </tbody>

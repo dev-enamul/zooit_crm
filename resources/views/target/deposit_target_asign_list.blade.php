@@ -47,8 +47,8 @@
                                         <th>Project</th> 
                                         <th>Unit & Amount</th>
                                         @foreach ($deposit_targets as $target) 
-                                            <th>{{$target->assignTo->name}} ({{$target->assignTo->user_id}}) Unit</th>
-                                            <th >{{$target->assignTo->name}} ({{$target->assignTo->user_id}}) Deposit</th>
+                                            <th>{{$target->assignTo->name}} ({{$target->assignTo->user_id}}) Deposit</th>
+                                            <th >{{$target->assignTo->name}} ({{$target->assignTo->user_id}}) Unit</th>
                                         @endforeach 
                                         <th>Total</th> 
                                     </tr>  
@@ -90,12 +90,12 @@
                                                             echo '<td class="align-middle">-</td>';
                                                             echo '<td class="align-middle">-</td>';
                                                         }
-                                                    @endphp 
+                                                    @endphp
                                                     @endforeach 
-
                                                 <td class="align-middle">{{$total_existing_unit}}</td> 
                                                 <td class="align-middle">{{get_price($total_existing_deposit)}}</td>  
-                                            </tr>  
+                                            </tr> 
+                                             
                                             <tr>  
                                                 <td>{{++$key}}</td>
                                                 <td>{{$project->name}} New</td> 
@@ -131,8 +131,7 @@
                                                             $total_new_deposit += $new_deposit;
                                                         }
                                                     }
-                                                @endphp 
-
+                                                @endphp  
                                                 <td class="align-middle">{{ $target_project ? $new_unit : '-' }}</td> 
                                                 <td class="align-middle">{{ $target_project ? get_price($new_deposit) : '-' }}</td>
                                                 @endforeach  
