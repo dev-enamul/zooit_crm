@@ -82,7 +82,7 @@
                                                 </tr> 
                                             @endforeach 
                                         @endif 
-                                    @else
+                                    @elseif(isset($datas) && $datas->is_project_wise==0)
                                         <th>1</th>
                                         <th>-</th> 
                                         <th>-</th>
