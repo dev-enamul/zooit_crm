@@ -95,5 +95,11 @@
 @endsection 
 
 @section('script')
-
+<script>
+    $(document).ready(function () { 
+        $('#selectAll').click(function () {
+            $(':checkbox').prop('checked', this.checked);
+        });
+    });
+</script>
 @endsection
