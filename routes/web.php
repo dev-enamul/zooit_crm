@@ -67,6 +67,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Events\Message;
 use App\Events\UserCreatedEvent;
+use App\Http\Controllers\AdminNoticeController;
 use App\Http\Controllers\CommonController; 
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController; 
@@ -433,6 +434,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Header Route 
         Route::get('notification', [NotificationController::class, 'index'])->name('notification.index');
+        Route::resource('admin-notice', AdminNoticeController::class); 
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 

@@ -354,7 +354,7 @@
                                 <li><a href="{{route('deposit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit List</a></li> 
                             </ul>
                         </li>  
-                    @endcan 
+                    @endcan   
                     </div>
                 </div>
 
@@ -395,9 +395,8 @@
                                     <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li> 
                                    
                                 </ul>
-                            </li>
-                        @endcan 
-    
+                            </li>  
+                        @endcan   
                         @can('book-reading')
     
                         @endcan
@@ -444,7 +443,14 @@
                                 </li> 
                             </ul>
                         </li> 
-                        @endcan 
+                        @endcan  
+
+                        <li>
+                            <a href="{{route('admin-notice.index')}}" class="">
+                                <i class="fas fa-desktop"></i>
+                                <span>Send Notice</span>
+                            </a>
+                        </li>
                         @can('meeting') 
 
                         {{-- <li>

@@ -32,8 +32,7 @@
                                     <div class="mb-1">
                                         <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
                                         <label for="selectAll">Check All</label>
-                                    </div> 
-
+                                    </div>  
                                     <div class="mb-1">
                                         <button class="btn btn-primary" type="submit">
                                             Approve
@@ -63,7 +62,7 @@
                                         @foreach ($presentations as  $presentation)
                                         <tr class="">
                                             <td class="text-center">
-                                                <input class="form-check-input" type="checkbox" name="presentation[]" value="{{$presentation->id}}" id="flexCheckChecked" >
+                                                <input class="form-check-input" type="checkbox" name="presentation_id[]" value="{{$presentation->id}}" id="flexCheckChecked" >
                                             </td>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ @$presentation->created_at }}</td>
