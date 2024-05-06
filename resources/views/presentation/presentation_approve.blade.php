@@ -96,6 +96,7 @@
 
 @section('script')
 <script>
+    alert('yes');
     $(document).ready(function () { 
         $('#selectAll').click(function () {
             $(':checkbox').prop('checked', this.checked);
