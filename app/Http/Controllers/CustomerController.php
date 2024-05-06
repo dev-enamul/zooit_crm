@@ -118,8 +118,8 @@ class CustomerController extends Controller
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required|in:1,2,3',
-            'phone1'                    => 'required|string|max:15',
-            'phone2'                    => 'nullable|string|max:15',
+            'phone1'                    => 'required|string|max:11|min:11||regex:/^01[3-9]{1}\d{8}$/',
+            'phone2'                    => 'nullable|string|max:11|min:11',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',
             'imo_whatsapp_number'       => 'nullable|string',
@@ -163,16 +163,19 @@ class CustomerController extends Controller
         DB::beginTransaction(); 
        
         try { 
-            $old_user = User::where('phone', get_phone($request->phone1))->first();
+            $old_user = User::where('phone', $request->phone1)->withTrashed()->first();
             $approve_setting = ApproveSetting::where('name','customer')->first();  
             $is_admin = Auth::user()->hasPermission('admin'); 
             if($approve_setting->status == 0 || $is_admin){ 
                 $approve_by = auth()->user()->id;
             }else{
                 $approve_by = null;
-            }
-
+            }  
             if ($old_user) {
+                $old_user->deleted_at = null;
+                $old_user->deleted_by = null;
+                $old_user->updated_at = now();
+                $old_user->save();
                 Customer::create([
                     'user_id'       => $old_user->id,
                     'customer_id'   => User::generateNextCustomerId(),
@@ -303,7 +306,8 @@ class CustomerController extends Controller
             
             DB::commit(); 
             return redirect()->route('customer.index')->with('success', 'Customer created successfully');
-        } catch (Exception $e) {   
+        } catch (Exception $e) {  
+            dd($e->getMessage()); 
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }

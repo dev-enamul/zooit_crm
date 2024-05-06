@@ -445,12 +445,15 @@
                         </li> 
                         @endcan  
 
-                        <li>
-                            <a href="{{route('admin-notice.index')}}" class="">
-                                <i class="fas fa-desktop"></i>
-                                <span>Send Notice</span>
-                            </a>
-                        </li>
+                        @if (auth()->user()->id == 1)
+                            <li>
+                                <a href="{{route('admin-notice.index')}}" class="">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Send Notice</span>
+                                </a>
+                            </li>
+                        @endif  
+                        
                         @can('meeting') 
 
                         {{-- <li>

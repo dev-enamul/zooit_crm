@@ -55,10 +55,13 @@
                     </div>
                 </form>
 
-                {{-- <div class="dropdown d-inline-block">
+                @php
+                    $notifications = \App\Models\NotificationUser::where('user_id',auth()->id())->where('read_at',null)->get();
+                @endphp
+                <div class="dropdown d-inline-block">
                     <button type="button" class="btn btn-sm top-icon" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell align-middle"></i>
-                        <span class="btn-marker"><i class="marker marker-dot text-danger"></i><span>
+                        <span class="btn-marker btn btn-primary btn-sm">6<span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-md dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
                         <div class="p-3 bg-info">
@@ -177,7 +180,7 @@
                             </div>
                         </div>
                     </div>
-                </div> --}}
+                </div>
                 <!-- End Notification --> 
 
                 <!-- Start Profile -->

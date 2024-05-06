@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminNoticeController extends Controller
 {
@@ -11,7 +14,8 @@ class AdminNoticeController extends Controller
      */
     public function index()
     {
-        dd("yes");
+        $datas = Notification::where('created_by', auth()->user()->id)->paginate(10);
+        return view('notification.admin_notice',compact('datas'));
     }
 
     /**
@@ -27,7 +31,12 @@ class AdminNoticeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $user = Auth::user();
+        $data['user_id'] = User::where('user_type',1)->where('status',1)->pluck('id')->toArray();
+        $data['created_by'] = Auth::user()->id; 
+        Notification::store($data); 
+        return redirect()->back()->with('success','Notification sent successfully');
     }
 
     /**
