@@ -144,7 +144,7 @@ class PresentationController extends Controller
     }
 
     public function presentationApproveSave(Request $request) {
-        if($request->has('presentation_id') && $request->presentation_id !== '' & $request->presentation_id !== null) {
+        if($request->has('presentation_id') && $request->presentation_id !== '' && $request->presentation_id !== null) {
             DB::beginTransaction();
             try {
                 foreach ($request->presentation_id as $key => $presentation_id) {
