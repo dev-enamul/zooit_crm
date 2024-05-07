@@ -93,7 +93,7 @@
                             <input type="text" class="form-control" id="link" name="link" placeholder="Enter notice title">
                         </div>
                         
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="employee" class="form-label">Employees <span class="text-danger">*</span></label>
                                 <select id="employee" class="select2" tags search name="user_id[]" multiple>
