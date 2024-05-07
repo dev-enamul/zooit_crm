@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Models\NotificationUser;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,7 @@ class NotificationController extends Controller
     public function index()
     { 
         $notifications = NotificationUser::where('user_id', auth()->user()->id)->latest()->paginate(10);
+       
         return view('notification.notification_list', compact('notifications'));
     }
 

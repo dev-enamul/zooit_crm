@@ -15,7 +15,8 @@ class AdminNoticeController extends Controller
     public function index()
     {
         $datas = Notification::where('created_by', auth()->user()->id)->paginate(10);
-        return view('notification.admin_notice',compact('datas'));
+        $employees = User::where('user_type',1)->where('status',1)->get();
+        return view('notification.admin_notice',compact('datas','employees'));
     }
 
     /**
@@ -32,8 +33,6 @@ class AdminNoticeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $user = Auth::user();
-        $data['user_id'] = User::where('user_type',1)->where('status',1)->pluck('id')->toArray();
         $data['created_by'] = Auth::user()->id; 
         Notification::store($data); 
         return redirect()->back()->with('success','Notification sent successfully');

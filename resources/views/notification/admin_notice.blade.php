@@ -91,7 +91,18 @@
                         <div class="form-group mb-2">
                             <label for="link">Link</label>
                             <input type="text" class="form-control" id="link" name="link" placeholder="Enter notice title">
-                        </div> 
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="employee" class="form-label">Employees <span class="text-danger">*</span></label>
+                                <select id="employee" class="select2" tags search name="user_id[]" multiple>
+                                    @foreach ($employees as $employee)
+                                        <option value="{{$employee->id}}">{{$employee->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
                     </div> 
                     <div class="modal-footer">
@@ -103,41 +114,7 @@
         </div>
     </div>
 </div>  
-
-<div class="modal fade" id="edit_modal">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header"> 
-                <h5 class="modal-title">Update Bank</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
-            </div>
-
-            <form action="" method="POST">  
-                @csrf  
-                @method('PUT')
-                <div class="modal-body"> 
-                    <div class="form-group mb-2">
-                        <label for="name">Bank Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Bank" required>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="bank_type">Bank Type <span class="text-danger">*</span></label>
-                        <select id="bank_type" class="select2" name="type" required> 
-                            <option value="1">Mobile Banking</option> 
-                            <option value="0" selected>Bank</option> 
-                        </select> 
-                    </div>  
-                </div>
-
-                <div class="modal-footer">
-                    <div class="text-end">
-                        <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-                    </div> 
-                </div> 
-            </form>
-        </div>
-    </div>
-</div>  
+  
 @endsection 
 
 @section('script')
