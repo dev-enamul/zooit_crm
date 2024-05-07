@@ -13,6 +13,7 @@ use App\Models\Area;
 use App\Models\Bank;
 use App\Models\Customer;
 use App\Models\Employee;
+use App\Models\Notification;
 use App\Models\Profession;
 use App\Models\ReportingUser;
 use App\Models\User;
@@ -108,7 +109,7 @@ class CustomerController extends Controller
     }
 
     public function save(Request $request, $id = null)
-    { 
+    {
         $validator = Validator::make($request->all(), [
             'full_name'                 => 'required|string|max:255', 
             'marital_status'            => 'nullable',
@@ -170,6 +171,16 @@ class CustomerController extends Controller
                 $approve_by = auth()->user()->id;
             }else{
                 $approve_by = null;
+                // $auth_user = Auth::user(); 
+                // if(count(json_decode($auth_user->user_reporting))>1){
+                //     Notification::store([
+                //         'title'         => 'Customer approval request',
+                //         'content'       => $auth_user->name.' has created a customer please approve as soon as possible',
+                //         'link'          => route('customer.approve'),
+                //         'created_by'    => auth()->user()->id,  
+                //         'user_id'       => json_decode($auth_user->user_reporting)[1]
+                //     ]);
+                // } 
             }  
             if ($old_user) {
                 $old_user->deleted_at = null;
@@ -304,6 +315,10 @@ class CustomerController extends Controller
             ];  
             Customer::create($customer_data);   
             
+
+            // Notification  
+            
+
             DB::commit(); 
             return redirect()->route('customer.index')->with('success', 'Customer created successfully');
         } catch (Exception $e) {  

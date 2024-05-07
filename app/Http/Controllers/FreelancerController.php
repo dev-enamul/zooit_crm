@@ -308,10 +308,10 @@ class FreelancerController extends Controller
             // for freelancer approve 
             $approve_setting = ApproveSetting::where('name','freelancer')->first();
             $is_admin = Auth::user()->hasPermission('admin');
-            if($approve_setting?->status == 0 || $is_admin){ 
+            if($approve_setting?->status == 0 || $is_admin){
                 $controller = new ApproveFreelancerController();
                 $controller->complete_training(encrypt($user->id)); 
-            } 
+            }
             DB::commit();  
             
             UserCreatedEvent::dispatch($user->id);

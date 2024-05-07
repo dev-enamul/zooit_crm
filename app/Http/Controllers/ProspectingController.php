@@ -59,8 +59,12 @@ class ProspectingController extends Controller
         ];
 
         if ($request->has('customer')) {
-            $selected_data['customer'] = Customer::select('name','id','customer_id')->find($request->customer);
+            $selected_data['customer'] = Customer::select('name','id','customer_id','ref_id')->find($request->customer);
         }
+        $ref_reporting = json_decode($selected_data['customer']->reference->user_reporting);
+        $select_data['freelancer'] = User::whereIn('id',$ref_reporting)->whereHas('freelancer',function($q){
+            $q->where('designation_id',20);
+        })->first();
      
         return view('prospecting.prospecting_save', compact('prospectingMedias','priorities','title','employees','selected_data'));
     }    

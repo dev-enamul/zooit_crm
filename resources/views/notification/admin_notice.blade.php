@@ -38,7 +38,7 @@
                                         <th>Content</th>  
                                         <th>Link</th>  
                                     </tr>
-                                </thead>
+                                </thead> 
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
                                         <tr> 

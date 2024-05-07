@@ -49,7 +49,7 @@ class DashboardController extends Controller
 
 
 
-    public function index(){ 
+    public function index(){  
         $user= User::find(Auth::id());
         if($user->user_type==1){
             $user->e = $user->employee;
@@ -215,6 +215,7 @@ class DashboardController extends Controller
     }
 
     public function migrate_fresh(){  
+        
         // $user_reporting = ReportingUser::latest()->first();
         // dd($user_reporting);
 
