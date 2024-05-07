@@ -434,12 +434,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Header Route 
         Route::get('notification', [NotificationController::class, 'index'])->name('notification.index');
+        Route::get('notification-read/{id}', [NotificationController::class, 'read'])->name('notification.read');
+        Route::get('notification-details/{id}', [NotificationController::class, 'details'])->name('notification.details');
         Route::resource('admin-notice', AdminNoticeController::class); 
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-
         dd(User::generateNextCustomerId());
     
   

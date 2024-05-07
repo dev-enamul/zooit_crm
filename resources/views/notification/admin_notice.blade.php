@@ -89,8 +89,8 @@
                         </div> 
 
                         <div class="form-group mb-2">
-                            <label for="link">Link <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="link" name="link" placeholder="Enter notice title" required>
+                            <label for="link">Link</label>
+                            <input type="text" class="form-control" id="link" name="link" placeholder="Enter notice title">
                         </div> 
 
                     </div> 

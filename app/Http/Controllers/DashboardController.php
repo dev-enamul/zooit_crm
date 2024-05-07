@@ -219,17 +219,17 @@ class DashboardController extends Controller
         // dd($user_reporting);
 
         // exec('composer update');
-        // Artisan::call('migrate:fresh');
+        Artisan::call('php artisan migrate:refresh --path=/database/migrations/fileName.pefresh --path=/database/migrations/2024_01_31_032728_create_notifications_table.php');
         // Artisan::call('db:seed');  
-        Artisan::call('migrate');
+        // Artisan::call('migrate');
         // Artisan::call('storage:link');
         
-        Artisan::call('cache:clear');
-        Artisan::call('config:clear');
-        Artisan::call('route:clear');
-        Artisan::call('view:clear');
-        Artisan::call('clear-compiled'); 
-        Artisan::call('optimize:clear');
+        // Artisan::call('cache:clear');
+        // Artisan::call('config:clear');
+        // Artisan::call('route:clear');
+        // Artisan::call('view:clear');
+        // Artisan::call('clear-compiled'); 
+        // Artisan::call('optimize:clear');
         
         return redirect()->route('index');
     }

@@ -30,28 +30,21 @@
                         <div class="box-title border-bottom p-3">
                             <h6 class="m-0">Notification</h6>
                         </div>
-                        <div class="box-body p-0"> 
-                            @foreach ($notifications as $notification)
-                                <div class="p-3 d-flex align-items-center justify-content-between {{$notification->read_at==null?'bg-light':''}}">
+                        <div class="box-body p-0">  
+                                <div class="p-3 d-flex align-items-center justify-content-between bg-light">
                                     <div class="d-flex">
                                         <div class="dropdown-list-image me-3">
-                                            <img class="rounded-circle" src="{{@$notification->notification->creator->image()}}" alt="" />
+                                            <img class="rounded-circle" src="{{@$notification->creator->image()}}" alt="" />
                                         </div>
                                         <div class="font-weight-bold mr-3">
                                             <div class="">
-                                                <b>{{@$notification->notification->title}}</b>
-                                                {{Str::limit(@$notification->notification->content,200)}}
+                                                <b>{{@$notification->title}}</b> <span class="text-primary">{{@$notification->created_at->diffForHumans();}} <br></span>
+                                                {{@$notification->content}}
                                             </div>
-                                            <div class="text-right text-secondary">
-                                                {{@$notification->created_at->diffForHumans();}}
-                                            </div>
-                                            <a href="{{route('notification.read',$notification->id)}}" type="button" class="btn btn-outline-primary btn-sm">View Details</a> 
+                                              
                                         </div>
                                     </div>  
-                                </div>  
-                            @endforeach 
-
-                            {{$notifications->links()}}
+                                </div>   
                         </div>
                     </div>
                 </div>   

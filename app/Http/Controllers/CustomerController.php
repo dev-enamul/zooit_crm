@@ -118,7 +118,7 @@ class CustomerController extends Controller
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required|in:1,2,3',
-            'phone1'                    => 'required|string|max:11|min:11||regex:/^01[3-9]{1}\d{8}$/',
+            'phone1'                    => 'required|string|max:11|min:11||regex:/^01[3-9]{1}\d{8}$/|unique:users,phone',
             'phone2'                    => 'nullable|string|max:11|min:11',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',
