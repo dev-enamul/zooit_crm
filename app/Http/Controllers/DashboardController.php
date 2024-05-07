@@ -219,7 +219,7 @@ class DashboardController extends Controller
         // dd($user_reporting);
 
         // exec('composer update');
-        Artisan::call('php artisan migrate:refresh --path=/database/migrations/fileName.pefresh --path=/database/migrations/2024_01_31_032728_create_notifications_table.php');
+        Artisan::call('migrate:refresh --path=/database/migrations/fileName.pefresh --path=/database/migrations/2024_01_31_032728_create_notifications_table.php');
         // Artisan::call('db:seed');  
         // Artisan::call('migrate');
         // Artisan::call('storage:link');
