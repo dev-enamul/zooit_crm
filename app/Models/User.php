@@ -253,13 +253,7 @@ class User extends Authenticatable
     public function my_customer(){
         $my_customer = Customer::where('ref_id',$this->id)->where('deleted_at',null)->pluck('id')->toArray();
         return $my_customer;
-    } 
-    
-    public function my_all_reporting(){
-        $my_all_reporting = user_reporting($this->id);
-        $user = User::whereIn('id',$my_all_reporting)->get();
-        return $user;
-    }
+    }  
 
     public function reportingUser()
     {
