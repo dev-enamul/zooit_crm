@@ -760,8 +760,7 @@
                             </li> 
                         @endif  
                     </div>
-                </div> 
-                  
+                </div>   
             </ul>
         </div> 
     </div>
