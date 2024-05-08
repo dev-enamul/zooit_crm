@@ -446,6 +446,7 @@ Route::get('function_test', function () {
         $user = User::where('user_id','PFL-000003')->first();
         if(isset($user) && $user!=null){
                 dd(user_reporting($user->id));
+                $user = User::find(3419);
         }else{
                 dd('user-not-found');
         }
