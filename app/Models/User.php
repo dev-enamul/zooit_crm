@@ -100,11 +100,6 @@ class User extends Authenticatable
         return $this->hasMany(Customer::class, 'user_id');
     }
 
-    public function reportingUser()
-    {
-        return ReportingUser::where('user_id', $this->id)->where('status',1)->latest()->first();;
-    }
-
     public function referee()
     {
         return $this->belongsTo(User::class, 'ref_id');
@@ -151,7 +146,8 @@ class User extends Authenticatable
     public static function generateNextEmployeeId($user_id = null){
         if($user_id == null){
             $user_id = User::where('user_type',1)->latest('id')->first()->user_id;
-        } 
+        }
+        
         if($user_id == null){
             $user_id = 'EMP-000';
         }
@@ -166,51 +162,59 @@ class User extends Authenticatable
     }
 
     public static function generateNextCustomerId(){
-        $customer = Customer::where('customer_id','like','PID-%')->latest('user_id')->first()?->customer_id;
-        if($customer == null){
-            $customer = 'PID-000';
-        }
-        $numericPart = substr($customer, 4);
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "PID-" . $newNumericPart; 
-        return $newValue;
+        $largest_user_id = Customer::where('customer_id', 'like', 'PID-%')
+        ->get()
+        ->map(function ($user) {
+                return (int)substr($user->customer_id, 4);  
+        })
+        ->max(); 
+        $largest_user_id++; 
+        $new_user_id = 'PID-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
+        return $new_user_id;
     }
-    public static function generateNextUserCustomerId()
+
+    public static function generateNextUserCustomerId(){
+        $largest_user_id = Customer::where('customer_id', 'like', 'CUS-%')
+        ->get()
+        ->map(function ($user) {
+                return (int)substr($user->customer_id, 4);  
+        })
+        ->max(); 
+        $largest_user_id++; 
+        $new_user_id = 'CUS-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
+        return $new_user_id;
+    }
+
+    public static function generateNextProvableFreelancerId()
     {
-        $customer_id = Customer::latest('id')->first()->customer_id;
-        if($customer_id == null){
-            $customer_id = 'CUS-000';
-        }
-        $numericPart = substr($customer_id, 4);
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "CUS-" . $newNumericPart; 
-        return $newValue;
-    }
-    
-    public static function generateNextProvableFreelancerId(){
-        $customer = User::where('user_id','like','PFL-%')->latest('user_id')->first()?->user_id;
-        if($customer == null){
-            $customer = 'PFL-000';
-        }
-        $numericPart = substr($customer, 4);
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "PID-" . $newNumericPart; 
-        return $newValue;
-    }
+        $largest_user_id = User::where('user_type', 2)
+            ->where('user_id', 'like', 'PFL-%')
+            ->get()
+            ->map(function ($user) {
+                    return (int)substr($user->customer_id, 4);  
+            })
+            ->max();
+        if($largest_user_id == null){
+            $largest_user_id = 0;
+        } 
+        $largest_user_id++; 
+        $new_user_id = 'PFL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
+        return $new_user_id;
+    } 
 
     public static function generateNextFreelancerId()
     {
-        $user_id = User::where('user_type',2)->latest('id')->first()?->user_id;
-        if($user_id == null){
-            $user_id = 'FL-000';
-        }
-        $numericPart = substr($user_id, 4);  
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT); 
-        $newValue = "FL-" . $newNumericPart; 
-        return $newValue;
-    }
-
-    
+        $largest_user_id = User::where('user_type', 2)
+            ->where('user_id', 'like', 'FL-%')
+            ->get()
+            ->map(function ($user) {
+                    return (int)substr($user->user_id, 3);  
+            })
+            ->max(); 
+        $largest_user_id++; 
+        $new_user_id = 'FL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
+        return $new_user_id;
+    } 
  
  
 
@@ -257,8 +261,13 @@ class User extends Authenticatable
         return $user;
     }
 
+    public function reportingUser()
+    {
+        return ReportingUser::where('user_id', $this->id)->where('status',1)->latest()->first();;
+    }
+
     public function my_reporting(){
-        $my_reporting = user_reporting($this->id);
+        $my_reporting = json_decode($this->user_reporting); 
         if(isset($my_reporting) && count($my_reporting) > 1){
              $user  = User::where('id',$my_reporting['1'])->first();
         }else{
@@ -268,20 +277,13 @@ class User extends Authenticatable
     }
 
     function my_top_reporting(){
-        $my_reporting = user_reporting($this->id);
+        $my_reporting = json_decode($this->user_reporting); 
         if(isset($my_reporting) && count($my_reporting) > 1){
-             $user  = User::where('id',(count($my_reporting)-1))->first();
+             $user  = User::where('id',end($my_reporting))->first();
         }else{
             $user = null;
         }
         return $user;
-    }
-
-
- 
-
-    
-
-
+    } 
     
 }

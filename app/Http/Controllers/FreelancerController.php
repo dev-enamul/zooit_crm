@@ -173,7 +173,7 @@ class FreelancerController extends Controller
         DB::beginTransaction();  
         try {
             $user = User::create([
-                'user_id'       => $request->freelancer_id??User::generateNextFreelancerId(),
+                'user_id'       => $request->freelancer_id??User::generateNextProvableFreelancerId(),
                 'name'          => $request->full_name,
                 'phone'         => get_phone($request->phone1),
                 'password'      => bcrypt('123456'),
