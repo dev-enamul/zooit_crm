@@ -448,11 +448,17 @@ Route::get('function_test', function () {
         $largest_user_ids = User::where('user_type', 2)
                 ->whereNotIn('created_by', ['3236', '1', '3251'])
                 ->where('user_id', 'like', 'FL-%')
-                ->pluck('user_id')
-                ->map(function ($id) {
-                        return preg_replace("/[^0-9]/", "", $id);
-                }) ;  
+                // ->pluck('user_id')
+                // ->map(function ($id) {
+                //         return preg_replace("/[^0-9]/", "", $id);
+                // });  
+                ->get();
 
+                foreach($largest_user_ids as $freelancer){
+                        $freelancer->user_id = User::generateNextProvableFreelancerId();
+                        $freelancer->save();
+                } 
+                
                 dd($largest_user_ids);
                 $missing = [];
                 for($i=0;$i<=2573;$i++){ 
