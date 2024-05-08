@@ -162,11 +162,11 @@ class User extends Authenticatable
     }
 
     public static function generateNextCustomerId(){
-        $largest_user_id = Customer::where('customer_id', 'like', 'PID-%')
-        ->get()
-        ->map(function ($user) {
-                return (int)substr($user->customer_id, 4);  
-        })
+        $largest_user_id = Customer::where('customer_id', 'like', 'PID-%') 
+        ->pluck('customer_id')
+                ->map(function ($id) {
+                        return preg_replace("/[^0-9]/", "", $id);
+                }) 
         ->max(); 
         $largest_user_id++; 
         $new_user_id = 'PID-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
@@ -175,11 +175,11 @@ class User extends Authenticatable
 
     public static function generateNextUserCustomerId(){
         $largest_user_id = Customer::where('customer_id', 'like', 'CUS-%')
-        ->get()
-        ->map(function ($user) {
-                return (int)substr($user->customer_id, 4);  
-        })
-        ->max(); 
+        ->pluck('customer_id')
+                ->map(function ($id) {
+                        return preg_replace("/[^0-9]/", "", $id);
+                }) 
+        ->max();  
         $largest_user_id++; 
         $new_user_id = 'CUS-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);
         return $new_user_id;
@@ -189,10 +189,10 @@ class User extends Authenticatable
     {
         $largest_user_id = User::where('user_type', 2)
             ->where('user_id', 'like', 'PFL-%')
-            ->get()
-            ->map(function ($user) {
-                    return (int)substr($user->customer_id, 4);  
-            })
+            ->pluck('user_id')
+            ->map(function ($id) {
+                    return preg_replace("/[^0-9]/", "", $id);
+            }) 
             ->max();
         if($largest_user_id == null){
             $largest_user_id = 0;
@@ -206,10 +206,10 @@ class User extends Authenticatable
     {
         $largest_user_id = User::where('user_type', 2)
             ->where('user_id', 'like', 'FL-%')
-            ->get()
-            ->map(function ($user) {
-                    return (int)substr($user->user_id, 3);  
-            })
+            ->pluck('user_id')
+            ->map(function ($id) {
+                    return preg_replace("/[^0-9]/", "", $id);
+            }) 
             ->max(); 
         $largest_user_id++; 
         $new_user_id = 'FL-' . str_pad($largest_user_id, 6, '0', STR_PAD_LEFT);

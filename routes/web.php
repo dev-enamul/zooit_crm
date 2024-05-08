@@ -444,7 +444,7 @@ Route::get('function_test', function () {
         // $users = User::whereIn('phone',['01730778241','01611477337','01730778251'])->select('id','phone')->get();
        
         
-
+ 
         $largest_user_ids = User::where('user_type', 2)
                 ->whereIn('created_by', ['3236', '1', '3251'])
                 ->where('user_id', 'like', 'FL-%')
