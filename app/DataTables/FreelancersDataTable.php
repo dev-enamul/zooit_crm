@@ -131,16 +131,18 @@ class FreelancersDataTable extends DataTable
                 $my_freelancer = json_decode($user->user_employee);
                 $model = $model->whereIn('user_id',$my_freelancer);
             }
+
+            $model =  $model  
+            ->where(function($q){
+                $q->where('freelancers.status',1)->orWhereHas('user', function($query){
+                    $query->Where('approve_by','!=',null)
+                    ->orWhere('ref_id',auth()->user()->id)
+                    ->orWhere('created_by',auth()->user()->id);
+                });
+            });
             
         }  
-         $model =  $model  
-        ->where(function($q){
-            $q->where('freelancers.status',1)->orWhereHas('user', function($query){
-                $query->Where('approve_by','!=',null)
-                ->orWhere('ref_id',auth()->user()->id)
-                ->orWhere('created_by',auth()->user()->id);
-            });
-        });
+        
 
         $data =  $model->with('user') 
         ->newQuery();
