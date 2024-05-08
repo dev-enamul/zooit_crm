@@ -312,6 +312,7 @@ class FreelancerController extends Controller
                 $controller = new ApproveFreelancerController();
                 $controller->complete_training(encrypt($user->id)); 
             }
+            
             DB::commit();  
             
             UserCreatedEvent::dispatch($user->id);

@@ -23,9 +23,12 @@
                                         <i class="marker marker-circle text-danger"></i>
                                     </div>
                                     <div class="timeline-content">
-                                        <p class="mb-0">
-                                            </p><p class="m-0 bold-lg">Recruitment By {{@$user->freelancer->reference->name}}</p>
-                                            <p class="m-0 fs-10">{{get_date(@$user->freelancer->created_at)}}</p> 
+                                        <p class="mb-0"></p>
+                                            <p class="m-0 bold-lg">Recruitment By {{@$user->freelancer->reference->name}} [{{@$user->freelancer->reference->user_id}}]</p>
+                                        @if ($user->ref_id!=$user->created_by)
+                                            <p class="m-0 bold-lg">Created By {{@$user->createdBy->name}} [{{@$user->createdBy->user_id}}]</p>   
+                                        @endif
+                                        <p class="m-0 fs-10">{{get_date(@$user->freelancer->created_at)}}</p> 
                                         <p></p>
                                     </div>
                                 </div> 
