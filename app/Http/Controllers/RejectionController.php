@@ -20,7 +20,7 @@ class RejectionController extends Controller
      
     public function index(Request $request)
     { 
-        $my_all_employee = my_all_employee(auth()->user()->id);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
         $employees = User::whereIn('id', $my_all_employee)->get();
 
@@ -35,8 +35,9 @@ class RejectionController extends Controller
             $startDate = Carbon::now()->subDays($waiting_day->waiting_day)->startOfDay(); 
         }else{
             $startDate = Carbon::now()->subDays(7)->startOfDay(); 
-        }   
-        $user_employee = my_all_employee($user_id);
+        } 
+        $user = User::find($user_id);
+        $user_employee = json_decode($user->user_employee);
         $negotiations = NegotiationAnalysis::where('created_at','<',$startDate)
         ->where(function($q){
             $q->where('approve_by','!=',null)
@@ -62,9 +63,8 @@ class RejectionController extends Controller
    
     public function create(Request $request)
     {
-        $title = 'Rejection Entry';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
+        $title = 'Rejection Entry'; 
+        $my_all_employee    = json_decode(Auth::user()->user_employee);
         $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
@@ -76,8 +76,7 @@ class RejectionController extends Controller
 
         if ($request->has('customer')) {
             $selected_data['customer'] = $request->customer;
-        }
-
+        } 
         return view('rejection.rejection_save',compact('customers','selected_data'));
     }
 
@@ -124,9 +123,8 @@ class RejectionController extends Controller
 
     public function edit(string $id, Request $request)
     {
-        $title = 'Rejection Edit';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
+        $title = 'Rejection Edit'; 
+        $my_all_employee    = Auth::user()->user_employee;
         $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();

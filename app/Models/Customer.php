@@ -22,6 +22,11 @@ class Customer extends Model
         'approve_by'
     ];
 
+    public function followup_analysis()
+    {
+        return $this->hasOne(FollowUpAnalysis::class, 'customer_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -503,25 +503,25 @@
 
 </div>
 @endsection  
-
-@section('script2')
-    <script>
-        $(document).ready(function() { 
-            $('#reporting_user').select2({
-                placeholder: "Select Employee",
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('select2.employee.freelancer') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        var query = {
-                            term: params.term
+ 
+    @section('script2')  
+        <script>
+            $(document).ready(function() { 
+                $('#reporting_user').select2({
+                    placeholder: "Select Employee",
+                    allowClear: true,
+                    ajax: {
+                        url: '{{ route('select2.employee.freelancer') }}',
+                        dataType: 'json',
+                        data: function (params) {
+                            var query = {
+                                term: params.term
+                            }
+                            return query;
                         }
-                        return query;
                     }
-                }
+                });
             });
-        });
-    </script>
-@endsection
+        </script>  
+    @endsection 
  

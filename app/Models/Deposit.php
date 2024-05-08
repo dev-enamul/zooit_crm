@@ -84,8 +84,9 @@ class Deposit extends Model
     public static function getDeposit($user_id, $monthOffset)
     {
         $targetMonth = date('m', strtotime("-$monthOffset month"));
-        $targetYear = date('Y'); 
-        $my_all_employee = my_all_employee($user_id);
+        $targetYear = date('Y');  
+        $user = User::find($user_id);
+        $my_all_employee = json_decode($user->user_employee);
  
         return self::whereHas('customer', function ($q) use ($my_all_employee) {
                 $q->whereIn('ref_id', $my_all_employee);

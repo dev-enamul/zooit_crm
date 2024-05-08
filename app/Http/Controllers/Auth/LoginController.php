@@ -30,7 +30,8 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {
+    { 
+ 
         $request->validate([
             'phone'    => 'required|exists:users,phone',
             'password' => 'required|string',
@@ -48,6 +49,8 @@ class LoginController extends Controller
     
         return redirect()->route('login')->with('error', 'Invalid phone or password');
     }
+
+   
 
    
 }

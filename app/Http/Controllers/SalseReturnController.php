@@ -21,7 +21,7 @@ class SalseReturnController extends Controller
      */
     public function create()
     {
-        $my_all_employee = my_all_employee(Auth::user()->id);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $customers = Salse::where('approve_by','!=',null)
         ->where('status',1)
         ->where('is_return',0)

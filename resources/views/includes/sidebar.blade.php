@@ -92,9 +92,7 @@
                                     @endcan    
                                     <li class="{{ Route::is('freelancer.save', 'freelancer.delete','freelancer.search','freelancer.edit') ? 'mm-active' : '' }}"><a href="{{route('freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer List</a></li> 
                                     @if (!empty($approve_setting['freelancer']) )
-                                        @can('product-approve')
                                         <li><a href="{{route('approve-freelancer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Freelancer Approve</a></li> 
-                                        @endcan
                                     @endif 
             
                                 </ul>
@@ -356,7 +354,7 @@
                                 <li><a href="{{route('deposit.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit List</a></li> 
                             </ul>
                         </li>  
-                    @endcan 
+                    @endcan   
                     </div>
                 </div>
 
@@ -397,9 +395,8 @@
                                     <li><a href="{{route('assign.task.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Assign Task List</a></li> 
                                    
                                 </ul>
-                            </li>
-                        @endcan 
-    
+                            </li>  
+                        @endcan   
                         @can('book-reading')
     
                         @endcan
@@ -412,17 +409,18 @@
                                 <span>Deposit Target</span>
                             </a>  
                             <ul class="sub-menu" aria-expanded="false"> 
-                                {{-- <li><a href="{{route('project.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Project Wise Target</a></li> 
-                                <li><a href="{{route('direct.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Target</a></li> 
-                                <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Assign List</a></li> --}}
-                                @if (auth()->user()->id == 1)
+                                <li><a href="{{route('my.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Target</a></li>
+                                <li><a href="{{route('project.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Project Wise Target</a></li> 
+                                {{-- <li><a href="{{route('direct.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Target</a></li>  --}}
+                                <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Assign List</a></li>
+                                {{-- @if (auth()->user()->id == 1)
                                     <li><a href="{{route('project.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Project Wise Target</a></li> 
                                     <li><a href="{{route('direct.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Target</a></li> 
                                     <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Assign List</a></li>
                                 @else 
                                     <li><a href="{{route('my.deposit.target')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>My Target</a></li> 
                                     <li><a href="{{route('deposit.target.asign.list')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Target Asign List</a></li>
-                                @endif 
+                                @endif  --}}
                             </ul>
                         </li> 
                         @endcan 
@@ -445,7 +443,17 @@
                                 </li> 
                             </ul>
                         </li> 
-                        @endcan 
+                        @endcan  
+
+                        @if (auth()->user()->id == 1)
+                            <li>
+                                <a href="{{route('admin-notice.index')}}" class="">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Send Notice</span>
+                                </a>
+                            </li>
+                        @endif  
+                        
                         @can('meeting') 
 
                         {{-- <li>
@@ -734,14 +742,23 @@
                                     <span>Approve Setting</span>
                                 </a>
                             </li>     
-                        @endcan 
+                        @endcan  
 
                         <li>
                             <a href="{{route('submit.time.setting')}}" class="">
                                 <i class="fas fa-desktop"></i>
                                 <span>Submit Time Setting</span>
                             </a>
-                        </li>
+                        </li> 
+
+                        @if (auth()->user()->id == 1)
+                            <li>
+                                <a href="{{route('user.commission')}}" class="">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>User Commission</span>
+                                </a>
+                            </li> 
+                        @endif  
                     </div>
                 </div> 
                   

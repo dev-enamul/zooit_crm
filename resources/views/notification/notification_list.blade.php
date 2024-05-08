@@ -28,148 +28,34 @@
                 <div class="card-body pt-0"> 
                     <div class="box shadow-sm rounded mb-3">
                         <div class="box-title border-bottom p-3">
-                            <h6 class="m-0">Recent</h6>
+                            <h6 class="m-0">Notification</h6>
                         </div>
-                        <div class="box-body p-0">
-                     
-                            <div class="p-3 d-flex align-items-center justify-content-between bg-light">
-                                <div class="d-flex">
-                                    <div class="dropdown-list-image me-3">
-                                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                    </div>
-                                    <div class="font-weight-bold mr-3">
-                                        <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
-                                        <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
-                                    </div>
-                                </div> 
+                        <div class="box-body p-0"> 
+                            @foreach ($notifications as $notification)
+                                <div class="p-3 d-flex align-items-center justify-content-between {{$notification->read_at==null?'bg-light':''}}">
+                                    <div class="d-flex">
+                                        <div class="dropdown-list-image me-3">
+                                            <img class="rounded-circle" src="{{@$notification->notification->creator->image()}}" alt="" />
+                                        </div>
+                                        <div class="font-weight-bold mr-3">
+                                            <div class="">
+                                                <b>{{@$notification->notification->title}}</b>
+                                                {{Str::limit(@$notification->notification->content,200)}}
+                                            </div>
+                                            <div class="text-right text-secondary">
+                                                {{@$notification->created_at->diffForHumans();}}
+                                            </div>
+                                            <a href="{{route('notification.read',$notification->id)}}" type="button" class="btn btn-outline-primary btn-sm">View Details</a> 
+                                        </div>
+                                    </div>  
+                                </div>  
+                            @endforeach 
 
-                                <span class="ml-auto mb-auto">
-                                  
-                                    <div class="text-right text-muted pt-1">4d</div>
-                                </span>
-                            </div>
-
-                            <div class="p-3 d-flex align-items-center justify-content-between">
-                                <div class="d-flex">
-                                    <div class="dropdown-list-image me-3">
-                                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                    </div>
-                                    <div class="font-weight-bold mr-3">
-                                        <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
-                                        <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
-                                    </div>
-                                </div> 
-
-                                <span class="ml-auto mb-auto">
-                                  
-                                    <div class="text-right text-muted pt-1">4d</div>
-                                </span>
-                            </div>
-
-                            
+                            {{$notifications->links()}}
                         </div>
                     </div>
                 </div>   
-            </div>
-            <div class="card">
-                <div class="card-body pt-0"> 
-                    <div class="box shadow-sm rounded mb-3">
-                        <div class="box-title border-bottom p-3">
-                            <h6 class="m-0">Earlier</h6>
-                        </div>
-                        <div class="box-body p-0">
-                      
-                            <div class="p-3 d-flex align-items-center border-bottom justify-content-between">
-                                <div class="d-flex">
-                                    <div class="dropdown-list-image me-3">
-                                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                    </div>
-                                    <div class="font-weight-bold mr-3">
-                                        <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
-                                        <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
-                                    </div>
-                                </div> 
-
-                                <span class="ml-auto mb-auto">
-                                  
-                                    <div class="text-right text-muted pt-1">4d</div>
-                                </span>
-                            </div>
-
-                            <div class="p-3 d-flex align-items-center border-bottom justify-content-between">
-                                <div class="d-flex">
-                                    <div class="dropdown-list-image me-3">
-                                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                    </div>
-                                    <div class="font-weight-bold mr-3">
-                                        <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
-                                        <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
-                                    </div>
-                                </div> 
-
-                                <span class="ml-auto mb-auto">
-                                  
-                                    <div class="text-right text-muted pt-1">4d</div>
-                                </span>
-                            </div>
-
-                            <div class="p-3 d-flex align-items-center border-bottom justify-content-between">
-                                <div class="d-flex">
-                                    <div class="dropdown-list-image me-3">
-                                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                    </div>
-                                    <div class="font-weight-bold mr-3">
-                                        <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
-                                        <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
-                                    </div>
-                                </div> 
-
-                                <span class="ml-auto mb-auto">
-                                  
-                                    <div class="text-right text-muted pt-1">4d</div>
-                                </span>
-                            </div>
-
-                            <div class="p-3 d-flex align-items-center border-bottom justify-content-between">
-                                <div class="d-flex">
-                                    <div class="dropdown-list-image me-3">
-                                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                    </div>
-                                    <div class="font-weight-bold mr-3">
-                                        <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
-                                        <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
-                                    </div>
-                                </div> 
-
-                                <span class="ml-auto mb-auto">
-                                  
-                                    <div class="text-right text-muted pt-1">4d</div>
-                                </span>
-                            </div>
-
-                            <div class="p-3 d-flex align-items-center border-bottom justify-content-between">
-                                <div class="d-flex">
-                                    <div class="dropdown-list-image me-3">
-                                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                    </div>
-                                    <div class="font-weight-bold mr-3">
-                                        <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
-                                        <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
-                                    </div>
-                                </div> 
-
-                                <span class="ml-auto mb-auto">
-                                  
-                                    <div class="text-right text-muted pt-1">4d</div>
-                                </span>
-                            </div>
-                            
-
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </div> 
             <!-- end row -->
         </div>
         <!-- container-fluid -->

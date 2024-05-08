@@ -104,7 +104,7 @@ class FieldTargetController extends Controller
     } 
 
     public function marketing_field_report(Request $request){
-        $my_all_employee = my_all_employee(auth()->user()->id); 
+        $my_all_employee = json_decode(auth()->user()->user_employee); 
        
         $user = User::find(auth()->user()->id); 
 
@@ -131,7 +131,7 @@ class FieldTargetController extends Controller
             $employee_id = decrypt($employee_id);
         } 
         $employee = User::find($employee_id);
-        $my_all_employee = my_all_employee($employee_id);  
+        $my_all_employee = json_decode($employee->user_employee);  
         $datas = User::where('user_type',2)->whereIn('id',$my_all_employee)->where('status',1)->get();
         return view('target.marketing_field_report',compact([
             'employees',
@@ -143,7 +143,7 @@ class FieldTargetController extends Controller
 
     public function salse_field_report(Request $request){ 
 
-        $my_all_employee = my_all_employee(auth()->user()->id); 
+        $my_all_employee = json_decode(auth()->user()->user_employee); 
          
         if(isset($request->month) && $request->month != ''){ 
             $date = Carbon::parse($request->month);

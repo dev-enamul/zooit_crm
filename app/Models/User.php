@@ -125,7 +125,8 @@ class User extends Authenticatable
 
     public function prospecting(){
         $this->hasMany(Prospecting::class,'user_id');
-    }
+    } 
+    
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -238,10 +239,7 @@ class User extends Authenticatable
         return $this->hasOne(UserId::class);
     }
 
-    public function my_all_employee(){
-         $my_all_employee =  my_all_employee($this->id); 
-         return $my_all_employee;
-    } 
+     
 
     public function my_employee(){
          $my_employee =  my_employee($this->id); 

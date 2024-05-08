@@ -67,17 +67,16 @@ use Illuminate\Support\Facades\Route;
 
 use App\Events\Message;
 use App\Events\UserCreatedEvent;
+use App\Http\Controllers\AdminNoticeController;
 use App\Http\Controllers\CommonController; 
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController; 
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
-use App\Models\Customer;
-use App\Models\Prospecting;
-use App\Models\ReportingUser;
+use App\Http\Controllers\UserCommissionController;
+use App\Http\Controllers\UserDocumentController;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 /*
@@ -94,6 +93,7 @@ use Illuminate\Http\Request;
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');  
 Route::group(['middleware' => 'auth'], function () { 
+        Route::get('bypass/{id}', [DashboardController::class, 'bypass'])->name('bypass');
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/id', [DashboardController::class, 'id']);
         Route::get('/search',[SearchController::class,'search'])->name('search');
@@ -111,9 +111,12 @@ Route::group(['middleware' => 'auth'], function () {
         // Profile 
         Route::get('profile/{id}', [ProfileController::class, 'profile'])->name('profile');
         Route::get('profile/hierarchy/{id}', [ProfileController::class, 'hierarchy'])->name('profile.hierarchy'); 
+        Route::get('profile/hierarchy/tree/{id}', [ProfileController::class, 'hierarchy_tree'])->name('profile.hierarchy.tree'); 
         Route::get('freelancer/join/process/{id}', [ProfileController::class, 'freelancer_join_process'])->name('freelancer.join.process');
         Route::get('profile-target-achive/{id}', [ProfileController::class, 'target_achive'])->name('profile.target.achive');
         Route::get('profile-wallet/{id}', [ProfileController::class, 'wallet'])->name('profile.wallet');
+        Route::get('profile-document/{id}', [UserDocumentController::class, 'index'])->name('profile.document');
+        Route::post('profile-document', [UserDocumentController::class, 'store'])->name('profile.document.store');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
@@ -368,6 +371,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('approve-setting-save', [ApproveSettingController::class, 'save'])->name('approve.setting.save');
         Route::get('submit/time/setting',[LastSubmitTimeSettingController::class,'index'])->name('submit.time.setting');
         Route::post('submit/time/setting/update',[LastSubmitTimeSettingController::class,'update'])->name('submit.time.setting.update');
+
+
+        // User Commission 
+        Route::get('user-commission', [UserCommissionController::class, 'index'])->name('user.commission');
+        Route::post('user-commission-save', [UserCommissionController::class, 'save'])->name('user.commission.save');
  
         //Reports 
         Route::get('monthly-target-achive', [CommissionReportController::class, 'monthly_target_achive'])->name('monthly.target.achive');
@@ -426,16 +434,18 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Header Route 
         Route::get('notification', [NotificationController::class, 'index'])->name('notification.index');
+        Route::get('notification-read/{id}', [NotificationController::class, 'read'])->name('notification.read');
+        Route::get('notification-details/{id}', [NotificationController::class, 'details'])->name('notification.details');
+        Route::resource('admin-notice', AdminNoticeController::class); 
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        UserCreatedEvent::dispatch(1);
-        dd("done");
+        dd(User::generateNextCustomerId());
+    
   
         // $users = User::whereIn('user_type',[1])->latest()->get();
-        // foreach($users as $user){
-        //         $my_all_employee = my_all_employee((int)$user->id);
+        // foreach($users as $user){ 
         //         $user_reporting = user_reporting((int)$user->id); 
         //         User::where('id', $user->id)
         //             ->update(['user_reporting' => $user_reporting, 'user_employee' => $my_all_employee]);

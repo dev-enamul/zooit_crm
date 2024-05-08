@@ -14,10 +14,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">{{$title}}</h4>  
-
+                        <h4 class="mb-sm-0">{{$title}}</h4> 
                         <div class="page-title-right">
-                            <div class="btn-group flex-wrap mb-2">      
+                            <div class="flex-wrap mb-2">     
+                                {{-- <button class="btn btn-secondary mr-3" data-bs-toggle="modal" data-bs-target="#wayting_day_setting">
+                                    <span><i class="fas fa-cog"></i> Waiting Day</span>
+                                </button>   --}}
                                 <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                     <span><i class="fas fa-filter"></i> Filter</span>
                                 </button> 
@@ -61,8 +63,8 @@
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <select class="select2" id="status" name="status"> 
-                            <option value = "1" {{$status==1?"selected":""}}>Completed</option>
-                            <option value = "0" {{$status==0?"selected":""}}> Pending</option>
+                            <option value = "1" {{$status==1?"selected":""}}> Previous</option>
+                            <option value = "0" {{$status==0?"selected":""}}> Present</option>
                         </select> 
                     </div>
                 </div> 
@@ -88,7 +90,32 @@
             </div>
         </form>
     </div>
-</div>  
+</div>   
+
+<div class="modal fade" id="wayting_day_setting">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header"> 
+                <h5 class="modal-title">Update Setting</h5><button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+            </div>
+            <form action="{{route('update.negotiation.waiting.day')}}" method="post">
+                @csrf 
+                <div class="modal-body"> 
+                    <div class="form-group mb-2">
+                        <label for="waiting_day">Waiting Day<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="waiting_day" min="1" name="waiting_day" value="{{@$waiting_day->waiting_day}}" required>
+                    </div>   
+                </div>
+
+                <div class="modal-footer">
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button type="button" class="btn btn-outline-danger refresh_btn"><i class="mdi mdi-refresh"></i> Reset</button>
+                    </div> 
+                </div> 
+            </form>
+        </div>
+    </div>
+</div> 
 
 @endsection  
 @section('script')

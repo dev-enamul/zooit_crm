@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\NegotiationAnalysisDataTable;
+use App\DataTables\NegotiationDataTable;
 use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
@@ -13,6 +15,7 @@ use App\Models\ProjectUnit;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\VisitAnalysis;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,22 +30,17 @@ class NegotiationController extends Controller
         return Priority::values();
     }
 
-    public function index(Request $request)
+    public function index(NegotiationDataTable $dataTable, Request $request)
     { 
-        if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
-        }else{
-            $user_id = Auth::user()->id;
-        }  
-        $user_employee = my_all_employee($user_id);
-        $negotiations = Negotiation::whereHas('customer', function($q) use($user_employee){ 
-            $q->whereIn('ref_id', $user_employee);
-        }); 
-
-         $negotiations = $negotiations->orderBY('id','desc')->get();  
-      
-        return view('negotiation.negotiation_list',compact('negotiations'));
-    }
+        $title = 'Negotiation Analysis'; 
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+        return $dataTable->render('negotiation.negotiation_list', compact('title','employee','status','start_date','end_date'));
+    }   
 
     public function create(Request $request)
     {
@@ -128,11 +126,7 @@ class NegotiationController extends Controller
             $follow->save();
 
             if($follow) {
-                $visit = FollowUpAnalysis::where('customer_id',$request->customer)->first();
-                if(isset($visit) && $visit != null){
-                    $visit->status = 1;
-                    $visit->save();
-                }
+                $visit = FollowUpAnalysis::where('customer_id',$request->customer)->update(['status' => 1]); 
             }
             
             return redirect()->route('negotiation.index')->with('success','Negotiation create successfully');
@@ -141,9 +135,8 @@ class NegotiationController extends Controller
 
     public function edit(string $id, Request $request)
     {
-        $title = 'Negotiation Edit';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
+        $title = 'Negotiation Edit'; 
+        $my_all_employee    = json_decode(Auth::user()->my_employee);
         $customers          = VisitAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
@@ -206,9 +199,8 @@ class NegotiationController extends Controller
         $request->validate([
             'term' => ['nullable', 'string'],
         ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id);   
+ 
+        $my_all_employee = json_decode(Auth::user()->my_employee);   
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']

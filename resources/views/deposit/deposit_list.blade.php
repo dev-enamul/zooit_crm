@@ -65,7 +65,7 @@
                                                 <td>{{get_date(@$data->salse->created_at)}}</td>
                                                 <td>{{$data->salse->project->name??'-'}}</td>
                                                 <td>{{$data->salse->unit->title??'-'}}</td>
-                                                <td>{{$data->salse->unit_qty}}</td> 
+                                                <td>{{$data->salse->unit_qty??'-'}}</td> 
                                                 <td>{{$data->depositCategory->name}}</td>
                                                 @foreach ($designations as $designation)    
                                                     <th>-</th>

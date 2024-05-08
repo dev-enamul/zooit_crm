@@ -37,8 +37,14 @@ class EmployeeController extends Controller
     use AreaTrait;
     use ImageUploadTrait;
       
-    public function index(EmployeesDataTable $dataTable)
+    public function index(Request $request)
     { 
+        // if($request->draw && $request->action === 'pdf'){
+        //     $request->dd();
+        //     need to write your pdf logic here
+        // }
+        $dataTable = app(EmployeesDataTable::class);
+        // dd($dataTable);
         return $dataTable->render('employee.employee_list');
     }
 
@@ -572,7 +578,7 @@ class EmployeeController extends Controller
         ]);
 
         $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id); 
+        $my_all_employee = json_decode(Auth::user()->user_employee); 
 
         $users = User::query()
             ->where(function ($query) use ($request) {
@@ -609,7 +615,7 @@ class EmployeeController extends Controller
         ]);
 
         $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id); 
+        $my_all_employee = json_decode(Auth::user()->user_employee); 
 
         $users = User::query()
             ->where(function ($query) use ($request) {
@@ -643,10 +649,8 @@ class EmployeeController extends Controller
     public function select2_employee_encode(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id); 
+        ]); 
+        $my_all_employee = json_decode(Auth::user()->user_employee); 
 
         $users = User::query()
             ->where(function ($query) use ($request) {

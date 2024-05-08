@@ -11,7 +11,7 @@
                     <div class="page-title-box d-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0">Daily Task</h4>
 
-                        <div class="page-title-right">
+                        {{-- <div class="page-title-right">
                             <form action="" method="get" action="">
                                 <div class="input-group">  
                                     <input type="date" class="form-control" value="{{$selected_date}}" name="date" id="date">
@@ -20,7 +20,7 @@
                                     </button> 
                                 </div>
                             </form> 
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>

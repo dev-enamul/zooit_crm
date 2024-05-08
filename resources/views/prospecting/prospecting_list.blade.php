@@ -34,7 +34,7 @@
                     <div class="card"> 
                         <div class="card-body"> 
                             <div class="table-box">
-                                {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap']) }} 
+                                {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap fs-10']) }} 
                             </div>
                             
                         </div>

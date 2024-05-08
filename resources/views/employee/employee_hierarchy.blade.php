@@ -23,8 +23,7 @@
             a{
                 color: #000 !important;
             }
-        </style> 
-
+        </style>  
 @endsection  
 @section('content')
 <div class="main-content">

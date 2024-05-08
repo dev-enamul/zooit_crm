@@ -135,9 +135,10 @@
 </div>
 @endsection 
 
-@section('script')  
+@section('script') 
+    @can('data-input-for-others')
     <script>
-        $(document).ready(function() { 
+         $(document).ready(function() { 
             $('#employee').select2({
                 placeholder: "Select Employee",
                 allowClear: true,
@@ -153,8 +154,10 @@
                 }
             });
         });
+    </script>
+    @endcan
 
-
+    <script> 
         $(document).ready(function() { 
             $('#customer').select2({
                 placeholder: "Select Customer",

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\FollowUpDataTable;
 use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
@@ -13,6 +14,7 @@ use App\Models\Unit;
 use App\Models\UnitPrice;
 use App\Models\User;
 use App\Models\VisitAnalysis;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,23 +26,17 @@ class FollowupController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(FollowUpDataTable $dataTable, Request $request)
     { 
-         
-        if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
-        }else{
-            $user_id = Auth::user()->id;
-        } 
-      
-        $user_employee = my_all_employee($user_id);
-        $followUps = FollowUp::whereHas('customer', function($q) use($user_employee){ 
-            $q->whereIn('ref_id', $user_employee);
-        }); 
-
-         $followUps = $followUps->orderBY('id','desc')->get();   
-        return view('followup.followup_list', compact('followUps'));
-    }
+        $title = 'Follow Up'; 
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+        return $dataTable->render('displaydata', compact('title','employee','status','start_date','end_date'));
+    } 
 
     public function priority()
     {
@@ -177,9 +173,8 @@ class FollowupController extends Controller
 
     public function edit(string $id, Request $request)
     {
-        $title = 'Follow Up Edit';
-        $user_id            = Auth::user()->id; 
-        $my_all_employee    = my_all_employee($user_id);
+        $title = 'Follow Up Edit'; 
+        $my_all_employee    = json_decode(Auth::user()->user_employee);
         $customers          = VisitAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
                                 })->get();
@@ -242,10 +237,8 @@ class FollowupController extends Controller
     public function select2_customer(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);
-
-        $user_id   = Auth::user()->id;
-        $my_all_employee = my_all_employee($user_id);   
+        ]);  
+        $my_all_employee = json_decode(Auth::user()->user_employee);   
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']

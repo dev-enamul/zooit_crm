@@ -8,8 +8,7 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">
-
+        <div class="container-fluid"> 
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -54,6 +53,15 @@
         <div class="offcanvas-body">
             <form action="" method="get">
                 <div class="row">  
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="select2" id="status" name="status"> 
+                                <option value = "1" {{$status==1?"selected":""}}>Previous</option>
+                                <option value = "0" {{$status==0?"selected":""}}>Present</option>
+                            </select> 
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="date_range" class="form-label">Date</label>

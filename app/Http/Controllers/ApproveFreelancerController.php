@@ -23,7 +23,7 @@ class ApproveFreelancerController extends Controller
 
   
     public function store(Request $request)
-    {
+{
         DB::beginTransaction();
         try{
             $freelancer = Freelancer::where('user_id',$request->user_id)->first(); 
@@ -43,6 +43,17 @@ class ApproveFreelancerController extends Controller
                 $freelancer->status = 1; 
                 $freelancer->save();
             }
+
+            // $auth_user = Auth::user(); 
+                // if(count(json_decode($auth_user->user_reporting))>1){
+                //     Notification::store([
+                //         'title'         => 'Customer approval request',
+                //         'content'       => $auth_user->name.' has created a customer please approve as soon as possible',
+                //         'link'          => route('customer.approve'),
+                //         'created_by'    => auth()->user()->id,  
+                //         'user_id'       => json_decode($auth_user->user_reporting)[1]
+                //     ]);
+                // } 
             
             DB::commit(); 
             return redirect()->back()->with('success', 'Freelancer approved successfully');

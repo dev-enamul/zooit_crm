@@ -28,49 +28,52 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card"> 
-                        <div class="card-body"> 
-                            <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr class="">
-                                        <th>Action</th>
-                                        <th>S/N</th>
-                                        <th>Date</th>
-                                        <th>Full Name</th>
-                                        <th>Profession</th>
-                                        <th>Upazilla/Thana</th>
-                                        <th>Union</th>
-                                        <th>Village</th>
-                                        <th>Mobile No</th>
-                                        <th>F/L ID</th> 
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    @foreach ($datas as $key => $data)
-                                    <tr class="">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}},'{{$data->user->user_id}}')">Approve</a> 
-                                                </div>
-                                            </div> 
-                                        </td> 
-                                        <td>{{$key+1}}</td>
-                                        <td>{{get_date($data->created_at)}}</td>
-                                        <td>{{@$data->user->name}}</td>
-                                        <td>{{@$data->profession->name}}</td>
-                                        <td>{{@$data->user->userAddress->upazila->name}}</td>
-                                        <td>{{@$data->user->userAddress->union->name}}</td>
-                                        <td>{{@$data->user->userAddress->village->name}}</td>
-                                        <td>{{@$data->user->phone}}</td>
-                                        <td>-</td> 
-                                    </tr> 
-                                    @endforeach 
-                                </tbody>
-                            </table>
+                        <div class="card-body">
+                            <div class="table-box">
+                                <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr class="">
+                                            <th>Action</th>
+                                            <th>S/N</th>
+                                            <th>Date</th>
+                                            <th>Full Name</th>
+                                            <th>Profession</th>
+                                            <th>Upazilla/Thana</th>
+                                            <th>Union</th>
+                                            <th>Village</th>
+                                            <th>Mobile No</th>
+                                            <th>F/L ID</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        @foreach ($datas as $key => $data)
+                                        <tr class="">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}},'{{$data->user->user_id}}')">Approve</a> 
+                                                    </div>
+                                                </div> 
+                                            </td> 
+                                            <td>{{$key+1}}</td>
+                                            <td>{{get_date($data->created_at)}}</td>
+                                            <td>{{@$data->user->name}}</td>
+                                            <td>{{@$data->profession->name}}</td>
+                                            <td>{{@$data->user->userAddress->upazila->name}}</td>
+                                            <td>{{@$data->user->userAddress->union->name}}</td>
+                                            <td>{{@$data->user->userAddress->village->name}}</td>
+                                            <td>{{@$data->user->phone}}</td>
+                                            <td>-</td> 
+                                        </tr> 
+                                        @endforeach 
+                                    </tbody>
+                                </table>
+                            </div> 
+                          
                         </div>
                     </div>
                 </div> <!-- end col -->

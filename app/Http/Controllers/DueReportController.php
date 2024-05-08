@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class DueReportController extends Controller
 {
-    public function due_report(){
-        $my_all_employee = my_all_employee(Auth::user()->id);
+    public function due_report(){ 
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $customers = Customer::whereHas('salse', function($query){
             $query->where('is_return',0)
             ->where('status',1)

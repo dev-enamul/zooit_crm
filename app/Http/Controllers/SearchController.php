@@ -15,10 +15,18 @@ class SearchController extends Controller
         }
         
         $key = strtolower($key); 
+        if(strpos($key,'pid-')!==false){ 
+            $customer = Customer::where('customer_id',$key)->first();
+            if($customer == null){
+                return redirect()->back()->with('warning','Provable ID Not Found');
+            } 
+            return redirect()->route('customer.profile',encrypt($customer->id));
+        }
+
         if(strpos($key,'cus-')!==false){ 
             $customer = Customer::where('customer_id',$key)->first();
             if($customer == null){
-                return redirect()->back()->with('error','Invalid customer id');
+                return redirect()->back()->with('warning','Customer ID Not Found');
             } 
             return redirect()->route('customer.profile',encrypt($customer->id));
         }
@@ -26,7 +34,7 @@ class SearchController extends Controller
         if(strpos($key,'emp-')!==false){
             $employee = User::where('user_id',$key)->first();
             if($employee == null){
-                return redirect()->back()->with('error','Invalid employee id');
+                return redirect()->back()->with('warning','Employee ID Not Found');
             }
             return redirect()->route('profile',encrypt($employee->id));
         }
@@ -34,7 +42,7 @@ class SearchController extends Controller
         if(strpos($key,'fl-')!==false){ 
             $freelancer = User::where('user_id',$key)->first();
             if($freelancer == null){
-                return redirect()->back()->with('error','Invalid freelancer id');
+                return redirect()->back()->with('warning','Freelancer ID Not Found');
             }
             return redirect()->route('profile',encrypt($freelancer->id));
         }

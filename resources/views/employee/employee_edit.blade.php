@@ -449,19 +449,20 @@
                                             <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="TIN Number" value="{{isset($employee) ? @$employee->user->userId->tin_number : old('tin_number')}}"> 
                                         </div>
                                     </div> 
+                                    @can('admin')
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="serial" class="form-label">Serial <span class="text-danger">*</span></label>
                                             <input type="number" name="serial" id="serial" class="form-control" step="any" placeholder="Enter Serial" value="{{old('serial',$employee->user->serial)}}" required> 
                                         </div>
-                                    </div>
-
+                                    </div> 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="user_id" class="form-label">Employee ID <span class="text-danger">*</span></label>
                                             <input type="text" name="user_id" id="user_id" class="form-control" step="any" placeholder="Enter Employee Id" value="{{old('user_id',$employee->user->user_id)}}" required> 
                                         </div>
                                     </div>
+                                    @endcan
                                 </div>
                                   
                                 <div>

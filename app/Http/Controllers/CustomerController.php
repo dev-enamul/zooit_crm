@@ -13,6 +13,7 @@ use App\Models\Area;
 use App\Models\Bank;
 use App\Models\Customer;
 use App\Models\Employee;
+use App\Models\Notification;
 use App\Models\Profession;
 use App\Models\ReportingUser;
 use App\Models\User;
@@ -90,8 +91,7 @@ class CustomerController extends Controller
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = json_decode(Auth::user()->user_employee);
-        $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->whereNotNull('approve_by')->select('id','name','user_id')->get();
+        
         return view('customer.customer_create', compact(
             'title', 
             'divisions', 
@@ -102,15 +102,14 @@ class CustomerController extends Controller
             'banks',
             'mobileBanks', 
             'nationalites', 
-            'professions',
-            'reporting_user',
+            'professions', 
             'areas',
             'zones'
         ));
     }
 
     public function save(Request $request, $id = null)
-    { 
+    {
         $validator = Validator::make($request->all(), [
             'full_name'                 => 'required|string|max:255', 
             'marital_status'            => 'nullable',
@@ -120,8 +119,8 @@ class CustomerController extends Controller
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required|in:1,2,3',
-            'phone1'                    => 'required|string|max:15',
-            'phone2'                    => 'nullable|string|max:15',
+            'phone1'                    => 'required|string|max:11|min:11||regex:/^01[3-9]{1}\d{8}$/|unique:users,phone',
+            'phone2'                    => 'nullable|string|max:11|min:11',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',
             'imo_whatsapp_number'       => 'nullable|string',
@@ -165,16 +164,29 @@ class CustomerController extends Controller
         DB::beginTransaction(); 
        
         try { 
-            $old_user = User::where('phone', get_phone($request->phone1))->first();
+            $old_user = User::where('phone', $request->phone1)->withTrashed()->first();
             $approve_setting = ApproveSetting::where('name','customer')->first();  
             $is_admin = Auth::user()->hasPermission('admin'); 
             if($approve_setting->status == 0 || $is_admin){ 
                 $approve_by = auth()->user()->id;
             }else{
                 $approve_by = null;
-            }
-
+                // $auth_user = Auth::user(); 
+                // if(count(json_decode($auth_user->user_reporting))>1){
+                //     Notification::store([
+                //         'title'         => 'Customer approval request',
+                //         'content'       => $auth_user->name.' has created a customer please approve as soon as possible',
+                //         'link'          => route('customer.approve'),
+                //         'created_by'    => auth()->user()->id,  
+                //         'user_id'       => json_decode($auth_user->user_reporting)[1]
+                //     ]);
+                // } 
+            }  
             if ($old_user) {
+                $old_user->deleted_at = null;
+                $old_user->deleted_by = null;
+                $old_user->updated_at = now();
+                $old_user->save();
                 Customer::create([
                     'user_id'       => $old_user->id,
                     'customer_id'   => User::generateNextCustomerId(),
@@ -185,8 +197,9 @@ class CustomerController extends Controller
                     'created_at'    => now(),
                     'approve_by'    => $approve_by,
                     'created_by'    => auth()->user()->id,
-                ]);
-                return redirect()->route('customer.index')->with('success', 'Customer created successfully');
+                ]); 
+
+                return redirect()->route('customer.index')->with('success', 'Customer added successfully');
             } 
 
             $user = User::create([ 
@@ -288,8 +301,7 @@ class CustomerController extends Controller
                 'tin_number'                => $request->tin_number,
                 'created_at'                => now(),
             ];
-            UserId::create($user_documents);
-
+            UserId::create($user_documents); 
             $customer_data = [
                 'customer_id'      =>  User::generateNextCustomerId(),
                 'user_id'           => $user->id,
@@ -303,9 +315,14 @@ class CustomerController extends Controller
             ];  
             Customer::create($customer_data);   
             
+
+            // Notification  
+            
+
             DB::commit(); 
             return redirect()->route('customer.index')->with('success', 'Customer created successfully');
-        } catch (Exception $e) {   
+        } catch (Exception $e) {  
+            dd($e->getMessage()); 
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
@@ -366,7 +383,7 @@ class CustomerController extends Controller
        
         try {  
             $customer = Customer::find($id);
-            $user = $customer->user; 
+            $user = $customer->user;
 
             if($user==null){
                 return redirect()->back()->with('Invalid Customer');
@@ -598,7 +615,7 @@ class CustomerController extends Controller
          }
     }
 
-    public function edit($id){ 
+    public function edit($id){
         $id = decrypt($id);
         $title     = "Customer Edit";
         $countries = $this->getCachedCountries();
@@ -615,9 +632,7 @@ class CustomerController extends Controller
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = my_all_employee(auth()->user()->id);
-        $reporting_user = User::where('status',1)->whereIn('id',$my_all_employee)->select('id','name','user_id')->get();
-        
+         
         $customer = Customer::find($id);
         $selected['country_id']   = $customer->user->userAddress->country_id??1;
         $selected['division_id']  = $customer->user->userAddress->division_id??1;
@@ -688,7 +703,7 @@ class CustomerController extends Controller
 
     public function customer_approve(){
         $my_customer = my_employee(auth()->user()->id);
-        $customers = Customer::where('approve_by',null)->whereIn('ref_id',$my_customer)->get();
+        $customers = Customer::where('approve_by',null)->whereIn('created_by',$my_customer)->get();
         return view('customer.customer_approve',compact('customers'));
     }
 

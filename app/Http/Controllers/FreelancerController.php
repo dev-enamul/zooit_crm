@@ -70,22 +70,20 @@ class FreelancerController extends Controller
     public function index(FreelancersDataTable $dataTable, Request $request){ 
         $title = 'Freelancer List'; 
         $date = $request->date??null; 
+        $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
         $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
 
-        return $dataTable->render('freelancer.freelancer_list',compact('title','employee','start_date','end_date'));
+        return $dataTable->render('freelancer.freelancer_list',compact('title','status','employee','start_date','end_date'));
     }
 
     public function create(){  
         $title     = "Freelancer Create";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
-        $districts = $this->getCachedDistricts();
-        $upazilas  = $this->getCachedUpazilas();
-        $unions    = $this->getCachedUnions();
-        $villages  = $this->getCachedVillages();
+       
         $nationalites = $this->nationality(); 
         $maritalStatuses = $this->maritalStatus();
         $religions = $this->religion();
@@ -97,15 +95,11 @@ class FreelancerController extends Controller
         $areas = Area::where('status',1)->select('id','name')->get();
         $designations = Designation::where('status',1)->where('designation_type',2)->select('id','title')->get(); 
         $professions = Profession::where('status',1)->select('id','name')->get(); 
-        $my_all_employee = my_all_employee(auth()->user()->id); 
+         
         return view('freelancer.freelancer_save', compact(
             'title',
             'countries',
             'divisions',
-            'districts',
-            'upazilas',
-            'unions',
-            'villages', 
             'maritalStatuses',
             'religions',
             'bloodGroups',
@@ -131,7 +125,7 @@ class FreelancerController extends Controller
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required',
-            'phone1'                    => 'required|string|unique:users,phone|max:15',
+            'phone1'                    => 'required|string|unique:users,phone|max:11|min:11|regex:/^01[3-9]{1}\d{8}$/',
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',
@@ -287,7 +281,7 @@ class FreelancerController extends Controller
                 'profession_id'     => $request->profession,
                 'designation_id'    => $request->designation, 
                 'ref_id'            => $request->reporting_user,
-                'last_approve_by'   => $request->reporting_user,
+                'last_approve_by'   => Auth::user()->id,
                 'status'            => 0,
                 'created_at'        => now(),
                 'created_by'        =>Auth::user()->id,
@@ -314,10 +308,10 @@ class FreelancerController extends Controller
             // for freelancer approve 
             $approve_setting = ApproveSetting::where('name','freelancer')->first();
             $is_admin = Auth::user()->hasPermission('admin');
-            if($approve_setting?->status == 0 || $is_admin){ 
+            if($approve_setting?->status == 0 || $is_admin){
                 $controller = new ApproveFreelancerController();
                 $controller->complete_training(encrypt($user->id)); 
-            } 
+            }
             DB::commit();  
             
             UserCreatedEvent::dispatch($user->id);
