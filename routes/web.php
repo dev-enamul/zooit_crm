@@ -453,7 +453,7 @@ Route::get('function_test', function () {
                         return preg_replace("/[^0-9]/", "", $id);
                 }) ;
 
-                $max_user_id = $largest_user_ids;
+                $max_user_id = $largest_user_ids->max();
 
                 dd($max_user_id);
    
