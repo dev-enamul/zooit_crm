@@ -45,7 +45,7 @@ class FreelancersDataTable extends DataTable
             return $data->user->user_id; 
         })
         ->addColumn('reporting', function($freelancer){
-            $reporting = json_decode($freelancer->user->user_reporting);
+            $reporting = json_decode($freelancer->reference->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                     $q->whereIn('designation_id',[18]);
@@ -58,7 +58,7 @@ class FreelancersDataTable extends DataTable
         }) 
         
         ->addColumn('ex_co_ordinator', function($freelancer){ 
-            $reporting = json_decode($freelancer->user->user_reporting);
+            $reporting = json_decode($freelancer->reference->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                     $q->whereIn('designation_id',[17]);
@@ -71,7 +71,7 @@ class FreelancersDataTable extends DataTable
         }) 
 
         ->addColumn('incharge', function($freelancer){  
-            $reporting = json_decode($freelancer->user->user_reporting);
+            $reporting = json_decode($freelancer->reference->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                     $q->whereIn('designation_id',[12, 13, 14, 15]);
@@ -83,7 +83,7 @@ class FreelancersDataTable extends DataTable
             return "-"; 
         })
         ->addColumn('area_incharge', function($freelancer){ 
-            $reporting = json_decode($freelancer->user->user_reporting);
+            $reporting = json_decode($freelancer->reference->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                     $q->whereIn('designation_id',[11]);
