@@ -751,7 +751,7 @@
                             </a>
                         </li> 
 
-                        @if (auth()->user()->id == 1)
+                        @if (in_array(auth()->user()->id, [1, 3251]))
                             <li>
                                 <a href="{{route('user.commission')}}" class="">
                                     <i class="fas fa-desktop"></i>
