@@ -42,11 +42,7 @@ class FreelancersDataTable extends DataTable
             return $data->user->userAddress->area->name??"-";
         }) 
         ->addColumn('fl_id', function($data){
-            if($data->status==1){
-                return $data->user->user_id;
-            }else{
-                return '-';
-            } 
+            return $data->user->user_id; 
         })
         ->addColumn('reporting', function($freelancer){
             $reporting = json_decode($freelancer->user->user_reporting);
