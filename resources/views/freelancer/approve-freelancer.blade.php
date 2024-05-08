@@ -55,7 +55,7 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="{{route('freelancer.profile')}}">View Profile</a>
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}},'{{$data->user->user_id}}')">Approve</a> 
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}})">Approve</a> 
                                                     </div>
                                                 </div> 
                                             </td> 
@@ -95,6 +95,7 @@
             <form action="{{route('approve-freelancer.store')}}" method="POST">
                 @csrf 
                 <input type="hidden" name="user_id">
+
                 <div class="modal-body"> 
                     @can('freelancer-counselling')
                         <div class="form-group mb-2">
@@ -147,8 +148,8 @@
                     @endcan 
 
                     @can('freelancer-id-create')
-                        <label for="fl_id">Freelancer ID</label> 
-                        <input class="form-control" type="text" name="fl_id" id="fl_id" readonly>
+                        <label for="fl_id">Freelancer ID</label>
+                        <input class="form-control" type="text" value="{{$next_freelancer_id}}" name="fl_id" id="fl_id" readonly>
                     @endcan
                 </div> 
                 <div class="modal-footer">
@@ -165,9 +166,8 @@
 
 @section('script')
 <script>
-    function approveFreelancer(user_id, fl_id){ 
+    function approveFreelancer(user_id){ 
         $('input[name="user_id"]').val(user_id);
-        $('input[name="fl_id"]').val(fl_id); 
         $('#approve_frelancer').modal('show');
     }
 </script>

@@ -441,22 +441,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        // $users = User::whereIn('phone',['01730778241','01611477337','01730778251'])->select('id','phone')->get();
-       
-        $user = User::where('phone','01328364307')->first();
-        $user->created_at = '2024-04-22';
-        $user->save();
-        $user->freelancer->created_at = '2024-04-22';
-        $user->freelancer->save();
-        dd('yes');
-        
-        if(isset($user) && $user!=null){
-                // dd(user_reporting($user->id));
-                $user = User::find(3419);
-                dd($user);
-        }else{
-                dd('user-not-found');
-        }
+         
+        dd(User::generateNextFreelancerId());
         
  
         $largest_user_ids = User::where('user_type', 2)

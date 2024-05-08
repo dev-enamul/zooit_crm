@@ -18,7 +18,8 @@ class ApproveFreelancerController extends Controller
         $trainings = TrainingCategory::where('status', '1')->get(); 
         $my_employee = my_employee(auth()->user()->id); 
         $datas = Freelancer::where('status',0)->whereIn('last_approve_by',$my_employee)->get();
-        return view('freelancer.approve-freelancer',compact('datas','trainings'));
+        $next_freelancer_id = User::generateNextFreelancerId();
+        return view('freelancer.approve-freelancer',compact('datas','trainings','next_freelancer_id'));
     }
 
   
@@ -26,7 +27,7 @@ class ApproveFreelancerController extends Controller
 {
         DB::beginTransaction();
         try{
-            $freelancer = Freelancer::where('user_id',$request->user_id)->first(); 
+            $freelancer = Freelancer::where('user_id',$request->user_id)->first();
             $freelancer->last_approve_by = auth()->user()->id;
             $freelancer->save(); 
 
@@ -35,13 +36,14 @@ class ApproveFreelancerController extends Controller
             $input['freelancer_id'] = $request->user_id;
             if($request->meeting_date && $request->meeting_time){
                 $input['meeting_date'] = $request->meeting_date . ' ' . $request->meeting_time;
-            }  
-
+            }   
+            
             FreelancerApprovel::create($input);  
-
             if(isset($request->fl_id) && $request->fl_id != null){
-                $freelancer->status = 1; 
-                $freelancer->save();
+                $freelancer->status = 1;
+                $freelancer->save(); 
+                $freelancer->user->user_id = $request->fl_id;
+                $freelancer->user->save();
             }
 
             // $auth_user = Auth::user(); 
