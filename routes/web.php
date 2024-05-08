@@ -441,18 +441,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        // $users = User::whereIn('phone',['01730778241','01611477337','01730778251'])->select('id','phone')->get();
+        $users = User::whereIn('phone',['01730778241','01611477337','01730778251'])->select('id','phone')->get();
        
         
  
         $largest_user_ids = User::where('user_type', 2)
-                ->whereIn('created_by', ['3236', '1', '3251'])
+                ->whereNotIn('created_by', ['3236', '1', '3251'])
                 ->where('user_id', 'like', 'FL-%')
                 ->pluck('user_id')
                 ->map(function ($id) {
                         return preg_replace("/[^0-9]/", "", $id);
                 }) ;  
 
+                dd($largest_user_ids);
                 $missing = [];
                 for($i=0;$i<=2573;$i++){ 
                     if(!in_array($i,$largest_user_ids->toArray())){
