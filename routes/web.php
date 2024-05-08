@@ -451,11 +451,17 @@ Route::get('function_test', function () {
                 ->pluck('user_id')
                 ->map(function ($id) {
                         return preg_replace("/[^0-9]/", "", $id);
-                }) ;
+                }) ;  
 
-                $max_user_id = $largest_user_ids->max();
-
-                dd($max_user_id);
+                $missing = [];
+                for($i=0;$i<=2573;$i++){ 
+                    if(!in_array($i,$largest_user_ids->toArray())){
+                        $missing[] = $i;
+                        echo $i.',';
+                    }
+                } 
+                dd(count($missing));
+ 
    
     
   
