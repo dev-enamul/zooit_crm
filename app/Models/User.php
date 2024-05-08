@@ -150,8 +150,7 @@ class User extends Authenticatable
     public static function generateNextEmployeeId($user_id = null){
         if($user_id == null){
             $user_id = User::where('user_type',1)->latest('id')->first()->user_id;
-        }
-        
+        } 
         if($user_id == null){
             $user_id = 'EMP-000';
         }
@@ -165,10 +164,32 @@ class User extends Authenticatable
         return $newValue;
     }
 
-    public static function generateNextCustomerId(){ 
+    public static function generateNextCustomerId(){
         $customer = Customer::where('customer_id','like','PID-%')->latest('user_id')->first()?->customer_id;
         if($customer == null){
             $customer = 'PID-000';
+        }
+        $numericPart = substr($customer, 4);
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
+        $newValue = "PID-" . $newNumericPart; 
+        return $newValue;
+    }
+    public static function generateNextUserCustomerId()
+    {
+        $customer_id = Customer::latest('id')->first()->customer_id;
+        if($customer_id == null){
+            $customer_id = 'CUS-000';
+        }
+        $numericPart = substr($customer_id, 4);
+        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
+        $newValue = "CUS-" . $newNumericPart; 
+        return $newValue;
+    }
+    
+    public static function generateNextProvableFreelancerId(){
+        $customer = User::where('user_id','like','PFL-%')->latest('user_id')->first()?->user_id;
+        if($customer == null){
+            $customer = 'PFL-000';
         }
         $numericPart = substr($customer, 4);
         $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
@@ -188,17 +209,7 @@ class User extends Authenticatable
         return $newValue;
     }
 
-    public static function generateNextUserCustomerId()
-    {
-        $customer_id = Customer::latest('id')->first()->customer_id;
-        if($customer_id == null){
-            $customer_id = 'CUS-000';
-        }
-        $numericPart = substr($customer_id, 4);
-        $newNumericPart = str_pad((int)$numericPart + 1, strlen($numericPart), '0', STR_PAD_LEFT);
-        $newValue = "CUS-" . $newNumericPart; 
-        return $newValue;
-    }
+    
  
  
 
