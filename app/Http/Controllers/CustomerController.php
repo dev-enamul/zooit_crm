@@ -81,6 +81,11 @@ class CustomerController extends Controller
     public function create(){
         $title     = "Customer Create"; 
         $divisions = $this->getCachedDivisions(); 
+        $districts = $this->getCachedDistricts();
+        $upazilas  = $this->getCachedUpazilas();
+        $unions    = $this->getCachedUnions();
+        $villages  = $this->getCachedVillages();
+
         $nationalites = $this->nationality(); 
         $maritalStatuses = $this->maritalStatus();
         $religions = $this->religion();
@@ -93,8 +98,12 @@ class CustomerController extends Controller
         $professions = Profession::where('status',1)->select('id','name')->get(); 
         
         return view('customer.customer_create', compact(
-            'title', 
-            'divisions', 
+            'title',
+            'divisions',
+            'districts',
+            'upazilas',
+            'unions',
+            'villages', 
             'maritalStatuses',
             'religions',
             'bloodGroups',
