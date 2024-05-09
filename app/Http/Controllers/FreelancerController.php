@@ -133,7 +133,7 @@ class FreelancerController extends Controller
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required',
-            'phone1'                    => 'required|string|unique:users,phone|max:11|min:11|regex:/^01[3-9]{1}\d{8}$/',
+            'phone1'                    => 'required|string|unique:users,phone|max:15',
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',

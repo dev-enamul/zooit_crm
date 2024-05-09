@@ -98,7 +98,7 @@ class CustomerController extends Controller
         $professions = Profession::where('status',1)->select('id','name')->get(); 
         
         return view('customer.customer_create', compact(
-            'title',
+            'title', 
             'divisions',
             'districts',
             'upazilas',
@@ -128,8 +128,8 @@ class CustomerController extends Controller
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
             'gender'                    => 'required|in:1,2,3',
-            'phone1'                    => 'required|string|max:11|min:11||regex:/^01[3-9]{1}\d{8}$/|unique:users,phone',
-            'phone2'                    => 'nullable|string|max:11|min:11',
+            'phone1'                    => 'required|string|max:15',
+            'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
             'email'                     => 'nullable|email',
             'imo_whatsapp_number'       => 'nullable|string',
