@@ -160,7 +160,7 @@ class FreelancerController extends Controller
             'nid_file'                  => 'image|max:2048',
             'birth_certificate_file'    => 'image|max:2048',
             'upload_passport'           => 'image|max:2048',
-            'reporting_user'            => 'required|numeric|exists:users,id',
+            'reporting_user'            => 'required|numeric|exists:reporting_users,id',
             'designation'               => 'required|numeric|exists:designations,id',
             // 'at_least_one_field' => [
             //     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),

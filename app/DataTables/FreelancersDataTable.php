@@ -113,7 +113,7 @@ class FreelancersDataTable extends DataTable
                 $start_date = date('Y-m-d',strtotime($date[0]));
                 $end_date = date('Y-m-d',strtotime($date[1]));
                 $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
-            }else{ 
+            }else{
                 $model = $model->whereBetween('created_at',[date('Y-m-01').' 00:00:00',date('Y-m-t').' 23:59:59']);
             }
         }

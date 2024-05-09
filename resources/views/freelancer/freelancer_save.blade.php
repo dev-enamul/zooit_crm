@@ -457,7 +457,7 @@
                                     </div>
 
                                     <div class="col-md-4 mb-3">
-                                        <label for="reporting_user" class="form-label">Employee <span class="text-danger">*</span></label>
+                                        <label for="reporting_user" class="form-label">Employee/Freelancer <span class="text-danger">*</span></label>
                                         <select class="select2" search name="reporting_user" id="reporting_id" required> 
                                                
                                         </select> 
