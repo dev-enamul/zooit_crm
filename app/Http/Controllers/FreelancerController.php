@@ -179,7 +179,17 @@ class FreelancerController extends Controller
         } 
 
         DB::beginTransaction();  
-        try {
+        try { 
+
+            if(isset($request->reporting_user) && $request->reporting_user != null){
+                $ref_user = ReportingUser::find($request->reporting_user);
+                if(isset($ref_user) && $ref_user != null){
+                    $ref_id = $ref_user->user_id;
+                }else{
+                    $ref_id = Auth::user()->id;
+                }
+            }
+            
             $user = User::create([
                 'user_id'       => $request->freelancer_id??User::generateNextProvableFreelancerId(),
                 'name'          => $request->full_name,
@@ -194,8 +204,8 @@ class FreelancerController extends Controller
                 'gender'        => $request->gender,
                 'nationality'   => $request->nationality,
                 'status'        => 0,
-                'created_by'    => auth()->user()->id, 
-                'ref_id'        => $request->reporting_user,
+                'created_by'    => auth()->user()->id,
+                'ref_id'        => $ref_id,
             ]);
 
             if ($request->hasFile('profile_image')) {
@@ -288,12 +298,12 @@ class FreelancerController extends Controller
                 'user_id'           => $user->id,
                 'profession_id'     => $request->profession,
                 'designation_id'    => $request->designation, 
-                'ref_id'            => $request->reporting_user,
+                'ref_id'            => $ref_id,
                 'last_approve_by'   => Auth::user()->id,
                 'status'            => 0,
                 'created_at'        => now(),
                 'created_by'        =>Auth::user()->id,
-            ]; 
+            ];
             Freelancer::create($employee_data);  
 
             $permissions = DesignationPermission::where('designation_id', $request->designation)->pluck('permission_id')->toArray();
@@ -311,7 +321,7 @@ class FreelancerController extends Controller
                     'status'                => 1,
                     'created_at'            => now(),
                 ]);
-            } 
+            }
 
             // for freelancer approve 
             $approve_setting = ApproveSetting::where('name','freelancer')->first();

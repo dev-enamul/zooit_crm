@@ -49,7 +49,7 @@
                                 <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer">
                                                 @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
                                                     <option value="{{$selected_data['customer']->id}}"  selected="selected">{{$selected_data['customer']->name}} [{{$selected_data['customer']->customer_id}}]</option>
