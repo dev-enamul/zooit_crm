@@ -10,7 +10,7 @@
                     <div class="page-title-box d-flex align-items-cjustify-content-between">
                         <h4 class="mb-sm-0">
                             {{$title}}
-                        </h4>   
+                        </h4>  
                     </div>
                 </div>
             </div>

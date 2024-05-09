@@ -83,12 +83,16 @@ class FreelancerController extends Controller
         $title     = "Freelancer Create";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
-       
+        $districts = $this->getCachedDistricts();
+        $upazilas  = $this->getCachedUpazilas();
+        $unions    = $this->getCachedUnions();
+        $villages  = $this->getCachedVillages();
+ 
         $nationalites = $this->nationality(); 
         $maritalStatuses = $this->maritalStatus();
         $religions = $this->religion();
         $bloodGroups = $this->bloodGroup();
-        $genders = $this->gender(); 
+        $genders = $this->gender();
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
         $zones = Zone::where('status',1)->select('id','name')->get();
@@ -100,6 +104,10 @@ class FreelancerController extends Controller
             'title',
             'countries',
             'divisions',
+            'districts',
+            'upazilas',
+            'unions',
+            'villages',
             'maritalStatuses',
             'religions',
             'bloodGroups',
@@ -346,6 +354,7 @@ class FreelancerController extends Controller
         if(!$freelancer){
             return redirect()->back()->with('error', 'Freelancer not found');
         }
+        
         $selected['country_id']   = $freelancer->user->userAddress->country_id??1;
         $selected['division_id']  = $freelancer->user->userAddress->division_id??1;
         $selected['district_id']  = $freelancer->user->userAddress->district_id??1;

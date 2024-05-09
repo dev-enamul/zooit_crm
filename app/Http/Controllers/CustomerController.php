@@ -183,23 +183,23 @@ class CustomerController extends Controller
                 // } 
             }  
             if ($old_user) {
-                $old_user->deleted_at = null;
-                $old_user->deleted_by = null;
-                $old_user->updated_at = now();
-                $old_user->save();
-                Customer::create([
-                    'user_id'       => $old_user->id,
-                    'customer_id'   => User::generateNextCustomerId(),
-                    'profession_id' => $request->profession,
-                    'name'          => $request->full_name,
-                    'ref_id'        => $request->reporting_user, 
-                    'status'        => 0,
-                    'created_at'    => now(),
-                    'approve_by'    => $approve_by,
-                    'created_by'    => auth()->user()->id,
-                ]); 
-
-                return redirect()->route('customer.index')->with('success', 'Customer added successfully');
+                return redirect()->back()->withInput()->with('error', 'Customer already exists');
+                // $old_user->deleted_at = null;
+                // $old_user->deleted_by = null;
+                // $old_user->updated_at = now();
+                // $old_user->save();
+                // Customer::create([
+                //     'user_id'       => $old_user->id,
+                //     'customer_id'   => User::generateNextCustomerId(),
+                //     'profession_id' => $request->profession,
+                //     'name'          => $request->full_name,
+                //     'ref_id'        => $request->reporting_user, 
+                //     'status'        => 0,
+                //     'created_at'    => now(),
+                //     'approve_by'    => $approve_by,
+                //     'created_by'    => auth()->user()->id,
+                // ]);  
+                // return redirect()->route('customer.index')->with('success', 'Customer added successfully');
             } 
 
             $user = User::create([ 
