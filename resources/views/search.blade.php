@@ -25,7 +25,7 @@
                                             @if ($data->user_type==1 || $data->user_type==2)
                                                 <a href="{{route('profile',encrypt($data->id))}}">{{$data->name}}</a>
                                             @else 
-                                                <a href="{{route('customer.profile',encrypt($data->customer[0]->id))}}">{{$data->name}}</a>
+                                                <a href="{{route('customer.profile',encrypt($data?->customer[0]?->id))}}">{{$data->name}}</a>
                                             @endif 
                                         </h4>
                                      
@@ -46,7 +46,7 @@
                                         </div> 
                                     @else  
                                         <div class="rich-list-append">
-                                            <a href="{{route('customer.profile',encrypt($data->customer[0]->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                            <a href="{{route('customer.profile',encrypt($data?->customer[0]?->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                         </div>
                                     @endif 
                                 </div>
