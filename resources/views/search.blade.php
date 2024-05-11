@@ -13,6 +13,32 @@
                 <div class="card-body">
                     <div class="rich-list rich-list-flush">
                         @foreach ($datas as $data)
+                        @if ($data->user_type==3 && $data?->customer[0]?->id!=null) 
+                        <div class="flex-column align-items-stretch">
+                            <div class="rich-list-item">
+                                <div class="rich-list-prepend">
+                                    <div class="avatar avatar-xs">
+                                        <div class=""><img src="{{$data->image()}}" alt="Avatar image" class="avatar-2xs" /></div>
+                                    </div>
+                                </div> 
+                                <div class="rich-list-content">
+                                    <h4 class="rich-list-title mb-1">
+                                        <a href="{{route('customer.profile',encrypt($data?->customer[0]?->id))}}">{{$data->name}}</a>
+                                    </h4>
+                                 
+                                    <p class="rich-list-subtitle mb-0">
+                                        @foreach ($data->customer as $customer)
+                                            #{{$customer->customer_id}}
+                                        @endforeach 
+                                    </p>  
+                                </div>
+                                
+                                <div class="rich-list-append">
+                                    <a href="{{route('customer.profile',encrypt($data?->customer[0]?->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                </div>
+                            </div>
+                        </div> 
+                        @else{
                             <div class="flex-column align-items-stretch">
                                 <div class="rich-list-item">
                                     <div class="rich-list-prepend">
@@ -22,35 +48,18 @@
                                     </div> 
                                     <div class="rich-list-content">
                                         <h4 class="rich-list-title mb-1">
-                                            @if ($data->user_type==1 || $data->user_type==2)
-                                                <a href="{{route('profile',encrypt($data->id))}}">{{$data->name}}</a>
-                                            @else 
-                                                <a href="{{route('customer.profile',encrypt($data?->customer[0]?->id))}}">{{$data->name}}</a>
-                                            @endif 
+                                            <a href="{{route('profile',encrypt($data->id))}}">{{$data->name}}</a> 
                                         </h4>
                                      
-                                        @if ($data->user_type==1 || $data->user_type==2)
-                                            <p class="rich-list-subtitle mb-0"> #{{$data->user_id}}</p> 
-                                        @else
-                                            <p class="rich-list-subtitle mb-0">
-                                                @foreach ($data->customer as $customer)
-                                                    #{{$customer->customer_id}}
-                                                @endforeach 
-                                            </p> 
-                                        @endif  
+                                        <p class="rich-list-subtitle mb-0"> #{{$data->user_id}}</p>  
                                     </div>
                                     
-                                    @if ($data->user_type==1 || $data->user_type==2)
-                                        <div class="rich-list-append">
-                                            <a href="{{route('profile',encrypt($data->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
-                                        </div> 
-                                    @else  
-                                        <div class="rich-list-append">
-                                            <a href="{{route('customer.profile',encrypt($data?->customer[0]?->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
-                                        </div>
-                                    @endif 
+                                    <div class="rich-list-append">
+                                        <a href="{{route('profile',encrypt($data->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                    </div> 
                                 </div>
                             </div> 
+                        } 
                         @endforeach 
                     </div>
                 </div>
