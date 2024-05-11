@@ -442,11 +442,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        $user = User::where('phone','01701203070')->first();
-        $reporting = ReportingUser::where('user_id', $user->id)->where('status',1)->latest()->first();
-        $reporting->reporting_user_id = null;
-        $reporting->save();
-        dd($reporting);
+         dd(user_reporting(1));
       
 
         
