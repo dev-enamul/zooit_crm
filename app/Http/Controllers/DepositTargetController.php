@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DepositTarget;
 use App\Models\DepositTargetProject;
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\User;
 use Exception;
@@ -91,8 +92,24 @@ class DepositTargetController extends Controller
                         $depositTargetProject->delete();
                     });
                 }
+
+                Notification::store([
+                    'title' => 'Field Target Updated',
+                    'content' => auth()->user()->name . ' has updated your field target',
+                    'link' => route('my.deposit.target'),
+                    'created_by' => auth()->user()->id,
+                    'user_id' => [$request->assign_to]
+                ]);
+
             }else{
                 $deposit_target = DepositTarget::create($input); 
+                Notification::store([
+                    'title' => 'Field Target Assigned',
+                    'content' => auth()->user()->name . ' has assigned you a field target',
+                    'link' => route('my.deposit.target'),
+                    'created_by' => auth()->user()->id,
+                    'user_id' => [$request->assign_to]
+                ]);
             }
            
             if(isset($request->project_id) && count($request->project_id) > 0){
@@ -119,6 +136,7 @@ class DepositTargetController extends Controller
                 $deposit_target->save();
 
             }    
+            
             DB::commit();
             return redirect()->back()->with('success','Deposit target assigned successfully');
        }catch(Exception $e){  

@@ -141,7 +141,7 @@ class FollowupAnalysisController extends Controller
                         'content' => auth()->user()->name . ' has created a follow up analysis please approve as soon as possible',
                         'link' => route('followUp-analysis.approve'),
                         'created_by' => auth()->user()->id,
-                        'user_id' => json_decode($employee->user_reporting)[1]
+                        'user_id' => [json_decode($employee->user_reporting)[1]]
                     ]);
                 }
             }

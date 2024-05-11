@@ -108,7 +108,7 @@ class ColdCallingController extends Controller
                         'content' => auth()->user()->name . ' has created a cold calling please approve as soon as possible',
                         'link' => route('cold-calling.approve'),
                         'created_by' => auth()->user()->id,
-                        'user_id' => json_decode($employee->user_reporting)[1]
+                        'user_id' => [json_decode($employee->user_reporting)[1]]
                     ]);
                 }
             }

@@ -115,7 +115,7 @@ class LeadController extends Controller
                         'content' => auth()->user()->name . ' has created a lead please approve as soon as possible',
                         'link' => route('lead.approve'),
                         'created_by' => auth()->user()->id,
-                        'user_id' => json_decode($employee->user_reporting)[1]
+                        'user_id' => [json_decode($employee->user_reporting)[1]]
                     ]);
                 }
             }

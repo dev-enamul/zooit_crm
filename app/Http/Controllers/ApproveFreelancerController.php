@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Freelancer;
 use App\Models\FreelancerApprovel;
+use App\Models\Notification;
 use App\Models\TrainingCategory;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ApproveFreelancerController extends Controller
@@ -53,7 +55,7 @@ class ApproveFreelancerController extends Controller
                          'content'       => $auth_user->name.' has created a freelancer approve please approve as soon as possible',
                          'link'          => url('approve-freelancer'),
                          'created_by'    => auth()->user()->id,
-                         'user_id'       => json_decode($auth_user->user_reporting)[1]
+                         'user_id'       => [json_decode($auth_user->user_reporting)[1]]
                      ]);
                  }
 

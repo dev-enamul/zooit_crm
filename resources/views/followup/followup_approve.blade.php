@@ -52,7 +52,7 @@
                                             <th>Address</th>
                                             <th>Neg. Amount</th>
                                             <th>Project</th>
-                                            <th>Product & Qty</th> 
+                                            {{-- <th>Product & Qty</th>  --}}
                                             <th>Freelancer</th> 
                                         </tr>
                                     </thead>
@@ -70,7 +70,7 @@
                                             <td class=""> {{ @$followUp->customer->user->userAddress->address }}</td>
                                             <td class=""> {{ @$followUp->negotiation_amount }}</td>
                                             <td class=""> {{ @$followUp->project->name }}</td>
-                                            <td class="">   {{count(json_decode($followUp->project_units))}} </td>
+                                            {{-- <td class="">   {{count(json_decode($followUp->project_units))}} </td> --}}
                                             <td class=""> {{ @$followUp->customer->reference->name }} [{{ @$followUp->customer->reference->user_id }}] </td>
                                            
                                         </tr>
@@ -92,5 +92,11 @@
 @endsection 
 
 @section('script')
-
+<script>
+    $(document).ready(function () { 
+        $('#selectAll').click(function () {
+            $(':checkbox').prop('checked', this.checked);
+        });
+    });
+</script>
 @endsection

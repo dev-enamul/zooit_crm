@@ -143,7 +143,7 @@ class ProductController extends Controller
                          'content'       => $auth_user->name.' has created a product please approve as soon as possible',
                          'link'          => route('product.approve'),
                          'created_by'    => auth()->user()->id,
-                         'user_id'       => json_decode($auth_user->user_reporting)[1]
+                         'user_id'       => [json_decode($auth_user->user_reporting)[1]]
                      ]);
                  }
             }

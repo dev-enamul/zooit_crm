@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\FieldTarget;
 use App\Models\Lead;
 use App\Models\LeadAnalysis;
+use App\Models\Notification;
 use App\Models\Prospecting;
 use App\Models\SubmitTime;
 use App\Models\User;
@@ -48,11 +49,28 @@ class FieldTargetController extends Controller
             $input['month'] = date('Y-m-d',strtotime($input['month']));
             $old = FieldTarget::where('assign_to',$input['assign_to'])->where('month',$input['month'])->first();
             if($old){
-                $old->update($input);
+                $old->update($input); 
+
+                // Notification Store
+                Notification::store([
+                    'title' => 'Field Target Updated',
+                    'content' => auth()->user()->name . ' has updated your field target',
+                    'link' => route('my.field.target'),
+                    'created_by' => auth()->user()->id,
+                    'user_id' => [$input['assign_to']]
+                ]); 
+                
                 return redirect()->back()->with('success', 'Target updated successfully');
             }else{
-                $target = new FieldTarget($input); 
+                $target = new FieldTarget($input);  
                 $target->save(); 
+                Notification::store([
+                    'title' => 'Field Target Assigned',
+                    'content' => auth()->user()->name . ' has assigned you a field target',
+                    'link' => route('my.field.target'),
+                    'created_by' => auth()->user()->id,
+                    'user_id' => [$input['assign_to']]
+                ]); 
                 return redirect()->back()->with('success', 'Target assigned successfully'); 
             } 
         }catch(Exception $e){ 

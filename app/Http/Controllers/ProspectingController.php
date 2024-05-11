@@ -120,7 +120,7 @@ class ProspectingController extends Controller
                         'content' => auth()->user()->name . ' has created a Prospecting please approve as soon as possible',
                         'link' => route('prospecting.approve'),
                         'created_by' => auth()->user()->id,
-                        'user_id' => json_decode($employee->user_reporting)[1]
+                        'user_id' => [json_decode($employee->user_reporting)[1]]
                     ]);
                 }
             }

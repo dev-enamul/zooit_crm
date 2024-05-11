@@ -338,7 +338,7 @@ class FreelancerController extends Controller
                         'content' => auth()->user()->name . ' has created a freelancer please approve as soon as possible',
                         'link' => url('approve-freelancer'),
                         'created_by' => auth()->user()->id,
-                        'user_id' => json_decode($employee->user_reporting)[1]
+                        'user_id' => [json_decode($employee->user_reporting)[1]]
                     ]);
                 }
             }
