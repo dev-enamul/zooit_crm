@@ -58,8 +58,7 @@
                                         <th>New Deposit</th> 
                                     </tr>   
                                 </thead>
-                                <tbody> 
-                                  
+                                <tbody>  
                                     @if (isset($datas) && $datas->is_project_wise==1) 
                                         @if (isset($datas->depositTargetProjects) && count($datas->depositTargetProjects)>0)
                                             @foreach ($datas->depositTargetProjects as $key => $data)

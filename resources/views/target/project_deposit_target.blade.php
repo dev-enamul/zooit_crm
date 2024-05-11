@@ -87,14 +87,14 @@
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="existing_unit_{{$item->id}}" class="form-label">Existing Unit</label>
-                                                <input type="number" name="existing_unit[]" id="existing_unit_{{$item->id}}" min="0" class="form-control" value="10"> 
+                                                <input type="number" name="existing_unit[]" id="existing_unit_{{$item->id}}" min="0" class="form-control" > 
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="existing_deposit_{{$item->id}}" class="form-label">Existing Deposit</label>
-                                                <input type="number" name="existing_deposit[]" id="existing_deposit_{{$item->id}}" min="0" class="form-control" value="400000"> 
+                                                <input type="number" name="existing_deposit[]" id="existing_deposit_{{$item->id}}" min="0" class="form-control"> 
                                             </div>
                                         </div> 
                                     </div>  

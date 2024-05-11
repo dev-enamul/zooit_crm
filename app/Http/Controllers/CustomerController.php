@@ -189,7 +189,7 @@ class CustomerController extends Controller
                 //         'created_by'    => auth()->user()->id,  
                 //         'user_id'       => json_decode($auth_user->user_reporting)[1]
                 //     ]);
-                // } 
+                // }
             }  
             if ($old_user) {
                 return redirect()->back()->withInput()->with('error', 'Customer already exists');
