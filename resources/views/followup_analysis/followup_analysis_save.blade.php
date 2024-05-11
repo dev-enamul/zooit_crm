@@ -4,7 +4,7 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid"> 
+        <div class="container-fluid">
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -25,21 +25,29 @@
 
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="card"> 
+                    <div class="card">
                         <div class="card-body">
                             @if(isset($visit))
-                                <form action="{{route('follow-up-analysis.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('follow-up-analysis.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 <input type="hidden" name="id" value="{{$visit->id}}">
-                            @else 
-                                <form action="{{route('follow-up-analysis.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                            @endif  
+                            @else
+                                <form action="{{route('follow-up-analysis.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            @endif
                             @csrf
-                                <div class="row">  
-                                    <div class="col-md-12">
+                                <div class="row">
+                                    @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reference</label>
+                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control"  >
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="col-md-{{ (isset($selected_data['customer']) && $selected_data['customer'] != null) ? '6' : '12' }}">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
-                                                
+
                                                 @isset($selected_data['customer'])
                                                     <option value="{{ $selected_data['customer']->id }}" selected>
                                                         {{ $selected_data['customer']->name }} ({{ $selected_data['customer']->customer_id}})
@@ -75,7 +83,7 @@
                                                         </option>
                                                     @endforeach
                                                 @endisset
-                                            </select> 
+                                            </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -96,11 +104,11 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+
                                         <div class="invalid-feedback">
                                             This field is required.
                                         </div>
-                                    </div>  
+                                    </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
@@ -116,89 +124,89 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+
                                         <div class="invalid-feedback">
                                             This field is required.
                                         </div>
-                                    </div>  
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_price" class="form-label"> Unit Price</label>
-                                             <input type="number"  class="form-control" name="unit_price" id="unit_price" value="" readonly> 
+                                             <input type="number"  class="form-control" name="unit_price" id="unit_price" value="" readonly>
                                         </div>
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_qty" class="form-label"> Unit Qty <span class="text-danger">*</span></label>
-                                             <input type="number"  class="form-control" name="unit_qty" id="unit_qty" value="1" min="1" required> 
+                                             <input type="number"  class="form-control" name="unit_qty" id="unit_qty" value="1" min="1" required>
                                         </div>
-                                    </div>   
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="regular_amount" class="form-label"> Regular Amount</label>
-                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($follow) ? $follow->regular_amount : old('regular_amount')}}" readonly> 
+                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($follow) ? $follow->regular_amount : old('regular_amount')}}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="negotiation_amount" class="form-label"> Negotiation Amount <span class="text-danger">*</span></label>
-                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}" required> 
+                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}" required>
                                         </div>
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_expectation" class="form-label"> Customer's Expectation</label>
-                                             <input type="text" placeholder="Customer Expectation" class="form-control" name="customer_expectation" id="customer_expectation" value="{{isset($follow) ? $follow->customer_expectation : old('customer_expectation')}}"> 
+                                             <input type="text" placeholder="Customer Expectation" class="form-control" name="customer_expectation" id="customer_expectation" value="{{isset($follow) ? $follow->customer_expectation : old('customer_expectation')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_need" class="form-label"> Need</label>
-                                             <input type="text" placeholder="Customer Need" class="form-control" name="customer_need" id="customer_need" value="{{isset($follow) ? $follow->customer_need : old('customer_need')}}"> 
+                                             <input type="text" placeholder="Customer Need" class="form-control" name="customer_need" id="customer_need" value="{{isset($follow) ? $follow->customer_need : old('customer_need')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_ability" class="form-label"> Ability</label>
-                                             <input type="text" placeholder="Customer Ability" class="form-control" name="customer_ability" id="customer_ability"  value="{{isset($follow) ? $follow->customer_ability : old('customer_ability')}}"> 
+                                             <input type="text" placeholder="Customer Ability" class="form-control" name="customer_ability" id="customer_ability"  value="{{isset($follow) ? $follow->customer_ability : old('customer_ability')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="influencer_opinion" class="form-label"> Influencer Opinion</label>
-                                             <input type="text" placeholder="Influncer Opinion" class="form-control" name="influencer_opinion" id="influencer_opinion" value="{{isset($follow) ? $follow->influencer_opinion : old('influencer_opinion')}}"> 
+                                             <input type="text" placeholder="Influncer Opinion" class="form-control" name="influencer_opinion" id="influencer_opinion" value="{{isset($follow) ? $follow->influencer_opinion : old('influencer_opinion')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="descision_maker" class="form-label"> Decision Maker</label>
-                                             <input type="text" placeholder="Enter Decision Maker" class="form-control" name="descision_maker" id="descision_maker" value="{{isset($follow) ? $follow->descision_maker : old('descision_maker')}}"> 
+                                             <input type="text" placeholder="Enter Decision Maker" class="form-control" name="descision_maker" id="descision_maker" value="{{isset($follow) ? $follow->descision_maker : old('descision_maker')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="decision_maker_opinion" class="form-label"> Decision Maker Opinion</label>
-                                             <input type="text" placeholder="Decision Maker Opinion" class="form-control" name="decision_maker_opinion" id="decision_maker_opinion" value="{{isset($follow) ? $follow->decision_maker_opinion : old('decision_maker_opinion')}}"> 
+                                             <input type="text" placeholder="Decision Maker Opinion" class="form-control" name="decision_maker_opinion" id="decision_maker_opinion" value="{{isset($follow) ? $follow->decision_maker_opinion : old('decision_maker_opinion')}}">
                                         </div>
                                     </div>
                                 </div>
-                                  
+
                                 <div class="text-end ">
                                     <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-                                </div> 
+                                </div>
                             </form>
                         </div>
-                    </div> 
+                    </div>
                 </div>
                 <!-- end col -->
 
@@ -223,13 +231,13 @@
     </footer>
 
 </div>
-@endsection 
+@endsection
 
 @section('script')
 
     @can('data-input-for-others')
         <script>
-            $(document).ready(function() { 
+            $(document).ready(function() {
                 $('#employee').select2({
                     placeholder: "Select Employee",
                     allowClear: true,
@@ -246,10 +254,10 @@
                 });
             });
         </script>
-    @endcan  
+    @endcan
 
-    <script> 
-        $(document).ready(function() { 
+    <script>
+        $(document).ready(function() {
             $('#customer').select2({
                 placeholder: "Select Customer",
                 allowClear: true,
@@ -259,7 +267,7 @@
                     data: function (params) {
                         var query = {
                             term: params.term
-                        } 
+                        }
                         return query;
                     },
                     success: function(data) {
@@ -267,34 +275,34 @@
                     }
                 }
             });
-        }); 
-    </script> 
+        });
+    </script>
 
     <script>
-        $(document).ready(function() { 
+        $(document).ready(function() {
             $('#unit_price, #unit').on('change', function() {
-                getUnitPrice(); 
+                getUnitPrice();
             });
 
             $('#unit_qty, #unit_price').on('change', function() {
-                getRegularPrice(); 
+                getRegularPrice();
             });
         });
 
         var totalSelectedPrice = 0;
-  
+
         function getUnitPrice(){
                 var formData = {
                         project_id: $("#project").val(),
-                        unit_id: $("#unit").val(), 
-                    };  
+                        unit_id: $("#unit").val(),
+                    };
                     $.ajax({
                         type: "GET",
                         data: formData,
                         dataType: "json",
-                        url: "{{ route('get-project-duration-type-name') }}", 
+                        url: "{{ route('get-project-duration-type-name') }}",
                         success: function(data) {
-                            $('#unit_price').val(data.most_highest_price);  
+                            $('#unit_price').val(data.most_highest_price);
                             getRegularPrice();
                         },
                         error: function(data) {
@@ -307,11 +315,11 @@
                 $unit_qty = $('#unit_qty').val();
                 $unit_price = $('#unit_price').val();
                 $('#regular_amount').val($unit_qty * $unit_price);
-        } 
-    </script>  
+        }
+    </script>
 
-    {{-- get old data  --}} 
-    <script>   
+    {{-- get old data  --}}
+    <script>
         $(document).ready(function(){
             get_customer_data();
             $('#customer').on('change', function() {
@@ -321,16 +329,16 @@
       function get_customer_data(){
             var formData = {
                     customer_id: $("#customer").val()
-                };  
+                };
                 $.ajax({
                     type: "GET",
                     data: formData,
                     dataType: "json",
-                    url: "{{ route('get.follow.up.data') }}", 
+                    url: "{{ route('get.follow.up.data') }}",
                     success: function(data) {
                         $('#priority').val(data.priority);
                         $('#project').val(data.project_id);
-                        $('#unit').val(data.unit_id); 
+                        $('#unit').val(data.unit_id);
                         $("#negotiation_amount").val(data.negotiation_amount);
                         getUnitPrice();
                     },
