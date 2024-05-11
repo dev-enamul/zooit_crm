@@ -331,7 +331,7 @@ class FreelancerController extends Controller
                 $controller = new ApproveFreelancerController();
                 $controller->complete_training(encrypt($user->id));
             }else{
-                $employee = User::find($request->reporting_user);
+                $employee = Auth::user();
                 if(!empty($employee) && count(json_decode($employee->user_reporting))>1) {
                     Notification::store([
                         'title' => 'Freelancer approve request',

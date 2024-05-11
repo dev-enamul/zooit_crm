@@ -5,9 +5,7 @@
         @endif
         <img class="rounded avatar-2xs p-0" src="{{$data?->user?->image()}}">
     </a>
-    <div class="dropdown-menu dropdown-menu-animated">
-
-
+    <div class="dropdown-menu dropdown-menu-animated"> 
         @can('freelancer-manage')
             <a class="dropdown-item" href="{{route('profile',encrypt($data?->user_id))}}">Profile</a>
             <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
@@ -20,7 +18,7 @@
             @can('freelancer-delete')
                 <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', encrypt($data?->user_id)) }}')">Resign Freelancer</a>
             @endcan
-            <a class="dropdown-item" href="{{route('user.area.edit', encrypt($data?->user_id))}}">Change Area</a>
+                <a class="dropdown-item" href="{{route('user.area.edit', encrypt($data?->user_id))}}">Change Area</a>
             @endif
 
             <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data?->user_id))}}">Change Reporting User</a>

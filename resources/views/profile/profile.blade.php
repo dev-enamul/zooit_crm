@@ -163,14 +163,11 @@
                             <div class="col-md-6">
                                 <div class="table-responsive">
                                     <table class="table table-nowrap table-borderless mb-0">
-                                        <tbody>
-                                            
-
+                                        <tbody> 
                                             <tr>
                                                 <th scope="row">Reporting Person :</th>
                                                 <td>{{$reporting_user->name??"-"}} [ {{@$reporting_user->user_id}} ] {{@$reporting_user->phone}}</td>
-                                            </tr> 
-
+                                            </tr>  
                                             <tr>
                                                 <th scope="row">Top Reporting Person :</th>
                                                 <td>{{$top_reporting_user->name??"-"}} [ {{@$top_reporting_user->user_id}} ] {{@$top_reporting_user->phone}}</td>

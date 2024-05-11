@@ -119,27 +119,23 @@ class FreelancersDataTable extends DataTable
         }
 
         $user = User::find(auth()->user()->id);
-        $is_admin = $user->hasPermission('admin');
-        if(!$is_admin){
-            if(isset($request->employee)){
-                $filter_user = User::find($request->employee);
-                $my_freelancer = json_decode($filter_user->user_employee);
-                $model = $model->whereIn('user_id',$my_freelancer);
-            }else{
-                $my_freelancer = json_decode($user->user_employee);
-                $model = $model->whereIn('user_id',$my_freelancer);
-            }
-
-            $model =  $model
-            ->where(function($q){
-                $q->where('freelancers.status',1)->orWhereHas('user', function($query){
-                    $query->Where('approve_by','!=',null)
-                    ->orWhere('ref_id',auth()->user()->id)
-                    ->orWhere('created_by',auth()->user()->id);
-                });
-            });
-
+        if(isset($request->employee)){
+            $filter_user = User::find($request->employee);
+            $my_freelancer = json_decode($filter_user->user_employee);
+            $model = $model->whereIn('user_id',$my_freelancer);
+        }else{
+            $my_freelancer = json_decode($user->user_employee);
+            $model = $model->whereIn('user_id',$my_freelancer);
         }
+
+        $model =  $model
+        ->where(function($q){
+            $q->WhereHas('user', function($query){
+                $query->Where('approve_by','!=',null)
+                ->orWhere('ref_id',auth()->user()->id)
+                ->orWhere('created_by',auth()->user()->id);
+            });
+        });
 
 
         $data =  $model->with('user')
