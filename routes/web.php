@@ -76,6 +76,8 @@ use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\UserCommissionController;
 use App\Http\Controllers\UserDocumentController;
+use App\Models\DepositTarget;
+use App\Models\ReportingUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -441,8 +443,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-         
-        dd(User::generateNextFreelancerId());
+        $deposit_targets = DepositTarget::get();
+     
+        foreach($deposit_targets as $deposit_target){
+                if($deposit_target->is_project_wise == 1){
+                        $new_total_deposit = $deposit_target->depositTargetProjects->sum('new_deposit');
+                        $existing_total_deposit = $deposit_target->depositTargetProjects->sum('existing_deposit');
+                        $deposit_target->new_total_deposit = $new_total_deposit;
+                        $deposit_target->existing_total_deposit = $existing_total_deposit;
+                        $deposit_target->save();
+                }    
+        }
+        dd($new_total_deposit, $existing_total_deposit);
+       
+      
+
         
  
         $largest_user_ids = User::where('user_type', 2)

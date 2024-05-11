@@ -67,8 +67,7 @@
                             <label for="date_range" class="form-label">Date</label>
                             <input class="form-control" start="{{$start_date}}" end="{{$end_date}}" id="date_range" name="date" default="This Month" type="text" value="" />   
                         </div>
-                    </div>
-
+                    </div> 
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="employee" class="form-label">Employee</label>

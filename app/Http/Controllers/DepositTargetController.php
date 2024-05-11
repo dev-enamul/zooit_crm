@@ -76,8 +76,8 @@ class DepositTargetController extends Controller
 
     public function deposit_target_save(Request $request){
     
-        DB::beginTransaction();
-       try{ 
+    DB::beginTransaction();
+       try{
             $input = $request->all();
             $input['assign_by'] = auth()->user()->id;
             $input['month'] = $request->month.'-'. 1; 
@@ -85,6 +85,7 @@ class DepositTargetController extends Controller
             if($old_deposit_target){
                 $old_deposit_target->update($input);
                 $deposit_target = $old_deposit_target;
+
                 if(isset($deposit_target->depositTargetProjects) && $deposit_target->depositTargetProjects->count() > 0){
                     $deposit_target->depositTargetProjects->each(function($depositTargetProject) {
                         $depositTargetProject->delete();
@@ -109,6 +110,11 @@ class DepositTargetController extends Controller
                         ]);
                     }
                 }
+                
+                $new_total_deposit = array_sum($request->new_deposit);
+                $existing_total_deposit = array_sum($request->existing_deposit);
+                $deposit_target->new_total_deposit = $new_total_deposit;
+                $deposit_target->existing_total_deposit = $existing_total_deposit; 
                 $deposit_target->is_project_wise = 1;
                 $deposit_target->save();
 

@@ -257,7 +257,7 @@ class User extends Authenticatable
 
     public function reportingUser()
     {
-        return ReportingUser::where('user_id', $this->id)->where('status',1)->latest()->first();;
+        return ReportingUser::where('user_id', $this->id)->where('status',1)->latest()->first();
     }
 
     public function my_reporting(){
