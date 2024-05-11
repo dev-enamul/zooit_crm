@@ -442,7 +442,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
          
-        dd(User::generateNextFreelancerId());
+        dd(user_reporting(1));
         
  
         $largest_user_ids = User::where('user_type', 2)
