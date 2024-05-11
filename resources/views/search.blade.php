@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <div class="rich-list rich-list-flush">
                         @foreach ($datas as $data)
-                        @if ($data->user_type==3 && $data?->customer[0]?->id!=null) 
+                        @if ($data->user_type==3 && $data->customer->count() > 0)
                         <div class="flex-column align-items-stretch">
                             <div class="rich-list-item">
                                 <div class="rich-list-prepend">
