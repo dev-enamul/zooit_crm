@@ -26,9 +26,9 @@ class FreelancersDataTable extends DataTable
      * @return \Yajra\DataTables\EloquentDataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
-    { 
+    {
         return (new EloquentDataTable($query))->setRowId('id')
-        ->addColumn('action',function($data){ 
+        ->addColumn('action',function($data){
              return view('freelancer.freelancer_action',compact('data'))->render();
         })
         ->addColumn('serial', function () {
@@ -37,52 +37,52 @@ class FreelancersDataTable extends DataTable
         })
         ->addColumn('date', function($data){
             return get_date($data->created_at);
-        })  
+        })
         ->addColumn('area', function($data){
             return $data->user->userAddress->area->name??"-";
-        }) 
+        })
         ->addColumn('fl_id', function($data){
-            return $data->user->user_id; 
+            return $data->user->user_id;
         })
         ->addColumn('reporting', function($freelancer){
             $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                     $q->whereIn('designation_id',[18]);
-                })->first();  
+                })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
                 }
             }
-            return "-";  
-        }) 
-        
-        ->addColumn('ex_co_ordinator', function($freelancer){ 
+            return "-";
+        })
+
+        ->addColumn('ex_co_ordinator', function($freelancer){
             $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                     $q->whereIn('designation_id',[17]);
-                })->first();  
+                })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
                 }
-            } 
-            return "-";  
-        }) 
+            }
+            return "-";
+        })
 
-        ->addColumn('incharge', function($freelancer){  
+        ->addColumn('incharge', function($freelancer){
             $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
                     $q->whereIn('designation_id',[12, 13, 14, 15]);
-                })->first();  
+                })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
                 }
-            } 
-            return "-"; 
+            }
+            return "-";
         })
-        ->addColumn('area_incharge', function($freelancer){ 
+        ->addColumn('area_incharge', function($freelancer){
             $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
@@ -91,7 +91,7 @@ class FreelancersDataTable extends DataTable
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
                 }
-            } 
+            }
             return "-";
         });
     }
@@ -102,12 +102,12 @@ class FreelancersDataTable extends DataTable
      * @param \App\Models\Freelancer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Freelancer $model, Request $request): QueryBuilder 
-    { 
+    public function query(Freelancer $model, Request $request): QueryBuilder
+    {
         if(isset($request->status) && $request->status != 0){
             $model = $model->where('created_at','<',Carbon::parse('2024-03-30'));
         }else{
-            $model = $model->where('created_at','>',Carbon::parse('2024-03-30')); 
+            $model = $model->where('created_at','>',Carbon::parse('2024-03-30'));
             if(isset($request->date)){
                 $date = explode(' - ',$request->date);
                 $start_date = date('Y-m-d',strtotime($date[0]));
@@ -121,7 +121,7 @@ class FreelancersDataTable extends DataTable
         $user = User::find(auth()->user()->id);
         $is_admin = $user->hasPermission('admin');
         if(!$is_admin){
-            if(isset($request->employee)){ 
+            if(isset($request->employee)){
                 $filter_user = User::find($request->employee);
                 $my_freelancer = json_decode($filter_user->user_employee);
                 $model = $model->whereIn('user_id',$my_freelancer);
@@ -130,7 +130,7 @@ class FreelancersDataTable extends DataTable
                 $model = $model->whereIn('user_id',$my_freelancer);
             }
 
-            $model =  $model  
+            $model =  $model
             ->where(function($q){
                 $q->where('freelancers.status',1)->orWhereHas('user', function($query){
                     $query->Where('approve_by','!=',null)
@@ -138,11 +138,11 @@ class FreelancersDataTable extends DataTable
                     ->orWhere('created_by',auth()->user()->id);
                 });
             });
-            
-        }  
-        
 
-        $data =  $model->with('user') 
+        }
+
+
+        $data =  $model->with('user')
         ->newQuery();
 
         return $data;
@@ -163,14 +163,14 @@ class FreelancersDataTable extends DataTable
             ->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()
-            ->createdRow('function(row, data, dataIndex) {
-                if (data["user"] && data["user"]["approve_by"] === null) {
-                    $(row).addClass("table-warning");
-                }
-            }')
+//            ->createdRow('function(row, data, dataIndex) {
+//                if (data["user"] && data["user"]["approve_by"] === null) {
+//                    $(row).addClass("table-warning");
+//                }
+//            }')
             ->buttons([
-                Button::make('excel')->title('Freelancer List'), 
-                Button::make('pdf')->title('Freelancer List'), 
+                Button::make('excel')->title('Freelancer List'),
+                Button::make('pdf')->title('Freelancer List'),
             ]);
     }
 
@@ -188,10 +188,10 @@ class FreelancersDataTable extends DataTable
                   ->searchable(false)
                   ->addClass('text-center'),
             Column::make('serial')->title('S/L')->searchable(true),
-            Column::make('user.user_id')->visible(false)->searchable(true), 
+            Column::make('user.user_id')->visible(false)->searchable(true),
             Column::make('fl_id'),
             Column::make('user.name')->title('Name')->searchable(true),
-            Column::make('user.phone')->title('Mobile')->searchable(true),  
+            Column::make('user.phone')->title('Mobile')->searchable(true),
             Column::make('reporting')->title('Co-Ordinator Name_ID'),
             Column::make('ex_co_ordinator')->title('Executive Co-Ordinator Name_ID'),
             Column::make('incharge')->title('InCharge Sales'),

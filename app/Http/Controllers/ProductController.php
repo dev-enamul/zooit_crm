@@ -24,7 +24,7 @@ class ProductController extends Controller
     public function index(){
 
         $divisions      = $this->getCachedDivisions();
-        $projects       = Project::where('status',1)->with('units')->select('id','name','address','total_floor')->get();
+        $projects       = Project::where('status',1)->with('units')->select('id','name','address','total_floor','approved_by')->get();
         $unit_headers   = Unit::where('status',1)->select('id','title')->get();
         $salse          = Salse::where('status',1)->get();
 
