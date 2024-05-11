@@ -4,7 +4,7 @@
 @section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid">  
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -24,17 +24,25 @@
 
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="card"> 
+                    <div class="card">
                         <div class="card-body">
                             @if(isset($visit))
-                                <form action="{{route('follow-up.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('follow-up.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 <input type="hidden" name="id" value="{{$visit->id}}">
-                            @else 
-                                <form action="{{route('follow-up.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                            @endif 
+                            @else
+                                <form action="{{route('follow-up.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            @endif
                                 @csrf
-                                <div class="row"> 
-                                    <div class="col-md-12">
+                                <div class="row">
+                                    @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reference</label>
+                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control"  >
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="col-md-{{ (isset($selected_data['customer']) && $selected_data['customer'] != null) ? '6' : '12' }}">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Customer</label>
                                             <select class="select2" search name="customer" id="customer" required>
@@ -52,7 +60,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
@@ -76,7 +84,7 @@
                                                         </option>
                                                     @endforeach
                                                 @endisset
-                                            </select> 
+                                            </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -99,13 +107,13 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+
                                         @if ($errors->has('project'))
                                             <span class="text-danger" role="alert">
                                                 {{ $errors->first('project') }}
                                             </span>
                                         @endif
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Preferred Unit Name <span class="text-danger">*</span></label>
@@ -121,7 +129,7 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+
                                         @if ($errors->has('unit'))
                                             <span class="text-danger" role="alert">
                                                 {{ $errors->first('unit') }}
@@ -132,61 +140,61 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_price" class="form-label"> Unit Price <span class="text-danger">*</label>
-                                             <input type="number"  class="form-control" name="unit_price" id="unit_price" value="" readonly> 
+                                             <input type="number"  class="form-control" name="unit_price" id="unit_price" value="" readonly>
                                              <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_qty" class="form-label"> Unit Qty <span class="text-danger">*</span></label>
-                                             <input type="number"  class="form-control" name="unit_qty" id="unit_qty" value="1" min="1" required> 
+                                             <input type="number"  class="form-control" name="unit_qty" id="unit_qty" value="1" min="1" required>
                                         </div>
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="regular_amount" class="form-label"> Regular Amount</label>
-                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($follow) ? $follow->regular_amount : old('regular_amount')}}" readonly> 
+                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($follow) ? $follow->regular_amount : old('regular_amount')}}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="negotiation_amount" class="form-label"> Negotiation Amount <span class="text-danger">*</span></label>
-                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}" required> 
+                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}" required>
                                         </div>
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
                                             <textarea class="form-control" id="remark" rows="3" name="remark" placeholder="Enter Remark">{{isset($follow) ? $follow->remark : old('remark')}}</textarea>
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
-                                  
+
                                 <div class="text-end ">
                                     <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-                                </div> 
+                                </div>
                             </form>
                         </div>
-                    </div> 
-                </div>  
-            </div> 
-        </div>  
-    </div> 
-    @include('includes.footer') 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @include('includes.footer')
 </div>
 @endsection
 
-@section('script') 
+@section('script')
 
     @can('data-input-for-others')
         <script>
-            $(document).ready(function() { 
+            $(document).ready(function() {
                 $('#employee').select2({
                     placeholder: "Select Employee",
                     allowClear: true,
@@ -203,10 +211,10 @@
                 });
             });
         </script>
-    @endcan  
+    @endcan
 
-<script> 
-    $(document).ready(function() { 
+<script>
+    $(document).ready(function() {
         $('#customer').select2({
             placeholder: "Select Customer",
             allowClear: true,
@@ -216,7 +224,7 @@
                 data: function (params) {
                     var query = {
                         term: params.term
-                    } 
+                    }
                     return query;
                 },
                 success: function(data) {
@@ -224,35 +232,35 @@
                 }
             }
         });
-    }); 
-</script> 
+    });
+</script>
 
     <script>
-        $(document).ready(function() { 
+        $(document).ready(function() {
             $('#unit_price, #unit').on('change', function() {
-                getUnitPrice(); 
+                getUnitPrice();
             });
 
             $('#unit_qty, #unit_price').on('change', function() {
-                getRegularPrice(); 
+                getRegularPrice();
             });
         });
 
         var totalSelectedPrice = 0;
-  
+
         function getUnitPrice(){
-           
+
                 var formData = {
                         project_id: $("#project").val(),
-                        unit_id: $("#unit").val(), 
-                    };  
+                        unit_id: $("#unit").val(),
+                    };
                     $.ajax({
                         type: "GET",
                         data: formData,
                         dataType: "json",
-                        url: "{{ route('get-project-duration-type-name') }}", 
+                        url: "{{ route('get-project-duration-type-name') }}",
                         success: function(data) {
-                            $('#unit_price').val(data.most_highest_price);  
+                            $('#unit_price').val(data.most_highest_price);
                             getRegularPrice();
                         },
                         error: function(data) {
@@ -266,10 +274,10 @@
                 $unit_price = $('#unit_price').val();
                 $('#regular_amount').val($unit_qty * $unit_price);
         }
-    </script> 
+    </script>
 
-    {{-- get old data  --}} 
-    <script>   
+    {{-- get old data  --}}
+    <script>
         $(document).ready(function(){
             get_customer_data();
             $('#customer').on('change', function() {
@@ -279,16 +287,16 @@
       function get_customer_data(){
             var formData = {
                     customer_id: $("#customer").val()
-                };  
+                };
                 $.ajax({
                     type: "GET",
                     data: formData,
                     dataType: "json",
-                    url: "{{ route('get.presentation.data') }}", 
+                    url: "{{ route('get.presentation.data') }}",
                     success: function(data) {
                         $('#priority').val(data.priority);
                         $('#project').val(data.project_id);
-                        $('#unit').val(data.unit_id); 
+                        $('#unit').val(data.unit_id);
                         getUnitPrice();
                     },
                     error: function(data) {

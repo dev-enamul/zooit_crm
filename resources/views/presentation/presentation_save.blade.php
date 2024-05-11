@@ -1,15 +1,15 @@
 @extends('layouts.dashboard')
 @section('title','Presentation Entry')
 
-@section('content') 
+@section('content')
 <div class="main-content">
     <div class="page-content">
-        <div class="container-fluid"> 
+        <div class="container-fluid">
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Presentation 
+                        <h4 class="mb-sm-0">Presentation
                             @if(isset($presentation))
                                 Edit
                             @else
@@ -20,7 +20,7 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Presentation  
+                                <li class="breadcrumb-item active">Presentation
                                     @if(isset($presentation))
                                         Edit
                                     @else
@@ -37,17 +37,24 @@
 
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="card"> 
+                    <div class="card">
                         <div class="card-body">
                             @if(isset($presentation))
-                                <form action="{{route('presentation.save',$presentation->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+                                <form action="{{route('presentation.save',$presentation->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 <input type="hidden" name="id" value="{{$presentation->id}}">
-                            @else 
-                                <form action="{{route('presentation.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                            @endif 
+                            @else
+                                <form action="{{route('presentation.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            @endif
                                 @csrf
-                                <div class="row"> 
-
+                                <div class="row">
+                                    @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reference</label>
+                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control"  >
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
@@ -79,7 +86,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -92,7 +99,7 @@
                                                         </option>
                                                     @endforeach
                                                 @endisset
-                                            </select> 
+                                            </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -113,13 +120,13 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+
                                         @if ($errors->has('project'))
                                             <span class="text-danger" role="alert">
                                                 {{ $errors->first('project') }}
                                             </span>
                                         @endif
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Interested Unit Name <span class="text-danger">*</span></label>
@@ -135,13 +142,13 @@
                                                 @endforeach
                                             @endisset
                                         </select>
-                                        
+
                                         @if ($errors->has('unit'))
                                             <span class="text-danger" role="alert">
                                                 {{ $errors->first('unit') }}
                                             </span>
                                         @endif
-                                    </div> 
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -150,13 +157,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                  
+
                                 <div class="text-end ">
                                     <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>
-                                </div> 
+                                </div>
                             </form>
                         </div>
-                    </div> 
+                    </div>
                 </div>
                 <!-- end col -->
 
@@ -181,13 +188,13 @@
     </footer>
 
 </div>
-@endsection 
+@endsection
 
-@section('script') 
+@section('script')
 
     @can('data-input-for-others')
         <script>
-            $(document).ready(function() { 
+            $(document).ready(function() {
                 $('#employee').select2({
                     placeholder: "Select Employee",
                     allowClear: true,
@@ -204,10 +211,10 @@
                 });
             });
         </script>
-    @endcan  
+    @endcan
 
-    <script> 
-        $(document).ready(function() { 
+    <script>
+        $(document).ready(function() {
             $('#customer').select2({
                 placeholder: "Select Customer",
                 allowClear: true,
@@ -217,7 +224,7 @@
                     data: function (params) {
                         var query = {
                             term: params.term
-                        } 
+                        }
                         return query;
                     },
                     success: function(data) {
@@ -226,29 +233,29 @@
                 }
             });
         });
-    </script> 
+    </script>
 
-    <script>   
+    <script>
         $(document).ready(function(){
             get_customer_data();
             $('#customer').on('change', function() {
                 get_customer_data();
             });
         })
-      function get_customer_data(){  
+      function get_customer_data(){
             var formData = {
                     customer_id: $("#customer").val()
-                };  
+                };
                 $.ajax({
                     type: "GET",
                     data: formData,
                     dataType: "json",
                     url: "{{ route('get.lead.analysis.data') }}",
 
-                    success: function(data) { 
+                    success: function(data) {
                         $('#priority').val(data.priority);
                         $('#project').val(data.project_id);
-                        $('#unit').val(data.unit_id); 
+                        $('#unit').val(data.unit_id);
                     },
                     error: function(data) {
                         console.log('Error:', data);
