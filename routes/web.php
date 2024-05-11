@@ -76,6 +76,7 @@ use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\UserCommissionController;
 use App\Http\Controllers\UserDocumentController;
+use App\Models\ReportingUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -442,7 +443,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('function_test', function () {  
          
-        dd(user_reporting(1));
+        $user = User::where('phone','01701203070')->first();
+        $reporting = ReportingUser::where('user_id', $user->id)->where('status',1)->latest()->first();
+        dd($reporting);
+      
+
         
  
         $largest_user_ids = User::where('user_type', 2)
