@@ -7,6 +7,7 @@ use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\ColdCalling;
 use App\Models\Customer;
+use App\Models\Notification;
 use App\Models\Profession;
 use App\Models\Project;
 use App\Models\Prospecting;
@@ -27,25 +28,25 @@ class ColdCallingController extends Controller
     }
 
     public function index(ColdCallingDataTable $dataTable, Request $request)
-    { 
-        $title = 'Cold Calling List'; 
+    {
+        $title = 'Cold Calling List';
         $date = $request->date??null;
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
         return $dataTable->render('cold_calling.cold_calling_list', compact('title','employee','status','start_date','end_date'));
     }
 
     public function create(Request $request)
-    {        
+    {
         $title = 'Cold Calling Entry';
-        $user_id            = Auth::user()->id;  
+        $user_id            = Auth::user()->id;
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
-        $units              = Unit::select('id','title')->get(); 
-        $selected_data = 
+        $units              = Unit::select('id','title')->get();
+        $selected_data =
         [
             'employee' => Auth::user()->id,
             'priority' => Priority::Regular,
@@ -61,7 +62,7 @@ class ColdCallingController extends Controller
         $validator = Validator::make($request->all(), [
             'customer'   => 'required|unique:cold_callings,customer_id,'.$id,
             'employee'   => 'required',
-            'priority'   => 'required', 
+            'priority'   => 'required',
             'remark'     => 'nullable|string|max:255'
         ]);
         if ($validator->fails()) {
@@ -91,14 +92,26 @@ class ColdCallingController extends Controller
             $cold_call->remark        = $request->remark;
             $cold_call->customer_id   = $request->customer;
             $cold_call->employee_id   = $request->employee;
-            $cold_call->project_id    = $request->project;    
+            $cold_call->project_id    = $request->project;
             $cold_call->unit_id       = $request->unit;
-            $cold_call->status        = 0;    
-            $approve_setting = ApproveSetting::where('name','cold_calling')->first(); 
-            $is_admin = Auth::user()->hasPermission('admin'); 
-            if($approve_setting?->status == 0 || $is_admin){ 
+            $cold_call->status        = 0;
+            $approve_setting = ApproveSetting::where('name','cold_calling')->first();
+            $is_admin = Auth::user()->hasPermission('admin');
+            if($approve_setting?->status == 0 || $is_admin){
                 $cold_call->approve_by = auth()->user()->id;
-            }  
+            }else{
+                $cold_call->approve_by = null;
+                $employee = User::find($request->employee);
+                if(!empty($employee) && count(json_decode($employee->user_reporting))>1) {
+                    Notification::store([
+                        'title' => 'Cold calling approval request',
+                        'content' => auth()->user()->name . ' has created a cold calling please approve as soon as possible',
+                        'link' => route('cold-calling.approve'),
+                        'created_by' => auth()->user()->id,
+                        'user_id' => json_decode($employee->user_reporting)[1]
+                    ]);
+                }
+            }
 
             $cold_call->created_by    = auth()->id();
             $cold_call->created_at    = now();
@@ -106,11 +119,11 @@ class ColdCallingController extends Controller
 
             if($cold_call) {
                 $prospecting = Prospecting::where('customer_id',$request->customer)->first();
-             
+
                 if(isset($prospecting) && $prospecting != null){
                     $prospecting->status = 1;
                     $prospecting->save();
-                } 
+                }
             }
             return redirect()->route('cold-calling.index')->with('success','Cold Calling create successfully');
         }
@@ -119,7 +132,7 @@ class ColdCallingController extends Controller
     public function edit(string $id)
     {
         $title = 'Cold Calling Edit';
-        
+
         $my_all_employee = json_decode(Auth::user()->user_employee);
         $cstmrs     = Prospecting::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
@@ -133,7 +146,7 @@ class ColdCallingController extends Controller
     }
 
     public function colCallingDelete($id){
-        try{ 
+        try{
             $data  = ColdCalling::find($id);
             $data->delete();
             return response()->json(['success' => 'Cold Calling Deleted'],200);
@@ -142,10 +155,10 @@ class ColdCallingController extends Controller
         }
     }
 
-    public function coldCallingApprove(){ 
-        $user_id        = Auth::user()->id; 
+    public function coldCallingApprove(){
+        $user_id        = Auth::user()->id;
         $my_employee    = my_employee($user_id);
-        $cold_callings  = ColdCalling::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        $cold_callings  = ColdCalling::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get();
         return view('cold_calling.cold_calling_approve', compact('cold_callings'));
     }
 
@@ -164,7 +177,7 @@ class ColdCallingController extends Controller
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-            
+
         } else {
             return redirect()->route('cold-calling.approve')->with('error', 'Something went wrong!');
         }
@@ -175,14 +188,14 @@ class ColdCallingController extends Controller
         $request->validate([
             'term' => ['nullable', 'string'],
         ]);
- 
-        $my_all_employee = json_decode(Auth::user()->user_employee);   
-        $is_admin = Auth::user()->hasPermission('admin'); 
+
+        $my_all_employee = json_decode(Auth::user()->user_employee);
+        $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']
-        ]; 
+        ];
 
-        if($is_admin){ 
+        if($is_admin){
             $users = Customer::query()
                 ->where(function ($query) use ($request) {
                     $term = $request->term;
@@ -192,14 +205,14 @@ class ColdCallingController extends Controller
                 ->whereDoesntHave('salse')
                 ->select('id', 'name', 'customer_id')
                 ->limit(10)
-                ->get();  
-                
+                ->get();
+
             foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->id,
                     'text' => "{$user->name} [{$user->customer_id}]"
-                ]; 
-            } 
+                ];
+            }
         }else{
             $users = Prospecting::where('status',0)->where('approve_by','!=',null)
             ->whereHas('customer',function($q) use($my_all_employee,$request){
@@ -209,15 +222,15 @@ class ColdCallingController extends Controller
                     $query->where('customer_id', 'like', "%{$term}%")
                         ->orWhere('name', 'like', "%{$term}%");
                 });
-              })->get(); 
+              })->get();
               foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->customer->id,
                     'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
-                ]; 
+                ];
             }
-        }  
-         
+        }
+
         return response()->json([
             'results' => $results
         ]);

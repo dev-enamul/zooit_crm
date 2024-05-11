@@ -9,6 +9,7 @@ use App\Models\ApproveSetting;
 use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Employee;
+use App\Models\Notification;
 use App\Models\Profession;
 use App\Models\Prospecting;
 use App\Models\User;
@@ -33,27 +34,27 @@ class ProspectingController extends Controller
 
     public function index(ProspectingDataTable $dataTable, Request $request)
     {
-        $title = 'Prospecting List'; 
+        $title = 'Prospecting List';
         $date = $request->date??null;
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
         return $dataTable->render('prospecting.prospecting_list', compact('title','employee','status','start_date','end_date'));
     }
- 
+
 
     public function create(Request $request)
     {
         $title = 'Prospecting Entry';
-        $user_id   = Auth::user()->id; 
-        $my_all_employee = json_decode(Auth::user()->user_employee); 
+        $user_id   = Auth::user()->id;
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
         $priorities = $this->priority();
-        $selected_data = 
-        [ 
+        $selected_data =
+        [
             'priority' => Priority::Regular,
             'media'    => ProspectingMedia::Phone,
         ];
@@ -65,17 +66,17 @@ class ProspectingController extends Controller
                 $q->where('designation_id',20);
             })->first();
         }
-        
-     
+
+
         return view('prospecting.prospecting_save', compact('prospectingMedias','priorities','title','employees','selected_data'));
-    }    
+    }
 
 
     public function save(Request $request, $id = null)
     {
         $validator = Validator::make($request->all(), [
             'media'         => 'required',
-            'priority'      => 'required', 
+            'priority'      => 'required',
             'employee'      => 'required',
             'remark'        => 'nullable|string|max:255',
         ]);
@@ -88,7 +89,7 @@ class ProspectingController extends Controller
             $prospecting->update([
                 'media'         => $request->media,
                 'priority'      => $request->priority,
-                'remark'        => $request->remark, 
+                'remark'        => $request->remark,
                 'employee_id'   => $request->employee,
                 'updated_by'    => auth()->id(),
                 'updated_at'    => now(),
@@ -105,12 +106,25 @@ class ProspectingController extends Controller
             $prospecting->status        = 0;
             $prospecting->created_by    = auth()->id();
             $prospecting->created_at    = now();
-            $approve_setting = ApproveSetting::where('name','prospecting')->first();  
-            $is_admin = Auth::user()->hasPermission('admin'); 
-            if($approve_setting?->status == 0 || $is_admin){ 
+            $approve_setting = ApproveSetting::where('name','prospecting')->first();
+            $is_admin = Auth::user()->hasPermission('admin');
+            if($approve_setting?->status == 0 || $is_admin){
                 $prospecting->approve_by = auth()->user()->id;
-            }  
-            $prospecting->save(); 
+            }else{
+                // Notification Create
+                $prospecting->approve_by = null;
+                $employee = User::find($request->employee);
+                if(!empty($employee) && count(json_decode($employee->user_reporting))>1) {
+                    Notification::store([
+                        'title' => 'Prospecting approval request',
+                        'content' => auth()->user()->name . ' has created a Prospecting please approve as soon as possible',
+                        'link' => route('prospecting.approve'),
+                        'created_by' => auth()->user()->id,
+                        'user_id' => json_decode($employee->user_reporting)[1]
+                    ]);
+                }
+            }
+            $prospecting->save();
             if($prospecting) {
                 $customer = Customer::find($request->customer);
                 $customer->status = 1;
@@ -123,12 +137,12 @@ class ProspectingController extends Controller
     public function edit(string $id)
     {
         $title = 'Prospecting Edit';
-        $prospecting = Prospecting::find($id);  
+        $prospecting = Prospecting::find($id);
         $my_all_employee = json_decode(Auth::user()->user_employee);
         $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
         $employees = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
-        $priorities = $this->priority(); 
+        $priorities = $this->priority();
         return view('prospecting.prospecting_save', compact('prospecting','customers','employees','prospectingMedias','priorities','title'));
     }
 
@@ -140,12 +154,12 @@ class ProspectingController extends Controller
         }catch(Exception $e){
             return response()->json(['error' => $e->getMessage()],500);
         }
-    } 
+    }
 
-    public function prospecting_approve(){ 
-        $user_id        = Auth::user()->id; 
+    public function prospecting_approve(){
+        $user_id        = Auth::user()->id;
         $my_employee    = my_employee($user_id);
-        $prospectings   = Prospecting::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        $prospectings   = Prospecting::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get();
         return view('prospecting.prospecting_approve', compact('prospectings'));
     }
 
@@ -164,7 +178,7 @@ class ProspectingController extends Controller
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-            
+
         } else {
             return redirect()->route('prospecting.approve')->with('error', 'Something went wrong!');
         }
@@ -175,8 +189,8 @@ class ProspectingController extends Controller
         $request->validate([
             'term' => ['nullable', 'string'],
         ]);
- 
-        $my_all_employee = json_decode(Auth::user()->user_employee);  
+
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $users = Customer::query()
             ->where(function ($query) use ($request) {
                 $term = $request->term;
@@ -192,13 +206,13 @@ class ProspectingController extends Controller
 
         $results = [
             ['id' => '', 'text' => 'Select Product']
-        ]; 
+        ];
         foreach ($users as $user) {
             $results[] = [
                 'id' => $user->id,
                 'text' => "{$user->name} ($user->customer_id)"
             ];
-            
+
         }
         return response()->json([
             'results' => $results

@@ -8,6 +8,7 @@ use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\FollowUp;
 use App\Models\FollowUpAnalysis;
+use App\Models\Notification;
 use App\Models\Presentation;
 use App\Models\Project;
 use App\Models\ProjectUnit;
@@ -27,32 +28,32 @@ class FollowupAnalysisController extends Controller
     {
         return Priority::values();
     }
-    
+
     public function index(FollowupAnalysisDataTable $dataTable, Request $request)
-    { 
-        $title = 'Follow Up Analysis'; 
+    {
+        $title = 'Follow Up Analysis';
         $date = $request->date??null;
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
         return $dataTable->render('followup_analysis.followup_analysis_list', compact('title','employee','status','start_date','end_date'));
-    } 
+    }
 
     public function create(Request $request)
     {
         $title = 'Follow Up Analysis Entry';
-        $user_id            = Auth::user()->id;  
+        $user_id            = Auth::user()->id;
         $projects       = Project::where('status',1)->get(['name', 'id']);
-        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']); 
+        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $priorities         = $this->priority();
         $units          = Unit::select('id','title')->get();
 
         $selected_data[] = Priority::Regular;
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
-        } 
+        }
         return view('followup_analysis.followup_analysis_save',compact('selected_data','priorities','projects','projectUnits','units'));
     }
 
@@ -69,7 +70,7 @@ class FollowupAnalysisController extends Controller
             'employee'          => 'required',
             'priority'          => 'required',
             'project'           => 'required',
-            'unit'              => 'required', 
+            'unit'              => 'required',
             'unit_qty'          => 'required',
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'nullable',
@@ -91,12 +92,12 @@ class FollowupAnalysisController extends Controller
             $follow->employee_id = $request->employee;
             $follow->priority = $request->priority;
             $follow->project_id = $request->input('project');
-            $follow->unit_id = $request->input('unit');  
+            $follow->unit_id = $request->input('unit');
             $follow->unit_price = $request->unit_price;
             $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount'); 
-            $follow->remark = $request->remark; 
+            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->remark = $request->remark;
             $follow->customer_expectation = $request->customer_expectation;
             $follow->need = $request->customer_need;
             $follow->ability = $request->customer_ability;
@@ -114,12 +115,12 @@ class FollowupAnalysisController extends Controller
             $follow->employee_id = $request->employee;
             $follow->priority = $request->priority;
             $follow->project_id = $request->input('project');
-            $follow->unit_id = $request->input('unit');  
+            $follow->unit_id = $request->input('unit');
             $follow->unit_price = $request->unit_price;
             $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount'); 
-            $follow->remark = $request->remark; 
+            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->remark = $request->remark;
             $follow->customer_expectation = $request->customer_expectation;
             $follow->need = $request->customer_need;
             $follow->ability = $request->customer_ability;
@@ -127,10 +128,22 @@ class FollowupAnalysisController extends Controller
             $follow->decision_maker = $request->descision_maker;
             $follow->decision_maker_opinion = $request->decision_maker_opinion;
 
-            $approve_setting = ApproveSetting::where('name','follow_up_analysis')->first();  
+            $approve_setting = ApproveSetting::where('name','follow_up_analysis')->first();
             $is_admin = Auth::user()->hasPermission('admin');
-            if($approve_setting?->status == 0 || $is_admin){ 
+            if($approve_setting?->status == 0 || $is_admin){
                 $follow->approve_by = auth()->user()->id;
+            }else{
+                $follow->approve_by = null;
+                $employee = User::find($request->employee);
+                if(!empty($employee) && count(json_decode($employee->user_reporting))>1) {
+                    Notification::store([
+                        'title' => 'Follow up analysis approve request',
+                        'content' => auth()->user()->name . ' has created a follow up analysis please approve as soon as possible',
+                        'link' => route('followUp-analysis.approve'),
+                        'created_by' => auth()->user()->id,
+                        'user_id' => json_decode($employee->user_reporting)[1]
+                    ]);
+                }
             }
 
             $follow->created_by = auth()->id();
@@ -139,16 +152,16 @@ class FollowupAnalysisController extends Controller
             $follow->save();
 
             if($follow) {
-                FollowUp::where('customer_id',$request->customer)->update(['status' => 1]); 
+                FollowUp::where('customer_id',$request->customer)->update(['status' => 1]);
             }
-            
+
             return redirect()->route('followup-analysis.index')->with('success','Follow Up Analysis create successfully');
         }
     }
 
     public function edit(string $id, Request $request)
     {
-        $title = 'Follow Up Analysis Entry'; 
+        $title = 'Follow Up Analysis Entry';
         $my_all_employee    = json_decode(Auth::user()->user_employee);
         $customers          = FollowUp::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
@@ -158,7 +171,7 @@ class FollowupAnalysisController extends Controller
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
 
-        $selected_data = 
+        $selected_data =
         [
             'employee' => Auth::user()->id,
             'priority' => Priority::Regular,
@@ -173,7 +186,7 @@ class FollowupAnalysisController extends Controller
 
 
     public function followUpDelete($id){
-        try{ 
+        try{
             $data  = FollowUp::find($id);
             $data->delete();
             return response()->json(['success' => 'Follow Up Deleted'],200);
@@ -182,10 +195,10 @@ class FollowupAnalysisController extends Controller
         }
     }
 
-    public function followUpApprove(){ 
-        $user_id        = Auth::user()->id; 
+    public function followUpApprove(){
+        $user_id        = Auth::user()->id;
         $my_employee    = my_employee($user_id);
-        $followUps  = FollowUpAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        $followUps  = FollowUpAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get();
         return view('followup_analysis.followup_analysis_approve', compact('followUps'));
     }
 
@@ -204,11 +217,11 @@ class FollowupAnalysisController extends Controller
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-            
+
         } else {
             return redirect()->back()->with('error', 'Please select at least one record');
         }
-    } 
+    }
 
     public function follow_analysis_up_details($id){
         try{
@@ -216,18 +229,18 @@ class FollowupAnalysisController extends Controller
          $data = FollowUpAnalysis::find($id);
          $customer = Customer::find($data->customer_id);
          $user = User::find($customer->ref_id);
-         $employee = User::find($data->employee_id);   
+         $employee = User::find($data->employee_id);
          $presentation_date = Presentation::where('customer_id',$data->customer_id)->select('created_at')->latest()->first();
-         
-        
-         $followUps = FollowUp::where('customer_id', $data->customer_id)->select('created_at')->get(); 
+
+
+         $followUps = FollowUp::where('customer_id', $data->customer_id)->select('created_at')->get();
          $firstFollowUp = $followUps->first();
-         $secondFollowUp = $followUps->slice(1, 1)->first(); 
+         $secondFollowUp = $followUps->slice(1, 1)->first();
          $thirdFollowUp = $followUps->slice(2, 1)->first();
          $lastFollowUp = $followUps->last();
          $totalFollowUps = $followUps->count();
 
-        
+
         }catch(Exception $e){
          return redirect()->back()->with('error', $e->getMessage());
         }
@@ -236,24 +249,24 @@ class FollowupAnalysisController extends Controller
             'customer',
             'user',
             'employee',
-            'presentation_date', 
+            'presentation_date',
             'followUps'
          ]));
- 
+
      }
 
      public function select2_customer(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
         ]);
- 
-        $my_all_employee = json_decode(Auth::user()->user_employee);   
+
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']
-        ]; 
-       
-        if($is_admin){ 
+        ];
+
+        if($is_admin){
             $users = Customer::query()
                 ->where(function ($query) use ($request) {
                     $term = $request->term;
@@ -263,14 +276,14 @@ class FollowupAnalysisController extends Controller
                 ->whereDoesntHave('salse')
                 ->select('id', 'name', 'customer_id')
                 ->limit(10)
-                ->get();  
-                
+                ->get();
+
             foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->id,
                     'text' => "{$user->name} [{$user->customer_id}]"
-                ]; 
-            } 
+                ];
+            }
         }else{
             $users = FollowUp::where('status',0)->where('approve_by','!=',null)
             ->whereHas('customer',function($q) use($my_all_employee,$request){
@@ -280,19 +293,19 @@ class FollowupAnalysisController extends Controller
                     $query->where('customer_id', 'like', "%{$term}%")
                         ->orWhere('name', 'like', "%{$term}%");
                 });
-              })->get(); 
+              })->get();
               foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->customer->id,
                     'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
-                ]; 
+                ];
             }
-        }  
-       
-        
+        }
+
+
         return response()->json([
             'results' => $results
         ]);
-    } 
+    }
 
 }

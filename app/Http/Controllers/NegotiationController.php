@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\FollowUp;
 use App\Models\FollowUpAnalysis;
 use App\Models\Negotiation;
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\ProjectUnit;
 use App\Models\Unit;
@@ -31,24 +32,24 @@ class NegotiationController extends Controller
     }
 
     public function index(NegotiationDataTable $dataTable, Request $request)
-    { 
-        $title = 'Negotiation Analysis'; 
+    {
+        $title = 'Negotiation Analysis';
         $date = $request->date??null;
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
         return $dataTable->render('negotiation.negotiation_list', compact('title','employee','status','start_date','end_date'));
-    }   
+    }
 
     public function create(Request $request)
     {
         $title = 'Negotiation Entry';
-        $user_id            = Auth::user()->id;  
+        $user_id            = Auth::user()->id;
         $projects       = Project::where('status',1)->get(['name', 'id']);
-        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']); 
-        $priorities         = $this->priority(); 
+        $projectUnits   = ProjectUnit::where('status', 1)->get(['name', 'id']);
+        $priorities         = $this->priority();
         $units              = Unit::select('id','title')->get();
 
         $selected_data[]= Priority::Regular;
@@ -61,7 +62,7 @@ class NegotiationController extends Controller
 
     public function customer_data(Request $request){
          $follow_up_analysis = FollowUpAnalysis::where('customer_id',$request->customer_id)->first();
-        return response()->json($follow_up_analysis,200); 
+        return response()->json($follow_up_analysis,200);
     }
 
     public function save(Request $request, $id = null)
@@ -72,7 +73,7 @@ class NegotiationController extends Controller
             'priority'          => 'required',
             'project'           => 'required',
             'unit_qty'          => 'required',
-            'unit'              => 'required', 
+            'unit'              => 'required',
             'regular_amount'    => 'required',
             'negotiation_amount'=> 'required',
             'remark'            => 'nullable',
@@ -89,11 +90,11 @@ class NegotiationController extends Controller
             $follow->project_id = $request->input('project');
             $follow->unit_id = $request->input('unit');
             $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration; 
+            $follow->payment_duration = $request->payment_duration;
             $follow->unit_price = $request->unit_price;
             $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount'); 
+            $follow->negotiation_amount = $request->input('negotiation_amount');
             $follow->remark = $request->remark;
             $follow->updated_by = $request->updated_by;
             $follow->updated_at = $request->updated_at;
@@ -107,35 +108,47 @@ class NegotiationController extends Controller
             $follow->project_id = $request->input('project');
             $follow->unit_id = $request->input('unit');
             $follow->select_type = $request->select_type;
-            $follow->payment_duration = $request->payment_duration; 
+            $follow->payment_duration = $request->payment_duration;
             $follow->unit_price = $request->unit_price;
             $follow->unit_qty = $request->unit_qty;
             $follow->regular_amount = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount'); 
-            $follow->remark = $request->remark;  
+            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->remark = $request->remark;
 
-            $approve_setting = ApproveSetting::where('name','negotiation')->first();  
-            $is_admin = Auth::user()->hasPermission('admin'); 
-            if($approve_setting?->status == 0 || $is_admin){ 
+            $approve_setting = ApproveSetting::where('name','negotiation')->first();
+            $is_admin = Auth::user()->hasPermission('admin');
+            if($approve_setting?->status == 0 || $is_admin){
                 $follow->approve_by = auth()->user()->id;
-            } 
-            
+            }else{
+                $follow->approve_by = null;
+                $employee = User::find($request->employee);
+                if(!empty($employee) && count(json_decode($employee->user_reporting))>1) {
+                    Notification::store([
+                        'title' => 'Negotiation approve request',
+                        'content' => auth()->user()->name . ' has created a negotiation please approve as soon as possible',
+                        'link' => route('negotiation.approve'),
+                        'created_by' => auth()->user()->id,
+                        'user_id' => json_decode($employee->user_reporting)[1]
+                    ]);
+                }
+            }
+
             $follow->created_by = auth()->id();
             $follow->created_at = now();
             $follow->status = 0;
             $follow->save();
 
             if($follow) {
-                $visit = FollowUpAnalysis::where('customer_id',$request->customer)->update(['status' => 1]); 
+                $visit = FollowUpAnalysis::where('customer_id',$request->customer)->update(['status' => 1]);
             }
-            
+
             return redirect()->route('negotiation.index')->with('success','Negotiation create successfully');
         }
     }
 
     public function edit(string $id, Request $request)
     {
-        $title = 'Negotiation Edit'; 
+        $title = 'Negotiation Edit';
         $my_all_employee    = json_decode(Auth::user()->my_employee);
         $customers          = VisitAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
@@ -145,7 +158,7 @@ class NegotiationController extends Controller
         $employees          = User::whereIn('id', $my_all_employee)->get();
         $priorities         = $this->priority();
 
-        $selected_data = 
+        $selected_data =
         [
             'employee' => Auth::user()->id,
             'priority' => Priority::Regular,
@@ -158,7 +171,7 @@ class NegotiationController extends Controller
     }
 
     public function negotiationDelete($id){
-        try{ 
+        try{
             $data  = Negotiation::find($id);
             $data->delete();
             return response()->json(['success' => 'Negotiation Deleted'],200);
@@ -167,10 +180,10 @@ class NegotiationController extends Controller
         }
     }
 
-    public function negotiationApprove(){ 
-        $user_id        = Auth::user()->id; 
+    public function negotiationApprove(){
+        $user_id        = Auth::user()->id;
         $my_employee    = my_employee($user_id);
-        $negotiations  = Negotiation::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        $negotiations  = Negotiation::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get();
         return view('negotiation.negotiation_approve', compact('negotiations'));
     }
 
@@ -189,24 +202,24 @@ class NegotiationController extends Controller
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-            
+
         } else {
             return redirect()->back()->with('error', 'Please select at least one negotiation');
         }
-    } 
+    }
 
     public function select2_customer(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
         ]);
- 
-        $my_all_employee = json_decode(Auth::user()->my_employee);   
+
+        $my_all_employee = json_decode(Auth::user()->my_employee);
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']
-        ]; 
-       
-        if($is_admin){ 
+        ];
+
+        if($is_admin){
             $users = Customer::query()
                 ->where(function ($query) use ($request) {
                     $term = $request->term;
@@ -216,14 +229,14 @@ class NegotiationController extends Controller
                 ->whereDoesntHave('salse')
                 ->select('id', 'name', 'customer_id')
                 ->limit(10)
-                ->get();  
-                
+                ->get();
+
             foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->id,
                     'text' => "{$user->name} [{$user->customer_id}]"
-                ]; 
-            } 
+                ];
+            }
         }else{
             $users = VisitAnalysis::where('status',0)->where('approve_by','!=',null)
             ->whereHas('customer',function($q) use($my_all_employee,$request){
@@ -233,19 +246,19 @@ class NegotiationController extends Controller
                     $query->where('customer_id', 'like', "%{$term}%")
                         ->orWhere('name', 'like', "%{$term}%");
                 });
-              })->get(); 
+              })->get();
               foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->customer->id,
                     'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
-                ]; 
+                ];
             }
-        }  
-       
-        
+        }
+
+
         return response()->json([
             'results' => $results
         ]);
-    } 
+    }
 
 }

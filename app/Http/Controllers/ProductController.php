@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApproveSetting;
+use App\Models\Notification;
 use Exception;
 use App\Models\Unit;
 use App\Models\Project;
@@ -20,13 +21,13 @@ class ProductController extends Controller
     use ImageUploadTrait;
     use AreaTrait;
 
-    public function index(){ 
-         
+    public function index(){
+
         $divisions      = $this->getCachedDivisions();
         $projects       = Project::where('status',1)->with('units')->select('id','name','address','total_floor')->get();
-        $unit_headers   = Unit::where('status',1)->select('id','title')->get(); 
+        $unit_headers   = Unit::where('status',1)->select('id','title')->get();
         $salse          = Salse::where('status',1)->get();
-        
+
         return view('product.product_list',compact('projects','divisions','unit_headers','salse'));
     }
 
@@ -41,21 +42,21 @@ class ProductController extends Controller
     }
 
     public function save(Request $request, $id = null)
-    { 
+    {
         $validator = Validator::make($request->all(), [
             'name'          => 'required|string|max:190',
             'division'      => 'required|exists:divisions,id',
             'district'      => 'required|exists:districts,id',
             'upazila'       => 'required|exists:upazilas,id',
             'union'         => 'required|exists:unions,id',
-            'village'       => 'required|exists:villages,id',  
+            'village'       => 'required|exists:villages,id',
             'total_floor'   => 'nullable|numeric|min:1',
             'google_map'    => 'nullable|string',
             'address'       => 'nullable|string|max:5000',
             'description'   => 'nullable|string|max:5000',
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
         }
@@ -64,9 +65,9 @@ class ProductController extends Controller
         $approve_setting = ApproveSetting::where('name','product')->first();
         $is_admin = Auth::user()->hasPermission('admin');
 
-        if (!empty($id)) { 
-            $info = Project::find($id); 
-           
+        if (!empty($id)) {
+            $info = Project::find($id);
+
 
             if (!empty($info)){
                 $info->name             = $request->name;
@@ -80,21 +81,21 @@ class ProductController extends Controller
                 $info->union_id         = $request->union;
                 $info->village_id       = $request->village;
 
-                if($approve_setting->status == 0 || $is_admin){ 
+                if($approve_setting->status == 0 || $is_admin){
                     $info->status           = 1;
                     $info->approved_by      = $user_id;
-                }else{ 
+                }else{
                     $info->status           = 0;
-                } 
+                }
 
                 $info->updated_by       = $user_id;
                 DB::beginTransaction();
                 try {
-                    $info->save(); 
+                    $info->save();
                     if ($request->hasFile('image')) {
                         $p_images = new ProjectImage();
                         $p_images->project_id = $info->id;
-                        $p_images->name =   $this->uploadImage($request, 'image', 'projects', 'public'); 
+                        $p_images->name =   $this->uploadImage($request, 'image', 'projects', 'public');
                         $p_images->save();
                     }
                     DB::commit();
@@ -119,7 +120,7 @@ class ProductController extends Controller
             'district_id'   => $request->district,
             'upazila_id'    => $request->upazila,
             'union_id'      => $request->union,
-            'village_id'    => $request->village,   
+            'village_id'    => $request->village,
             'status'        => 0,
             'created_by'    => $user_id,
             'country_id'   => 18,
@@ -129,22 +130,35 @@ class ProductController extends Controller
         try {
             $project = Project::create($data);
 
-            if($approve_setting?->status == 0 || $is_admin){ 
+            if($approve_setting?->status == 0 || $is_admin){
                 $project->status           = 1;
                 $project->approved_by      = $user_id;
                 $project->save();
+            } else{
+                 $approve_by = null;
+                 $auth_user = Auth::user();
+                 if(count(json_decode($auth_user->user_reporting))>1){
+                     Notification::store([
+                         'title'         => 'Product approval request',
+                         'content'       => $auth_user->name.' has created a product please approve as soon as possible',
+                         'link'          => route('product.approve'),
+                         'created_by'    => auth()->user()->id,
+                         'user_id'       => json_decode($auth_user->user_reporting)[1]
+                     ]);
+                 }
             }
 
-           
+
 
             if ($request->hasFile('image')) {
                 $p_images = new ProjectImage();
                 $p_images->project_id = $project->id;
-                $p_images->name =   $this->uploadImage($request, 'image', 'projects', 'public'); 
+                $p_images->name =   $this->uploadImage($request, 'image', 'projects', 'public');
                 $p_images->save();
             }
+
             DB::commit();
-            
+
             return redirect()->route('product.index')->with('success', 'Project created successfully');
         } catch (Exception $e) {
             DB::rollback();
@@ -164,7 +178,7 @@ class ProductController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
             $errorMessage = implode('<br>', $errors);
-        
+
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
             }
@@ -206,7 +220,7 @@ class ProductController extends Controller
                 if (!is_null($village_id)) {
                     $projectsQuery->where('village_id', $village_id);
                 }
-                
+
                 $projects = $projectsQuery->select('id', 'name', 'address', 'total_floor')->get();
                 $unit_headers   = Unit::where('status',1)->select('id','title')->get();
 
@@ -240,7 +254,7 @@ class ProductController extends Controller
     public function sold_unsold($id){
         $id = decrypt($id);
         try{
-            $product = Project::find($id); 
+            $product = Project::find($id);
             $salse = Salse::where('project_id',$product->id)
                         ->where('select_type',2)
                         ->where('status',1)
@@ -249,7 +263,7 @@ class ProductController extends Controller
         }catch(Exception $e){
             dd($e->getMessage());
         }
-        
+
     }
 
     public function product_approve(){
@@ -274,7 +288,7 @@ class ProductController extends Controller
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-            
+
         } else {
             return redirect()->route('product.approve')->with('error', 'Something went wrong!');
         }
@@ -282,7 +296,7 @@ class ProductController extends Controller
     }
 
     public function productDelete($id){
-        try{ 
+        try{
             $data  = Project::find($id);
             $data->delete();
             return response()->json(['success' => 'Project Deleted'],200);

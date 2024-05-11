@@ -9,6 +9,7 @@ use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\LeadAnalysis;
+use App\Models\Notification;
 use App\Models\Presentation;
 use App\Models\Profession;
 use App\Models\Project;
@@ -26,11 +27,11 @@ class LeadAnalysisController extends Controller
 
     public function index(LeadAnalysisDataTable $dataTable, Request $request)
     {
-        $title = 'Lead Analysis List'; 
+        $title = 'Lead Analysis List';
         $date = $request->date??null;
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
         return $dataTable->render('lead_analysis.lead_analysis_list', compact('title','employee','status','start_date','end_date'));
@@ -43,21 +44,21 @@ class LeadAnalysisController extends Controller
 
 
     public function create(Request $request)
-    { 
+    {
        try{
             $title = 'Lead Analysis Entry';
-            $user_id   = Auth::user()->id;  
+            $user_id   = Auth::user()->id;
             $projects = Project::where('status',1)->select('id','name')->get();
-            $units          = Unit::select('id','title')->get();  
-            $selected_data['customer'] = Customer::find($request->customer); 
+            $units          = Unit::select('id','title')->get();
+            $selected_data['customer'] = Customer::find($request->customer);
        }catch(Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
-       } 
+       }
         return view('lead_analysis.lead_analysis_save',compact('title','projects','units','selected_data'));
     }
 
     public function customer_data(Request $request){
-        $lead = Lead::where('customer_id',$request->customer)->first(); 
+        $lead = Lead::where('customer_id',$request->customer)->first();
         return response()->json($lead,200);
 
     }
@@ -70,7 +71,7 @@ class LeadAnalysisController extends Controller
             'project' => ['required', 'numeric'],
             'unit' => ['required', 'numeric'],
             'hobby' => ['nullable', 'string', 'max:255'],
-            'income_range' => ['nullable', 'numeric'], 
+            'income_range' => ['nullable', 'numeric'],
             'profession_year' => ['nullable', 'numeric'],
             'customer_need' => ['nullable', 'string', 'max:255'],
             'tentative_amount' => ['nullable', 'numeric'],
@@ -86,16 +87,16 @@ class LeadAnalysisController extends Controller
             'area' => ['nullable', 'string', 'max:255'],
             'consumer' => ['nullable', 'string', 'max:255'],
         ]);
-        
+
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }
-        
+
         if (!empty($id)) {
             $cold_calling = LeadAnalysis::find($id);
             $cold_calling->update([
                 'customer_id'   => $request->customer,
-                'employee_id'   => $request->employee, 
+                'employee_id'   => $request->employee,
                 'project_id'   => $request->project,
                 'unit_id'   => $request->unit,
                 'hobby'   => $request->hobby,
@@ -120,19 +121,29 @@ class LeadAnalysisController extends Controller
             ]);
             return redirect()->route('lead-analysis.index')->with('success','Lead Analysis update successfully');
 
-        } else { 
+        } else {
 
-            $approve_setting = ApproveSetting::where('name','lead_analysis')->first();  
-            $is_admin = Auth::user()->hasPermission('admin'); 
-            if($approve_setting?->status == 0 || $is_admin){ 
+            $approve_setting = ApproveSetting::where('name','lead_analysis')->first();
+            $is_admin = Auth::user()->hasPermission('admin');
+            if($approve_setting?->status == 0 || $is_admin){
                 $approve_by = auth()->user()->id;
             }else{
                 $approve_by = null;
+                $employee = User::find($request->employee);
+                if(!empty($employee) && count(json_decode($employee->user_reporting))>1) {
+                    Notification::store([
+                        'title' => 'Lead analysis approval request',
+                        'content' => auth()->user()->name . ' has created a lead analysis please approve as soon as possible',
+                        'link' => route('lead-analysis.approve'),
+                        'created_by' => auth()->user()->id,
+                        'user_id' => json_decode($employee->user_reporting)[1]
+                    ]);
+                }
             }
 
             $lead_analysis = LeadAnalysis::create([
                 'customer_id'          => $request->customer,
-                'employee_id'          => $request->employee, 
+                'employee_id'          => $request->employee,
                 'project_id'           => $request->project,
                 'unit_id'              => $request->unit,
                 'hobby'                => $request->hobby,
@@ -147,11 +158,11 @@ class LeadAnalysisController extends Controller
                 'influencer'           => $request->influencer,
                 'family_member'        => $request->family_member,
                 'decision_maker'       => $request->decision_maker,
-                'previous_experience'  => $request->previous_experience, 
+                'previous_experience'  => $request->previous_experience,
                 'instant_investment'   => $request->instant_investment,
                 'buyer'                => $request->buyer,
                 'area'                 => $request->area,
-                'status'               => 0,    
+                'status'               => 0,
                 'consumer'             => $request->consumer,
                 'created_by'           => auth()->id(),
                 'approve_by'           => $approve_by,
@@ -161,14 +172,14 @@ class LeadAnalysisController extends Controller
             if(isset($lead) && $lead!=null){
                 $lead->status = 1;
                 $lead->save();
-            } 
+            }
             return redirect()->route('lead-analysis.index')->with('success','Lead Analysis create successfully');
         }
     }
 
     public function edit(string $id)
     {
-        $title = 'Lead Analysis Entry'; 
+        $title = 'Lead Analysis Entry';
         $my_all_employee = json_decode(Auth::user()->user_employee);
         $cstmrs             = Lead::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
                                     $q->whereIn('ref_id',$my_all_employee);
@@ -182,7 +193,7 @@ class LeadAnalysisController extends Controller
     }
 
     public function leadAnalysisDelete($id){
-        try{ 
+        try{
             $data  = LeadAnalysis::find($id);
             $data->delete();
             return response()->json(['success' => 'Lead Analysis Deleted'],200);
@@ -191,12 +202,12 @@ class LeadAnalysisController extends Controller
         }
     }
 
-    
 
-    public function leadAnalysisApprove(){ 
-        $user_id        = Auth::user()->id; 
+
+    public function leadAnalysisApprove(){
+        $user_id        = Auth::user()->id;
         $my_employee    = my_employee($user_id);
-        $leads          = LeadAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        $leads          = LeadAnalysis::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get();
         return view('lead_analysis.lead_analysis_approve', compact('leads'));
     }
 
@@ -215,12 +226,12 @@ class LeadAnalysisController extends Controller
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-            
+
         } else {
             return redirect()->route('lead-analysis.approve')->with('error', 'Something went wrong!');
         }
 
-    } 
+    }
 
     public function lead_analysis_details($id){
         $id = decrypt($id);
@@ -232,21 +243,21 @@ class LeadAnalysisController extends Controller
         }
         $cold_calling = ColdCalling::where('customer_id',$customer->id)->latest()->select('created_at')->first();
         $presentation = Presentation::where('customer_id',$customer->id)->latest()->select('created_at')->first();
-         
+
         return view('lead_analysis.lead_analysis_details',compact('data','customer','user','cold_calling','presentation'));
-    } 
+    }
 
     public function select2_customer(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);  
-        $my_all_employee = json_decode(Auth::user()->user_employee);   
+        ]);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']
-        ]; 
-       
-        if($is_admin){ 
+        ];
+
+        if($is_admin){
             $users = Customer::query()
                 ->where(function ($query) use ($request) {
                     $term = $request->term;
@@ -256,14 +267,14 @@ class LeadAnalysisController extends Controller
                 ->whereDoesntHave('salse')
                 ->select('id', 'name', 'customer_id')
                 ->limit(10)
-                ->get();  
-                
+                ->get();
+
             foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->id,
                     'text' => "{$user->name} [{$user->customer_id}]"
-                ]; 
-            } 
+                ];
+            }
         }else{
             $users = Lead::where('status',0)->where('approve_by','!=',null)
             ->whereHas('customer',function($q) use($my_all_employee,$request){
@@ -273,20 +284,20 @@ class LeadAnalysisController extends Controller
                     $query->where('customer_id', 'like', "%{$term}%")
                         ->orWhere('name', 'like', "%{$term}%");
                 });
-              })->get(); 
+              })->get();
               foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->customer->id,
                     'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
-                ]; 
+                ];
             }
-        }  
-       
-        
+        }
+
+
         return response()->json([
             'results' => $results
         ]);
-    } 
+    }
 
-   
+
 }

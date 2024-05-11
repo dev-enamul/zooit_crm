@@ -7,6 +7,7 @@ use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\LeadAnalysis;
+use App\Models\Notification;
 use App\Models\Presentation;
 use App\Models\Profession;
 use App\Models\Project;
@@ -25,26 +26,26 @@ class PresentationController extends Controller
     {
         return Priority::values();
     }
-    
+
     public function index(PresentationDataTable $dataTable, Request $request)
-    { 
-        $title = 'Presentation'; 
+    {
+        $title = 'Presentation';
         $date = $request->date??null;
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee = $request->employee??null;
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
         return $dataTable->render('displaydata', compact('title','employee','status','start_date','end_date'));
-    }  
+    }
 
     public function create(Request $request)
-    {        
+    {
         $title = 'Presentation Entry';
-        $user_id            = Auth::user()->id;  
+        $user_id            = Auth::user()->id;
         $priorities         = $this->priority();
         $projects           = Project::where('status',1)->select('id','name')->get();
-        $units              = Unit::select('id','title')->get(); 
+        $units              = Unit::select('id','title')->get();
         $selected_data['priority'] = Priority::Regular;
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
@@ -53,7 +54,7 @@ class PresentationController extends Controller
     }
 
     public function customer_data(Request $request){
-        $lead_analysis  = LeadAnalysis::where('customer_id',$request->customer_id)->first(); 
+        $lead_analysis  = LeadAnalysis::where('customer_id',$request->customer_id)->first();
         return response()->json($lead_analysis,200);
     }
 
@@ -61,7 +62,7 @@ class PresentationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'customer'   => 'required',
-            'employee'   => 'required', 
+            'employee'   => 'required',
             'priority'   => 'required',
             'project'    => 'required',
             'unit'       => 'required',
@@ -90,15 +91,27 @@ class PresentationController extends Controller
             $presentation->priority      = $request->priority;
             $presentation->remark        = $request->remark;
             $presentation->customer_id   = $request->customer;
-            $presentation->employee_id   = $request->employee;    
-            $presentation->project_id    = $request->project;    
-            $presentation->unit_id       = $request->unit; 
-            $approve_setting = ApproveSetting::where('name','presentation')->first();  
-            $is_admin = Auth::user()->hasPermission('admin'); 
-            if($approve_setting?->status == 0 || $is_admin){ 
+            $presentation->employee_id   = $request->employee;
+            $presentation->project_id    = $request->project;
+            $presentation->unit_id       = $request->unit;
+            $approve_setting = ApproveSetting::where('name','presentation')->first();
+            $is_admin = Auth::user()->hasPermission('admin');
+            if($approve_setting?->status == 0 || $is_admin){
                 $presentation->approve_by = auth()->user()->id;
-            }  
-            $presentation->status        = 0;    
+            }else{
+                $presentation->approve_by = null;
+                $employee = User::find($request->employee);
+                if(!empty($employee) && count(json_decode($employee->user_reporting))>1) {
+                    Notification::store([
+                        'title' => 'Presentation approval request',
+                        'content' => auth()->user()->name . ' has created a Presentation please approve as soon as possible',
+                        'link' => route('presentation.approve'),
+                        'created_by' => auth()->user()->id,
+                        'user_id' => json_decode($employee->user_reporting)[1]
+                    ]);
+                }
+            }
+            $presentation->status        = 0;
             $presentation->created_by    = auth()->id();
             $presentation->created_at    = now();
             $presentation->save();
@@ -108,7 +121,7 @@ class PresentationController extends Controller
                 if(isset($lead_analysis) && $lead_analysis != null){
                     $lead_analysis->status = 1;
                     $lead_analysis->save();
-                } 
+                }
             }
             return redirect()->route('presentation.index')->with('success','Presentation create successfully');
         }
@@ -116,7 +129,7 @@ class PresentationController extends Controller
 
     public function edit(string $id)
     {
-        $title = 'Presentation Edit'; 
+        $title = 'Presentation Edit';
         $my_all_employee = json_decode(Auth::user()->user_employee);
         $customers = Customer::whereIn('ref_id', $my_all_employee)->get();
         $priorities = $this->priority();
@@ -127,7 +140,7 @@ class PresentationController extends Controller
     }
 
     public function presentationDelete($id){
-        try{ 
+        try{
             $data  = Presentation::find($id);
             $data->delete();
             return response()->json(['success' => 'Presentation Deleted'],200);
@@ -136,10 +149,10 @@ class PresentationController extends Controller
         }
     }
 
-    public function presentationApprove(){ 
-        $user_id        = Auth::user()->id; 
+    public function presentationApprove(){
+        $user_id        = Auth::user()->id;
         $my_employee    = my_employee($user_id);
-        $presentations  = Presentation::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get(); 
+        $presentations  = Presentation::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get();
         return view('presentation.presentation_approve', compact('presentations'));
     }
 
@@ -158,25 +171,25 @@ class PresentationController extends Controller
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-            
+
         } else {
             return redirect()->route('presentation.approve')->with('error', 'Something went wrong!');
         }
 
-    } 
+    }
 
 
     public function select2_customer(Request $request){
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);  
-        $my_all_employee = json_decode(Auth::user()->user_employee);   
+        ]);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $is_admin = Auth::user()->hasPermission('admin');
         $results = [
             ['id' => '', 'text' => 'Select Product']
-        ]; 
-       
-        if($is_admin){ 
+        ];
+
+        if($is_admin){
             $users = Customer::query()
                 ->where(function ($query) use ($request) {
                     $term = $request->term;
@@ -186,14 +199,14 @@ class PresentationController extends Controller
                 ->whereDoesntHave('salse')
                 ->select('id', 'name', 'customer_id')
                 ->limit(10)
-                ->get();  
-                
+                ->get();
+
             foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->id,
                     'text' => "{$user->name} [{$user->customer_id}]"
-                ]; 
-            } 
+                ];
+            }
         }else{
             $users = LeadAnalysis::where('status',0)->where('approve_by','!=',null)
             ->whereHas('customer',function($q) use($my_all_employee,$request){
@@ -203,16 +216,16 @@ class PresentationController extends Controller
                     $query->where('customer_id', 'like', "%{$term}%")
                         ->orWhere('name', 'like', "%{$term}%");
                 });
-              })->get(); 
+              })->get();
               foreach ($users as $user) {
                 $results[] = [
                     'id' => $user->customer->id,
                     'text' => "{$user->customer->name} [{$user->customer->customer_id}]"
-                ]; 
+                ];
             }
-        }  
-       
-        
+        }
+
+
         return response()->json([
             'results' => $results
         ]);
