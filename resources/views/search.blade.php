@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                         </div> 
-                        @else{
+                        @else
                             <div class="flex-column align-items-stretch">
                                 <div class="rich-list-item">
                                     <div class="rich-list-prepend">
@@ -58,8 +58,7 @@
                                         <a href="{{route('profile',encrypt($data->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                     </div> 
                                 </div>
-                            </div> 
-                        } 
+                            </div>  
                         @endif
                         @endforeach 
                     </div>
