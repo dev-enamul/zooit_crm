@@ -26,7 +26,7 @@
                                         <a href="{{route('bypass',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
                                                 Login
                                         </a>
-                                    @endcan   
+                                    @endcan 
                                         {{-- @if ($user->user_type==1)
                                             <a href="{{route('employee.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
                                                 <i class="mdi mdi-account-edit"></i> Edit Profile
