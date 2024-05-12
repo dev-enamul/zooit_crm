@@ -443,71 +443,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-        $deposit_targets = DepositTarget::get();
-     
-        foreach($deposit_targets as $deposit_target){
-                if($deposit_target->is_project_wise == 1){
-                        $new_total_deposit = $deposit_target->depositTargetProjects->sum('new_deposit');
-                        $existing_total_deposit = $deposit_target->depositTargetProjects->sum('existing_deposit');
-                        $deposit_target->new_total_deposit = $new_total_deposit;
-                        $deposit_target->existing_total_deposit = $existing_total_deposit;
-                        $deposit_target->save();
-                }    
-        }
-        dd($new_total_deposit, $existing_total_deposit);
-       
-      
-
-        
- 
-        $largest_user_ids = User::where('user_type', 2)
-                ->whereNotIn('created_by', ['3236', '1', '3251'])
-                ->where('user_id', 'like', 'FL-%')
-                ->pluck('user_id')
-                ->map(function ($id) {
-                        return preg_replace("/[^0-9]/", "", $id);
-                });
-                dd($largest_user_ids);
-                $missing = [];
-                for($i=0;$i<=2573;$i++){ 
-                    if(!in_array($i,$largest_user_ids->toArray())){
-                        $missing[] = $i;
-                        echo $i.',';
-                    }
-                } 
-                dd(count($missing));
- 
-   
-    
-  
-        // $users = User::whereIn('user_type',[1])->latest()->get();
-        // foreach($users as $user){ 
-        //         $user_reporting = user_reporting((int)$user->id); 
-        //         User::where('id', $user->id)
-        //             ->update(['user_reporting' => $user_reporting, 'user_employee' => $my_all_employee]);
-        // }
-        
-       
-
-        // foreach($employees as $employee){
-        //         if($employee->id != 1 || $employee->id != 3){  
-        //                 $permissions = UserPermission::where('user_id',3)->get();
-        //                 UserPermission::where('user_id',$employee->id)->delete();
-        //                 foreach($permissions as $permission){
-        //                         $userPermission = new UserPermission();
-        //                         $userPermission->user_id = $employee->id;
-        //                         $userPermission->permission_id = $permission->permission_id;
-        //                         $userPermission->save();
-        //                 } 
-        //         }
-        // } 
-        // $data = UserPermission::all();
-     
-        
-        // $organogram = getOrganogram($topUser);
-        // dd($organogram);
- 
-        // return view('organogram', ['organogram' => $organogram]);
+         $user = User::where('user_id','FL-002581')->first();
+         dd($user);
 });
 
 // test
