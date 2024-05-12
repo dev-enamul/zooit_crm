@@ -49,8 +49,8 @@ class FieldTargetController extends Controller
             $input['month'] = date('Y-m-d',strtotime($input['month']));
             $old = FieldTarget::where('assign_to',$input['assign_to'])->where('month',$input['month'])->first();
             if($old){
-                $old->update($input); 
-
+                $old->update($input);
+                
                 // Notification Store
                 Notification::store([
                     'title' => 'Field Target Updated',
@@ -71,7 +71,7 @@ class FieldTargetController extends Controller
                     'created_by' => auth()->user()->id,
                     'user_id' => [$input['assign_to']]
                 ]); 
-                return redirect()->back()->with('success', 'Target assigned successfully'); 
+                return redirect()->back()->with('success', 'Target assigned successfully');
             } 
         }catch(Exception $e){ 
             return redirect()->back()->with('error', $e->getMessage());

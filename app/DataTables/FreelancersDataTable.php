@@ -74,7 +74,7 @@ class FreelancersDataTable extends DataTable
             $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereIn('designation_id',[12, 13, 14, 15]);
+                    $q->whereJsonContains('designations',[12, 13, 14, 15]);
                 })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
@@ -86,7 +86,7 @@ class FreelancersDataTable extends DataTable
             $reporting = json_decode($freelancer->user->user_reporting);
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereIn('designation_id',[11]);
+                    $q->whereJsonContains('designations',[11]);
                 })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
@@ -158,12 +158,7 @@ class FreelancersDataTable extends DataTable
             ->minifiedAjax()
             ->dom('Bfrtip')
             ->orderBy(1)
-            ->selectStyleSingle()
-//            ->createdRow('function(row, data, dataIndex) {
-//                if (data["user"] && data["user"]["approve_by"] === null) {
-//                    $(row).addClass("table-warning");
-//                }
-//            }')
+            ->selectStyleSingle() 
             ->buttons([
                 Button::make('excel')->title('Freelancer List'),
                 Button::make('pdf')->title('Freelancer List'),

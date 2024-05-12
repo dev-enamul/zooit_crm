@@ -40,39 +40,41 @@
                                     </div>
                                 </div>
                             
-                                <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Action</th>
-                                            <th>S/N</th>
-                                            <th>Full Name</th>
-                                            <th>Profession</th>
-                                            <th>Upazilla/Thana</th>
-                                            <th>Union</th>
-                                            <th>Village</th> 
-                                            <th>Mobile No</th>
-                                            <th>Employee</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach ($customers as  $customer)
-                                            <tr class="">
-                                                <td class="text-center">
-                                                    <input class="form-check-input" type="checkbox" name="customer_id[]" value="{{$customer->id}}" id="flexCheckChecked" >
-                                                </td>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td >{{ @$customer->name }} [{{ @$customer->customer_id }}]</td>
-                                                <td >{{ @$customer->profession->name }}</td>
-                                                <td >{{ @$customer->user->userAddress->upazila->name }}</td>
-                                                <td >{{ @$customer->user->userAddress->union->name }}</td>
-                                                <td >{{ @$customer->user->userAddress->village->name }}</td> 
-                                                <td >{{ @$customer->user->phone }}</td>
-                                                <td >{{ @$customer->reference->name}} [{{ @$customer->reference->user_id}}]</td>     
+                                <div class="table-box">
+                                    <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>S/N</th>
+                                                <th>Full Name</th>
+                                                <th>Profession</th>
+                                                <th>Upazilla/Thana</th>
+                                                <th>Union</th>
+                                                <th>Village</th> 
+                                                <th>Mobile No</th>
+                                                <th>Employee</th>
                                             </tr>
-                                        @endforeach  
-                                    </tbody>
-                                </table>
+                                        </thead>
+    
+                                        <tbody>
+                                            @foreach ($customers as  $customer)
+                                                <tr class="">
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox" name="customer_id[]" value="{{$customer->id}}" id="flexCheckChecked" >
+                                                    </td>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td >{{ @$customer->name }} [{{ @$customer->customer_id }}]</td>
+                                                    <td >{{ @$customer->profession->name }}</td>
+                                                    <td >{{ @$customer->user->userAddress->upazila->name }}</td>
+                                                    <td >{{ @$customer->user->userAddress->union->name }}</td>
+                                                    <td >{{ @$customer->user->userAddress->village->name }}</td> 
+                                                    <td >{{ @$customer->user->phone }}</td>
+                                                    <td >{{ @$customer->reference->name}} [{{ @$customer->reference->user_id}}]</td>     
+                                                </tr>
+                                            @endforeach  
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </form>
                     </div>
