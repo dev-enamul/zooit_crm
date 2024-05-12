@@ -36,7 +36,7 @@
                                             <select class="select2" search id="assign_to" name="assign_to" required>
                                                 <option value="">Select Employee</option> 
                                                 @foreach ($employeies as $employee)
-                                                    <option {{$data->assign_to==$employee->id?'selected':''}} value="{{$employee->id}}">{{$employee->name}}-{{$employee->phone}}-{{$employee->user_id}}</option>
+                                                    <option {{@$data->assign_to==$employee->id?'selected':''}} value="{{$employee->id}}">{{$employee->name}}-{{$employee->phone}}-{{$employee->user_id}}</option>
     
                                                 @endforeach 
                                             </select>
