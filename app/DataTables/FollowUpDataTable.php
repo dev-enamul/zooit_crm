@@ -26,104 +26,104 @@ class FollowUpDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action',function($followUp){ 
+            ->addColumn('action',function($followUp){
                 return view('followup.followup_action',compact('followUp'))->render();
-            })  
-            
+            })
+
             ->addColumn('profession', function($data){
                 return $data->customer->profession->name??'-';
-            }) 
+            })
             ->addColumn('project', function($data){
                 return $data->project->name??'-';
             })
             ->addColumn('unit', function($data){
                 return $data->unit->name??'-';
-            })  
+            })
             ->addColumn('date', function($data){
                 return get_date($data->created_at);
-            }) 
-          
+            })
+
             ->addColumn('freelancer', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
-                }  
+                }
 
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[20]);
-                    })->first();  
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
             ->addColumn('marketing-incharge', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
-                }  
+                }
 
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[16]);
-                    })->first();  
+                        $q->whereJsonContains('designations',[16]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
 
             ->addColumn('salse-incharge', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
-                }  
+                }
 
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[12,13,14,15]);
-                    })->first();  
+                        $q->whereJsonContains('designations',[12,13,14,15]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            })  
+                return "-";
+            })
             ->addColumn('area-incharge', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
-                }  
+                }
 
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[11]);
-                    })->first();  
+                        $q->whereJsonContains('designations',[11]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
             ->addColumn('zonal-manager', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
-                }  
+                }
 
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[10]);
-                    })->first();  
+                        $q->whereJsonContains('designations',[10]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
@@ -142,30 +142,30 @@ class FollowUpDataTable extends DataTable
             $user_id = (int)$request->employee;
         }else{
             $user_id = Auth::user()->id;
-        }  
+        }
         if(isset($request->date)){
             $date = explode(' - ',$request->date);
             $start_date = date('Y-m-d',strtotime($date[0]));
-            $end_date = date('Y-m-d',strtotime($date[1])); 
+            $end_date = date('Y-m-d',strtotime($date[1]));
         }else{
             $start_date = date('Y-m-01');
             $end_date = date('Y-m-t');
-        } 
+        }
         $user = User::find($user_id);
         $user_employee = json_decode($user->user_employee);
 
         if(isset($request->status) && !empty($request->status)){
-            $status = $request->status; 
+            $status = $request->status;
         }else{
-            $status = 0; 
-        } 
+            $status = 0;
+        }
 
         $datas =$model->where(function ($q){
             $q->where('approve_by','!=',null)
                 ->orWhere('employee_id', Auth::user()->id)
                 ->orWhere('created_by', Auth::user()->id);
-        }) 
-        ->whereHas('customer', function($q) use($user_employee){ 
+        })
+        ->whereHas('customer', function($q) use($user_employee){
             $q->whereIn('ref_id', $user_employee);
         })
         ->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59'])
@@ -173,7 +173,7 @@ class FollowUpDataTable extends DataTable
         ->with('customer.reference')
         ->with('customer.user.userAddress')
         ->with('customer.profession')
-        ->newQuery();  
+        ->newQuery();
 
         $datas->user_reporting = $user->user_reporting;
         return $datas;
@@ -194,7 +194,7 @@ class FollowUpDataTable extends DataTable
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('excel'), 
+                        Button::make('excel'),
                         Button::make('pdf')->title('Lead List'),
                     ]);
     }
@@ -212,21 +212,21 @@ class FollowUpDataTable extends DataTable
                   ->printable(false)
                   ->width(60)
                   ->addClass('text-center')
-                  ->sortable(false), 
+                  ->sortable(false),
             Column::make('serial')->title('S/L')->sortable(false),
-            Column::make('customer.customer_id')->title('Provable Cus ID')->sortable(false), 
-            Column::make('customer.name')->title('Customer Name')->sortable(false), 
+            Column::make('customer.customer_id')->title('Provable Cus ID')->sortable(false),
+            Column::make('customer.name')->title('Customer Name')->sortable(false),
             Column::make('customer.user.phone')->title('Mobile Number')->sortable(false),
             Column::make('profession')->title('Profession')->sortable(false),
             Column::make('project')->title('Preferred Project Name')->sortable(false),
             Column::make('unit')->title('Preferred Unit Name')->sortable(false),
-            Column::make('date')->title('Follow Up Date')->sortable(false), 
+            Column::make('date')->title('Follow Up Date')->sortable(false),
             Column::make('freelancer')->title('Franchise Partner Name & ID')->sortable(false),
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID')->sortable(false), 
+            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID')->sortable(false),
             Column::make('salse-incharge')->title('Incharge Sales Name & ID')->sortable(false),
             Column::make('area-incharge')->title('Area Incharge Name & ID')->sortable(false),
             Column::make('zonal-manager')->title('Zonal Manager Name & ID')->sortable(false),
-        ]; 
+        ];
     }
 
     /**
