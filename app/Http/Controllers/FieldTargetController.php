@@ -17,10 +17,16 @@ use Illuminate\Http\Request;
 
 class FieldTargetController extends Controller
 {
-     public function assign_target(){
+     public function assign_target(Request $request){ 
+        if(isset($request->id)){
+            $data = FieldTarget::find($request->id);
+        }else{
+            $data = null;
+        } 
+
         $my_employee = my_employee(auth()->user()->id);
         $employeies = User::whereIn('id',$my_employee)->where('status',1)->get(); 
-         return view('target.field_target.assign_target',compact('employeies'));
+         return view('target.field_target.assign_target',compact('employeies','data'));
      } 
 
      public function field_target_save(Request $request){

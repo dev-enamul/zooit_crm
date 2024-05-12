@@ -35,8 +35,9 @@
                                             <label for="assign_to" class="form-label">Task Asign To <span class="text-danger">*</span></label>
                                             <select class="select2" search id="assign_to" name="assign_to" required>
                                                 <option value="">Select Employee</option> 
-                                                @foreach ($employeies as $data)
-                                                 <option value="{{$data->id}}">{{$data->name}}-{{$data->phone}}-{{$data->user_id}}</option>
+                                                @foreach ($employeies as $employee)
+                                                    <option {{$data->assign_to==$employee->id?'selected':''}} value="{{$employee->id}}">{{$employee->name}}-{{$employee->phone}}-{{$employee->user_id}}</option>
+    
                                                 @endforeach 
                                             </select>
                                             <div class="invalid-feedback">
@@ -67,42 +68,42 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">FL Recruitment</label>
-                                            <input type="number" class="form-control" id="freelancer" name="freelancer" value="0"> 
+                                            <input type="number" class="form-control" id="freelancer" name="freelancer" value="{{@$data->freelancer}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Customer Data Collection</label>
-                                            <input type="number" class="form-control" id="customer" name="customer" value="0"> 
+                                            <input type="number" class="form-control" id="customer" name="customer" value="{{@$data->customer}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="prospecting" class="form-label">Prospecting</label>
-                                            <input type="number" class="form-control" id="prospecting" name="prospecting" value="0"> 
+                                            <input type="number" class="form-control" id="prospecting" name="prospecting" value="{{@$data->prospecting}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="cold_calling" class="form-label">Cold calling</label>
-                                            <input type="number" class="form-control" id="cold_calling" name="cold_calling" value="0"> 
+                                            <input type="number" class="form-control" id="cold_calling" name="cold_calling" value="{{@$data->cold_calling}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="lead" class="form-label">Lead</label>
-                                            <input type="number" class="form-control" id="lead" name="lead" value="0"> 
+                                            <input type="number" class="form-control" id="lead" name="lead" value="{{@$data->lead}}"> 
                                         </div>
                                     </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="lead_analysis" class="form-label">Lead Analysis</label>
-                                            <input type="number" class="form-control" id="lead_analysis" name="lead_analysis" value="0"> 
+                                            <input type="number" class="form-control" id="lead_analysis" name="lead_analysis" value="{{@$data->lead_analysis}}"> 
                                         </div>
                                     </div>
 
@@ -111,42 +112,42 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="project_visit" class="form-label">Project Visit & Presentation</label>
-                                            <input type="number" class="form-control" id="project_visit" name="project_visit" value="0"> 
+                                            <input type="number" class="form-control" id="project_visit" name="project_visit" value="{{@$data->project_visit}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="project_visit_analysis" class="form-label">Project Visit & Presentation Analysis</label>
-                                            <input type="number" class="form-control" id="project_visit_analysis" name="project_visit_analysis" value="0"> 
+                                            <input type="number" class="form-control" id="project_visit_analysis" name="project_visit_analysis" value="{{@$data->project_visit_analysis}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="follow_up" class="form-label">Follow Up</label>
-                                            <input type="number" class="form-control" id="follow_up" name="follow_up" value="0"> 
+                                            <input type="number" class="form-control" id="follow_up" name="follow_up" value="{{@$data->follow_up}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="follow_up_analysis" class="form-label">Follow Analysis</label>
-                                            <input type="number" class="form-control" id="follow_up_analysis" name="follow_up_analysis" value="0"> 
+                                            <input type="number" class="form-control" id="follow_up_analysis" name="follow_up_analysis" value="{{@$data->follow_up_analysis}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="negotiation" class="form-label">Negotiation</label>
-                                            <input type="number" class="form-control" id="negotiation" name="negotiation" value="0"> 
+                                            <input type="number" class="form-control" id="negotiation" name="negotiation" value="{{@$data->negotiation}}"> 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="negotiation_analysis" class="form-label">Negotiation Analysis</label>
-                                            <input type="number" class="form-control" id="negotiation_analysis" name="negotiation_analysis" value="0"> 
+                                            <input type="number" class="form-control" id="negotiation_analysis" name="negotiation_analysis" value="{{@$data->negotiation_analysis}}"> 
                                         </div>
                                     </div> 
                                 </div>

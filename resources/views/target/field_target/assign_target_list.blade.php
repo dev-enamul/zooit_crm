@@ -44,6 +44,7 @@
                                 <thead>
                                     <tr> 
                                         <th>S/N</th>
+                                        <th>Action</th>
                                         <th>Employee Name</th>  
                                         <th>FL Recruitment</th>
                                         <th>Customer Data</th> 
@@ -63,7 +64,19 @@
                                     @foreach ($datas as $key => $data)
                                     <tr> 
                                         <td>{{++$key}}</td>
-                                        <td><a href="{{route('my.field.target', ['month'=>urldecode($selected),'employee'=>encrypt($data->assignTo->id)])}}">{{@$data->assignTo->name}} [{{@$data->assignTo->user_id}}]</a> </td>  
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    
+                                                    <img class="rounded avatar-2xs p-0" src="{{$data?->assignTo?->image()}}">
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-animated"> 
+                                                    <a class="dropdown-item" href="{{route('assign.field.target',['id'=>$data->id])}}">Edit</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><a class="text-dark" href="{{route('my.field.target', ['month'=>urldecode($selected),'employee'=>encrypt($data->assignTo->id)])}}">{{@$data->assignTo->name}} [{{@$data->assignTo->user_id}}]</a> </td>  
+                                        
                                         @php 
                                             $user = App\Models\User::find($data->assignTo->id);
                                             $my_all_employee = json_decode($user->user_employee);
