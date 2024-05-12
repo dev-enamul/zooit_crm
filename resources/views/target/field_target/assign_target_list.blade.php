@@ -87,7 +87,7 @@
                                             {{$user->freelanecr_achive($selected,$my_all_employee)}} / {{$data->freelancer}}
                                         </td>  
                                         <td class="align-middle">
-                                            {{$user->customer_achive($selected,$my_all_employee)}} /{{$data->freelancer}}
+                                            {{$user->customer_achive($selected,$my_all_employee)}} /{{$data->customer}}
                                          </td>  
                                          <td class="align-middle">{{$user->prospecting_achive($selected,$my_all_employee)}} / {{$data->prospecting}}</td>  
                                         <td class="align-middle">{{$user->cold_calling_achive($selected,$my_all_employee)}} / {{$data->cold_calling}}</td>  
