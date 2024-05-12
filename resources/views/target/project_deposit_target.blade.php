@@ -35,7 +35,7 @@
                                             <select class="form-select" name="assign_to" id="assign_to" required>
                                                 <option value="">Select Employee</option>
                                                 @foreach ($employees as $key => $item)
-                                                    <option {{$key==0?"selected":""}} value="{{$item->id}}">{{$item->name}}</option>
+                                                    <option {{$key==0?"selected":""}} value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option>
                                                 @endforeach
                                             </select>
                                         </div>
