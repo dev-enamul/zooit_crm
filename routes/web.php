@@ -443,10 +443,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-         $user = User::where('id','3906')->first();
-         $user->user_id = User::generateNextProvableFreelancerId();
-        $user->save();
-         dd($user);
+          dd('noting');
 });
 
 // test
