@@ -41,11 +41,15 @@ class ApproveFreelancerController extends Controller
             }
 
             FreelancerApprovel::create($input);
-            if(isset($request->fl_id) && $request->fl_id != null){
-                $freelancer->status = 1;
-                $freelancer->save();
-                $freelancer->user->user_id = $request->fl_id;
-                $freelancer->user->save();
+             $hasIdPermission =  Auth::user()->hasPermission('freelancer-id-create');
+
+             if($hasIdPermission){
+                if(isset($request->fl_id) && $request->fl_id != null){
+                    $freelancer->status = 1;
+                    $freelancer->save();
+                    $freelancer->user->user_id = $request->fl_id;
+                    $freelancer->user->save();
+                }
             }
 
              $auth_user = Auth::user();
