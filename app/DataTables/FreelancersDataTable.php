@@ -71,10 +71,10 @@ class FreelancersDataTable extends DataTable
         })
 
         ->addColumn('incharge', function($freelancer){
-            inChargeEmployee(json_decode($freelancer->user->user_reporting));
+          return  inChargeEmployee(json_decode($freelancer->user->user_reporting));
         })
         ->addColumn('area_incharge', function($freelancer){
-            areaInChargeEmployee(json_decode($freelancer->user->user_reporting));
+         return   areaInChargeEmployee(json_decode($freelancer->user->user_reporting));
         });
     }
 

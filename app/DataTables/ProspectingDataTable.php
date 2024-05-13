@@ -88,7 +88,7 @@ class ProspectingDataTable extends DataTable
                     return '-';
                 }
 
-                marketingInChargeEmployee(json_decode($data->customer->reference->user_reporting));
+              return  marketingInChargeEmployee(json_decode($data->customer->reference->user_reporting));
 
             })
 
@@ -97,7 +97,7 @@ class ProspectingDataTable extends DataTable
                     return '-';
                 }
 
-                salesInChargeEmployee(json_decode($data->customer->reference->user_reporting));
+              return  salesInChargeEmployee(json_decode($data->customer->reference->user_reporting));
 
             })
             ->addColumn('area-incharge', function($data){
@@ -105,13 +105,13 @@ class ProspectingDataTable extends DataTable
                     return '-';
                 }
 
-                areaInChargeEmployee(json_decode($data->customer->reference->user_reporting));
+              return  areaInChargeEmployee(json_decode($data->customer->reference->user_reporting));
             })
             ->addColumn('zonal-manager', function($data){
                 if(@$data->customer->ref_id==null){
                     return '-';
                 }
-                zonalManagerEmployee(json_decode($data->customer->reference->user_reporting));
+             return   zonalManagerEmployee(json_decode($data->customer->reference->user_reporting));
 
             })
             ->addColumn('serial', function () {
