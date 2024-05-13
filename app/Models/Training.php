@@ -15,6 +15,7 @@ class Training extends Model
         'date',
         'time',
         'agenda',
+        'status',
         'created_by'
     ]; 
     
