@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->text('agenda');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Training;
 use App\Models\TrainingAttendance;
 use App\Models\TrainingCategory;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 class TrainingController extends Controller
 { 
 
-    public function index(Request $request){ 
+    public function index(Request $request){
         if(isset($request->month)){ 
             $month =  Carbon::parse($request->month)->format('m');
             $year =  Carbon::parse($request->month)->format('Y'); 
@@ -25,7 +26,11 @@ class TrainingController extends Controller
             $date = Carbon::now()->format('Y-m');
         }
 
-        $datas = Training::whereMonth('date',$month)->whereYear('date',$year)->get();
+        $reporting_user = json_decode(auth()->user()->user_reporting);
+        $datas = Training::whereMonth('date',$month)
+            ->whereYear('date',$year)
+            ->whereIn('created_by',$reporting_user)
+            ->get();
  
         return view('training.training_history',compact('datas','date'));
     }
@@ -35,20 +40,19 @@ class TrainingController extends Controller
         return view('training.training_create',compact('categoris'));
     }
 
-    public function store(Request $request){
-        $rules = [
-            'category_id' => 'required|string|max:255'|'exists:training_categories,id',
+    public function store(Request $request){ 
+    $validator = Validator::make($request->all(), [
+            'category_id' => 'required|string|max:255|exists:training_categories,id',
             'trainer' => 'required|array',
             'seat' => 'required|integer|min:1',
             'date' => 'required|date',
             'time' => 'required|date_format:H:i',
             'agenda' => 'nullable|string',
-        ];   
-
-        $validator = Validator::make($request->all(), $rules);
+        ]);
+        
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
-        }  
+        }
 
        try{
             $event = new Training(); 
@@ -58,6 +62,7 @@ class TrainingController extends Controller
             $event->date    = $request->date;
             $event->time    = $request->time;
             $event->agenda  = $request->agenda;
+            $event->created_by = auth()->id();
             $event->save(); 
             return redirect()->back()->with('success', 'Training created successfully'); 
        }catch(Exception $e){
@@ -77,9 +82,43 @@ class TrainingController extends Controller
             $trainers = User::whereIn('id',$trainers)->get();
             $present = TrainingAttendance::where('training_id',$id)->where('status',1)->get();
             $absent = TrainingAttendance::where('training_id',$id)->where('status',0)->get();
-            return view('training.training_details',compact('data','trainers','present','absent'));
+
+            $bookeds = TrainingAttendance::where('training_id',$id)->get();
+            return view('training.training_details',compact('data','trainers','present','absent','bookeds'));
         }catch(Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function training_add_person(Request $request){
+       foreach($request->user_id as $user){
+            $existing = TrainingAttendance::where('training_id',$request->training_id)->where('user_id',$user)->first();
+             if(!isset($existing) || empty($existing)){
+                $data = [
+                    'training_id' => $request->training_id,
+                    'user_id' => $user,
+                    'status' => 1,
+                    'created_by' => auth()->user()->id
+                ];
+
+                TrainingAttendance::create($data);  
+                Notification::store([
+                    'title' => 'You have been added to a training',
+                    'content' => auth()->user()->name . 'has added you to a training please check your schedule',
+                    'link' => route('training.schedule'),
+                    'created_by' => auth()->user()->id,
+                    'user_id' => [$user]
+                ]);
+             } 
+       }
+        return redirect()->back()->with('success', 'Person added successfully');
+    }
+
+    public function training_attendance($id){
+        $data = Training::find($id);
+        $attendance = TrainingAttendance::where('training_id',$id)->get();
+        dd($attendance);
+    }
+
+    
 }

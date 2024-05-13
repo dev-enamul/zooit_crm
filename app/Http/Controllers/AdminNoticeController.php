@@ -33,8 +33,8 @@ class AdminNoticeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['created_by'] = Auth::user()->id; 
-        Notification::store($data); 
+        $data['created_by'] = Auth::user()->id;
+        Notification::store($data);
         return redirect()->back()->with('success','Notification sent successfully');
     }
 

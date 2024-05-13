@@ -47,14 +47,23 @@
                                 <tbody> 
                                     @foreach ($datas as $key =>  $data)
                                         <tr> 
-                                            <td class="text-center align-middle"><a href="{{route('training.show',$data->id)}}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a></td>
-                                            <td class="text-center align-middle">{{$key++}}</td> 
+                                            <td class="text-center align-middle"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="{{route('training.show',$data->id)}}">View</a>
+                                                        <a class="dropdown-item" href="{{route('training.attendance',$data->id)}}">Attendance</a> 
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('training.destroy',$data->id) }}')">Delete</a>   
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center align-middle">{{++$key}}</td> 
                                             <td class="text-center align-middle">
                                                 {{get_date($data->date)}} <br> 
                                                 <span class="badge badge-label-primary">
                                                     {{ \Carbon\Carbon::createFromFormat('H:i:s', $data->time)->format('h:i A') }}
                                             </td>
-                                            <td class="align-middle">{{$data->title}}</td> 
+                                            <td class="align-middle">{{$data->category->title}}</td> 
                                             <td class="align-middle">{{$data->seat}}</td>
                                             <td class="align-middle">
                                                 <div class="avatar-group">
@@ -81,8 +90,8 @@
                                                     @foreach ($data->attendance as $key => $attendance)
                                                         @if ($key < 5)
                                                             <div class="avatar avatar-circle avatar-circle-sm">
-                                                                <a href="" data-bs-toggle="tooltip" title="Md Enamul Haque">
-                                                                    <img src="../assets/images/users/avatar-1.png" alt="Avatar image" class="avatar-2xs cursor-pointer">
+                                                                <a href="" data-bs-toggle="tooltip" title="{{$attendance->user->name??null}}">
+                                                                    <img src="{{$attendance->user->image()??null}}" alt="{{$attendance->user->name??null}}" class="avatar-2xs cursor-pointer">
                                                                 </a>
                                                             </div> 
                                                         @endif 

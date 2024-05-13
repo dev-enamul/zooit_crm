@@ -22,4 +22,9 @@ class Training extends Model
     {
         return $this->hasMany(TrainingAttendance::class)->where('status', 1);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(TrainingCategory::class,'category_id');
+    }
 }

@@ -36,7 +36,7 @@
                                 <div class="row">   
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
+                                            <label for="employee" class="form-label">Employee/Freelancer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="user_id" id="employee" required>
                                                 <option value="{{auth()->user()->id}}" selected="selected">{{Auth::user()->name}}</option>
                                             </select>

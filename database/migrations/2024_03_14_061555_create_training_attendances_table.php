@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('training_id')->constrained('trainings')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->boolean('status')->default(0)->comment('0=present, 1=absent');
+            $table->boolean('status')->default(0)->comment('0=absent, 1=present');
             $table->time('time')->nullable();
             $table->text('note')->nullable();
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

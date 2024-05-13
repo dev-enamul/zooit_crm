@@ -20,4 +20,9 @@ class TrainingAttendance extends Model
     {
         return $this->belongsTo(Training::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
