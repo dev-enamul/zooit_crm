@@ -71,31 +71,10 @@ class FreelancersDataTable extends DataTable
         })
 
         ->addColumn('incharge', function($freelancer){
-            $reporting = json_decode($freelancer->user->user_reporting);
-            if(isset($reporting) && $reporting!= null){
-                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereJsonContains('designations', '12')
-                    ->orWhereJsonContains('designations', '13')
-                    ->orWhereJsonContains('designations', '14')
-                    ->orWhereJsonContains('designations', '15');
-                })->first();
-                if(isset($user) && $user != null){
-                    return $user->name.' ['.$user->user_id.']';
-                }
-            }
-            return "-";
+            inChargeEmployee(json_decode($freelancer->user->user_reporting));
         })
         ->addColumn('area_incharge', function($freelancer){
-            $reporting = json_decode($freelancer->user->user_reporting);
-            if(isset($reporting) && $reporting!= null){
-                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereJsonContains('designations','11');
-                })->first();
-                if(isset($user) && $user != null){
-                    return $user->name.' ['.$user->user_id.']';
-                }
-            }
-            return "-";
+            areaInChargeEmployee(json_decode($freelancer->user->user_reporting));
         });
     }
 
@@ -161,7 +140,7 @@ class FreelancersDataTable extends DataTable
             ->minifiedAjax()
             ->dom('Bfrtip')
             ->orderBy(1)
-            ->selectStyleSingle() 
+            ->selectStyleSingle()
             ->buttons([
                 Button::make('excel')->title('Freelancer List'),
                 Button::make('pdf')->title('Freelancer List'),

@@ -4,6 +4,7 @@ use App\Models\District;
 use App\Models\ReportingUser;
 use App\Models\Union;
 use App\Models\Upazila;
+use App\Models\User;
 use App\Models\Village;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -94,19 +95,19 @@ if (!function_exists('get_percent')) {
         if ($denominator != 0) {
             return round(($numerator / $denominator) * 100) .'%';
         } else {
-            return 0 .'%';  
+            return 0 .'%';
         }
     }
 }
 
 function get_phone($phoneNumber) {
-    // $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber); 
-    // if (substr($phoneNumber, 0, 4) === '8801') { 
+    // $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+    // if (substr($phoneNumber, 0, 4) === '8801') {
     //     $phoneNumber = substr($phoneNumber, 4);
-    // } elseif (substr($phoneNumber, 0, 2) === '0') { 
+    // } elseif (substr($phoneNumber, 0, 2) === '0') {
     //     $phoneNumber = substr($phoneNumber, 2);
     // }
-    
+
     return $phoneNumber;
 }
 
@@ -127,7 +128,7 @@ if (!function_exists('getOrganogram')) {
         return $organogram;
     }
 }
- 
+
 
 // if (!function_exists('user_reporting')) {
 //     function user_reporting($user_id, $users = [])
@@ -141,33 +142,33 @@ if (!function_exists('getOrganogram')) {
 //                 return $users;
 //             }
 //         }elseif(isset($reporting->user_id) && $reporting->user_id != null){
-//             return array_merge($users, [$reporting->user_id]);  
+//             return array_merge($users, [$reporting->user_id]);
 //         }else{
 //             return $users;
 //         }
 //     }
 // }
 
- 
+
 if (!function_exists('user_reporting')) {
     function user_reporting($user_id, $users = [])
-    {   
-        $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->latest()->where('status',1)->first(); 
-        if (!$reporting) { 
+    {
+        $reporting = \App\Models\ReportingUser::where('user_id', $user_id)->latest()->where('status',1)->first();
+        if (!$reporting) {
             return $users;
-        } 
+        }
         if (!$reporting->reporting_user_id || $reporting->reporting_user_id == null) {
-            return array_merge($users, [$user_id]);  
+            return array_merge($users, [$user_id]);
         } else {
             $next_reporting = \App\Models\ReportingUser::find($reporting->reporting_user_id);
-            if(isset($next_reporting) && $next_reporting->user_id != null){  
+            if(isset($next_reporting) && $next_reporting->user_id != null){
                 return user_reporting($next_reporting->user_id, array_merge($users, [$user_id]));
-            }  
-            return array_merge($users, [$user_id]);  
-            
+            }
+            return array_merge($users, [$user_id]);
+
         }
     }
-} 
+}
 
 
 if (!function_exists('user_info')) {
@@ -182,15 +183,15 @@ if (!function_exists('user_info')) {
 
 if (!function_exists('my_employee')) {
     function my_employee($user_id)
-    { 
+    {
         $reporting_id = ReportingUser::where('user_id', $user_id)->whereNull('deleted_at')->first('id');
-        if ($reporting_id) {  
+        if ($reporting_id) {
             $my_employee_id = ReportingUser::where('reporting_user_id', $reporting_id->id)
-            ->whereNull('deleted_at') 
-            ->pluck('user_id')  
+            ->whereNull('deleted_at')
+            ->pluck('user_id')
             ->toArray();
             return $my_employee_id;
-         
+
         }else{
             return [];
         }
@@ -205,9 +206,9 @@ if (!function_exists('my_all_employee')) {
                 ->select(['id', 'user_id'])
                 ->first();
         }
- 
+
         if(isset($user->user_id) && $user->user_id != null){
-            $userIds = [$user->user_id]; 
+            $userIds = [$user->user_id];
             $downlines = $user->downlines;
             if ($downlines) {
                 foreach ($downlines as $downline) {
@@ -215,10 +216,89 @@ if (!function_exists('my_all_employee')) {
                 }
             }
         }
-         
+
         return $userIds??[];
+    }
+
+    if(!function_exists('inChargeEmployee')){
+        function inChargeEmployee($reporting){
+            if(isset($reporting) && $reporting!= null){
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereJsonContains('designations', '12')
+                        ->orWhereJsonContains('designations', '13')
+                        ->orWhereJsonContains('designations', '14')
+                        ->orWhereJsonContains('designations', '15');
+                })->first();
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
+                }
+            }
+            return "-";
+        }
+    }
+
+    if (!function_exists('areaInChargeEmployee')){
+        function areaInChargeEmployee($reporting){
+            if(isset($reporting) && $reporting!= null){
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereJsonContains('designations','11');
+                })->first();
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
+                }
+            }
+            return "-";
+        }
+    }
+
+    if (!function_exists('marketingInChargeEmployee')) {
+        function marketingInChargeEmployee($reporting)
+        {
+            if(isset($reporting) && $reporting!= null){
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereJsonContains('designations','16');
+                })->first();
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
+                }
+            }
+            return "-";
+        }
+    }
+
+    if (!function_exists('salesInChargeEmployee')){
+        function salesInChargeEmployee($reporting)
+        {
+            if(isset($reporting) && $reporting!= null){
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereJsonContains('designations', '12')
+                        ->orWhereJsonContains('designations', '13')
+                        ->orWhereJsonContains('designations', '14')
+                        ->orWhereJsonContains('designations', '15');
+                })->first();
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
+                }
+            }
+            return "-";
+        }
+    }
+
+    if (!function_exists('zonalManagerEmployee')){
+        function zonalManagerEmployee($reporting)
+        {
+            if(isset($reporting) && $reporting!= null){
+                $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
+                    $q->whereJsonContains('designations','10');
+                })->first();
+                if(isset($user) && $user != null){
+                    return $user->name.' ['.$user->user_id.']';
+                }
+            }
+            return "-";
+        }
     }
 }
 
- 
+
 
