@@ -29,77 +29,79 @@
                         <form action="{{route('lead-analysis.approve.save')}}" method="POST">
                             @csrf
                             <div class="card-body">
-                                <div class="d-flex justify-content-between"> 
-                                    <div class="mb-1">
-                                        <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
-                                        <label for="selectAll">Check All</label>
-                                    </div> 
-
-                                    <div class="mb-1">
-                                        <button class="btn btn-primary" type="submit">
-                                            Approve
-                                        </button>
+                                <div class="table-box">
+                                    <div class="d-flex justify-content-between"> 
+                                        <div class="mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
+                                            <label for="selectAll">Check All</label>
+                                        </div> 
+    
+                                        <div class="mb-1">
+                                            <button class="btn btn-primary" type="submit">
+                                                Approve
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            
-                                <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Action</th>
-                                            <th>S/N</th>
-                                            <th>Date</th>
-                                            <th>Name</th>
-                                            <th>Profession</th>
-                                            <th>Upazilla/Thana</th>
-                                            <th>Union</th>
-                                            <th>Village</th>
-                                            <th>Maritial</th>
-                                            <th>Last Call</th>
-                                            <th>Project</th>
-                                            <th>Unit</th>
-                                            <th>Capacity</th>
-                                            <th>Purchase Date</th>
-                                            <th>Mobile</th>
-                                            <th>Freelancer</th> 
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach ($leads as  $lead)
-                                            <tr class="">
-                                                <td class="text-center">
-                                                    <input class="form-check-input" type="checkbox" name="lead_id[]" value="{{$lead->id}}" id="flexCheckChecked" >
-                                                </td>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ @$lead->created_at }}</td>
-                                                <td> {{ @$lead->customer->name }}</td>
-                                                <td> {{ @$lead->customer->profession->name }}</td>
-                                                <td> {{ @$lead->customer->user->userAddress->upazila->name}}</td>
-                                                <td> {{ @$lead->customer->user->userAddress->union->name}}</td>
-                                                <td> {{ @$lead->customer->user->userAddress->village->name }}</td>
-                                                <td> {{ $lead->customer->user->marital_status}}</td>
-                                                <td> #Dummy </td>
-                                                <td>{{ $lead->project->name }}</td>
-                                                <td> {{  @$lead->unit->title}}</td>
-                                                @php
-                                                    $lead_capacity = App\Models\Lead::where('customer_id',$lead->customer_id)->first();
-                                                @endphp
-                                                <td class="text-primary"> 
-                                                    @if($lead_capacity->purchase_capacity == 1)
-                                                        High
-                                                    @elseif($lead_capacity->purchase_capacity == 2)
-                                                        Medium
-                                                    @else
-                                                        Low
-                                                    @endif
-                                                </td>
-                                                <td>{{@$lead_capacity->possible_purchase_date }}</td>
-                                                <td>{{ @$lead->customer->user->phone}}</td>
-                                                <td>Dummy</td> 
+                                
+                                    <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>S/N</th>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Profession</th>
+                                                <th>Upazilla/Thana</th>
+                                                <th>Union</th>
+                                                <th>Village</th>
+                                                <th>Maritial</th>
+                                                <th>Last Call</th>
+                                                <th>Project</th>
+                                                <th>Unit</th>
+                                                <th>Capacity</th>
+                                                <th>Purchase Date</th>
+                                                <th>Mobile</th>
+                                                <th>Freelancer</th> 
                                             </tr>
-                                        @endforeach  
-                                    </tbody>
-                                </table>
+                                        </thead>
+    
+                                        <tbody>
+                                            @foreach ($leads as  $lead)
+                                                <tr class="">
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox" name="lead_id[]" value="{{$lead->id}}" id="flexCheckChecked" >
+                                                    </td>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ @$lead->created_at }}</td>
+                                                    <td> {{ @$lead->customer->name }}</td>
+                                                    <td> {{ @$lead->customer->profession->name }}</td>
+                                                    <td> {{ @$lead->customer->user->userAddress->upazila->name}}</td>
+                                                    <td> {{ @$lead->customer->user->userAddress->union->name}}</td>
+                                                    <td> {{ @$lead->customer->user->userAddress->village->name }}</td>
+                                                    <td> {{ $lead->customer->user->marital_status}}</td>
+                                                    <td> #Dummy </td>
+                                                    <td>{{ $lead->project->name }}</td>
+                                                    <td> {{  @$lead->unit->title}}</td>
+                                                    @php
+                                                        $lead_capacity = App\Models\Lead::where('customer_id',$lead->customer_id)->first();
+                                                    @endphp
+                                                    <td class="text-primary"> 
+                                                        @if($lead_capacity->purchase_capacity == 1)
+                                                            High
+                                                        @elseif($lead_capacity->purchase_capacity == 2)
+                                                            Medium
+                                                        @else
+                                                            Low
+                                                        @endif
+                                                    </td>
+                                                    <td>{{@$lead_capacity->possible_purchase_date }}</td>
+                                                    <td>{{ @$lead->customer->user->phone}}</td>
+                                                    <td>Dummy</td> 
+                                                </tr>
+                                            @endforeach  
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </form>
                     </div>
