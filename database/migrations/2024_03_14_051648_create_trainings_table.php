@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('trainings', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->integer('category_id')->constrained()->onDelete('cascade');
             $table->json('trainer');
             $table->integer('seat');
             $table->date('date');

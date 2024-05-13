@@ -9,7 +9,7 @@ class Training extends Model
 {
     use HasFactory; 
     protected $fillable = [
-        'title',
+        'category_id',
         'trainer',
         'seat',
         'date',

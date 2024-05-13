@@ -426,8 +426,8 @@ Route::group(['middleware' => 'auth'], function () {
         // Training
         Route::resource('training-category', TrainingCategoryController::class);
         Route::post('training-category-update', [TrainingCategoryController::class, 'update'])->name('training.category.update');
-        Route::resource('training', TrainingController::class);
-        // Route::get('training-create', [TrainingController::class, 'training_create'])->name('training.create');
+
+        Route::resource('training', TrainingController::class); 
         Route::get('training-schedule', [TrainingController::class, 'training_schedule'])->name('training.schedule');
         Route::get('training-history', [TrainingController::class, 'training_history'])->name('training.history');
 
@@ -442,7 +442,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {  
+Route::get('function_test', function () {
           dd('noting');
 });
 

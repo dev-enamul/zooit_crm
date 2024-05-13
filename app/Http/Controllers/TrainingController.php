@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Training;
 use App\Models\TrainingAttendance;
+use App\Models\TrainingCategory;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -29,14 +30,14 @@ class TrainingController extends Controller
         return view('training.training_history',compact('datas','date'));
     }
 
-    public function create(){ 
-        $employees = User::where('user_type','1')->select('name','id','user_id')->get();
-        return view('training.training_create',compact('employees'));
+    public function create(){  
+        $categoris =  TrainingCategory::where('status',1)->get();
+        return view('training.training_create',compact('categoris'));
     }
 
     public function store(Request $request){
         $rules = [
-            'title' => 'required|string|max:255',
+            'category_id' => 'required|string|max:255'|'exists:training_categories,id',
             'trainer' => 'required|array',
             'seat' => 'required|integer|min:1',
             'date' => 'required|date',
@@ -50,8 +51,8 @@ class TrainingController extends Controller
         }  
 
        try{
-            $event = new Training();
-            $event->title   = $request->title;
+            $event = new Training(); 
+            $event->category_id   = $request->category_id;
             $event->trainer = json_encode($request->trainer); 
             $event->seat    = $request->seat;
             $event->date    = $request->date;

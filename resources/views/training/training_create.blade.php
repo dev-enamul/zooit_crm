@@ -33,8 +33,12 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="title" class="form-label">Training Title <span class="text-danger">*</span></label>
-                                            <input type="text" name="title" class="form-control" id="title" placeholder="Training Title" value="" required> 
+                                            <label for="category" class="form-label">Training Category <span class="text-danger">*</span></label>
+                                            <select class="select2" name="category_id" id="category" tabindex="-1" search  placeholder="Select Training Category" required>
+                                                @foreach ($categoris as $caegory)
+                                                    <option value="{{$caegory->id}}">{{$caegory->title}}</option> 
+                                                @endforeach
+                                            </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -43,11 +47,9 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="trainer" class="form-label">Trainer <span class="text-danger">*</span></label>
-                                            <select class="select2" name="trainer[]" id="trainer" tabindex="-1" multiple placeholder="Select Trainer" required>
-                                               @foreach ($employees as $employee) 
-                                                    <option value="{{$employee->id}}">{{$employee->name}} [#{{$employee->user_id}}]</option>
-                                               @endforeach 
+                                            <label for="employee" class="form-label">Trainer <span class="text-danger">*</span></label>
+                                            <select class="select2" name="trainer[]" id="employee" tabindex="-1" multiple placeholder="Select Trainer" required>
+                                                
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -120,4 +122,25 @@
     </footer>
 
 </div>
+@endsection 
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+        $('#employee').select2({
+            placeholder: "Select Employee",
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select2.employee') }}',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        term: params.term
+                    }
+                    return query;
+                }
+            }
+        });
+    });
+    </script>
 @endsection
