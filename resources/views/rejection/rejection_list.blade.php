@@ -30,53 +30,55 @@
                 <div class="col-12">
                     <div class="card"> 
                         <div class="card-body">  
-                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>S/N</th>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Mobile</th>
-                                        <th>Address</th>
-                                        <th>Neg. Amount</th>
-                                        <th>Project</th>
-                                        {{-- <th>Product & Qty</th>  --}}
-                                        <th>Freelancer</th> 
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    @foreach ($negotiations as  $negotiation)
-                                    <tr class="{{$negotiation->approve_by==null?"table-warning":""}}">
-                                        <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img class="rounded avatar-2xs p-0" src="{{@$negotiation->customer->user->image()}}">
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-animated">
-                                                    <a class="dropdown-item" href="{{route('customer.profile',encrypt($negotiation->customer_id))}}">Customer Profile</a>
-                                                    <a class="dropdown-item" href="{{route('rejection.create',['customer'=>$negotiation->customer->id])}}">Write Reject Reason</a>
-                                                    @if ($negotiation->approve_by != null)
-                                                        @can('sales-manage')
-                                                            <a class="dropdown-item" href="{{route('salse.create',['customer'=>$negotiation->customer->id])}}">Salse</a>
-                                                        @endcan 
-                                                    @endif
-                                                </div>
-                                            </div> 
-                                        </td>
-                                        <td class="">{{ $loop->iteration}}</td>
-                                        <td class="">{{ get_date($negotiation->created_at) }}</td> 
-                                        <td class="">{{ @$negotiation->customer->user->name }}</td>
-                                        <td class=""> {{ @$negotiation->customer->user->phone }}</td>
-                                        <td class=""> {{ @$negotiation->customer->user->userAddress->address }}</td>
-                                        <td class=""> {{ get_price(@$negotiation->negotiation_amount) }}</td>
-                                        <td class=""> {{ @$negotiation->project->name }}</td>
-                                        {{-- <td class="">{{count(json_decode($negotiation->project_units))}} </td> --}}
-                                        <td class="">{{ @$negotiation->customer->reference->name }} [{{ @$negotiation->customer->reference->user_id }}] </td>
-                                    </tr> 
-                                @endforeach
-                                </tbody>
-                            </table>
+                            <div class="table-box">
+                                <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>S/N</th>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Mobile</th>
+                                            <th>Address</th>
+                                            <th>Neg. Amount</th>
+                                            <th>Project</th>
+                                            {{-- <th>Product & Qty</th>  --}}
+                                            <th>Freelancer</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        @foreach ($negotiations as  $negotiation)
+                                        <tr class="{{$negotiation->approve_by==null?"table-warning":""}}">
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <img class="rounded avatar-2xs p-0" src="{{@$negotiation->customer->user->image()}}">
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a class="dropdown-item" href="{{route('customer.profile',encrypt($negotiation->customer_id))}}">Customer Profile</a>
+                                                        <a class="dropdown-item" href="{{route('rejection.create',['customer'=>$negotiation->customer->id])}}">Write Reject Reason</a>
+                                                        @if ($negotiation->approve_by != null)
+                                                            @can('sales-manage')
+                                                                <a class="dropdown-item" href="{{route('salse.create',['customer'=>$negotiation->customer->id])}}">Salse</a>
+                                                            @endcan 
+                                                        @endif
+                                                    </div>
+                                                </div> 
+                                            </td>
+                                            <td class="">{{ $loop->iteration}}</td>
+                                            <td class="">{{ get_date($negotiation->created_at) }}</td> 
+                                            <td class="">{{ @$negotiation->customer->user->name }}</td>
+                                            <td class=""> {{ @$negotiation->customer->user->phone }}</td>
+                                            <td class=""> {{ @$negotiation->customer->user->userAddress->address }}</td>
+                                            <td class=""> {{ get_price(@$negotiation->negotiation_amount) }}</td>
+                                            <td class=""> {{ @$negotiation->project->name }}</td>
+                                            {{-- <td class="">{{count(json_decode($negotiation->project_units))}} </td> --}}
+                                            <td class="">{{ @$negotiation->customer->reference->name }} [{{ @$negotiation->customer->reference->user_id }}] </td>
+                                        </tr> 
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div> <!-- end col -->
