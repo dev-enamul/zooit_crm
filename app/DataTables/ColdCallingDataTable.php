@@ -91,7 +91,7 @@ class ColdCallingDataTable extends DataTable
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations',[16]);
+                        $q->whereJsonContains('designations','16');
                     })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
@@ -108,7 +108,10 @@ class ColdCallingDataTable extends DataTable
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations',[12,13,14,15]);
+                        $q->whereJsonContains('designations', '12')
+                        ->orWhereJsonContains('designations', '13')
+                        ->orWhereJsonContains('designations', '14')
+                        ->orWhereJsonContains('designations', '15');
                     })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
@@ -124,7 +127,7 @@ class ColdCallingDataTable extends DataTable
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations',[11]);
+                        $q->whereJsonContains('designations','11');
                     })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
@@ -140,7 +143,7 @@ class ColdCallingDataTable extends DataTable
                 $reporting = json_decode($data->customer->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations',[10]);
+                        $q->whereJsonContains('designations','10');
                     })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
