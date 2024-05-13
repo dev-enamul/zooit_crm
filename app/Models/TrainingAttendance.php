@@ -14,6 +14,7 @@ class TrainingAttendance extends Model
         'status',
         'time',
         'note',
+        'created_by'
     ];
 
     public function training()

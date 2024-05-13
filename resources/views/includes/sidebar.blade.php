@@ -436,7 +436,7 @@
                                     <a href="{{route('training.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Create</a>
                                 </li> 
                                 
-                                {{-- <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li>  --}}
+                                <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li> 
                                 
                                 <li>
                                     <a href="{{route('training.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training History</a>

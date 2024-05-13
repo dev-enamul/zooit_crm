@@ -39,6 +39,7 @@
                                         <th class="text-center">S/L</th>
                                         <th class="text-center">Date Time</th>
                                         <th>Title</th>  
+                                        <th>Created By</th>
                                         <th>Seat</th>
                                         <th>Trainer</th> 
                                         <th>Attendance</th>  
@@ -51,8 +52,7 @@
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
-                                                        <a class="dropdown-item" href="{{route('training.show',$data->id)}}">View</a>
-                                                        <a class="dropdown-item" href="{{route('training.attendance',$data->id)}}">Attendance</a> 
+                                                        <a class="dropdown-item" href="{{route('training.show',$data->id)}}">View</a>  
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('training.destroy',$data->id) }}')">Delete</a>   
                                                     </div>
                                                 </div>
@@ -60,10 +60,12 @@
                                             <td class="text-center align-middle">{{++$key}}</td> 
                                             <td class="text-center align-middle">
                                                 {{get_date($data->date)}} <br> 
-                                                <span class="badge badge-label-primary">
-                                                    {{ \Carbon\Carbon::createFromFormat('H:i:s', $data->time)->format('h:i A') }}
+                                                <span class="badge badge-label-primary"> {{get_date($data->time,'h:i A')}} </span>
+                                                    {{-- {{ \Carbon\Carbon::createFromFormat('H:i:s', $data->time)->format('h:i A') }} --}}
                                             </td>
+                                            
                                             <td class="align-middle">{{$data->category->title}}</td> 
+                                            <td class="align-middle">{{$data->createdBy->name}} [{{$data->createdBy->user_id}}]</td>
                                             <td class="align-middle">{{$data->seat}}</td>
                                             <td class="align-middle">
                                                 <div class="avatar-group">

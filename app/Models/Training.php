@@ -15,6 +15,7 @@ class Training extends Model
         'date',
         'time',
         'agenda',
+        'created_by'
     ]; 
     
     
@@ -26,5 +27,10 @@ class Training extends Model
     public function category()
     {
         return $this->belongsTo(TrainingCategory::class,'category_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class,'created_by');
     }
 }

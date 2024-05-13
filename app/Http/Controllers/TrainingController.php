@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TrainingController extends Controller
@@ -27,11 +28,12 @@ class TrainingController extends Controller
         }
 
         $reporting_user = json_decode(auth()->user()->user_reporting);
+        $reporting_employee = json_decode(auth()->user()->user_employee); 
+        $all_reporting = array_merge($reporting_user,$reporting_employee);
         $datas = Training::whereMonth('date',$month)
             ->whereYear('date',$year)
-            ->whereIn('created_by',$reporting_user)
-            ->get();
- 
+            ->whereIn('created_by',$all_reporting)
+            ->get(); 
         return view('training.training_history',compact('datas','date'));
     }
 
@@ -84,7 +86,27 @@ class TrainingController extends Controller
             $absent = TrainingAttendance::where('training_id',$id)->where('status',0)->get();
 
             $bookeds = TrainingAttendance::where('training_id',$id)->get();
-            return view('training.training_details',compact('data','trainers','present','absent','bookeds'));
+
+            $is_attendent_changer = false;
+            $is_time_end = false;
+            $is_admin = Auth::user()->hasPermission('admin');
+            if($is_admin){
+                $is_attendent_changer = true;
+            }
+
+            if($data->created_by == auth()->user()->id){
+                $is_attendent_changer = true;
+            }
+
+            $date_time = $data->date.' '.$data->time;
+            if($date_time < Carbon::now()){ 
+                $is_time_end = true;
+            }
+
+            if(in_array(auth()->user()->id,json_decode($data->trainer))){
+                $is_attendent_changer = true;
+            } 
+            return view('training.training_details',compact('data','trainers','present','absent','bookeds','is_time_end','is_attendent_changer'));
         }catch(Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -115,9 +137,11 @@ class TrainingController extends Controller
     }
 
     public function training_attendance($id){
-        $data = Training::find($id);
-        $attendance = TrainingAttendance::where('training_id',$id)->get();
-        dd($attendance);
+        $id = decrypt($id);
+        $data = TrainingAttendance::find($id);
+        $data->status = !$data->status;
+        $data->save(); 
+        return redirect()->back()->with('success', 'Attendance updated successfully');
     }
 
     

@@ -51,8 +51,7 @@
                             </div>
                         </div>
 
-                        @if ($data->date > date('Y-m-d') && $data->status==0)
-
+                        @if (!$is_time_end) 
                         <div class="card-header card-header-bordered bg-primary">
                             <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
                             <h3 class="card-title text-white">Add Employee/Freelanecr</h3>
@@ -111,7 +110,7 @@
                                                 </div> 
                                             @else  
                                                 <div class="rich-list-append">
-                                                    <a href="{{route('customer.profile',encrypt(@$user->customer[0]->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
+                                                    <a href="{{route('customer.profile',encrypt(@$user->customer[0]->id))}}" class="btn btn-sm btn-label-primary">Profile</a><a href="{{route('customer.profile',encrypt(@$user->customer[0]->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                                 </div>
                                             @endif 
                                         </div>
@@ -126,9 +125,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="rich-list rich-list-flush">
-                                    @foreach ($present as $user)
+                                    @foreach ($present as $item)
                                     @php
-                                        $user = $user->user;
+                                        $user = $item->user;
                                     @endphp
                                         <div class="flex-column align-items-stretch">
                                             <div class="rich-list-item">
@@ -143,6 +142,7 @@
                                                 </div>
                                                 @if ($user->user_type==1 || $user->user_type==2)
                                                     <div class="rich-list-append">
+                                                        <a href="{{route('training.attandance',encrypt($item->id))}}" class="btn btn-sm btn-label-danger me-1">Absent</a>
                                                         <a href="{{route('profile',encrypt($user->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                                     </div> 
                                                 @else  
@@ -163,9 +163,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="rich-list rich-list-flush">
-                                    @foreach ($absent as $user)
+                                    @foreach ($absent as $item)
                                     @php
-                                        $user = $user->user;
+                                        $user = $item->user;
                                     @endphp
                                         <div class="flex-column align-items-stretch">
                                             <div class="rich-list-item">
@@ -180,6 +180,7 @@
                                                 </div>
                                                 @if ($user->user_type==1 || $user->user_type==2)
                                                     <div class="rich-list-append">
+                                                        <a href="{{route('training.attandance',encrypt($item->id))}}" class="btn btn-sm btn-label-success me-1">Present</a>
                                                         <a href="{{route('profile',encrypt($user->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                                     </div> 
                                                 @else  
