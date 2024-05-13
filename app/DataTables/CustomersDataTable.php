@@ -31,7 +31,7 @@ class CustomersDataTable extends DataTable
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
-            })  
+            })
             ->addColumn('thana', function($data){
                 return $data->user->userAddress->upazila->name??"-";
             })
@@ -47,119 +47,119 @@ class CustomersDataTable extends DataTable
             })
             ->addColumn('profession', function($data){
                 return $data->profession->name??'-';
-            }) 
-            
+            })
+
             ->addColumn('freelancer', function($data){
                 if($data->ref_id==null){
                     return '-';
-                }  
+                }
                 $reporting = json_decode($data->reference->user_reporting);
-               
+
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[20]);
-                    })->first();  
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
 
-            
+
             ->addColumn('co-ordinator', function($data){
                 if($data->ref_id==null){
                     return '-';
-                } 
+                }
                 $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[18]);
-                    })->first();  
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
             ->addColumn('ex-co-ordinator', function($data){
                 if($data->ref_id==null){
                     return '-';
-                } 
+                }
                 $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
                         $q->whereIn('designation_id',[17]);
-                    })->first();  
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
 
             ->addColumn('marketing-incharge', function($data){
                 if(@$data->ref_id==null){
                     return '-';
-                }  
+                }
                 $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[16]);
-                    })->first();  
+                        $q->whereJsonContains('designations',[16]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
 
             ->addColumn('salse-incharge', function($data){
                 if(@$data->ref_id==null){
                     return '-';
-                }   
+                }
                 $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[12,13,14,15]);
-                    })->first();   
+                        $q->whereJsonContains('designations',[12,13,14,15]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                // return "-";  
-            })  
+                // return "-";
+            })
             ->addColumn('area-incharge', function($data){
                 if(@$data->ref_id==null){
                     return '-';
-                }  
+                }
 
                 $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[11]);
-                    })->first();  
+                        $q->whereJsonContains('designations',[11]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                return "-";  
-            }) 
+                return "-";
+            })
             ->addColumn('zonal-manager', function($data){
                 if(@$data->ref_id==null){
                     return '-';
-                }   
+                }
                 $reporting = json_decode($data->reference->user_reporting);
                 if(isset($reporting) && $reporting!= null){
                     $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereIn('designation_id',[10]);
-                    })->first(); 
+                        $q->whereJsonContains('designations',[10]);
+                    })->first();
                     if(isset($user) && $user != null){
                         return $user->name.' ['.$user->user_id.']';
                     }
                 }
-                // return "-";  
-            }) 
+                // return "-";
+            })
             ->setRowId('id');
     }
 
@@ -176,16 +176,16 @@ class CustomersDataTable extends DataTable
             $start_date = date('Y-m-d',strtotime($date[0]));
             $end_date = date('Y-m-d',strtotime($date[1]));
             $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
-        } 
+        }
 
         if(isset($request->employee)){
-            $user_id = (int)$request->employee; 
+            $user_id = (int)$request->employee;
         }else{
             $user_id = auth()->user()->id;
-        } 
+        }
         $user = User::find($user_id);
         $my_employee = json_decode($user->user_employee);
-         
+
         if(isset($request->status)){
             $status = $request->status;
         }else{
@@ -194,7 +194,7 @@ class CustomersDataTable extends DataTable
 
         return $model->newQuery()
         ->whereIn('ref_id',$my_employee)
-        ->where('status',$status) 
+        ->where('status',$status)
         ->with(['reference','user','profession','user.userAddress.village','user.userAddress.union','user.userAddress.upazila']);
     }
 
@@ -214,8 +214,8 @@ class CustomersDataTable extends DataTable
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('excel'), 
-                        Button::make('pdf')->title('Customer List'), 
+                        Button::make('excel'),
+                        Button::make('pdf')->title('Customer List'),
                     ]);
     }
 
@@ -231,19 +231,19 @@ class CustomersDataTable extends DataTable
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
-                  ->addClass('text-center'), 
+                  ->addClass('text-center'),
             Column::make('serial')->title('S/L'),
-            Column::make('customer_id')->title('Provable CUS ID')->searchable(true), 
+            Column::make('customer_id')->title('Provable CUS ID')->searchable(true),
             Column::make('name')->title('Customer Name')->searchable(true),
             Column::make('user.phone')->title('Phone Number')->searchable(true),
             Column::make('profession'),
-            Column::make('freelancer')->title('Franchise Partner Name & ID'), 
+            Column::make('freelancer')->title('Franchise Partner Name & ID'),
             Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
-            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'), 
+            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
             Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
             Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'), 
+            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
         ];
     }
 
