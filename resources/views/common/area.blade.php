@@ -136,8 +136,7 @@
         </select>
         <div class="invalid-feedback">
             This field is required.
-        </div>
-        
+        </div> 
         @if ($errors->has('village'))
             <span class="text-danger" role="alert">
                 {{ $errors->first('village') }}

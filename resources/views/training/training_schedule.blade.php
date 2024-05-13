@@ -1,6 +1,16 @@
 @extends('layouts.dashboard')
 @section('title','Training History')
-
+@section('style')
+    <style>
+      .fc-event, .fc-event-dot {
+          background-color: #ddd !important;
+          display: block;
+      }
+      .fc-daygrid-more-link{
+        color: #ddd;
+      }
+    </style>
+@endsection
 @section('content')
 <div class="main-content">
     <div class="page-content">
@@ -56,6 +66,14 @@
 <script src="{{asset('assets/js/pages/index.global.js')}}"></script> 
 
 <script> 
+var today = new Date();
+ var datas = {!! json_encode($datas) !!};
+  
+
+// Get tomorrow's date
+var tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+
     document.addEventListener('DOMContentLoaded', function() {
        var calendarEl = document.getElementById('calendar');
    
@@ -66,70 +84,18 @@
            right: 'dayGridYear,dayGridMonth,timeGridWeek'
          },
          initialView: 'dayGridMonth',
-         initialDate: '2023-12-12',
+         initialDate: Date.now(),
          editable: true,
          selectable: true,
          dayMaxEvents: true, 
-         events: [
-           {
-             title: 'Language Training',
-             start: '2023-12-12'
-           },
-           {
-             title: 'Long Event',
-             start: '2023-01-07',
-             end: '2023-01-10'
-           },
-           {
-             groupId: 999,
-             title: 'Repeating Event',
-             start: '2023-01-09T16:00:00'
-           },
-           {
-             groupId: 999,
-             title: 'Repeating Event',
-             start: '2023-01-16T16:00:00'
-           },
-           {
-             title: 'Conference',
-             start: '2023-01-11',
-             end: '2023-01-13'
-           },
-           {
-             title: 'Meeting',
-             start: '2023-01-12T10:30:00',
-             end: '2023-01-12T12:30:00'
-           },
-           {
-             title: 'Lunch',
-             start: '2023-01-12T12:00:00'
-           },
-           {
-             title: 'Meeting',
-             start: '2023-01-12T14:30:00'
-           },
-           {
-             title: 'Happy Hour',
-             start: '2023-01-12T17:30:00'
-           },
-           {
-             title: 'Dinner',
-             start: '2023-01-12T20:00:00'
-           },
-           {
-             title: 'Birthday Party',
-             start: '2023-01-13T07:00:00'
-           },
-           {
-             title: 'Click for Google',
-             url: 'http://google.com/',
-             start: '2023-12-28'
-           }
-         ]
+         events: datas,
        });
    
        calendar.render();
      });
     
+     $(document).ready(function() {
+       $('.fc-daygrid-more-link').closest('.fc-scrollgrid-sync-inner').css('background', '#1a252f');
+     }); 
    </script>
 @endsection

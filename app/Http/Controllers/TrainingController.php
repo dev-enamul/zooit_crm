@@ -74,7 +74,40 @@ class TrainingController extends Controller
 
 
     public function training_schedule(){
-        return view('training.training_schedule');
+        $attendance = TrainingAttendance::where('user_id',auth()->user()->id)->with('training')->get();
+        $datas = [];
+        foreach ($attendance as $data) {
+            $datas[] = [
+                'title' => "Training ".$data->training->category->title,
+                'url' => route('training.show', $data->training->id),
+                'date' => $data->training->date . ' ' . $data->training->time,
+                
+            ];
+        }
+
+        $trainings = Training::whereJsonContains('trainer',(string) auth()->user()->id)->get(); 
+        foreach ($trainings as $data) {
+            $datas[] = [
+                'title' => "Trainer ".$data->category->title,
+                'url' => route('training.show', $data->id),
+                'date' => $data->date . ' ' . $data->time,
+                
+            ];
+        }
+
+        $trainings = Training::where('created_by', auth()->user()->id)->get(); 
+        foreach ($trainings as $data) {
+            $datas[] = [
+                'title' => "Creator ".$data->category->title,
+                'url' => route('training.show', $data->id),
+                'date' => $data->date . ' ' . $data->time,
+                
+            ];
+        }
+        
+       
+
+        return view('training.training_schedule',compact('datas'));
     }
   
     public function show($id){

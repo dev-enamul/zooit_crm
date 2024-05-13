@@ -12057,7 +12057,7 @@ var FullCalendar = (function (exports) {
         hour: 'numeric',
         minute: '2-digit',
         omitZeroMinute: true,
-        meridiem: 'narrow',
+        meridiem: 'long',
     });
     function hasListItemDisplay(seg) {
         let { display } = seg.eventRange.ui;
