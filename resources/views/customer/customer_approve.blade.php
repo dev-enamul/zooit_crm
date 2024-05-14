@@ -27,20 +27,20 @@
                         <form action="{{route('customer.approve.save')}}" method="POST">
                             @csrf
                             <div class="card-body">
-                                <div class="d-flex justify-content-between"> 
-                                    <div class="mb-1">
-                                        <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
-                                        <label for="selectAll">Check All</label>
-                                    </div> 
-
-                                    <div class="mb-1">
-                                        <button class="btn btn-primary" type="submit">
-                                            Approve
-                                        </button>
-                                    </div>
-                                </div>
-                            
                                 <div class="table-box">
+                                    <div class="d-flex justify-content-between"> 
+                                        <div class="mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
+                                            <label for="selectAll">Check All</label>
+                                        </div> 
+
+                                        <div class="mb-1">
+                                            <button class="btn btn-primary" type="submit">
+                                                Approve
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
                                     <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                             <tr>
@@ -55,7 +55,7 @@
                                                 <th>Employee</th>
                                             </tr>
                                         </thead>
-    
+
                                         <tbody>
                                             @foreach ($customers as  $customer)
                                                 <tr class="">

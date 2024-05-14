@@ -1,3 +1,6 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layouts.dashboard')
 @section('title',"Freelancer Create")
 @section('content')
@@ -35,14 +38,13 @@
                                         <tr class="">
                                             <th>Action</th>
                                             <th>S/N</th>
-                                            <th>Date</th>
-                                            <th>Full Name</th>
-                                            <th>Profession</th>
-                                            <th>Upazilla/Thana</th>
-                                            <th>Union</th>
-                                            <th>Village</th>
-                                            <th>Mobile No</th>
-                                            <th>F/L ID</th> 
+                                            <th>Fl Id</th>
+                                            <th>Name</th>
+                                            <th>Mobile</th>
+                                            <th>Co-Ordinator Name_ID</th>
+                                            <th>Executive Co-Ordinator Name_ID</th>
+                                            <th>InCharge Sales</th>
+                                            <th>Area InCharge</th>
                                         </tr>
                                     </thead>
                                     <tbody> 
@@ -59,15 +61,71 @@
                                                     </div>
                                                 </div> 
                                             </td> 
-                                            <td>{{$key+1}}</td>
-                                            <td>{{get_date($data->created_at)}}</td>
-                                            <td>{{@$data->user->name}}</td>
-                                            <td>{{@$data->profession->name}}</td>
-                                            <td>{{@$data->user->userAddress->upazila->name}}</td>
-                                            <td>{{@$data->user->userAddress->union->name}}</td>
-                                            <td>{{@$data->user->userAddress->village->name}}</td>
-                                            <td>{{@$data->user->phone}}</td>
-                                            <td>-</td> 
+                                            <td>{{ $key+1 }}</td>
+                                            <td>{{ @$data->user->user_id }}</td>
+                                            <td>{{ @$data->user->name }}</td>
+                                            <td>{{ @$data->user->phone }}</td>
+                                            <td>
+                                                @php
+                                                    $reporting = json_decode($data->user->user_reporting);
+                                                    $userInfo = "-"; // Set a default value
+                                                    if(isset($reporting) && $reporting != null) {
+                                                        $user = User::whereIn('id', $reporting)->whereHas('freelancer', function($q) {
+                                                            $q->whereIn('designation_id', [18]);
+                                                        })->first();
+                                                        if(isset($user) && $user != null) {
+                                                            $userInfo = $user->name . ' [' . $user->user_id . ']';
+                                                        }
+                                                    }
+                                                @endphp
+                                                <center>{{ $userInfo }}<center>                                            
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $reporting = json_decode($data->user->user_reporting);
+                                                    $userInfo = "-"; // Set a default value
+                                                    if(isset($reporting) && $reporting != null) {
+                                                        $user = User::whereIn('id', $reporting)->whereHas('freelancer', function($q) {
+                                                            $q->whereIn('designation_id', [17]);
+                                                        })->first();
+                                                        if(isset($user) && $user != null) {
+                                                            $userInfo = $user->name . ' [' . $user->user_id . ']';
+                                                        }
+                                                    }
+                                                @endphp
+                                                <center>{{ $userInfo }}<center>  
+                                            </td>
+
+                                            <td>
+                                                @php
+                                                    $reporting = json_decode($data->user->user_reporting);
+                                                    $userInfo = "-"; // Set a default value
+                                                    if(isset($reporting) && $reporting != null) {
+                                                        $user = User::whereIn('id', $reporting)->whereHas('freelancer', function($q) {
+                                                            $q->whereIn('designation_id', [12,13,14,15]);
+                                                        })->first();
+                                                        if(isset($user) && $user != null) {
+                                                            $userInfo = $user->name . ' [' . $user->user_id . ']';
+                                                        }
+                                                    }
+                                                @endphp
+                                                <center>{{ $userInfo }}<center> 
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $reporting = json_decode($data->user->user_reporting);
+                                                    $userInfo = "-"; // Set a default value
+                                                    if(isset($reporting) && $reporting != null) {
+                                                        $user = User::whereIn('id', $reporting)->whereHas('freelancer', function($q) {
+                                                            $q->whereIn('designation_id', [11]);
+                                                        })->first();
+                                                        if(isset($user) && $user != null) {
+                                                            $userInfo = $user->name . ' [' . $user->user_id . ']';
+                                                        }
+                                                    }
+                                                @endphp
+                                                <center>{{ $userInfo }}<center> 
+                                            </td>
                                         </tr> 
                                         @endforeach 
                                     </tbody>
@@ -81,7 +139,6 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div>
-
     @include('includes.footer')
 </div>  
 

@@ -28,64 +28,66 @@
                         <form action="{{route('presentation-analysis.approve.save')}}" method="POST">
                             @csrf
                             <div class="card-body">
-                                <div class="d-flex justify-content-between"> 
-                                    <div class="mb-1">
-                                        <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
-                                        <label for="selectAll">Check All</label>
-                                    </div> 
-
-                                    <div class="mb-1">
-                                        <button class="btn btn-primary" type="submit">
-                                            Approve
-                                        </button>
+                                <div class="table-box">
+                                    <div class="d-flex justify-content-between"> 
+                                        <div class="mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
+                                            <label for="selectAll">Check All</label>
+                                        </div> 
+    
+                                        <div class="mb-1">
+                                            <button class="btn btn-primary" type="submit">
+                                                Approve
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            
-                                <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Action</th>
-                                            <th>S/N</th>
-                                            <th>Date</th>
-                                            <th>Project Name</th>
-                                            <th>Negotiation Person</th>
-                                            <th>Phone</th>
-                                            <th>Total Visitor</th> 
-                                        </tr>
-                                    </thead>
-                                    <tbody> 
-                                        @foreach ($presentations as  $visit)
-                                        <tr class="">
-                                            <td class="text-center">
-                                                <input class="form-check-input" type="checkbox" name="customer_id[]" value="{{$visit->customer_id}}" id="flexCheckChecked" >
+                                
+                                    <table class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>S/N</th>
+                                                <th>Date</th>
+                                                <th>Project Name</th>
+                                                <th>Negotiation Person</th>
+                                                <th>Phone</th>
+                                                <th>Total Visitor</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody> 
+                                            @foreach ($presentations as  $visit)
+                                            <tr class="">
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox" name="customer_id[]" value="{{$visit->customer_id}}" id="flexCheckChecked" >
+                                                </td>
+                                                <td class="">{{ $loop->iteration}}</td>
+                                            <td class="">{{ get_date($visit->created_at) }}</td>
+                                            <td class="">
+                                                @php
+                                                    $projects = json_decode($visit->projects);
+                                                @endphp
+                                                @foreach($projects as $key => $project)
+                                                @if ($key!=0)
+                                                    ,
+                                                @endif
+                                                {{ $project }}
+                                                @endforeach
                                             </td>
-                                            <td class="">{{ $loop->iteration}}</td>
-                                        <td class="">{{ get_date($visit->created_at) }}</td>
-                                        <td class="">
-                                            @php
-                                                $projects = json_decode($visit->projects);
-                                            @endphp
-                                            @foreach($projects as $key => $project)
-                                            @if ($key!=0)
-                                                ,
-                                            @endif
-                                            {{ $project }}
-                                            @endforeach
-                                        </td>
-                                        <td class="">{{ @$visit->customer->user->name }}</td>
-                                        <td class=""> {{ @$visit->customer->user->phone }}</td>
-                                        <td class=""><span class="badge badge-label-success"> 
-                                            @php
-                                                $visitors = json_decode($visit->visitors);
-                                                $totalVisitors = count($visitors);
-                                            @endphp
-                                           {{ $totalVisitors }}    
-                                        
-                                        </span></td> 
-                                        </tr>
-                                        @endforeach 
-                                    </tbody>
-                                </table>
+                                            <td class="">{{ @$visit->customer->user->name }}</td>
+                                            <td class=""> {{ @$visit->customer->user->phone }}</td>
+                                            <td class=""><span class="badge badge-label-success"> 
+                                                @php
+                                                    $visitors = json_decode($visit->visitors);
+                                                    $totalVisitors = count($visitors);
+                                                @endphp
+                                               {{ $totalVisitors }}    
+                                            
+                                            </span></td> 
+                                            </tr>
+                                            @endforeach 
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </form>
                     </div>

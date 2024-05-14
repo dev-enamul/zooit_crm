@@ -1,3 +1,6 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layouts.dashboard')
 @section('title','Product Create')
 @section('style')
@@ -29,60 +32,189 @@
                         <form action="{{route('prospecting.approve.save')}}" method="POST">
                             @csrf
                             <div class="card-body">
-                                <div class="d-flex justify-content-between"> 
-                                    <div class="mb-1">
-                                        <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
-                                        <label for="selectAll">Check All</label>
-                                    </div> 
+                                <div class="table-box">
+                                    <div class="d-flex justify-content-between"> 
+                                        <div class="mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="selectAll" > 
+                                            <label for="selectAll">Check All</label>
+                                        </div> 
 
-                                    <div class="mb-1">
-                                        <button class="btn btn-primary" type="submit">
-                                            Approve
-                                        </button>
+                                        <div class="mb-1">
+                                            <button class="btn btn-primary" type="submit">
+                                                Approve
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            
-                                <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Action</th>
-                                            <th>S/N</th>
-                                            <th>Full Name</th>
-                                            <th>Profession</th>
-                                            <th>Upazilla/Thana</th>
-                                            <th>Union</th>
-                                            <th>Village</th>
-                                            <th>Media</th>
-                                            <th>Mobile No</th>
-                                            <th>Employee</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach ($prospectings as  $prospecting)
-                                            <tr class="">
-                                                <td class="text-center">
-                                                    <input class="form-check-input" type="checkbox" name="prospecting_id[]" value="{{$prospecting->id}}" id="flexCheckChecked" >
-                                                </td>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td >{{ @$prospecting->customer->name }} [{{ @$prospecting->customer->customer_id }}]</td>
-                                                <td >{{ @$prospecting->customer->profession->name }}</td>
-                                                <td >{{ @$prospecting->customer->user->userAddress->upazila->name }}</td>
-                                                <td >{{ @$prospecting->customer->user->userAddress->union->name }}</td>
-                                                <td >{{ @$prospecting->customer->user->userAddress->village->name }}</td>
-                                                <td >
-                                                    @if ($prospecting->media == 1)
-                                                    Phone
-                                                    @elseif($prospecting->media == 2)
-                                                    Meet
-                                                    @endif 
-                                                </td>
-                                                <td >{{ @$prospecting->customer->user->phone }}</td>
-                                                <td >{{ @$prospecting->employee->name}} [{{ @$prospecting->employee->user_id}}]</td>     
+                                
+                                    <table id="approve_table" class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>S/N</th>
+                                                <th>Provable Cus ID</th>
+                                                <th>Customer Name</th>
+                                                <th>Phone</th>
+                                                <th>Profession</th>
+                                                <th>Franchise Partner Name & ID</th>
+                                                <th>Co-ordinator Name & ID</th>
+                                                <th>Executive Co-ordinator Name & ID</th>
+                                                <th>Incharge Marketing Name & ID</th>
+                                                <th>Incharge Salse Name & ID</th>
+                                                <th>Area Incharge Name & ID</th>
+                                                <th>Zonal Manager Name & ID</th>
                                             </tr>
-                                        @endforeach  
-                                    </tbody>
-                                </table>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach ($prospectings as  $prospecting)
+                                                <tr class="">
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox" name="prospecting_id[]" value="{{$prospecting->id}}" id="flexCheckChecked" >
+                                                    </td>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td >{{  @$prospecting->customer_id }}</td>
+                                                    <td >{{ @$prospecting->customer->name }}</td>
+                                                    <td >{{ @$prospecting->customer->user->phone??"-" }}</td>
+                                                    <td >{{ @$prospecting->customer->profession->name??'-' }}</td>
+                                                    <td>
+                                                        @php
+                                                            if(@$prospecting->customer->ref_id==null){
+                                                                $prospectingReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($prospecting->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[20]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $prospectingReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $prospectingReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $prospectingReturn }}</center>
+                                                    </td>
+                                                    <td >
+                                                        @php
+                                                            if(@$prospecting->customer->ref_id==null){
+                                                                $prospectingReturn = '-';
+                                                            }
+
+                                                            $reporting = json_decode($prospecting->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[18]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $prospectingReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $prospectingReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $prospectingReturn }}</center>   
+                                                    </td>
+
+
+                                                    <td>
+                                                        @php
+                                                            if(@$prospecting->customer->ref_id==null){
+                                                                $prospectingReturn = '-';
+                                                            }
+
+                                                            $reporting = json_decode($prospecting->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[17]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $prospectingReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $prospectingReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $prospectingReturn }}</center> 
+                                                    </td>
+                                                    <td >
+                                                        @php
+                                                            if(@$prospecting->customer->ref_id==null){
+                                                                $prospectingReturn = '-';
+                                                            }
+
+                                                            $reporting = json_decode($prospecting->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designations',[16]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $prospectingReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $prospectingReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $prospectingReturn }}</center> 
+                                                    </td>
+                                                    <td >
+                                                        @php
+                                                            if(@$prospecting->customer->ref_id==null){
+                                                                $prospectingReturn = '-';
+                                                            }
+
+                                                            $reporting = json_decode($prospecting->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designations',[12,13,14,15]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $prospectingReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $prospectingReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $prospectingReturn }}</center> 
+                                                    </td>
+                                                    <td >
+                                                        @php
+                                                            if(@$prospecting->customer->ref_id==null){
+                                                                $prospectingReturn = '-';
+                                                            }
+
+                                                            $reporting = json_decode($prospecting->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designations',[11]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $prospectingReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $prospectingReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $prospectingReturn }}</center>     
+                                                    </td>
+                                                    <td >
+                                                        @php
+                                                            if(@$prospecting->customer->ref_id==null){
+                                                                $prospectingReturn = '-';
+                                                            }
+
+                                                            $reporting = json_decode($prospecting->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designations',[10]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $prospectingReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $prospectingReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $prospectingReturn }}</center>    
+                                                    </td>     
+                                                </tr>
+                                            @endforeach  
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </form>
                     </div>

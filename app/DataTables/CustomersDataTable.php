@@ -102,66 +102,28 @@ class CustomersDataTable extends DataTable
                 if(@$data->ref_id==null){
                     return '-';
                 }
-                $reporting = json_decode($data->reference->user_reporting);
-                if(isset($reporting) && $reporting!= null){
-                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations','16');
-                    })->first();
-                    if(isset($user) && $user != null){
-                        return $user->name.' ['.$user->user_id.']';
-                    }
-                }
-                return "-";
+
+             return   marketingInChargeEmployee(json_decode($data->reference->user_reporting));
             })
 
             ->addColumn('salse-incharge', function($data){
                 if(@$data->ref_id==null){
                     return '-';
                 }
-                $reporting = json_decode($data->reference->user_reporting);
-                if(isset($reporting) && $reporting!= null){
-                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations', '12')
-                        ->orWhereJsonContains('designations', '13')
-                        ->orWhereJsonContains('designations', '14')
-                        ->orWhereJsonContains('designations', '15');
-                    })->first();
-                    if(isset($user) && $user != null){
-                        return $user->name.' ['.$user->user_id.']';
-                    }
-                }
-                // return "-";
+              return  salesInChargeEmployee(json_decode($data->reference->user_reporting));
             })
             ->addColumn('area-incharge', function($data){
                 if(@$data->ref_id==null){
                     return '-';
                 }
 
-                $reporting = json_decode($data->reference->user_reporting);
-                if(isset($reporting) && $reporting!= null){
-                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations','11');
-                    })->first();
-                    if(isset($user) && $user != null){
-                        return $user->name.' ['.$user->user_id.']';
-                    }
-                }
-                return "-";
+               return areaInChargeEmployee(json_decode($data->reference->user_reporting));
             })
             ->addColumn('zonal-manager', function($data){
                 if(@$data->ref_id==null){
                     return '-';
                 }
-                $reporting = json_decode($data->reference->user_reporting);
-                if(isset($reporting) && $reporting!= null){
-                    $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                        $q->whereJsonContains('designations','10');
-                    })->first();
-                    if(isset($user) && $user != null){
-                        return $user->name.' ['.$user->user_id.']';
-                    }
-                }
-                // return "-";
+              return  zonalManagerEmployee(json_decode($data->reference->user_reporting));
             })
             ->setRowId('id');
     }
