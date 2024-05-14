@@ -67,7 +67,6 @@ class ApproveFreelancerController extends Controller {
             dd($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
-
     }
 
     public function complete_training($id) {
