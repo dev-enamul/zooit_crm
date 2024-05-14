@@ -88,6 +88,13 @@ if (!function_exists('villages')) {
     }
 }
 
+if (!function_exists('target_cal')) {
+    function target_cal($target, $total_days,$diff)
+    {
+        return round(($target / $total_days) * $diff);
+    }
+}
+
 
 if (!function_exists('get_percent')) {
     function get_percent($numerator, $denominator)

@@ -51,7 +51,7 @@
                             </div>
                         </div>
 
-                        @if (!$is_time_end && $bookeds->count() >= $data->seat)
+                        @if (!$is_time_end)
                         <div class="card-header card-header-bordered bg-primary">
                             <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
                             <h3 class="card-title text-white">Add Employee/Freelanecr</h3>
@@ -92,7 +92,7 @@
                                 @foreach ($bookeds as $book)
                                     @php
                                         $user = $book->user;
-                                    @endphp
+                                    @endphp 
                                     <div class="flex-column align-items-stretch">
                                         <div class="rich-list-item">
                                             <div class="rich-list-prepend">

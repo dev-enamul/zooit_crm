@@ -443,6 +443,25 @@
                         </li> 
                         @endcan  
 
+                        @can('training')
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow ">
+                                    <i class="mdi mdi-teach"></i>
+                                    <span>Meeting</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    {{-- <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li>  --}}
+                                    <li>
+                                        <a href="{{route('meeting.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Create</a>
+                                    </li> 
+
+                                    <li>
+                                        <a href="{{route('meeting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting History</a>
+                                    </li>
+                                </ul>
+                            </li> 
+                        @endcan 
+
                         @if (auth()->user()->id == 1)
                             <li>
                                 <a href="{{route('admin-notice.index')}}" class="">

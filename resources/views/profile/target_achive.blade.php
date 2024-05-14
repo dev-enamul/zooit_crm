@@ -18,51 +18,55 @@
                     @include('includes.profile_menu')
                 </div> 
                 <div class="col-md-9">  
-                    {{-- <div class="card">
-                        <div class="card-header">
-                            <div class="card-icon text-muted"><i class="fa fa-boxes"></i></div>
-                            <h3 class="card-title">Average Achivement</h3> 
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between"> 
+                            <h6 class="card-title">Field Work & Deposit Work Summery <br>  </h6>
+                            {{-- <a href="{{route('my.field.target',['month'=>urldecode(date('Y-m', $date->timestamp)),'employee'=>encrypt($user->id)])}}" class="btn btn-secondary" type="submit">
+                                <span><i class="fas fa-print"></i> Export</span>
+                            </a>   --}}
                         </div>
                         <div class="card-body">
-                            <div class="mb-4">
-                                <div class="d-flex justify-content-between">
-                                    <h2 class="rich-list-title mb-0">{{ date('M-Y', $date->timestamp) }}</h2>
-                                    <p class="rich-list-subtitle mb-0">{{$total_per}}%</p>
-                                </div>
-                                <div class="progress progress-sm" style="height:8px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: {{$total_per}}%"></div>
-                                </div>
-                            </div> 
-                        </div>
-                    </div> --}}
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-icon text-muted"><i class="fa fa-chalkboard fs14"></i></div>
-                            <h6 class="card-title">Field Work & Deposit Work Summery
-                                <a href="{{route('my.field.target',['month'=>urldecode(date('Y-m', $date->timestamp)),'employee'=>encrypt($user->id)])}}" class="btn btn-secondary" type="submit">
-                                    <span><i class="fas fa-print"></i> Export</span>
-                                </a>  
-                            </h6>
-                            <div class="card-addon">
-                                <form action="" method="get">
-                                    <div class="input-group">   
-                                        <input type="month" class="form-control" name="month" value="{{ date('Y-m', $date->timestamp) }}">
-                                        <button class="btn btn-secondary btn-sm" type="submit">
-                                            <span><i class="fas fa-filter"></i> Filter</span>
-                                        </button>  
+                            <form action="" method="get">
+                                <div class="mb-4">
+                                    <div class="row">
+                                      <div class="col-md-3">
+                                          <label for="start_date" class="form-label">Start Date</label>
+                                          <input type="number" class="form-control" name="start_date" id="start_date" value="{{get_date($start_date,'d')}}">
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label for="end_date" class="form-label">End Date</label>
+                                          <input type="number" class="form-control" name="end_date" id="end_date" value="{{get_date($end_date,'d')}}">
+                                      </div>
+                                      <div class="col-md-6">
+                                          <label for="month" class="form-label">Month</label>
+                                          <div class="input-group">  
+                                              <input type="month" id="month" class="form-control" name="month" value="{{ $month }}">
+                                              <button class="btn btn-secondary btn-sm" type="submit">
+                                                  <span><i class="fas fa-filter"></i> Filter</span>
+                                              </button>  
+                                          </div>
+                                      </div>
                                     </div>
-                                </form>
-                            </div> 
+                              </div>
+                            </form> 
+                        </div>
+                    </div> 
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between"> 
+                            <h6 class="card-title"> {{get_date($start_date)}} to {{get_date($end_date)}} </h6>
+
+                            <a href="{{route('my.field.target',['start_date'=>get_date($start_date,'d'),'end_date'=>get_date($end_date,'d'),'month'=>$month,'employee'=>encrypt($user->id)])}}" class="btn btn-secondary" type="submit">
+                                <span><i class="fas fa-print"></i> Export</span>
+                            </a>  
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-4">
                                     <div class="border rounded p-2">
-                                        <p class="text-muted mb-2 bold"><a href="{{route('freelancer.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>FL Recruitment</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('freelancer.index',['employee'=>$user->id,'date'=>$date])}}"><b>FL Recruitment</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['freelancer']}}</span> / 
-                                            <span title="target">T-{{$target->freelancer??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->freelancer??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['freelancer']}}"></div>
                                         </div>
@@ -71,10 +75,10 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('customer.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Customer Data</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('customer.index',['employee'=>$user->id,'date'=>$date])}}"><b>Customer Data</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['customer']}}</span> / 
-                                            <span title="target">T-{{$target->customer??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->customer??0,$total_days,$diff)}} </span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['customer']}}"></div>
                                         </div>
@@ -84,10 +88,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('prospecting.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Prospectings</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('prospecting.index',['employee'=>$user->id,'date'=>$date])}}"><b>Prospectings</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['prospecting']}}</span> / 
-                                            <span title="target">T-{{$target->prospecting??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->prospecting??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['prospecting']}}"></div>
                                         </div>
@@ -97,10 +101,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('cold-calling.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Cold Calling</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('cold-calling.index',['employee'=>$user->id,'date'=>$date])}}"><b>Cold Calling</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['cold_calling']}}</span> / 
-                                            <span title="target">T-{{$target->cold_calling??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->cold_calling??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['cold_calling']}}"></div>
                                         </div>
@@ -110,10 +114,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('lead.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Lead</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('lead.index',['employee'=>$user->id,'date'=>$date])}}"><b>Lead</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['lead']}}</span> / 
-                                            <span title="target">T-{{$target->lead??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->lead??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['lead']}}"></div>
                                         </div>
@@ -123,10 +127,10 @@
                                 <div class="col-4">
                                     <div class="border rounded p-2">
                                         <p class="text-muted mb-2"></p>
-                                        <p class="text-muted mb-2 bold"><a href="{{route('lead-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Lead Analysis</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('lead-analysis.index',['employee'=>$user->id,'date'=>$date])}}"><b>Lead Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['lead_analysis']}}</span> / 
-                                            <span title="target">T-{{$target->lead_analysis??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->lead_analysis??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['lead_analysis']}}"></div>
                                         </div>
@@ -136,10 +140,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('presentation.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Presentation</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('presentation.index',['employee'=>$user->id,'date'=>$date])}}"><b>Presentation</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['presentation']}}</span> / 
-                                            <span title="target">T-{{$target->project_visit??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->project_visit??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['presentation']}}"></div>
                                         </div>
@@ -149,10 +153,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('presentation_analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Visit Analysis</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('presentation_analysis.index',['employee'=>$user->id,'date'=>$date])}}"><b>Visit Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['visit_analysis']}}</span> / 
-                                            <span title="target">T-{{$target->project_visit_analysis??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->project_visit_analysis??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['visit_analysis']}}"></div>
                                         </div>
@@ -162,10 +166,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('followup.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Follow Up</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('followup.index',['employee'=>$user->id,'date'=>$date])}}"><b>Follow Up</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['followup']}}</span> / 
-                                            <span title="target">T-{{$target->follow_up??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->follow_up??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['followup']}}"></div>
                                         </div>
@@ -175,10 +179,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2">
-                                        <p class="text-muted mb-2 bold"><a href="{{route('followup-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Follow Up Analysis</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('followup-analysis.index',['employee'=>$user->id,'date'=>$date])}}"><b>Follow Up Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['followup_analysis']}}</span> / 
-                                            <span title="target">T-{{$target->follow_up_analysis??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->follow_up_analysis??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['followup_analysis']}}"></div>
                                         </div>
@@ -188,10 +192,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Negotiation</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation.index',['employee'=>$user->id,'date'=>$date])}}"><b>Negotiation</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['negotiation']}}</span> / 
-                                            <span title="target">T-{{$target->negotiation??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->negotiation??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['negotiation']}}"></div>
                                         </div>
@@ -201,10 +205,10 @@
 
                                 <div class="col-4">
                                     <div class="border rounded p-2"> 
-                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date_range])}}"><b>Negotiation Analysis</b></a></p>
+                                        <p class="text-muted mb-2 bold"><a href="{{route('negotiation-analysis.index',['employee'=>$user->id,'date'=>$date])}}"><b>Negotiation Analysis</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['negotiation_analysis']}}</span> / 
-                                            <span title="target">T-{{$target->negotiation_analysis??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($target->negotiation_analysis??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['negotiation_analysis']}}"></div>
                                         </div>
@@ -244,7 +248,7 @@
                                         <p class="text-muted mb-2 bold"><a href=""><b>Unit</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['sales']}}</span> / 
-                                            <span title="target">T-{{$deposit_target->total_unit??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($deposit_target->total_unit??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['sales']}}"></div>
                                         </div>
@@ -257,7 +261,7 @@
                                         <p class="text-muted mb-2 bold"><a href=""><b>Deposit</b></a></p>
                                         <h4 class="fs-16 mb-2">
                                             <span title="Achivement">A-{{$achive['deposit']}}</span> / 
-                                            <span title="target">T-{{$deposit_target->total_deposit??0}}</span></h4>
+                                            <span title="target">T-{{target_cal($deposit_target->total_deposit??0,$total_days,$diff)}}</span></h4>
                                         <div class="progress progress-sm" style="height:4px;">
                                             <div class="progress-bar bg-success" style="width: {{$per['deposit']}}"></div>
                                         </div>

@@ -23,11 +23,20 @@ use Carbon\Carbon;
 trait UserAchiveTreat
 {  
     public function freelanecr_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        } 
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
+ 
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
@@ -38,59 +47,83 @@ trait UserAchiveTreat
         })
         ->where('user_type',2)
          ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count(); 
 
         return $freelancer;
     } 
 
     public function customer_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
+        
+        
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
         }
         $customer = Customer::whereIn('ref_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereMonth('created_at',$date)
-            ->whereYear('created_at',$date)
+            ->where('approve_by','!=',null) 
+            ->whereBetween('created_at',[$start,$end])
             ->count();
 
         return $customer; 
     }
 
     public function prospecting_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
+
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
-        }
+        } 
 
         $prospecting = Prospecting::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59'])
         ->count(); 
         return $prospecting; 
     }
 
     public function cold_calling_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
         
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -99,19 +132,26 @@ trait UserAchiveTreat
         $cold_calling = ColdCalling::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
-        ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->where('approve_by','!=',null) 
+        ->whereBetween('created_at',[$start,$end])
         ->count(); 
         return $cold_calling; 
     } 
 
     public function lead_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        } 
         
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -122,17 +162,24 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count();
         return $lead; 
     } 
 
     public function lead_analysis_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
         }   
         
         if($my_all_employee==null){
@@ -144,17 +191,24 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count();  
         return $lead_analysis; 
     } 
 
     public function presentation_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
         }   
        
         if($my_all_employee==null){
@@ -166,18 +220,25 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count();  
         return $presentation; 
     } 
 
     public function visit_analysis_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }  
         
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -187,19 +248,26 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count();  
         return $presentation; 
     }
 
 
     public function followup_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        } 
         
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -210,17 +278,24 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count(); 
         return $followup; 
     }  
     public function followup_analysis_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
         
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -231,19 +306,26 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count(); 
         return $data; 
     } 
 
 
     public function negotiation_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }  
         
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -254,18 +336,25 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count(); 
         return $data; 
     } 
 
     public function negotiation_analysis_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
        
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -276,18 +365,25 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereMonth('created_at',$date)
-        ->whereYear('created_at',$date)
+        ->whereBetween('created_at',[$start,$end])
         ->count(); 
         return $data; 
     } 
 
     public function rejection($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
 
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -297,18 +393,25 @@ trait UserAchiveTreat
         $data = Rejection::whereHas('customer',function($q) use($my_all_employee){
                 $q->whereIn('ref_id',$my_all_employee);
             }) 
-            ->whereMonth('created_at',$date)
-            ->whereYear('created_at',$date)
+            ->whereBetween('created_at',[$start,$end])
             ->count();
         return $data; 
     }
 
     public function sales_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
-        }   
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
+        }
 
         if($my_all_employee==null){
             $user = User::find($this->id);
@@ -318,17 +421,25 @@ trait UserAchiveTreat
         $data = Salse::whereHas('customer',function($q) use($my_all_employee){
                 $q->whereIn('ref_id',$my_all_employee);
             }) 
-            ->whereMonth('created_at',$date)
-            ->whereYear('created_at',$date)
+            ->where('approve_by','!=',null)
+            ->whereBetween('created_at',[$start,$end])
             ->count();
         return $data; 
     }
 
     public function return($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
         }   
 
         if($my_all_employee==null){
@@ -340,8 +451,7 @@ trait UserAchiveTreat
                 $q->whereIn('ref_id',$my_all_employee);
             }) 
             ->where('approve_by','!=',null)
-            ->whereMonth('created_at',$date)
-            ->whereYear('created_at',$date)
+            ->whereBetween('created_at',[$start,$end])
             ->count();
         return $data; 
     }
@@ -349,10 +459,18 @@ trait UserAchiveTreat
       
 
     public function deposit_achive($date = null, $my_all_employee = null){
-        if($date == null){
-            $date = Carbon::now();
-        }else{
-            $date = Carbon::parse($date);
+        if($date == null){ 
+            $start = date('Y-m-01');
+            $end = date('Y-m-t');
+        }else{ 
+            if (strpos($date, ' - ') !== false) {
+                list($start_date, $end_date) = explode(' - ', $date); 
+                $start = date('Y-m-d',strtotime($start_date));
+                $end = date('Y-m-d',strtotime($end_date));
+            } else {  
+                $start = date('Y-m-d',strtotime($date));
+                $end = date('Y-m-d',strtotime($date));
+            }  
         }   
 
         if($my_all_employee==null){
@@ -364,8 +482,7 @@ trait UserAchiveTreat
                 $q->whereIn('ref_id',$my_all_employee);
             })
             ->where('approve_by','!=',null)
-            ->whereMonth('created_at',$date)
-            ->whereYear('created_at',$date)
+            ->whereBetween('created_at',[$start,$end])
             ->sum('amount');
         return $data; 
     } 

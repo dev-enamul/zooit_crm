@@ -432,7 +432,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('training-history', [TrainingController::class, 'training_history'])->name('training.history');
         Route::post('training-add-person', [TrainingController::class, 'training_add_person'])->name('training.add.person');
         Route::get('training-attendance/{id}', [TrainingController::class, 'training_attendance'])->name('training.attandance');
-
+ 
         // Meeting  
         Route::resource('meeting', MeetingController::class);
 

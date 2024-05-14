@@ -134,7 +134,8 @@ class ProspectingDataTable extends DataTable
             $user = User::find($request->employee);
         }else{
             $user = Auth::user();
-        }
+        } 
+        
         if(isset($request->date)){
             $date = explode(' - ',$request->date);
             $start_date = date('Y-m-d',strtotime($date[0]));
@@ -151,10 +152,10 @@ class ProspectingDataTable extends DataTable
             $status = 0;
         }
 
-        $prospectings =$model->where(function ($q){
+        $prospectings =$model->where(function ($q) use($user){
             $q->where('approve_by','!=',null)
-                ->orWhere('employee_id', Auth::user()->id)
-                ->orWhere('created_by', Auth::user()->id);
+                ->orWhere('employee_id', $user->id)
+                ->orWhere('created_by', $user->id);
         })
         ->whereHas('customer', function($q) use($user_employee){
             $q->whereIn('ref_id', $user_employee);

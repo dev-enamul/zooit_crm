@@ -49,7 +49,11 @@ class ProfileController extends Controller
 
     public function profile($id){  
         $user_id = decrypt($id); 
-        $user = User::find($user_id);  
+        $user = User::find($user_id); 
+        $my_all_employee = json_decode(Auth::user()->user_employee);
+        if(!in_array($user_id,$my_all_employee)){
+            return redirect()->back()->with('error','You are not authorized to view this profile');
+        }  
         $reporting_users = json_decode($user->user_reporting);
         $data = ReportingUser::where('user_id', $user_id)->where('status',1)->latest()->first();
         $boss = ReportingUser::find($data->reporting_user_id); 
@@ -75,10 +79,30 @@ class ProfileController extends Controller
         $user_id = decrypt($id);
         if(isset($request->month) && $request->month != ''){ 
             $date = Carbon::parse($request->month);
+            $start_date = $date->startOfMonth()->format('Y/m/d');
+            $end_date   = $date->endOfMonth()->format('Y/m/d');
         }else{ 
-            $date = Carbon::now();
-        }  
- 
+            $date = Carbon::now(); 
+            $start_date = $date->startOfMonth()->format('Y/m/d');
+            $end_date   = $date->endOfMonth()->format('Y/m/d');
+        } 
+
+        if(isset($request->start_date) && $request->start_date != ''){ 
+            $dayOfMonth = $request->start_date; 
+            $currentMonth = $date->format('Y-m'); 
+            $start_date = Carbon::parse($currentMonth . '-' . $dayOfMonth)->format('Y/m/d');
+        }
+
+        if(isset($request->end_date) && $request->end_date != ''){   
+            $dayOfMonth = $request->end_date; 
+            $currentMonth = $date->format('Y-m'); 
+            $end_date = Carbon::parse($currentMonth . '-' . $dayOfMonth)->format('Y/m/d');
+        }
+
+        $full_date = $start_date.' - '.$end_date;
+        $diff = Carbon::parse($start_date)->diffInDays(Carbon::parse($end_date))+1;
+        $total_days = Carbon::parse($date)->daysInMonth; 
+        
         $user = User::find($user_id); ;
         $target = FieldTarget::where('assign_to',$user_id)
                     ->whereMonth('month',$date)
@@ -95,12 +119,10 @@ class ProfileController extends Controller
             }])
             ->selectRaw('SUM(new_total_deposit + existing_total_deposit) as total_deposit')
             ->whereHas('depositTargetProjects')
-            ->first();
-        
-        
-        
+            ->first(); 
 
-        $my_all_employee = json_decode($user->user_employee);
+        $my_all_employee = json_decode($user->user_employee); 
+        $date = $full_date;
         $achive['freelancer'] = $user->freelanecr_achive($date, $my_all_employee)??0;
         $achive['customer'] = $user->customer_achive($date, $my_all_employee)??0;
         $achive['prospecting'] = $user->prospecting_achive($date, $my_all_employee)??0;
@@ -114,38 +136,44 @@ class ProfileController extends Controller
         $achive['negotiation'] = $user->negotiation_achive($date, $my_all_employee)??0;
         $achive['negotiation_analysis'] = $user->negotiation_analysis_achive($date, $my_all_employee)??0;
         $achive['rejection'] = $user->rejection($date, $my_all_employee)??0;
-        $achive['sales'] = $user->sales_achive($date, $my_all_employee)??0;
-        $achive['deposit'] = $user->deposit_achive($date, $my_all_employee)??0; 
-
-        $achive['rejection'] = $user->rejection($date, $my_all_employee);
         $achive['return'] = $user->return($date, $my_all_employee);
+        
+        $achive['sales'] = $user->sales_achive($date, $my_all_employee)??0;
+        $achive['deposit'] = $user->deposit_achive($date, $my_all_employee)??0;  
+       
         // $transfer = $user->transfer($date, $my_all_employee);
 
 
-        $per['freelancer'] = get_percent($achive['freelancer']??0,$target->freelancer??0);
-        $per['customer'] = get_percent($achive['customer']??0,$target->customer??0);
-        $per['prospecting'] = get_percent($achive['prospecting']??0,$target->prospecting??0);
-        $per['cold_calling'] = get_percent($achive['cold_calling']??0,$target->cold_calling??0);
-        $per['lead'] = get_percent($achive['lead']??0,$target->lead??0);
-        $per['lead_analysis'] = get_percent($achive['lead_analysis']??0,$target->lead_analysis??0);
-        $per['presentation'] = get_percent($achive['presentation']??0,$target->project_visit??0);
-        $per['visit_analysis'] = get_percent($achive['visit_analysis']??0,$target->project_visit_analysis??0);
-        $per['followup'] = get_percent($achive['followup']??0,$target->follow_up??0);
-        $per['followup_analysis'] = get_percent($achive['followup_analysis']??0,$target->follow_up_analysis??0);
-        $per['negotiation'] = get_percent($achive['negotiation']??0,$target->negotiation??0);
-        $per['negotiation_analysis'] = get_percent($achive['negotiation_analysis']??0,$target->negotiation_analysis??0);
-        $per['sales'] = get_percent($achive['sales']??0,$deposit_target->total_unit??0);
-        $per['deposit'] = get_percent($achive['deposit']??0,$deposit_target->total_deposit??0);
-        $date_range = $date->startOfMonth()->format('Y/m/d').' - '.$date->endOfMonth()->format('Y/m/d');
-        
-
-        $total_achive = array_sum($per); 
-        $total_per = $total_achive/1200;
-     
-       
-
-
-        return view('profile.target_achive',compact('user_id','user','date','target','achive','per','date_range','total_per','deposit_target'));
+        $per['freelancer'] = get_percent($achive['freelancer']??0,target_cal($target->freelancer??0,$total_days,$diff));
+        $per['customer'] = get_percent($achive['customer']??0,target_cal($target->customer??0,$total_days,$diff) );
+        $per['prospecting'] = get_percent($achive['prospecting']??0,target_cal($target->prospecting??0,$total_days,$diff));
+        $per['cold_calling'] = get_percent($achive['cold_calling']??0,target_cal($target->cold_calling??0,$total_days,$diff));
+        $per['lead'] = get_percent($achive['lead']??0,target_cal($target->lead??0,$total_days,$diff));
+        $per['lead_analysis'] = get_percent($achive['lead_analysis']??0,target_cal($target->lead_analysis??0,$total_days,$diff));
+        $per['presentation'] = get_percent($achive['presentation']??0,target_cal($target->project_visit??0,$total_days,$diff));
+        $per['visit_analysis'] = get_percent($achive['visit_analysis']??0,target_cal($target->project_visit_analysis??0,$total_days,$diff));
+        $per['followup'] = get_percent($achive['followup']??0,target_cal($target->follow_up??0,$total_days,$diff));
+        $per['followup_analysis'] = get_percent($achive['followup_analysis']??0,target_cal($target->follow_up_analysis??0,$total_days,$diff));
+        $per['negotiation'] = get_percent($achive['negotiation']??0,target_cal($target->negotiation??0,$total_days,$diff));
+        $per['negotiation_analysis'] = get_percent($achive['negotiation_analysis']??0,target_cal($target->negotiation_analysis??0,$total_days,$diff));
+        $per['sales'] = get_percent($achive['sales']??0,target_cal($target->total_unit??0,$total_days,$diff));
+        $per['deposit'] = get_percent($achive['deposit']??0,target_cal($target->total_deposit??0,$total_days,$diff));
+ 
+        $month = Carbon::parse($start_date)->format('Y-m'); 
+        return view('profile.target_achive',compact(
+            'user_id',
+            'user',
+            'date',
+            'target',
+            'achive',
+            'per',
+            'month' ,
+            'deposit_target',
+            'start_date',
+            'end_date',
+            'total_days',
+            'diff'
+        ));
     }    
 
     public function wallet(Request $request, $id){
