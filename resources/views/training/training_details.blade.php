@@ -51,15 +51,15 @@
                             </div>
                         </div>
 
-                        @if (!$is_time_end) 
+                        @if (!$is_time_end && $bookeds->count() >= $data->seat)
                         <div class="card-header card-header-bordered bg-primary">
                             <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
                             <h3 class="card-title text-white">Add Employee/Freelanecr</h3>
-                        </div>
+                        </div> 
                         <div class="card-body">
                             <div class="rich-list rich-list-flush">
                                 <form action="{{route('training.add.person')}}" method="post">
-                                    @csrf
+                                    @csrf  
                                     <div class="row">   
                                         <div class="col-md-12">
                                             <div class="mb-3">
@@ -85,7 +85,7 @@
 
                         <div class="card-header card-header-bordered bg-primary">
                             <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
-                            <h3 class="card-title text-white">Seat Booked</h3>
+                            <h3 class="card-title text-white w-100">Seat Booked <span class="badge badge-secondary float-end">{{$bookeds->count()}}</span></h3>
                         </div>
                         <div class="card-body">
                             <div class="rich-list rich-list-flush">
@@ -121,7 +121,7 @@
                         @else 
                             <div class="card-header card-header-bordered bg-primary">
                                 <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
-                                <h3 class="card-title text-white">Present</h3>
+                                <h3 class="card-title text-white w-100">Present <span class="badge badge-secondary float-end">{{$present->count()}}</span></h3>
                             </div>
                             <div class="card-body">
                                 <div class="rich-list rich-list-flush">
@@ -159,7 +159,7 @@
 
                             <div class="card-header card-header-bordered bg-primary">
                                 <div class="card-icon text-white"><i class="fa fa-user-tag fs14"></i></div>
-                                <h3 class="card-title text-white">Absent</h3>
+                                <h3 class="card-title text-white w-100">Absent <span class="badge badge-secondary float-end">{{$absent->count()}}</span></h3>
                             </div>
                             <div class="card-body">
                                 <div class="rich-list rich-list-flush">

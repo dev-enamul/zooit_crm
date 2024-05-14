@@ -73,6 +73,42 @@ class TrainingController extends Controller
     }
 
 
+    public function edit($id){
+        $data = Training::find($id);
+        $categoris =  TrainingCategory::where('status',1)->get();
+        return view('training.training_edit',compact('data','categoris'));
+    }
+
+    public function update(Request $request, $id){ 
+ 
+        $validator = Validator::make($request->all(), [
+            'category_id' => 'required|string|max:255|exists:training_categories,id',
+            'trainer' => 'required|array',
+            'seat' => 'required|integer|min:1',
+            'date' => 'required|date',
+            'time' => 'required',
+            'agenda' => 'nullable|string',
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
+        }
+
+       try{
+            $event = Training::find($id); 
+            $event->category_id  = $request->category_id;
+            $event->trainer = json_encode($request->trainer); 
+            $event->seat    = $request->seat;
+            $event->date    = $request->date;
+            $event->time    = $request->time;
+            $event->agenda  = $request->agenda;
+            $event->save();
+            return redirect()->route('training.index')->with('success', 'Training updated successfully'); 
+       }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+       }
+    }
+
     public function training_schedule(){
         $attendance = TrainingAttendance::where('user_id',auth()->user()->id)->with('training')->get();
         $datas = [];
@@ -103,9 +139,7 @@ class TrainingController extends Controller
                 'date' => $data->date . ' ' . $data->time,
                 
             ];
-        }
-        
-       
+        } 
 
         return view('training.training_schedule',compact('datas'));
     }

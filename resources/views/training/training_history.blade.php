@@ -54,6 +54,7 @@
                                                         <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-animated">
                                                             <a class="dropdown-item" href="{{route('training.show',$data->id)}}">View</a>  
+                                                            <a class="dropdown-item" href="{{route('training.edit',$data->id)}}">Edit</a>
                                                             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('training.destroy',$data->id) }}')">Delete</a>   
                                                         </div>
                                                     </div>
