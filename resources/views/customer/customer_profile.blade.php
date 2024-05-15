@@ -208,7 +208,8 @@
                                             <i class="marker marker-circle text-danger"></i>
                                         </div>
                                         <div class="timeline-content"> 
-                                            <p class="m-0 bold-lg">Join by {{@$customer->reference->name}}</p>
+                                            <p class="m-0 bold-lg">Join by {{@$customer->reference->name}} [{{@$customer->reference->user_id}}]</p>
+                                            <p class="m-0 bold-lg">Created by {{@$customer->createdBy->name}} [{{@$customer->createdBy->user_id}}]</p>
                                                 <p class="m-0 fs-10">{{get_date($customer->created_at)}}</p> 
                                             <p></p>
                                         </div>

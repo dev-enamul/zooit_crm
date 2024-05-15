@@ -49,6 +49,10 @@ class Customer extends Model
         return $this->hasMany(Deposit::class,'customer_id');
     }
 
+    public function createdBy(){
+        return $this->belongsTo(User::class,'created_by');
+    }
+
    public function next_payment_date(){
         $last_deposit = $this->deposits()->where('deposit_category_id', 1)->latest()->first();
 

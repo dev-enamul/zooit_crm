@@ -207,7 +207,7 @@
                                                                 }
                                                             }
                                                             $prospectingReturn = "-";
-                                                        @endphp
+                                                        @endphp 
                                                         <center>{{ $prospectingReturn }}</center>    
                                                     </td>     
                                                 </tr>
