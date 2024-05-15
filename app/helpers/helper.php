@@ -28,15 +28,15 @@ if (!function_exists('getSlug')) {
 }
 
 if (!function_exists('get_date')) {
-    function get_date($inputDate, $format = 'j M, Y')
+    function get_date($inputDate, $format = 'j M, Y', $timezone = 'Asia/Dhaka')
     {
-        $timestamp = strtotime($inputDate);
-
-        if ($timestamp === false || $timestamp < 0) {
+        try {
+            $date = new DateTime($inputDate);
+            $date->setTimezone(new DateTimeZone($timezone));
+            return $date->format($format);
+        } catch (Exception $e) {
             return '-';
         }
-
-        return date($format, $timestamp);
     }
 }
 
