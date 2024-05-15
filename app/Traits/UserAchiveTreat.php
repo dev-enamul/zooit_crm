@@ -46,8 +46,8 @@ trait UserAchiveTreat
             $q->whereIn('user_id',$my_all_employee);
         })
         ->where('user_type',2)
-         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->where('approve_by','!=',null)
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count(); 
 
         return $freelancer;
@@ -75,7 +75,7 @@ trait UserAchiveTreat
         }
         $customer = Customer::whereIn('ref_id',$my_all_employee)
             ->where('approve_by','!=',null) 
-            ->whereBetween('created_at',[$start,$end])
+            ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
             ->count();
 
         return $customer; 
@@ -105,7 +105,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59'])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count(); 
         return $prospecting; 
     }
@@ -133,7 +133,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null) 
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count(); 
         return $cold_calling; 
     } 
@@ -162,7 +162,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count();
         return $lead; 
     } 
@@ -191,7 +191,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count();  
         return $lead_analysis; 
     } 
@@ -220,7 +220,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count();  
         return $presentation; 
     } 
@@ -248,7 +248,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count();  
         return $presentation; 
     }
@@ -278,7 +278,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count(); 
         return $followup; 
     }  
@@ -306,7 +306,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count(); 
         return $data; 
     } 
@@ -336,7 +336,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count(); 
         return $data; 
     } 
@@ -365,7 +365,7 @@ trait UserAchiveTreat
             $q->whereIn('ref_id',$my_all_employee);
         })
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start,$end])
+        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
         ->count(); 
         return $data; 
     } 
@@ -393,7 +393,7 @@ trait UserAchiveTreat
         $data = Rejection::whereHas('customer',function($q) use($my_all_employee){
                 $q->whereIn('ref_id',$my_all_employee);
             }) 
-            ->whereBetween('created_at',[$start,$end])
+            ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
             ->count();
         return $data; 
     }
@@ -422,7 +422,7 @@ trait UserAchiveTreat
                 $q->whereIn('ref_id',$my_all_employee);
             }) 
             ->where('approve_by','!=',null)
-            ->whereBetween('created_at',[$start,$end])
+            ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
             ->count();
         return $data; 
     }
@@ -451,7 +451,7 @@ trait UserAchiveTreat
                 $q->whereIn('ref_id',$my_all_employee);
             }) 
             ->where('approve_by','!=',null)
-            ->whereBetween('created_at',[$start,$end])
+            ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
             ->count();
         return $data; 
     }
