@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meeting;
+use App\Models\MeetingAttendance;
 use App\Models\Notification;
 use App\Models\Training;
 use App\Models\TrainingAttendance;
@@ -141,6 +143,26 @@ class TrainingController extends Controller
             ];
         } 
 
+        $meetings = MeetingAttendance::where('user_id',auth()->user()->id)->with('meeting')->get();
+        foreach ($meetings as $data) {
+            $datas[] = [
+                'title' => "Meeting ".$data->meeting->title,
+                'url' => route('meeting.show', encrypt($data->meeting->id)),
+                'date' => $data->meeting->date_time,
+                
+            ];
+        }
+
+        $meetings = Meeting::where('created_by', auth()->user()->id)->get();
+        foreach ($meetings as $data) {
+            $datas[] = [
+                'title' => "Meeting ".$data->title,
+                'url' => route('meeting.show', encrypt($data->id)),
+                'date' => $data->date_time,
+                
+            ];
+        }
+
         return view('training.training_schedule',compact('datas'));
     }
   
@@ -203,12 +225,18 @@ class TrainingController extends Controller
         return redirect()->back()->with('success', 'Person added successfully');
     }
 
-    public function training_attendance($id){
+    public function training_attendance_status($id){
         $id = decrypt($id);
         $data = TrainingAttendance::find($id);
         $data->status = !$data->status;
         $data->save(); 
         return redirect()->back()->with('success', 'Attendance updated successfully');
+    }
+
+    public function training_attendance($id){
+        $id = decrypt($id);
+        $data = Training::with('attendance')->find($id); 
+        return view('training.training_attendance',compact('data'));
     }
 
     

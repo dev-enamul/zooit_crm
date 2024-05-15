@@ -153,7 +153,7 @@
                                         </a>
                                         <a href="{{route('training.schedule')}}" class="grid-nav-item">
                                             <div class="grid-nav-icon"><i class="far fa-clone"></i></div>
-                                            <span class="grid-nav-content">Training</span>
+                                            <span class="grid-nav-content">Event</span>
                                         </a>
                                     </div>
                                     <div class="grid-nav-row">

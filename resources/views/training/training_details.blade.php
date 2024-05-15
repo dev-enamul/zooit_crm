@@ -143,7 +143,7 @@
                                                 </div>
                                                 @if ($user->user_type==1 || $user->user_type==2)
                                                     <div class="rich-list-append">
-                                                        <a href="{{route('training.attandance',encrypt($item->id))}}" class="btn btn-sm btn-label-danger me-1">Absent</a>
+                                                        <a href="{{route('training.attandance.status',encrypt($item->id))}}" class="btn btn-sm btn-label-danger me-1">Absent</a>
                                                         <a href="{{route('profile',encrypt($user->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                                     </div> 
                                                 @else  
@@ -181,7 +181,7 @@
                                                 </div>
                                                 @if ($user->user_type==1 || $user->user_type==2)
                                                     <div class="rich-list-append">
-                                                        <a href="{{route('training.attandance',encrypt($item->id))}}" class="btn btn-sm btn-label-success me-1">Present</a>
+                                                        <a href="{{route('training.attandance.status',encrypt($item->id))}}" class="btn btn-sm btn-label-success me-1">Present</a>
                                                         <a href="{{route('profile',encrypt($user->id))}}" class="btn btn-sm btn-label-primary">Profile</a>
                                                     </div> 
                                                 @else  

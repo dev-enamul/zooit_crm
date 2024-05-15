@@ -1,7 +1,7 @@
 @php
     $approve_setting = App\Models\ApproveSetting::pluck('status', 'name')->toArray();  
     $task_route = ['employee.create', 'employee.index', 'employees.tree', 'product.create', 'product.index', 'unit.create', 'unit.index', 'product.approve', 'freelancer.create', 'freelancer.index', 'approve-freelancer.index', 'customer.create', 'customer.index', 'customer.approve', 'prospecting.create', 'prospecting.index', 'prospecting.approve', 'cold-calling.create', 'cold-calling.index', 'cold-calling.approve', 'lead.create', 'lead.index', 'lead.approve', 'lead-analysis.create', 'lead-analysis.index', 'lead-analysis.approve', 'presentation.create', 'presentation.index', 'presentation.approve', 'presentation_analysis.create', 'presentation_analysis.index', 'presentation-analysis.approve', 'followup.create', 'followup.index', 'followUp.approve', 'followup-analysis.create', 'followup-analysis.index', 'followUp-analysis.approve', 'negotiation.create', 'negotiation.index', 'negotiation.approve', 'negotiation-analysis.create', 'negotiation-analysis.index', 'negotiation-analysis.approve', 'rejection.index', 'salse.create', 'salse.index', 'salse.approve', 'existing.salse', 'return.create', 'return.index', 'transfer.create', 'transfer.index', 'deposit.create', 'deposit.index'];
-    $progress_route = ['assign.task.list','my.field.target', 'assign.field.target', 'assign.field.target.list', 'my.task', 'task.complete', 'assign.task', 'project.deposit.target', 'direct.deposit.target', 'deposit.target.asign.list', 'my.deposit.target', 'training.create', 'training.schedule', 'training.index', 'meeting.index', 'meeting.create', 'meeting.view'];
+    $progress_route = ['assign.task.list','my.field.target', 'assign.field.target', 'assign.field.target.list', 'my.task', 'task.complete', 'assign.task', 'project.deposit.target', 'direct.deposit.target', 'deposit.target.asign.list', 'my.deposit.target', 'training.create', 'training.show', 'training.index', 'meeting.index', 'meeting.create', 'meeting.show'];
     $report_route = ['monthly.target.achive', 'mst.commission', 'rsa.co.ordinator', 'monthly.dt.achivement', 'dt.achivement', 'daily.deposit', 'special-offer.index', 'special-offer.create', 'marketing.field.report', 'salse.field.report', 'due.report', 'floor.wise.sold.report', 'cc.report', 'pending.report'];
     $setting_route = ['profession.index', 'village.index', 'zone.index', 'area.index', 'unit.type', 'unit.category', 'training-category.index', 'designation.index', 'commission.index', 'special-commission.index', 'commission-deducted-setting.index', 'bank.index', 'bank-day.index', 'deposit-category.index', 'approve.setting'];
     $currentRoute = \Request::route()->getName();
@@ -431,8 +431,7 @@
                                 <i class="mdi mdi-teach"></i>
                                 <span>Training</span>
                             </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li> 
+                            <ul class="sub-menu" aria-expanded="false"> 
                                 <li>
                                     <a href="{{route('training.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Create</a>
                                 </li>  
@@ -443,14 +442,14 @@
                         </li> 
                         @endcan  
 
-                        @can('training')
+                        @can('meeting')
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow ">
                                     <i class="mdi mdi-teach"></i>
                                     <span>Meeting</span>
-                                </a>
+                                </a> 
                                 <ul class="sub-menu" aria-expanded="false">
-                                    {{-- <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li>  --}}
+                                   
                                     <li>
                                         <a href="{{route('meeting.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Create</a>
                                     </li> 
@@ -470,36 +469,6 @@
                                 </a>
                             </li>
                         @endif  
-                        
-                        @can('meeting') 
-
-                        {{-- <li>
-                            <a href="{{route('meeting.index')}}" class="">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>Meeting Schedule</span>
-                            </a>
-                        </li>    --}} 
-
-                        @endcan
-                    {{-- <li class="menu-title">Asign</li>  
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="mdi mdi-teach"></i>
-                            <span>Training</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{route('training.schedule.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Create</a></li> 
-                            <li><a href="{{route('training.schedule')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Schedule</a></li> 
-                            <li><a href="{{route('training.attendance')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training Attendance</a></li> 
-                            <li><a href="{{route('training.history')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Training History</a></li> 
-                        </ul>
-                    </li> 
-                    <li>
-                        <a href="{{route('meeting.index')}}" class="">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Meeting Schedule</span>
-                        </a>
-                    </li>    --}}
                     </div>
                 </div>
                  
