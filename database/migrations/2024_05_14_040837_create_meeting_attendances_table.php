@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('meeting_attendances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('meeting_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->boolean('is_present')->default(false);
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

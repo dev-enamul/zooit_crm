@@ -159,7 +159,7 @@ class ProfileController extends Controller
         $per['sales'] = get_percent($achive['sales']??0,target_cal($target->total_unit??0,$total_days,$diff));
         $per['deposit'] = get_percent($achive['deposit']??0,target_cal($target->total_deposit??0,$total_days,$diff));
  
-        $month = Carbon::parse($start_date)->format('Y-m'); 
+        $month = Carbon::parse($start_date)->format('Y-m');
         return view('profile.target_achive',compact(
             'user_id',
             'user',

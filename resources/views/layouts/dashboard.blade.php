@@ -106,7 +106,7 @@
                 $(this).find('button').prop('disabled', true); 
                 setTimeout(function() {
                 button.prop('disabled', false);
-            }, 20000); // 10 seconds
+            }, 20000); // 20 seconds
             });
         });  
 

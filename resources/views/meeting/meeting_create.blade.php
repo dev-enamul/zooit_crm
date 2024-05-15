@@ -9,12 +9,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Training Create</h4>
+                        <h4 class="mb-sm-0">Meeting Create</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Training Create</li>
+                                <li class="breadcrumb-item active">Meeting Create</li>
                             </ol>
                         </div>
 
@@ -27,7 +27,7 @@
                 <div class="col-xl-12">
                     <div class="card"> 
                         <div class="card-body">
-                            <form class="needs-validation" action="{{route('training.store')}}" method="post" novalidate>
+                            <form class="needs-validation" action="{{route('meeting.store')}}" method="post" novalidate>
                                 @csrf
                                 <div class="row"> 
 

@@ -210,7 +210,8 @@
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Join by {{@$customer->reference->name}} [{{@$customer->reference->user_id}}]</p>
                                             <p class="m-0 bold-lg">Created by {{@$customer->createdBy->name}} [{{@$customer->createdBy->user_id}}]</p>
-                                                <p class="m-0 fs-10">{{get_date($customer->created_at)}}</p> 
+                                                <p class="m-0 fs-10">Created At {{get_date($customer->created_at)}}</p> 
+                                                <p class="m-0 fs-10">Approved At {{get_date($customer->updated_at)}}</p>
                                             <p></p>
                                         </div>
                                     </div>

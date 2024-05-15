@@ -31,11 +31,11 @@
                                     <div class="row">
                                       <div class="col-md-3">
                                           <label for="start_date" class="form-label">Start Date</label>
-                                          <input type="number" class="form-control" name="start_date" id="start_date" value="{{get_date($start_date,'d')}}">
+                                          <input type="number" min="1" max="31" class="form-control" name="start_date" id="start_date" value="{{get_date($start_date,'d')}}">
                                       </div>
                                       <div class="col-md-3">
                                           <label for="end_date" class="form-label">End Date</label>
-                                          <input type="number" class="form-control" name="end_date" id="end_date" value="{{get_date($end_date,'d')}}">
+                                          <input type="number" max="31" min="1" class="form-control" name="end_date" id="end_date" value="{{get_date($end_date,'d')}}">
                                       </div>
                                       <div class="col-md-6">
                                           <label for="month" class="form-label">Month</label>
