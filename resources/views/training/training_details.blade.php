@@ -9,6 +9,7 @@
                 <div class="col-12">
                     <div class="page-title-box text-center">
                         <h4 class="mb-sm-0 pb-1">{{$data->category->title}}</h4> 
+                        <h5>{{@$data->createdBy->name}} [{{@$data->createdBy->user_id}}]</h5>
                         <p class="m-0">{{get_date($data->date)}} <span class="badge badge-label-primary"> {{ date('h:i A', strtotime($data->time)) }} </span></p>
                     </div>
                 </div>

@@ -186,7 +186,7 @@ class TrainingController extends Controller
                 $data = [
                     'training_id' => $request->training_id,
                     'user_id' => $user,
-                    'status' => 1,
+                    'status' => 0,
                     'created_by' => auth()->user()->id
                 ];
 

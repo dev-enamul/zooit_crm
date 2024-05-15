@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Meeting;
 use App\Models\MeetingAttendance;
 use App\Models\Notification;
+use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -96,7 +98,21 @@ class MeetingController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try{
+            $id= decrypt($id);
+            $data = Meeting::with('attendance')->find($id); 
+             
+            $present = $data->attendance->where('is_present',true);
+            $absent = $data->attendance->where('is_present',false); 
+
+            $is_time_end = false;
+            if($data->date_time < Carbon::now()){ 
+                $is_time_end = true;
+            }
+            return view('meeting.meeting_details',compact('data', 'present','absent','is_time_end'));
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -104,7 +120,9 @@ class MeetingController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $id = decrypt($id);
+        $data = Meeting::with('attendance')->find($id);
+        return view('meeting.meeting_edit',compact('data'));
     }
 
     /**
@@ -112,7 +130,38 @@ class MeetingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'employee' => 'required|array',
+            'employee.*' => 'exists:users,id',
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+            'agenda' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        $meeting = Meeting::find($id);
+        $meeting->title = $request->title;
+        $meeting->date_time = $request->date . ' ' . $request->time;
+        $meeting->agenda = $request->agenda;
+        $meeting->created_by = auth()->id();
+        $meeting->save();
+
+        MeetingAttendance::where('meeting_id',$meeting->id)->delete();
+
+        if(isset($request->employee) && count($request->employee) > 0) {
+           foreach($request->employee as $employee) {
+               $attendance = new MeetingAttendance();
+               $attendance->meeting_id = $meeting->id;
+               $attendance->user_id = $employee;
+               $attendance->save();
+           }  
+        }
+
+        return redirect()->route('meeting.index')->with('success', 'Meeting updated successfully');
     }
 
     /**
@@ -120,6 +169,24 @@ class MeetingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{ 
+            $meeting = Meeting::find($id);
+            $meeting->delete();
+            return response()->json(['success' => 'Meeting deleted successfully']);
+        }catch(Exception $e){
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    } 
+
+    public function attend_status($id){
+        try{
+            $id = decrypt($id);
+            $attendance = MeetingAttendance::find($id);
+            $attendance->is_present = !$attendance->is_present;
+            $attendance->save();
+            return redirect()->back()->with('success', 'Attendance updated successfully');
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

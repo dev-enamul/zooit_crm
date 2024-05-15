@@ -435,6 +435,7 @@ Route::group(['middleware' => 'auth'], function () {
  
         // Meeting  
         Route::resource('meeting', MeetingController::class);
+        Route::get('attend-status/{id}', [MeetingController::class, 'attend_status'])->name('meeting.attendance.status');
 
         // Header Route 
         Route::get('notification', [NotificationController::class, 'index'])->name('notification.index');

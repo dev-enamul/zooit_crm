@@ -49,9 +49,11 @@
                                                     <div class="dropdown">
                                                         <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-animated">
-                                                            <a class="dropdown-item" href="{{route('training.show',$data->id)}}">View</a>  
-                                                            <a class="dropdown-item" href="{{route('training.edit',$data->id)}}">Edit</a>
-                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('training.destroy',$data->id) }}')">Delete</a>   
+                                                            <a class="dropdown-item" href="{{route('meeting.show',encrypt($data->id))}}">View</a> 
+                                                            @if ($data->created_by == auth()->user()->id || auth()->user()->hasPermission('admin'))
+                                                                <a class="dropdown-item" href="{{route('meeting.edit',encrypt($data->id))}}">Edit</a>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('meeting.destroy',$data->id) }}')">Delete</a>
+                                                            @endif 
                                                         </div>
                                                     </div>
                                                 </td>
@@ -67,7 +69,7 @@
                                                
                                                 <td class="align-middle"> 
                                                     <div class="avatar-group">
-                                                        @foreach ($data->attendance as $key => $attendance)
+                                                        @foreach ($data->attendance->where('is_present',true) as $key => $attendance)
                                                             @if ($key < 5)
                                                                 <div class="avatar avatar-circle avatar-circle-sm">
                                                                     <a href="" data-bs-toggle="tooltip" title="{{$attendance->user->name??null}}">
