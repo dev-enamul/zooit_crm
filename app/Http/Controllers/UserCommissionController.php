@@ -26,11 +26,11 @@ class UserCommissionController extends Controller
             if($ex_commission){
                 $ex_commission->total_regular_commission = $request->total_regular_commission;
                 $ex_commission->total_special_commission = $request->total_special_commission;
+
                 $ex_commission->total_commission = $request->total_regular_commission + $request->total_special_commission;
-                $ex_commission->paid_commission = $request->paid_commission;
-                $ex_commission->pending_commission = $ex_commission->total_commission - $request->paid_commission;
-                $ex_commission->updated_at = $request->updated_at;
-                $ex_commission->save();
+                $ex_commission->paid_commission = $request->paid_commission; 
+                $ex_commission->updated_at = $request->updated_at; 
+                $ex_commission->save(); 
             }else{
                 UserCommission::create([
                     'user_id' => $request->user_id,

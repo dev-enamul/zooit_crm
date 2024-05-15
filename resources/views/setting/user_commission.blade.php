@@ -121,10 +121,14 @@
                     data: {user_id: user_id},
                     success: function(response) {
                         console.log(response);
+
+                        var updatedAt = new Date(response.updated_at); 
+                        var formattedDate = updatedAt.toISOString().split('T')[0]; 
+
                         $('input[name="total_regular_commission"]').val(response.total_regular_commission);
                         $('input[name="total_special_commission"]').val(response.total_special_commission);
                         $('input[name="paid_commission"]').val(response.paid_commission);
-                        $('input[name="updated_at"]').val(response.updated_at);
+                        $('input[name="updated_at"]').val(formattedDate);
                     } 
 
                 });
