@@ -255,14 +255,13 @@
                                             <p class="m-0 bold-lg">Cold Calling by {{$communication['cold_calling']->employee->name??"-"}}</p>
                                             <p class="m-0 fs-10">{{get_date($communication['cold_calling']->created_at??date('y-m-d'))}}</p>
                                             <p class="m-0 fs-10">Created At: {{get_date(@$communication['cold_calling']->created_at,'j M, Y g:i A')}}</p> 
-                                                <p class="m-0 fs-10">Approved At:
-                                                    @if (@$communication['cold_calling']->approve_by != null)
-                                                        {{get_date(@$communication['cold_calling']->updated_at,'j M, Y g:i A')}} 
-                                                    @else
-                                                        <span class="badge badge-warning">Not approved yet</span>
-                                                    @endif  
-                                                </p>
-
+                                            <p class="m-0 fs-10">Approved At:
+                                                @if (@$communication['cold_calling']->approve_by != null)
+                                                    {{get_date(@$communication['cold_calling']->updated_at,'j M, Y g:i A')}} 
+                                                @else
+                                                    <span class="badge badge-warning">Not approved yet</span>
+                                                @endif  
+                                            </p> 
                                             {{$communication['cold_calling']->remark??""}}
                                             <span class="badge badge-secondary mb-1">#project: {{$communication['cold_calling']->project->name??"-"}} </span>
                                             <span class="badge badge-secondary mb-1">#unit: {{$communication['cold_calling']->unit->title??""}}</span>
@@ -278,6 +277,15 @@
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Lead by {{$communication['lead']->employee->name??"-"}}</p>
                                                 <p class="m-0 fs-10">{{get_date($communication['lead']->created_at??date('y-m-d'))}}</p>
+                                                <p class="m-0 fs-10">Created At: {{get_date(@$communication['lead']->created_at,'j M, Y g:i A')}}</p> 
+                                                <p class="m-0 fs-10">Approved At:
+                                                    @if (@$communication['lead']->approve_by != null)
+                                                        {{get_date(@$communication['lead']->updated_at,'j M, Y g:i A')}} 
+                                                    @else
+                                                        <span class="badge badge-warning">Not approved yet</span>
+                                                    @endif  
+                                                </p> 
+
                                                 {{$communication['lead']->remark}}
                                                 <span class="badge badge-secondary mb-1">#project: {{$communication['lead']->project->name??"-"}} </span>
                                                 <span class="badge badge-secondary m-1">#unit: {{$communication['lead']->unit->title??"-"}}</span>
@@ -293,7 +301,15 @@
                                         </div>
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Lead Analysis by {{$communication['lead_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">{{get_date($communication['lead_analysis']->created_at??date('y-m-d'))}}</p>
+                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['lead_analysis']->created_at,'j M, Y g:i A')}}</p> 
+                                            <p class="m-0 fs-10">Approved At:
+                                                @if (@$communication['lead_analysis']->approve_by != null)
+                                                    {{get_date(@$communication['lead_analysis']->updated_at,'j M, Y g:i A')}} 
+                                                @else
+                                                    <span class="badge badge-warning">Not approved yet</span>
+                                                @endif  
+                                            </p>
+
                                             {{$communication['lead_analysis']->remark??""}}
                                             <span class="badge badge-secondary mb-1">#project: {{$communication['lead_analysis']->project->name??"-"}} </span>
                                             <span class="badge badge-secondary mb-1">#unit: {{$communication['lead_analysis']->unit->title??""}}</span>
@@ -308,7 +324,15 @@
                                         </div>
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Presentation by {{$communication['presentation']->employee->name??"-"}}</p>
-                                                <p class="m-0 fs-10">{{get_date($communication['presentation']->created_at??date('y-m-d'))}}</p>
+                                                <p class="m-0 fs-10">Created At: {{get_date(@$communication['presentation']->created_at,'j M, Y g:i A')}}</p> 
+                                                <p class="m-0 fs-10">Approved At:
+                                                    @if (@$communication['presentation']->approve_by != null)
+                                                        {{get_date(@$communication['presentation']->updated_at,'j M, Y g:i A')}} 
+                                                    @else
+                                                        <span class="badge badge-warning">Not approved yet</span>
+                                                    @endif  
+                                                </p>
+
                                                 {{$communication['presentation']->remark}}
                                                 <span class="badge badge-secondary mb-1">#project: {{$communication['presentation']->project->name??"-"}} </span>
                                                 <span class="badge badge-secondary m-1">#unit: {{$communication['presentation']->unit->title??"-"}}</span>
@@ -325,7 +349,14 @@
                                         </div>
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Project Visit by {{$communication['visit_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">{{get_date($communication['visit_analysis']->created_at??date('y-m-d'))}}</p>
+                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['visit_analysis']->created_at,'j M, Y g:i A')}}</p> 
+                                            <p class="m-0 fs-10">Approved At:
+                                                @if (@$communication['visit_analysis']->approve_by != null)
+                                                    {{get_date(@$communication['visit_analysis']->updated_at,'j M, Y g:i A')}} 
+                                                @else
+                                                    <span class="badge badge-warning">Not approved yet</span>
+                                                @endif  
+                                            </p>
                                             {{$communication['visit_analysis']->remark??""}} 
                      
                                             <span class="badge badge-secondary mb-1">#project: 
@@ -351,7 +382,15 @@
                                         </div>
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Follow Up by {{$communication['follow_up']->employee->name??"-"}}</p>
-                                                <p class="m-0 fs-10">{{get_date($communication['follow_up']->created_at??date('y-m-d'))}}</p>
+                                                <p class="m-0 fs-10">Created At: {{get_date(@$communication['follow_up']->created_at,'j M, Y g:i A')}}</p> 
+                                                <p class="m-0 fs-10">Approved At:
+                                                    @if (@$communication['follow_up']->approve_by != null)
+                                                        {{get_date(@$communication['follow_up']->updated_at,'j M, Y g:i A')}} 
+                                                    @else
+                                                        <span class="badge badge-warning">Not approved yet</span>
+                                                    @endif  
+                                                </p>
+
                                                 {{$communication['follow_up']->remark}}
                                                 <span class="badge badge-secondary mb-1">#project: {{$communication['follow_up']->project->name??"-"}} </span>
                                                 <span class="badge badge-secondary m-1">#unit: {{$communication['follow_up']->unit->title??"-"}}</span>
@@ -369,7 +408,15 @@
                                         </div>
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Follow Up Analysis by {{$communication['follow_up_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">{{get_date($communication['follow_up_analysis']->created_at??date('y-m-d'))}}</p>
+                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['follow_up_analysis']->created_at,'j M, Y g:i A')}}</p> 
+                                            <p class="m-0 fs-10">Approved At:
+                                                @if (@$communication['follow_up_analysis']->approve_by != null)
+                                                    {{get_date(@$communication['follow_up_analysis']->updated_at,'j M, Y g:i A')}} 
+                                                @else
+                                                    <span class="badge badge-warning">Not approved yet</span>
+                                                @endif  
+                                            </p>
+
                                             {{$communication['follow_up_analysis']->remark??""}}  
                                             <span class="badge badge-secondary mb-1">#project: {{$communication['follow_up_analysis']->project->name??"-"}} </span>
                                             <span class="badge badge-secondary m-1">#unit: {{$communication['follow_up_analysis']->unit->title??"-"}}</span>
@@ -387,7 +434,15 @@
                                         </div>
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Negotiation by {{$communication['negotiation']->employee->name??"-"}}</p>
-                                                <p class="m-0 fs-10">{{get_date($communication['negotiation']->created_at??date('y-m-d'))}}</p>
+                                                <p class="m-0 fs-10">Created At: {{get_date(@$communication['negotiation']->created_at,'j M, Y g:i A')}}</p> 
+                                                <p class="m-0 fs-10">Approved At:
+                                                    @if (@$communication['negotiation']->approve_by != null)
+                                                        {{get_date(@$communication['negotiation']->updated_at,'j M, Y g:i A')}} 
+                                                    @else
+                                                        <span class="badge badge-warning">Not approved yet</span>
+                                                    @endif  
+                                                </p>
+
                                                 {{$communication['negotiation']->remark}}
                                                 <span class="badge badge-secondary mb-1">#project: {{$communication['negotiation']->project->name??"-"}} </span>
                                                 <span class="badge badge-secondary m-1">#unit: {{$communication['negotiation']->unit->title??"-"}}</span>
@@ -404,7 +459,15 @@
                                         </div>
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Negotiation Analysis by {{$communication['negotiation_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">{{get_date($communication['negotiation_analysis']->created_at??date('y-m-d'))}}</p>
+                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['negotiation_analysis']->created_at,'j M, Y g:i A')}}</p> 
+                                            <p class="m-0 fs-10">Approved At:
+                                                @if (@$communication['negotiation_analysis']->approve_by != null)
+                                                    {{get_date(@$communication['negotiation_analysis']->updated_at,'j M, Y g:i A')}} 
+                                                @else
+                                                    <span class="badge badge-warning">Not approved yet</span>
+                                                @endif  
+                                            </p>
+
                                             {{$communication['negotiation_analysis']->remark??""}}  
                                             <span class="badge badge-secondary mb-1">#project: {{$communication['negotiation_analysis']->project->name??"-"}} </span>
                                             <span class="badge badge-secondary m-1">#unit: {{$communication['negotiation_analysis']->unit->title??"-"}}</span>
