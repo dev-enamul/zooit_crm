@@ -143,7 +143,7 @@
                                                             $reporting = json_decode($prospecting->customer->reference->user_reporting);
                                                             if(isset($reporting) && $reporting!= null){
                                                                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
-                                                                    $q->whereIn('designations',[16]);
+                                                                    $q->whereIn('designation_id',[16]);
                                                                 })->first();
                                                                 if(isset($user) && $user != null){
                                                                     $prospectingReturn = $user->name.' ['.$user->user_id.']';
@@ -162,7 +162,7 @@
                                                             $reporting = json_decode($prospecting->customer->reference->user_reporting);
                                                             if(isset($reporting) && $reporting!= null){
                                                                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
-                                                                    $q->whereIn('designations',[12,13,14,15]);
+                                                                    $q->whereIn('designation_id',[12,13,14,15]);
                                                                 })->first();
                                                                 if(isset($user) && $user != null){
                                                                     $prospectingReturn = $user->name.' ['.$user->user_id.']';
@@ -181,7 +181,7 @@
                                                             $reporting = json_decode($prospecting->customer->reference->user_reporting);
                                                             if(isset($reporting) && $reporting!= null){
                                                                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
-                                                                    $q->whereIn('designations',[11]);
+                                                                    $q->whereIn('designation_id',[11]);
                                                                 })->first();
                                                                 if(isset($user) && $user != null){
                                                                     $prospectingReturn = $user->name.' ['.$user->user_id.']';
@@ -200,7 +200,7 @@
                                                             $reporting = json_decode($prospecting->customer->reference->user_reporting);
                                                             if(isset($reporting) && $reporting!= null){
                                                                 $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
-                                                                    $q->whereIn('designations',[10]);
+                                                                    $q->whereIn('designation_id',[10]);
                                                                 })->first();
                                                                 if(isset($user) && $user != null){
                                                                     $prospectingReturn = $user->name.' ['.$user->user_id.']';
