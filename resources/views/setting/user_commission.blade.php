@@ -110,5 +110,25 @@
                 }
             });
         }); 
-    </script> 
+    </script>  
+    <script>
+        $(document).ready(function() { 
+            $('#employee').on('change', function() { 
+                var user_id = $(this).val(); 
+                $.ajax({
+                    url: '{{ route('user.commission.get') }}',
+                    type: 'GET',
+                    data: {user_id: user_id},
+                    success: function(response) {
+                        console.log(response);
+                        $('input[name="total_regular_commission"]').val(response.total_regular_commission);
+                        $('input[name="total_special_commission"]').val(response.total_special_commission);
+                        $('input[name="paid_commission"]').val(response.paid_commission);
+                        $('input[name="updated_at"]').val(response.updated_at);
+                    } 
+
+                });
+            });
+        });
+    </script>
 @endsection

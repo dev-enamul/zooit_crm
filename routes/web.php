@@ -378,6 +378,7 @@ Route::group(['middleware' => 'auth'], function () {
         // User Commission 
         Route::get('user-commission', [UserCommissionController::class, 'index'])->name('user.commission');
         Route::post('user-commission-save', [UserCommissionController::class, 'save'])->name('user.commission.save');
+        Route::get('user-commission-get', [UserCommissionController::class, 'get'])->name('user.commission.get');
  
         //Reports 
         Route::get('monthly-target-achive', [CommissionReportController::class, 'monthly_target_achive'])->name('monthly.target.achive');

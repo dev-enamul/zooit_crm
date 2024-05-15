@@ -48,5 +48,11 @@ class UserCommissionController extends Controller
         }
         
         
+    } 
+ 
+    public function get(Request $request){
+        $user_id = $request->user_id;
+        $commission = UserCommission::where('user_id', $user_id)->first();
+        return response()->json($commission);
     }
 }
