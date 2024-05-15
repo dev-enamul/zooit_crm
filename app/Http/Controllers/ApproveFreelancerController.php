@@ -17,8 +17,8 @@ class ApproveFreelancerController extends Controller {
     public function index() {
         $trainings   = TrainingCategory::where('status', '1')->get();
         $my_employee = my_employee(auth()->user()->id);
-        // $datas = Freelancer::where('status',0)->whereIn('last_approve_by',$my_employee)->get();
-        $datas              = Freelancer::where('id', 2715)->get();
+        $datas = Freelancer::where('status',0)->whereIn('last_approve_by',$my_employee)->get();
+        // $datas              = Freelancer::where('id', 2715)->get();
         $next_freelancer_id = User::generateNextFreelancerId();
         return view('freelancer.approve-freelancer', compact('datas', 'trainings', 'next_freelancer_id'));
     }
