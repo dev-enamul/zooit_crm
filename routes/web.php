@@ -421,6 +421,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('deposit-target-asign/{id}', [DepositTargetController::class, 'target_asign'])->name('deposit.target.asign');
         Route::get('deposit-target-asign-list', [DepositTargetController::class, 'target_asign_list'])->name('deposit.target.asign.list');
         Route::get('project-deposit-target', [DepositTargetController::class, 'project_deposit_target'])->name('project.deposit.target');
+        Route::get('employee-projects', [DepositTargetController::class, 'employee_projects'])->name('employee.projects');
         Route::get('direct-deposit-target', [DepositTargetController::class, 'direct_deposit_target'])->name('direct.deposit.target');
         Route::post('deposit-target-save', [DepositTargetController::class, 'deposit_target_save'])->name('deposit.target.save');
 

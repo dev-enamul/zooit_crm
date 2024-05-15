@@ -119,9 +119,7 @@
                     url: '{{ route('user.commission.get') }}',
                     type: 'GET',
                     data: {user_id: user_id},
-                    success: function(response) {
-                        console.log(response);
-
+                    success: function(response) { 
                         var updatedAt = new Date(response.updated_at); 
                         var formattedDate = updatedAt.toISOString().split('T')[0]; 
 

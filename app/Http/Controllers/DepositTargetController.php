@@ -61,13 +61,25 @@ class DepositTargetController extends Controller
         return view('target.deposit_target_asign_list',compact('selected','projects','employees','deposit_targets'));
     }
 
-    public function project_deposit_target(){ 
+    public function project_deposit_target(){
         $my_employee = my_employee(auth()->user()->id);
         $employees = User::whereIn('id',$my_employee)->where('status',1)->get();  
-        $projects = Project::where('status', 1)->get();
-     
+        $projects = Project::where('status', 1)->get(); 
         return view('target.project_deposit_target',compact('projects','employees'));
     } 
+
+    // employee.projects
+    public function employee_projects(Request $request){  
+        $month = $request->month.'-'. 1; 
+        $deposit = DepositTarget::where('assign_to',$request->employee_id)
+            ->where('month',$month) 
+            ->first(); 
+        $projects = DepositTargetProject::where('deposit_target_id',$deposit->id)->get();
+        return response()->json($projects);
+    }
+
+
+     
 
     public function direct_deposit_target(){
         $my_employee = my_employee(auth()->user()->id);

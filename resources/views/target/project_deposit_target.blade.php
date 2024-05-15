@@ -114,8 +114,29 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div>
-
   @include('includes.footer')
-
 </div>
+@endsection 
+
+@section('script')
+{{-- assign_to change call ajax  --}}
+<script>
+    $(document).on('change','#assign_to',function(){
+        var assign_to = $(this).val(); 
+        var month = $('#month').val();
+        $.ajax({
+            url: '{{ route('employee.projects') }}',
+            type: 'get',
+            data: {employee_id: assign_to, month:month},
+            success: function(response) { 
+                response.forEach(element => { 
+                    $('#new_unit_'+element.project_id).val(element.new_unit);
+                    $('#new_deposit_'+element.project_id).val(element.new_deposit);
+                    $('#existing_unit_'+element.project_id).val(element.existing_unit);
+                    $('#existing_deposit_'+element.project_id).val(element.existing_deposit); 
+                });
+            }
+        });
+    });
+</script>
 @endsection
