@@ -1,3 +1,6 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layouts.dashboard')
 @section('title','Product Create')
 @section('style')
@@ -47,16 +50,17 @@
                                             <tr>
                                                 <th>Action</th>
                                                 <th>S/N</th>
-                                                <th>Full Name</th>
+                                                <th>Provable Cus ID</th>
+                                                <th>Customer Name</th>
+                                                <th>Phone</th>
                                                 <th>Profession</th>
-                                                <th>Upazilla/Thana</th>
-                                                <th>Union</th>
-                                                <th>Village</th>
-                                                <th>Last Prospecting</th>
-                                                <th>Project</th>
-                                                <th>Unit</th>
-                                                <th>Mobile No</th>
-                                                <th>Freelancer</th>
+                                                <th>Franchise Partner Name & ID</th>
+                                                <th>Co-ordinator Name & ID</th>
+                                                <th>Executive Co-ordinator Name & ID</th>
+                                                <th>Incharge Marketing Name & ID</th>
+                                                <th>Incharge Salse Name & ID</th>
+                                                <th>Area Incharge Name & ID</th>
+                                                <th>Zonal Manager Name & ID</th>
                                             </tr>
                                         </thead>
     
@@ -67,20 +71,106 @@
                                                     <input class="form-check-input" type="checkbox" name="cold_calling_id[]" value="{{$cold_calling->id}}" id="flexCheckChecked" >
                                                 </td>
                                                 <td >{{ $loop->iteration }}</td>
+                                                <td>{{ $cold_calling->customer_id }}</td>
                                                 <td >{{ @$cold_calling->customer->user->name }}</td>
-                                                <td >{{ @$cold_calling->customer->profession->name }}</td>
-                                                <td >{{ @$cold_calling->customer->user->userAddress->upazila->name }}</td>
-                                                <td >{{ @$cold_calling->customer->user->userAddress->union->name }}</td>
-                                                <td >{{ @$cold_calling->customer->user->userAddress->village->name }}</td>
-                                                @php
-                                                    $prospecting = \App\Models\Prospecting::where('customer_id',$cold_calling->customer->id)->first();
-                                                    $last_prospecting = $prospecting->updated_at;
-                                                @endphp
-                                                <td >{{ $last_prospecting->format('Y-m-d') }}</td>
-                                                <td >{{ @$cold_calling->project->name }}</td>
-                                                <td > {{@$cold_calling->unit->title }} </td>
-                                                <td >{{ @$cold_calling->customer->user->phone }}</td>
-                                                <td >{{ @$cold_calling->employee->name }}</td>
+                                                <td >{{ @$cold_calling->customer->user->phone??'-' }}</td>
+                                                <td >{{ @$cold_calling->customer->profession->name??'-' }}</td>
+
+                                                <td>
+                                                    @php
+                                                        if(@$cold_calling->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode($cold_calling->customer->reference->user_reporting);
+                                                        if(isset($reporting) && $reporting!= null){
+                                                            $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                $q->whereIn('designation_id',[20]);
+                                                            })->first();
+                                                            if(isset($user) && $user != null){
+                                                                $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                            }
+                                                        }
+                                                        $dataReturn = "-";
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$cold_calling->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode($cold_calling->customer->reference->user_reporting);
+                                                        if(isset($reporting) && $reporting!= null){
+                                                            $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                $q->whereIn('designation_id',[18]);
+                                                            })->first();
+                                                            if(isset($user) && $user != null){
+                                                                $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                            }
+                                                        }
+                                                        $dataReturn = "-";
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$cold_calling->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode($cold_calling->customer->reference->user_reporting);
+                                                        if(isset($reporting) && $reporting!= null){
+                                                            $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                $q->whereIn('designation_id',[17]);
+                                                            })->first();
+                                                            if(isset($user) && $user != null){
+                                                                $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                            }
+                                                        }
+                                                        $dataReturn = "-";
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$cold_calling->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode($cold_calling->customer->reference->user_reporting);
+                                                        $dataReturn = marketingInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$cold_calling->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode($cold_calling->customer->reference->user_reporting);
+                                                        $dataReturn = salesInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$cold_calling->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode($cold_calling->customer->reference->user_reporting);
+                                                        $dataReturn = areaInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$cold_calling->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode($cold_calling->customer->reference->user_reporting);
+                                                        $dataReturn = zonalManagerEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+
                                             </tr>
                                             @endforeach
                                         </tbody>

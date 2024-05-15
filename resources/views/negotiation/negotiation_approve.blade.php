@@ -1,3 +1,6 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layouts.dashboard')
 @section('title','Presentation Analysis Approve')
 
@@ -48,14 +51,23 @@
                                             <tr>
                                                 <th>Action</th>
                                                 <th>S/N</th>
-                                                <th>Date</th>
-                                                <th>Name</th>
-                                                <th>Mobile</th>
-                                                <th>Address</th>
-                                                <th>Neg. Amount</th>
-                                                <th>Project</th>
-                                                <th>Product & Qty</th> 
-                                                <th>Freelancer</th> 
+                                                <th>Provable Cus ID</th>
+                                                <th>Customer Name</th>
+                                                <th>Mobile Number</th>
+                                                <th>Profession</th>
+                                                <th>Preferred Project Name</th>
+                                                <th>Preferred Unit Name</th>
+                                                <th>Customer Expectation</th>
+                                                <th>Customer Need</th>
+                                                <th>Customer Ability</th>
+                                                <th>Influencer Openion</th>
+                                                <th>Decision Maker Openion</th>
+                                                <th>Negotiation Amount</th>
+                                                <th>Franchise Partner Name & ID</th>
+                                                <th>Incharge Marketing Name & ID</th>
+                                                <th>Incharge Sales Name & ID</th>
+                                                <th>Area Incharge Name & ID</th>
+                                                <th>Zonal Manager Name & ID</th>
                                             </tr>
                                         </thead>
                                         <tbody> 
@@ -65,15 +77,77 @@
                                                     <input class="form-check-input" type="checkbox" name="negotiation_id[]" value="{{$negotiation->id}}" id="flexCheckChecked" >
                                                 </td>
                                                 <td>{{ $loop->iteration}}</td>
-                                                <td class="">{{ get_date($negotiation->created_at) }}</td> 
+                                               
+                                                <td>{{ $negotiation->customer->customer_id??'-' }}</td>
                                                 <td class="">{{ @$negotiation->customer->user->name }}</td>
                                                 <td class=""> {{ @$negotiation->customer->user->phone }}</td>
-                                                <td class=""> {{ @$negotiation->customer->user->userAddress->address }}</td>
-                                                <td class=""> {{ get_price(@$negotiation->negotiation_amount) }}</td>
-                                                <td class=""> {{ @$negotiation->project->name }}</td>
-                                                <td class="">{{count(json_decode($negotiation->project_units))}} </td>
-                                                <td class="">{{ @$negotiation->customer->reference->name }} [{{ @$negotiation->customer->reference->user_id }}] </td>
-                                               
+                                                <td>{{ $negotiation->customer->profession->name??'-' }}</td>
+                                                <td>{{ $negotiation->project->name??'-' }}</td>
+                                                <td>{{ $negotiation->unit->name??'-' }}</td>
+                                                <td>{{ $negotiation->customer->followup_analysis->customer_expectation??'-' }}</td>
+                                                <td>{{ $negotiation->customer->followup_analysis->need??'-' }}</td>
+                                                <td>{{ $negotiation->customer->followup_analysis->ability??'-' }}</td>
+                                                <td>{{ $negotiation->customer->followup_analysis->abiliinfluencer_opinionty??'-' }}</td>
+                                                <td>{{ $negotiation->customer->followup_analysis->decision_maker_opinion??'-' }}</td>
+                                                <td>{{ get_price($data->negotiation_amount??0) }}</td>
+                                                <td>
+                                                    @php
+                                                        if(@$data->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$data->customer->reference->user_reporting);
+                                                        if(isset($reporting) && $reporting!= null){
+                                                            $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                $q->whereIn('designation_id',[20]);
+                                                            })->first();
+                                                            if(isset($user) && $user != null){
+                                                                $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                            }
+                                                        }
+                                                        $dataReturn = "-";
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$negotiation->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$negotiation->customer->reference->user_reporting);
+                                                        $dataReturn = marketingInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$negotiation->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$negotiation->customer->reference->user_reporting);
+                                                        $dataReturn = salesInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$negotiation->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$negotiation->customer->reference->user_reporting);
+                                                        $dataReturn = areaInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if(@$negotiation->customer->ref_id==null){
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$negotiation->customer->reference->user_reporting);
+                                                        $dataReturn = zonalManagerEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
                                             </tr>
                                             @endforeach 
                                         </tbody>
