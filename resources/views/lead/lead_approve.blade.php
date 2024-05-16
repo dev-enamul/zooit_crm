@@ -1,3 +1,6 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layouts.dashboard')
 @section('title','Product Create')
 @section('style')
@@ -48,20 +51,19 @@
                                             <tr>
                                                 <th>Action</th>
                                                 <th>S/N</th>
-                                                <th>Date</th>
-                                                <th>Name</th>
+                                                <th>Provable Cus ID</th>
+                                                <th>Customer Name</th>
+                                                <th>Mobile Number</th>
                                                 <th>Profession</th>
-                                                <th>Upazilla/Thana</th>
-                                                <th>Union</th>
-                                                <th>Village</th>
-                                                <th>Maritial</th>
-                                                <th>Last Call</th>
-                                                <th>Project</th>
-                                                <th>Unit</th>
-                                                <th>Capacity</th>
-                                                <th>Purchase Date</th>
-                                                <th>Mobile</th>
-                                                <th>Freelancer</th> 
+                                                <th>Preferred Project Name</th>
+                                                <th>Preferred Unit Name</th>
+                                                <th>Franchise Partner Name & ID</th>
+                                                <th>Co-ordinator Name & ID</th>
+                                                <th>Executive Co-ordinator Name & ID</th>
+                                                <th>Incharge Marketing Name & ID</th>
+                                                <th>Incharge Salse Name & ID</th>
+                                                <th>Area Incharge Name & ID</th>
+                                                <th>Zonal Manager Name & ID</th>
                                             </tr>
                                         </thead>
     
@@ -72,28 +74,107 @@
                                                         <input class="form-check-input" type="checkbox" name="lead_id[]" value="{{$lead->id}}" id="flexCheckChecked" >
                                                     </td>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $lead->created_at->format('Y-m-d') }}</td>
-                                                    <td>{{ @$lead->customer->user->name }}</td>
-                                                    <td>{{ @$lead->customer->profession->name }}</td>
-                                                    <td>{{ @$lead->customer->user->userAddress->upazila->name }}</td>
-                                                    <td>{{ @$lead->customer->user->userAddress->union->name }}</td>
-                                                    <td>{{ @$lead->customer->user->userAddress->village->name }}</td>
-                                                    <td>{{ @$lead->customer->user->marital_status }}</td>
-                                                    <td>{{ @$lead->prospecting }} #dummy</td>
-                                                    <td>{{ @$lead->project->name }}</td>
-                                                    <td>{{ @$lead->unit->title }}</td>
-                                                    <td class="text-primary">
-                                                       @if ($lead->purchase_capacity ==1)
-                                                           High
-                                                       @elseif($lead->purchase_capacity ==2)
-                                                           Regular
-                                                        @else
-                                                            Low
-                                                       @endif
+                                                    <td>{{ $lead->customer_id }}</td>
+                                                    <td>{{ @$lead->project->name ?? '-' }}</td>
+                                                    <td>{{ @$lead->customer->user->phone ?? "-" }}</td>
+                                                    <td>{{ @$lead->customer->profession->name??'-' }}</td>
+                                                    <td>{{ @$lead->project->name??'-' }}</td>
+                                                    <td>{{ @$$lead->unit->name??'-'; }}</td>
+
+                                                    <td>
+                                                        @php
+                                                            if(@$lead->customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[20]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $dataReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $dataReturn }}</center>    
                                                     </td>
-                                                    <td>{{ @$lead->possible_purchase_date }}</td>
-                                                    <td>{{ @$lead->customer->user->phone }}</td>
-                                                    <td>{{ @$lead->employee->name ?? 'N/A' }}</td>  
+                                                    <td>
+                                                        @php
+                                                            if(@$lead->customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[18]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $dataReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $dataReturn }}</center>    
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$lead->customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[17]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            $dataReturn = "-";
+                                                        @endphp
+                                                        <center>{{ $dataReturn }}</center>    
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$lead->customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            $dataReturn = inChargeEmployee($reporting);
+                                                        @endphp
+                                                        <center>{{ $dataReturn }}</center> 
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$lead->customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            $dataReturn = salesInChargeEmployee($reporting);
+                                                        @endphp
+                                                        <center>{{ $dataReturn }}</center> 
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$lead->customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            $dataReturn = areaInChargeEmployee($reporting);
+                                                        @endphp
+                                                        <center>{{ $dataReturn }}</center> 
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$lead->customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            $dataReturn = zonalManagerEmployee($reporting);
+                                                        @endphp
+                                                        <center>{{ $dataReturn }}</center> 
+                                                    </td>  
                                                 </tr>
                                             @endforeach  
                                         </tbody>

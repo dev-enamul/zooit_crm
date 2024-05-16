@@ -1,3 +1,6 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layouts.dashboard')
 @section('title','Customer Approve')
  
@@ -46,13 +49,17 @@
                                             <tr>
                                                 <th>Action</th>
                                                 <th>S/N</th>
-                                                <th>Full Name</th>
+                                                <th>Provable CUS ID</th>
+                                                <th>Customer Name</th>
+                                                <th>Phone Number</th>
                                                 <th>Profession</th>
-                                                <th>Upazilla/Thana</th>
-                                                <th>Union</th>
-                                                <th>Village</th> 
-                                                <th>Mobile No</th>
-                                                <th>Employee</th>
+                                                <th>Franchise Partner Name & ID</th> 
+                                                <th>Co-ordinator Name & ID</th>
+                                                <th>Executive Co-ordinator Name & ID</th>
+                                                <th>Incharge Marketing Name & ID</th>
+                                                <th>Incharge Salse Name & ID</th>
+                                                <th>Area Incharge Name & ID</th>
+                                                <th>Zonal Manager Name & ID</th>
                                             </tr>
                                         </thead>
 
@@ -63,13 +70,100 @@
                                                         <input class="form-check-input" type="checkbox" name="customer_id[]" value="{{$customer->id}}" id="flexCheckChecked" >
                                                     </td>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td >{{ @$customer->name }} [{{ @$customer->customer_id }}]</td>
-                                                    <td >{{ @$customer->profession->name }}</td>
-                                                    <td >{{ @$customer->user->userAddress->upazila->name }}</td>
-                                                    <td >{{ @$customer->user->userAddress->union->name }}</td>
-                                                    <td >{{ @$customer->user->userAddress->village->name }}</td> 
-                                                    <td >{{ @$customer->user->phone }}</td>
-                                                    <td >{{ @$customer->reference->name}} [{{ @$customer->reference->user_id}}]</td>     
+                                                    <td>Provable CUS ID</td>
+                                                    <td>{{ @$customer->name }}</td>
+                                                    <td>{{ @$customer->user->phone }}</td>
+                                                    <td>{{ @$customer->profession->name }}</td>
+                                                    <td>
+                                                        @php
+                                                            if($customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($customer->reference->user_reporting);
+                                                            $dataReturn = "-";
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[20]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            echo $dataReturn;
+                                                        @endphp
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if($customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $reporting = json_decode($customer->reference->user_reporting);
+                                                            $dataReturn = "-";
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[18]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            echo $dataReturn;
+                                                        @endphp
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if($customer->ref_id==null){
+                                                                return '-';
+                                                            }
+                                                            $reporting = json_decode($customer->reference->user_reporting);
+                                                            $dataReturn = "-";
+                                                            if(isset($reporting) && $reporting!= null){
+                                                                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
+                                                                    $q->whereIn('designation_id',[17]);
+                                                                })->first();
+                                                                if(isset($user) && $user != null){
+                                                                    $dataReturn = $user->name.' ['.$user->user_id.']';
+                                                                }
+                                                            }
+                                                            echo $dataReturn;
+                                                        @endphp
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $dataReturn = marketingInChargeEmployee(json_decode($customer->reference->user_reporting));
+                                                            echo $dataReturn;
+                                                        @endphp
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $dataReturn = salesInChargeEmployee(json_decode($customer->reference->user_reporting));
+                                                            echo $dataReturn;
+                                                        @endphp
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            if(@$customer->ref_id==null){
+                                                                $dataReturn = '-';
+                                                            }
+                                                            $dataReturn = areaInChargeEmployee(json_decode($customer->reference->user_reporting));
+                                                            echo $dataReturn;
+                                                        @endphp
+                                                    </td>
+                                                    <td>
+                                                    @php
+                                                        if(@$customer->ref_id==null) {
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $dataReturn = zonalManagerEmployee(json_decode($customer->reference->user_reporting));
+                                                        echo $dataReturn;
+                                                    @endphp  
+                                                    </td>  
                                                 </tr>
                                             @endforeach  
                                         </tbody>

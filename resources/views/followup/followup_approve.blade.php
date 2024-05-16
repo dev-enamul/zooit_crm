@@ -1,3 +1,6 @@
+@php
+    use App\Models\User;
+@endphp
 @extends('layouts.dashboard')
 @section('title','Presentation Analysis Approve')
 
@@ -47,32 +50,90 @@
                                             <tr>
                                                 <th>Action</th>
                                                 <th>S/N</th>
-                                                <th>Date</th>
-                                                <th>Name</th>
-                                                <th>Mobile</th>
-                                                <th>Address</th>
-                                                <th>Neg. Amount</th>
-                                                <th>Project</th>
-                                                {{-- <th>Product & Qty</th>  --}}
-                                                <th>Freelancer</th> 
+                                                <th>Provable Cus ID</th>
+                                                <th>Customer Name</th>
+                                                <th>Mobile Number</th>
+                                                <th>Preferred Project Name</th>
+                                                <th>Preferred Unit Name</th>
+                                                <th>Follow Up Date</th>
+                                                <th>Franchise Partner Name & ID</th>
+                                                <th>Incharge Marketing Name & ID</th>
+                                                <th>Incharge Sales Name & ID</th>
+                                                <th>Area Incharge Name & ID</th>
+                                                <th>Zonal Manager Name & ID</th>
                                             </tr>
                                         </thead>
                                         <tbody> 
                                             @foreach ($followUps as  $followUp)
-                                            <tr class="">
+                                            <tr>
                                                 <td class="text-center">
                                                     <input class="form-check-input" type="checkbox" name="followUp_id[]" value="{{$followUp->id}}" id="flexCheckChecked" >
                                                 </td>
-                                                <td class="">{{ $loop->iteration}}</td>
-                                                <td class="">{{ get_date($followUp->created_at) }}</td>
-                                               
-                                                <td class="">{{ @$followUp->customer->user->name }}</td>
-                                                <td class=""> {{ @$followUp->customer->user->phone }}</td>
-                                                <td class=""> {{ @$followUp->customer->user->userAddress->address }}</td>
-                                                <td class=""> {{ @$followUp->negotiation_amount }}</td>
-                                                <td class=""> {{ @$followUp->project->name }}</td>
-                                                {{-- <td class="">   {{count(json_decode($followUp->project_units))}} </td> --}}
-                                                <td class=""> {{ @$followUp->customer->reference->name }} [{{ @$followUp->customer->reference->user_id }}] </td>
+                                                <td>{{ $loop->iteration}}</td>
+                                                <td>{{ @$followUp->customer->customer_id }}</td>
+                                                <td>{{ @$followUp->customer->user->name }}</td>
+                                                <td>{{ @$followUp->customer->user->phone }}</td>
+                                                <td>{{ @$followUp->project->name ?? '-' }}</td>
+                                                <td>{{ @$followUp->unit->name ?? '-' }}</td>
+                                                <td>{{ get_date($followUp->created_at) }}</td>
+                                                <td>
+                                                    @php
+                                                        if (@$data->customer->ref_id == null) {
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$data->customer->reference->user_reporting);
+                                                        if (isset($reporting) && $reporting != null) {
+                                                            $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
+                                                                $q->whereIn('designation_id', [20]);
+                                                            })->first();
+                                                            if (isset($user) && $user != null) {
+                                                                $dataReturn = $user->name . ' [' . $user->user_id . ']';
+                                                            }
+                                                        }
+                                                        $dataReturn = "-";
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if (@$followUp->customer->ref_id == null) {
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$followUp->customer->reference->user_reporting);
+                                                        $dataReturn = marketingInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if (@$followUp->customer->ref_id == null) {
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$followUp->customer->reference->user_reporting);
+                                                        $dataReturn = salesInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if (@$followUp->customer->ref_id == null) {
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$followUp->customer->reference->user_reporting);
+                                                        $dataReturn = areaInChargeEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        if (@$followUp->customer->ref_id == null) {
+                                                            $dataReturn = '-';
+                                                        }
+                                                        $reporting = json_decode(@$followUp->customer->reference->user_reporting);
+                                                        $dataReturn = zonalManagerEmployee($reporting);
+                                                    @endphp
+                                                    <center>{{ $dataReturn }}</center>
+                                                </td>
                                                
                                             </tr>
                                             @endforeach 
