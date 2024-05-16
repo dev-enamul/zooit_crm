@@ -102,13 +102,15 @@
         // for remove double click  
 
         $(document).ready(function(){ 
-            $('form').submit(function() {
-                $(this).find('button').prop('disabled', true); 
+            $('form').submit(function(event) {  
+                var button = $(this).find('button');
+                button.prop('disabled', true);  
                 setTimeout(function() {
-                button.prop('disabled', false);
-            }, 20000); // 20 seconds
+                    button.prop('disabled', false);
+                }, 20000);   
             });
-        });  
+    });
+ 
 
     </script>
 </body>
