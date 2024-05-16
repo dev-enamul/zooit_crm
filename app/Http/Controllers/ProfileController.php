@@ -51,7 +51,7 @@ class ProfileController extends Controller
         $user_id = decrypt($id); 
         $user = User::find($user_id); 
         $my_all_employee = json_decode(Auth::user()->user_employee);
-        if(!in_array($user_id,$my_all_employee)){
+        if(!in_array($user_id,$my_all_employee)|| auth()->user()->hasPermission('admin') ){
             return redirect()->back()->with('error','You are not authorized to view this profile');
         }  
         $reporting_users = json_decode($user->user_reporting);
