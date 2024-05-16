@@ -151,7 +151,7 @@ class ColdCallingController extends Controller {
     public function coldCallingApprove() {
         $user_id     = Auth::user()->id;
         $my_employee = my_employee($user_id);
-        $cold_callings  = ColdCalling::where('approve_by', null)->whereIn('employee_id',$my_employee)->orderBy('id','desc')->get();
+        $cold_callings  = ColdCalling::where('approve_by', null)->whereIn('employee_id',$my_employee)->with('customer')->orderBy('id','desc')->get();
         return view('cold_calling.cold_calling_approve', compact('cold_callings'));
     }
 

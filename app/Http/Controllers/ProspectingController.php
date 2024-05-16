@@ -144,7 +144,7 @@ class ProspectingController extends Controller {
         }
     }
 
-    public function prospecting_approve(ProspectingDataTable $dataTable, Request $request) {
+    public function prospecting_approve(Request $request) {
         $title      = 'Prospecting List';
         $date       = $request->date ?? null;
         $status     = $request->status ?? 0;
@@ -153,7 +153,7 @@ class ProspectingController extends Controller {
 
         $user_id      = Auth::user()->id;
         $my_employee  = my_employee($user_id);
-        $prospectings = Prospecting::where('approve_by', null)->whereIn('employee_id', $my_employee)->orderBy('id', 'desc')->get();
+        $prospectings = Prospecting::where('approve_by', null)->whereIn('employee_id', $my_employee)->with('customer')->orderBy('id', 'desc')->get();
         return view('prospecting.prospecting_approve', compact('prospectings'));
     }
 
