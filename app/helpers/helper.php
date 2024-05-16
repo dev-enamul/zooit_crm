@@ -231,10 +231,11 @@ if (!function_exists('my_all_employee')) {
         function inChargeEmployee($reporting){
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereJsonContains('designations', '12')
-                        ->orWhereJsonContains('designations', '13')
-                        ->orWhereJsonContains('designations', '14')
-                        ->orWhereJsonContains('designations', '15');
+                    // $q->whereJsonContains('designations', '12')
+                    //     ->orWhereJsonContains('designations', '13')
+                    //     ->orWhereJsonContains('designations', '14')
+                    //     ->orWhereJsonContains('designations', '15');
+                    $q->whereIn('designation_id', [12,13,14,15]);
                 })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
@@ -248,7 +249,8 @@ if (!function_exists('my_all_employee')) {
         function areaInChargeEmployee($reporting){
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereJsonContains('designations','11');
+                    // $q->whereJsonContains('designations','11');
+                    $q->whereIn('designation_id', [11]);
                 })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
@@ -263,7 +265,8 @@ if (!function_exists('my_all_employee')) {
         {
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereJsonContains('designations','16');
+                    // $q->whereJsonContains('designations','16');
+                    $q->whereIn('designation_id', [16]);
                 })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
@@ -278,10 +281,11 @@ if (!function_exists('my_all_employee')) {
         {
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereJsonContains('designations', '12')
-                        ->orWhereJsonContains('designations', '13')
-                        ->orWhereJsonContains('designations', '14')
-                        ->orWhereJsonContains('designations', '15');
+                    // $q->whereJsonContains('designations', '12')
+                    //     ->orWhereJsonContains('designations', '13')
+                    //     ->orWhereJsonContains('designations', '14')
+                    //     ->orWhereJsonContains('designations', '15');
+                    $q->whereIn('designation_id', [12,13,14,15]); 
                 })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
@@ -296,7 +300,8 @@ if (!function_exists('my_all_employee')) {
         {
             if(isset($reporting) && $reporting!= null){
                 $user = User::whereIn('id',$reporting)->whereHas('employee',function($q){
-                    $q->whereJsonContains('designations','10');
+                    // $q->whereJsonContains('designations','10');
+                    $q->whereIn('designation_id', [10]);
                 })->first();
                 if(isset($user) && $user != null){
                     return $user->name.' ['.$user->user_id.']';
