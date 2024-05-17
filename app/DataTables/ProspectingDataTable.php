@@ -129,8 +129,8 @@ class ProspectingDataTable extends DataTable {
             $user = User::find($request->employee);
         } else {
             $user = Auth::user();
-        } 
-        
+        }
+
         if(isset($request->date)){
             $date = explode(' - ',$request->date);
             $start_date = date('Y-m-d',strtotime($date[0]));
