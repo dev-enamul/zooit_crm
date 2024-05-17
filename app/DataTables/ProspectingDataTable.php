@@ -51,33 +51,15 @@ class ProspectingDataTable extends DataTable {
                 if (@$data->customer->ref_id == null) {
                     return '-';
                 }
-
                 $reporting = json_decode($data->customer->reference->user_reporting);
-                if (isset($reporting) && $reporting != null) {
-                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                        $q->whereIn('designation_id', [18]);
-                    })->first();
-                    if (isset($user) && $user != null) {
-                        return $user->name . ' [' . $user->user_id . ']';
-                    }
-                }
-                return "-";
+                return coOrdinator($reporting);
             })
             ->addColumn('ex-co-ordinator', function ($data) {
                 if (@$data->customer->ref_id == null) {
                     return '-';
                 }
-
                 $reporting = json_decode($data->customer->reference->user_reporting);
-                if (isset($reporting) && $reporting != null) {
-                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                        $q->whereIn('designation_id', [17]);
-                    })->first();
-                    if (isset($user) && $user != null) {
-                        return $user->name . ' [' . $user->user_id . ']';
-                    }
-                }
-                return "-";
+                return exCoOrdinator($reporting);
             })
             ->addColumn('marketing-incharge', function ($data) {
                 if (@$data->customer->ref_id == null) {
@@ -131,11 +113,11 @@ class ProspectingDataTable extends DataTable {
             $user = Auth::user();
         }
 
-        if(isset($request->date)){
-            $date = explode(' - ',$request->date);
-            $start_date = date('Y-m-d',strtotime($date[0]));
-            $end_date = date('Y-m-d',strtotime($date[1]));
-        }else{
+        if (isset($request->date)) {
+            $date       = explode(' - ', $request->date);
+            $start_date = date('Y-m-d', strtotime($date[0]));
+            $end_date   = date('Y-m-d', strtotime($date[1]));
+        } else {
             $start_date = date('Y-m-01');
             $end_date   = date('Y-m-t');
         }
@@ -147,8 +129,8 @@ class ProspectingDataTable extends DataTable {
             $status = 0;
         }
 
-        $prospectings =$model->where(function ($q) use($user){
-            $q->where('approve_by','!=',null)
+        $prospectings = $model->where(function ($q) use ($user) {
+            $q->where('approve_by', '!=', null)
                 ->orWhere('employee_id', $user->id)
                 ->orWhere('created_by', $user->id);
         })

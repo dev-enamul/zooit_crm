@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Models\Freelancer;
-use App\Models\ReportingUser;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
@@ -13,69 +12,57 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class FreelancersDataTable extends DataTable
-{
+class FreelancersDataTable extends DataTable {
     /**
      * Build DataTable class.
      *
      * @param QueryBuilder $query Results from query() method.
      * @return \Yajra\DataTables\EloquentDataTable
      */
-    public function dataTable(QueryBuilder $query): EloquentDataTable
-    {
+    public function dataTable(QueryBuilder $query): EloquentDataTable {
         return (new EloquentDataTable($query))->setRowId('id')
-        ->addColumn('action',function($data){
-             return view('freelancer.freelancer_action',compact('data'))->render();
-        })
-        ->addColumn('serial', function () {
-            static $serial = 0;
-            return ++$serial;
-        })
-        ->addColumn('date', function($data){
-            return get_date($data->created_at);
-        })
-        ->addColumn('area', function($data){
-            return $data->user->userAddress->area->name??"-";
-        })
-        ->addColumn('fl_id', function($data){
-            return $data->user->user_id;
-        })
-        ->addColumn('reporting', function($freelancer){
-            $reporting = json_decode($freelancer->user->user_reporting);
-            if(isset($reporting) && $reporting!= null){
-                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
-                    $q->whereIn('designation_id',[18]);
-                })->first();
-                if(isset($user) && $user != null){
-                    return $user->name.' ['.$user->user_id.']';
+            ->addColumn('action', function ($data) {
+                return view('freelancer.freelancer_action', compact('data'))->render();
+            })
+            ->addColumn('serial', function () {
+                static $serial = 0;
+                return ++$serial;
+            })
+            ->addColumn('date', function ($data) {
+                return get_date($data->created_at);
+            })
+            ->addColumn('area', function ($data) {
+                return $data->user->userAddress->area->name ?? "-";
+            })
+            ->addColumn('fl_id', function ($data) {
+                return $data->user->user_id;
+            })
+            ->addColumn('reporting', function ($freelancer) {
+                $reporting = json_decode($freelancer->user->user_reporting);
+                if (isset($reporting) && $reporting != null) {
+                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
+                        $q->whereIn('designation_id', [18]);
+                    })->first();
+                    if (isset($user) && $user != null) {
+                        return $user->name . ' [' . $user->user_id . ']';
+                    }
                 }
-            }
-            return "-";
-        })
+                return "-";
+            })
 
-        ->addColumn('ex_co_ordinator', function($freelancer){
-            $reporting = json_decode($freelancer->user->user_reporting);
-            if(isset($reporting) && $reporting!= null){
-                $user = User::whereIn('id',$reporting)->whereHas('freelancer',function($q){
-                    $q->whereIn('designation_id',[17]);
-                })->first();
-                if(isset($user) && $user != null){
-                    return $user->name.' ['.$user->user_id.']';
-                }
-            }
-            return "-";
-        })
+            ->addColumn('ex_co_ordinator', function ($freelancer) {
+                $reporting = json_decode($freelancer->user->user_reporting);
+                return exCoOrdinator($reporting);
+            })
 
-        ->addColumn('incharge', function($freelancer){
-          return  inChargeEmployee(json_decode($freelancer->user->user_reporting));
-        })
-        ->addColumn('area_incharge', function($freelancer){
-         return   areaInChargeEmployee(json_decode($freelancer->user->user_reporting));
-        });
+            ->addColumn('incharge', function ($freelancer) {
+                return inChargeEmployee(json_decode($freelancer->user->user_reporting));
+            })
+            ->addColumn('area_incharge', function ($freelancer) {
+                return areaInChargeEmployee(json_decode($freelancer->user->user_reporting));
+            });
     }
 
     /**
@@ -84,44 +71,42 @@ class FreelancersDataTable extends DataTable
      * @param \App\Models\Freelancer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Freelancer $model, Request $request): QueryBuilder
-    {
-        if(isset($request->status) && $request->status != 0){
-            $model = $model->where('created_at','<',Carbon::parse('2024-03-30'));
-        }else{
-            $model = $model->where('created_at','>',Carbon::parse('2024-03-30'));
-            if(isset($request->date)){
-                $date = explode(' - ',$request->date);
-                $start_date = date('Y-m-d',strtotime($date[0]));
-                $end_date = date('Y-m-d',strtotime($date[1]));
-                $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
-            }else{
-                $model = $model->whereBetween('created_at',[date('Y-m-01').' 00:00:00',date('Y-m-t').' 23:59:59']);
+    public function query(Freelancer $model, Request $request): QueryBuilder {
+        if (isset($request->status) && $request->status != 0) {
+            $model = $model->where('created_at', '<', Carbon::parse('2024-03-30'));
+        } else {
+            $model = $model->where('created_at', '>', Carbon::parse('2024-03-30'));
+            if (isset($request->date)) {
+                $date       = explode(' - ', $request->date);
+                $start_date = date('Y-m-d', strtotime($date[0]));
+                $end_date   = date('Y-m-d', strtotime($date[1]));
+                $model      = $model->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
+            } else {
+                $model = $model->whereBetween('created_at', [date('Y-m-01') . ' 00:00:00', date('Y-m-t') . ' 23:59:59']);
             }
         }
 
         $user = User::find(auth()->user()->id);
-        if(isset($request->employee)){
-            $filter_user = User::find($request->employee);
+        if (isset($request->employee)) {
+            $filter_user   = User::find($request->employee);
             $my_freelancer = json_decode($filter_user->user_employee);
-            $model = $model->whereIn('user_id',$my_freelancer);
-        }else{
+            $model         = $model->whereIn('user_id', $my_freelancer);
+        } else {
             $my_freelancer = json_decode($user->user_employee);
-            $model = $model->whereIn('user_id',$my_freelancer);
+            $model         = $model->whereIn('user_id', $my_freelancer);
         }
 
-        $model =  $model
-        ->where(function($q){
-            $q->WhereHas('user', function($query){
-                $query->Where('approve_by','!=',null)
-                ->orWhere('ref_id',auth()->user()->id)
-                ->orWhere('created_by',auth()->user()->id);
+        $model = $model
+            ->where(function ($q) {
+                $q->WhereHas('user', function ($query) {
+                    $query->Where('approve_by', '!=', null)
+                        ->orWhere('ref_id', auth()->user()->id)
+                        ->orWhere('created_by', auth()->user()->id);
+                });
             });
-        });
 
-
-        $data =  $model->with('user')
-        ->newQuery();
+        $data = $model->with('user')
+            ->newQuery();
 
         return $data;
     }
@@ -131,8 +116,7 @@ class FreelancersDataTable extends DataTable
      *
      * @return \Yajra\DataTables\Html\Builder
      */
-    public function html(): HtmlBuilder
-    {
+    public function html(): HtmlBuilder {
         return $this->builder()
             ->setTableId('employees-table')
             ->columns($this->getColumns())
@@ -152,14 +136,13 @@ class FreelancersDataTable extends DataTable
      *
      * @return array
      */
-    public function getColumns(): array
-    {
+    public function getColumns(): array {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->searchable(false)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->searchable(false)
+                ->addClass('text-center'),
             Column::make('serial')->title('S/L')->searchable(true),
             Column::make('user.user_id')->visible(false)->searchable(true),
             Column::make('fl_id'),
@@ -177,8 +160,7 @@ class FreelancersDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename(): string
-    {
+    protected function filename(): string {
         return 'Freelancers_' . date('YmdHis');
     }
 }
