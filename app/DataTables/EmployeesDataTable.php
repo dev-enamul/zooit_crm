@@ -80,10 +80,15 @@ class EmployeesDataTable extends DataTable
     
     public function query(User $model, Request $request): QueryBuilder
         {
-            $my_freelancer = json_decode(Auth::user()->user_employee);
-            if(auth()->user()->id!=1){
-                $model = $model->whereIn('id',$my_freelancer);
-            } 
+            $is_admin = Auth::user()->hasPermission('admin');
+
+            if(!$is_admin){
+                $my_freelancer = json_decode(Auth::user()->user_employee);
+                if(auth()->user()->id!=1){
+                    $model = $model->whereIn('id',$my_freelancer);
+                }
+            }
+            
 
             if($request->designation){
                 $model = $model->whereHas('employee', function($query) use ($request){
