@@ -28,10 +28,17 @@
                                         </a>
                                     @endcan   
 
-                                    @if (auth()->user()->hasPermission('admin'))
-                                        <a href="{{route('employee.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
-                                            <i class="mdi mdi-account-edit"></i> Edit Profile
-                                        </a>
+                                    @if (auth()->user()->hasPermission('admin')) 
+                                        @if ($user->user_type==1)
+                                            <a href="{{route('employee.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
+                                                <i class="mdi mdi-account-edit"></i> Edit Profile
+                                            </a> 
+                                        @elseif($user->user_type==2)
+                                            <a href="{{route('freelancer.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
+                                                <i class="mdi mdi-account-edit"></i> Edit Profile
+                                            </a>
+                                        @endif
+                                        
                                     @endif
 
                                 </div>
