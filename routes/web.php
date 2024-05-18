@@ -458,7 +458,7 @@ Route::get('function_test', function () {
         $user_reporting = ReportingUser::where('user_id', $user->id)->latest()->where('status',1)->first(); 
 
         $top_user_reporting->reporting_user_id = $user_reporting->id;
-        
+        dd($top_user_reporting);
         UserCreatedEvent::dispatch($top_user->id);
         UserCreatedEvent::dispatch($user->id); 
 
