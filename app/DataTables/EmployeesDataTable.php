@@ -82,12 +82,12 @@ class EmployeesDataTable extends DataTable
         {
             $is_admin = Auth::user()->hasPermission('admin');
 
-            if(!$is_admin){
-                $my_freelancer = json_decode(Auth::user()->user_employee);
-                if(auth()->user()->id!=1){
-                    $model = $model->whereIn('id',$my_freelancer);
-                }
-            }
+            // if(!$is_admin){
+            //     $my_freelancer = json_decode(Auth::user()->user_employee);
+            //     if(auth()->user()->id!=1){
+            //         $model = $model->whereIn('id',$my_freelancer);
+            //     }
+            // }
             
 
             if($request->designation){
