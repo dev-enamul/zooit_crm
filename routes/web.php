@@ -449,19 +449,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
-        $top_user = User::where('phone','01701203070')->first();
-        $top_user_reporting = ReportingUser::where('user_id', $top_user->id)->latest()->where('status',1)->first();
-        $top_user_reporting->update(['reporting_user_id' => null]);
-
-        dd($top_user_reporting);
-
-        $user = User::where('phone','01993335001')->first(); 
-
-        $user_reporting = ReportingUser::where('user_id', $user->id)->latest()->where('status',1)->first();
-          
-        UserCreatedEvent::dispatch($top_user->id);
-        UserCreatedEvent::dispatch($user->id); 
-
+         dd(my_all_employee(auth()->user()->id));
 
           dd('updated');
 });
