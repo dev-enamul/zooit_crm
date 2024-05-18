@@ -455,7 +455,8 @@ Route::get('function_test', function () {
         $user_reporting = ReportingUser::where('user_id', $user->id)->latest()->where('status',1)->first();
         
         
-        dd($user,$user_reporting);
+        UserCreatedEvent::dispatch($user->id);
+        UserCreatedEvent::dispatch(Auth::user()->id);
 
 
           dd('noting');

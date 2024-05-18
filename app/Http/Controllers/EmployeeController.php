@@ -282,7 +282,7 @@ class EmployeeController extends Controller
             }   
             DB::commit();  
  
-           UserCreatedEvent::dispatch($user->id);
+            UserCreatedEvent::dispatch($user->id);
 
             return redirect()->route('employee.index')->with('success', 'Employee created successfully');
         } catch (Exception $e) {   
