@@ -45,6 +45,8 @@ class Designation extends Model
 
     public function freelancers()
     {
-        return $this->hasMany(Freelancer::class, 'designation_id');
+        return $this->hasMany(Freelancer::class, 'designation_id')->WhereHas('user', function($query){
+            $query->Where('approve_by','!=',null);
+        });
     }
 }
