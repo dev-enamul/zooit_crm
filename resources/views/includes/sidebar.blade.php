@@ -109,7 +109,7 @@
                             @can('customer-manage')
                                 <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Entry</a></li> 
                             @endcan
-                            <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Customer List</a></li> 
+                            <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Probable Customer List</a></li> 
                             
                             @if (!empty($approve_setting['customer']) )
                                 <li><a href="{{route('customer.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Approve</a></li>
