@@ -452,10 +452,10 @@ Route::get('function_test', function () {
 
         $user = User::where('phone','01993335001')->first();
 
-        $user_reporting = ReportingUser::where('user_id',$user->id)->latest()->first();
-        $user_reporting->update(['reporting_user_id' => null]);
+        $user_reporting = ReportingUser::where('user_id', $user->id)->latest()->where('status',1)->first();
         
-        dd($user_reporting);
+        
+        dd($user,$user_reporting);
 
 
           dd('noting');
