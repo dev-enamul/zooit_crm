@@ -93,7 +93,7 @@ class FreelancersDataTable extends DataTable
             })->with('user');
             return $model;
         } 
-
+ 
         if(isset($request->status) && $request->status != 0){
             $model = $model->where('created_at','<',Carbon::parse('2024-03-30'));
         }else{
@@ -110,13 +110,17 @@ class FreelancersDataTable extends DataTable
 
 
         $user = User::find(auth()->user()->id);
-        if(isset($request->employee)){
-            $filter_user = User::find($request->employee);
-            $my_freelancer = json_decode($filter_user->user_employee);
-            $model = $model->whereIn('user_id',$my_freelancer);
-        }else{
-            $my_freelancer = json_decode($user->user_employee);
-            $model = $model->whereIn('user_id',$my_freelancer);
+        $is_admin = Auth::user()->hasPermission('admin');
+        
+        if(!$is_admin){
+            if(isset($request->employee)){
+                $filter_user = User::find($request->employee);
+                $my_freelancer = json_decode($filter_user->user_employee);
+                $model = $model->whereIn('user_id',$my_freelancer);
+            }else{
+                $my_freelancer = json_decode($user->user_employee);
+                $model = $model->whereIn('user_id',$my_freelancer);
+            } 
         } 
 
         

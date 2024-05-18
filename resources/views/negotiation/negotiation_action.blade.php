@@ -8,11 +8,9 @@
         </a>
         <div class="dropdown-menu dropdown-menu-animated">
             <a class="dropdown-item" href="{{route('customer.profile',encrypt($negotiation->customer_id))}}">Customer Profile</a>
-            @if ($negotiation->approve_by==null)
-                @can('negotiation-manage')
-                    <a class="dropdown-item" href="{{route('negotiation.edit',$negotiation->id)}}">Edit</a>
-                @endcan
-            @endif
+            @can('negotiation-manage')
+                <a class="dropdown-item" href="{{route('negotiation.edit',$negotiation->id)}}">Edit</a>
+            @endcan
 
             @can('negotiation-delete')
                 <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('negotiation.delete',$negotiation->id) }}')">Delete</a>

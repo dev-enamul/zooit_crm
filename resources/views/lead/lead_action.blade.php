@@ -6,11 +6,9 @@
         <img class="rounded avatar-2xs p-0" src="{{@$lead->customer->user->image()}}">
     </a>
     <div class="dropdown-menu dropdown-menu-animated">
-        @if ($lead->approve_by==null)
-            @can('lead-manage')
-                <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
-            @endcan
-        @endif
+        @can('lead-manage')
+            <a class="dropdown-item" href="{{route('lead.edit',$lead->id)}}">Edit</a>
+        @endcan
 
         @can('lead-delete')
             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$lead->id) }}')">Delete</a>

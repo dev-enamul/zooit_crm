@@ -7,11 +7,9 @@
     </a>
     <div class="dropdown-menu dropdown-menu-animated">
         <a class="dropdown-item" href="{{route('customer.profile',encrypt($visit->customer_id))}}">Customer Profile</a>
-        @if ($visit->approve_by==null)
-            @can('visit-analysis-manage')
-                    <a class="dropdown-item" href="{{route('presentation_analysis.edit',$visit->id)}}">Edit</a>
-                @endcan
-        @endif
+        @can('visit-analysis-manage')
+            <a class="dropdown-item" href="{{route('presentation_analysis.edit',$visit->id)}}">Edit</a>
+        @endcan
         @can('visit-analysis-delete')
             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('visit.delete',$visit->id) }}')">Delete</a>
         @endcan

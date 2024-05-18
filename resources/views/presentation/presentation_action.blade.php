@@ -8,9 +8,7 @@
 
     <div class="dropdown-menu dropdown-menu-animated">
         @can('presentation-management')
-           @if ($presentation->approve_by==null)
             <a class="dropdown-item" href="{{route('presentation.edit',$presentation->id)}}">Edit</a>
-           @endif
         @endcan
 
         @can('presentation-delete')

@@ -8,9 +8,7 @@
 
     <div class="dropdown-menu dropdown-menu-animated">
         @can('prospecting-manage')
-            @if ($prospecting->approve_by==null)
-                <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a>
-            @endif
+            <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a> 
         @endcan
 
         @can('prospecting-delete')
