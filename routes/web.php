@@ -453,11 +453,12 @@ Route::get('function_test', function () {
         $top_user = User::where('phone','01701203070')->first();
         $top_user_reporting = ReportingUser::where('user_id', $top_user->id)->latest()->where('status',1)->first();
 
-        $user = User::where('phone','01993335001')->first();
+        $user = User::where('phone','01993335001')->first(); 
 
         $user_reporting = ReportingUser::where('user_id', $user->id)->latest()->where('status',1)->first(); 
-
-        $top_user_reporting->reporting_user_id = $user_reporting->id;
+ 
+        dd(my_all_employee($user->id));
+        
         dd($top_user_reporting);
         UserCreatedEvent::dispatch($top_user->id);
         UserCreatedEvent::dispatch($user->id); 
