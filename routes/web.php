@@ -463,7 +463,7 @@ Route::get('function_test', function () {
         UserCreatedEvent::dispatch($user->id); 
 
 
-          dd('noting');
+          dd('updated');
 });
 
 // test
