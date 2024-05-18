@@ -117,12 +117,9 @@ class FreelancersDataTable extends DataTable
                 ->orWhere('ref_id',auth()->user()->id)
                 ->orWhere('created_by',auth()->user()->id);
             });
-        });
-
-
+        });  
         $data =  $model->with('user')
-        ->newQuery();
-
+        ->newQuery(); 
         return $data;
     }
 

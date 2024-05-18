@@ -16,6 +16,7 @@ use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
  
 use CarlosMeneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EmployeesDataTable extends DataTable
@@ -77,11 +78,17 @@ class EmployeesDataTable extends DataTable
     }
 
     
-    public function query(User $model): QueryBuilder
+    public function query(User $model, Request $request): QueryBuilder
         {
             $my_freelancer = json_decode(Auth::user()->user_employee);
             if(auth()->user()->id!=1){
                 $model = $model->whereIn('id',$my_freelancer);
+            } 
+
+            if($request->designation){
+                $model = $model->whereHas('employee', function($query) use ($request){
+                    $query->where('designation_id', $request->designation);
+                });
             }
             
 
