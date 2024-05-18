@@ -66,7 +66,9 @@
                                                 <a href="{{route('employee.index',['designation'=>$data->id])}}" class="btn btn-primary btn-sm">{{$data->employees->count()}}</a>
                                             </td> 
                                         @else 
-                                            <td>{{$data->freelancers->count()}}</td>
+                                        <td>
+                                            <a href="{{route('freelancer.index',['designation'=>$data->id])}}" class="btn btn-primary btn-sm">{{$data->freelancers->where('approve_by',"!=",null)->count()}}</a>
+                                        </td>  
                                         @endif 
                                         <th>{{@$data->commission->commission}}%</th> 
                                     </tr> 

@@ -26,18 +26,14 @@
                                         <a href="{{route('bypass',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
                                                 Login
                                         </a>
-                                    @endcan 
-                                        {{-- @if ($user->user_type==1)
-                                            <a href="{{route('employee.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
-                                                <i class="mdi mdi-account-edit"></i> Edit Profile
-                                            </a> 
-                                             
-                                            
-                                        @else 
-                                            <a href="{{route('freelancer.create',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
-                                                <i class="mdi mdi-account-edit"></i> Edit Profile
-                                            </a>
-                                        @endif    --}}
+                                    @endcan   
+
+                                    @if (auth()->user()->hasPermission('admin'))
+                                        <a href="{{route('employee.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
+                                            <i class="mdi mdi-account-edit"></i> Edit Profile
+                                        </a>
+                                    @endif
+
                                 </div>
                                
                             </div> 

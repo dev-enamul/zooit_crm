@@ -283,9 +283,15 @@
                                         'visible'   => ['division', 'district', 'upazila','union','village'],
                                         'required'  => [],
                                         'selected'  => $selected ?? null,
-                                    ]) 
-
+                                    ])  
                                     <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="post_code" class="form-label">Post Code</label>
+                                            <input type="text" class="form-control" name="post_code" id="post_code" value="{{isset($customer) ? @$customer->user->userAddress->post_code : old('post_code')}}">
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
                                             <textarea class="form-control" id="address" rows="1" name="address">{{isset($customer) ? @$customer->user->userAddress->address : old('address')}}</textarea> 

@@ -250,14 +250,18 @@
                                         'visible'   => ['division', 'district', 'upazila','union','village'],
                                         'required'  => [],
                                         'selected'  => $selected ?? null,
-                                    ]) 
-
-                                    
-
+                                    ])  
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="post_code" class="form-label">Post Code</label>
+                                            <input type="text" class="form-control" name="post_code" id="post_code" placeholder="Enter post code">
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="1" name="address" placeholder="Address">{{old('address')}}</textarea> 
+                                            <textarea class="form-control" id="address" rows="1" name="address" placeholder="Enter post code"></textarea> 
                                         </div>
                                     </div>
 
