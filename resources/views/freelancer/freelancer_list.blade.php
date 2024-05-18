@@ -43,46 +43,46 @@
     </div> 
 </div>      
  
-    <div class="offcanvas offcanvas-end" id="offcanvas">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Select Filter Item</h5>
-            <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="offcanvas-body">
-            <form action="" method="get">
-                <div class="row">  
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="select2" id="status" name="status"> 
-                                <option value = "1" {{$status==1?"selected":""}}>Previous</option>
-                                <option value = "0" {{$status==0?"selected":""}}>Present</option>
-                            </select> 
-                        </div>
+<div class="offcanvas offcanvas-end" id="offcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Select Filter Item</h5>
+        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+            <i class="fa fa-times"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form action="" method="get">
+            <div class="row">  
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="select2" id="status" name="status"> 
+                            <option value = "1" {{$status==1?"selected":""}}>Previous</option>
+                            <option value = "0" {{$status==0?"selected":""}}>Present</option>
+                        </select> 
                     </div>
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="date_range" class="form-label">Date</label>
-                            <input class="form-control" start="{{$start_date}}" end="{{$end_date}}" id="date_range" name="date" default="This Month" type="text" value="" />   
-                        </div>
-                    </div> 
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label for="employee" class="form-label">Employee</label>
-                            <select class="select2" search id="employee" name="employee"> 
-                                <option value = "{{$employee->id}}" selected="selected">{{$employee->name}} [{{$employee->user_id}}]</option>
-                            </select> 
-                        </div>
-                    </div>   
-                    <div class="text-center">
-                        <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
-                    </div> 
                 </div>
-            </form>
-        </div>
-    </div> 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="date_range" class="form-label">Date</label>
+                        <input class="form-control" start="{{$start_date}}" end="{{$end_date}}" id="date_range" name="date" default="This Month" type="text" value="" />   
+                    </div>
+                </div> 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Employee</label>
+                        <select class="select2" search id="employee" name="employee"> 
+                            <option value = "{{$employee->id}}" selected="selected">{{$employee->name}} [{{$employee->user_id}}]</option>
+                        </select> 
+                    </div>
+                </div>   
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+                </div> 
+            </div>
+        </form>
+    </div>
+</div> 
 
 @endsection  
 @section('script')

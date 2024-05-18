@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ApproveFreelanerDataTable;
 use App\Models\Freelancer;
 use App\Models\FreelancerApprovel;
 use App\Models\Notification;
 use App\Models\TrainingCategory;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,14 +16,19 @@ use Illuminate\Support\Facades\DB;
 
 class ApproveFreelancerController extends Controller {
 
-    public function index() {
-        $trainings   = TrainingCategory::where('status', '1')->get();
-        $my_employee = my_employee(auth()->user()->id);
-        $datas = Freelancer::where('status',0)->whereIn('last_approve_by',$my_employee)->get();
-        // $datas              = Freelancer::where('id', 2715)->get();
+    public function index(ApproveFreelanerDataTable $dataTable, Request $request){
+        $title = 'Freelancer Approve List';
+        $date = $request->date??null;
+        $status = $request->status??0;
+        $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
+        $employee = $request->employee??null;
+        $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
+        $trainings   = TrainingCategory::where('status', '1')->get(); 
         $next_freelancer_id = User::generateNextFreelancerId();
-        return view('freelancer.approve-freelancer', compact('datas', 'trainings', 'next_freelancer_id'));
+        return $dataTable->render('freelancer.approve-freelancer',compact('trainings','next_freelancer_id','title','status','employee','start_date','end_date'));
     }
+  
 
     public function store(Request $request) {
         DB::beginTransaction();

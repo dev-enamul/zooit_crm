@@ -47,9 +47,7 @@
     <script src="{{asset('assets/libs/metismenu/metisMenu.min.js')}}"></script>
     <script src="{{asset('assets/libs/simplebar/simplebar.min.js')}}"></script>
     <script src="{{asset('assets/libs/node-waves/waves.min.js')}}"></script>
-
-
-
+ 
   
     {{-- Form Validation  --}}
     <script src="{{asset('assets/libs/parsleyjs/parsley.min.js')}}"></script> 
@@ -109,9 +107,7 @@
                     button.prop('disabled', false);
                 }, 20000);   
             });
-    });
- 
-
+    }); 
     </script>
 </body>
  
