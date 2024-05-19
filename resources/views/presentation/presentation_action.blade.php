@@ -7,15 +7,14 @@
     </a>
 
     <div class="dropdown-menu dropdown-menu-animated">
+        <a class="dropdown-item" href="{{route('customer.profile',encrypt($presentation->customer_id))}}">Customer Profile</a>
         @can('presentation-manage')
             <a class="dropdown-item" href="{{route('presentation.edit',$presentation->id)}}">Edit</a>
         @endcan
 
         @can('presentation-delete')
             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('presentation.delete',$presentation->id) }}')">Delete</a>
-        @endcan
-
-        <a class="dropdown-item" href="{{route('customer.profile',encrypt($presentation->customer_id))}}">Customer Profile</a>
+        @endcan 
         @if ($presentation->approve_by!=null)
             <a class="dropdown-item" href="{{route('followup.create',['customer' => $presentation->customer_id])}}">Follow Up</a>
         @endif

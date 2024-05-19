@@ -59,12 +59,13 @@
                                         <div class="mb-3">
                                             <label for="visitor" class="form-label">Visitor <span class="text-danger">*</span></label>
                                             <select id="visitor" class="select2" tags search name="visitor[]" multiple required>
-                                                @foreach ($selected_data['visitor'] as $visitor)
-                                                    <option value="{{ $visitor->id }}" selected>
-                                                        {{ $visitor->name }} [{{ $visitor->user_id }}]
-                                                    </option>
-                                                    
-                                                @endforeach
+                                                @isset($selected_data['visitor'])
+                                                    @foreach ($selected_data['visitor'] as $visitor)
+                                                        <option value="{{ $visitor->id }}" selected>
+                                                            {{ $visitor->name }} [{{ $visitor->user_id }}]
+                                                        </option> 
+                                                    @endforeach
+                                                @endisset
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.

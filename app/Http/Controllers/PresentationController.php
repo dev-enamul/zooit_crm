@@ -123,8 +123,10 @@ class PresentationController extends Controller {
         $priorities      = $this->priority();
         $projects        = Project::where('status', 1)->select('id', 'name')->get();
         $units           = Unit::select('id', 'title')->get();
-        $presentation    = Presentation::find($id);
-        return view('presentation.presentation_save', compact('title', 'customers', 'priorities', 'projects', 'units', 'presentation'));
+        $presentation    = Presentation::find($id); 
+        $selected_data['customer'] = $presentation->customer; 
+ 
+        return view('presentation.presentation_save', compact('selected_data','title', 'customers', 'priorities', 'projects', 'units', 'presentation'));
     }
 
     public function presentationDelete($id) {

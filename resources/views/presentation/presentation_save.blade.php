@@ -91,8 +91,11 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="priority" class="form-label">Priority<span class="text-danger">*</span></label>
-                                            <select class="select2" name="priority" id="priority" required>
+                                            <select class="form-control" name="priority" id="priority" required>
                                                 @isset($priorities)
+                                                    <option data-display="Select a priority *" value="">
+                                                        Select a priority
+                                                    </option>
                                                     @foreach ($priorities as $id => $name)
                                                         <option value="{{ $id }}" {{ old('priority', isset($presentation) ? $presentation->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
@@ -227,40 +230,12 @@
                         }
                         return query;
                     },
-                    success: function(data) {
-                        get_customer_data();
+                    success: function(data) { 
                     }
                 }
             });
         });
     </script>
 
-    <script>
-        $(document).ready(function(){
-            get_customer_data();
-            $('#customer').on('change', function() {
-                get_customer_data();
-            });
-        })
-      function get_customer_data(){
-            var formData = {
-                    customer_id: $("#customer").val()
-                };
-                $.ajax({
-                    type: "GET",
-                    data: formData,
-                    dataType: "json",
-                    url: "{{ route('get.lead.analysis.data') }}",
-
-                    success: function(data) {
-                        $('#priority').val(data.priority);
-                        $('#project').val(data.project_id);
-                        $('#unit').val(data.unit_id);
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
-                    },
-                });
-        }
-    </script>
+    
 @endsection
