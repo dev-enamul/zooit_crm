@@ -135,7 +135,8 @@ class ColdCallingController extends Controller {
         $units        = Unit::select('id', 'title')->get();
         $cold_calling = ColdCalling::find($id);
         $employees    = User::whereIn('id', $my_all_employee)->get();
-        return view('cold_calling.cold_calling_save', compact('title', 'cstmrs', 'priorities', 'projects', 'units', 'cold_calling', 'employees'));
+        $selected_data['customer'] = $cold_calling->customer;
+        return view('cold_calling.cold_calling_save', compact('selected_data','title', 'cstmrs', 'priorities', 'projects', 'units', 'cold_calling', 'employees'));
     }
 
     public function colCallingDelete($id) {

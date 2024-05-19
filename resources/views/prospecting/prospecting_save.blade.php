@@ -48,13 +48,14 @@
                                 @csrf
                                 <div class="row">
                                     @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Reference</label>
-                                            <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Reference</label>
+                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control">
+                                            </div>
                                         </div>
-                                    </div>
-                                    @endif
+                                    @endif 
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>

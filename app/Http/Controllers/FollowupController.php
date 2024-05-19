@@ -166,11 +166,8 @@ class FollowupController extends Controller {
             $follow->save();
 
             if ($follow) {
-                $visit = VisitAnalysis::where('customer_id', $request->customer)->first();
-                if (isset($visit) && $visit != null) {
-                    $visit->status = 1;
-                    $visit->save();
-                }
+                 VisitAnalysis::where('customer_id', $request->customer)->update(['status' => 1]);
+                 Presentation::where('customer_id', $request->customer)->update(['status' => 1]);
             }
 
             return redirect()->route('followup.index')->with('success', 'Follow Up create successfully');
@@ -192,11 +189,10 @@ class FollowupController extends Controller {
             [
             'employee' => Auth::user()->id,
             'priority' => Priority::Regular,
-        ];
-        if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
-        }
+        ]; 
+      
         $follow = FollowUp::find($id);
+        $selected_data['customer'] = $follow->customer;
         return view('followup.followup_save', compact('selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees', 'follow'));
     }
 

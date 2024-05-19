@@ -14,7 +14,7 @@
             @can('negotiation-analysis-delete')
                 <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('negotiation.delete',$negotiation->id) }}')">Delete</a>
             @endcan
-            @if ($negotiation->approve_by != null)
+            @if ($negotiation->approve_by != null && $negotiation->status == 0)
                 @can('sales-manage')
                     <a class="dropdown-item" href="{{route('salse.create',['customer'=>$negotiation->customer->id])}}">Sales Create</a>
                 @endcan

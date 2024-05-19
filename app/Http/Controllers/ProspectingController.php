@@ -130,8 +130,9 @@ class ProspectingController extends Controller {
         $customers         = Customer::whereIn('ref_id', $my_all_employee)->get();
         $employees         = User::whereIn('id', $my_all_employee)->get();
         $prospectingMedias = $this->prospectingMedia();
-        $priorities        = $this->priority();
-        return view('prospecting.prospecting_save', compact('prospecting', 'customers', 'employees', 'prospectingMedias', 'priorities', 'title'));
+        $priorities        = $this->priority(); 
+        $selected_data['customer'] = $prospecting->customer;
+        return view('prospecting.prospecting_save', compact('prospecting', 'customers', 'employees', 'prospectingMedias', 'priorities', 'title','selected_data'));
     }
 
     public function prospectingDelete($id) {

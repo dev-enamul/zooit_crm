@@ -58,9 +58,17 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="visitor" class="form-label">Visitor <span class="text-danger">*</span></label>
-                                            <select id="visitor" class="select2" tags search name="visitor[]" multiple>
-
+                                            <select id="visitor" class="select2" tags search name="visitor[]" multiple required>
+                                                @foreach ($selected_data['visitor'] as $visitor)
+                                                    <option value="{{ $visitor->id }}" selected>
+                                                        {{ $visitor->name }} [{{ $visitor->user_id }}]
+                                                    </option>
+                                                    
+                                                @endforeach
                                             </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
                                         </div>
                                     </div>
 
@@ -79,7 +87,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Project <span class="text-danger">*</span></label>
-                                            <select id="projects" class="select2" tags search name="projects[]" multiple>
+                                            <select id="projects" class="select2" tags search name="projects[]" multiple required>
                                                 @isset($projects)
                                                     @foreach ($projects as $project)
                                                         <option value="{{ $project->name }}" {{ in_array($project->name, old('projects', isset($visit) ? json_decode($visit->projects) : [])) ? 'selected' : '' }}>

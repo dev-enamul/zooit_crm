@@ -16,7 +16,7 @@
         @endcan
 
         @can('prospecting')
-            @if ($data->approve_by!=null)
+            @if ($data->approve_by!=null && $data->status==0)
                 <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>
             @endif
         @endcan

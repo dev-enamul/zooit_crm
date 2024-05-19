@@ -67,7 +67,7 @@
                                             @foreach ($presentations as  $presentation)
                                             <tr class="">
                                                 <td class="text-center">
-                                                    <input class="form-check-input" type="checkbox" name="presentation_id[]" value="{{$presentation->user_id}}" id="flexCheckChecked" >
+                                                    <input class="form-check-input" type="checkbox" name="presentation_id[]" value="{{$presentation->id}}" id="flexCheckChecked" >
                                                 </td>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $presentation->customer->customer_id??'-' }}</td>

@@ -7,6 +7,7 @@ use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
 use App\Models\Employee;
+use App\Models\LeadAnalysis;
 use App\Models\Notification;
 use App\Models\Presentation;
 use App\Models\Project;
@@ -112,14 +113,9 @@ class PresentationAnalysisController extends Controller {
             $visit->status     = 0;
             $visit->created_at = now();
             $visit->created_by = auth()->id();
-            $visit->save();
-
+            $visit->save(); 
             if ($visit) {
-                $visit = Presentation::where('customer_id', $request->customer_id)->first();
-                if (isset($visit) && $visit != null) {
-                    $visit->status = 1;
-                    $visit->save();
-                }
+                LeadAnalysis::where('customer_id', $request->customer_id)->update(['status' => 1]); 
             }
 
             return redirect()->route('presentation_analysis.index')->with('success', 'Presentation analysis create successfully');
@@ -135,7 +131,12 @@ class PresentationAnalysisController extends Controller {
         $projects        = Project::where('status', 1)->select('id', 'name')->get();
         $units           = Unit::select('id', 'title')->get();
         $visit           = VisitAnalysis::findOrFail($id);
-        return view('presentation_analysis.presentation_analysis_save', compact('title', 'customers', 'priorities', 'projects', 'units', 'visit', 'freelancers'));
+        $visitor        = json_decode($visit->visitors);
+
+        $selected_data['customer'] = $visit->customer;
+        $selected_data['visitor']  = User::whereIn('id', $visitor)->get(); 
+
+        return view('presentation_analysis.presentation_analysis_save', compact('selected_data','title', 'customers', 'priorities', 'projects', 'units', 'visit', 'freelancers'));
     }
 
     public function presentationDelete($id) {
@@ -160,10 +161,8 @@ class PresentationAnalysisController extends Controller {
         if ($request->has('customer_id') && $request->customer_id !== '' & $request->customer_id !== null) {
             DB::beginTransaction();
             try {
-                foreach ($request->customer_id as $key => $customer_id) {
-                    $lead             = VisitAnalysis::where('customer_id', $customer_id)->first();
-                    $lead->approve_by = Auth::user()->id;
-                    $lead->save();
+                foreach ($request->presentation_id as $presentation_id) {
+                    VisitAnalysis::where('id', $presentation_id)->update('approve_by', Auth::user()->id);
                 }
                 DB::commit();
                 return redirect()->route('presentation_analysis.index')->with('success', 'Status Updated Successfully');

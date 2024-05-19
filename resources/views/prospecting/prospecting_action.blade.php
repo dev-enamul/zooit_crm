@@ -7,6 +7,7 @@
     </a>
 
     <div class="dropdown-menu dropdown-menu-animated">
+        <a class="dropdown-item" href="{{route('customer.profile',encrypt($prospecting->customer_id))}}">Customer Profile</a>
         @can('prospecting-manage')
             <a class="dropdown-item" href="{{route('prospecting.edit',$prospecting->id)}}">Edit</a> 
         @endcan
@@ -15,7 +16,7 @@
             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('prospecting.delete',$prospecting->id) }}')">Delete</a>
         @endcan
 
-        @if ($prospecting->approve_by!=null)
+        @if ($prospecting->approve_by!=null && $prospecting->status==0)
             @can('cold-calling-manage')
                 <a class="dropdown-item" href="{{route('cold-calling.create',['customer' => $prospecting->customer->id])}}">Cold Calling</a>
             @endcan

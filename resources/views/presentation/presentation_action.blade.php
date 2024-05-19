@@ -17,16 +17,7 @@
 
         <a class="dropdown-item" href="{{route('customer.profile',encrypt($presentation->customer_id))}}">Customer Profile</a>
         @if ($presentation->approve_by!=null)
-        <a class="dropdown-item" href="{{route('followup.create',['customer' => $presentation->customer_id])}}">Follow Up</a>
-            {{-- @if ($presentation->isVisited())
-                @can('follow-up-manage')
-                    <a class="dropdown-item" href="{{route('followup.create',['customer' => $presentation->customer_id])}}">Follow Up</a>
-                @endcan
-            @else
-                @can('visit-analysis')
-                    <a class="dropdown-item" href="{{route('presentation_analysis.create',['customer_id' => $presentation->customer_id])}}">Project Visit Analysis</a>
-                @endcan
-            @endif   --}}
+            <a class="dropdown-item" href="{{route('followup.create',['customer' => $presentation->customer_id])}}">Follow Up</a>
         @endif
     </div>
 </div>
