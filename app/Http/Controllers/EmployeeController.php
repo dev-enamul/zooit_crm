@@ -10,10 +10,10 @@ use App\Enums\Nationality;
 use App\Enums\Religion;
 use App\Events\UserCreatedEvent;
 use App\Models\Area;
-use App\Models\Bank; 
+use App\Models\Bank;
 use App\Models\Designation;
 use App\Models\DesignationPermission;
-use App\Models\Employee; 
+use App\Models\Employee;
 use App\Models\ReportingUser;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -29,16 +29,16 @@ use App\Traits\ImageUploadTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
 {
     use AreaTrait;
     use ImageUploadTrait;
-      
+
     public function index(Request $request)
-    { 
+    {
         // if($request->draw && $request->action === 'pdf'){
         //     $request->dd();
         //     need to write your pdf logic here
@@ -49,7 +49,7 @@ class EmployeeController extends Controller
     }
 
 
-    public function create(){    
+    public function create(){
         $title     = "Employee Create";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
@@ -57,26 +57,26 @@ class EmployeeController extends Controller
         $upazilas  = $this->getCachedUpazilas();
         $unions    = $this->getCachedUnions();
         $villages  = $this->getCachedVillages();
-        $nationalites = $this->nationality(); 
+        $nationalites = $this->nationality();
         $maritalStatuses = $this->maritalStatus();
         $religions = $this->religion();
         $bloodGroups = $this->bloodGroup();
-        $genders = $this->gender(); 
+        $genders = $this->gender();
         $banks = Bank::where('status',1)->where('type',0)->select('id','name')->get();
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
         $zones = Zone::where('status',1)->select('id','name')->get();
         $areas = Area::where('status',1)->select('id','name')->get();
-        $designations = Designation::where('status',1)->where('designation_type',1)->select('id','title')->get(); 
+        $designations = Designation::where('status',1)->where('designation_type',1)->select('id','title')->get();
         $reporting_user = User::where('status',1)->where('user_type',1)->select('id','name','user_id')->get();
-        
-        return view('employee.employee_create',compact([ 
+
+        return view('employee.employee_create',compact([
             'title',
             'countries',
             'divisions',
             'districts',
             'upazilas',
             'unions',
-            'villages', 
+            'villages',
             'maritalStatuses',
             'religions',
             'bloodGroups',
@@ -86,15 +86,15 @@ class EmployeeController extends Controller
             'zones',
             'areas',
             'nationalites',
-            'designations', 
+            'designations',
             'reporting_user'
         ]));
-    } 
+    }
 
     public function save(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name'                 => 'required|string|max:255', 
+            'full_name'                 => 'required|string|max:255',
             'marital_status'            => 'required|in:1,2,3',
             'dob'                       => 'required',
             'card_id'                   => 'nullable|string',
@@ -108,7 +108,7 @@ class EmployeeController extends Controller
             'imo_whatsapp_number'       => 'nullable|string',
             'facebook_id'               => 'nullable|string',
             'emergency_contact_name'    => 'nullable|string',
-            'emergency_person_number'   => 'nullable|string', 
+            'emergency_person_number'   => 'nullable|string',
             'division'                  => 'required|numeric|exists:divisions,id',
             'district'                  => 'required|numeric|exists:districts,id',
             'upazila'                   => 'required|numeric|exists:upazilas,id',
@@ -142,13 +142,13 @@ class EmployeeController extends Controller
                 'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
             ],
         ]);
-        if ($validator->fails()) { 
+        if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
-        } 
- 
-        DB::beginTransaction(); 
-       
-        try { 
+        }
+
+        DB::beginTransaction();
+
+        try {
             $user = User::create([
                 'user_id'       => User::generateNextEmployeeId(),
                 'name'          => $request->full_name,
@@ -188,7 +188,7 @@ class EmployeeController extends Controller
                 'created_at'    => now(),
             ]);
 
-            #user contacts 
+            #user contacts
             UserContact::create([
                 'user_id'                   => $user->id,
                 'personal_phone'            => get_phone($request->phone1),
@@ -196,13 +196,13 @@ class EmployeeController extends Controller
                 'office_email'              => $request->office_email,
                 'personal_email'            => $request->email,
                 'imo_number'                => get_phone($request->imo_whatsapp_number),
-                'facebook_id'               => $request->facebook_id, 
+                'facebook_id'               => $request->facebook_id,
                 'emergency_contact_person'  => $request->emergency_contact_name,
                 'emergency_contact_number'  => get_phone($request->emergency_person_number),
                 'created_at'                => now(),
             ]);
 
-            #user family 
+            #user family
             UserFamily::create([
                 'user_id'               => $user->id,
                 'father_name'           => $request->father_name,
@@ -213,7 +213,7 @@ class EmployeeController extends Controller
                 'spouse_contact'        => get_phone($request->spouse_phone),
                 'created_at'            => now(),
             ]);
-             
+
 
             #user transaction
             $data_transaction = [
@@ -256,11 +256,11 @@ class EmployeeController extends Controller
             $employee_data = [
                 'user_id'       => $user->id,
                 'designation_id'=> $request->designation,
-                'designations'  => json_encode($request->designations), 
+                'designations'  => json_encode($request->designations),
                 'status'        => 1,
                 'created_at'    => now(),
-            ]; 
-            Employee::create($employee_data);  
+            ];
+            Employee::create($employee_data);
 
             $permissions = DesignationPermission::where('designation_id', $request->designation)->pluck('permission_id')->toArray();
             foreach($permissions as $permission){
@@ -268,9 +268,9 @@ class EmployeeController extends Controller
                     'user_id'       => $user->id,
                     'permission_id' => $permission,
                 ]);
-            } 
-            
-            $reportingUser = ReportingUser::where('user_id',$request->reporting_user)->where('deleted_at',null)->first(); 
+            }
+
+            $reportingUser = ReportingUser::where('user_id',$request->reporting_user)->where('deleted_at',null)->first();
             if ($reportingUser) {
                 $reportingUserId = $reportingUser->id;
                 ReportingUser::create([
@@ -279,13 +279,13 @@ class EmployeeController extends Controller
                     'status'                => 1,
                     'created_at'            => now(),
                 ]);
-            }   
-            DB::commit();  
- 
+            }
+            DB::commit();
+
            UserCreatedEvent::dispatch($user->id);
 
             return redirect()->route('employee.index')->with('success', 'Employee created successfully');
-        } catch (Exception $e) {   
+        } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
@@ -293,7 +293,7 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
-        $id = decrypt($id); 
+        $id = decrypt($id);
         $title     = "Employee Edit";
         $countries = $this->getCachedCountries();
         $divisions = $this->getCachedDivisions();
@@ -301,7 +301,7 @@ class EmployeeController extends Controller
         $upazilas  = $this->getCachedUpazilas();
         $unions    = $this->getCachedUnions();
         $villages  = $this->getCachedVillages();
-        $nationalites = $this->nationality(); 
+        $nationalites = $this->nationality();
         $maritalStatuses = $this->maritalStatus();
         $religions = $this->religion();
         $bloodGroups = $this->bloodGroup();
@@ -311,7 +311,7 @@ class EmployeeController extends Controller
         $mobileBanks = Bank::where('status',1)->where('type',1)->select('id','name')->get();
         $zones = Zone::where('status',1)->select('id','name')->get();
         $areas = Area::where('status',1)->select('id','name')->get();
-        $designations = Designation::where('status',1)->where('designation_type',1)->select('id','title')->get(); 
+        $designations = Designation::where('status',1)->where('designation_type',1)->select('id','title')->get();
         $reporting_user = ReportingUser::where('status',1)->get();
 
         $employee = Employee::where('user_id',$id)->first();
@@ -325,7 +325,7 @@ class EmployeeController extends Controller
         $selected['upazila_id']   = $employee->user->userAddress->upazila_id??1;
         $selected['union_id']     = $employee->user->userAddress->union_id??1;
         $selected['village_id']   = $employee->user->userAddress->village_id??1;
- 
+
         return view('employee.employee_edit',compact([
             'ref_ids',
             'title',
@@ -334,7 +334,7 @@ class EmployeeController extends Controller
             'districts',
             'upazilas',
             'unions',
-            'villages', 
+            'villages',
             'maritalStatuses',
             'religions',
             'bloodGroups',
@@ -344,24 +344,24 @@ class EmployeeController extends Controller
             'zones',
             'areas',
             'nationalites',
-            'designations', 
+            'designations',
             'reporting_user',
             'employee',
             'selected'
-            
+
         ]));
     }
 
     public function update(Request $request, $id){
-       
+
         $validator = Validator::make($request->all(), [
-            'full_name'                 => 'required|string|max:255', 
+            'full_name'                 => 'required|string|max:255',
             'marital_status'            => 'required|in:1,2,3',
             'dob'                       => 'required',
             'card_id'                   => 'nullable|string',
             'religion'                  => 'required|numeric',
             'blood_group'               => 'nullable|numeric',
-            'gender'                    => 'required|in:1,2,3', 
+            'gender'                    => 'required|in:1,2,3',
             'phone1'                    => 'nullable|string|max:15',
             'phone2'                    => 'nullable|string|max:15',
             'office_email'              => 'nullable|email',
@@ -369,7 +369,7 @@ class EmployeeController extends Controller
             'imo_whatsapp_number'       => 'nullable|string',
             'facebook_id'               => 'nullable|string',
             'emergency_contact_name'    => 'nullable|string',
-            'emergency_person_number'   => 'nullable|string', 
+            'emergency_person_number'   => 'nullable|string',
             'division'                  => 'required|numeric|exists:divisions,id',
             'district'                  => 'required|numeric|exists:districts,id',
             'upazila'                   => 'required|numeric|exists:upazilas,id',
@@ -396,32 +396,32 @@ class EmployeeController extends Controller
             'profile_image'             => 'image|max:2048',
             'nid_file'                  => 'image|max:2048',
             'birth_certificate_file'    => 'image|max:2048',
-            'upload_passport'           => 'image|max:2048', 
+            'upload_passport'           => 'image|max:2048',
             'at_least_one_field' => [
                 'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
             ],
         ]);
 
-        if ($validator->fails()) { 
+        if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
-        } 
-        DB::beginTransaction();  
+        }
+        DB::beginTransaction();
         $user = User::find($id);
         if(!$user){
             return redirect()->back()->with('error', 'User Not Found');
         }
-        try { 
-            $user->update([ 
+        try {
+            $user->update([
                 'name'          => $request->full_name,
-                'phone'         => get_phone($request->phone1),  
+                'phone'         => get_phone($request->phone1),
                 'marital_status'=> $request->marital_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),
                 'finger_id'     => $request->card_id,
                 'religion'      => $request->religion,
                 'blood_group'   => $request->blood_group,
                 'gender'        => $request->gender,
-                'nationality'   => $request->nationality, 
-                'updated_by'    => auth()->user()->id, 
+                'nationality'   => $request->nationality,
+                'updated_by'    => auth()->user()->id,
                 'serial'        => $request->serial,
                 'user_id'       => $request->user_id,
             ]);
@@ -431,46 +431,46 @@ class EmployeeController extends Controller
                 $user->save();
             }
 
-            $address_data = [ 
+            $address_data = [
                 'country_id'    => $request->country,
                 'division_id'   => $request->division,
                 'district_id'   => $request->district,
                 'upazila_id'    => $request->upazila,
                 'union_id'      => $request->union,
                 'village_id'    => $request->village,
-                'address'       => $request->address, 
+                'address'       => $request->address,
             ];
-            if($user->userAddress){ 
+            if($user->userAddress){
                 $user->userAddress->update($address_data);
             }else{
                 $address_data['user_id'] = $user->id;
                 UserAddress::create($address_data);
-            } 
- 
-            $contact_data = [ 
+            }
+
+            $contact_data = [
                 'personal_phone'            => get_phone($request->phone1),
                 'office_phone'              => get_phone($request->phone2),
                 'office_email'              => $request->office_email,
                 'personal_email'            => $request->email,
                 'imo_number'                => get_phone($request->imo_whatsapp_number),
-                'facebook_id'               => $request->facebook_id, 
+                'facebook_id'               => $request->facebook_id,
                 'emergency_contact_person'  => $request->emergency_contact_name,
-                'emergency_contact_number'  => get_phone($request->emergency_person_number), 
+                'emergency_contact_number'  => get_phone($request->emergency_person_number),
             ];
             if($user->userContact){
                 $user->userContact->update($contact_data);
             }else{
                 $contact_data['user_id'] = $user->id;
                 UserContact::create($contact_data);
-            } 
- 
-            $family_data = [ 
+            }
+
+            $family_data = [
                 'father_name'           => $request->father_name,
                 'father_mobile'         => get_phone($request->father_phone),
                 'mother_name'           => $request->mother_name,
                 'mother_mobile'         => get_phone($request->mother_phone),
                 'spouse_name'           => $request->spouse_name,
-                'spouse_contact'        => get_phone($request->spouse_phone), 
+                'spouse_contact'        => get_phone($request->spouse_phone),
             ];
 
             if($user->userFamily){
@@ -478,11 +478,11 @@ class EmployeeController extends Controller
             }else{
                 $family_data['user_id'] = $user->id;
                 UserFamily::create($family_data);
-            } 
-             
+            }
+
 
             #user transaction
-            $data_transaction = [ 
+            $data_transaction = [
                 'bank_id'                       => $request->bank,
                 'branch'                        => $request->branch,
                 'bank_account_number'           => $request->account_number,
@@ -496,7 +496,7 @@ class EmployeeController extends Controller
             }else{
                 $data_transaction['user_id'] = $user->id;
                 UserTransaction::create($data_transaction);
-            } 
+            }
 
             #user documents
             if ($request->hasFile('nid_file')) {
@@ -508,15 +508,15 @@ class EmployeeController extends Controller
             if ($request->hasFile('upload_passport')) {
                 $upload_passport = $this->uploadImage($request, 'upload_passport', 'users', 'public');
             }
-            $user_documents = [ 
+            $user_documents = [
                 'nid_number'                => $request->nid,
                 'nid_image'                 => $nid_file ?? null,
                 'birth_cirtificate_number'  => $request->birth_certificate_number,
                 'birth_cirtificate_image'   => $birth_certificate_file ?? null,
-                'passport_number'           => $request->passport_number, 
+                'passport_number'           => $request->passport_number,
                 'passport_exp_date'         => date('Y-m-d', strtotime($request->passport_expire_date)),
                 'passport_image'            => $upload_passport ?? null,
-                'tin_number'                => $request->tin_number, 
+                'tin_number'                => $request->tin_number,
             ];
 
             if($user->userId){
@@ -524,17 +524,17 @@ class EmployeeController extends Controller
             }else{
                 $user_documents['user_id'] = $user->id;
                 UserId::create($user_documents);
-            }  
-  
-            DB::commit(); 
+            }
+
+            DB::commit();
             return redirect()->route('employee.index')->with('success', 'Employee Updated successfully');
-        } catch (Exception $e) {  
+        } catch (Exception $e) {
             dd($e->getMessage());
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
-    } 
- 
+    }
+
 
 
     public function maritalStatus()
@@ -546,7 +546,7 @@ class EmployeeController extends Controller
     {
         return Religion::values();
     }
-    
+
     public function bloodGroup()
     {
         return BloodGroup::values();
@@ -563,14 +563,14 @@ class EmployeeController extends Controller
     }
 
     public function userDetails($id) {
-        $id = decrypt($id); 
-        $user = User::find($id); 
+        $id = decrypt($id);
+        $user = User::find($id);
         if(!$user){
             return redirect()->back()->with('error', 'User Not Found');
         }
 
         return view('employee.employee_details',compact('user'));
-    } 
+    }
 
     public function select2_employee(Request $request){
         $request->validate([
@@ -578,7 +578,7 @@ class EmployeeController extends Controller
         ]);
 
         $user_id   = Auth::user()->id;
-        $my_all_employee = json_decode(Auth::user()->user_employee); 
+        $my_all_employee = json_decode(Auth::user()->user_employee);
 
         $users = User::query()
             ->where(function ($query) use ($request) {
@@ -591,23 +591,23 @@ class EmployeeController extends Controller
             ->where('user_type',1)
             ->limit(10)
             ->get();
-    
+
         $results = [
             ['id' => '', 'text' => 'Select Product']
         ];
-    
+
         foreach ($users as $user) {
             $results[] = [
                 'id' => $user->id,
                 'text' => "{$user->name} ($user->user_id)",
                 'selected' => $user->id == $user_id,
             ];
-            
+
         }
         return response()->json([
             'results' => $results
         ]);
-    } 
+    }
 
     public function select2_employee_freelancer(Request $request){
         $request->validate([
@@ -615,42 +615,7 @@ class EmployeeController extends Controller
         ]);
 
         $user_id   = Auth::user()->id;
-        $my_all_employee = json_decode(Auth::user()->user_employee); 
-
-        $users = User::query()
-            ->where(function ($query) use ($request) {
-                $term = $request->term;
-                $query->where('user_id', 'like', "%{$term}%")
-                    ->orWhere('name', 'like', "%{$term}%");
-            })
-            ->whereIn('id', $my_all_employee)
-            ->where('status', 1) 
-            ->limit(10)
-            ->get();
-    
-        $results = [
-            ['id' => '', 'text' => 'Select Product']
-        ];
-    
-        foreach ($users as $user) {
-            $results[] = [
-                'id' => $user->id,
-                'text' => "{$user->name} ($user->user_id)",
-                'selected' => $user->id == $user_id,
-            ];
-            
-        }
-        return response()->json([
-            'results' => $results
-        ]);
-    } 
-
-
-    public function select2_employee_encode(Request $request){
-        $request->validate([
-            'term' => ['nullable', 'string'],
-        ]); 
-        $my_all_employee = json_decode(Auth::user()->user_employee); 
+        $my_all_employee = json_decode(Auth::user()->user_employee);
 
         $users = User::query()
             ->where(function ($query) use ($request) {
@@ -662,17 +627,52 @@ class EmployeeController extends Controller
             ->where('status', 1)
             ->limit(10)
             ->get();
-    
+
         $results = [
             ['id' => '', 'text' => 'Select Product']
         ];
-    
+
+        foreach ($users as $user) {
+            $results[] = [
+                'id' => $user->id,
+                'text' => "{$user->name} ($user->user_id)",
+                'selected' => $user->id == $user_id,
+            ];
+
+        }
+        return response()->json([
+            'results' => $results
+        ]);
+    }
+
+
+    public function select2_employee_encode(Request $request){
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
+
+        $users = User::query()
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('user_id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%");
+            })
+            ->whereIn('id', $my_all_employee)
+            ->where('status', 1)
+            ->limit(10)
+            ->get();
+
+        $results = [
+            ['id' => '', 'text' => 'Select Product']
+        ];
+
         foreach ($users as $user) {
             $results[] = [
                 'id' => encrypt($user->id),
                 'text' => "{$user->name} ($user->user_id)",
             ];
-            
+
         }
         return response()->json([
             'results' => $results
