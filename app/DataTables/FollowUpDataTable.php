@@ -33,7 +33,7 @@ class FollowUpDataTable extends DataTable {
                 return $data->project->name ?? '-';
             })
             ->addColumn('unit', function ($data) {
-                return $data->unit->name ?? '-';
+                return $data->unit->title ?? '-';
             })
             ->addColumn('date', function ($data) {
                 return get_date($data->created_at);

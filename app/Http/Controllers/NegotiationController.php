@@ -141,11 +141,12 @@ class NegotiationController extends Controller {
 
     public function edit(string $id, Request $request) {
         $title           = 'Negotiation Edit';
-        $my_all_employee = json_decode(Auth::user()->my_employee);
+        $my_all_employee = json_decode(Auth::user()->user_employee);
         $customers       = VisitAnalysis::where('status', 0)->where('approve_by', '!=', null)->whereHas('customer', function ($q) use ($my_all_employee) {
             $q->whereIn('ref_id', $my_all_employee);
         })->get();
         $projects     = Project::where('status', 1)->get(['name', 'id']);
+        $units        = Unit::select('id', 'title')->get();
         $projectUnits = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees    = User::whereIn('id', $my_all_employee)->get();
         $priorities   = $this->priority();
@@ -154,12 +155,10 @@ class NegotiationController extends Controller {
             [
             'employee' => Auth::user()->id,
             'priority' => Priority::Regular,
-        ];
-        if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
-        }
-        $negotiation = Negotiation::find($id);
-        return view('negotiation.negotiation_save', compact('selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees', 'negotiation'));
+        ]; 
+        $negotiation = Negotiation::find($id); 
+        $selected_data['customer'] = $negotiation->customer;
+        return view('negotiation.negotiation_save', compact('units','selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees', 'negotiation'));
     }
 
     public function negotiationDelete($id) {

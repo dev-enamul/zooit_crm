@@ -4,6 +4,9 @@
     </a>
     <div class="dropdown-menu dropdown-menu-animated"> 
         <a class="dropdown-item" href="{{route('profile',encrypt($data?->user_id))}}">Profile</a>
+        @if (auth()->user()->hasPermission('admin'))
+            <a class="dropdown-item" href="{{route('employee.edit', encrypt($data->id))}}">Edit</a>
+        @endif
         <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}})">Approve</a> 
     </div>
 </div> 

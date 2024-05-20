@@ -38,7 +38,7 @@ class FollowupAnalysisDataTable extends DataTable
                 return $data->project->name??'-';
             })
             ->addColumn('unit', function($data){
-                return $data->unit->name??'-';
+                return $data->unit->title??'-';
             })
 
             ->addColumn('freelancer', function($data){

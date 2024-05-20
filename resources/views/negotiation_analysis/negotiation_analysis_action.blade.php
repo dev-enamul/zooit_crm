@@ -6,6 +6,7 @@
             @endif
             <img class="rounded avatar-2xs p-0" src="{{@$negotiation->customer->user->image()}}">
         </a>
+        
         <div class="dropdown-menu dropdown-menu-animated">
             <a class="dropdown-item" href="{{route('customer.profile',$negotiation->customer_id)}}">Customer Profile</a>
             @can('negotiation-analysis-manage')

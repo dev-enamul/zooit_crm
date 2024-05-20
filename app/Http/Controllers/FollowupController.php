@@ -184,6 +184,7 @@ class FollowupController extends Controller {
         $projectUnits = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees    = User::whereIn('id', $my_all_employee)->get();
         $priorities   = $this->priority();
+        $units      = Unit::select('id', 'title')->get();
 
         $selected_data =
             [
@@ -193,7 +194,7 @@ class FollowupController extends Controller {
       
         $follow = FollowUp::find($id);
         $selected_data['customer'] = $follow->customer;
-        return view('followup.followup_save', compact('selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees', 'follow'));
+        return view('followup.followup_save', compact('units','selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees', 'follow'));
     }
 
     public function followUpDelete($id) {

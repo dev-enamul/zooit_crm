@@ -161,6 +161,7 @@ class FollowupAnalysisController extends Controller {
             $q->whereIn('ref_id', $my_all_employee);
         })->get();
         $projects     = Project::where('status', 1)->get(['name', 'id']);
+        $units        = Unit::select('id', 'title')->get();
         $projectUnits = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $employees    = User::whereIn('id', $my_all_employee)->get();
         $priorities   = $this->priority();
@@ -169,13 +170,10 @@ class FollowupAnalysisController extends Controller {
             [
             'employee' => Auth::user()->id,
             'priority' => Priority::Regular,
-        ];
-        if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
-        }
-
+        ]; 
         $followUp = FollowUpAnalysis::find($id);
-        return view('followup_analysis.followup_analysis_save', compact('followUp', 'selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees'));
+        $selected_data['customer'] = $followUp->customer;
+        return view('followup_analysis.followup_analysis_save', compact('followUp','units', 'selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees'));
     }
 
     public function followUpDelete($id) {

@@ -16,7 +16,7 @@
                 <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followup-analysis.destroy',$followUp->id) }}')">Delete</a>
             @endcan
 
-            @if ($followUp->approve_by!=null)
+            @if ($followUp->approve_by!=null && $followUp->status==0)
                  @can('negotiation-manage')
                     <a class="dropdown-item" href="{{route('negotiation.create',['customer'=>$followUp->customer->id])}}">Negotiation Create</a>
                  @endcan
