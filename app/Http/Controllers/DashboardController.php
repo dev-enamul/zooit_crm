@@ -220,6 +220,7 @@ class DashboardController extends Controller
         // dd($user_reporting);
 
         exec('composer update');
+        dd('Yes');
         
         // Artisan::call('db:seed');  
         // Artisan::call('migrate');
