@@ -7,28 +7,16 @@
     </a>
 
     <div class="dropdown-menu dropdown-menu-animated">
-        @can('presentation-management')
-           @if ($presentation->approve_by==null)
+        <a class="dropdown-item" href="{{route('customer.profile',encrypt($presentation->customer_id))}}">Customer Profile</a>
+        @can('presentation-manage')
             <a class="dropdown-item" href="{{route('presentation.edit',$presentation->id)}}">Edit</a>
-           @endif
         @endcan
 
         @can('presentation-delete')
             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('presentation.delete',$presentation->id) }}')">Delete</a>
-        @endcan
-
-        <a class="dropdown-item" href="{{route('customer.profile',encrypt($presentation->customer_id))}}">Customer Profile</a>
+        @endcan 
         @if ($presentation->approve_by!=null)
-        <a class="dropdown-item" href="{{route('followup.create',['customer' => $presentation->customer_id])}}">Follow Up</a>
-            {{-- @if ($presentation->isVisited())
-                @can('follow-up-manage')
-                    <a class="dropdown-item" href="{{route('followup.create',['customer' => $presentation->customer_id])}}">Follow Up</a>
-                @endcan
-            @else
-                @can('visit-analysis')
-                    <a class="dropdown-item" href="{{route('presentation_analysis.create',['customer_id' => $presentation->customer_id])}}">Project Visit Analysis</a>
-                @endcan
-            @endif   --}}
+            <a class="dropdown-item" href="{{route('followup.create',['customer' => $presentation->customer_id])}}">Follow Up</a>
         @endif
     </div>
 </div>

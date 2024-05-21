@@ -22,8 +22,7 @@ use Illuminate\Support\Facades\Validator;
 class PresentationController extends Controller {
     public function priority() {
         return Priority::values();
-    }
-
+    } 
     public function index(PresentationDataTable $dataTable, Request $request) {
         $title      = 'Presentation';
         $date       = $request->date ?? null;
@@ -111,11 +110,7 @@ class PresentationController extends Controller {
             $presentation->save();
 
             if ($presentation) {
-                $lead_analysis = LeadAnalysis::where('customer_id', $request->customer)->first();
-                if (isset($lead_analysis) && $lead_analysis != null) {
-                    $lead_analysis->status = 1;
-                    $lead_analysis->save();
-                }
+                LeadAnalysis::where('customer_id', $request->customer)->update(['status' => 1]); 
             }
             return redirect()->route('presentation.index')->with('success', 'Presentation create successfully');
         }
@@ -128,8 +123,10 @@ class PresentationController extends Controller {
         $priorities      = $this->priority();
         $projects        = Project::where('status', 1)->select('id', 'name')->get();
         $units           = Unit::select('id', 'title')->get();
-        $presentation    = Presentation::find($id);
-        return view('presentation.presentation_save', compact('title', 'customers', 'priorities', 'projects', 'units', 'presentation'));
+        $presentation    = Presentation::find($id); 
+        $selected_data['customer'] = $presentation->customer; 
+ 
+        return view('presentation.presentation_save', compact('selected_data','title', 'customers', 'priorities', 'projects', 'units', 'presentation'));
     }
 
     public function presentationDelete($id) {
@@ -154,9 +151,7 @@ class PresentationController extends Controller {
             DB::beginTransaction();
             try {
                 foreach ($request->presentation_id as $key => $presentation_id) {
-                    $lead             = Presentation::where('id', $presentation_id)->first();
-                    $lead->approve_by = Auth::user()->id;
-                    $lead->save();
+                   Presentation::where('id', $presentation_id)->update(['approve_by' => Auth::user()->id]); 
                 }
                 DB::commit();
                 return redirect()->route('presentation.approve')->with('success', 'Status Updated Successfully');

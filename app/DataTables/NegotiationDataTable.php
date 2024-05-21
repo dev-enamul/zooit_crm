@@ -39,7 +39,7 @@ class NegotiationDataTable extends DataTable
                 return $data->project->name??'-';
             })
             ->addColumn('unit', function($data){
-                return $data->unit->name??'-';
+                return $data->unit->title??'-';
             })
             ->addColumn('customer_expectation', function($data){
                 return $data->customer->followup_analysis->customer_expectation??'-';

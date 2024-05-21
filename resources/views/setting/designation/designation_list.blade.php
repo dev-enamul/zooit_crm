@@ -38,7 +38,8 @@
                                         @endcan
                                         <th>S/N</th>
                                         <th>Profession Name</th> 
-                                        <th>Designation Type</th> 
+                                        <th>Designation Type</th>
+                                        <th>Total Employee</th>
                                         <th>Commission</th> 
                                     </tr>
                                 </thead>
@@ -59,7 +60,16 @@
                                         @endcan
                                         <td>{{$key+1}}</td>
                                         <td>{{$data->title}}</td>
-                                        <td>{{$data->designation_type==1?"Employee":"Freelancer"}}</td>  
+                                        <td>{{$data->designation_type==1?"Employee":"Freelancer"}}</td> 
+                                        @if ($data->designation_type==1)
+                                            <td>
+                                                <a href="{{route('employee.index',['designation'=>$data->id])}}" class="btn btn-primary btn-sm">{{$data->employees->count()}}</a>
+                                            </td> 
+                                        @else 
+                                        <td>
+                                            <a href="{{route('freelancer.index',['designation'=>$data->id])}}" class="btn btn-primary btn-sm">{{$data->freelancers->count()}}</a>
+                                        </td>  
+                                        @endif 
                                         <th>{{@$data->commission->commission}}%</th> 
                                     </tr> 
                                     @endforeach 

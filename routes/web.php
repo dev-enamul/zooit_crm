@@ -449,7 +449,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
-          dd('noting');
+         dd(my_all_employee(auth()->user()->id));
+
+          dd('updated');
 });
 
 // test

@@ -21,6 +21,8 @@ class UserAddress extends Model
         'change_reason_document',
         'zone_id',
         'area_id',
+        'post_code',
+        'post_id'
     ];
 
     public function user()

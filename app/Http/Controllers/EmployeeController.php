@@ -279,10 +279,17 @@ class EmployeeController extends Controller
                     'status'                => 1,
                     'created_at'            => now(),
                 ]);
+<<<<<<< HEAD
             }
             DB::commit();
 
            UserCreatedEvent::dispatch($user->id);
+=======
+            }   
+            DB::commit();  
+ 
+            UserCreatedEvent::dispatch($user->id);
+>>>>>>> main
 
             return redirect()->route('employee.index')->with('success', 'Employee created successfully');
         } catch (Exception $e) {

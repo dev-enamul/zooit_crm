@@ -71,6 +71,7 @@ class FreelancersDataTable extends DataTable {
      * @param \App\Models\Freelancer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
+<<<<<<< HEAD
     public function query(Freelancer $model, Request $request): QueryBuilder {
         if (isset($request->status) && $request->status != 0) {
             $model = $model->where('created_at', '<', Carbon::parse('2024-03-30'));
@@ -83,10 +84,35 @@ class FreelancersDataTable extends DataTable {
                 $model      = $model->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
             } else {
                 $model = $model->whereBetween('created_at', [date('Y-m-01') . ' 00:00:00', date('Y-m-t') . ' 23:59:59']);
+=======
+    public function query(Freelancer $model, Request $request): QueryBuilder
+    {
+        if(isset($request->designation)){
+            $model = $model->where('designation_id', $request->designation)
+            ->WhereHas('user', function($query){
+                $query->Where('approve_by','!=',null);
+            })->with('user');
+            return $model;
+        } 
+ 
+        if(isset($request->status) && $request->status != 0){
+            $model = $model->where('created_at','<',Carbon::parse('2024-03-30'));
+        }else{
+            $model = $model->where('created_at','>',Carbon::parse('2024-03-30'));
+            if(isset($request->date)){
+                $date = explode(' - ',$request->date);
+                $start_date = date('Y-m-d',strtotime($date[0]));
+                $end_date = date('Y-m-d',strtotime($date[1]));
+                $model = $model->whereBetween('created_at',[$start_date.' 00:00:00',$end_date.' 23:59:59']);
+            }else{
+                $model = $model->whereBetween('created_at',[date('Y-m-01').' 00:00:00',date('Y-m-t').' 23:59:59']);
+>>>>>>> main
             }
         }
 
+
         $user = User::find(auth()->user()->id);
+<<<<<<< HEAD
         if (isset($request->employee)) {
             $filter_user   = User::find($request->employee);
             $my_freelancer = json_decode($filter_user->user_employee);
@@ -95,6 +121,22 @@ class FreelancersDataTable extends DataTable {
             $my_freelancer = json_decode($user->user_employee);
             $model         = $model->whereIn('user_id', $my_freelancer);
         }
+=======
+        $is_admin = Auth::user()->hasPermission('admin');
+        
+        if(!$is_admin){
+            if(isset($request->employee)){
+                $filter_user = User::find($request->employee);
+                $my_freelancer = json_decode($filter_user->user_employee);
+                $model = $model->whereIn('user_id',$my_freelancer);
+            }else{
+                $my_freelancer = json_decode($user->user_employee);
+                $model = $model->whereIn('user_id',$my_freelancer);
+            } 
+        } 
+
+        
+>>>>>>> main
 
         $model = $model
             ->where(function ($q) {
@@ -104,10 +146,16 @@ class FreelancersDataTable extends DataTable {
                         ->orWhere('created_by', auth()->user()->id);
                 });
             });
+<<<<<<< HEAD
 
         $data = $model->with('user')
             ->newQuery();
 
+=======
+        });  
+        $data =  $model->with('user')
+        ->newQuery(); 
+>>>>>>> main
         return $data;
     }
 

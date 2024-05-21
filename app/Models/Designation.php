@@ -42,4 +42,11 @@ class Designation extends Model
     {
         return $this->hasMany(Employee::class, 'designation_id');
     }
+
+    public function freelancers()
+    {
+        return $this->hasMany(Freelancer::class, 'designation_id')->WhereHas('user', function($query){
+            $query->Where('approve_by','!=',null);
+        });
+    }
 }

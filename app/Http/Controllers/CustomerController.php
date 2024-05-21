@@ -229,6 +229,7 @@ class CustomerController extends Controller {
                 'division_id' => $request->division,
                 'district_id' => $request->district,
                 'upazila_id'  => $request->upazila,
+                'post_code'   => $request->post_code,
                 'union_id'    => $request->union,
                 'village_id'  => $request->village,
                 'address'     => $request->address,
@@ -406,6 +407,7 @@ class CustomerController extends Controller {
                 'district_id' => $request->district,
                 'upazila_id'  => $request->upazila,
                 'union_id'    => $request->union,
+                'post_code'   => $request->post_code,
                 'village_id'  => $request->village,
                 'address'     => $request->address,
             ];

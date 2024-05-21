@@ -25,17 +25,97 @@
             <div class="row">
                 <div class="col-xl-12"> 
                     <form class="needs-validation" method="POST" action="{{route('deposit.target.save')}}" novalidate> 
-                        @csrf
+                        @csrf 
+
+                        <div class="row">
+                            <div class="col-md-3"> 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 align-self-center">
+                                                <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
+                                                    <span class="avatar-title">
+                                                        <i class="mdi mdi-hospital-building fs-24"></i> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="text-muted fw-medium mb-2">New Unit</p>
+                                                <h4 class="mb-0" id="total_new_unit">0</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3"> 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 align-self-center">
+                                                <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
+                                                    <span class="avatar-title">
+                                                        <i class="mdi mdi-hospital-building fs-24"></i> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="text-muted fw-medium mb-2">Existing Unit</p>
+                                                <h4 class="mb-0" id="total_existing_unit">0</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3"> 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 align-self-center">
+                                                <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
+                                                    <span class="avatar-title">
+                                                        <i class="mdi mdi-credit-card fs-24"></i> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="text-muted fw-medium mb-2">New Deposit</p>
+                                                <h4 class="mb-0"><span id="total_new_deposit">0</span> Tk</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div class="col-md-3"> 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 align-self-center">
+                                                <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
+                                                    <span class="avatar-title">
+                                                        <i class="mdi mdi-credit-card fs-24"></i> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="text-muted fw-medium mb-2">Existing Deposit</p>
+                                                <h4 class="mb-0"><span id="total_existing_deposit">0</span> Tk</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
                         <div class="card"> 
                             <div class="card-body"> 
                                 <div class="row"> 
                                     <div class="col-md-8">
                                         <div class="mb-3">
                                             <label for="assign_to" class="form-label">Assign To <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="assign_to" id="assign_to" required>
+                                            <select class="select2" search name="assign_to" id="assign_to" required>
                                                 <option value="">Select Employee</option>
                                                 @foreach ($employees as $key => $item)
-                                                    <option {{$key==0?"selected":""}} value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option>
+                                                    <option  value="{{$item->id}}">{{$item->name}} [{{$item->user_id}}]</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -137,6 +217,35 @@
                 });
             }
         });
+    }); 
+
+    $(document).on('change', 'input[type="number"]', function() {
+    var total_new_unit = 0;
+    var total_existing_unit = 0;
+    var total_new_deposit = 0;
+    var total_existing_deposit = 0;
+
+    $('input[name^="new_unit"]').each(function() {
+        total_new_unit += parseInt($(this).val()) || 0;
     });
+
+    $('input[name^="existing_unit"]').each(function() {
+        total_existing_unit += parseInt($(this).val()) || 0;
+    });
+
+    $('input[name^="new_deposit"]').each(function() {
+        total_new_deposit += parseInt($(this).val()) || 0;
+    });
+
+    $('input[name^="existing_deposit"]').each(function() {
+        total_existing_deposit += parseInt($(this).val()) || 0;
+    });
+
+    $('#total_new_unit').text(total_new_unit);
+    $('#total_existing_unit').text(total_existing_unit);
+    $('#total_new_deposit').text(total_new_deposit);
+    $('#total_existing_deposit').text(total_existing_deposit);
+});
+
 </script>
 @endsection

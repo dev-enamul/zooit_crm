@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Follow Up Entry</h4>
+                        <h4 class="mb-sm-0">Follow Up</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Follow Up Entry</li>
+                                <li class="breadcrumb-item active">Follow Up</li>
                             </ol>
                         </div>
 
@@ -26,9 +26,9 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            @if(isset($visit))
+                            @if(isset($follow))
                                 <form action="{{route('follow-up.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-                                <input type="hidden" name="id" value="{{$visit->id}}">
+                                <input type="hidden" name="id" value="{{$follow->id}}">
                             @else
                                 <form action="{{route('follow-up.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @endif
@@ -101,7 +101,7 @@
                                             </option>
                                             @isset($projects)
                                                 @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($cold_calling) ? $cold_calling->project_id : null) == $project->id ? 'selected' : '' }}>
+                                                    <option value="{{ $project->id }}" {{ old('project', isset($follow) ? $follow->project_id : null) == $project->id ? 'selected' : '' }}>
                                                         {{ $project->name }}
                                                     </option>
                                                 @endforeach
@@ -123,7 +123,7 @@
                                             </option>
                                             @isset($units)
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($lead) ? $lead->unit_id : null) == $unit->id ? 'selected' : '' }}>
+                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($follow) ? $follow->unit_id : null) == $unit->id ? 'selected' : '' }}>
                                                         {{ $unit->title }}
                                                     </option>
                                                 @endforeach
@@ -294,10 +294,10 @@
                     dataType: "json",
                     url: "{{ route('get.presentation.data') }}",
                     success: function(data) {
-                        $('#priority').val(data.priority);
-                        $('#project').val(data.project_id);
-                        $('#unit').val(data.unit_id);
-                        getUnitPrice();
+                        // $('#priority').val(data.priority);
+                        // $('#project').val(data.project_id);
+                        // $('#unit').val(data.unit_id);
+                        // getUnitPrice();
                     },
                     error: function(data) {
                         console.log('Error:', data);

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('district_id')->nullable()->constrained();
             $table->foreignId('upazila_id')->nullable()->constrained();
             $table->foreignId('union_id')->nullable()->constrained();
+            $table->string('post_code')->nullable();
+            $table->foreignId('post_id')->nullable()->constrained();
             $table->foreignId('village_id')->nullable()->constrained();
             $table->string('address', 250)->nullable(); 
             $table->foreignId('country_id')->nullable()->constrained();

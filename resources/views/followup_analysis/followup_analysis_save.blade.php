@@ -27,9 +27,9 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            @if(isset($visit))
-                                <form action="{{route('follow-up-analysis.save',$follow->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-                                <input type="hidden" name="id" value="{{$visit->id}}">
+                            @if(isset($followUp))
+                                <form action="{{route('follow-up-analysis.save',$followUp->id)}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                <input type="hidden" name="id" value="{{$followUp->id}}">
                             @else
                                 <form action="{{route('follow-up-analysis.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @endif
@@ -140,63 +140,62 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="unit_qty" class="form-label"> Unit Qty <span class="text-danger">*</span></label>
-                                             <input type="number"  class="form-control" name="unit_qty" id="unit_qty" value="1" min="1" required>
+                                             <input type="number"  class="form-control" name="unit_qty" id="unit_qty" value="{{old('unit_price',$followUp->unit_price??'1')}}" min="1" required>
                                         </div>
-                                    </div>
-
+                                    </div> 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="regular_amount" class="form-label"> Regular Amount</label>
-                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="{{isset($follow) ? $follow->regular_amount : old('regular_amount')}}" readonly>
+                                             <input type="number"  class="form-control" name="regular_amount" id="regular_amount" value="" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="negotiation_amount" class="form-label"> Negotiation Amount <span class="text-danger">*</span></label>
-                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}" required>
+                                             <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{old('negotiation_amount',$followUp->negotiation_amount??0)}}" required>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_expectation" class="form-label"> Customer's Expectation</label>
-                                             <input type="text" placeholder="Customer Expectation" class="form-control" name="customer_expectation" id="customer_expectation" value="{{isset($follow) ? $follow->customer_expectation : old('customer_expectation')}}">
+                                             <input type="text" placeholder="Customer Expectation" class="form-control" name="customer_expectation" id="customer_expectation" value="{{old('customer_expectation',$followUp->customer_expectation??'')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_need" class="form-label"> Need</label>
-                                             <input type="text" placeholder="Customer Need" class="form-control" name="customer_need" id="customer_need" value="{{isset($follow) ? $follow->customer_need : old('customer_need')}}">
+                                             <input type="text" placeholder="Customer Need" class="form-control" name="customer_need" id="customer_need" value="{{old('need',$followUp->need??'')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_ability" class="form-label"> Ability</label>
-                                             <input type="text" placeholder="Customer Ability" class="form-control" name="customer_ability" id="customer_ability"  value="{{isset($follow) ? $follow->customer_ability : old('customer_ability')}}">
+                                             <input type="text" placeholder="Customer Ability" class="form-control" name="customer_ability" id="customer_ability"  value="{{old('ability',$followUp->ability??'')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="influencer_opinion" class="form-label"> Influencer Opinion</label>
-                                             <input type="text" placeholder="Influncer Opinion" class="form-control" name="influencer_opinion" id="influencer_opinion" value="{{isset($follow) ? $follow->influencer_opinion : old('influencer_opinion')}}">
+                                             <input type="text" placeholder="Influncer Opinion" class="form-control" name="influencer_opinion" id="influencer_opinion" value="{{old('influencer_opinion',$followUp->influencer_opinion??'')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="descision_maker" class="form-label"> Decision Maker</label>
-                                             <input type="text" placeholder="Enter Decision Maker" class="form-control" name="descision_maker" id="descision_maker" value="{{isset($follow) ? $follow->descision_maker : old('descision_maker')}}">
+                                             <input type="text" placeholder="Enter Decision Maker" class="form-control" name="descision_maker" id="descision_maker" value="{{old('decision_maker',$followUp->decision_maker??'')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="decision_maker_opinion" class="form-label"> Decision Maker Opinion</label>
-                                             <input type="text" placeholder="Decision Maker Opinion" class="form-control" name="decision_maker_opinion" id="decision_maker_opinion" value="{{isset($follow) ? $follow->decision_maker_opinion : old('decision_maker_opinion')}}">
+                                             <input type="text" placeholder="Decision Maker Opinion" class="form-control" name="decision_maker_opinion" id="decision_maker_opinion" value="{{old('decision_maker_opinion',$followUp->decision_maker_opinion??'')}}">
                                         </div>
                                     </div>
                                 </div>

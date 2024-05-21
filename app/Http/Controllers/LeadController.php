@@ -136,8 +136,9 @@ class LeadController extends Controller {
         $units           = Unit::select('id', 'title')->get();
         $priorities      = $this->priority();
         $lead            = Lead::find($id);
+        $selected_data['customer'] = $lead->customer;
 
-        return view('lead.lead_save', compact('customers', 'priorities', 'title', 'projects', 'units', 'lead'));
+        return view('lead.lead_save', compact('selected_data','customers', 'priorities', 'title', 'projects', 'units', 'lead'));
     }
 
     public function leadDelete($id) {

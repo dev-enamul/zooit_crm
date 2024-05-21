@@ -215,7 +215,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 d-none">
                                         <div class="mb-3">
                                             <label for="booking" class="form-label">Booking <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" name="booking" id="booking" value="" required readonly>
@@ -225,11 +225,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 d-none">
                                         <div class="mb-3">
                                             <label for="down_payment" class="form-label">Down Payment</label>
                                             <input type="number"  class="form-control" name="down_payment" id="down_payment" value="{{ isset($selected_data['down_payment']) ? $selected_data['down_payment'] : (isset($sales) ? $sales->down_payment : old('down_payment')) }}" readonly >
-
                                         </div>
                                     </div>
 

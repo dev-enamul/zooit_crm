@@ -106,7 +106,8 @@ class PresentationDataTable extends DataTable {
             $user_id = (int) $request->employee;
         } else {
             $user_id = Auth::user()->id;
-        }
+        } 
+
         if (isset($request->date)) {
             $date       = explode(' - ', $request->date);
             $start_date = date('Y-m-d', strtotime($date[0]));
@@ -114,7 +115,8 @@ class PresentationDataTable extends DataTable {
         } else {
             $start_date = date('Y-m-01');
             $end_date   = date('Y-m-t');
-        }
+        } 
+
         $user          = User::find($user_id);
         $user_employee = json_decode($user->user_employee);
 
@@ -127,7 +129,7 @@ class PresentationDataTable extends DataTable {
             $q->where('approve_by', '!=', null)
                 ->orWhere('employee_id', Auth::user()->id)
                 ->orWhere('created_by', Auth::user()->id);
-        })
+            })
             ->whereHas('customer', function ($q) use ($user_employee) {
                 $q->whereIn('ref_id', $user_employee);
             })

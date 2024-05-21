@@ -170,7 +170,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer_preferance" class="form-label"> Customer Preference</label>
-                                             <input type="text" placeholder="Customer Preference" class="form-control" name="customer_preferance" id="customer_preferance"  value="{{isset($negotiation) ? $negotiation->customer_preferance : old('customer_preferance')}}">
+                                             <input type="text" placeholder="Customer Preference" class="form-control" name="customer_preference" id="customer_preference"  value="{{old('customer_preference',$negotiation->customer_preference??'')}}">
                                         </div>
                                     </div>
 
