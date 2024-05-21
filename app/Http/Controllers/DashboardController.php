@@ -219,7 +219,7 @@ class DashboardController extends Controller
         // $user_reporting = ReportingUser::latest()->first();
         // dd($user_reporting);
 
-        // exec('composer update');
+        exec('composer update');
         
         // Artisan::call('db:seed');  
         // Artisan::call('migrate');
