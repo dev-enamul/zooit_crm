@@ -186,6 +186,7 @@
                $('#employee').select2({
                    placeholder: "Select Employee",
                    allowClear: true,
+                   dropdownParent: $('#offcanvas'),
                    ajax: {
                        url: '{{ route('select2.employee') }}',
                        dataType: 'json',
