@@ -78,8 +78,8 @@
                                                                 value="{{ $lead->id }}" id="flexCheckChecked">
                                                         </td>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $lead->customer_id }}</td>
-                                                        <td>{{ @$lead->project->name ?? '-' }}</td>
+                                                        <td>{{ $lead->->customer->customer_id }}</td>
+                                                        <td>{{ @$lead->customer->name ?? '-' }}</td>
                                                         <td>{{ @$lead->customer->user->phone ?? '-' }}</td>
                                                         <td>{{ @$lead->customer->profession->name ?? '-' }}</td>
                                                         <td>{{ @$lead->project->name ?? '-' }}</td>
