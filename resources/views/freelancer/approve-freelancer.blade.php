@@ -2,7 +2,11 @@
     use App\Models\User;
 @endphp
 @extends('layouts.dashboard')
-@section('title', 'Freelancer Create')
+@section('title', 'Freelancer Create') 
+@section('script')
+<link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+@endsection
 @section('content')
     <div class="main-content">
         <div class="page-content">
@@ -165,7 +169,16 @@
     </div>
 @endsection
 
-@section('script')
+@section('script') 
+
+<script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
+{{-- <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script> --}}
+<script src="/vendor/datatables/buttons.server-side.js"></script>
+
     <script>
         function approveFreelancer(user_id) {
             $('input[name="user_id"]').val(user_id);

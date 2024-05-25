@@ -90,7 +90,7 @@ class ApproveFreelanerDataTable extends DataTable
             $datas = $model->where('status',0)->with('user')->newQuery();
         }else{
             $datas = $model->where('status',0)->whereIn('last_approve_by',$my_employee)->with('user')->newQuery();
-        }  
+        }
         return $datas;
     }
 

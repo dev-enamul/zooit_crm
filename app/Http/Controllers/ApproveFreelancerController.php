@@ -17,16 +17,17 @@ use Illuminate\Support\Facades\DB;
 class ApproveFreelancerController extends Controller {
 
     public function index(ApproveFreelanerDataTable $dataTable, Request $request){
+      
         $title = 'Freelancer Approve List';
         $date = $request->date??null;
         $status = $request->status??0;
         $start_date = Carbon::parse($date ? explode(' - ',$date)[0] : date('Y-m-01'))->format('Y-m-d');
         $end_date = Carbon::parse($date ? explode(' - ',$date)[1] : date('Y-m-t'))->format('Y-m-d');
-        $employee = $request->employee??null;
+        $employee = $request->employee??null;  
         $employee = $employee ? User::find($employee)?? User::find(auth()->user()->id) :  User::find(auth()->user()->id);
         $trainings   = TrainingCategory::where('status', '1')->get(); 
         $next_freelancer_id = User::generateNextFreelancerId();
-        return $dataTable->render('freelancer.approve-freelancer',compact('trainings','next_freelancer_id','title','status','employee','start_date','end_date'));
+        return $dataTable->render('freelancer.freelancer_list',compact('trainings','next_freelancer_id','title','status','employee','start_date','end_date'));
     }
   
 
