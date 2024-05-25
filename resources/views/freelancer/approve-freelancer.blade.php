@@ -178,7 +178,7 @@
 {{-- <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script> --}}
 <script src="/vendor/datatables/buttons.server-side.js"></script>
-
+{!! $dataTable->scripts() !!}
     <script>
         function approveFreelancer(user_id) {
             $('input[name="user_id"]').val(user_id);
