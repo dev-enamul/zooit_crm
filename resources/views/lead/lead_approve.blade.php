@@ -140,7 +140,7 @@
                                                                 $reporting = json_decode(
                                                                     $lead->customer->reference->user_reporting,
                                                                 );
-                                                                $dataReturn = inChargeEmployee($reporting);
+                                                                $dataReturn = marketingInChargeEmployee($reporting);
                                                             @endphp
                                                             <center>{{ $dataReturn }}</center>
                                                         </td>
