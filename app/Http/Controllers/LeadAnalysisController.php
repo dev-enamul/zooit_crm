@@ -184,13 +184,13 @@ class LeadAnalysisController extends Controller {
         return view('lead_analysis.lead_analysis_save', compact('title', 'cstmrs', 'projects', 'units', 'religions', 'lead_analysis'));
     }
 
-    public function leadAnalysisDelete($id) {
+    public function leadAnalysisDelete($id) { 
         try {
             $data = LeadAnalysis::find($id);
             $data->delete();
-            return response()->json(['success' => 'Lead Analysis Deleted'], 200);
+            return response()->json(['success' => 'Lead Analysis Deleted']);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
 

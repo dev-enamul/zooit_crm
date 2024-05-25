@@ -12,7 +12,7 @@
         @endcan
 
         @can('lead-analysis-delete')
-            <a class="dropdown-item" onclick="deleteItem('{{ route('lead-analysis.destroy',$lead->id) }}')">Delete</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead_analysis.delete',$lead->id) }}')">Delete</a>
         @endcan
 
         @if ($lead->approve_by!=null && $lead->status==0)

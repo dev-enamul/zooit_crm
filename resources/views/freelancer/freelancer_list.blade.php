@@ -84,6 +84,9 @@
     </div>
 </div>
 
+
+
+
 @endsection
 @section('script')
 <script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
@@ -113,7 +116,9 @@
             });
         });
 
-    getDateRange('date_range');
+    getDateRange('date_range'); 
+
+    
 </script>
 @endsection
 
