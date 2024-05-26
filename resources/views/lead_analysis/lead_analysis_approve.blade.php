@@ -109,36 +109,40 @@
                                                             if(@$lead->customer->ref_id==null){
                                                                 $dataReturn = '-';
                                                             }
-                                                            $reporting = json_decode($lead->customer?->reference->user_reporting);
-                                                            $dataReturn = marketingInChargeEmployee($reporting); 
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
+                                                            $dataReturn = inChargeEmployee($reporting); 
                                                         @endphp
+                                                         <center>{{ $dataReturn }}</center>
                                                     </td>
                                                     <td>
                                                         @php
                                                             if(@$lead->customer->ref_id==null){
                                                                 $dataReturn = '-';
                                                             }
-                                                            $reporting = json_decode($lead->customer?->reference->user_reporting);
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
                                                             $dataReturn = salesInChargeEmployee($reporting); 
                                                         @endphp      
+                                                         <center>{{ $dataReturn }}</center>
                                                     </td>
                                                     <td>
                                                         @php
                                                            if(@$lead->customer->ref_id==null){
                                                                 $dataReturn = '-';
                                                             }
-                                                            $reporting = json_decode($lead->customer?->reference->user_reporting);
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
                                                             $dataReturn = areaInChargeEmployee($reporting); 
                                                         @endphp    
+                                                         <center>{{ $dataReturn }}</center>
                                                     </td>
                                                     <td>
                                                         @php
                                                             if(@$lead->customer->ref_id==null){
                                                                 $dataReturn = '-';
                                                             }
-                                                            $reporting = json_decode($lead->customer?->reference->user_reporting);
+                                                            $reporting = json_decode($lead->customer->reference->user_reporting);
                                                             $dataReturn = zonalManagerEmployee($reporting);
                                                         @endphp    
+                                                         <center>{{ $dataReturn }}</center>
                                                     </td>
                                                 </tr>
                                             @endforeach  
