@@ -1,7 +1,13 @@
 @extends('layouts.dashboard')
 @section('title',"Profile")
  
-
+@section('style')
+   <style>
+     .fa-check{
+        display: none;
+     }
+   </style>
+@endsection
 @section('content')
 <div class="main-content">
 
@@ -18,7 +24,7 @@
                         <div class="card-body border-top">
                             <div class="d-flex justify-content-between mb-4">
                                 <h4 class="card-title">About</h4>
-                                <div>
+                                <div class="d-flex gap-1">
                                     <button data-bs-toggle="modal" data-bs-target="#change_password" class="btn btn-secondary cursor-pointer" title="Change Password"  data-bs-toggle="modal" data-bs-target="#change_password_modal">
                                         <i class="mdi mdi-key-change"></i> Change password 
                                     </button>  
@@ -30,13 +36,16 @@
 
                                     @if (auth()->user()->hasPermission('admin')) 
                                         @if ($user->user_type==1)
-                                            <a href="{{route('employee.edit',encrypt($user->id))}}" class="btn btn-primary cursor-pointer"> 
-                                                <i class="mdi mdi-account-edit"></i> Edit Profile
-                                            </a> 
+                                            @php
+                                                $data=$user;
+                                            @endphp
+                                            @include('employee.employee_action')
+                                           
                                         @elseif($user->user_type==2)
-                                            <a href="{{route('freelancer.edit',encrypt($user->freelancer->id))}}" class="btn btn-primary cursor-pointer"> 
-                                                <i class="mdi mdi-account-edit"></i> Edit Profile
-                                            </a>
+                                            @php
+                                                $data=$user->freelancer;
+                                            @endphp
+                                            @include('freelancer.freelancer_action')
                                         @endif
                                         
                                     @endif

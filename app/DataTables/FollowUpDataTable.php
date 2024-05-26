@@ -180,7 +180,7 @@ class FollowUpDataTable extends DataTable {
             Column::make('date')->title('Follow Up Date')->sortable(false),
             Column::make('freelancer')->title('Franchise Partner Name & ID')->sortable(false),
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID')->sortable(false),
-            Column::make('salse-incharge')->title('Incharge Sales Name & ID')->sortable(false),
+            Column::make('salse-incharge')->title('Incharge Salse Name & ID')->sortable(false),
             Column::make('area-incharge')->title('Area Incharge Name & ID')->sortable(false),
             Column::make('zonal-manager')->title('Zonal Manager Name & ID')->sortable(false),
         ];

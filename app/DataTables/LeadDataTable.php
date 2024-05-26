@@ -190,7 +190,7 @@ class LeadDataTable extends DataTable {
             Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
             Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
+            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
             Column::make('area-incharge')->title('Area Incharge Name & ID'),
             Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
 

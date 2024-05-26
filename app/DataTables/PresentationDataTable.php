@@ -185,7 +185,7 @@ class PresentationDataTable extends DataTable {
             Column::make('date')->title('Presentation Date'),
             Column::make('freelancer')->title('Franchise Partner Name & ID'),
             Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Salse Name & ID'),
+            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
             Column::make('area-incharge')->title('Area Incharge Name & ID'),
             Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
         ];
