@@ -14,7 +14,7 @@
                                 @else
                                     Product Entry
                                 @endif
-                            </h4> 
+                            </h4>
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
@@ -70,7 +70,7 @@
                                             'div'       => 'col-md-6',
                                             'mb'        => 'mb-3',
                                             'visible'   => ['division', 'district', 'upazila','union','village'],
-                                            'required'  => ['division', 'district', 'upazila','union','village'],
+                                            'required'  => [],
                                             'selected'  => $selected ?? null,
                                         ])
 

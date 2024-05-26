@@ -45,11 +45,11 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'          => 'required|string|max:190',
-            'division'      => 'required|exists:divisions,id',
-            'district'      => 'required|exists:districts,id',
-            'upazila'       => 'required|exists:upazilas,id',
-            'union'         => 'required|exists:unions,id',
-            'village'       => 'required|exists:villages,id',
+            'division'      => 'nullable|exists:divisions,id',
+            'district'      => 'nullable|exists:districts,id',
+            'upazila'       => 'nullable|exists:upazilas,id',
+            'union'         => 'nullable|exists:unions,id',
+            'village'       => 'nullable|exists:villages,id',
             'total_floor'   => 'nullable|numeric|min:1',
             'google_map'    => 'nullable|string',
             'address'       => 'nullable|string|max:5000',
