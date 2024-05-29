@@ -11,7 +11,7 @@
         @endif 
 
         @can('freelancer-delete')
-            <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', encrypt($data?->user_id)) }}')">Resign Freelancer</a>
+            <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', encrypt($data?->user_id)) }}')">Delete Freelancer</a>
         @endcan
 
         <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}})">Approve</a> 
