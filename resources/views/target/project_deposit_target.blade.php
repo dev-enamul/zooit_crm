@@ -201,7 +201,8 @@
 @section('script')
 {{-- assign_to change call ajax  --}}
 <script>
-    $(document).on('change','#assign_to',function(){    
+    $(document).on('change','#assign_to',function(){ 
+        reset_value();    
         var assign_to = $(this).val(); 
         var month = $('#month').val();
         $.ajax({
@@ -228,6 +229,7 @@
 
     function reset_value(){
             $('input[name^="new_unit"], input[name^="existing_unit"], input[name^="new_deposit"], input[name^="existing_deposit"]').val(0);
+            summary();
         }
 
  function summary(){
