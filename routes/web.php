@@ -449,53 +449,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {
-        $userIds = [
-                "FL-002584",
-                "FL-002585",
-                "FL-002586",
-                "FL-002587",
-                "FL-002588",
-                "FL-002589",
-                "FL-002590",
-                "FL-002591",
-                "FL-002592",
-                "FL-002593",
-                "FL-002594",
-                "FL-002595",
-                "FL-002596",
-                "FL-002597",
-                "FL-002598",
-                "FL-002599",
-                "FL-002600",
-                "FL-002601",
-                "FL-002602",
-                "FL-002603",
-                "FL-002604",
-                "FL-002605",
-                "FL-002606",
-                "FL-002607",
-                "FL-002612",
-                "FL-002615",
-                "FL-002616",
-                "FL-002617",
-                "FL-002619"
-            ];
-            
-            foreach ($userIds as $userId) {
-                $user = User::where('user_id', $userId)->first();
-            
-                if ($user) {
-                    $user->user_id = User::generateNextProvableFreelancerId();
-                    $user->save();
-             
-                    if ($user->freelancer) {
-                        $user->freelancer->status = 0;
-                        $user->freelancer->save();
-                    }
-                }
-            } 
-
-            return "complete";
+     dd( User::generateNextProvableFreelancerId());
 
 });
 
