@@ -219,32 +219,32 @@
         });
     }); 
 
-    $(document).on('change', 'input[type="number"]', function() {
-    var total_new_unit = 0;
-    var total_existing_unit = 0;
-    var total_new_deposit = 0;
-    var total_existing_deposit = 0;
+    $(document).on('input', 'input[type="number"]', function() {
+        var total_new_unit = 0;
+        var total_existing_unit = 0;
+        var total_new_deposit = 0;
+        var total_existing_deposit = 0;
 
-    $('input[name^="new_unit"]').each(function() {
-        total_new_unit += parseInt($(this).val()) || 0;
-    });
+        $('input[name^="new_unit"]').each(function() {
+            total_new_unit += parseInt($(this).val()) || 0;
+        });
 
-    $('input[name^="existing_unit"]').each(function() {
-        total_existing_unit += parseInt($(this).val()) || 0;
-    });
+        $('input[name^="existing_unit"]').each(function() {
+            total_existing_unit += parseInt($(this).val()) || 0;
+        });
 
-    $('input[name^="new_deposit"]').each(function() {
-        total_new_deposit += parseInt($(this).val()) || 0;
-    });
+        $('input[name^="new_deposit"]').each(function() {
+            total_new_deposit += parseInt($(this).val()) || 0;
+        });
 
-    $('input[name^="existing_deposit"]').each(function() {
-        total_existing_deposit += parseInt($(this).val()) || 0;
-    });
+        $('input[name^="existing_deposit"]').each(function() {
+            total_existing_deposit += parseInt($(this).val()) || 0;
+        });
 
-    $('#total_new_unit').text(total_new_unit);
-    $('#total_existing_unit').text(total_existing_unit);
-    $('#total_new_deposit').text(total_new_deposit);
-    $('#total_existing_deposit').text(total_existing_deposit);
+        $('#total_new_unit').text(total_new_unit);
+        $('#total_existing_unit').text(total_existing_unit);
+        $('#total_new_deposit').text(total_new_deposit);
+        $('#total_existing_deposit').text(total_existing_deposit);
 });
 
 </script>
