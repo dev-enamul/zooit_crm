@@ -201,25 +201,21 @@
 @section('script')
 {{-- assign_to change call ajax  --}}
 <script>
-    $(document).on('change','#assign_to',function(){   
-        $('#total_new_unit').text(0);
-        $('#total_existing_unit').text(0);
-        $('#total_new_deposit').text(0);
-        $('#total_existing_deposit').text(0);
-
+    $(document).on('change','#assign_to',function(){    
         var assign_to = $(this).val(); 
         var month = $('#month').val();
         $.ajax({
             url: '{{ route('employee.projects') }}',
             type: 'get',
             data: {employee_id: assign_to, month:month},
-            success: function(response) { 
+            success: function(response) {
+                reset_value();
                 response.forEach(element => { 
                     $('#new_unit_'+element.project_id).val(element.new_unit);
                     $('#new_deposit_'+element.project_id).val(element.new_deposit);
                     $('#existing_unit_'+element.project_id).val(element.existing_unit);
                     $('#existing_deposit_'+element.project_id).val(element.existing_deposit); 
-                }); 
+                });  
                 summary();
             } 
 
@@ -229,6 +225,24 @@
     $(document).on('input', 'input[type="number"]', function() {
         summary();
     });
+
+    function reset_value(){
+            $('input[name^="new_unit"]').each(function() {
+                $(this).val() = 0;
+            });
+
+            $('input[name^="existing_unit"]').each(function() {
+                $(this).val() = 0;
+            });
+
+            $('input[name^="new_deposit"]').each(function() {
+                $(this).val() = 0;
+            });
+
+            $('input[name^="existing_deposit"]').each(function() {
+                $(this).val() = 0;
+            });
+        }
 
  function summary(){
         var total_new_unit = 0;
