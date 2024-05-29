@@ -60,27 +60,39 @@
                                 </thead>
                                 <tbody>  
                                     @if (isset($datas) && $datas->is_project_wise==1) 
-                                        @if (isset($datas->depositTargetProjects) && count($datas->depositTargetProjects)>0)
-                                            @foreach ($datas->depositTargetProjects as $key => $data)
-                                                <tr> 
-                                                    {{-- <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
-                                                        <div class="dropdown">  
-                                                            <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
-                                                            <div class="dropdown-menu dropdown-menu-animated">
-                                                                <a class="dropdown-item" href="{{route('deposit.target.asign',$data->id)}}">Asign Target</a>
-                                                            </div>
-                                                        </div> 
-                                                    </td> --}}
-                                                    <td>{{$key+1}}</td>
-                                                    <td>{{@$data->project->name}}</td>
-                                                    <td class="align-middle">{{$data->existing_unit}}</td> 
-                                                    <td class="align-middle">{{get_price($data->existing_deposit)}}</td>
+                                    @if (isset($datas->depositTargetProjects) && count($datas->depositTargetProjects) > 0)
+                                        @php
+                                            $totalExistingUnit = 0;
+                                            $totalExistingDeposit = 0;
+                                            $totalNewUnit = 0;
+                                            $totalNewDeposit = 0;
+                                        @endphp
 
-                                                    <td class="align-middle">{{$data->new_unit}}</td> 
-                                                    <td class="align-middle">{{get_price($data->new_deposit)}}</td>  
-                                                </tr> 
-                                            @endforeach 
-                                        @endif 
+                                        @foreach ($datas->depositTargetProjects as $key => $data)
+                                            <tr> 
+                                                <td>{{$key+1}}</td>
+                                                <td>{{@$data->project->name}}</td>
+                                                <td class="align-middle">{{$data->existing_unit}}</td>
+                                                <td class="align-middle">{{get_price($data->existing_deposit)}}</td>
+                                                <td class="align-middle">{{$data->new_unit}}</td>
+                                                <td class="align-middle">{{get_price($data->new_deposit)}}</td>
+ 
+                                                @php
+                                                    $totalExistingUnit += $data->existing_unit;
+                                                    $totalExistingDeposit += $data->existing_deposit;
+                                                    $totalNewUnit += $data->new_unit;
+                                                    $totalNewDeposit += $data->new_deposit;
+                                                @endphp
+                                            </tr>
+                                        @endforeach 
+                                        <tr>
+                                            <td colspan="2">Total</td>
+                                            <td>{{$totalExistingUnit}}</td>
+                                            <td>{{get_price($totalExistingDeposit)}}</td>
+                                            <td>{{$totalNewUnit}}</td>
+                                            <td>{{get_price($totalNewDeposit)}}</td>
+                                        </tr>
+                                    @endif
                                     @elseif(isset($datas) && $datas->is_project_wise==0)
                                         <th>1</th>
                                         <th>-</th> 
