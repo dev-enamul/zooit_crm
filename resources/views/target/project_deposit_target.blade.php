@@ -202,7 +202,11 @@
 {{-- assign_to change call ajax  --}}
 <script>
     $(document).on('change','#assign_to',function(){   
-        summary();
+        $('#total_new_unit').text(0);
+        $('#total_existing_unit').text(0);
+        $('#total_new_deposit').text(0);
+        $('#total_existing_deposit').text(0);
+
         var assign_to = $(this).val(); 
         var month = $('#month').val();
         $.ajax({
@@ -217,7 +221,8 @@
                     $('#existing_deposit_'+element.project_id).val(element.existing_deposit); 
                 }); 
                 summary();
-            }
+            } 
+
         });
     }); 
 
@@ -226,7 +231,7 @@
     });
 
  function summary(){
-    var total_new_unit = 0;
+        var total_new_unit = 0;
         var total_existing_unit = 0;
         var total_new_deposit = 0;
         var total_existing_deposit = 0;
