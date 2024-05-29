@@ -15,16 +15,38 @@ use Illuminate\Support\Facades\DB;
 class DepositTargetController extends Controller
 {
     public function my_target(Request $request){  
-        $datas = DepositTarget::where('assign_to',auth()->user()->id);
+        $datas = DepositTarget::where('assign_to',auth()->user()->id); 
+
         if(isset($request->month) && $request->month != ''){ 
             $month = date('m',strtotime($request->month));
             $year = date('Y',strtotime($request->month)); 
             $datas = $datas->whereMonth('month',$month)->whereYear('month',$year);
         }else{
             $datas = $datas->whereMonth('month',date('m'))->whereYear('month',date('Y'));
-        }
+        } 
+
         $datas = $datas->first(); 
         return view('target.deposit_target',compact('datas'));
+    } 
+
+
+    // Remain Deposit Target 
+    public function remain_deposit_target(){
+        $target = DepositTarget::where('assign_to',auth()->user()->id); 
+        $asigned = DepositTarget::where('assign_by',auth()->user()->id); 
+
+        if(isset($request->month) && $request->month != ''){
+            $month = date('m',strtotime($request->month));
+            $year = date('Y',strtotime($request->month)); 
+            $target = $target->whereMonth('month',$month)->whereYear('month',$year);
+            $asigned = $asigned->whereMonth('month',$month)->whereYear('month',$year);
+        }else{
+            $target = $target->whereMonth('month',date('m'))->whereYear('month',date('Y'));
+            $asigned = $asigned->whereMonth('month',date('m'))->whereYear('month',date('Y'));
+        }  
+        $target = $target->first(); 
+        $asigned = $asigned->get(); 
+        return view('target.deposit_target_remain',compact('target','asigned'));
     }
 
     public function target_asign($id){ 
