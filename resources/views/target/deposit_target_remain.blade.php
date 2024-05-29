@@ -59,8 +59,8 @@
                                     </tr>   
                                 </thead>
                                 <tbody>  
-                                    @if (isset($datas) && $datas->is_project_wise==1) 
-                                    @if (isset($datas->depositTargetProjects) && count($datas->depositTargetProjects) > 0)
+                                    @if (isset($asigned) && $asigned->is_project_wise==1) 
+                                    @if (isset($asigned->depositTargetProjects) && count($asigned->depositTargetProjects) > 0)
                                         @php
                                             $totalExistingUnit = 0;
                                             $totalExistingDeposit = 0;
@@ -68,7 +68,7 @@
                                             $totalNewDeposit = 0;
                                         @endphp
 
-                                        @foreach ($datas->depositTargetProjects as $key => $data)
+                                        @foreach ($asigned->depositTargetProjects as $key => $data)
                                             <tr> 
                                                 <td>{{$key+1}}</td>
                                                 <td>{{@$data->project->name}}</td>
@@ -93,7 +93,7 @@
                                             <th>{{get_price($totalNewDeposit)}}</th>
                                         </tr>
                                     @endif
-                                    @elseif(isset($datas) && $datas->is_project_wise==0)
+                                    @elseif(isset($asigned) && $asigned->is_project_wise==0)
                                         <th>1</th>
                                         <th>-</th> 
                                         <th>-</th>
