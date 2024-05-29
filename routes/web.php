@@ -449,12 +449,22 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () {  
-         $user = User::where('user_id','FL-002584')->first();
-         $user->user_id = User::generateNextProvableFreelancerId();
-         $user->save();
-         $user->freelancer->status = 0;
-         $user->freelancer->save(); 
-        dd($user, $user->freelancer);
+        $user = User::where('user_id', 'FL-002584')->first(); 
+        if ($user) {
+        $user->user_id = User::generateNextProvableFreelancerId();
+        $user->save(); 
+                if ($user->freelancer) {
+                        $user->freelancer->status = 0;
+                        $user->freelancer->save();
+                }else{
+                        dd('freelancer not found');
+                }
+        }else{
+                dd("user not found");
+        }
+
+        return $user;
+
 
 
 });
