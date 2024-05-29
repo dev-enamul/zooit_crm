@@ -453,9 +453,8 @@ Route::get('function_test', function () {
          $user->user_id = User::generateNextProvableFreelancerId();
          $user->save();
          $user->freelancer->status = 0;
-         $user->freelancer->save();
-
-         return $user;
+         $user->freelancer->save(); 
+        dd($user, $user->freelancer);
 
 
 });
