@@ -72,10 +72,10 @@
                                             <tr> 
                                                 <td>{{$key+1}}</td>
                                                 <td>{{@$data->project->name}}</td>
-                                                <td class="align-middle">{{$data->existing_unit-$asigned->where('project_id',$data->project_id)->sum('existing_unit')}}</td>
-                                                <td class="align-middle">{{get_price($data->existing_deposit-$asigned->where('project_id',$data->project_id)->sum('existing_deposit'))}}</td>
-                                                <td class="align-middle">{{$data->new_unit-$asigned->where('project_id',$data->project_id)->sum('new_unit')}}</td>
-                                                <td class="align-middle">{{get_price($data->new_deposit-$asigned->where('project_id',$data->project_id)->sum('new_deposit'))}}</td>
+                                                <td class="align-middle">{{$data->existing_unit-$asigned?->depositTargetProjects?->where('project_id',$data->project_id)->sum('existing_unit')}}</td>
+                                                <td class="align-middle">{{get_price($data->existing_deposit-$asigned?->depositTargetProjects?->where('project_id',$data->project_id)->sum('existing_deposit'))}}</td>
+                                                <td class="align-middle">{{$data->new_unit-$asigned?->depositTargetProjects?->where('project_id',$data->project_id)->sum('new_unit')}}</td>
+                                                <td class="align-middle">{{get_price($data->new_deposit-$asigned?->->where('project_id',$data->project_id)->sum('new_deposit'))}}</td>
  
                                                 @php
                                                     $totalExistingUnit += $data->existing_unit;
