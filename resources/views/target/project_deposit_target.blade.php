@@ -201,7 +201,8 @@
 @section('script')
 {{-- assign_to change call ajax  --}}
 <script>
-    $(document).on('change','#assign_to',function(){
+    $(document).on('change','#assign_to',function(){   
+        summary();
         var assign_to = $(this).val(); 
         var month = $('#month').val();
         $.ajax({
@@ -214,8 +215,7 @@
                     $('#new_deposit_'+element.project_id).val(element.new_deposit);
                     $('#existing_unit_'+element.project_id).val(element.existing_unit);
                     $('#existing_deposit_'+element.project_id).val(element.existing_deposit); 
-                });
-
+                }); 
                 summary();
             }
         });
