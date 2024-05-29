@@ -227,21 +227,7 @@
     });
 
     function reset_value(){
-            $('input[name^="new_unit"]').each(function() {
-                $(this).val() = 0;
-            });
-
-            $('input[name^="existing_unit"]').each(function() {
-                $(this).val() = 0;
-            });
-
-            $('input[name^="new_deposit"]').each(function() {
-                $(this).val() = 0;
-            });
-
-            $('input[name^="existing_deposit"]').each(function() {
-                $(this).val() = 0;
-            });
+            $('input[name^="new_unit"], input[name^="existing_unit"], input[name^="new_deposit"], input[name^="existing_deposit"]').val(0);
         }
 
  function summary(){
