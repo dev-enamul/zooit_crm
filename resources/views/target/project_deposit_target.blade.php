@@ -215,12 +215,18 @@
                     $('#existing_unit_'+element.project_id).val(element.existing_unit);
                     $('#existing_deposit_'+element.project_id).val(element.existing_deposit); 
                 });
+
+                summary();
             }
         });
     }); 
 
     $(document).on('input', 'input[type="number"]', function() {
-        var total_new_unit = 0;
+        summary();
+    });
+
+ function summary(){
+    var total_new_unit = 0;
         var total_existing_unit = 0;
         var total_new_deposit = 0;
         var total_existing_deposit = 0;
@@ -245,7 +251,7 @@
         $('#total_existing_unit').text(total_existing_unit);
         $('#total_new_deposit').text(total_new_deposit);
         $('#total_existing_deposit').text(total_existing_deposit);
-});
+ }
 
 </script>
 @endsection
