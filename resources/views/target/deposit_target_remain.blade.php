@@ -59,8 +59,8 @@
                                     </tr>   
                                 </thead>
                                 <tbody>  
-                                    @if (isset($asigned) && $asigned->is_project_wise==1) 
-                                    @if (isset($asigned->depositTargetProjects) && count($asigned->depositTargetProjects) > 0)
+                                    @if (isset($target) && $target->is_project_wise==1) 
+                                    @if (isset($target->depositTargetProjects) && count($target->depositTargetProjects) > 0)
                                         @php
                                             $totalExistingUnit = 0;
                                             $totalExistingDeposit = 0;
@@ -68,7 +68,7 @@
                                             $totalNewDeposit = 0;
                                         @endphp
 
-                                        @foreach ($asigned->depositTargetProjects as $key => $data)
+                                        @foreach ($target->depositTargetProjects as $key => $data)
                                             <tr> 
                                                 <td>{{$key+1}}</td>
                                                 <td>{{@$data->project->name}}</td>
@@ -93,13 +93,13 @@
                                             <th>{{get_price($totalNewDeposit)}}</th>
                                         </tr>
                                     @endif
-                                    @elseif(isset($asigned) && $asigned->is_project_wise==0)
+                                    @elseif(isset($target) && $target->is_project_wise==0)
                                         <th>1</th>
                                         <th>-</th> 
                                         <th>-</th>
-                                        <th>{{get_price($datas->existing_total_deposit)}}</th>
+                                        <th>{{get_price($target->existing_total_deposit)}}</th>
                                         <th></th> 
-                                        <th>{{get_price($datas->new_total_deposit)}}</th> 
+                                        <th>{{get_price($target->new_total_deposit)}}</th> 
                                     @endif
                                     
                                 </tbody>
