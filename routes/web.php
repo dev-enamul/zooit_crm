@@ -448,8 +448,16 @@ Route::group(['middleware' => 'auth'], function () {
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () { 
-          dd('changed');
+Route::get('function_test', function () {  
+         $user = User::where('user_id','FL-002584');
+         $user->user_id = User::generateNextProvableFreelancerId();
+         $user->save();
+         $user->freelancer->status = 0;
+         $user->freelancer->save();
+
+         return $user;
+
+
 });
 
 // test
