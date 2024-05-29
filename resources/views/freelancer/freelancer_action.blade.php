@@ -15,15 +15,17 @@
                     <a class="dropdown-item" href="javascript:void(0)" onclick="approveItem('{{route('complete.training',encrypt($data?->user_id))}}')">Complete Training</a>
                 @endcan
             @elseif($data->status==1)
+            
             @can('freelancer-delete')
                 <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', encrypt($data?->user_id)) }}')">Resign Freelancer</a>
             @endcan
-                <a class="dropdown-item" href="{{route('user.area.edit', encrypt($data?->user_id))}}">Change Area</a>
-            @endif
 
-            <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data?->user_id))}}">Change Reporting User</a>
-            <a class="dropdown-item" href="{{route('user.details', encrypt($data?->user_id))}}">Print Freelancer</a>
-        @endcan
+                <a class="dropdown-item" href="{{route('user.area.edit', encrypt($data?->user_id))}}">Change Area</a>
+           
+            @endif 
+                <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data?->user_id))}}">Change Reporting User</a>
+                <a class="dropdown-item" href="{{route('user.details', encrypt($data?->user_id))}}">Print Freelancer</a>
+            @endcan
 
     </div>
 </div>

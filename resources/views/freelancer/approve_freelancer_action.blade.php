@@ -8,7 +8,12 @@
         @if (auth()->user()->hasPermission('admin'))
             <a class="dropdown-item" href="{{route('freelancer.edit', encrypt($data->id))}}">Edit</a>
             <a class="dropdown-item" href="{{route('reporting.user.edit', encrypt($data?->user_id))}}">Change Reporting User</a>
-        @endif
+        @endif 
+
+        @can('freelancer-delete')
+            <a class="dropdown-item"  href="javascript:void(0)" onclick="deleteItem('{{ route('deactive.freelancer', encrypt($data?->user_id)) }}')">Resign Freelancer</a>
+        @endcan
+
         <a class="dropdown-item" href="javascript:void(0)" onclick="approveFreelancer({{$data->user_id}})">Approve</a> 
     </div>
 </div> 
