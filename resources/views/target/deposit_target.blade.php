@@ -86,11 +86,11 @@
                                             </tr>
                                         @endforeach 
                                         <tr>
-                                            <td colspan="2">Total</td>
-                                            <td>{{$totalExistingUnit}}</td>
-                                            <td>{{get_price($totalExistingDeposit)}}</td>
-                                            <td>{{$totalNewUnit}}</td>
-                                            <td>{{get_price($totalNewDeposit)}}</td>
+                                            <th colspan="2">Total</th>
+                                            <th>{{$totalExistingUnit}}</th>
+                                            <th>{{get_price($totalExistingDeposit)}}</th>
+                                            <th>{{$totalNewUnit}}</th>
+                                            <th>{{get_price($totalNewDeposit)}}</th>
                                         </tr>
                                     @endif
                                     @elseif(isset($datas) && $datas->is_project_wise==0)
