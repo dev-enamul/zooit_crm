@@ -158,7 +158,7 @@ class PresentationAnalysisController extends Controller {
 
     public function presentationAnalysisApproveSave(Request $request) {
 
-        if ($request->has('customer_id') && $request->customer_id !== '' & $request->customer_id !== null) {
+        if ($request->has('presentation_id') && $request->presentation_id !== '' & $request->presentation_id !== null) {
             DB::beginTransaction();
             try {
                 foreach ($request->presentation_id as $presentation_id) {

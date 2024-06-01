@@ -47,9 +47,8 @@ trait UserAchiveTreat
         })
         ->where('user_type',2)
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
-        ->count(); 
-
+        ->whereBetween('created_at',[$start.'00:00:00',$end.' 23:59:59']) 
+        ->count();  
         return $freelancer;
     } 
 

@@ -449,7 +449,9 @@ Route::group(['middleware' => 'auth'], function () {
 });
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
-Route::get('function_test', function () {
+Route::get('function_test', function () { 
+        $data = ['FL--002591','FL--002592'];
+        $user =
      dd( User::generateNextProvableFreelancerId());
 
 });

@@ -45,7 +45,7 @@ class DepositTargetController extends Controller
             $asigned = $asigned->whereMonth('month',date('m'))->whereYear('month',date('Y'));
         }  
         $target = $target->first(); 
-        $asigned = $asigned->get(); 
+        $asigned = $asigned->get();
         return view('target.deposit_target_remain',compact('target','asigned'));
     }
 
