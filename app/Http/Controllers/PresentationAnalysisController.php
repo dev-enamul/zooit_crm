@@ -157,8 +157,7 @@ class PresentationAnalysisController extends Controller {
     }
 
     public function presentationAnalysisApproveSave(Request $request) {
-
-        if ($request->has('presentation_id') && $request->presentation_id !== '' & $request->presentation_id !== null) {
+        if ($request->has('presentation_id') && $request->presentation_id !== '' && $request->presentation_id !== null) {
             DB::beginTransaction();
             try {
                 foreach ($request->presentation_id as $presentation_id) {
@@ -170,11 +169,9 @@ class PresentationAnalysisController extends Controller {
                 DB::rollback();
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
             }
-
         } else {
             return redirect()->back()->with('error', 'Please Select Customer');
         }
-
     }
 
     public function presentation_analysis_details($id) {
