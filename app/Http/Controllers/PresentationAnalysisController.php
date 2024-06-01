@@ -162,7 +162,7 @@ class PresentationAnalysisController extends Controller {
             DB::beginTransaction();
             try {
                 foreach ($request->presentation_id as $presentation_id) {
-                    VisitAnalysis::where('id', $presentation_id)->update('approve_by', Auth::user()->id);
+                    VisitAnalysis::where('id', $presentation_id)->update(['approve_by' => Auth::user()->id]);
                 }
                 DB::commit();
                 return redirect()->route('presentation_analysis.index')->with('success', 'Status Updated Successfully');
