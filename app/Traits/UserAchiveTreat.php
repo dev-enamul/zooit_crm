@@ -35,11 +35,10 @@ trait UserAchiveTreat
                 $start = date('Y-m-d',strtotime($date));
                 $end = date('Y-m-d',strtotime($date));
             }  
-        }
- 
-        dd($start, $end);
+        } 
         if($my_all_employee==null){
             $user = User::find($this->id);
+            dd($user);
             $my_all_employee = json_decode($user->user_employee);
         }
          
