@@ -23,7 +23,7 @@ use Carbon\Carbon;
 trait UserAchiveTreat
 {  
     public function freelanecr_achive($date = null, $my_all_employee = null){
-        if($date == null){ 
+        if($date == null){
             $start = date('Y-m-01');
             $end = date('Y-m-t');
         }else{ 
@@ -37,8 +37,7 @@ trait UserAchiveTreat
             }  
         } 
         if($my_all_employee==null){
-            $user = User::find($this->id);
-            dd($user);
+            $user = User::find($this->id); 
             $my_all_employee = json_decode($user->user_employee);
         }
          
@@ -47,7 +46,7 @@ trait UserAchiveTreat
         })
         ->where('user_type',2)
         ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start.'00:00:00',$end.' 23:59:59']) 
+        ->whereBetween('created_at',[$start.'00:00:00',$end.' 23:59:59'])
         ->count();  
         return $freelancer;
     } 
@@ -77,7 +76,7 @@ trait UserAchiveTreat
             ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
             ->count();
 
-        return $customer; 
+        return $start.$end.$customer; 
     }
 
     public function prospecting_achive($date = null, $my_all_employee = null){

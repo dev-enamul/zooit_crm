@@ -120,7 +120,6 @@ class ProfileController extends Controller
             ->selectRaw('SUM(new_total_deposit + existing_total_deposit) as total_deposit')
             ->whereHas('depositTargetProjects')
             ->first(); 
-
         $my_all_employee = json_decode($user->user_employee); 
         $date = $full_date;
         $achive['freelancer'] = $user->freelanecr_achive($date, $my_all_employee)??0;
