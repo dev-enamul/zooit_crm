@@ -8,11 +8,9 @@
     </style>
 @endsection
 @section('content')
-<div class="main-content">
-
+<div class="main-content"> 
     <div class="page-content">
-        <div class="container-fluid">
-           
+        <div class="container-fluid"> 
             <div class="row"> 
                 <div class="col-md-3"> 
                     @include('includes.profile_menu')

@@ -31,12 +31,13 @@ trait UserAchiveTreat
                 list($start_date, $end_date) = explode(' - ', $date); 
                 $start = date('Y-m-d',strtotime($start_date));
                 $end = date('Y-m-d',strtotime($end_date));
-            } else {  
+            } else {
                 $start = date('Y-m-d',strtotime($date));
                 $end = date('Y-m-d',strtotime($date));
             }  
         }
  
+        dd($start, $end);
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
