@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ProspectingDataTable;
+use App\DataTables\RejectionDataTable;
+use App\Models\ColdCalling;
 use App\Models\Customer;
+use App\Models\FollowUp;
+use App\Models\FollowUpAnalysis;
+use App\Models\Lead;
+use App\Models\LeadAnalysis;
 use App\Models\Negotiation;
 use App\Models\NegotiationAnalysis;
 use App\Models\NegotiationWaitingDay;
+use App\Models\Presentation;
+use App\Models\Prospecting;
 use App\Models\Rejection;
 use App\Models\User;
+use App\Models\VisitAnalysis;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,46 +28,16 @@ use Illuminate\Support\Facades\Validator;
 class RejectionController extends Controller
 {
      
-    public function index(Request $request)
+    public function index(RejectionDataTable $dataTable, Request $request)
     { 
-        $my_all_employee = json_decode(Auth::user()->user_employee);
-        $employee_data = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-        $employees = User::whereIn('id', $my_all_employee)->get();
-
-        if(isset($request->employee) && !empty($request->employee)){
-            $user_id = (int)$request->employee;
-        }else{
-            $user_id = Auth::user()->id;
-        } 
-
-        $waiting_day = NegotiationWaitingDay::first();
-        if(isset($waiting_day) && $waiting_day != null){
-            $startDate = Carbon::now()->subDays($waiting_day->waiting_day)->startOfDay(); 
-        }else{
-            $startDate = Carbon::now()->subDays(7)->startOfDay(); 
-        } 
-        $user = User::find($user_id);
-        $user_employee = json_decode($user->user_employee);
-        $negotiations = NegotiationAnalysis::where('created_at','<',$startDate)
-        ->where(function($q){
-            $q->where('approve_by','!=',null)
-                ->orWhere('employee_id', Auth::user()->id)
-                ->orWhere('created_by', Auth::user()->id);
-        })
-        ->whereHas('customer', function($q) use($user_employee){ 
-            $q->whereIn('ref_id', $user_employee);
-        }); 
-  
-
-         $negotiations = $negotiations->orderBY('id','desc')->get();  
-         $filter =  $request->all();
-        return view('rejection.rejection_list', compact([
-            'negotiations',
-            'employee_data',
-            'employees',
-            'filter',
-            'waiting_day'
-        ]));
+        $title      = 'Rejection List';
+        $date       = $request->date ?? null;
+        $status     = $request->status ?? 0;
+        $start_date = Carbon::parse($date ? explode(' - ', $date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d');
+        $employee   = $request->employee ?? null;
+        $employee   = $employee ? User::find($employee) ?? User::find(auth()->user()->id) : User::find(auth()->user()->id);
+        return $dataTable->render('rejection.rejection_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
     }
 
    
@@ -108,8 +88,56 @@ class RejectionController extends Controller
             $rejection->created_at = now();
             $rejection->status = 1;
             $rejection->save(); 
+
+              
+            // update table data 
+            if(Customer::where('id',$request->customer)->where('status',0)->count() > 0){
+                $datas = Customer::where('id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas);
+            }elseif(Prospecting::where('customer_id',$request->customer)->where('status',0)->count() > 0){
+                $datas = Prospecting::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas); 
+            }elseif(ColdCalling::where('customer_id',$request->customer)->where('status',0)->count() > 0){
+                $datas = ColdCalling::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas);   
+            }elseif(Lead::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                $datas = Lead::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas);    
+            }elseif(LeadAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){
+                $datas = LeadAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas); 
+            }elseif(Presentation::where('customer_id',$request->customer)->where('status',0)->count() > 0){
+                $datas = Presentation::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas);  
+            }elseif(VisitAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                $datas = VisitAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas);  
+            }elseif(FollowUp::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                $datas = FollowUp::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas);  
+            }elseif(FollowUpAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                $datas = FollowUpAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas);  
+            }elseif(Negotiation::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                $datas = Negotiation::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas); 
+            }elseif(NegotiationAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                $datas = NegotiationAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
+                $this->rejectData($datas); 
+            }
+
             return redirect()->route('rejection.index')->with('success','Rejection create successfully');
         }
+    } 
+
+    public function rejectData($datas){
+        foreach($datas as $data){
+            $data->status = 1;
+            if($data->approve_by == null){
+                $data->approve_by =Auth::user()->id;
+            } 
+            $data->save();
+        } 
     }
 
     public function edit(string $id, Request $request)
