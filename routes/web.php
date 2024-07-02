@@ -314,6 +314,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Rejection
         Route::resource('rejection', RejectionController::class);
+        Route::get('select2-rejection-customer', [RejectionController::class, 'select2_customer'])->name('select2.rejection.customer');
         Route::post('rejection-save/{id?}', [RejectionController::class, 'save'])->name('rejection.save');
         Route::any('rejection-delete/{id}', [RejectionController::class, "rejectionDelete"])->name('rejection.delete');
         Route::get('rejection-approve', [RejectionController::class, 'rejectionApprove'])->name('rejection.approve');
@@ -450,9 +451,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () { 
-        $data = ['FL--002591','FL--002592'];
-        $user =
-     dd( User::generateNextProvableFreelancerId());
+        UserCreatedEvent::dispatch(auth()->user()->id);
 
 });
 

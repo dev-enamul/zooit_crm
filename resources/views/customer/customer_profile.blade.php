@@ -97,39 +97,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </div> 
                 </div> 
                 <div class="col-md-9">  
-                    {{-- <div class="card overflow-hidden"> 
-                        <div class="card-body border-top">
-                            <div class="d-flex justify-content-between mb-4">
-                                <h4 class="card-title">About</h4> 
-                            </div>  
-                            <div class="table-responsive">
-                                <table class="table table-nowrap table-borderless mb-0">
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row"><i class="mdi mdi-account align-middle text-primary me-2"></i> Full Name :</th>
-                                            <td>{{$customer->user->name??"-"}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><i class="mdi mdi-cellphone align-middle text-primary me-2"></i> Mobile :</th>
-                                            <td>{{@$customer->user->phone}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><i class="mdi mdi-email text-primary me-2"></i> E-mail :</th>
-                                            <td>{{$customer->user->userContact->office_email??$customer->user->userContact->personal_email??"-"}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"><i class="mdi mdi-google-maps text-primary me-2"></i> Location :</th>
-                                            <td>{{$customer->user->userAddress->address??"-"}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>  
-                    </div>   --}}
+                 
 
                     <div class="row">
                         <div class="col-md-4"> 
@@ -197,7 +168,13 @@
 
                     <div class="card overflow-hidden"> 
                         <div class="card-body">
-                            <h4 class="card-title">{{$customer->customer_id}}</h4>
+                            <div class="d-flex justify-content-between">
+                                <h4 class="card-title">{{$customer->customer_id}}</h4>
+                                <a href="{{route('rejection.create', ['customer' => $customer->id])}}" class="btn btn-danger" type="submit">
+                                    Reject
+                                </a>  
+                            </div> 
+
                             <hr>
                             <div class="timeline timeline-zigzag">
 

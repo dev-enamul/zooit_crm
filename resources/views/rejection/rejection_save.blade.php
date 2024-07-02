@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title','Prospecting Reason Entry')
+@section('title','Rejection Entry')
 
 @section('content')
 <div class="main-content">
@@ -9,8 +9,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Rejection Reason Entry</h4>
-
+                        <h4 class="mb-sm-0">Rejection Reason Entry</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
@@ -39,16 +38,10 @@
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
-                                                <option data-display="Select a coustomer *" value="">
-                                                    Select a customer
-                                                </option>
-                                                @isset($customers)
-                                                    @foreach ($customers as $cstm)
-                                                        <option value="{{ $cstm->customer_id }}" {{ isset($selected_data['customer']) || isset($follow->customer_id) == $cstm->customer_id ? 'selected' : '' }}>
-                                                            {{ @$cstm->customer->name }} ({{ $cstm->customer->customer_id}})
-                                                        </option>
-                                                    @endforeach
-                                                @endisset
+                                                <option data-display="Select a coustomer *" value="">  Select a customer </option> 
+                                                @if (isset($selected_data['customer']))
+                                                    <option selected value="{{ $selected_data['customer']->id }}" > {{$selected_data['customer']->name}} [ {{$selected_data['customer']->customer_id}} ]</option>
+                                                @endif 
                                             </select>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -91,7 +84,27 @@
                 </div>
             </div>
         </div>
-    </footer>
-
+    </footer> 
 </div>
+@endsection 
+
+@section('script') 
+<script>
+    $(document).ready(function() {
+        $('#customer').select2({
+            placeholder: "Select Customer",
+            allowClear: true,
+            ajax: {
+                url: '{{ route('select2.rejection.customer') }}',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        term: params.term
+                    }
+                    return query;
+                }
+            }
+        });
+    });
+</script> 
 @endsection

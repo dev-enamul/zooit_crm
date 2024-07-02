@@ -16,7 +16,6 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.3",
-        "maatwebsite/excel": "*",
         "profburial/wkhtmltopdf-binaries-osx": "0.12.1",
         "pusher/pusher-php-server": "^7.2",
         "wemersonjanuario/wkhtmltopdf-windows": "0.12.2.3",

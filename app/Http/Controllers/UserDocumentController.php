@@ -6,14 +6,16 @@ use App\Models\User;
 use App\Models\UserDocument;
 use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserDocumentController extends Controller
 {
     use ImageUploadTrait;
     public function index($id){
-        $user_id = decrypt($id); 
-        $user = User::find($user_id);  
-        return view('profile.document',compact('user'));
+        $user_id = decrypt($id);
+        $user = User::find($user_id);
+        $datas = UserDocument::where('user_id',Auth::user()->id)->get(); 
+        return view('profile.document',compact('user','datas'));
     }
 
     public function store(Request $request){ 

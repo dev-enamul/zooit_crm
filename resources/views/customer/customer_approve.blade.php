@@ -38,10 +38,10 @@
                                                 <label for="selectAll">Check All</label>
                                             </div>
 
-                                            <div class="mb-1">
+                                            <div class="mb-1"> 
                                                 <button class="btn btn-primary" type="submit">
                                                     Approve
-                                                </button>
+                                                </button>  
                                             </div>
                                         </div>
 

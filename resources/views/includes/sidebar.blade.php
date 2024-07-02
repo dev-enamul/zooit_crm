@@ -283,9 +283,9 @@
                             <span>Rejection</span>
                         </a>  
                         <ul class="sub-menu" aria-expanded="false">
-                            {{-- @can('rejection-manage')
+                            @can('rejection-manage')
                                 <li><a href="{{route('rejection.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Entry Rejection</a></li> 
-                            @endcan --}}
+                            @endcan
                             <li><a href="{{route('rejection.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Rejections</a></li> 
                             {{-- <li><a href="{{route('rejection.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Rejection Approve</a></li>  --}}
                         </ul>

@@ -65,17 +65,15 @@ class RejectionController extends Controller
     {
         $title = 'Rejection Entry'; 
         $my_all_employee    = json_decode(Auth::user()->user_employee);
-        $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
+        $customers          = Customer::get();
        
         $selected_data = 
         [
             'employee' => Auth::user()->id,
-        ];
+        ]; 
 
         if ($request->has('customer')) {
-            $selected_data['customer'] = $request->customer;
+            $selected_data['customer'] = Customer::find($request->customer);
         } 
         return view('rejection.rejection_save',compact('customers','selected_data'));
     }
@@ -85,7 +83,8 @@ class RejectionController extends Controller
         $validator = Validator::make($request->all(), [
             'customer'          => 'required', 
             'remark'            => 'nullable',
-        ]);
+        ]); 
+
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }
@@ -94,7 +93,6 @@ class RejectionController extends Controller
             $rejection = Rejection::findOrFail($id);
             $rejection->customer_id = $request->customer;
             $rejection->employee_id = Auth::user()->id;
-
             $rejection->remark = $request->remark;
             $rejection->updated_by = $request->updated_by;
             $rejection->updated_at = $request->updated_at;
@@ -109,14 +107,7 @@ class RejectionController extends Controller
             $rejection->created_by = auth()->id();
             $rejection->created_at = now();
             $rejection->status = 1;
-            $rejection->save();
-
-            // if($rejection) {
-            //     $visit = NegotiationAnalysis::where('customer_id',$request->customer)->first();
-            //     $visit->status = 1;
-            //     $visit->save();
-            // }
-            
+            $rejection->save(); 
             return redirect()->route('rejection.index')->with('success','Rejection create successfully');
         }
     }
@@ -181,5 +172,37 @@ class RejectionController extends Controller
         } else {
             return redirect()->route('rejection.approve')->with('error', 'Something went wrong!');
         }
+    } 
+
+    public function select2_customer(Request $request) {
+        $request->validate([
+            'term' => ['nullable', 'string'],
+        ]);
+
+        $my_all_employee = json_decode(Auth::user()->user_employee);
+        $users           = Customer::query()
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('customer_id', 'like', "%{$term}%")
+                    ->orWhere('name', 'like', "%{$term}%");
+            })
+            ->whereIn('ref_id', $my_all_employee)
+            ->select('id', 'name', 'customer_id')
+            ->limit(10)
+            ->get();
+
+        $results = [
+            ['id' => '', 'text' => 'Select Product'],
+        ];
+        foreach ($users as $user) {
+            $results[] = [
+                'id'   => $user->id,
+                'text' => "{$user->name} ($user->customer_id)",
+            ];
+
+        }
+        return response()->json([
+            'results' => $results,
+        ]);
     }
 }

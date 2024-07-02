@@ -32,7 +32,47 @@
                                 </div>
                             </form>
                         </div>
+                    </div> 
+                    <div class="accordion" id="accordionExample-Pricing">
+                        @foreach ($datas as $data)
+                            @php
+                                $filePath = 'storage/' . $data->file;
+                                $fileExtension = pathinfo(storage_path('app/public/' . $data->file), PATHINFO_EXTENSION);
+                                $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
+                            @endphp
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-Pricing-{{ $loop->index }}" aria-expanded="true" aria-controls="collapseOne-Pricing-{{ $loop->index }}">
+                                        <i class="fas {{ $isImage ? 'fa-file-image' : 'fa-file' }} text-primary"></i>  &nbsp; {{$data->title}}
+                                    </button>
+                                </h2>
+                                <div id="collapseOne-Pricing-{{ $loop->index }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample-Pricing">
+                                    <div class="accordion-body">
+                                        @if ($isImage)
+                                            <img src="{{ asset($filePath) }}" alt="{{$data->title}}" style="width: 100%;">
+                                        @elseif ($fileExtension === 'pdf')
+                                            <embed
+                                                src="{{ asset($filePath) }}"
+                                                frameBorder="0"
+                                                scrolling="auto"
+                                                width="100%"
+                                                height="600px"
+                                            ></embed>
+                                        @else
+                                            <p>Unsupported file type.</p>
+                                        @endif
+                    
+                                        <div style="margin-top: 10px;">
+                                            <a href="{{ asset($filePath) }}" download class="btn btn-primary">
+                                                Download {{$data->title}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
+                    
                 </div>
             </div> 
         </div> 
