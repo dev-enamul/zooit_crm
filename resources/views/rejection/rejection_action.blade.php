@@ -9,18 +9,15 @@
         <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
         {{-- @can('lead-manage')
             <a class="dropdown-item" href="{{route('lead.edit',$data->id)}}">Edit</a>
-        @endcan
-
+        @endcan 
         @can('lead-delete')
             <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('lead.delete',$data->id) }}')">Delete</a>
-        @endcan
-
+        @endcan 
         @if ($data->approve_by!=null && $data->status==0)
             @can('lead-analysis')
                 <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $data->customer->id])}}">Lead Analysis Form</a>
             @endcan
-        @endif  --}}
-
+        @endif  --}} 
         {{-- <a class="dropdown-item" href="{{route('customer.details', encrypt($data->customer_id))}}">Print Customer</a> --}}
     </div>
 </div>

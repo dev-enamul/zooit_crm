@@ -71,20 +71,23 @@ class FreelancersDataTable extends DataTable {
      * @param \App\Models\Freelancer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Freelancer $model, Request $request): QueryBuilder {
-        if (isset($request->status) && $request->status != 0) {
-            $model = $model->where('created_at', '<', Carbon::parse('2024-03-30'));
-        } else {
-            $model = $model->where('created_at', '>', Carbon::parse('2024-03-30'));
-            if (isset($request->date)) {
-                $date       = explode(' - ', $request->date);
-                $start_date = date('Y-m-d', strtotime($date[0]));
-                $end_date   = date('Y-m-d', strtotime($date[1]));
-                $model      = $model->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
+    public function query(Freelancer $model, Request $request): QueryBuilder { 
+        if(isset($request->status) && $request->status != 2){ 
+            if ($request->status != 0) {
+                $model = $model->where('created_at', '<', Carbon::parse('2024-03-30'));
             } else {
-                $model = $model->whereBetween('created_at', [date('Y-m-01') . ' 00:00:00', date('Y-m-t') . ' 23:59:59']);
+                $model = $model->where('created_at', '>', Carbon::parse('2024-03-30'));
+                if (isset($request->date)) {
+                    $date       = explode(' - ', $request->date);
+                    $start_date = date('Y-m-d', strtotime($date[0]));
+                    $end_date   = date('Y-m-d', strtotime($date[1]));
+                    $model      = $model->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
+                } else {
+                    $model = $model->whereBetween('created_at', [date('Y-m-01') . ' 00:00:00', date('Y-m-t') . ' 23:59:59']);
+                }
             }
         }
+        
 
 
         $user = User::find(auth()->user()->id);

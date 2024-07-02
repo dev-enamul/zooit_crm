@@ -129,13 +129,11 @@ class NegotiationAnalysisDataTable extends DataTable {
             $end_date   = date('Y-m-t');
         }
         $user          = User::find($user_id);
-        $user_employee = json_decode($user->user_employee);
-
-        if (isset($request->status) && !empty($request->status)) {
-            $status = $request->status;
-        } else {
-            $status = 0;
-        }
+        $user_employee = json_decode($user->user_employee); 
+        
+        if(isset($request->status) && $request->status != 2){
+            $model->where('status', $request->status);
+        }  
 
         $datas = $model->where(function ($q) {
             $q->where('approve_by', '!=', null)
@@ -145,8 +143,7 @@ class NegotiationAnalysisDataTable extends DataTable {
             ->whereHas('customer', function ($q) use ($user_employee) {
                 $q->whereIn('ref_id', $user_employee);
             })
-            ->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
-            ->where('status', $status)
+            ->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']) 
             ->with('customer.reference')
             ->with('customer.followup_analysis')
             ->with('customer.user.userAddress')

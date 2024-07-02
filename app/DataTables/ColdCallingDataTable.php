@@ -123,22 +123,19 @@ class ColdCallingDataTable extends DataTable {
             $end_date   = date('Y-m-t');
         }
 
-        if (isset($request->status) && !empty($request->status)) {
-            $status = $request->status;
-        } else {
-            $status = 0;
-        }
+        if(isset($request->status) && $request->status != 2){
+            $model->where('status', $request->status);
+        }  
 
         $datas = $model->where(function ($q) {
             $q->where('approve_by', '!=', null)
                 ->orWhere('employee_id', Auth::user()->id)
                 ->orWhere('created_by', Auth::user()->id);
-        })
+            })
             ->whereHas('customer', function ($q) use ($user_employee) {
                 $q->whereIn('ref_id', $user_employee);
             })
-            ->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
-            ->where('status', $status)
+            ->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']) 
             ->with('customer.user.userAddress', 'customer.reference', 'customer.profession', 'project', 'unit')
             ->newQuery();
         return $datas;

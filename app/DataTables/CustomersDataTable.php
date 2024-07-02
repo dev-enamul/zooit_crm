@@ -129,15 +129,12 @@ class CustomersDataTable extends DataTable {
         $user        = User::find($user_id);
         $my_employee = json_decode($user->user_employee);
 
-        if (isset($request->status)) {
-            $status = $request->status;
-        } else {
-            $status = 0;
-        }
+        if(isset($request->status) && $request->status != 2){
+            $model->where('status', $request->status);
+        } 
 
         return $model->newQuery()
-            ->whereIn('ref_id', $my_employee)
-            ->where('status', $status)
+            ->whereIn('ref_id', $my_employee) 
             ->with(['reference', 'user', 'profession', 'user.userAddress.village', 'user.userAddress.union', 'user.userAddress.upazila']);
     }
 

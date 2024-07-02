@@ -63,6 +63,7 @@
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <select class="select2" id="status" name="status">
+                            <option value = "2" {{$status==1?"selected":""}}> All</option>
                             <option value = "1" {{$status==1?"selected":""}}> Previous</option>
                             <option value = "0" {{$status==0?"selected":""}}> Present</option>
                         </select>
