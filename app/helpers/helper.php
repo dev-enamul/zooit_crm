@@ -28,7 +28,7 @@ if (!function_exists('get_date')) {
     function get_date($inputDate, $format = 'j M, Y', $timezone = 'Asia/Dhaka') {
         try {
             $date = new DateTime($inputDate);
-            $date->setTimezone(new DateTimeZone($timezone));
+            // $date->setTimezone(new DateTimeZone($timezone));
             return $date->format($format);
         } catch (Exception $e) {
             return '-';

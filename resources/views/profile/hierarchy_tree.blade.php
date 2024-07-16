@@ -48,10 +48,7 @@
                                         <ul>
                                             @foreach ($my_emplyees as $employee) 
                                             @php
-                                                $user = App\Models\User::find($employee);  
-                                                if(!isset($user) && empty($user)){
-                                                    dd($employee);
-                                                }
+                                                $user = App\Models\User::find($employee);   
                                                 $next_employees = my_employee($employee); 
                                                 if(!empty($next_employees)){
                                                     $all_employee = json_decode($user->user_employee);
@@ -61,7 +58,9 @@
                                                     $employee = 0;
                                                     $freelancer = 0;
                                                 }
-                                            @endphp
+                                            @endphp 
+
+                                            @if (isset($user) && $user!=null)
                                             <li>  
                                                 <a href="{{route('profile.hierarchy.tree',[encrypt($user_id),'employee'=> encrypt($user->id)])}}" style="{{!empty($next_employees)?'background:#ddd':''}}">
                                                     <img src="{{@$user->image()}}">
@@ -71,6 +70,7 @@
                                                         Total Freelancer: {{ $freelancer }} </span> 
                                                 </a>   
                                             </li> 
+                                            @endif 
                                             @endforeach 
                                         </ul>
                                     </ul>

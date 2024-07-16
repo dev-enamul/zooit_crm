@@ -22,34 +22,44 @@ use Carbon\Carbon;
 
 trait UserAchiveTreat
 {  
-    public function freelanecr_achive($date = null, $my_all_employee = null){
-        if($date == null){
+    public function freelanecr_achive($date = null, $my_all_employee = null) {
+        // Handle date range
+        if ($date == null) {
             $start = date('Y-m-01');
             $end = date('Y-m-t');
-        }else{ 
+        } else { 
             if (strpos($date, ' - ') !== false) {
                 list($start_date, $end_date) = explode(' - ', $date); 
-                $start = date('Y-m-d',strtotime($start_date));
-                $end = date('Y-m-d',strtotime($end_date));
+                $start = date('Y-m-d', strtotime($start_date));
+                $end = date('Y-m-d', strtotime($end_date));
             } else {
-                $start = date('Y-m-d',strtotime($date));
-                $end = date('Y-m-d',strtotime($date));
+                $start = date('Y-m-d', strtotime($date));
+                $end = date('Y-m-d', strtotime($date));
             }  
         } 
-        if($my_all_employee==null){
+    
+        // Handle employees
+        if ($my_all_employee == null) {
             $user = User::find($this->id); 
-            $my_all_employee = json_decode($user->user_employee);
+            $my_all_employee = json_decode($user->user_employee, true); // Ensure it's an array
         }
-         
-        $freelancer = User::whereHas('freelancer',function($q) use($my_all_employee){
-            $q->whereIn('user_id',$my_all_employee);
-        })
-        ->where('user_type',2)
-        ->where('approve_by','!=',null)
-        ->whereBetween('created_at',[$start.'00:00:00',$end.' 23:59:59'])
-        ->count();  
+        
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; // Default to an empty array if decoding failed
+        }
+    
+        // Query freelancers
+        $freelancer = User::whereHas('freelancer', function($q) use ($my_all_employee) {
+                $q->whereIn('user_id', $my_all_employee);
+            })
+            ->where('user_type', 2)
+            ->where('approve_by', '!=', null)
+            ->whereBetween('created_at', [$start . ' 00:00:00', $end . ' 23:59:59'])
+            ->count();  
+        
         return $freelancer;
-    } 
+    }
+    
 
     public function customer_achive($date = null, $my_all_employee = null){
         if($date == null){ 
@@ -71,6 +81,12 @@ trait UserAchiveTreat
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
         }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = [];  
+        }
+
+
         $customer = Customer::whereIn('ref_id',$my_all_employee)
             ->where('approve_by','!=',null) 
             ->whereBetween('created_at',[$start.' 00:00:00',$end.' 23:59:59']) 
@@ -98,6 +114,10 @@ trait UserAchiveTreat
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
         } 
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = [];
+        }
 
         $prospecting = Prospecting::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
@@ -127,6 +147,12 @@ trait UserAchiveTreat
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
         }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
+        }
+
+
         $cold_calling = ColdCalling::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -154,6 +180,10 @@ trait UserAchiveTreat
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
+        }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
         }
 
         $lead = Lead::WhereHas('customer',function($q) use($my_all_employee){
@@ -185,6 +215,10 @@ trait UserAchiveTreat
             $my_all_employee = json_decode($user->user_employee);
         }
 
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = [];
+        }
+
         $lead_analysis = LeadAnalysis::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -212,6 +246,10 @@ trait UserAchiveTreat
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
+        }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = [];
         }
 
         $presentation = Presentation::WhereHas('customer',function($q) use($my_all_employee){
@@ -242,6 +280,11 @@ trait UserAchiveTreat
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
         }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
+        }
+
         $presentation = VisitAnalysis::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -272,6 +315,10 @@ trait UserAchiveTreat
             $my_all_employee = json_decode($user->user_employee);
         }
 
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
+        }
+
         $followup = FollowUp::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -298,6 +345,10 @@ trait UserAchiveTreat
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
+        }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = [];
         }
 
         $data = FollowUpAnalysis::WhereHas('customer',function($q) use($my_all_employee){
@@ -330,6 +381,10 @@ trait UserAchiveTreat
             $my_all_employee = json_decode($user->user_employee);
         }
 
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
+        }
+
         $data = Negotiation::WhereHas('customer',function($q) use($my_all_employee){
             $q->whereIn('ref_id',$my_all_employee);
         })
@@ -357,6 +412,10 @@ trait UserAchiveTreat
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
+        }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = [];
         }
 
         $data = NegotiationAnalysis::WhereHas('customer',function($q) use($my_all_employee){
@@ -387,6 +446,10 @@ trait UserAchiveTreat
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
         }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
+        }
         
         $data = Rejection::whereHas('customer',function($q) use($my_all_employee){
                 $q->whereIn('ref_id',$my_all_employee);
@@ -414,6 +477,10 @@ trait UserAchiveTreat
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
+        }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
         }
         
         $data = Salse::whereHas('customer',function($q) use($my_all_employee){
@@ -443,6 +510,10 @@ trait UserAchiveTreat
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
+        }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
         }
         
         $data = SalseReturn::whereHas('customer',function($q) use($my_all_employee){
@@ -474,6 +545,10 @@ trait UserAchiveTreat
         if($my_all_employee==null){
             $user = User::find($this->id);
             $my_all_employee = json_decode($user->user_employee);
+        }
+
+        if (!is_array($my_all_employee)) {
+            $my_all_employee = []; 
         }
         
         $data = Deposit::whereHas('customer',function($q) use($my_all_employee){
