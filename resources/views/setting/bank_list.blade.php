@@ -92,13 +92,7 @@
                     <div class="form-group mb-2">
                         <label for="name">Bank Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="Enter Bank" required>
-                    </div>
-
-                    {{-- <div class="form-group mb-2">
-                        <label for="account">Account Number<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="account" name="account" placeholder="Enter Account Number" required>
-                    </div> --}}
-
+                    </div> 
                     <div class="form-group mb-2">
                         <label for="bank_type">Bank Type <span class="text-danger">*</span></label>
                         <select id="bank_type" class="select2" name="type" required> 

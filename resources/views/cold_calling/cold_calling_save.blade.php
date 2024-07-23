@@ -46,15 +46,8 @@
                             @endif
                                 @csrf
                                 <div class="row">
-                                    @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Reference</label>
-                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control">
-                                            </div>
-                                        </div>
-                                    @endif
-                                    <div class="col-md-{{  (isset($selected_data['customer']) && $selected_data['customer'] != null) ? '6' : '12' }}">
+                                  
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
@@ -66,19 +59,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="employee" id="employee" required>
-                                                 <option value="{{auth()->user()->id}}" selected="selected">{{auth()->user()->name}} [{{auth()->user()->user_id}}]</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -96,51 +77,17 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
-                                        <label for="project" class="form-label">Interested Project Name</label>
-                                        <select class="select2 reset-data" search name="project" id="project">
-                                            <option data-display="Select a project *" value="">
-                                                Select a Project
-                                            </option>
-                                            @isset($projects)
-                                                @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($cold_calling) ? $cold_calling->project_id : null) == $project->id ? 'selected' : '' }}>
-                                                        {{ $project->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-
-                                        @if ($errors->has('project'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('project') }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="unit" class="form-label">Interested Unit Name </label>
-                                        <select class="select2 reset-data" search name="unit" id="unit">
-                                            <option data-display="Select a unit *" value="">
-                                                Select a unit
-                                            </option>
-                                            @isset($units)
-                                                @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($cold_calling) ? $cold_calling->unit_id : null) == $unit->id ? 'selected' : '' }}>
-                                                        {{ $unit->title }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-
-                                        @if ($errors->has('unit'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('unit') }}
-                                            </span>
-                                        @endif
-                                    </div>
+                                        <div class="mb-3">
+                                            <label for="lead_date" class="form-label">Lead Date <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" name="lead_date" id="lead_date" required value="{{old('lead_date', @$cold_calling->lead_date)}}">
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div> 
 
                                     <div class="col-md-12">
                                         <div class="mb-3">

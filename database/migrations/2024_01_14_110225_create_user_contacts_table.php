@@ -13,15 +13,22 @@ return new class extends Migration
     {
         Schema::create('user_contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained(); 
-            $table->string('office_phone', 15)->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->tinyInteger('type')->default(1)->comment('1=Person, 2 = Company');
+            $table->foreignId('designation_id')->nullable()->constrained('designations');
+            $table->string('name')->nullable();
+            $table->tinyInteger('gender')->nullable();
+            $table->tinyInteger('religion')->nullable();
+            $table->date('dob')->nullable();
+            $table->string('phone', 15)->nullable();
             $table->string('personal_phone', 15)->nullable();
-            $table->string('office_email', 45)->nullable();
+            $table->string('email', 45)->nullable();
             $table->string('personal_email', 45)->nullable();
             $table->string('imo_number', 15)->nullable();
             $table->string('facebook_id', 100)->nullable(); 
-            $table->string('emergency_contact_number', 15)->nullable();
-            $table->string('emergency_contact_person', 45)->nullable(); 
+            $table->string('linkedin_id', 100)->nullable(); 
+            $table->string('twiter_id', 100)->nullable(); 
+            $table->string('instragram_id', 100)->nullable(); 
             $table->timestamps(); 
         });
     }

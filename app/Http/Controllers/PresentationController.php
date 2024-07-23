@@ -6,6 +6,7 @@ use App\DataTables\PresentationDataTable;
 use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
+use App\Models\Lead;
 use App\Models\LeadAnalysis;
 use App\Models\Notification;
 use App\Models\Presentation;
@@ -31,20 +32,17 @@ class PresentationController extends Controller {
         $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee   = $request->employee ?? null;
         $employee   = $employee ? User::find($employee) ?? User::find(auth()->user()->id) : User::find(auth()->user()->id);
-        return $dataTable->render('displaydata', compact('title', 'employee', 'status', 'start_date', 'end_date'));
+        return $dataTable->render('presentation.presentation_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
     }
 
     public function create(Request $request) {
-        $title                     = 'Presentation Entry';
-        $user_id                   = Auth::user()->id;
-        $priorities                = $this->priority();
-        $projects                  = Project::where('status', 1)->select('id', 'name')->get();
-        $units                     = Unit::select('id', 'title')->get();
+        $title                     = 'Presentation Entry'; 
+        $priorities                = $this->priority(); 
         $selected_data['priority'] = Priority::Regular;
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
         }
-        return view('presentation.presentation_save', compact('title', 'priorities', 'projects', 'units', 'selected_data'));
+        return view('presentation.presentation_save', compact('title', 'priorities', 'selected_data'));
     }
 
     public function customer_data(Request $request) {
@@ -54,12 +52,10 @@ class PresentationController extends Controller {
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'customer' => 'required',
-            'employee' => 'required',
-            'priority' => 'required',
-            'project'  => 'required',
-            'unit'     => 'required',
-            'remark'   => 'nullable|string|max:255',
+            'customer'      => 'required', 
+            'priority'      => 'required',
+            'followup_date' => 'required',
+            'remark'        => 'nullable|string|max:255',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -68,14 +64,13 @@ class PresentationController extends Controller {
         if (!empty($id)) {
             $presentation = Presentation::find($id);
             $presentation->update([
-                'customer_id' => $request->customer,
-                'employee_id' => $request->employee,
-                'priority'    => $request->priority,
-                'remark'      => $request->remark,
-                'project_id'  => $request->project,
-                'unit_id'     => $request->unit,
-                'updated_by'  => auth()->id(),
-                'updated_at'  => now(),
+                'customer_id'   => $request->customer,
+                'employee_id'   => auth()->id(),
+                'followup_date' => $request->followup_date,
+                'priority'      => $request->priority,
+                'remark'        => $request->remark, 
+                'updated_by'    => auth()->id(),
+                'updated_at'    => now(),
             ]);
             return redirect()->route('presentation.index')->with('success', 'Presemtation update successfully');
 
@@ -84,9 +79,8 @@ class PresentationController extends Controller {
             $presentation->priority    = $request->priority;
             $presentation->remark      = $request->remark;
             $presentation->customer_id = $request->customer;
-            $presentation->employee_id = $request->employee;
-            $presentation->project_id  = $request->project;
-            $presentation->unit_id     = $request->unit;
+            $presentation->followup_date = $request->followup_date;
+            $presentation->employee_id = Auth::user()->id; 
             $approve_setting           = ApproveSetting::where('name', 'presentation')->first();
             $is_admin                  = Auth::user()->hasPermission('admin');
             if ($approve_setting?->status == 0 || $is_admin) {
@@ -110,23 +104,18 @@ class PresentationController extends Controller {
             $presentation->save();
 
             if ($presentation) {
-                LeadAnalysis::where('customer_id', $request->customer)->update(['status' => 1]); 
+                Lead::where('customer_id', $request->customer)->update(['status' => 1]); 
             }
             return redirect()->route('presentation.index')->with('success', 'Presentation create successfully');
         }
     }
 
     public function edit(string $id) {
-        $title           = 'Presentation Edit';
-        $my_all_employee = json_decode(Auth::user()->user_employee);
-        $customers       = Customer::whereIn('ref_id', $my_all_employee)->get();
-        $priorities      = $this->priority();
-        $projects        = Project::where('status', 1)->select('id', 'name')->get();
-        $units           = Unit::select('id', 'title')->get();
+        $title           = 'Presentation Edit';  
+        $priorities      = $this->priority(); 
         $presentation    = Presentation::find($id); 
-        $selected_data['customer'] = $presentation->customer; 
- 
-        return view('presentation.presentation_save', compact('selected_data','title', 'customers', 'priorities', 'projects', 'units', 'presentation'));
+        $selected_data['customer'] = $presentation->customer;
+        return view('presentation.presentation_save', compact('selected_data','title','priorities', 'presentation'));
     }
 
     public function presentationDelete($id) {
@@ -195,7 +184,7 @@ class PresentationController extends Controller {
                 ];
             }
         } else {
-            $users = LeadAnalysis::where('status', 0)->where('approve_by', '!=', null)
+            $users = Lead::where('status', 0)->where('approve_by', '!=', null)
                 ->whereHas('customer', function ($q) use ($my_all_employee, $request) {
                     $q->whereIn('ref_id', $my_all_employee)
                         ->where(function ($query) use ($request) {

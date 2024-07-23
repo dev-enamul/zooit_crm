@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('customer_id')->nullable();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('profession_id')->nullable()->constrained();
-            $table->string('name')->nullable(); 
-            $table->unsignedBigInteger('ref_id')->nullable();
-            $table->foreign('ref_id')->references('id')->on('users');
+            $table->foreignId('ref_id')->nullable()->constrained('users');
+            $table->foreignId('project_id')->nullable()->constrained('projects');
+            $table->foreignId('sub_project_id')->nullable()->constrained('sub_projects');
+            $table->integer('purchase_posibility')->default(0)->comment("Min: 0, Max: 100");
+            $table->foreignId('find_media_id')->nullable()->constrained('find_media');
+            $table->tinyInteger('type')->default(1)->comment('1=Person, 2 = Company');
 
-            $table->foreignId('approve_by')->nullable()->constrained('users'); 
-
+            $table->foreignId('approve_by')->nullable()->constrained('users');  
             $table->tinyInteger('status')->default(1)->comment('1= Complete, 0= Uncomplete');
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');

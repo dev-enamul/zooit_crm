@@ -4,17 +4,17 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\CommissionDeductedSetting;
-use App\Models\NegotiationWaitingDay;
-use App\Models\ReportingUser;
-use App\Models\TrainingCategory;
+ 
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(ProfessionsSeeder::class);
+        $this->call(FindMediaSeeder::class);
+        $this->call(ProjectSeeder::class);
+        $this->call(SubProductSeeder::class);
+        $this->call(CompanyTypeSeeder::class);
         $this->call(CommissionSeeder::class);
         $this->call(DesignationSeeder::class);
         $this->call(UsersSeeder::class);

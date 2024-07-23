@@ -24,71 +24,21 @@ class PresentationDataTable extends DataTable {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($presentation) {
                 return view('presentation.presentation_action', compact('presentation'))->render();
-            })
-            ->addColumn('profession', function ($data) {
-                return $data->customer->profession->name ?? '-';
-            })
-            ->addColumn('project', function ($data) {
-                return $data->project->name ?? '-';
-            })
-            ->addColumn('unit', function ($data) {
-                return $data->unit->name ?? '-';
-            })
-            ->addColumn('income_range', function ($data) {
-                return get_price($data->income_range ?? 0);
-            })
-            ->addColumn('date', function ($data) {
-                return get_date($data->created_at);
-            })
-            ->addColumn('freelancer', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
+            }) 
 
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                if (isset($reporting) && $reporting != null) {
-                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                        $q->whereIn('designation_id', [20]);
-                    })->first();
-                    if (isset($user) && $user != null) {
-                        return $user->name . ' [' . $user->user_id . ']';
-                    }
-                }
-                return "-";
-            })
-            ->addColumn('marketing-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
+            ->addColumn('created_by', function ($presentation) {
+                if(isset($presentation->employee_id) && $presentation->employee_id != null){
+                    $user = user_info($presentation->employee_id);
+                    return @$user->name.' ['. @$user->user_id.']';
+                }else{
+                    return "-";
+                } 
+            }) 
 
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return marketingInChargeEmployee($reporting);
-            })
-
-            ->addColumn('salse-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return salesInChargeEmployee($reporting);
-            })
-            ->addColumn('area-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return areaInChargeEmployee($reporting);
-            })
-            ->addColumn('zonal-manager', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return zonalManagerEmployee($reporting);
-            })
+            ->addColumn('followup_date', function ($presentation) { 
+                return get_date($presentation->followup_date);
+            }) 
+         
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
@@ -119,6 +69,9 @@ class PresentationDataTable extends DataTable {
 
         $user          = User::find($user_id);
         $user_employee = json_decode($user->user_employee);
+        if($user_employee==null){
+            $user_employee = [Auth::user()->id];
+        }
 
          
         if(isset($request->status) && $request->status != 2){
@@ -177,16 +130,9 @@ class PresentationDataTable extends DataTable {
             Column::make('serial')->title('S/L'),
             Column::make('customer.customer_id')->title('Provable Cus ID'),
             Column::make('customer.name')->title('Customer Name'),
-            Column::make('customer.user.phone')->title('Mobile Number'),
-            Column::make('profession')->title('Profession'),
-            Column::make('project')->title('Preferred Project Name'),
-            Column::make('unit')->title('Preferred Unit Name'),
-            Column::make('date')->title('Presentation Date'),
-            Column::make('freelancer')->title('Franchise Partner Name & ID'),
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
-            Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
+            Column::make('customer.user.phone')->title('Mobile Number'),  
+            Column::make('created_by')->title('Employee'),  
+            Column::make('followup_date')->title('Followup Date'),
         ];
     }
 

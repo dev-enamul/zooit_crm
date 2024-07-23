@@ -16,10 +16,11 @@
         @endcan
 
         @if ($lead->approve_by!=null && $lead->status==0)
-            @can('lead-analysis')
-                <a class="dropdown-item" href="{{route('lead-analysis.create',['customer'=> $lead->customer->id])}}">Lead Analysis Form</a>
+            @can('presentation')
+                <a class="dropdown-item" href="{{route('presentation.create',['customer'=> $lead->customer->id])}}">Presentation</a>
             @endcan
         @endif
+        
         <a class="dropdown-item" href="{{route('customer.details', encrypt($lead->customer_id))}}">Print Customer</a>
     </div>
 </div>

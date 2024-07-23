@@ -10,19 +10,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Customer extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'user_id',
-        'customer_id',
-        'profession_id',
-        'name',
-        'ref_id',
-        'status',
-        'created_by',
-        'approve_by',
-    ];
+    protected $fillable = [ 'customer_id', 'user_id', 'ref_id', 'project_id', 'sub_project_id', 'purchase_posibility', 'find_media_id', 'type', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'deleted_at', 'created_at', 'updated_at'];
 
     public function followup_analysis() {
         return $this->hasOne(FollowUpAnalysis::class, 'customer_id');
+    }
+
+    public function project(){
+        return $this->belongsTo(Project::class,'project_id');
+    }
+    public function sub_project(){
+        return $this->belongsTo(SubProject::class,'project_id');
     }
 
     public function user() {

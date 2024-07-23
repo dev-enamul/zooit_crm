@@ -47,14 +47,7 @@
                             @endif
                                 @csrf
                                 <div class="row">
-                                    @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label class="form-label">Reference</label>
-                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control"  >
-                                            </div>
-                                        </div>
-                                    @endif
+                                  
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>
@@ -70,19 +63,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="employee" id="employee" required>
-                                                <option value="{{auth()->user()->id}}" selected="selected">{{Auth::user()->name}}</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -100,58 +81,24 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="project" class="form-label">Preferred Project Name </label>
-                                        <select class="form-select reset-data" name="project" id="project" >
-                                            <option data-display="Select a project *" value="">
-                                                Select a Project
-                                            </option>
-                                            @isset($projects)
-                                                @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($lead) ? $lead->project_id : null) == $project->id ? 'selected' : '' }}>
-                                                        {{ $project->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-
-                                        @if ($errors->has('project'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('project') }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="unit" class="form-label">Preferred Unit Name </label>
-                                        <select class="form-select reset-data" name="unit" id="unit">
-                                            <option data-display="Select a unit *" value="">
-                                                Select a unit
-                                            </option>
-                                            @isset($units)
-                                                @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($lead) ? $lead->unit_id : null) == $unit->id ? 'selected' : '' }}>
-                                                        {{ $unit->title }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-
-                                        @if ($errors->has('unit'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('unit') }}
-                                            </span>
-                                        @endif
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="purchase_date" class="form-label">Possible Purchase Date</label>
-                                            <input type="text" name="purchase_date" class="form-control datepicker w-100" id="purchase_date" placeholder="Purchase date" value="{{isset($lead) ? $lead->possible_purchase_date : old('purchase_date')}}">
+                                            <input type="date" name="purchase_date" class="form-control" id="purchase_date" placeholder="Purchase date" value="{{isset($lead) ? $lead->possible_purchase_date : old('purchase_date')}}">
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="presentation_date" class="form-label">Presentation Date <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" name="presentation_date" id="presentation_date" required value="{{old('presentation_date', @$lead->presentation_date)}}">
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div> 
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
@@ -193,47 +140,7 @@
 </div>
 @endsection
 
-@section('script')
-    @can('data-input-for-others')
-        <script>
-            $(document).ready(function() {
-                $('#employee').select2({
-                    placeholder: "Select Employee",
-                    allowClear: true,
-                    ajax: {
-                        url: '{{ route('select2.employee') }}',
-                        dataType: 'json',
-                        data: function (params) {
-                            var query = {
-                                term: params.term
-                            }
-                            return query;
-                        }
-                    }
-                });
-            });
-        </script>
-    @endcan
-
-    <script>
-
-        $(document).ready(function() {
-            $('#customer').select2({
-                placeholder: "Select Customer",
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('select2.lead.customer') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        var query = {
-                            term: params.term
-                        }
-                        return query;
-                    }
-                }
-            });
-        });
-    </script>
+@section('script') 
 
     <script>
 

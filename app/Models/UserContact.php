@@ -8,18 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserContact extends Model
 {
     use HasFactory; 
-    protected $fillable = [
-        'office_phone',
-        'personal_phone',
-        'office_email',
-        'personal_email',
-        'imo_number',
-        'facebook_id', 
-        'emergency_contact_number',
-        'emergency_contact_person',
-        'user_id',
-    ];
-
+    protected $fillable = ['user_id', 'type', 'designation_id', 'name', 'gender', 'religion', 'dob', 'phone', 'personal_phone', 'email', 'personal_email', 'imo_number', 'facebook_id', 'linkedin_id', 'twiter_id', 'instragram_id', 'created_at', 'updated_at'];
     public function user()
     {
         return $this->belongsTo(User::class);

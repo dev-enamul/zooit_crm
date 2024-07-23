@@ -14,13 +14,9 @@ return new class extends Migration
         Schema::create('follow_ups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained();  
-            $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
-            $table->foreignId('project_id')->nullable()->constrained('projects'); 
-            $table->foreignId('unit_id')->nullable()->constrained('units'); 
-            $table->integer('unit_qty')->default(1);
-            $table->decimal('unit_price', 10, 2)->nullable();
-            $table->decimal('regular_amount', 10, 2)->nullable()->comment('Total Amount');
+            $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');   
             $table->decimal('negotiation_amount', 10, 2)->nullable()->comment('Negotiation Amount');
+            $table->date('next_followup_date')->nullable();
             $table->string('remark')->nullable();  
             $table->date('date')->default(now());
 

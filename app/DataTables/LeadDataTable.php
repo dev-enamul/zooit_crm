@@ -24,82 +24,24 @@ class LeadDataTable extends DataTable {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($lead) {
                 return view('lead.lead_action', compact('lead'))->render();
-            })
-            ->addColumn('profession', function ($data) {
-                return $data->customer->profession->name ?? '-';
-            })
-            ->addColumn('project', function ($data) {
-                return $data->project->name ?? '-';
-            })
-            ->addColumn('unit', function ($data) {
-                return $data->unit->name ?? '-';
-            })
+            }) 
             ->addColumn('phone', function ($data) {
                 return $data->customer->user->phone ?? "-";
             })
-            ->addColumn('freelancer', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
 
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                if (isset($reporting) && $reporting != null) {
-                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                        $q->whereIn('designation_id', [20]);
-                    })->first();
-                    if (isset($user) && $user != null) {
-                        return $user->name . ' [' . $user->user_id . ']';
-                    }
+            ->addColumn('created_by', function ($data) { 
+                if(isset($data->employee_id) && $data->employee_id != null){
+                    $user = user_info($data->employee_id);
+                    return $user->name.' ['.$user->id.']';
+                }else{
+                    return "-";
                 }
-                return "-";
-            })
-            ->addColumn('co-ordinator', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return coOrdinator($reporting);
-            })
-            ->addColumn('ex-co-ordinator', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return exCoOrdinator($reporting);
-            })
-            ->addColumn('marketing-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return inChargeEmployee($reporting);
             })
 
-            ->addColumn('salse-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return salesInChargeEmployee($reporting);
+            ->addColumn('followup_date', function ($data) {
+                return $data->customer->user->phone ?? "-";
             })
-            ->addColumn('area-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return areaInChargeEmployee($reporting);
-            })
-            ->addColumn('zonal-manager', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return zonalManagerEmployee($reporting);
-            })
+            
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
@@ -129,6 +71,9 @@ class LeadDataTable extends DataTable {
         }
         $user          = User::find($user_id);
         $user_employee = json_decode($user->user_employee);
+        if($user_employee == null){
+            $user_employee = [Auth::user()->id];
+        }
 
         if(isset($request->status) && $request->status != 2){
             $model->where('status', $request->status);
@@ -180,16 +125,9 @@ class LeadDataTable extends DataTable {
             Column::make('customer.customer_id')->title('Provable Cus ID'),
             Column::make('customer.name')->title('Customer Name'),
             Column::make('phone')->title('Mobile Number'),
-            Column::make('profession')->title('Profession'),
-            Column::make('project')->title('Preferred Project Name'),
-            Column::make('unit')->title('Preferred Unit Name'),
-            Column::make('freelancer')->title('Franchise Partner Name & ID'),
-            Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
-            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
-            Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
+            Column::make('created_by')->title('Employee'),
+            Column::make('followup_date')->title('Followup Date'),
+           
 
         ];
     }

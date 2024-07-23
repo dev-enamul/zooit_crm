@@ -10,19 +10,7 @@ class Presentation extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'customer_id',
-        'priority',
-        'project_id',
-        'unit_id',
-        'remark',
-        'employee_id',
-        'approve_by',
-        'status',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-    ];
+    protected $fillable = [ 'customer_id', 'priority', 'followup_date', 'remark', 'employee_id', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
 
     public function customer()
     {

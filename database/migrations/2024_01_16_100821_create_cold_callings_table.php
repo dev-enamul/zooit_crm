@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('cold_callings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained(); 
-            $table->tinyInteger('media')->nullable()->comment('1= Phone, 2= Meet');
+            $table->foreignId('customer_id')->constrained();  
             $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
             $table->string('remark')->nullable();  
-            $table->foreignId('employee_id')->constrained('users'); 
-            $table->foreignId('project_id')->nullable()->constrained(); 
-            $table->foreignId('unit_id')->nullable()->constrained(); 
-            $table->foreignId('approve_by')->nullable()->constrained('users'); 
+            $table->foreignId('employee_id')->constrained('users');
+            $table->date('lead_date')->nullable();
             
+            $table->foreignId('approve_by')->nullable()->constrained('users');  
             $table->tinyInteger('status')->default(1)->comment('1= Complete, 0= Uncomplete');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

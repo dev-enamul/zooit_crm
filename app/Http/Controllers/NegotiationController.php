@@ -6,6 +6,7 @@ use App\DataTables\NegotiationDataTable;
 use App\Enums\Priority;
 use App\Models\ApproveSetting;
 use App\Models\Customer;
+use App\Models\FollowUp;
 use App\Models\FollowUpAnalysis;
 use App\Models\Negotiation;
 use App\Models\Notification;
@@ -40,18 +41,13 @@ class NegotiationController extends Controller {
 
     public function create(Request $request) {
         $title        = 'Negotiation Entry';
-        $user_id      = Auth::user()->id;
-        $projects     = Project::where('status', 1)->get(['name', 'id']);
-        $projectUnits = ProjectUnit::where('status', 1)->get(['name', 'id']);
-        $priorities   = $this->priority();
-        $units        = Unit::select('id', 'title')->get();
-
+        $user_id      = Auth::user()->id; 
+        $priorities   = $this->priority(); 
         $selected_data[] = Priority::Regular;
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
-        }
-
-        return view('negotiation.negotiation_save', compact('selected_data', 'priorities', 'projects', 'projectUnits', 'units'));
+        } 
+        return view('negotiation.negotiation_save', compact('selected_data', 'priorities'));
     }
 
     public function customer_data(Request $request) {
@@ -61,13 +57,9 @@ class NegotiationController extends Controller {
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'customer'           => 'required',
-            'employee'           => 'required',
-            'priority'           => 'required',
-            'project'            => 'required',
-            'unit_qty'           => 'required',
-            'unit'               => 'required',
-            'regular_amount'     => 'required',
+            'customer'           => 'required', 
+            'priority'           => 'required', 
+            'sales_date'         => 'required',
             'negotiation_amount' => 'required',
             'remark'             => 'nullable',
         ]);
@@ -78,17 +70,11 @@ class NegotiationController extends Controller {
         if (!empty($id)) {
             $follow                     = Negotiation::findOrFail($id);
             $follow->customer_id        = $request->customer;
-            $follow->employee_id        = $request->employee;
-            $follow->priority           = $request->priority;
-            $follow->project_id         = $request->input('project');
-            $follow->unit_id            = $request->input('unit');
-            $follow->select_type        = $request->select_type;
-            $follow->payment_duration   = $request->payment_duration;
-            $follow->unit_price         = $request->unit_price;
-            $follow->unit_qty           = $request->unit_qty;
-            $follow->regular_amount     = $request->input('regular_amount');
-            $follow->negotiation_amount = $request->input('negotiation_amount');
+            $follow->employee_id        = auth()->id();
+            $follow->priority           = $request->priority; 
+            $follow->negotiation_amount = $request->negotiation_amount;
             $follow->remark             = $request->remark;
+            $follow->sales_date         = $request->sales_date;
             $follow->updated_by         = $request->updated_by;
             $follow->updated_at         = $request->updated_at;
             $follow->save();
@@ -96,17 +82,11 @@ class NegotiationController extends Controller {
         } else {
             $follow                     = new Negotiation();
             $follow->customer_id        = $request->customer;
-            $follow->employee_id        = $request->employee;
-            $follow->priority           = $request->priority;
-            $follow->project_id         = $request->input('project');
-            $follow->unit_id            = $request->input('unit');
-            $follow->select_type        = $request->select_type;
-            $follow->payment_duration   = $request->payment_duration;
-            $follow->unit_price         = $request->unit_price;
-            $follow->unit_qty           = $request->unit_qty;
-            $follow->regular_amount     = $request->input('regular_amount');
+            $follow->employee_id        = auth()->id();
+            $follow->priority           = $request->priority;    
             $follow->negotiation_amount = $request->input('negotiation_amount');
             $follow->remark             = $request->remark;
+            $follow->sales_date         = $request->sales_date;
 
             $approve_setting = ApproveSetting::where('name', 'negotiation')->first();
             $is_admin        = Auth::user()->hasPermission('admin');
@@ -132,7 +112,7 @@ class NegotiationController extends Controller {
             $follow->save();
 
             if ($follow) {
-                $visit = FollowUpAnalysis::where('customer_id', $request->customer)->update(['status' => 1]);
+                $visit = FollowUp::where('customer_id', $request->customer)->update(['status' => 1]);
             }
 
             return redirect()->route('negotiation.index')->with('success', 'Negotiation create successfully');
@@ -140,15 +120,7 @@ class NegotiationController extends Controller {
     }
 
     public function edit(string $id, Request $request) {
-        $title           = 'Negotiation Edit';
-        $my_all_employee = json_decode(Auth::user()->user_employee);
-        $customers       = VisitAnalysis::where('status', 0)->where('approve_by', '!=', null)->whereHas('customer', function ($q) use ($my_all_employee) {
-            $q->whereIn('ref_id', $my_all_employee);
-        })->get();
-        $projects     = Project::where('status', 1)->get(['name', 'id']);
-        $units        = Unit::select('id', 'title')->get();
-        $projectUnits = ProjectUnit::where('status', 1)->get(['name', 'id']);
-        $employees    = User::whereIn('id', $my_all_employee)->get();
+        $title           = 'Negotiation Edit'; 
         $priorities   = $this->priority();
 
         $selected_data =
@@ -158,7 +130,7 @@ class NegotiationController extends Controller {
         ]; 
         $negotiation = Negotiation::find($id); 
         $selected_data['customer'] = $negotiation->customer;
-        return view('negotiation.negotiation_save', compact('units','selected_data', 'priorities', 'projects', 'projectUnits', 'customers', 'employees', 'negotiation'));
+        return view('negotiation.negotiation_save', compact('selected_data', 'priorities', 'negotiation'));
     }
 
     public function negotiationDelete($id) {
@@ -207,7 +179,7 @@ class NegotiationController extends Controller {
         $my_all_employee = json_decode(Auth::user()->my_employee);
         $is_admin        = Auth::user()->hasPermission('admin');
         $results         = [
-            ['id' => '', 'text' => 'Select Product'],
+            ['id' => '', 'text' => 'Select Customer'],
         ];
 
         if ($is_admin) {
@@ -229,7 +201,7 @@ class NegotiationController extends Controller {
                 ];
             }
         } else {
-            $users = VisitAnalysis::where('status', 0)->where('approve_by', '!=', null)
+            $users = FollowUp::where('status', 0)->where('approve_by', '!=', null)
                 ->whereHas('customer', function ($q) use ($my_all_employee, $request) {
                     $q->whereIn('ref_id', $my_all_employee)
                         ->where(function ($query) use ($request) {

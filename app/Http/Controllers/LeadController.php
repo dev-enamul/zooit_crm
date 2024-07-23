@@ -29,7 +29,7 @@ class LeadController extends Controller {
         $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee   = $request->employee ?? null;
         $employee   = $employee ? User::find($employee) ?? User::find(auth()->user()->id) : User::find(auth()->user()->id);
-        return $dataTable->render('displaydata', compact('title', 'employee', 'status', 'start_date', 'end_date'));
+        return $dataTable->render('lead.lead_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
     }
 
     public function priority() {
@@ -37,10 +37,7 @@ class LeadController extends Controller {
     }
 
     public function create(Request $request) {
-        $title      = 'Lead Entry';
-        $user_id    = Auth::user()->id;
-        $projects   = Project::where('status', 1)->select('id', 'name')->get();
-        $units      = Unit::select('id', 'title')->get();
+        $title      = 'Lead Entry'; 
         $priorities = $this->priority();
 
         $selected_data =
@@ -51,7 +48,7 @@ class LeadController extends Controller {
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::select('id', 'customer_id', 'name')->find($request->customer);
         }
-        return view('lead.lead_save', compact('priorities', 'title', 'projects', 'units', 'selected_data'));
+        return view('lead.lead_save', compact('priorities', 'title', 'selected_data'));
     }
 
     public function customer_data(Request $request) {
@@ -61,10 +58,10 @@ class LeadController extends Controller {
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'customer' => 'required',
-            'priority' => 'required',
-            'remark'   => 'nullable|string|max:255',
-            'employee' => 'required',
+            'customer'      => 'required',
+            'priority'      => 'required',
+            'presentation_date' => 'required',
+            'remark'        => 'nullable|string|max:255', 
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -74,28 +71,25 @@ class LeadController extends Controller {
             $lead = Lead::find($id);
             $lead->update([
                 'customer_id'            => $request->customer,
-                'purchase_capacity'      => $request->priority,
+                'priority'              => $request->priority,
                 'remark'                 => $request->remark,
-                'employee_id'            => $request->employee,
-                'project_id'             => $request->project,
-                'unit_id'                => $request->unit,
+                'employee_id'            => Auth::user()->id, 
                 'possible_purchase_date' => date('Y-m-d', strtotime($request->purchase_date)),
+                'presentation_date' => date('Y-m-d', strtotime($request->presentation_date)),
                 'updated_by'             => auth()->id(),
                 'updated_at'             => now(),
                 'created_by'             => auth()->id(),
             ]);
-            return redirect()->route('lead.index')->with('success', 'Lead update successfully');
-
+            return redirect()->route('lead.index')->with('success', 'Lead update successfully'); 
         } else {
             $lead                         = new Lead();
             $lead->customer_id            = $request->customer;
-            $lead->employee_id            = $request->employee;
-            $lead->project_id             = $request->project;
-            $lead->remark                 = $request->remark;
-            $lead->unit_id                = $request->unit;
+            $lead->employee_id            = auth()->user()->id; 
+            $lead->remark                 = $request->remark; 
             $lead->updated_by             = auth()->id();
-            $lead->purchase_capacity      = $request->priority;
+            $lead->priority             = $request->priority;
             $lead->possible_purchase_date = date('Y-m-d', strtotime($request->purchase_date));
+            $lead->presentation_date = date('Y-m-d', strtotime($request->presentation_date));
             $approve_setting              = ApproveSetting::where('name', 'lead')->first();
             $is_admin                     = Auth::user()->hasPermission('admin');
             if ($approve_setting?->status == 0 || $is_admin) {
@@ -131,14 +125,16 @@ class LeadController extends Controller {
     public function edit($id) {
         $title           = 'Lead Edit';
         $my_all_employee = json_decode(Auth::user()->user_employee);
-        $customers       = Customer::whereIn('ref_id', $my_all_employee)->get();
-        $projects        = Project::where('status', 1)->select('id', 'name')->get();
-        $units           = Unit::select('id', 'title')->get();
+        if($my_all_employee==null){
+            $my_all_employee = [Auth::user()->id];
+        }
+        $customers       = Customer::whereIn('ref_id', $my_all_employee)->get(); 
         $priorities      = $this->priority();
         $lead            = Lead::find($id);
         $selected_data['customer'] = $lead->customer;
+ 
 
-        return view('lead.lead_save', compact('selected_data','customers', 'priorities', 'title', 'projects', 'units', 'lead'));
+        return view('lead.lead_save', compact('selected_data','customers', 'priorities', 'title', 'lead'));
     }
 
     public function leadDelete($id) {

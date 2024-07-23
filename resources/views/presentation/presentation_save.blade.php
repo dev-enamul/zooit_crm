@@ -46,18 +46,10 @@
                                 <form action="{{route('presentation.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @endif
                                 @csrf
-                                <div class="row">
-                                    @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label class="form-label">Reference</label>
-                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control"  >
-                                            </div>
-                                        </div>
-                                    @endif
+                                <div class="row"> 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
@@ -72,21 +64,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="employee" id="employee" required>
-                                                <option value="{{ Auth::user()->id }}" selected>
-                                                    {{ Auth::user()->name }}
-                                                </option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -107,51 +85,17 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>  
 
                                     <div class="col-md-6">
-                                        <label for="project" class="form-label">Interested Project Name <span class="text-danger">*</span></label>
-                                        <select class="form-select reset-data" name="project" id="project" required>
-                                            <option data-display="Select a project *" value="">
-                                                Select a Project
-                                            </option>
-                                            @isset($projects)
-                                                @foreach ($projects as $project)
-                                                    <option value="{{ $project->id }}" {{ old('project', isset($presentation) ? $presentation->project_id : null) == $project->id ? 'selected' : '' }}>
-                                                        {{ $project->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-
-                                        @if ($errors->has('project'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('project') }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="unit" class="form-label">Interested Unit Name <span class="text-danger">*</span></label>
-                                        <select class="form-select reset-data" name="unit" id="unit" required>
-                                            <option data-display="Select a unit *" value="">
-                                                Select a unit
-                                            </option>
-                                            @isset($units)
-                                                @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}" {{ old('unit', isset($presentation) ? $presentation->unit_id : null) == $unit->id ? 'selected' : '' }}>
-                                                        {{ $unit->title }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-
-                                        @if ($errors->has('unit'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('unit') }}
-                                            </span>
-                                        @endif
-                                    </div>
+                                        <div class="mb-3">
+                                            <label for="followup_date" class="form-label">Followup Date <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" name="followup_date" id="followup_date" required value="{{old('followup_date', @$presentation->followup_date)}}">
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -195,26 +139,7 @@
 
 @section('script')
 
-    @can('data-input-for-others')
-        <script>
-            $(document).ready(function() {
-                $('#employee').select2({
-                    placeholder: "Select Employee",
-                    allowClear: true,
-                    ajax: {
-                        url: '{{ route('select2.employee') }}',
-                        dataType: 'json',
-                        data: function (params) {
-                            var query = {
-                                term: params.term
-                            }
-                            return query;
-                        }
-                    }
-                });
-            });
-        </script>
-    @endcan
+   
 
     <script>
         $(document).ready(function() {

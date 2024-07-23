@@ -54,9 +54,9 @@ class ColdCallingController extends Controller {
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'customer' => 'required|unique:cold_callings,customer_id,' . $id,
-            'employee' => 'required',
+            'customer' => 'required|unique:cold_callings,customer_id,' . $id, 
             'priority' => 'required',
+            'lead_date' => 'required',
             'remark'   => 'nullable|string|max:255',
         ]);
         if ($validator->fails()) {
@@ -66,28 +66,23 @@ class ColdCallingController extends Controller {
         if (!empty($id)) {
             $cold_calling = ColdCalling::find($id);
             $cold_calling->update([
-                'customer_id' => $request->customer,
-                'media'       => 1, # dummy
+                'customer_id' => $request->customer, 
                 'priority' => $request->priority,
-                'remark'      => $request->remark,
-                'customer_id' => $request->customer,
-                'employee_id' => $request->employee,
-                'project_id'  => $request->project,
-                'unit_id'     => $request->unit,
+                'remark'      => $request->remark, 
+                'employee_id' => auth()->user()->id, 
+                'lead_date'   => $request->lead_date,
                 'updated_by'  => auth()->id(),
                 'updated_at'  => now(),
             ]);
             return redirect()->route('cold-calling.index')->with('success', 'Cold Calling update successfully');
 
         } else {
-            $cold_call              = new ColdCalling();
-            $cold_call->media       = 1; #dummy
+            $cold_call              = new ColdCalling(); 
             $cold_call->priority    = $request->priority;
             $cold_call->remark      = $request->remark;
             $cold_call->customer_id = $request->customer;
-            $cold_call->employee_id = $request->employee;
-            $cold_call->project_id  = $request->project;
-            $cold_call->unit_id     = $request->unit;
+            $cold_call->employee_id = auth()->user()->id; 
+            $cold_call->lead_date   = $request->lead_date;
             $cold_call->status      = 0;
             $approve_setting        = ApproveSetting::where('name', 'cold_calling')->first();
             $is_admin               = Auth::user()->hasPermission('admin');
@@ -112,8 +107,7 @@ class ColdCallingController extends Controller {
             $cold_call->save();
 
             if ($cold_call) {
-                $prospecting = Prospecting::where('customer_id', $request->customer)->first();
-
+                $prospecting = Prospecting::where('customer_id', $request->customer)->first(); 
                 if (isset($prospecting) && $prospecting != null) {
                     $prospecting->status = 1;
                     $prospecting->save();
@@ -126,17 +120,19 @@ class ColdCallingController extends Controller {
     public function edit(string $id) {
         $title = 'Cold Calling Edit';
 
-        $my_all_employee = json_decode(Auth::user()->user_employee);
+        $user = Auth::user();
+        $my_all_employee = json_decode($user->user_employee);
+        if($my_all_employee==null){
+            $my_all_employee = [$user->id];
+        }
         $cstmrs          = Prospecting::where('status', 0)->where('approve_by', '!=', null)->whereHas('customer', function ($q) use ($my_all_employee) {
             $q->whereIn('ref_id', $my_all_employee);
         })->get();
-        $priorities   = $this->priority();
-        $projects     = Project::where('status', 1)->select('id', 'name')->get();
-        $units        = Unit::select('id', 'title')->get();
+        $priorities   = $this->priority(); 
         $cold_calling = ColdCalling::find($id);
         $employees    = User::whereIn('id', $my_all_employee)->get();
         $selected_data['customer'] = $cold_calling->customer;
-        return view('cold_calling.cold_calling_save', compact('selected_data','title', 'cstmrs', 'priorities', 'projects', 'units', 'cold_calling', 'employees'));
+        return view('cold_calling.cold_calling_save', compact('selected_data','title', 'cstmrs', 'priorities', 'cold_calling', 'employees'));
     }
 
     public function colCallingDelete($id) {

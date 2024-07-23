@@ -21,38 +21,22 @@ class ProductController extends Controller
     use ImageUploadTrait;
     use AreaTrait;
 
-    public function index(){
-
-        $divisions      = $this->getCachedDivisions();
-        $projects       = Project::where('status',1)->with('units')->select('id','name','address','total_floor','approved_by')->get();
-        $unit_headers   = Unit::where('status',1)->select('id','title')->get();
-        $salse          = Salse::where('status',1)->get();
-
-        return view('product.product_list',compact('projects','divisions','unit_headers','salse'));
+    public function index(){ 
+        $projects       = Project::where('status',1)->get();  
+        return view('product.product_list',compact('projects'));
     }
 
     public function create(){
-        $title     = "Product Create";
-        $divisions = $this->getCachedDivisions();
-        $districts = $this->getCachedDistricts();
-        $upazilas  = $this->getCachedUpazilas();
-        $unions    = $this->getCachedUnions();
-        $villages  = $this->getCachedVillages();
-        return view('product.product_save', compact('title','divisions','districts','upazilas','unions','villages'));
+        $title     = "Product Create"; 
+        return view('product.product_save', compact('title'));
     }
 
     public function save(Request $request, $id = null)
     {
+ 
         $validator = Validator::make($request->all(), [
-            'name'          => 'required|string|max:190',
-            'division'      => 'nullable|exists:divisions,id',
-            'district'      => 'nullable|exists:districts,id',
-            'upazila'       => 'nullable|exists:upazilas,id',
-            'union'         => 'nullable|exists:unions,id',
-            'village'       => 'nullable|exists:villages,id',
-            'total_floor'   => 'nullable|numeric|min:1',
-            'google_map'    => 'nullable|string',
-            'address'       => 'nullable|string|max:5000',
+            'name'          => 'required|string|max:190', 
+            'price'          => 'nullable|integer', 
             'description'   => 'nullable|string|max:5000',
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
         ]);
@@ -66,29 +50,11 @@ class ProductController extends Controller
         $is_admin = Auth::user()->hasPermission('admin');
 
         if (!empty($id)) {
-            $info = Project::find($id);
-
-
+            $info = Project::find($id); 
             if (!empty($info)){
                 $info->name             = $request->name;
-                $info->total_floor      = $request->total_floor;
-                $info->google_map       = $request->google_map;
-                $info->address          = $request->address;
-                $info->description      = $request->description;
-                $info->division_id      = $request->division;
-                $info->district_id      = $request->district;
-                $info->upazila_id       = $request->upazila;
-                $info->union_id         = $request->union;
-                $info->village_id       = $request->village;
-
-                if($approve_setting->status == 0 || $is_admin){
-                    $info->status           = 1;
-                    $info->approved_by      = $user_id;
-                }else{
-                    $info->status           = 0;
-                }
-
-                $info->updated_by       = $user_id;
+                $info->price             = $request->price; 
+                $info->description      = $request->description;     
                 DB::beginTransaction();
                 try {
                     $info->save();
@@ -111,52 +77,21 @@ class ProductController extends Controller
         }
 
         $data = [
-            'name'          => $request->name,
-            'total_floor'   => $request->total_floor,
-            'google_map'    => $request->google_map,
-            'address'       => $request->address,
-            'description'   => $request->description,
-            'division_id'   => $request->division,
-            'district_id'   => $request->district,
-            'upazila_id'    => $request->upazila,
-            'union_id'      => $request->union,
-            'village_id'    => $request->village,
-            'status'        => 0,
-            'created_by'    => $user_id,
-            'country_id'   => 18,
+            'name'          => $request->name, 
+            'price'          => $request->price, 
+            'description'   => $request->description, 
+            'status'        => 1, 
         ];
 
         DB::beginTransaction();
         try {
-            $project = Project::create($data);
-
-            if($approve_setting?->status == 0 || $is_admin){
-                $project->status           = 1;
-                $project->approved_by      = $user_id;
-                $project->save();
-            } else{
-                 $approve_by = null;
-                 $auth_user = Auth::user();
-                 if(count(json_decode($auth_user->user_reporting))>1){
-                     Notification::store([
-                         'title'         => 'Product approval request',
-                         'content'       => $auth_user->name.' has created a product please approve as soon as possible',
-                         'link'          => route('product.approve'),
-                         'created_by'    => auth()->user()->id,
-                         'user_id'       => [json_decode($auth_user->user_reporting)[1]]
-                     ]);
-                 }
-            }
-
-
-
+            $project = Project::create($data); 
             if ($request->hasFile('image')) {
                 $p_images = new ProjectImage();
                 $p_images->project_id = $project->id;
                 $p_images->name =   $this->uploadImage($request, 'image', 'projects', 'public');
                 $p_images->save();
-            }
-
+            } 
             DB::commit();
 
             return redirect()->route('product.index')->with('success', 'Project created successfully');
@@ -165,73 +100,7 @@ class ProductController extends Controller
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
-
-    public function productSearch(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'division'       => 'nullable',
-            'district'       => 'nullable',
-            'upazila'        => 'nullable',
-            'union'          => 'nullable',
-            'village'        => 'nullable',
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->errors()->all();
-            $errorMessage = implode('<br>', $errors);
-
-            if ($validator->fails()) {
-                return redirect()->back()->withInput()->withErrors($validator)->with('error', 'Validation failed.');
-            }
-        }
-
-        try{
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $division_id    = $request->division;
-                $district_id    = $request->district;
-                $upazila_id     = $request->upazila;
-                $union_id       = $request->union;
-                $village_id     = $request->village;
-                $divisions      = $this->getCachedDivisions();
-                $districts      = $this->getCachedDistricts();
-                $upazilas       = $this->getCachedUpazilas();
-                $unions         = $this->getCachedUnions();
-                $villages       = $this->getCachedVillages();
-
-                $selected['division_id'] = $division_id;
-                $selected['district_id'] = $district_id;
-                $selected['upazila_id']  = $upazila_id;
-                $selected['union_id']    = $union_id;
-                $selected['village_id']  = $village_id;
-
-                $projectsQuery = Project::where('status', 1);
-
-                if (!is_null($division_id)) {
-                    $projectsQuery->where('division_id', $division_id);
-                }
-                if (!is_null($district_id)) {
-                    $projectsQuery->where('district_id', $district_id);
-                }
-                if (!is_null($upazila_id)) {
-                    $projectsQuery->where('upazila_id', $upazila_id);
-                }
-                if (!is_null($union_id)) {
-                    $projectsQuery->where('union_id', $union_id);
-                }
-                if (!is_null($village_id)) {
-                    $projectsQuery->where('village_id', $village_id);
-                }
-
-                $projects = $projectsQuery->select('id', 'name', 'address', 'total_floor')->get();
-                $unit_headers   = Unit::where('status',1)->select('id','title')->get();
-
-                return view('product.product_list', compact('projects','divisions','districts','upazilas','unions','villages','selected','unit_headers'));
-            }
-        }
-        catch (\Throwable $th) {
-            dd( $th);
-            return redirect()->route('product.edit')->with('error', 'Something went wrong!');
-         }
-    }
+ 
 
     public function edit($id){
         $title     = "Product Edit";
@@ -251,20 +120,7 @@ class ProductController extends Controller
         return view('product.product_save', compact('title','divisions','districts','upazilas','unions', 'villages','product','selected'));
     }
 
-    public function sold_unsold($id){
-        $id = decrypt($id);
-        try{
-            $product = Project::find($id);
-            $salse = Salse::where('project_id',$product->id)
-                        ->where('select_type',2)
-                        ->where('status',1)
-                        ->get();
-            return view('product.sold_unsold',compact('product','salse'));
-        }catch(Exception $e){
-            dd($e->getMessage());
-        }
-
-    }
+    
 
     public function product_approve(){
         $projects       = Project::where('status',0)->with('units')->select('id','name','address','total_floor')->get();

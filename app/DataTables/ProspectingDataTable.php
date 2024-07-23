@@ -24,74 +24,22 @@ class ProspectingDataTable extends DataTable {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($prospecting) {
                 return view('prospecting.prospecting_action', compact('prospecting'))->render();
-            })
-            ->addColumn('profession', function ($data) {
-                return $data->customer->profession->name ?? '-';
-            })
+            }) 
             ->addColumn('phone', function ($data) {
                 return $data->customer->user->phone ?? "-";
-            })
-            ->addColumn('freelancer', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
+            }) 
+            ->addColumn('cold_call_date', function ($data) {
+                return get_date($data->cold_call_date);
+            }) 
+            ->addColumn('created_by', function ($data) {
+                if(isset($data->created_by) && $data->created_by != null){
+                    $user = user_info($data->created_by);
+                    return $user->name??"-";
+                }else{
+                    return "-";
                 }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                if (isset($reporting) && $reporting != null) {
-                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                        $q->whereIn('designation_id', [20]);
-                    })->first();
-                    if (isset($user) && $user != null) {
-                        return $user->name . ' [' . $user->user_id . ']';
-                    }
-                }
-                return "-";
-            })
-            ->addColumn('co-ordinator', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return coOrdinator($reporting);
-            })
-            ->addColumn('ex-co-ordinator', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return exCoOrdinator($reporting);
-            })
-            ->addColumn('marketing-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                return marketingInChargeEmployee(json_decode($data->customer->reference->user_reporting));
-
-            })
-
-            ->addColumn('salse-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                return salesInChargeEmployee(json_decode($data->customer->reference->user_reporting));
-
-            })
-            ->addColumn('area-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                return areaInChargeEmployee(json_decode($data->customer->reference->user_reporting));
-            })
-            ->addColumn('zonal-manager', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-                return zonalManagerEmployee(json_decode($data->customer->reference->user_reporting));
-
-            })
+                
+            }) 
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
@@ -121,11 +69,19 @@ class ProspectingDataTable extends DataTable {
             $start_date = date('Y-m-01');
             $end_date   = date('Y-m-t');
         }
-        $user_employee = json_decode($user->user_employee);
 
-        if(isset($request->status) && $request->status != 2){
-            $model->where('status', $request->status);
-        }  
+        $user_employee = json_decode($user->user_employee);
+        if($user_employee==null){
+            $user_employee = [Auth::user()->id];
+        }
+
+        if(isset($request->status)){
+            if($request->status != 2){
+                $model =  $model->where('status', $request->status);
+            } 
+        }else{
+            $model = $model->where('status', 0);
+        }
 
         $prospectings = $model->where(function ($q) use ($user) {
             $q->where('approve_by', '!=', null)
@@ -178,14 +134,8 @@ class ProspectingDataTable extends DataTable {
             Column::make('customer.customer_id')->title('Provable Cus ID'),
             Column::make('customer.name')->title('Customer Name'),
             Column::make('phone')->title('Phone'),
-            Column::make('profession')->title('Profession'),
-            Column::make('freelancer')->title('Franchise Partner Name & ID'),
-            Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
-            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
-            Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
+            Column::make('cold_call_date')->title('CC Date'),
+            Column::make('created_by')->title('Employee'),
         ];
     }
 

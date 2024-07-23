@@ -58,40 +58,21 @@
 
                                         <div class="col-md-6">
                                             <div class="mb-3">
+                                                <label for="price" class="form-label">Product Price <span class="text-danger">*</span></label>
+                                                <input type="number" name="price" class="form-control" id="price" placeholder="Price" value="{{ isset($product) ? $product->price : old('price')}}" required>
+                                                <div class="invalid-feedback">
+                                                    This field is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
                                                 <label for="image" class="form-label">Product Image</label>
                                                 <input type="file" name="image" id="image" class="form-control">
                                                 @if (isset($product) && $product->images->isNotEmpty())
                                                     <img src="{{ asset('storage/' . $product->images->first()->name) }}" alt="" width="100" height="100">
                                                 @endif
-                                            </div>
-                                        </div>
-                                        
-                                        @include('common.area', [
-                                            'div'       => 'col-md-6',
-                                            'mb'        => 'mb-3',
-                                            'visible'   => ['division', 'district', 'upazila','union','village'],
-                                            'required'  => [],
-                                            'selected'  => $selected ?? null,
-                                        ])
-
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="total_floor" class="form-label">Total Floor</label>
-                                                <input type="number" name="total_floor" id="total_floor" class="form-control"  value="{{isset($product) ? $product->total_floor : old('total_floor')}}">  
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="google_map" class="form-label">Google Map Location</label>
-                                                <input type="string" name="google_map" id="google_map" class="form-control" value="{{isset($product) ? $product->google_map : old('google_map')}}">  
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label">Address</label>
-                                                <textarea class="form-control" id="address" rows="2" name="address">{{isset($product) ? $product->address : old('address')}}</textarea> 
                                             </div>
                                         </div>
 

@@ -10,26 +10,7 @@ class Negotiation extends Model
 {
     use HasFactory, SoftDeletes; 
 
-    protected $fillable = [
-        'customer_id',
-        'priority',
-        'project_id',
-        'unit_id',
-        'payment_duration',
-        'select_type',
-        'unit_qty',
-        'unit_price',
-        'regular_amount',
-        'negotiation_amount',
-        'remark',
-        'date',
-        'employee_id',
-        'approve_by',
-        'status',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-    ]; 
+    protected $fillable = ['customer_id', 'priority', 'negotiation_amount', 'sales_date', 'remark', 'date', 'employee_id', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at']; 
  
  
     

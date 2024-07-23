@@ -22,8 +22,8 @@
 
 
             @if ($followUp->approve_by!=null && $followUp->status==0)
-                @can('follow-up-analysis-manage')
-                <a class="dropdown-item" href="{{route('followup-analysis.create',['customer'=>$followUp->customer->id])}}">Follow Up Analysis</a>
+                @can('negotiation')
+                <a class="dropdown-item" href="{{route('negotiation.create',['customer'=>$followUp->customer->id])}}">Negotiation</a>
                 @endcan
             @endif
         </div>

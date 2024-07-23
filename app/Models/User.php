@@ -17,30 +17,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable,HasPermissionsTrait,UserAchiveTreat; 
     use SoftDeletes; 
     
-  protected $fillable = [
-        'user_id',
-        'name',
-        'phone',
-        'password',
-        'user_type',
-        'profile_image',
-        'marital_status',
-        'dob',
-        'finger_id',
-        'approve_by',
-        'religion',
-        'blood_group',
-        'gender',
-        'professions_id',
-        'ref_id',
-        'serial',
-        'signature',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-        'user_reporting',
-        'user_employee',
-    ]; 
+  protected $fillable = ['user_id', 'name', 'phone', 'password', 'user_type', 'profile_image', 'approve_by', 'ref_id', 'status', 'created_by', 'updated_by', 'deleted_by', 'deleted_at', 'created_at', 'updated_at', 'serial', 'user_reporting', 'user_employee']; 
  
     protected $hidden = [
         'password',
@@ -79,11 +56,10 @@ class User extends Authenticatable
         }
     }
 
-
-    public function profession()
-    {
-        return $this->belongsTo(Profession::class, 'professions_id');
-    } 
+ 
+    public function companyType(){
+        return $this->belongsTo(CompanyType::class,'company_type_id');
+    }
 
     public function freelancer()
     {

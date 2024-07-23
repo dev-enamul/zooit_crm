@@ -1,180 +1,32 @@
 @extends('layouts.dashboard')
 @section('title',"Profile")
 @section('content')
-<div class="main-content">
-
+<div class="main-content"> 
     <div class="page-content">
-        <div class="container-fluid">
-           
+        <div class="container-fluid"> 
             <div class="row"> 
                 <div class="col-md-3"> 
-                    <div class="card border mb-0"> 
-                        <div class="card-header">
-                            <div class="text-center w-100">
-                                <img class="w-100 mb-3" src="{{@$customer->user->image()}}" alt="">
-                                <h5 class="mb-0">{{@$customer->user->name}}</h5>
-                                <p>{{@$customer->profession->name}}</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group">
-                                {{-- <a href="{{route('freelancer.profile')}}" class="list-group-item list-group-item-action {{Route::is('freelancer.profile')?"active":""}} ">About</a> --}}
-                                @foreach ($customer->user->customer as $single_customer)
-                                <a href="{{route('customer.profile',encrypt($single_customer->id))}}" class="list-group-item list-group-item-action {{$customer->id==$single_customer->id?"active":""}}">{{$single_customer->customer_id}}</a> 
-                                @endforeach
-                               
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 align-self-center">
-                                    <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
-                                        <span class="avatar-title">
-                                            <i class="mdi mdi-check-circle-outline fs-24"></i>
-                                        </span>
-                                    </div>
-                                </div>  
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="text-muted fw-medium mb-2">Purchase Amount</p>
-                                    <h4 class="mb-0">{{get_price($totalSaleValue)}}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 align-self-center">
-                                    <div class="avatar-sm rounded bg-warning-subtle text-warning d-flex align-items-center justify-content-center">
-                                        <span class="avatar-title">
-                                            <i class="mdi mdi-timer-sand fs-24"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="text-muted fw-medium mb-2">Total Payment</p>
-                                    <h4 class="mb-0">{{$totalDeposit}}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 align-self-center">
-                                    <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
-                                        <span class="avatar-title">
-                                            <i class="mdi mdi-check-circle-outline fs-24"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="text-muted fw-medium mb-2">Return/Deduction</p>
-                                    <h4 class="mb-0">{{$salesReturnAmount}}+{{$deductionAmount}} = {{$salesReturnAmount+$deductionAmount}}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 align-self-center">
-                                    <div class="avatar-sm rounded bg-danger-subtle text-danger d-flex align-items-center justify-content-center">
-                                        <span class="">
-                                            <i class="mdi mdi-chart-line fs-24"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="text-muted fw-medium mb-2">Total Due</p>
-                                    <h4 class="mb-0">{{get_price(($totalSaleValue+$salesReturnAmount+$deductionAmount)-$totalDeposit)}}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
+                    @include('customer.includes.customer_sidebar')
                 </div> 
-                <div class="col-md-9">  
-                 
-
-                    <div class="row">
-                        <div class="col-md-4"> 
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 align-self-center">
-                                            <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
-                                                <span class="avatar-title">
-                                                    <i class="mdi mdi-check-circle-outline fs-24"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <p class="text-muted fw-medium mb-2">Sold Value</p>
-                                            <h4 class="mb-0">{{get_price($customer_salse->sold_value??0)}}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 align-self-center">
-                                            <div class="avatar-sm rounded bg-warning-subtle text-warning d-flex align-items-center justify-content-center">
-                                                <span class="avatar-title">
-                                                    <i class="mdi mdi-timer-sand fs-24"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <p class="text-muted fw-medium mb-2">Total Deposit</p>
-                                            <h4 class="mb-0">{{get_price($customer_salse->total_deposit??0)}}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 align-self-center">
-                                            <div class="avatar-sm rounded bg-danger-subtle text-danger d-flex align-items-center justify-content-center">
-                                                <span class="">
-                                                    <i class="mdi mdi-chart-line fs-24"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <p class="text-muted fw-medium mb-2">Total Due</p>
-                                            @php
-                                                $total_due = ($customer_salse->sold_value??0)-($customer_salse->total_deposit??0);
-                                            @endphp
-                                            <h4 class="mb-0">{{get_price($total_due)}}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
-
-
+                <div class="col-md-9">   
+                    @include('customer.includes.customer_menu')
                     <div class="card overflow-hidden"> 
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h4 class="card-title">{{$customer->customer_id}}</h4>
-                                <a href="{{route('rejection.create', ['customer' => $customer->id])}}" class="btn btn-danger" type="submit">
-                                    Reject
-                                </a>  
-                            </div> 
-
+                                <div>
+                                    <button class="btn btn-primary  mx-1 btn-md">
+                                        <a href="{{route('rejection.create', ['customer' => $customer->id])}}" class="text-white" type="submit">
+                                            Sales
+                                        </a> 
+                                    </button>
+                                    <button class="btn btn-danger  mx-1 btn-md">
+                                        <a href="{{route('rejection.create', ['customer' => $customer->id])}}" class="text-white" type="submit">
+                                            Reject
+                                        </a> 
+                                    </button> 
+                                </div>
+                            </div>  
                             <hr>
                             <div class="timeline timeline-zigzag">
 
@@ -271,28 +123,7 @@
                                     </div>
                                 @endif 
 
-                                @if (isset($communication['lead_analysis']) && $communication['lead_analysis'] != null)
-                                    <div class="timeline-item">
-                                        <div class="timeline-pin">
-                                            <i class="marker marker-circle text-danger"></i>
-                                        </div>
-                                        <div class="timeline-content"> 
-                                            <p class="m-0 bold-lg">Lead Analysis by {{$communication['lead_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['lead_analysis']->created_at,'j M, Y g:i A')}}</p> 
-                                            <p class="m-0 fs-10">Approved At:
-                                                @if (@$communication['lead_analysis']->approve_by != null)
-                                                    {{get_date(@$communication['lead_analysis']->updated_at,'j M, Y g:i A')}} 
-                                                @else
-                                                    <span class="badge badge-warning">Not approved yet</span>
-                                                @endif  
-                                            </p>
-
-                                            {{$communication['lead_analysis']->remark??""}}
-                                            <span class="badge badge-secondary mb-1">#project: {{$communication['lead_analysis']->project->name??"-"}} </span>
-                                            <span class="badge badge-secondary mb-1">#unit: {{$communication['lead_analysis']->unit->title??""}}</span>
-                                        </div>
-                                    </div>
-                                @endif 
+                               
 
                                 @if (isset($communication['presentation']) && $communication['presentation'] != null)
                                     <div class="timeline-item">
@@ -319,38 +150,7 @@
                                 @endif 
 
 
-                                @if (isset($communication['visit_analysis']) && $communication['visit_analysis'] != null)
-                                    <div class="timeline-item">
-                                        <div class="timeline-pin">
-                                            <i class="marker marker-circle text-danger"></i>
-                                        </div>
-                                        <div class="timeline-content"> 
-                                            <p class="m-0 bold-lg">Project Visit by {{$communication['visit_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['visit_analysis']->created_at,'j M, Y g:i A')}}</p> 
-                                            <p class="m-0 fs-10">Approved At:
-                                                @if (@$communication['visit_analysis']->approve_by != null)
-                                                    {{get_date(@$communication['visit_analysis']->updated_at,'j M, Y g:i A')}} 
-                                                @else
-                                                    <span class="badge badge-warning">Not approved yet</span>
-                                                @endif  
-                                            </p>
-                                            {{$communication['visit_analysis']->remark??""}} 
-                     
-                                            <span class="badge badge-secondary mb-1">#project: 
-                                                @php
-                                                    $projects = json_decode($communication['visit_analysis']->projects);
-                                                @endphp
-                                                @foreach($projects as $key => $project)
-                                                    @if ($key!=0)
-                                                        ,
-                                                    @endif
-                                                    {{ $project }}
-                                            @endforeach
-                                            </span>
-                                             
-                                        </div>
-                                    </div>
-                                @endif 
+                                
 
                                 @if (isset($communication['follow_up']) && $communication['follow_up'] != null)
                                     <div class="timeline-item">
@@ -377,32 +177,7 @@
                                     </div>
                                 @endif 
 
-
-                                @if (isset($communication['follow_up_analysis']) && $communication['follow_up_analysis'] != null)
-                                    <div class="timeline-item">
-                                        <div class="timeline-pin">
-                                            <i class="marker marker-circle text-danger"></i>
-                                        </div>
-                                        <div class="timeline-content"> 
-                                            <p class="m-0 bold-lg">Follow Up Analysis by {{$communication['follow_up_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['follow_up_analysis']->created_at,'j M, Y g:i A')}}</p> 
-                                            <p class="m-0 fs-10">Approved At:
-                                                @if (@$communication['follow_up_analysis']->approve_by != null)
-                                                    {{get_date(@$communication['follow_up_analysis']->updated_at,'j M, Y g:i A')}} 
-                                                @else
-                                                    <span class="badge badge-warning">Not approved yet</span>
-                                                @endif  
-                                            </p>
-
-                                            {{$communication['follow_up_analysis']->remark??""}}  
-                                            <span class="badge badge-secondary mb-1">#project: {{$communication['follow_up_analysis']->project->name??"-"}} </span>
-                                            <span class="badge badge-secondary m-1">#unit: {{$communication['follow_up_analysis']->unit->title??"-"}}</span>
-                                            <span class="badge badge-secondary mb-1">#Regular Amount: {{get_price( $communication['follow_up_analysis']->regular_amount??0)}}</span>
-                                            <span class="badge badge-secondary mb-1">#Negotiation Amount: {{get_price( $communication['follow_up_analysis']->negotiation_amount??0)}}</span>
-                                            
-                                        </div>
-                                    </div>
-                                @endif 
+ 
 
                                 @if (isset($communication['negotiation']) && $communication['negotiation'] != null)
                                     <div class="timeline-item">
@@ -429,30 +204,7 @@
                                     </div>
                                 @endif 
 
-                                @if (isset($communication['negotiation_analysis']) && $communication['negotiation_analysis'] != null)
-                                    <div class="timeline-item">
-                                        <div class="timeline-pin">
-                                            <i class="marker marker-circle text-danger"></i>
-                                        </div>
-                                        <div class="timeline-content"> 
-                                            <p class="m-0 bold-lg">Negotiation Analysis by {{$communication['negotiation_analysis']->employee->name??"-"}}</p>
-                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['negotiation_analysis']->created_at,'j M, Y g:i A')}}</p> 
-                                            <p class="m-0 fs-10">Approved At:
-                                                @if (@$communication['negotiation_analysis']->approve_by != null)
-                                                    {{get_date(@$communication['negotiation_analysis']->updated_at,'j M, Y g:i A')}} 
-                                                @else
-                                                    <span class="badge badge-warning">Not approved yet</span>
-                                                @endif  
-                                            </p>
-
-                                            {{$communication['negotiation_analysis']->remark??""}}  
-                                            <span class="badge badge-secondary mb-1">#project: {{$communication['negotiation_analysis']->project->name??"-"}} </span>
-                                            <span class="badge badge-secondary m-1">#unit: {{$communication['negotiation_analysis']->unit->title??"-"}}</span>
-                                            <span class="badge badge-secondary mb-1">#Regular Amount: {{get_price( $communication['negotiation_analysis']->regular_amount??0)}}</span>
-                                            <span class="badge badge-secondary mb-1">#Negotiation Amount: {{get_price( $communication['negotiation_analysis']->negotiation_amount??0)}}</span>
-                                        </div>
-                                    </div>
-                                @endif  
+                                
 
                                 @if (isset($communication['rejection']) && $communication['rejection'] != null)
                                     <div class="timeline-item">

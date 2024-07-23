@@ -41,9 +41,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PresentationAnalysisController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductReportController;
-use App\Http\Controllers\ProductUnitController;
-use App\Http\Controllers\ProfessionController;
+use App\Http\Controllers\ProductReportController; 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectSettingController;
 use App\Http\Controllers\ProspectingController;
@@ -68,11 +66,13 @@ use Illuminate\Support\Facades\Route;
 use App\Events\Message;
 use App\Events\UserCreatedEvent;
 use App\Http\Controllers\AdminNoticeController;
-use App\Http\Controllers\CommonController; 
+use App\Http\Controllers\CommonController;
+use App\Http\Controllers\CompanyTypeController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController; 
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
+use App\Http\Controllers\SubProductController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\UserCommissionController;
 use App\Http\Controllers\UserDocumentController;
@@ -154,18 +154,15 @@ Route::group(['middleware' => 'auth'], function () {
 
         #Product  
         Route::resource('product', ProductController::class);
-        Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
-        Route::get('sold-unsold/{id}', [ProductController::class, 'sold_unsold'])->name('sold.unsold');
-        Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save');
+        Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save'); 
         Route::get('/product-approve', [ProductController::class, 'product_approve'])->name('product.approve');
-        Route::post('/product-approve', [ProductController::class, 'productApprove'])->name('product.approve.save');
-        Route::post('/product-search', [ProductController::class, 'productSearch'])->name('product.search');
+        Route::post('/product-approve', [ProductController::class, 'productApprove'])->name('product.approve.save'); 
         Route::any('product-delete/{id}', [ProductController::class, "productDelete"])->name('product.delete');
 
-        Route::resource('unit', ProductUnitController::class);
-        Route::post('unit-save/{id?}', [ProductUnitController::class, 'save'])->name('unit.save');
-        Route::any('product-unit-delete/{id}', [ProductUnitController::class, "productUnitDelete"])->name('project.unit.delete');
-        Route::post('/product-unit-search', [ProductUnitController::class, 'productUnitSearch'])->name('project.unit.search');
+        Route::resource('sub-product', SubProductController::class);
+        Route::get('project-get-subproject',[SubProductController::class,"get_subproject"])->name('project-get-subproject');
+
+         
 
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class); 
@@ -198,6 +195,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('customer-approve-save', [CustomerController::class, 'customer_approve_save'])->name('customer.approve.save');
        
         Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile');
+        Route::get('customer-profile-contact/{id}', [CustomerProfileController::class, 'contact_list'])->name('customer.profile.contact');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
         Route::get('customer-details/{id}', [CustomerController::class, "customerDetails"])->name('customer.details');
 
@@ -225,16 +223,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
         Route::get('lead-approve', [LeadController::class, 'leadApprove'])->name('lead.approve');
         Route::post('lead-approve-save', [LeadController::class, 'leadApproveSave'])->name('lead.approve.save');
-
-        // Lead Analysis
-        Route::resource('lead-analysis', LeadAnalysisController::class);
-        Route::get('select2-lead-analysis-customer', [LeadAnalysisController::class, 'select2_customer'])->name('select2.lead_analysis.customer');
-        Route::get('get-lead-data', [LeadAnalysisController::class, 'customer_data'])->name('get.lead.data');
-        Route::post('lead-analysis-save/{id?}', [LeadAnalysisController::class, 'save'])->name('lead_analysis.save');
-        Route::any('lead-analysis-delete/{id}', [LeadAnalysisController::class, "leadAnalysisDelete"])->name('lead_analysis.delete');
-        Route::get('lead-analysis-approve', [LeadAnalysisController::class, 'leadAnalysisApprove'])->name('lead-analysis.approve');
-        Route::post('lead-analysis-approve-save', [LeadAnalysisController::class, 'leadAnalysisApproveSave'])->name('lead-analysis.approve.save');
-        Route::get('lead-analysis-details/{id}', [LeadAnalysisController::class, 'lead_analysis_details'])->name('lead.analysis.details');
+ 
 
         // Presentation
         Route::resource('presentation', PresentationController::class);
@@ -245,37 +234,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('presentation-approve', [PresentationController::class, 'presentationApprove'])->name('presentation.approve');
         Route::post('presentation-approve-save', [PresentationController::class, 'presentationApproveSave'])->name('presentation.approve.save');
 
-        // Presentation Analysis
-        Route::resource('presentation_analysis', PresentationAnalysisController::class);
-        Route::get('select2-presentation-analysis-customer', [PresentationAnalysisController::class, 'select2_customer'])->name('select2.presentation_analysis.customer');
-        Route::get('select2-visitor', [PresentationAnalysisController::class, 'get_visitor'])->name('select2.visitor');
-        Route::post('visit-save/{id?}', [PresentationAnalysisController::class, 'save'])->name('visit.save');
-        Route::any('visit-delete/{id}', [PresentationAnalysisController::class, "presentationDelete"])->name('visit.delete');
-        Route::get('presentation-analysis-approve', [PresentationAnalysisController::class, 'presentationAnalysisApprove'])->name('presentation-analysis.approve');
-        Route::post('presentation-analysis-approve-save', [PresentationAnalysisController::class, 'presentationAnalysisApproveSave'])->name('presentation-analysis.approve.save');
-        Route::get('presentation-analysis-details/{id}', [PresentationAnalysisController::class, 'presentation_analysis_details'])->name('presentation.analysis.details');
-
+          
         // Follow Up
         Route::resource('followup', FollowupController::class);
-        Route::get('select2-followup-customer', [FollowupController::class, 'select2_customer'])->name('select2.followup.customer');
-        Route::get('get-presentaion-data', [FollowupController::class, 'customer_data'])->name('get.presentation.data');
-        Route::get('get-project-duration-type-name', [FollowupController::class, 'projectDurationTypeName'])->name('get-project-duration-type-name');
+        Route::get('select2-followup-customer', [FollowupController::class, 'select2_customer'])->name('select2.followup.customer'); 
         Route::post('follow-up-save/{id?}', [FollowupController::class, 'save'])->name('follow-up.save');
         Route::any('follow-up-delete/{id}', [FollowupController::class, "followUpDelete"])->name('followUp.delete');
         Route::get('follow-up-approve', [FollowupController::class, 'followUpApprove'])->name('followUp.approve');
         Route::post('follow-up-approve-save', [FollowupController::class, 'followUpApproveSave'])->name('followUp.approve.save');
         
-
-        // Follow Up Analysis
-        Route::resource('followup-analysis', FollowupAnalysisController::class);
-        Route::get('select2-followup-analysis-customer', [FollowupController::class, 'select2_customer'])->name('select2.followup_analysis.customer');
-        Route::get('get-follow-up-data', [FollowupAnalysisController::class, 'customer_data'])->name('get.follow.up.data');
-        Route::post('follow-up-analysis-save/{id?}', [FollowupAnalysisController::class, 'save'])->name('follow-up-analysis.save');
-        Route::any('follow-up-analysis-delete/{id}', [FollowupAnalysisController::class, "followUpDelete"])->name('followUp-analysis.delete');
-        Route::get('follow-up-analysis-approve', [FollowupAnalysisController::class, 'followUpApprove'])->name('followUp-analysis.approve');
-        Route::post('follow-up-analysis-approve-save', [FollowupAnalysisController::class, 'followUpsApproveSave'])->name('followUp-analysis.approve.save');
-        Route::get('follow-up-analysis-details/{id}', [FollowupAnalysisController::class, 'follow_analysis_up_details'])->name('followup.analysis.details');
-        
+ 
         // Negotation
         Route::resource('negotiation', NegotiationController::class);
         Route::get('select2-negotiation-customer', [NegotiationController::class, 'select2_customer'])->name('select2.negotiation.customer');
@@ -284,18 +252,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('negotiation-delete/{id}', [NegotiationController::class, "negotiationDelete"])->name('negotiation.delete');
         Route::get('negotiation-approve', [NegotiationController::class, 'negotiationApprove'])->name('negotiation.approve');
         Route::post('negotiation-approve-save', [NegotiationController::class, 'negotiationApproveSave'])->name('negotiation-approve.save');
-
-        // Negotation Analysis
-        Route::resource('negotiation-analysis', NegotiationAnalysisController::class);
-        Route::get('select2-negotiation_analysis-customer', [NegotiationAnalysisController::class, 'select2_customer'])->name('select2.negotiation_analysis.customer');
-        Route::get('get-negotiation-data', [NegotiationAnalysisController::class, 'customer_data'])->name('get.negotiation.data');
-        Route::post('negotiation-analysis-save/{id?}', [NegotiationAnalysisController::class, 'save'])->name('negotiation-analysis.save');
-        Route::any('negotiation-analysis-delete/{id}', [NegotiationAnalysisController::class, "negotiationAnalysisDelete"])->name('negotiation-analysis.delete');
-        Route::get('negotiation-analysis-approve', [NegotiationAnalysisController::class, 'negotiationAnalysisApprove'])->name('negotiation-analysis.approve');
-        Route::any('negotiation-analysis-approve-save', [NegotiationAnalysisController::class, 'negotiationAnalysisApproveSave'])->name('negotiation-analysis-approve.save');
-        Route::post('update-negotiation-waiting-day',[NegotiationAnalysisController::class,'update_waiting_day'])->name('update.negotiation.waiting.day');
-        Route::get('negotiation-analysis-details/{id}', [NegotiationAnalysisController::class, 'negotiation_analysis_details'])->name('negotiation.analysis.details');
-
+ 
 
         // Salse
         Route::resource('salse', SalseController::class);
@@ -327,9 +284,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('transfer', SalseTransferController::class);
 
         // Settings =============================
-        // Profession
-        Route::resource('profession', ProfessionController::class);
-        Route::post('profession-update', [ProfessionController::class, 'update'])->name('profession.update');
+        // Company Type
+        Route::resource('company-type', CompanyTypeController::class);
+        Route::post('profession-update', [CompanyTypeController::class, 'update'])->name('profession.update');
         // Location
         Route::resource('union', UnionController::class);
         Route::resource('village', VillageController::class); 
@@ -451,8 +408,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () { 
-        UserCreatedEvent::dispatch(auth()->user()->id);
-
+        UserCreatedEvent::dispatch(auth()->user()->id); 
 });
 
 // test

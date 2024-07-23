@@ -46,16 +46,7 @@
                                 <form action="{{route('prospecting.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @endif
                                 @csrf
-                                <div class="row">
-                                    @if (isset($selected_data['customer']) && $selected_data['customer'] != null)
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label class="form-label">Reference</label>
-                                                <input type="text" value="{{ $selected_data['customer']->reference->name??'' }}" disabled class="form-control">
-                                            </div>
-                                        </div>
-                                    @endif 
-
+                                <div class="row"> 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Customer <span class="text-danger">*</span></label>
@@ -68,19 +59,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employee" class="form-label">Employee <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="employee" id="employee" required>
-                                                <option value="{{auth()->user()->id}}" selected="selected">{{Auth::user()->name}}</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -117,7 +96,18 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="cold_call_date" class="form-label">Cold Calling Date <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" name="cold_call_date" id="cold_call_date" required value="{{old('cold_call_date', @$prospecting->cold_call_date)}}">
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>  
+
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
@@ -145,25 +135,7 @@
 @endsection
 
 @section('script')
-    @can('data-input-for-others')
-    <script>
-         $(document).ready(function() {
-            $('#employee').select2({
-                placeholder: "Select Employee",
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('select2.employee') }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        var query = {
-                            term: params.term
-                        }
-                        return query;
-                    }
-                }
-            });
-        });
-    </script>
+    @can('data-input-for-others') 
     @endcan
 
     <script>
@@ -183,6 +155,6 @@
                 }
             });
         });
-    </script> 
+    </script>  
     
 @endsection

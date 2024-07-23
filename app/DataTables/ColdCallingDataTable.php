@@ -31,70 +31,18 @@ class ColdCallingDataTable extends DataTable {
             ->addColumn('phone', function ($data) {
                 return $data->customer->user->phone ?? "-";
             })
-            ->addColumn('freelancer', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
 
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                if (isset($reporting) && $reporting != null) {
-                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                        $q->whereIn('designation_id', [20]);
-                    })->first();
-                    if (isset($user) && $user != null) {
-                        return $user->name . ' [' . $user->user_id . ']';
-                    }
+            ->addColumn('created_by', function ($data) { 
+                if(isset($data->employee_id) && $data->employee_id != null){
+                    $user = user_info($data->employee_id);
+                    return $user->name.' ['.$user->user_id.']';
                 }
-                return "-";
-            })
-            ->addColumn('co-ordinator', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return coOrdinator($reporting);
-            })
-            ->addColumn('ex-co-ordinator', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return exCoOrdinator($reporting);
-            })
-            ->addColumn('marketing-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return marketingInChargeEmployee($reporting);
             })
 
-            ->addColumn('salse-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return salesInChargeEmployee($reporting);
+            ->addColumn('lead_date', function ($data) {
+                return get_date($data->lead_date);
             })
-            ->addColumn('area-incharge', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return areaInChargeEmployee($reporting);
-            })
-            ->addColumn('zonal-manager', function ($data) {
-                if (@$data->customer->ref_id == null) {
-                    return '-';
-                }
-
-                $reporting = json_decode($data->customer->reference->user_reporting);
-                return zonalManagerEmployee($reporting);
-            })
-
+              
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
@@ -114,6 +62,10 @@ class ColdCallingDataTable extends DataTable {
         } else {
             $user_employee = json_decode(Auth::user()->user_employee);
         }
+
+        if($user_employee==null){
+            $user_employee = [Auth::user()->id];
+        } 
         if (isset($request->date)) {
             $date       = explode(' - ', $request->date);
             $start_date = date('Y-m-d', strtotime($date[0]));
@@ -123,9 +75,14 @@ class ColdCallingDataTable extends DataTable {
             $end_date   = date('Y-m-t');
         }
 
-        if(isset($request->status) && $request->status != 2){
-            $model->where('status', $request->status);
-        }  
+        if(isset($request->status)){
+            if($request->status != 2){
+                $model =  $model->where('status', $request->status);
+            } 
+        }else{
+            $model = $model->where('status', 0);
+        }
+ 
 
         $datas = $model->where(function ($q) {
             $q->where('approve_by', '!=', null)
@@ -175,15 +132,9 @@ class ColdCallingDataTable extends DataTable {
             Column::make('serial')->title('S/N'),
             Column::make('customer.customer_id')->title('Provable Cus ID'),
             Column::make('customer.name')->title('Customer Name'),
-            Column::make('phone')->title('Phone'),
-            Column::make('profession')->title('Profession'),
-            Column::make('freelancer')->title('Franchise Partner Name & ID'),
-            Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
-            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
-            Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
+            Column::make('phone')->title('Phone'), 
+            Column::make('created_by')->title('Employee'), 
+            Column::make('lead_date')->title('Lead Date'), 
         ];
     }
 

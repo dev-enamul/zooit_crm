@@ -12,13 +12,7 @@
                         <p class="d-none"></p>
                         <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)">
                         <input type="hidden" id="pageSize" value="A4">
-                        <input type="hidden" id="fontSize" value="10">
-
-                        <div class="page-title-right">
-                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                <span><i class="fas fa-filter"></i> Filter</span>
-                            </button>
-                        </div>
+                        <input type="hidden" id="fontSize" value="10"> 
                     </div>
                 </div>
             </div>
@@ -33,12 +27,10 @@
                                         <tr class="">
                                             <th>Action</th>
                                             <th>S/N</th>
-                                            <th>Name & ID</th>
-                                            <th>Address</th>
-                                            <th>Floor</th>
-                                            @foreach($unit_headers as $header)
-                                                <th>{{ ucfirst($header->title) }}</th>
-                                            @endforeach
+                                            <th>Name</th>
+                                            <th>Price</th>
+                                            <th>Description</th>
+                                          
                                         </tr>
                                     </thead>
 
@@ -56,18 +48,14 @@
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="{{route('product.edit',$project->id)}}">Edit</a>
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('product.delete',$project->id) }}')">Delete</a>
-                                                        <a class="dropdown-item" href="{{route('sold.unsold',encrypt($project->id))}}">Sold & Unsold</a>
                                                         <a class="dropdown-item" href="{{route('salse.index')}}">Sales History</a>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>{{ $loop->iteration}} </td>
-                                            <td>{{ @$project->name }}</td>
-                                            <td>{{ @$project->address }}</td>
-                                            <td>{{ @$project->total_floor}}</td>
-                                            @foreach($unit_headers as $header)
-                                                <td>{{$salse->where('project_id',$project->id)->where('unit_id',$header->id)->count()}} / {{ $project->units->where('unit.title', $header->title)->count() }}</td>
-                                            @endforeach
+                                            <td>{{ @$project->name }}</td> 
+                                            <td>{{ @$project->price }}</td> 
+                                            <td>{{$project->description}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -76,39 +64,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-
-            <div class="offcanvas offcanvas-end" id="offcanvas">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title">Select Filter Item</h5>
-                    <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-                <div class="offcanvas-body">
-                    <form action="{{route('product.search')}}" method="POST">
-                        @csrf
-                        <div class="row">
-                            @include('common.search', [
-                                'div' => 'col-md-6',
-                                'visible' => ['division', 'district', 'upazila','union','village'],
-                            ])
-                            <input type="hidden" id="division" value="{{ @$division }}">
-                            <input type="hidden" id="district" value="{{ @$district }}">
-                            <input type="hidden" id="upazila" value="{{ @$upazila }}">
-                            <input type="hidden" id="union" value="{{ @$union }}">
-                            <input type="hidden" id="village" value="{{ @$village }}">
-                            <div class="text-end ">
-                                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
-                                <button class="btn btn-outline-danger" type="button" onclick="resetFormFields()">
-                                    <i class="mdi mdi-refresh"></i> Reset
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            </div> 
         </div>
     </div>
 

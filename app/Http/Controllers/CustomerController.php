@@ -11,10 +11,14 @@ use App\Enums\Religion;
 use App\Models\ApproveSetting;
 use App\Models\Area;
 use App\Models\Bank;
+use App\Models\CompanyType;
 use App\Models\Customer;
+use App\Models\Designation;
 use App\Models\Employee;
+use App\Models\FindMedia;
 use App\Models\Notification;
 use App\Models\Profession;
+use App\Models\Project;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\UserContact;
@@ -65,27 +69,22 @@ class CustomerController extends Controller {
         } else {
             $employee = User::find(auth()->user()->id);
         }
+ 
         return $dataTable->render('customer.customer_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
     }
 
-    public function create() {
+    public function create() { 
         $title     = "Customer Create";
         $divisions = $this->getCachedDivisions();
         $districts = $this->getCachedDistricts();
         $upazilas  = $this->getCachedUpazilas();
         $unions    = $this->getCachedUnions();
-        $villages  = $this->getCachedVillages();
+        $villages  = $this->getCachedVillages(); 
 
-        $nationalites    = $this->nationality();
-        $maritalStatuses = $this->maritalStatus();
-        $religions       = $this->religion();
-        $bloodGroups     = $this->bloodGroup();
-        $areas           = Area::where('status', 1)->select('id', 'name')->get();
-        $zones           = Zone::where('status', 1)->select('id', 'name')->get();
-        $genders         = $this->gender();
-        $banks           = Bank::where('status', 1)->where('type', 0)->select('id', 'name')->get();
-        $mobileBanks     = Bank::where('status', 1)->where('type', 1)->select('id', 'name')->get();
-        $professions     = Profession::where('status', 1)->select('id', 'name')->get();
+        $projects = Project::where('status',1)->select('id','name')->get();
+        $company_types = CompanyType::where('status',1)->select('id','name')->get();
+        $find_medias = FindMedia::where('status',1)->get();
+        $designations = Designation::where('status',1)->get();
 
         return view('customer.customer_create', compact(
             'title',
@@ -93,66 +92,30 @@ class CustomerController extends Controller {
             'districts',
             'upazilas',
             'unions',
-            'villages',
-            'maritalStatuses',
-            'religions',
-            'bloodGroups',
-            'genders',
-            'banks',
-            'mobileBanks',
-            'nationalites',
-            'professions',
-            'areas',
-            'zones'
+            'villages', 
+            'projects',
+            'company_types',
+            'find_medias',
+            'designations'
         ));
     }
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'full_name'               => 'required|string|max:255',
-            'marital_status'          => 'nullable',
-            'profession'              => 'required|numeric|exists:professions,id',
-            'dob'                     => 'nullable',
-            'card_id'                 => 'nullable|string',
-            'religion'                => 'required|numeric',
-            'blood_group'             => 'nullable|numeric',
-            'gender'                  => 'required|in:1,2,3',
-            'phone1'                  => 'required|string|max:15',
-            'phone2'                  => 'nullable|string|max:15',
-            'office_email'            => 'nullable|email',
-            'email'                   => 'nullable|email',
-            'imo_whatsapp_number'     => 'nullable|string',
-            'facebook_id'             => 'nullable|string',
-            'emergency_contact_name'  => 'nullable|string',
-            'emergency_person_number' => 'nullable|string',
-            'division'                => 'nullable|numeric|exists:divisions,id',
-            'district'                => 'nullable|numeric|exists:districts,id',
-            'upazila'                 => 'nullable|numeric|exists:upazilas,id',
-            'union'                   => 'nullable|numeric|exists:unions,id',
-            'village'                 => 'nullable|numeric|exists:villages,id',
-            'address'                 => 'nullable|string',
-            'father_name'             => 'nullable|string',
-            'father_phone'            => 'nullable|string|max:15',
-            'mother_name'             => 'nullable|string',
-            'mother_phone'            => 'nullable|string|max:15',
-            'spouse_name'             => 'nullable|string',
-            'spouse_phone'            => 'nullable|string|max:15',
-            'bank'                    => 'nullable|numeric|exists:banks,id',
-            'branch'                  => 'nullable|string',
-            'account_number'          => 'nullable|string',
-            'account_holder_name'     => 'nullable|string',
-            'mobile_bank'             => 'nullable|numeric|exists:banks,id',
-            'mobile_bank_number'      => 'nullable|string|max:15',
-            'passport_issue_date'     => 'nullable',
-            'passport_expire_date'    => 'nullable',
-            'tin_number'              => 'nullable|string',
-            'profile_image'           => 'image|max:2048',
-            'nid_file'                => 'image|max:2048',
-            'birth_certificate_file'  => 'image|max:2048',
-            'upload_passport'         => 'image|max:2048',
-            // 'at_least_one_field' => [
-            //     'sometimes', new AtLeastOneFilledRule('nid', 'birth_certificate_number', 'passport_number'),
-            // ],
+            'full_name'                 => 'required|string|max:255',
+            'project_id'                => 'nullable|integer',
+            'sub_project_id'           => 'nullable|integer',   
+            'phone'                     => 'required|string|max:15',  
+            'email'                     => 'required|email',
+            'imo_whatsapp_number'       => 'nullable|string',
+            'facebook_id'               => 'nullable|string',  
+            'division'                  => 'nullable|numeric|exists:divisions,id',
+            'district'                  => 'nullable|numeric|exists:districts,id',
+            'upazila'                   => 'nullable|numeric|exists:upazilas,id',
+            'union'                     => 'nullable|numeric|exists:unions,id',
+            'village'                   => 'nullable|numeric|exists:villages,id',
+            'address'                   => 'nullable|string',  
+            'profile_image'             => 'image|max:2048' 
         ]);
 
         if ($validator->fails()) {
@@ -162,7 +125,7 @@ class CustomerController extends Controller {
         DB::beginTransaction();
 
         try {
-            $old_user        = User::where('phone', $request->phone1)->withTrashed()->first();
+            $old_user        = User::where('phone', $request->phone)->withTrashed()->first();
             $approve_setting = ApproveSetting::where('name', 'customer')->first();
             $is_admin        = Auth::user()->hasPermission('admin');
             if ($approve_setting->status == 0 || $is_admin) {
@@ -179,40 +142,13 @@ class CustomerController extends Controller {
                         'user_id'    => [json_decode($auth_user->user_reporting)[1]],
                     ]);
                 }
-            }
-            if ($old_user) {
-                return redirect()->back()->withInput()->with('error', 'Customer already exists');
-                // $old_user->deleted_at = null;
-                // $old_user->deleted_by = null;
-                // $old_user->updated_at = now();
-                // $old_user->save();
-                // Customer::create([
-                //     'user_id'       => $old_user->id,
-                //     'customer_id'   => User::generateNextCustomerId(),
-                //     'profession_id' => $request->profession,
-                //     'name'          => $request->full_name,
-                //     'ref_id'        => $request->reporting_user,
-                //     'status'        => 0,
-                //     'created_at'    => now(),
-                //     'approve_by'    => $approve_by,
-                //     'created_by'    => auth()->user()->id,
-                // ]);
-                // return redirect()->route('customer.index')->with('success', 'Customer added successfully');
-            }
-
+            } 
             $user = User::create([
                 'name'           => $request->full_name,
-                'phone'          => get_phone($request->phone1),
+                'phone'          => get_phone($request->phone),
                 'password'       => bcrypt('123456'),
-                'user_type'      => 3,
-                'marital_status' => $request->marital_status,
-                'dob'            => date('Y-m-d', strtotime($request->dob)),
-                'finger_id'      => $request->card_id,
-                'religion'       => $request->religion,
-                'blood_group'    => $request->blood_group,
-                'gender'         => $request->gender,
-                'nationality'    => $request->nationality,
-                'status'         => 1,
+                'user_type'      => 3,  
+                'status'         => 1, 
                 'created_by'     => auth()->user()->id,
                 'approve_by'     => auth()->user()->id,
                 'ref_id'         => auth()->user()->id,
@@ -225,96 +161,45 @@ class CustomerController extends Controller {
 
             UserAddress::create([
                 'user_id'     => $user->id,
-                'country_id'  => $request->country,
+                'country_id'  => 18,
                 'division_id' => $request->division,
                 'district_id' => $request->district,
-                'upazila_id'  => $request->upazila,
-                'post_code'   => $request->post_code,
+                'upazila_id'  => $request->upazila, 
                 'union_id'    => $request->union,
                 'village_id'  => $request->village,
-                'address'     => $request->address,
-                'zone_id'     => $request->zone,
-                'area_id'     => $request->area,
+                'address'     => $request->address, 
                 'created_at'  => now(),
             ]);
 
             #user contacts
             UserContact::create([
-                'user_id'                  => $user->id,
-                'personal_phone'           => get_phone($request->phone1),
-                'office_phone'             => get_phone($request->phone2),
-                'office_email'             => $request->office_email,
-                'personal_email'           => $request->email,
-                'imo_number'               => get_phone($request->imo_whatsapp_number),
-                'facebook_id'              => $request->facebook_id,
-                'emergency_contact_person' => $request->emergency_contact_name,
-                'emergency_contact_number' => get_phone($request->emergency_person_number),
-                'created_at'               => now(),
-            ]);
-
-            #user family
-            UserFamily::create([
-                'user_id'        => $user->id,
-                'father_name'    => $request->father_name,
-                'father_mobile'  => get_phone($request->father_phone),
-                'mother_name'    => $request->mother_name,
-                'mother_mobile'  => get_phone($request->mother_phone),
-                'spouse_name'    => $request->spouse_name,
-                'spouse_contact' => get_phone($request->spouse_phone),
-                'created_at'     => now(),
-            ]);
-
-            #user transaction
-            $data_transaction = [
-                'user_id'                    => $user->id,
-                'bank_id'                    => $request->bank,
-                'branch'                     => $request->branch,
-                'bank_account_number'        => $request->account_number,
-                'bank_details'               => $request->account_holder_name,
-                'mobile_bank_id'             => $request->mobile_bank,
-                'mobile_bank_account_number' => get_phone($request->mobile_bank_number),
-                'created_at'                 => now(),
-            ];
-            UserTransaction::create($data_transaction);
-
-            #user documents
-            if ($request->hasFile('nid_file')) {
-                $nid_file = $this->uploadImage($request, 'nid_file', 'users', 'public');
-            }
-            if ($request->hasFile('birth_certificate_file')) {
-                $birth_certificate_file = $this->uploadImage($request, 'birth_certificate_file', 'users', 'public');
-            }
-            if ($request->hasFile('upload_passport')) {
-                $upload_passport = $this->uploadImage($request, 'upload_passport', 'users', 'public');
-            }
-            $user_documents = [
-                'user_id'                  => $user->id,
-                'nid_number'               => $request->nid,
-                'nid_image'                => $nid_file ?? null,
-                'birth_cirtificate_number' => $request->birth_certificate_number,
-                'birth_cirtificate_image'  => $birth_certificate_file ?? null,
-                'passport_number'          => $request->passport_number,
-                'passport_exp_date'        => date('Y-m-d', strtotime($request->passport_expire_date)),
-                'passport_image'           => $upload_passport ?? null,
-                'tin_number'               => $request->tin_number,
-                'created_at'               => now(),
-            ];
-            UserId::create($user_documents);
+                'user_id'                   => $user->id, //company_id
+                'name'                      => $request->contact_person_name??$request->full_name,
+                'type'                      => $request->company_type,
+                'designation_id'            => $request->designation_id,
+                'phone'                     => get_phone($request->phone), 
+                'email'                     => $request->email, 
+                'imo_number'                => get_phone($request->imo_whatsapp_number),
+                'facebook_id'               => $request->facebook_id,
+                'linkedin_id'               => $request->linkedin_id,
+                'created_at'                => now(),
+            ]);  
+  
             $customer_data = [
-                'customer_id'   => User::generateNextCustomerId(),
-                'user_id'       => $user->id,
-                'profession_id' => $request->profession,
-                'name'          => $request->full_name,
-                'ref_id'        => $request->reporting_user,
-                'status'        => 0,
+                'customer_id'   => User::generateNextCustomerId(), 
+                'user_id'       => $user->id, 
+                'ref_id'        => Auth::user()->id,
+                'project_id'    => $request->project_id,
+                'sub_poject_id' => $request->sub_poject_id,
+                'find_media_id' => $request->find_media_id,
+                'type'          => $request->company_type, 
+                'status'        => 0, 
                 'created_at'    => now(),
                 'created_by'    => auth()->user()->id,
                 'approve_by'    => $approve_by,
             ];
             Customer::create($customer_data);
-
-            // Notification
-
+ 
             DB::commit();
             return redirect()->route('customer.index')->with('success', 'Customer created successfully');
         } catch (Exception $e) {

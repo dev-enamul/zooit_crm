@@ -27,83 +27,21 @@ class CustomersDataTable extends DataTable {
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
+            })  
+            ->addColumn('project', function ($data) { 
+                return $data->project->name??"-";
             })
-            ->addColumn('thana', function ($data) {
-                return $data->user->userAddress->upazila->name ?? "-";
-            })
-            ->addColumn('union', function ($data) {
-                return $data->user->userAddress->union->name ?? "-";
-            })
-
-            ->addColumn('vilage', function ($data) {
-                return $data->user->userAddress->village->name ?? "-";
-            })
-            ->addColumn('mobile_no', function ($data) {
-                return $data->user->phone ?? "-";
-            })
-            ->addColumn('profession', function ($data) {
-                return $data->profession->name ?? '-';
-            })
-
-            ->addColumn('freelancer', function ($data) {
-                if ($data->ref_id == null) {
-                    return '-';
+            ->addColumn('sub_project', function ($data) { 
+                return $data->sub_project->name??"-";
+            })   
+            ->addColumn('created_by', function ($data) { 
+                if(isset($data->created_by) && $data->created_by!=null){
+                    $user = user_info($data->created_by);
+                    return $user->name.' ['.$user->user_id.']';
+                }else{
+                    return "-";
                 }
-                $reporting = json_decode($data->reference->user_reporting);
-
-                if (isset($reporting) && $reporting != null) {
-                    $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                        $q->whereIn('designation_id', [20]);
-                    })->first();
-                    if (isset($user) && $user != null) {
-                        return $user->name . ' [' . $user->user_id . ']';
-                    }
-                }
-                return "-";
-            })
-
-            ->addColumn('co-ordinator', function ($data) {
-                if ($data->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->reference->user_reporting);
-                return coOrdinator($reporting);
-            })
-            ->addColumn('ex-co-ordinator', function ($data) {
-                if ($data->ref_id == null) {
-                    return '-';
-                }
-                $reporting = json_decode($data->reference->user_reporting);
-                return exCoOrdinator($reporting);
-            })
-
-            ->addColumn('marketing-incharge', function ($data) {
-                if (@$data->ref_id == null) {
-                    return '-';
-                }
-
-                return marketingInChargeEmployee(json_decode($data->reference->user_reporting));
-            })
-
-            ->addColumn('salse-incharge', function ($data) {
-                if (@$data->ref_id == null) {
-                    return '-';
-                }
-                return salesInChargeEmployee(json_decode($data->reference->user_reporting));
-            })
-            ->addColumn('area-incharge', function ($data) {
-                if (@$data->ref_id == null) {
-                    return '-';
-                }
-
-                return areaInChargeEmployee(json_decode($data->reference->user_reporting));
-            })
-            ->addColumn('zonal-manager', function ($data) {
-                if (@$data->ref_id == null) {
-                    return '-';
-                }
-                return zonalManagerEmployee(json_decode($data->reference->user_reporting));
-            })
+            })      
             ->setRowId('id');
     }
 
@@ -129,12 +67,20 @@ class CustomersDataTable extends DataTable {
         $user        = User::find($user_id);
         $my_employee = json_decode($user->user_employee);
 
-        if(isset($request->status) && $request->status != 2){
-            $model->where('status', $request->status);
+        if (!is_array($my_employee)) {
+            $my_employee = []; 
         } 
 
+        if(isset($request->status)){
+            if($request->status != 2){
+                $model =  $model->where('status', $request->status);
+            } 
+        }else{
+            $model = $model->where('status', 0);
+        }
+
         return $model->newQuery()
-            ->whereIn('ref_id', $my_employee) 
+            // ->whereIn('ref_id', $my_employee) 
             ->with(['reference', 'user', 'profession', 'user.userAddress.village', 'user.userAddress.union', 'user.userAddress.upazila']);
     }
 
@@ -172,16 +118,11 @@ class CustomersDataTable extends DataTable {
                 ->addClass('text-center'),
             Column::make('serial')->title('S/L'),
             Column::make('customer_id')->title('Provable CUS ID')->searchable(true),
-            Column::make('name')->title('Customer Name')->searchable(true),
-            Column::make('user.phone')->title('Phone Number')->searchable(true),
-            Column::make('profession'),
-            Column::make('freelancer')->title('Franchise Partner Name & ID'),
-            Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
-            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
-            Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
+            Column::make('user.name')->title('Company Name')->searchable(true),
+            Column::make('user.phone')->title('Phone Number')->searchable(true),  
+            Column::make('project')->title('Product'), 
+            Column::make('sub_project')->title('Sub Product'), 
+            Column::make('created_by')->title('Created By'), 
         ];
     }
 

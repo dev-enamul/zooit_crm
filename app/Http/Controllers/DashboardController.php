@@ -1,13 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\DataTables\FollowupAnalysisDataTable;
-use App\DataTables\FollowUpDataTable;
-use App\DataTables\NegotiationAnalysisDataTable;
-use App\DataTables\NegotiationDataTable;
-use App\DataTables\PresentationAnalysisDataTable;
-use App\DataTables\PresentationDataTable;  
+  
 use App\Models\Bank;
 use App\Models\ColdCalling;
 use App\Models\Customer;
@@ -16,11 +10,8 @@ use App\Models\DepositTarget;
 use App\Models\Designation;  
 use App\Models\District;
 use App\Models\Division;
-use App\Models\FieldTarget;
-use App\Models\FollowUpAnalysis;
-use App\Models\Lead;
-use App\Models\LeadAnalysis;
-use App\Models\NegotiationAnalysis;
+use App\Models\FieldTarget; 
+use App\Models\Lead;  
 use App\Models\Prospecting;
 use App\Models\TaskList;
 use App\Models\Union;
@@ -89,10 +80,7 @@ class DashboardController extends Controller
         $today_target['customer'] = round($field_target?->customer/$total_day??0,1);
         $today_target['prospecting'] = round($field_target?->prospecting/$total_day??0,1);
         $today_target['cold_calling'] = round($field_target?->cold_calling/$total_day??0,1);
-        $today_target['lead'] = round($field_target?->lead/$total_day??0,1);
-        $today_target['lead_analysis'] = round($field_target?->lead_analysis/$total_day??0,1);
-        $today_target['follow_up_analysis'] = round($field_target?->follow_up_analysis/$total_day??0,1);
-        $today_target['negotiation_analysis'] = round($field_target?->negotiation_analysis/$total_day??0,1);
+        $today_target['lead'] = round($field_target?->lead/$total_day??0,1); 
         $today_target['deposit'] = round($deposit_target/$total_day??0,1);
  
         // achivement
@@ -100,8 +88,7 @@ class DashboardController extends Controller
          
         if (!is_array($my_all_employee)) {
             $my_all_employee = []; 
-        }
-
+        } 
         
         $date = Carbon::now();
         $monthly_achive['freelancer'] = $user->freelanecr_achive($date,$my_all_employee);
@@ -112,13 +99,7 @@ class DashboardController extends Controller
 
         $monthly_achive['cold_calling'] = $user->cold_calling_achive($date,$my_all_employee);
 
-        $monthly_achive['lead'] = $user->lead_achive($date,$my_all_employee);
-
-        $monthly_achive['lead_analysis'] = $user->lead_analysis_achive($date,$my_all_employee);
-
-        $monthly_achive['follow_up_analysis'] = $user->followup_analysis_achive($date,$my_all_employee);
-        
-        $monthly_achive['negotiation_analysis'] = $user->negotiation_analysis_achive($date,$my_all_employee);
+        $monthly_achive['lead'] = $user->lead_achive($date,$my_all_employee); 
 
         $monthly_achive['deposit']= $user->deposit_achive($date,$my_all_employee);
 
@@ -147,22 +128,7 @@ class DashboardController extends Controller
         $today_achive['lead'] = Lead::whereIn('employee_id',$my_all_employee)
             ->where('approve_by','!=',null)
             ->whereDate('created_at',today()) 
-            ->count(); 
-
-        $today_achive['lead_analysis'] = LeadAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
-
-        $today_achive['follow_up_analysis'] = FollowUpAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
-        
-        $today_achive['negotiation_analysis'] = NegotiationAnalysis::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
+            ->count();  
 
         $today_achive['deposit']= Deposit::whereHas('customer',function($q) use($my_all_employee){
                 $q->whereIn('ref_id',$my_all_employee);

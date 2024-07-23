@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained();  
             $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
-            $table->foreignId('project_id')->nullable()->constrained('projects'); 
-            $table->foreignId('unit_id')->nullable()->constrained('units'); 
-            $table->string('remark')->nullable(); 
-
+            $table->date('followup_date')->nullable();
+            $table->string('remark')->nullable();  
+            
             $table->foreignId('employee_id')->constrained('users');  
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
             

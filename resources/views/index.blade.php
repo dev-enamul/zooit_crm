@@ -97,19 +97,7 @@
                                                     </div>
                                                 </div>
                                             </div> 
-                    
-                                            <div class="col-xl-2">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="text-secondary mb-0">Lead Analysis</p> 
-                                                                <h4 class="mb-0">{{$today_achive['lead_analysis']}}/{{$today_target['lead_analysis']}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div>  
+                     
                                         </div> 
                                     </div>
                                     <div class="col-md-12"> 
@@ -117,9 +105,9 @@
                                             <div id="today_target"
                                                 data-colors='["--bs-primary", "--bs-success"]'
                                                 class="apex-charts"
-                                                data-series='[{"name": "Achivement", "data": [{{$today_achive['freelancer']}}, {{$today_achive['customer']}}, {{$today_achive['prospecting']}}, {{$today_achive['cold_calling']}},{{$today_achive['lead']}}, {{$today_achive['lead_analysis']}}]},
-                                                        {"name": "Target", "data": [{{$today_target['freelancer']}}, {{$today_target['customer']}}, {{$today_target['prospecting']}}, {{$today_target['cold_calling']}}, {{$today_target['lead']}}, {{$today_target['lead_analysis']}}]}]'
-                                                data-xaxis-categories='["Freelancer", "Customer", "Prospecting", "Cold Calling","Lead","Lead Analysis"]'
+                                                data-series='[{"name": "Achivement", "data": [{{$today_achive['freelancer']}}, {{$today_achive['customer']}}, {{$today_achive['prospecting']}}, {{$today_achive['cold_calling']}},{{$today_achive['lead']}}]},
+                                                        {"name": "Target", "data": [{{$today_target['freelancer']}}, {{$today_target['customer']}}, {{$today_target['prospecting']}}, {{$today_target['cold_calling']}}, {{$today_target['lead']}}]}]'
+                                                data-xaxis-categories='["Freelancer", "Customer", "Prospecting", "Cold Calling","Lead"]'
                                                 data-height="400">
                                             </div>
                                         </div> 
@@ -201,18 +189,7 @@
                                                 </div>
                                             </div> 
                     
-                                            <div class="col-xl-2">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="text-secondary mb-0">Lead Analysis</p> 
-                                                                <h4 class="mb-0">{{$monthly_achive['lead_analysis']}}/{{$field_target->lead_analysis??0}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div>  
+                                             
                                         </div>
                                     </div>
                                     <div class="col-md-12"> 
@@ -220,9 +197,9 @@
                                             <div id="this_month_target"
                                                 data-colors='["--bs-primary", "--bs-success"]'
                                                 class="apex-charts"
-                                                data-series='[{"name": "Achivement", "data": [{{$monthly_achive['freelancer']}}, {{$monthly_achive['customer']}}, {{$monthly_achive['prospecting']}}, {{$monthly_achive['cold_calling']}},{{$monthly_achive['lead']}},{{$monthly_achive['lead_analysis']}}]},
-                                                    {"name": "Target", "data": [{{$field_target->freelancer??0}}, {{$field_target->customer??0}}, {{$field_target->prospecting??0}}, {{$field_target->cold_calling??0}}, {{$field_target->lead??0}}, {{$field_target->lead_analysis??0}}]}]'
-                                                data-xaxis-categories='["Freelancer", "Customer", "Prospecting", "Cold Calling","Lead","Lead Analysis"]'
+                                                data-series='[{"name": "Achivement", "data": [{{$monthly_achive['freelancer']}}, {{$monthly_achive['customer']}}, {{$monthly_achive['prospecting']}}, {{$monthly_achive['cold_calling']}},{{$monthly_achive['lead']}}]},
+                                                    {"name": "Target", "data": [{{$field_target->freelancer??0}}, {{$field_target->customer??0}}, {{$field_target->prospecting??0}}, {{$field_target->cold_calling??0}}, {{$field_target->lead??0}}]}]'
+                                                data-xaxis-categories='["Freelancer", "Customer", "Prospecting", "Cold Calling","Lead"]'
                                                 data-height="400">
                                             </div>
                                         </div> 
@@ -244,46 +221,7 @@
                                 </h2>
                                 <div id="collapseOne-general" class="accordion-collapse collapse" data-bs-parent="#accordionExample-general" style="">
                                     <div class="accordion-body">
-                                        <div class="row">  
-                                            <div class="col-md-3">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Lead Analysis</p> 
-                                                                <h4 class="mb-0">{{$today_achive['lead_analysis']}}/{{$today_target['lead_analysis']}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div> 
-                    
-                                            <div class="col-md-3">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Follow up Analysis</p> 
-                                                                <h4 class="mb-0">{{$today_achive['follow_up_analysis']}}/{{$today_target['follow_up_analysis']}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div> 
-                    
-                                            <div class="col-md-3">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Negotiation Analysis</p> 
-                                                                <h4 class="mb-0">{{$today_achive['negotiation_analysis']}}/{{$today_target['negotiation_analysis']}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div> 
-                    
+                                        <div class="row"> 
                                             <div class="col-md-3">
                                                 <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
                                                     <div class="card-body">
@@ -303,9 +241,9 @@
                                             <div id="today_target"
                                                 data-colors='["--bs-primary", "--bs-success"]'
                                                 class="apex-charts"
-                                                data-series='[{"name": "Achivement", "data": [{{$today_achive['lead_analysis']}}, {{$today_achive['follow_up_analysis']}}, {{$today_achive['negotiation_analysis']}}, {{$today_achive['deposit']}}]},
-                                                        {"name": "Target", "data": [{{$today_target['lead_analysis']}}, {{$today_target['follow_up_analysis']}}, {{$today_target['negotiation_analysis']}}, {{$today_target['deposit']}}]}]'
-                                                data-xaxis-categories='["Lead Analysis", "Follow up Analysis", "Negotiation Analysis", "Today Deposit TA"]'
+                                                data-series='[{"name": "Achivement", "data": [{{$today_achive['deposit']}}]},
+                                                        {"name": "Target", "data": [    {{$today_target['deposit']}}]}]'
+                                                data-xaxis-categories='["Today Deposit TA"]'
                                                 data-height="400">
                                             </div>
                                         </div> 
@@ -322,44 +260,7 @@
                                 <div id="collapseTwo-general" class="accordion-collapse collapse" data-bs-parent="#accordionExample-general" style="">
                                     <div class="accordion-body">
                                         <div class="row">  
-                                            <div class="col-md-3">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Lead Analysis</p> 
-                                                                <h4 class="mb-0">{{$monthly_achive['lead_analysis']}}/{{$field_target->lead_analysis??0}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div> 
-                    
-                                            <div class="col-md-3">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Follow up Analysis</p> 
-                                                                <h4 class="mb-0">{{$monthly_achive['follow_up_analysis']}}/{{$field_target->follow_up_analysis??0}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div> 
-                    
-                                            <div class="col-md-3">
-                                                <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
-                                                    <div class="card-body">
-                                                        <div class="d-flex"> 
-                                                            <div class="ms-3">
-                                                                <p class="fw-semibold mb-0">Negotiation Analysis</p> 
-                                                                <h4 class="mb-0">{{$monthly_achive['negotiation_analysis']}}/{{$field_target->negotiation_analysis??0}}</h4>
-                                                            </div>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </div>  
+                                              
                                             <div class="col-md-3">
                                                 <div class="card bg-primary-subtle" style="background: url('../assets/images/dashboard/dashboard-shape-3.png'); background-repeat: no-repeat; background-position: bottom center; ">
                                                     <div class="card-body">
@@ -379,9 +280,9 @@
                                             <div id="this_month_target"
                                                 data-colors='["--bs-primary", "--bs-success"]'
                                                 class="apex-charts"
-                                                data-series='[{"name": "Achivement", "data": [{{$monthly_achive['lead_analysis']}},{{$monthly_achive['follow_up_analysis']}}, {{$monthly_achive['negotiation_analysis']}}, {{$monthly_achive['deposit']}}]},
-                                                {"name": "Target", "data": [{{$field_target->lead_analysis??0}}, {{$field_target->follow_up_analysis??0}}, {{$field_target->negotiation_analysis??0}}, {{$deposit_target}}]}]'
-                                                data-xaxis-categories='["Lead Analysis", "Follow Up Analysis", "Negotiation Analysis", "Deposit"]'
+                                                data-series='[{"name": "Achivement", "data": [   {{$monthly_achive['deposit']}}]},
+                                                {"name": "Target", "data": [  {{$deposit_target}}]}]'
+                                                data-xaxis-categories='[ "Deposit"]'
                                                 data-height="400">
                                             </div>
                                         </div> 
