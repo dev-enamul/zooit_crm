@@ -196,6 +196,7 @@ Route::group(['middleware' => 'auth'], function () {
        
         Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile');
         Route::get('customer-profile-contact/{id}', [CustomerProfileController::class, 'contact_list'])->name('customer.profile.contact');
+        Route::get('customer-profile-about/{id}', [CustomerProfileController::class, 'about'])->name('customer.profile.about');
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
         Route::get('customer-details/{id}', [CustomerController::class, "customerDetails"])->name('customer.details');
 

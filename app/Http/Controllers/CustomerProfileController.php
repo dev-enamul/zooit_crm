@@ -65,4 +65,14 @@ class CustomerProfileController extends Controller
             'contact_persons'
         ])); 
     }
+
+    public function about($id){
+        $id = decrypt($id);
+        try{
+            $customer = Customer::find($id);
+            return view('customer.customer_about',compact('customer'));
+        }catch(Exception $e){
+            return redirect()->back()->with("success",$e->getMessage());
+        }
+    }
 }
