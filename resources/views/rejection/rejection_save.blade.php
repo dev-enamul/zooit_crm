@@ -34,7 +34,7 @@
                             @endif 
                                 @csrf
                                 <div class="row"> 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
                                             <select class="select2" search name="customer" id="customer" required>
@@ -48,11 +48,46 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="rejection_reason" class="form-label">Rejection Reason <span class="text-danger">*</span></label>
+                                            <select class="select2" search name="rejection_reason" id="rejection_reason" required>
+                                                @foreach ($reject_reasons as $reason)
+                                                    <option data-display="Select a reason *" value="{{$reason->id}}"> {{$reason->name}} </option> 
+                                                @endforeach                                                
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 additional_info" id="price_capability_section">
+                                        <div class="mb-3">
+                                            <label for="customer_price_capability" class="form-label">Price Capability</label>
+                                             <input type="number" class="form-control" name="customer_price_capability" id="customer_price_capability" min="0">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 additional_info" id="purchase_date_section">
+                                        <div class="mb-3">
+                                            <label for="possible_purchase_date" class="form-label">Possible Purchase Date </label>
+                                             <input type="date" class="form-control" name="possible_purchase_date" id="possible_purchase_date">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 additional_info" id="competitor_information_section">
+                                        <div class="mb-3">
+                                            <label for="competitor_information" class="form-label">Competitor Information</label>
+                                             <input type="text" class="form-control" name="competitor_information" id="competitor_information">
+                                        </div>
+                                    </div> 
                                    
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark" placeholder="Enter Remark">{{isset($rejection) ? $rejection->remark : old('remark')}}</textarea>
+                                            <textarea class="form-control" id="remark" rows="1" name="remark" placeholder="Enter Remark">{{isset($rejection) ? $rejection->remark : old('remark')}}</textarea>
                                         </div>
                                     </div> 
                                 </div>
@@ -103,6 +138,14 @@
                     }
                     return query;
                 }
+            }
+        });
+
+        $('.additional_info').hide();
+        $('#rejection_reason').on('change',function(){
+            var id = $(this).val();
+            if(id==1 || id==2){
+                $('#price_capability_section'.show());
             }
         });
     });

@@ -16,6 +16,7 @@ use App\Models\NegotiationWaitingDay;
 use App\Models\Presentation;
 use App\Models\Prospecting;
 use App\Models\Rejection;
+use App\Models\RejectReason;
 use App\Models\User;
 use App\Models\VisitAnalysis;
 use Carbon\Carbon;
@@ -45,17 +46,17 @@ class RejectionController extends Controller
     {
         $title = 'Rejection Entry'; 
         $my_all_employee    = json_decode(Auth::user()->user_employee);
-        $customers          = Customer::get();
-       
+        $customers          = Customer::get(); 
+        $reject_reasons     = RejectReason::get();
         $selected_data = 
         [
             'employee' => Auth::user()->id,
-        ]; 
-
+        ];  
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
         } 
-        return view('rejection.rejection_save',compact('customers','selected_data'));
+        
+        return view('rejection.rejection_save',compact('customers','selected_data','reject_reasons'));
     }
 
     public function save(Request $request, $id = null)

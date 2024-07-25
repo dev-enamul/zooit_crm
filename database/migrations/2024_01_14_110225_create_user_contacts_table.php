@@ -22,6 +22,8 @@ return new class extends Migration
             $table->date('dob')->nullable();
             $table->string('phone', 15)->nullable();
             $table->string('personal_phone', 15)->nullable();
+            $table->string('preferred_contact_method')->nullable();
+            $table->string('preferred_contact_time')->nullable();
             $table->string('email', 45)->nullable();
             $table->string('personal_email', 45)->nullable();
             $table->string('imo_number', 15)->nullable();

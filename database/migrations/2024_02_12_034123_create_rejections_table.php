@@ -19,10 +19,8 @@ return new class extends Migration
             $table->foreignId('reject_reason_id')->constrained('reject_reasons');   
             
             $table->decimal('customer_price_capability', 10, 2)->nullable(); // If reason is high price
-            $table->integer('delay_period')->nullable(); // If reason is late buy
-            $table->text('competitor_information')->nullable(); // If reason is Preference for Competitor
-            $table->text('product_mismatch_details')->nullable(); // If reason is Product Mismatch
-            $table->text('lack_of_interest_reason')->nullable(); // If reason is Lack of Interest
+            $table->date('possible_purchase_date')->nullable(); // If reason is late buy
+            $table->text('competitor_information')->nullable(); // If reason is Preference for Competitor  
 
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');

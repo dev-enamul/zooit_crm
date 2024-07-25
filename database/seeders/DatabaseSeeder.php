@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(FindMediaSeeder::class);
         $this->call(ProjectSeeder::class);
-        $this->call(SubProductSeeder::class);
-        $this->call(CompanyTypeSeeder::class);
+        $this->call(SubProductSeeder::class); 
+        $this->call(RejectReasonSeeder::class);
         $this->call(CommissionSeeder::class);
         $this->call(DesignationSeeder::class);
         $this->call(UsersSeeder::class);

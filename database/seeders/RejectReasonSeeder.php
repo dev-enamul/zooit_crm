@@ -16,18 +16,18 @@ class RejectReasonSeeder extends Seeder
     {
         DB::table('reject_reasons')->delete();
 
-        DB::table('rejection_reasons')->insert([
-            ['reason' => 'High Price'],
-            ['reason' => 'Lack of Budget'],
-            ['reason' => 'Product Mismatch'],
-            ['reason' => 'Lack of Interest'],
-            ['reason' => 'Preference for Competitor'],
-            ['reason' => 'Timing Issues'],
-            ['reason' => 'No Need'],
-            ['reason' => 'Poor Quality'],
-            ['reason' => 'Unresponsive Lead'],
-            ['reason' => 'Contractual Issues'],
-            ['reason' => 'Other'],
+        DB::table('reject_reasons')->insert([
+            ['name' => 'High Price'],
+            ['name' => 'Lack of Budget'],
+            ['name' => 'Timing Issues'],
+            ['name' => 'Preference for Competitor'], 
+            ['name' => 'Product Mismatch'],
+            ['name' => 'Lack of Interest'], 
+            ['name' => 'No Need'],
+            ['name' => 'Poor Quality'],
+            ['name' => 'Unresponsive Lead'],
+            ['name' => 'Contractual Issues'],
+            ['name' => 'Other'],
         ]); 
     }
 }
