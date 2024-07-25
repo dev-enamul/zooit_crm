@@ -12,6 +12,7 @@ use App\Models\ApproveSetting;
 use App\Models\Area;
 use App\Models\Bank;
 use App\Models\CompanyType;
+use App\Models\Country;
 use App\Models\Customer;
 use App\Models\Designation;
 use App\Models\Employee;
@@ -68,7 +69,7 @@ class CustomerController extends Controller {
             $employee = User::find($request->employee);
         } else {
             $employee = User::find(auth()->user()->id);
-        }
+        } 
  
         return $dataTable->render('customer.customer_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
     }
@@ -85,6 +86,7 @@ class CustomerController extends Controller {
         $company_types = CompanyType::where('status',1)->select('id','name')->get();
         $find_medias = FindMedia::where('status',1)->get();
         $designations = Designation::where('status',1)->get();
+        $countries = Country::get();
 
         return view('customer.customer_create', compact(
             'title',
@@ -96,7 +98,8 @@ class CustomerController extends Controller {
             'projects',
             'company_types',
             'find_medias',
-            'designations'
+            'designations',
+            'countries'
         ));
     }
 
@@ -161,7 +164,7 @@ class CustomerController extends Controller {
 
             UserAddress::create([
                 'user_id'     => $user->id,
-                'country_id'  => 18,
+                'country_id'  => $request->country_id,
                 'division_id' => $request->division,
                 'district_id' => $request->district,
                 'upazila_id'  => $request->upazila, 
@@ -183,11 +186,12 @@ class CustomerController extends Controller {
                 'facebook_id'               => $request->facebook_id,
                 'linkedin_id'               => $request->linkedin_id,
                 'created_at'                => now(),
-            ]);  
+            ]); 
   
             $customer_data = [
                 'customer_id'   => User::generateNextCustomerId(), 
                 'user_id'       => $user->id, 
+                'name'          => $request->contact_person_name??$request->full_name,
                 'ref_id'        => Auth::user()->id,
                 'project_id'    => $request->project_id,
                 'sub_poject_id' => $request->sub_poject_id,

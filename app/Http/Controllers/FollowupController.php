@@ -43,14 +43,14 @@ class FollowupController extends Controller {
     public function create(Request $request) {
         $title        = 'Follow Up Entry';
         $user_id      = Auth::user()->id;  
-        $priorities = $this->priority();
+        $purchase_possibilitys = $this->priority();
         $units      = Unit::select('id', 'title')->get();
 
-        $selected_data[] = Priority::Regular;
+        $selected_data['purchase_possibility'] = Priority::Ziro;
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
         }
-        return view('followup.followup_save', compact('selected_data', 'priorities',  'units'));
+        return view('followup.followup_save', compact('selected_data', 'purchase_possibilitys',  'units'));
     }
 
     public function customer_data(Request $request) {
@@ -60,11 +60,11 @@ class FollowupController extends Controller {
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'customer'           => 'required', 
-            'priority'           => 'required',  
-            'negotiation_amount' => 'required',
-            'next_followup_date' => 'required',
-            'remark'             => 'nullable',
+            'customer'                  => 'required', 
+            'purchase_possibility'     => 'required',  
+            'negotiation_amount'        => 'required',
+            'next_followup_date'        => 'required',
+            'remark'                    => 'nullable',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -74,21 +74,26 @@ class FollowupController extends Controller {
             $follow                     = FollowUp::findOrFail($id);
             $follow->customer_id        = $request->customer;
             $follow->employee_id        = Auth::user()->id;
-            $follow->priority           = $request->priority;  
+            $follow->purchase_possibility  = $request->purchase_possibility;  
             $follow->negotiation_amount = $request->input('negotiation_amount');
-            $follow->next_followup_date = date('Y-m-d', strtotime($request->next_followup_date));
+            $follow->next_followup_date = $request->next_followup_date;
             $follow->remark             = $request->remark;
             $follow->updated_by         = $request->updated_by;
             $follow->updated_at         = $request->updated_at;
             $follow->save();
+
+            $customer = Customer::find($request->customer);
+            $customer->purchase_possibility = $request->purchase_possibility; 
+            $customer->save();
+
             return redirect()->route('followup.index')->with('success', 'Follow Up update successfully');
         } else {
             $follow                     = new FollowUp();
             $follow->customer_id        = $request->customer;
             $follow->employee_id        = Auth::user()->id;
-            $follow->priority           = $request->priority; 
+            $follow->purchase_possibility  = $request->purchase_possibility; 
             $follow->negotiation_amount = $request->input('negotiation_amount');
-            $follow->next_followup_date = date('Y-m-d', strtotime($request->next_followup_date));
+            $follow->next_followup_date = $request->next_followup_date;
             $follow->remark             = $request->remark;
 
             $approve_setting = ApproveSetting::where('name', 'follow_up')->first();
@@ -113,8 +118,12 @@ class FollowupController extends Controller {
             $follow->created_at = now();
             $follow->status     = 0;
             $follow->save(); 
-            if ($follow) { 
-                 Presentation::where('customer_id', $request->customer)->update(['status' => 1]);
+            if ($follow) {
+                Presentation::where('customer_id', $request->customer)->update(['status' => 1]);  
+                $customer = Customer::find($request->customer);
+                $customer->purchase_possibility = $request->purchase_possibility;
+                $customer->last_stpe = 6; 
+                $customer->save();
             } 
             return redirect()->route('followup.index')->with('success', 'Follow Up create successfully');
         }
@@ -122,15 +131,15 @@ class FollowupController extends Controller {
 
     public function edit(string $id, Request $request) {
         $title           = 'Follow Up Edit';  
-        $priorities   = $this->priority();  
+        $purchase_possibilitys   = $this->priority();  
         $selected_data =
             [
             'employee' => Auth::user()->id,
-            'priority' => Priority::Regular,
+            'purchase_possibility' => Priority::Ziro,
         ];  
         $follow = FollowUp::find($id);
         $selected_data['customer'] = $follow->customer; 
-        return view('followup.followup_save', compact('selected_data',   'follow'));
+        return view('followup.followup_save', compact('selected_data','purchase_possibilitys','follow'));
     }
 
     public function followUpDelete($id) {

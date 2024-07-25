@@ -24,7 +24,6 @@
                                 @csrf
                                 <div class="row">
                                     <h6 class="text-white bg-primary p-2"> <i class="mdi mdi-check-all"></i> Primary Information</h6>  
-
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="company_type" class="form-label">Customer Type</label>
@@ -157,6 +156,19 @@
                                     </div>  
 
                                     <h6 class="text-white bg-primary p-2"> <i class="mdi mdi-check-all"></i> Address</h6> 
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="country_id" class="form-label">Country</label>
+                                            <select class="form-select select2" search name="country_id" id="country_id">
+                                                <option value="">Select a Project</option> 
+                                                @foreach ($countries as $country)
+                                                    <option value="{{$country->id}}" {{$country->id==18?"selected":""}}>{{$country->name}}</option>
+                                                @endforeach
+                                            </select>  
+                                        </div>
+                                    </div>
+
                                     @include('common.area', [
                                         'div'       => 'col-md-6',
                                         'mb'        => 'mb-3',
@@ -165,10 +177,10 @@
                                         'selected'  => $selected ?? null,
                                     ]) 
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="1" name="address" placeholder="Address">{{old('address')}}</textarea> 
+                                            <textarea class="form-control" id="address" rows="2" name="address" placeholder="Address">{{old('address')}}</textarea> 
                                         </div>
                                     </div>   
                                 </div>
@@ -230,7 +242,7 @@
                     $("#image_label").text("Logo"); 
                 }
             });
-
+  
             $("#project_id").on("change", function() { 
                 var formData = {
                     id: $(this).val(),

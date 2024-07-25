@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained();  
-            $table->date('possible_purchase_date')->nullable();
-            $table->dateTime('presentation_date')->nullable();
-            $table->string('remark')->nullable();  
+            $table->foreignId('customer_id')->constrained(); 
+            $table->dateTime('presentation_date')->nullable();   
             $table->foreignId('employee_id')->constrained('users'); 
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
-            $table->tinyInteger('priority')->default(1); 
+            $table->string('remark')->nullable();  
+
+            $table->integer('purchase_possibility')->comment('0-100');
+            $table->foreignId('user_contact_id')->nullable()->constrained('user_contacts')->comment('contact person id');
+            $table->text('customer_opinion')->nullable();
 
             $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();

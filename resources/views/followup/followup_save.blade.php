@@ -51,15 +51,15 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="priority" class="form-label">Priority<span class="text-danger">*</span></label>
-                                            <select class="select2" name="priority" id="priority" required>
-                                                @isset($priorities)
-                                                    @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('priority', isset($follow) ? $follow->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
+                                            <label for="purchase_possibility" class="form-label">Purchase Possibility<span class="text-danger">*</span></label>
+                                            <select class="select2" name="purchase_possibility" id="purchase_possibility" required>
+                                                @isset($purchase_possibilitys)
+                                                    @foreach ($purchase_possibilitys as $id => $name)
+                                                        <option value="{{ $id }}" {{ old('purchase_possibility', isset($follow) ? $follow->purchase_possibility : null) == $id || (isset($selected_data['purchase_possibility']) && $selected_data['purchase_possibility'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -81,7 +81,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="next_followup_date" class="form-label">Next Followup Date <span class="text-danger">*</span></label>
-                                            <input type="date" class="form-control datepicker w-100" name="next_followup_date" id="next_followup_date" required value="{{old('next_followup_date', @$cold_calling->next_followup_date)}}">
+                                            <input type="date" class="form-control" name="next_followup_date" id="next_followup_date" required value="{{old('next_followup_date', @$follow->next_followup_date)}}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>

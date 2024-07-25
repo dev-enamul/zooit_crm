@@ -42,12 +42,12 @@ class NegotiationController extends Controller {
     public function create(Request $request) {
         $title        = 'Negotiation Entry';
         $user_id      = Auth::user()->id; 
-        $priorities   = $this->priority(); 
-        $selected_data[] = Priority::Regular;
+        $purchase_possibilitys   = $this->priority(); 
+        $selected_data['purchase_possibility'] = Priority::Ziro;
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
         } 
-        return view('negotiation.negotiation_save', compact('selected_data', 'priorities'));
+        return view('negotiation.negotiation_save', compact('selected_data', 'purchase_possibilitys'));
     }
 
     public function customer_data(Request $request) {
@@ -57,36 +57,40 @@ class NegotiationController extends Controller {
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'customer'           => 'required', 
-            'priority'           => 'required', 
-            'sales_date'         => 'required',
-            'negotiation_amount' => 'required',
-            'remark'             => 'nullable',
+            'customer'              => 'required', 
+            'purchase_possibility'  => 'required', 
+            'sales_date'            => 'required',
+            'negotiation_amount'    => 'required',
+            'remark'                => 'nullable',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }
 
         if (!empty($id)) {
-            $follow                     = Negotiation::findOrFail($id);
-            $follow->customer_id        = $request->customer;
-            $follow->employee_id        = auth()->id();
-            $follow->priority           = $request->priority; 
-            $follow->negotiation_amount = $request->negotiation_amount;
-            $follow->remark             = $request->remark;
-            $follow->sales_date         = $request->sales_date;
-            $follow->updated_by         = $request->updated_by;
-            $follow->updated_at         = $request->updated_at;
+            $follow                         = Negotiation::findOrFail($id);
+            $follow->customer_id            = $request->customer;
+            $follow->employee_id            = auth()->id();
+            $follow->purchase_possibility   = $request->purchase_possibility; 
+            $follow->negotiation_amount     = $request->negotiation_amount;
+            $follow->remark                 = $request->remark;
+            $follow->sales_date             = $request->sales_date;
+            $follow->updated_by             = $request->updated_by;
+            $follow->updated_at             = $request->updated_at;
             $follow->save();
+
+            $customer = Customer::find($request->customer);
+            $customer->purchase_possibility = $request->purchase_possibility; 
+            $customer->save();
             return redirect()->route('negotiation.index')->with('success', 'Negotiation update successfully');
         } else {
-            $follow                     = new Negotiation();
-            $follow->customer_id        = $request->customer;
-            $follow->employee_id        = auth()->id();
-            $follow->priority           = $request->priority;    
-            $follow->negotiation_amount = $request->input('negotiation_amount');
-            $follow->remark             = $request->remark;
-            $follow->sales_date         = $request->sales_date;
+            $follow                         = new Negotiation();
+            $follow->customer_id            = $request->customer;
+            $follow->employee_id            = auth()->id();
+            $follow->purchase_possibility   = $request->purchase_possibility;    
+            $follow->negotiation_amount     = $request->input('negotiation_amount');
+            $follow->remark                 = $request->remark;
+            $follow->sales_date             = $request->sales_date;
 
             $approve_setting = ApproveSetting::where('name', 'negotiation')->first();
             $is_admin        = Auth::user()->hasPermission('admin');
@@ -112,7 +116,11 @@ class NegotiationController extends Controller {
             $follow->save();
 
             if ($follow) {
-                $visit = FollowUp::where('customer_id', $request->customer)->update(['status' => 1]);
+                FollowUp::where('customer_id', $request->customer)->update(['status' => 1]);
+                $customer = Customer::find($request->customer);
+                $customer->purchase_possibility = $request->purchase_possibility;
+                $customer->last_stpe = 7; 
+                $customer->save();
             }
 
             return redirect()->route('negotiation.index')->with('success', 'Negotiation create successfully');
@@ -121,16 +129,16 @@ class NegotiationController extends Controller {
 
     public function edit(string $id, Request $request) {
         $title           = 'Negotiation Edit'; 
-        $priorities   = $this->priority();
+        $purchase_possibilitys   = $this->priority();
 
         $selected_data =
             [
             'employee' => Auth::user()->id,
-            'priority' => Priority::Regular,
+            'purchase_possibility' => Priority::Ziro,
         ]; 
         $negotiation = Negotiation::find($id); 
         $selected_data['customer'] = $negotiation->customer;
-        return view('negotiation.negotiation_save', compact('selected_data', 'priorities', 'negotiation'));
+        return view('negotiation.negotiation_save', compact('selected_data', 'purchase_possibilitys', 'negotiation'));
     }
 
     public function negotiationDelete($id) {

@@ -37,25 +37,25 @@ class PresentationController extends Controller {
 
     public function create(Request $request) {
         $title                     = 'Presentation Entry'; 
-        $priorities                = $this->priority(); 
-        $selected_data['priority'] = Priority::Regular;
+        $purchase_possibilitys     = $this->priority();  
+        $selected_data['purchase_possibility'] = Priority::Ziro;
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::find($request->customer);
         }
-        return view('presentation.presentation_save', compact('title', 'priorities', 'selected_data'));
+        return view('presentation.presentation_save', compact('title', 'purchase_possibilitys', 'selected_data'));
     }
 
     public function customer_data(Request $request) {
-        $lead_analysis = LeadAnalysis::where('customer_id', $request->customer_id)->first();
+        $lead_analysis = Lead::where('customer_id', $request->customer_id)->first();
         return response()->json($lead_analysis, 200);
     }
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'customer'      => 'required', 
-            'priority'      => 'required',
-            'followup_date' => 'required',
-            'remark'        => 'nullable|string|max:255',
+            'customer'              => 'required', 
+            'purchase_possibility'  => 'required',
+            'followup_date'         => 'required',
+            'remark'                => 'nullable|string|max:255',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -65,26 +65,30 @@ class PresentationController extends Controller {
             $presentation = Presentation::find($id);
             $presentation->update([
                 'customer_id'   => $request->customer,
+                'purchase_possibility' => $request->purchase_possibility,
                 'employee_id'   => auth()->id(),
-                'followup_date' => $request->followup_date,
-                'priority'      => $request->priority,
+                'followup_date' => $request->followup_date, 
                 'remark'        => $request->remark, 
                 'updated_by'    => auth()->id(),
                 'updated_at'    => now(),
             ]);
+
+            $customer = Customer::find($request->customer);
+            $customer->purchase_possibility = $request->purchase_possibility; 
+            $customer->save();
             return redirect()->route('presentation.index')->with('success', 'Presemtation update successfully');
 
         } else {
             $presentation              = new Presentation();
-            $presentation->priority    = $request->priority;
-            $presentation->remark      = $request->remark;
-            $presentation->customer_id = $request->customer;
-            $presentation->followup_date = $request->followup_date;
-            $presentation->employee_id = Auth::user()->id; 
-            $approve_setting           = ApproveSetting::where('name', 'presentation')->first();
-            $is_admin                  = Auth::user()->hasPermission('admin');
-            if ($approve_setting?->status == 0 || $is_admin) {
-                $presentation->approve_by = auth()->user()->id;
+            $presentation->purchase_possibility     = $request->purchase_possibility;
+            $presentation->remark                   = $request->remark;
+            $presentation->customer_id              = $request->customer;
+            $presentation->followup_date            = $request->followup_date;
+            $presentation->employee_id              = Auth::user()->id; 
+            $approve_setting                        = ApproveSetting::where('name', 'presentation')->first();
+            $is_admin                               = Auth::user()->hasPermission('admin');
+            if ($approve_setting?->status           == 0 || $is_admin) {
+                $presentation->approve_by           = auth()->user()->id;
             } else {
                 $presentation->approve_by = null;
                 $employee                 = User::find($request->employee);
@@ -104,18 +108,22 @@ class PresentationController extends Controller {
             $presentation->save();
 
             if ($presentation) {
-                Lead::where('customer_id', $request->customer)->update(['status' => 1]); 
+                Lead::where('customer_id', $request->customer)->update(['status' => 1]);  
+                $customer = Customer::find($request->customer);
+                $customer->purchase_possibility = $request->purchase_possibility;
+                $customer->last_stpe = 5; //Cold Calling
+                $customer->save();
             }
             return redirect()->route('presentation.index')->with('success', 'Presentation create successfully');
         }
     }
 
     public function edit(string $id) {
-        $title           = 'Presentation Edit';  
-        $priorities      = $this->priority(); 
-        $presentation    = Presentation::find($id); 
+        $title                  = 'Presentation Edit';  
+        $purchase_possibilitys  = $this->priority(); 
+        $presentation               = Presentation::find($id); 
         $selected_data['customer'] = $presentation->customer;
-        return view('presentation.presentation_save', compact('selected_data','title','priorities', 'presentation'));
+        return view('presentation.presentation_save', compact('selected_data','title','purchase_possibilitys', 'presentation'));
     }
 
     public function presentationDelete($id) {

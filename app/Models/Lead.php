@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Lead extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = [ 'customer_id', 'possible_purchase_date', 'presentation_date', 'remark', 'employee_id', 'approve_by', 'priority', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = [ 'customer_id', 'remark', 'presentation_date', 'employee_id', 'approve_by', 'purchase_possibility', 'user_contact_id', 'customer_opinion', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
 
    
     public function customer()

@@ -38,8 +38,8 @@ class LeadDataTable extends DataTable {
                 }
             })
 
-            ->addColumn('followup_date', function ($data) {
-                return $data->customer->user->phone ?? "-";
+            ->addColumn('presentation_date', function ($data) {
+                return get_date($data->presentation_date);
             })
             
             ->addColumn('serial', function () {
@@ -126,7 +126,7 @@ class LeadDataTable extends DataTable {
             Column::make('customer.name')->title('Customer Name'),
             Column::make('phone')->title('Mobile Number'),
             Column::make('created_by')->title('Employee'),
-            Column::make('followup_date')->title('Followup Date'),
+            Column::make('presentation_date')->title('Presentation Date'),
            
 
         ];

@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('presentations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained();  
-            $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
             $table->date('followup_date')->nullable();
             $table->string('remark')->nullable();  
+
+            $table->integer('purchase_possibility')->comment('0-100');
+            $table->foreignId('user_contact_id')->nullable()->constrained('user_contacts')->comment('contact person id');
+            $table->text('customer_opinion')->nullable();
             
             $table->foreignId('employee_id')->constrained('users');  
             $table->foreignId('approve_by')->nullable()->constrained('users'); 

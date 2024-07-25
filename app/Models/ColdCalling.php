@@ -10,7 +10,7 @@ class ColdCalling extends Model
 {
     use HasFactory, SoftDeletes; 
 
-    protected $fillable = ['customer_id', 'priority', 'remark', 'employee_id', 'lead_date', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['customer_id', 'remark', 'employee_id', 'lead_date', 'purchase_possibility', 'user_contact_id', 'customer_opinion', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
 
     public function customer()
     {

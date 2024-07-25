@@ -10,7 +10,7 @@ class Prospecting extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [ 'media', 'priority', 'remark', 'customer_id', 'cold_call_date', 'employee_id', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = [ 'media', 'remark', 'customer_id', 'cold_call_date', 'purchase_possibility', 'user_contact_id', 'customer_opinion', 'employee_id', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
 
     public function customer()
     {

@@ -68,14 +68,11 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="priority" class="form-label">Priority<span class="text-danger">*</span></label>
-                                            <select class="form-control" name="priority" id="priority" required>
-                                                @isset($priorities)
-                                                    <option data-display="Select a priority *" value="">
-                                                        Select a priority
-                                                    </option>
-                                                    @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('priority', isset($presentation) ? $presentation->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
+                                            <label for="purchase_possibility" class="form-label">Purchase Possibility<span class="text-danger">*</span></label>
+                                            <select class="select2" name="purchase_possibility" id="purchase_possibility" required>
+                                                @isset($purchase_possibilitys)
+                                                    @foreach ($purchase_possibilitys as $id => $name)
+                                                        <option value="{{ $id }}" {{ old('purchase_possibility', isset($presentation) ? $presentation->purchase_possibility : null) == $id || (isset($selected_data['purchase_possibility']) && $selected_data['purchase_possibility'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -85,7 +82,7 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>  
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -103,7 +100,7 @@
                                             <textarea class="form-control" id="remark" rows="1" name="remark">{{isset($presentation) ? $presentation->remark : old('remark')}}</textarea>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
 
                                 <div class="text-end ">
                                     <button class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>

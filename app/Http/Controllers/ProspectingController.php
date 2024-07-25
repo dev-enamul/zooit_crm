@@ -12,6 +12,7 @@ use App\Models\Notification;
 use App\Models\Project;
 use App\Models\Prospecting;
 use App\Models\User;
+use App\Models\UserContact;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -51,12 +52,12 @@ class ProspectingController extends Controller {
         $priorities        = $this->priority();
         $selected_data     =
             [
-            'priority' => Priority::Regular,
+            'purchase_possibility' => Priority::Ziro,
             'media'    => ProspectingMedia::Phone,
-        ];
+            ];
 
         if ($request->has('customer')) {
-            $selected_data['customer'] = Customer::select('name', 'id', 'customer_id', 'ref_id')->find($request->customer);
+            $selected_data['customer'] = Customer::select('name', 'id', 'customer_id', 'ref_id')->with('user')->find($request->customer);
             $ref_reporting             = json_decode($selected_data['customer']->reference->user_reporting);
             if($ref_reporting == null){
                 $ref_reporting = [];
@@ -64,17 +65,17 @@ class ProspectingController extends Controller {
             $select_data['freelancer'] = User::whereIn('id', $ref_reporting)->whereHas('freelancer', function ($q) {
                 $q->where('designation_id', 20);
             })->first();
-        } 
+        }
         return view('prospecting.prospecting_save', compact('prospectingMedias', 'priorities', 'title', 'employees', 'selected_data'));
     }
 
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
-            'media'    => 'required',
-            'priority' => 'required', 
-            'customer' => 'required',
-            'cold_call_date' => 'required',
-            'remark'   => 'nullable|string|max:255',
+            'media'                 => 'required',
+            'purchase_possibility'  => 'required', 
+            'customer'              => 'required',
+            'cold_call_date'        => 'required',
+            'remark'                => 'nullable|string|max:255',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
@@ -83,29 +84,29 @@ class ProspectingController extends Controller {
         if (!empty($id)) {
             $prospecting = Prospecting::find($id); 
             $prospecting->update([
-                'media'       => $request->media,
-                'priority'    => $request->priority,
-                'remark'      => $request->remark,
-                'employee_id' => Auth::user()->id,
-                'updated_by'  => auth()->id(),
-                'cold_call_date' => $request->cold_call_date,
-                'updated_at'  => now(),
+                'media'                     => $request->media,
+                'purchase_possibility'      => $request->purchase_possibility,
+                'remark'                        => $request->remark,
+                'employee_id'               => Auth::user()->id,
+                'updated_by'                => auth()->id(),
+                'cold_call_date'            => $request->cold_call_date,
+                'updated_at'                => now(),
             ]);
             return redirect()->route('prospecting.index')->with('success', 'Prospecting update successfully');
 
         } else {
-            $prospecting                    = new Prospecting();
-            $prospecting->media             = $request->media;
-            $prospecting->priority          = $request->priority;
-            $prospecting->remark            = $request->remark;
-            $prospecting->customer_id       = $request->customer;
-            $prospecting->employee_id       = Auth::user()->id;
-            $prospecting->cold_call_date    = $request->cold_call_date;
-            $prospecting->status            = 0;
-            $prospecting->created_by        = auth()->id();
-            $prospecting->created_at        = now();
-            $approve_setting                = ApproveSetting::where('name', 'prospecting')->first();
-            $is_admin                       = Auth::user()->hasPermission('admin');
+            $prospecting                        = new Prospecting();
+            $prospecting->media                 = $request->media;
+            $prospecting->purchase_possibility  = $request->purchase_possibility;
+            $prospecting->remark                = $request->remark;
+            $prospecting->customer_id           = $request->customer;
+            $prospecting->employee_id           = Auth::user()->id;
+            $prospecting->cold_call_date        = $request->cold_call_date;
+            $prospecting->status                = 0;
+            $prospecting->created_by            = auth()->id();
+            $prospecting->created_at            = now();
+            $approve_setting                    = ApproveSetting::where('name', 'prospecting')->first();
+            $is_admin                           = Auth::user()->hasPermission('admin');  
             if ($approve_setting?->status == 0 || $is_admin) {
                 $prospecting->approve_by = auth()->user()->id;
             } else { 
@@ -125,6 +126,8 @@ class ProspectingController extends Controller {
             if ($prospecting) {
                 $customer         = Customer::find($request->customer);
                 $customer->status = 1;
+                $customer->purchase_possibility = $request->purchase_possibility;
+                $customer->last_stpe = '2'; // 2= Prospecting
                 $customer->save();
             }
             return redirect()->route('prospecting.index')->with('success', 'Prospecting create successfully');

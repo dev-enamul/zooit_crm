@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('prospectings', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('media')->nullable()->comment('1= Phone, 2= Meet');
-            $table->tinyInteger('priority')->nullable()->comment('1= High, 2= Regular, 3= Low');
+            $table->tinyInteger('media')->nullable()->comment('1= Phone, 2= Meet'); 
             $table->string('remark')->nullable(); 
             $table->foreignId('customer_id')->constrained('customers');
             $table->date('cold_call_date')->nullable(); 
+            $table->integer('purchase_possibility')->comment('0-100');
+            $table->foreignId('user_contact_id')->nullable()->constrained('user_contacts')->comment('contact person id');
+            $table->text('customer_opinion')->nullable();
             
             $table->foreignId('employee_id')->constrained('users'); 
             $table->unsignedBigInteger('approve_by')->nullable();

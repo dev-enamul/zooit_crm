@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class FollowUp extends Model
 {
     use HasFactory, SoftDeletes; 
-    protected $fillable = [ 'customer_id', 'priority', 'negotiation_amount', 'next_followup_date', 'remark', 'date', 'employee_id', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = [ 'customer_id', 'purchase_possibility', 'negotiation_amount', 'next_followup_date', 'remark', 'date', 'employee_id', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'];
     
 
     public function customer()

@@ -63,11 +63,11 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="priority" class="form-label">Priority<span class="text-danger">*</span></label>
-                                            <select class="select2" name="priority" id="priority" required>
-                                                @isset($priorities)
-                                                    @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('priority', isset($cold_calling) ? $cold_calling->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
+                                            <label for="purchase_possibility" class="form-label">Purchase Possibility<span class="text-danger">*</span></label>
+                                            <select class="select2" name="purchase_possibility" id="purchase_possibility" required>
+                                                @isset($purchase_possibilitys)
+                                                    @foreach ($purchase_possibilitys as $id => $name)
+                                                        <option value="{{ $id }}" {{ old('purchase_possibility', isset($cold_calling) ? $cold_calling->purchase_possibility : null) == $id || (isset($selected_data['purchase_possibility']) && $selected_data['purchase_possibility'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach

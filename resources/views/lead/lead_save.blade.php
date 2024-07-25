@@ -67,11 +67,11 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="priority" class="form-label">Priority<span class="text-danger">*</span></label>
-                                            <select class="select2" name="priority" id="priority" required>
-                                                @isset($priorities)
-                                                    @foreach ($priorities as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('priority', isset($cold_calling) ? $cold_calling->priority : null) == $id || (isset($selected_data['priority']) && $selected_data['priority'] == $id) ? 'selected' : '' }}>
+                                            <label for="purchase_possibility" class="form-label">Purchase Possibility<span class="text-danger">*</span></label>
+                                            <select class="select2" search name="purchase_possibility" id="purchase_possibility" required>
+                                                @isset($purchase_possibilitys)
+                                                    @foreach ($purchase_possibilitys as $id => $name)
+                                                        <option value="{{ $id }}" {{ old('purchase_possibility', $lead->purchase_possibility) == $id || (isset($selected_data['purchase_possibility']) && $selected_data['purchase_possibility'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -81,29 +81,22 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="purchase_date" class="form-label">Possible Purchase Date</label>
-                                            <input type="date" name="purchase_date" class="form-control" id="purchase_date" placeholder="Purchase date" value="{{isset($lead) ? $lead->possible_purchase_date : old('purchase_date')}}">
-                                        </div>
-                                    </div>
+                                    </div>  
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="presentation_date" class="form-label">Presentation Date <span class="text-danger">*</span></label>
-                                            <input type="date" class="form-control" name="presentation_date" id="presentation_date" required value="{{old('presentation_date', @$lead->presentation_date)}}">
+                                            <input type="date" class="form-control" name="presentation_date" id="presentation_date" required value="{{old('presentation_date', $lead->presentation_date)}}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="3" name="remark">{{isset($lead) ? $lead->remark : old('remark')}}</textarea>
+                                            <textarea class="form-control" id="remark" rows="1" name="remark">{{isset($lead) ? $lead->remark : old('remark')}}</textarea>
                                         </div>
                                     </div>
                                 </div>

@@ -38,17 +38,17 @@ class LeadController extends Controller {
 
     public function create(Request $request) {
         $title      = 'Lead Entry'; 
-        $priorities = $this->priority();
+        $purchase_possibilitys = $this->priority();
 
         $selected_data =
             [
             'employee' => Auth::user()->id,
-            'priority' => Priority::Regular,
+            'purchase_possibility' => Priority::Ziro,
         ];
         if ($request->has('customer')) {
             $selected_data['customer'] = Customer::select('id', 'customer_id', 'name')->find($request->customer);
         }
-        return view('lead.lead_save', compact('priorities', 'title', 'selected_data'));
+        return view('lead.lead_save', compact('purchase_possibilitys', 'title', 'selected_data'));
     }
 
     public function customer_data(Request $request) {
@@ -59,7 +59,7 @@ class LeadController extends Controller {
     public function save(Request $request, $id = null) {
         $validator = Validator::make($request->all(), [
             'customer'      => 'required',
-            'priority'      => 'required',
+            'purchase_possibility'      => 'required',
             'presentation_date' => 'required',
             'remark'        => 'nullable|string|max:255', 
         ]);
@@ -71,24 +71,26 @@ class LeadController extends Controller {
             $lead = Lead::find($id);
             $lead->update([
                 'customer_id'            => $request->customer,
-                'priority'              => $request->priority,
+                'purchase_possibility'  => $request->purchase_possibility,
                 'remark'                 => $request->remark,
-                'employee_id'            => Auth::user()->id, 
-                'possible_purchase_date' => date('Y-m-d', strtotime($request->purchase_date)),
+                'employee_id'            => Auth::user()->id,  
                 'presentation_date' => date('Y-m-d', strtotime($request->presentation_date)),
                 'updated_by'             => auth()->id(),
                 'updated_at'             => now(),
                 'created_by'             => auth()->id(),
             ]);
+
+            $customer = Customer::find($request->customer);
+            $customer->purchase_possibility = $request->purchase_possibility; 
+            $customer->save();
             return redirect()->route('lead.index')->with('success', 'Lead update successfully'); 
         } else {
             $lead                         = new Lead();
             $lead->customer_id            = $request->customer;
             $lead->employee_id            = auth()->user()->id; 
-            $lead->remark                 = $request->remark; 
-            $lead->updated_by             = auth()->id();
-            $lead->priority             = $request->priority;
-            $lead->possible_purchase_date = date('Y-m-d', strtotime($request->purchase_date));
+            $lead->remark                           = $request->remark; 
+            $lead->updated_by                       = auth()->id();
+            $lead->purchase_possibility             = $request->purchase_possibility; 
             $lead->presentation_date = date('Y-m-d', strtotime($request->presentation_date));
             $approve_setting              = ApproveSetting::where('name', 'lead')->first();
             $is_admin                     = Auth::user()->hasPermission('admin');
@@ -117,6 +119,11 @@ class LeadController extends Controller {
                     $cold_calling->status = 1;
                     $cold_calling->save();
                 }
+
+                $customer = Customer::find($request->customer);
+                $customer->purchase_possibility = $request->purchase_possibility;
+                $customer->last_stpe = 4; //Cold Calling
+                $customer->save();
             }
             return redirect()->route('lead.index')->with('success', 'Lead create successfully');
         }
@@ -129,12 +136,12 @@ class LeadController extends Controller {
             $my_all_employee = [Auth::user()->id];
         }
         $customers       = Customer::whereIn('ref_id', $my_all_employee)->get(); 
-        $priorities      = $this->priority();
+        $purchase_possibilitys      = $this->priority();
         $lead            = Lead::find($id);
         $selected_data['customer'] = $lead->customer;
  
 
-        return view('lead.lead_save', compact('selected_data','customers', 'priorities', 'title', 'lead'));
+        return view('lead.lead_save', compact('selected_data','customers', 'purchase_possibilitys', 'title', 'lead'));
     }
 
     public function leadDelete($id) {

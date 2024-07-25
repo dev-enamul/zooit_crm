@@ -103,26 +103,14 @@ class RejectionController extends Controller
             }elseif(Lead::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
                 $datas = Lead::where('customer_id',$request->customer)->where('status',0)->get(); 
                 $this->rejectData($datas);    
-            }elseif(LeadAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){
-                $datas = LeadAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas); 
             }elseif(Presentation::where('customer_id',$request->customer)->where('status',0)->count() > 0){
                 $datas = Presentation::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas);  
-            }elseif(VisitAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                $datas = VisitAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
                 $this->rejectData($datas);  
             }elseif(FollowUp::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
                 $datas = FollowUp::where('customer_id',$request->customer)->where('status',0)->get(); 
                 $this->rejectData($datas);  
-            }elseif(FollowUpAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                $datas = FollowUpAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas);  
             }elseif(Negotiation::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
                 $datas = Negotiation::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas); 
-            }elseif(NegotiationAnalysis::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                $datas = NegotiationAnalysis::where('customer_id',$request->customer)->where('status',0)->get(); 
                 $this->rejectData($datas); 
             }
 
