@@ -84,7 +84,7 @@
                                         </div>
                                     </div> 
                                    
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" id="remark_section">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
                                             <textarea class="form-control" id="remark" rows="1" name="remark" placeholder="Enter Remark">{{isset($rejection) ? $rejection->remark : old('remark')}}</textarea>
@@ -140,14 +140,28 @@
                 }
             }
         });
+ 
+        get_field_by_reason(1);
 
-        $('.additional_info').hide();
         $('#rejection_reason').on('change',function(){
             var id = $(this).val();
-            if(id==1 || id==2){
-                $('#price_capability_section'.show());
-            }
+            get_field_by_reason(id);
         });
+
+
+        function get_field_by_reason(id){  
+            $(".additional_info").hide();
+            $('#remark_section').removeClass('col-md-12');
+            if(id=="1" || id=="2"){ 
+                $('#price_capability_section').show();
+            }else if(id=="3"){ 
+                $('#purchase_date_section').show();
+            }else if(id=="4"){
+                $('#competitor_information_section').show();
+            }else{
+                $('#remark_section').addClass('col-md-12');
+            }
+        }
     });
 </script> 
 @endsection

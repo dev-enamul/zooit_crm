@@ -6,6 +6,7 @@ use App\Models\Rejection;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -37,73 +38,11 @@ class RejectionDataTable extends DataTable
         }) 
         ->addColumn('phone', function ($data) {
             return $data->customer->user->phone ?? "-";
-        })
-        ->addColumn('profession', function ($data) {
-            return $data->customer->profession->name ?? '-';
         }) 
-        ->addColumn('freelancer', function ($data) {
-            if (@$data->customer->ref_id == null) {
-                return '-';
-            }
 
-            $reporting = json_decode($data->customer->reference->user_reporting);
-            if (isset($reporting) && $reporting != null) {
-                $user = User::whereIn('id', $reporting)->whereHas('freelancer', function ($q) {
-                    $q->whereIn('designation_id', [20]);
-                })->first();
-                if (isset($user) && $user != null) {
-                    return $user->name . ' [' . $user->user_id . ']';
-                }
-            }
-            return "-";
-        })
-        ->addColumn('co-ordinator', function ($data) {
-            if (@$data->customer->ref_id == null) {
-                return '-';
-            }
-            $reporting = json_decode($data->customer->reference->user_reporting);
-            return coOrdinator($reporting);
-        })
-        ->addColumn('ex-co-ordinator', function ($data) {
-            if (@$data->customer->ref_id == null) {
-                return '-';
-            }
-            $reporting = json_decode($data->customer->reference->user_reporting);
-            return exCoOrdinator($reporting);
-        })
-        ->addColumn('marketing-incharge', function ($data) {
-            if (@$data->customer->ref_id == null) {
-                return '-';
-            }
-
-            $reporting = json_decode($data->customer->reference->user_reporting);
-            return marketingInChargeEmployee($reporting);
-        })
-
-        ->addColumn('salse-incharge', function ($data) {
-            if (@$data->customer->ref_id == null) {
-                return '-';
-            }
-
-            $reporting = json_decode($data->customer->reference->user_reporting);
-            return salesInChargeEmployee($reporting);
-        })
-        ->addColumn('area-incharge', function ($data) {
-            if (@$data->customer->ref_id == null) {
-                return '-';
-            }
-
-            $reporting = json_decode($data->customer->reference->user_reporting);
-            return areaInChargeEmployee($reporting);
-        })
-        ->addColumn('zonal-manager', function ($data) {
-            if (@$data->customer->ref_id == null) {
-                return '-';
-            }
-
-            $reporting = json_decode($data->customer->reference->user_reporting);
-            return zonalManagerEmployee($reporting);
-        })
+        ->addColumn('reject_reason', function ($data) {
+            return $data->reject_reason->name ?? "-";
+        }) 
         ->setRowId('id');
     }
 
@@ -129,6 +68,9 @@ class RejectionDataTable extends DataTable
         }
         $user        = User::find($user_id);
         $my_employee = json_decode($user->user_employee);   
+        if($my_employee == null){
+            $my_employee = [Auth::user()->id];
+        }
         return $model->newQuery()
         ->with('customer.user.userAddress', 'customer.reference', 'customer.profession')
         ->whereHas('customer', function ($q) use ($my_employee) {
@@ -173,15 +115,8 @@ class RejectionDataTable extends DataTable
             Column::make('serial')->title('S/N'),
             Column::make('customer.customer_id')->title('Provable Cus ID'),
             Column::make('customer.name')->title('Customer Name'),
-            Column::make('phone')->title('Phone'),
-            Column::make('profession')->title('Profession'),
-            Column::make('freelancer')->title('Franchise Partner Name & ID'),
-            Column::make('co-ordinator')->title('Co-ordinator Name & ID'),
-            Column::make('ex-co-ordinator')->title('Executive Co-ordinator Name & ID'),
-            Column::make('marketing-incharge')->title('Incharge Marketing Name & ID'),
-            Column::make('salse-incharge')->title('Incharge Sales Name & ID'),
-            Column::make('area-incharge')->title('Area Incharge Name & ID'),
-            Column::make('zonal-manager')->title('Zonal Manager Name & ID'),
+            Column::make('phone')->title('Phone'), 
+            Column::make('reject_reason')->title('Reject Reason'), 
         ];
     }
 

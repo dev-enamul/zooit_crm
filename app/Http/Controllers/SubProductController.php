@@ -25,6 +25,16 @@ class SubProductController extends Controller
        }
     }
 
+    // public function create(Request $request, string $id)
+    // { 
+    //    try{ 
+    //     $input = $request->all();
+    //     SubProject::create($input); 
+    //     return redirect()->back()->with('success', 'Sub Product Created');
+    //    }catch(Exception $e){ 
+    //         return redirect()->back()->with('error', $e->getMessage());
+    //    }
+    // }
 
     public function update(Request $request, string $id)
     { 

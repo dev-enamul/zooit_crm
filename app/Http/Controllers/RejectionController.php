@@ -74,7 +74,14 @@ class RejectionController extends Controller
             $rejection = Rejection::findOrFail($id);
             $rejection->customer_id = $request->customer;
             $rejection->employee_id = Auth::user()->id;
-            $rejection->remark = $request->remark;
+            $rejection->remark = $request->remark; 
+            $rejection->remark = $request->remark;  
+            $rejection->reject_reason_id = $request->rejection_reason;
+            $rejection->customer_price_capability =  $request->customer_price_capability;
+            $rejection->possible_purchase_date =  $request->possible_purchase_date;
+            $rejection->competitor_information =  $request->competitor_information;
+
+
             $rejection->updated_by = $request->updated_by;
             $rejection->updated_at = $request->updated_at;
             $rejection->save();
@@ -83,36 +90,45 @@ class RejectionController extends Controller
             $rejection = new Rejection();
             $rejection->customer_id = $request->customer;
             $rejection->employee_id = Auth::user()->id;
+            $rejection->reject_reason_id = $request->rejection_reason;
+            $rejection->customer_price_capability =  $request->customer_price_capability;
+            $rejection->possible_purchase_date =  $request->possible_purchase_date;
+            $rejection->competitor_information =  $request->competitor_information;
 
             $rejection->remark = $request->remark;
             $rejection->created_by = auth()->id();
             $rejection->created_at = now();
             $rejection->status = 1;
-            $rejection->save(); 
-
+            $rejection->save();  
+                
               
             // update table data 
-            if(Customer::where('id',$request->customer)->where('status',0)->count() > 0){
-                $datas = Customer::where('id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas);
-            }elseif(Prospecting::where('customer_id',$request->customer)->where('status',0)->count() > 0){
-                $datas = Prospecting::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas); 
-            }elseif(ColdCalling::where('customer_id',$request->customer)->where('status',0)->count() > 0){
-                $datas = ColdCalling::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas);   
-            }elseif(Lead::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                $datas = Lead::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas);    
-            }elseif(Presentation::where('customer_id',$request->customer)->where('status',0)->count() > 0){
-                $datas = Presentation::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas);  
-            }elseif(FollowUp::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                $datas = FollowUp::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas);  
-            }elseif(Negotiation::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                $datas = Negotiation::where('customer_id',$request->customer)->where('status',0)->get(); 
-                $this->rejectData($datas); 
+            if($rejection){
+                if(Customer::where('id',$request->customer)->where('status',0)->count() > 0){
+                    $datas = Customer::where('id',$request->customer)->where('status',0)->get(); 
+                    $this->rejectData($datas);
+                }elseif(Prospecting::where('customer_id',$request->customer)->where('status',0)->count() > 0){
+                    $datas = Prospecting::where('customer_id',$request->customer)->where('status',0)->get(); 
+                    $this->rejectData($datas); 
+                }elseif(ColdCalling::where('customer_id',$request->customer)->where('status',0)->count() > 0){
+                    $datas = ColdCalling::where('customer_id',$request->customer)->where('status',0)->get(); 
+                    $this->rejectData($datas);   
+                }elseif(Lead::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                    $datas = Lead::where('customer_id',$request->customer)->where('status',0)->get(); 
+                    $this->rejectData($datas);    
+                }elseif(Presentation::where('customer_id',$request->customer)->where('status',0)->count() > 0){
+                    $datas = Presentation::where('customer_id',$request->customer)->where('status',0)->get(); 
+                    $this->rejectData($datas);  
+                }elseif(FollowUp::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                    $datas = FollowUp::where('customer_id',$request->customer)->where('status',0)->get(); 
+                    $this->rejectData($datas);  
+                }elseif(Negotiation::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
+                    $datas = Negotiation::where('customer_id',$request->customer)->where('status',0)->get(); 
+                    $this->rejectData($datas); 
+                } 
+                $customer = Customer::find($request->customer); 
+                $customer->last_stpe = 8; 
+                $customer->save();
             }
 
             return redirect()->route('rejection.index')->with('success','Rejection create successfully');
@@ -132,12 +148,8 @@ class RejectionController extends Controller
     public function edit(string $id, Request $request)
     {
         $title = 'Rejection Edit'; 
-        $my_all_employee    = Auth::user()->user_employee;
-        $customers          = NegotiationAnalysis::where('status',0)->where('approve_by','!=',null)->whereHas('customer',function($q) use($my_all_employee){
-                                    $q->whereIn('ref_id',$my_all_employee);
-                                })->get();
-
-        $employees          = User::whereIn('id', $my_all_employee)->get(); 
+        $my_all_employee    = Auth::user()->user_employee; 
+ 
         $selected_data = 
         [
             'employee' => Auth::user()->id,
@@ -149,7 +161,7 @@ class RejectionController extends Controller
 
         $rejection = Rejection::find($id);
 
-        return view('rejection.rejection_save',compact('customers','employees','selected_data','rejection'));
+        return view('rejection.rejection_save',compact('selected_data','rejection'));
     }
 
 
@@ -197,7 +209,10 @@ class RejectionController extends Controller
         ]);
 
         $my_all_employee = json_decode(Auth::user()->user_employee);
-        $users           = Customer::query()
+        if($my_all_employee==null){
+            $my_all_employee = [Auth::user()->id];
+        }
+        $users = Customer::query()
             ->where(function ($query) use ($request) {
                 $term = $request->term;
                 $query->where('customer_id', 'like', "%{$term}%")

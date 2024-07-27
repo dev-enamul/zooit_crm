@@ -167,8 +167,8 @@ Route::group(['middleware' => 'auth'], function () {
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class); 
         Route::resource('approve-freelancer', ApproveFreelancerController::class);
-        Route::get('complete-training/{id}', [ApproveFreelancerController::class, 'complete_training'])->name('complete.training');
-        Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save'); 
+        Route::get('complete-training/{id}', [ApproveFreelancerController::class, 'complete_training'])->name('complete.training'); 
+        Route::post('freelancer-save/{id?}', [FreelancerController::class, 'save'])->name('freelancer.save');  
          
  
         Route::get('designation/freelancer/edit/{id}', [FreelancerEditController::class, 'designation_edit'])->name('designation.freelancer.edit');
