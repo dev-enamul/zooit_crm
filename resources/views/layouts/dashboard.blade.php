@@ -18,9 +18,7 @@
     <link rel="stylesheet" href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}">
     
     <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
-
-   
-    
+ 
     @yield('style') 
 
 </head>
@@ -33,6 +31,38 @@
         @include('includes.sidebar') 
         @yield('content') 
     </div>  
+
+    <div class="modal fade" id="send_whatsapp_message">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Send Message</h5>
+                    <button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="whatsappForm">
+                        @csrf
+                        <div class="row">
+                            <input type="hidden" name="user_id" id="user_id">
+                            <div class="col-md-12">
+                                <label class="mb-1" for="message">Message <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="message" rows="3" name="message" placeholder="message"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="text-end">
+                                <button class="btn btn-primary" type="button" id="sendWhatsApp">
+                                    <i class="fas fa-save"></i> Send
+                                </button> 
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> 
   
     <!-- JAVASCRIPT --> 
     <script>
@@ -107,7 +137,52 @@
                     button.prop('disabled', false);
                 }, 20000);   
             });
-    }); 
+    });  
+
+    function sendWhatsapp(id) {
+        $('#user_id').val(id);  
+        $('#send_whatsapp_message').modal('show');
+        }
+
+    $(document).ready(function () {
+        $('#sendWhatsApp').on('click', function (e) {
+            e.preventDefault(); 
+            let $button = $(this);
+            $button.prop('disabled', true);
+            $button.html('<i class="fas fa-spinner fa-spin"></i> Sending...');
+ 
+            let formData = {
+                user_id: $('#user_id').val(),
+                message: $('#message').val(),
+                _token: $('input[name="_token"]').val(),  
+            };
+ 
+            $.ajax({
+                url: "{{ route('whatsapp.store') }}", 
+                type: "POST",
+                data: formData,
+                success: function (response) { 
+                    $('#send_whatsapp_message').modal('hide'); 
+                    Toast.fire({ icon: "success", title: 'Message sent successfully!' }); 
+                },
+                error: function (xhr, status, error) { 
+                    let err = JSON.parse(xhr.responseText); 
+                    Toast.fire({ icon: "error", title: err.message || "An error occurred." }); 
+                     
+                }, 
+
+                complete: function () { 
+                    $button.prop('disabled', false);
+                    $button.html('<i class="fas fa-save"></i> Send');
+                    $('#message').val('')
+                },
+            });
+        });
+    });
+
+
+
+
     </script>
 </body>
  

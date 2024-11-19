@@ -6,11 +6,12 @@
         <img class="rounded avatar-2xs p-0" src="{{$data->user->image()}}">
     </a>
     <div class="dropdown-menu dropdown-menu-animated">
-        <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->id))}}">View Profile</a> 
+        <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->id))}}">View Profile</a>  
+        <a class="dropdown-item" href="#" onclick="sendWhatsapp('{{$data->user_id}}')">WhatsApp Message</a>
 
         @can('customer-delete')
             <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',encrypt($data->id)) }}')">Delete</a>
-        @endcan
+        @endcan  
 
         @can('prospecting')
             @if ($data->approve_by!=null && $data->status==0)

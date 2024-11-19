@@ -20,6 +20,7 @@ use App\Models\FindMedia;
 use App\Models\Notification;
 use App\Models\Profession;
 use App\Models\Project;
+use App\Models\Service;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\UserContact;
@@ -75,27 +76,17 @@ class CustomerController extends Controller {
     }
 
     public function create() { 
-        $title     = "Customer Create";
-        $divisions = $this->getCachedDivisions();
-        $districts = $this->getCachedDistricts();
-        $upazilas  = $this->getCachedUpazilas();
-        $unions    = $this->getCachedUnions();
-        $villages  = $this->getCachedVillages(); 
+        $title     = "Lead Save";   
 
-        $projects = Project::where('status',1)->select('id','name')->get();
+        $services = Service::select('id','service')->get();
         $company_types = CompanyType::where('status',1)->select('id','name')->get();
         $find_medias = FindMedia::where('status',1)->get();
         $designations = Designation::where('status',1)->get();
         $countries = Country::get();
 
         return view('customer.customer_create', compact(
-            'title',
-            'divisions',
-            'districts',
-            'upazilas',
-            'unions',
-            'villages', 
-            'projects',
+            'title', 
+            'services',
             'company_types',
             'find_medias',
             'designations',
@@ -103,115 +94,73 @@ class CustomerController extends Controller {
         ));
     }
 
-    public function save(Request $request, $id = null) {
+    public function save(Request $request) {
         $validator = Validator::make($request->all(), [
-            'full_name'                 => 'required|string|max:255',
-            'project_id'                => 'nullable|integer',
-            'sub_project_id'           => 'nullable|integer',   
-            'phone'                     => 'required|string|max:15',  
-            'email'                     => 'required|email',
-            'imo_whatsapp_number'       => 'nullable|string',
-            'facebook_id'               => 'nullable|string',  
-            'division'                  => 'nullable|numeric|exists:divisions,id',
-            'district'                  => 'nullable|numeric|exists:districts,id',
-            'upazila'                   => 'nullable|numeric|exists:upazilas,id',
-            'union'                     => 'nullable|numeric|exists:unions,id',
-            'village'                   => 'nullable|numeric|exists:villages,id',
-            'address'                   => 'nullable|string',  
-            'profile_image'             => 'image|max:2048' 
+            'full_name'           => 'required|string|max:255',
+            'phone'               => 'required|string|max:15',
+            'company_type'        => 'required|in:1,2',
+            'find_media_id'       => 'nullable|integer',
+            'contact_person_name' => 'nullable|string|max:255',
+            'designation_id'      => 'nullable|integer',
+            'serivce_id'          => 'nullable|integer',
+            'remark'              => 'nullable|string|max:500',
+            'address'             => 'nullable|string',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }
-
+    
         DB::beginTransaction();
-
-        try {
-            $old_user        = User::where('phone', $request->phone)->withTrashed()->first();
-            $approve_setting = ApproveSetting::where('name', 'customer')->first();
-            $is_admin        = Auth::user()->hasPermission('admin');
-            if ($approve_setting->status == 0 || $is_admin) {
-                $approve_by = auth()->user()->id;
-            } else {
-                $approve_by = null;
-                $auth_user  = Auth::user();
-                if (count(json_decode($auth_user->user_reporting)) > 1) {
-                    Notification::store([
-                        'title'      => 'Customer approval request',
-                        'content'    => $auth_user->name . ' has created a customer please approve as soon as possible',
-                        'link'       => route('customer.approve'),
-                        'created_by' => auth()->user()->id,
-                        'user_id'    => [json_decode($auth_user->user_reporting)[1]],
-                    ]);
-                }
-            } 
+    
+        try { 
             $user = User::create([
                 'name'           => $request->full_name,
                 'phone'          => get_phone($request->phone),
-                'password'       => bcrypt('123456'),
+                'password'       => bcrypt('123456'), 
                 'user_type'      => 3,  
-                'status'         => 1, 
+                'status'         => 1,
                 'created_by'     => auth()->user()->id,
-                'approve_by'     => auth()->user()->id,
-                'ref_id'         => auth()->user()->id,
             ]);
-
-            if ($request->hasFile('profile_image')) {
-                $user->profile_image = $this->uploadImage($request, 'profile_image', 'users', 'public');
-                $user->save();
-            }
+    
+            // Create contact record
+            UserContact::create([
+                'user_id'        => $user->id,
+                'name'           => $request->contact_person_name ?? $request->full_name,
+                'type'           => $request->company_type,
+                'designation_id' => $request->designation_id,
+                'phone'          => get_phone($request->phone),
+                'created_at'     => now(),
+            ]);
 
             UserAddress::create([
-                'user_id'     => $user->id,
-                'country_id'  => $request->country_id,
-                'division_id' => $request->division,
-                'district_id' => $request->district,
-                'upazila_id'  => $request->upazila, 
-                'union_id'    => $request->union,
-                'village_id'  => $request->village,
-                'address'     => $request->address, 
-                'created_at'  => now(),
+                'user_id' => $user->id,
+                'address'  => $request->address,
             ]);
-
-            #user contacts
-            UserContact::create([
-                'user_id'                   => $user->id, //company_id
-                'name'                      => $request->contact_person_name??$request->full_name,
-                'type'                      => $request->company_type,
-                'designation_id'            => $request->designation_id,
-                'phone'                     => get_phone($request->phone), 
-                'email'                     => $request->email, 
-                'imo_number'                => get_phone($request->imo_whatsapp_number),
-                'facebook_id'               => $request->facebook_id,
-                'linkedin_id'               => $request->linkedin_id,
-                'created_at'                => now(),
-            ]); 
-  
-            $customer_data = [
-                'customer_id'   => User::generateNextCustomerId(), 
-                'user_id'       => $user->id, 
-                'name'          => $request->contact_person_name??$request->full_name,
+    
+            // Create customer record
+            Customer::create([
+                'customer_id'   => User::generateNextCustomerId(),
+                'user_id'       => $user->id,
+                'name'          => $request->contact_person_name ?? $request->full_name,
                 'ref_id'        => Auth::user()->id,
-                'project_id'    => $request->project_id,
-                'sub_poject_id' => $request->sub_poject_id,
+                'serivce_id'    => $request->serivce_id,
                 'find_media_id' => $request->find_media_id,
-                'type'          => $request->company_type, 
-                'status'        => 0, 
-                'created_at'    => now(),
+                'type'          => $request->company_type,
+                'remark'        => $request->remark,
+                'status'        => 0, // Assuming 0 is the default status
                 'created_by'    => auth()->user()->id,
-                'approve_by'    => $approve_by,
-            ];
-            Customer::create($customer_data);
- 
+            ]);
+    
             DB::commit();
+    
             return redirect()->route('customer.index')->with('success', 'Customer created successfully');
         } catch (Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
+    
 
     public function update(Request $request, $id) {
         $validator = Validator::make($request->all(), [

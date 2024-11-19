@@ -38,6 +38,7 @@
                                             </div>
                                         </div>
                                     @endif
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
@@ -92,7 +93,8 @@
                                         <div class="invalid-feedback">
                                             This field is required.
                                         </div>
-                                    </div>
+                                    </div> 
+                                    
                                     <div class="col-md-6 mb-3">
                                         <label for="unit" class="form-label">Unit Type <span class="text-danger">*</span></label>
                                         <select class="select2" name="unit" id="unit" required>

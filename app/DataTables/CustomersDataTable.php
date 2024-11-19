@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -68,7 +69,7 @@ class CustomersDataTable extends DataTable {
         $my_employee = json_decode($user->user_employee);
 
         if (!is_array($my_employee)) {
-            $my_employee = []; 
+            $my_employee = [Auth::user()->id]; 
         } 
 
         if(isset($request->status)){
@@ -80,7 +81,7 @@ class CustomersDataTable extends DataTable {
         }
 
         return $model->newQuery()
-            // ->whereIn('ref_id', $my_employee) 
+            ->whereIn('ref_id', $my_employee) 
             ->with(['reference', 'user', 'profession', 'user.userAddress.village', 'user.userAddress.union', 'user.userAddress.upazila']);
     }
 

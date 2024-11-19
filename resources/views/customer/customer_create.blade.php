@@ -23,7 +23,6 @@
                             <form action="{{route('customer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                                 @csrf
                                 <div class="row">
-                                    <h6 class="text-white bg-primary p-2"> <i class="mdi mdi-check-all"></i> Primary Information</h6>  
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="company_type" class="form-label">Customer Type</label>
@@ -86,103 +85,35 @@
                                         </div>
                                     </div>  
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="profile_image" class="form-label"> <span id="image_label">Logo</span> <span class="text-danger">[jpeg, jpg, png, gif | Max : 2MB ]</span></label> 
-                                            <input type="file" name="profile_image" class="form-control" id="profile_image" > 
-                                        </div>
-                                    </div>    
+                                   
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="project_id" class="form-label">Product</label>
-                                            <select class="form-select select2" search name="project_id" id="project_id">
-                                                <option value="">Select a Project</option> 
-                                                @foreach ($projects as $project)
-                                                    <option value="{{$project->id}}">{{$project->name}}</option>
+                                            <label for="serivce_id" class="form-label">Service</label>
+                                            <select class="form-select select2" search name="serivce_id" id="serivce_id">
+                                                <option value="">Select a Service</option> 
+                                                @foreach ($services as $service)
+                                                    <option value="{{$service->id}}">{{$service->service}}</option>
                                                 @endforeach
                                             </select>  
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="sub_project" class="form-label">Sub Product </label>
-                                            <select class="form-select select2" search name="sub_project" id="sub_project">
-                                                <option value="">Select a Project</option>  
-                                            </select>  
-                                        </div>
-                                    </div> 
+ 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
                                             <textarea class="form-control" id="remark" rows="1" name="remark" placeholder="Remark">{{old('remark')}}</textarea> 
                                         </div>
-                                    </div> 
-
-                                    <h6 class="text-white bg-primary p-2"> <i class="mdi mdi-check-all"></i> Contact Information</h6>  
-
-                                     
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Email</label>
-                                           <input type="email" name="email" class="form-control" id="email" placeholder="Email ID" value="{{ old('email') }}"> 
-                                            <div class="invalid-feedback">
-                                                This field is invalid.
-                                            </div>
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="imo_whatsapp_number" class="form-label">Imo/WhatsApp Number</label>
-                                            <input type="text" name="imo_whatsapp_number" class="form-control" id="imo_whatsapp_number" placeholder="Imo/WhatsApp Number" value="{{ old('imo_whatsapp_number') }}">  
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="linkedin_id" class="form-label">Website / Linkedin</label>
-                                            <input type="text" name="linkedin_id" class="form-control" id="linkedin_id" placeholder="Linkedin ID" value="{{old('linkedin_id')}}">  
-                                        </div>
-                                    </div>  
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="facebook_id" class="form-label">Facebook ID</label>
-                                            <input type="text" name="facebook_id" class="form-control" id="facebook_id" placeholder="Facebook ID" value="{{old('facebook_id')}}">  
-                                        </div>
-                                    </div>  
-
-                                    <h6 class="text-white bg-primary p-2"> <i class="mdi mdi-check-all"></i> Address</h6> 
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="country_id" class="form-label">Country</label>
-                                            <select class="form-select select2" search name="country_id" id="country_id">
-                                                <option value="">Select a Project</option> 
-                                                @foreach ($countries as $country)
-                                                    <option value="{{$country->id}}" {{$country->id==18?"selected":""}}>{{$country->name}}</option>
-                                                @endforeach
-                                            </select>  
-                                        </div>
-                                    </div>
-
-                                    @include('common.area', [
-                                        'div'       => 'col-md-6',
-                                        'mb'        => 'mb-3',
-                                        'visible'   => ['division', 'district', 'upazila','union','village'],
-                                        'required'  => [],
-                                        'selected'  => $selected ?? null,
-                                    ]) 
+                                    </div>   
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="2" name="address" placeholder="Address">{{old('address')}}</textarea> 
+                                            <textarea class="form-control" id="address" rows="2" name="address" placeholder="address">{{old('address')}}</textarea> 
                                         </div>
-                                    </div>   
+                                    </div>  
+
                                 </div>
                                   
                                 <div>
@@ -204,24 +135,7 @@
 @endsection  
  
     @section('script2')  
-        <script>
-            $(document).ready(function() { 
-                $('#reporting_user').select2({
-                    placeholder: "Select Employee",
-                    allowClear: true,
-                    ajax: {
-                        url: '{{ route('select2.employee.freelancer') }}',
-                        dataType: 'json',
-                        data: function (params) {
-                            var query = {
-                                term: params.term
-                            }
-                            return query;
-                        }
-                    }
-                });
-            }); 
-
+        <script> 
 
             $("#company_type").on("change",function(){
                 var id = $(this).val();
@@ -243,45 +157,7 @@
                 }
             });
   
-            $("#project_id").on("change", function() { 
-                var formData = {
-                    id: $(this).val(),
-                }; 
-                $.ajax({
-                    type: "GET",
-                    data: formData,
-                    dataType: "json",
-                    url: "{{ route('project-get-subproject') }}",
-
-                    success: function(data) {
-                        $("#sub_project").empty().append(
-                            $("<option>", {
-                                value: '',
-                                text: 'Select Sub Project',
-                            })
-                        );
-
-                        console.log(data);
-                        if (data.length) {
-                            $.each(data, function(i, sub_project) {
-                                $("#sub_project").append(
-                                    $("<option>", {
-                                        value: sub_project.id,
-                                        text: sub_project.name,
-                                    })
-                                );
-                            });
-                        }
-
-                        $('#sub_project').trigger('change');
-
-                       
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
-                    },
-                });
-            });
+        
 
             
         </script>  

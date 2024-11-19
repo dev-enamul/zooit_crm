@@ -38,8 +38,7 @@ class CustomerProfileController extends Controller
             $communication['presentation'] = Presentation::where('customer_id', $id)->first(); 
             $communication['follow_up'] = FollowUp::where('customer_id', $id)->first(); 
             $communication['negotiation'] = Negotiation::where('customer_id', $id)->first(); 
-            $communication['rejection'] = Rejection::where('customer_id', $id)->first();
-            $communication['salse'] = Salse::where('customer_id', $id)->first();
+            $communication['rejection'] = Rejection::where('customer_id', $id)->first(); 
             $communication['salse_return'] = SalseReturn::where('customer_id', $id)->first();  
 
              
@@ -52,6 +51,7 @@ class CustomerProfileController extends Controller
                 'communication' 
             ]));
         }catch(Exception $e){
+            dd($e->getMessage());
             return redirect()->back()->with('error',$e->getMessage());
         }
     } 

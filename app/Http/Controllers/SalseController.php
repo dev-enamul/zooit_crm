@@ -23,15 +23,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SalseController extends Controller
 {
-    public function priority()
-    {
-        return Priority::values();
-    }
-
-    public function facility()
-    {
-        return UnitFacility::values();
-    }
+   
 
     public function index()
     {
@@ -47,9 +39,7 @@ class SalseController extends Controller
     public function create(Request $request)
     {
         $title              = 'Sales Entry';
-        $user_id            = Auth::user()->id;
-
-        $projects           = Project::where('status',1)->get(['name', 'id']);
+        $user_id            = Auth::user()->id; 
         $projectUnits       = ProjectUnit::where('status', 1)->get(['name', 'id']);
         $priorities         = $this->priority();
         $facilities         = $this->facility();

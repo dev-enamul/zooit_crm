@@ -37,17 +37,9 @@
                                             <i class="marker marker-circle text-danger"></i>
                                         </div>
                                         <div class="timeline-content"> 
-                                            <p class="m-0 bold-lg">Join by {{@$customer->reference->name}} [{{@$customer->reference->user_id}}]</p>
-                                            <p class="m-0 bold-lg">Created by {{@$customer->createdBy->name}} [{{@$customer->createdBy->user_id}}]</p>
+                                                <p class="m-0 bold-lg">Join by {{@$customer->reference->name}} [{{@$customer->reference->user_id}}]</p>
                                                 <p class="m-0 fs-10">Created At: {{get_date($customer->created_at,'j M, Y g:i A')}}</p> 
-                                                <p class="m-0 fs-10">Approved At:
-                                                     @if ($customer->approve_by != null)
-                                                        {{get_date($customer->updated_at,'j M, Y g:i A')}} 
-                                                    @else
-                                                        <span class="badge badge-warning">Not approved yet</span>
-                                                     @endif  
-                                                </p>
-                                            <p></p>
+                                                
                                         </div>
                                     </div>
                                  @endif
@@ -61,14 +53,6 @@
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Prospecting by {{@$communication['prospecting']->employee->name??"-"}} on {{$communication['prospecting']->media==1?"Phone":"Meet"}}</p>
                                                 <p class="m-0 fs-10">Created At: {{get_date(@$communication['prospecting']->created_at,'j M, Y g:i A')}}</p> 
-                                                <p class="m-0 fs-10">Approved At:
-                                                    @if (@$communication['prospecting']->approve_by != null)
-                                                        {{get_date(@$communication['prospecting']->updated_at,'j M, Y g:i A')}} 
-                                                    @else
-                                                        <span class="badge badge-warning">Not approved yet</span>
-                                                    @endif  
-                                                </p>
-
                                                 {{$communication['prospecting']->remark}}
                                         </div>
                                     </div>
@@ -83,17 +67,10 @@
                                         <div class="timeline-content"> 
                                             <p class="m-0 bold-lg">Cold Calling by {{$communication['cold_calling']->employee->name??"-"}}</p>
                                             <p class="m-0 fs-10">{{get_date($communication['cold_calling']->created_at??date('y-m-d'))}}</p>
-                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['cold_calling']->created_at,'j M, Y g:i A')}}</p> 
-                                            <p class="m-0 fs-10">Approved At:
-                                                @if (@$communication['cold_calling']->approve_by != null)
-                                                    {{get_date(@$communication['cold_calling']->updated_at,'j M, Y g:i A')}} 
-                                                @else
-                                                    <span class="badge badge-warning">Not approved yet</span>
-                                                @endif  
-                                            </p> 
+                                            <p class="m-0 fs-10">Created At: {{get_date(@$communication['cold_calling']->created_at,'j M, Y g:i A')}}</p>  
                                             {{$communication['cold_calling']->remark??""}}
-                                            <span class="badge badge-secondary mb-1">#project: {{$communication['cold_calling']->project->name??"-"}} </span>
-                                            <span class="badge badge-secondary mb-1">#unit: {{$communication['cold_calling']->unit->title??""}}</span>
+                                            <span class="badge badge-secondary mb-1">#project:  </span>
+                                            <span class="badge badge-secondary mb-1">#unit: </span>
                                         </div>
                                     </div>
                                 @endif
@@ -202,9 +179,7 @@
                                                 <span class="badge badge-secondary mb-1">#Negotiation Amount: {{get_price( $communication['negotiation']->negotiation_amount??0)}}</span>
                                         </div>
                                     </div>
-                                @endif 
-
-                                
+                                @endif  
 
                                 @if (isset($communication['rejection']) && $communication['rejection'] != null)
                                     <div class="timeline-item">

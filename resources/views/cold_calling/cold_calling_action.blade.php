@@ -8,6 +8,7 @@
 
     <div class="dropdown-menu dropdown-menu-animated">
         <a class="dropdown-item" href="{{route('customer.profile',encrypt($cold_calling->customer_id))}}">Customer Profile</a>
+        <a class="dropdown-item" href="#" onclick="sendWhatsapp('{{$cold_calling->customer->user_id}}')">WhatsApp Message</a>
         @can('cold-calling-manage')
             <a class="dropdown-item" href="{{route('cold-calling.edit',$cold_calling->id)}}">Edit</a>
         @endcan

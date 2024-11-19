@@ -18,6 +18,7 @@
         "laravel/ui": "^4.3",
         "profburial/wkhtmltopdf-binaries-osx": "0.12.1",
         "pusher/pusher-php-server": "^7.2",
+        "twilio/sdk": "^8.3",
         "wemersonjanuario/wkhtmltopdf-windows": "0.12.2.3",
         "yajra/laravel-datatables": "10.0",
         "yajra/laravel-datatables-buttons": "10.0",

@@ -8,6 +8,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-animated">
             <a class="dropdown-item" href="{{route('customer.profile',encrypt($followUp->customer_id))}}">Customer Profile</a>
+            <a class="dropdown-item" href="#" onclick="sendWhatsapp('{{$followUp->customer->user_id}}')">WhatsApp Message</a>
             
             @can('follow-up-manage')
                 <a class="dropdown-item" href="{{route('followup.edit',$followUp->id)}}">Edit</a>

@@ -17,8 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('name')->nullable();
             $table->foreignId('ref_id')->nullable()->constrained('users');
-            $table->foreignId('project_id')->nullable()->constrained('projects');
-            $table->foreignId('sub_project_id')->nullable()->constrained('sub_projects'); 
+            $table->foreignId('serivce_id')->nullable(); 
             $table->foreignId('find_media_id')->nullable()->constrained('find_media');
             $table->tinyInteger('type')->default(1)->comment('1=Person, 2 = Company'); 
 

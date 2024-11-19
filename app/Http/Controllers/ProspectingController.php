@@ -202,6 +202,9 @@ class ProspectingController extends Controller {
         ]);
 
         $my_all_employee = json_decode(Auth::user()->user_employee);
+        if($my_all_employee == null){
+            $my_all_employee = [Auth::user()->id];
+        }
         $users           = Customer::query()
             ->where(function ($query) use ($request) {
                 $term = $request->term;

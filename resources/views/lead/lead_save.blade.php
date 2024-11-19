@@ -71,7 +71,7 @@
                                             <select class="select2" search name="purchase_possibility" id="purchase_possibility" required>
                                                 @isset($purchase_possibilitys)
                                                     @foreach ($purchase_possibilitys as $id => $name)
-                                                        <option value="{{ $id }}" {{ old('purchase_possibility', $lead->purchase_possibility) == $id || (isset($selected_data['purchase_possibility']) && $selected_data['purchase_possibility'] == $id) ? 'selected' : '' }}>
+                                                        <option value="{{ $id }}" {{ old('purchase_possibility', @$lead->purchase_possibility) == $id || (isset($selected_data['purchase_possibility']) && $selected_data['purchase_possibility'] == $id) ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -86,7 +86,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="presentation_date" class="form-label">Presentation Date <span class="text-danger">*</span></label>
-                                            <input type="date" class="form-control" name="presentation_date" id="presentation_date" required value="{{old('presentation_date', $lead->presentation_date)}}">
+                                            <input type="date" class="form-control" name="presentation_date" id="presentation_date" required value="{{old('presentation_date', @$lead->presentation_date)}}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>

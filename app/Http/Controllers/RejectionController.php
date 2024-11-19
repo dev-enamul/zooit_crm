@@ -80,8 +80,7 @@ class RejectionController extends Controller
             $rejection->customer_price_capability =  $request->customer_price_capability;
             $rejection->possible_purchase_date =  $request->possible_purchase_date;
             $rejection->competitor_information =  $request->competitor_information;
-
-
+ 
             $rejection->updated_by = $request->updated_by;
             $rejection->updated_at = $request->updated_at;
             $rejection->save();

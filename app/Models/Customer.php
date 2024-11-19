@@ -5,16 +5,39 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [ 'customer_id', 'user_id','name', 'ref_id', 'project_id', 'sub_project_id', 'find_media_id', 'type', 'company_dob', 'last_stpe', 'purchase_possibility', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'deleted_at', 'created_at', 'updated_at'];
+    protected $fillable = [ 'customer_id', 'user_id','name', 'ref_id', 'serivce_id', 'find_media_id', 'type', 'company_dob', 'last_stpe', 'purchase_possibility', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'deleted_at', 'created_at', 'updated_at'];
  
+    public function prospecting(){
+        return $this->hasOne(Prospecting::class,'customer_id');
+    }
+    public function cold_calling(){
+        return $this->hasOne(ColdCalling::class,'customer_id');
+    }
+
+    public function lead(){
+        return $this->hasOne(Lead::class,'customer_id');
+    }
+
+    public function presentation(){
+        return $this->hasOne(Presentation::class,'customer_id');
+    }
+
+    public function followup(){
+        return $this->hasOne(followup::class,'customer_id');
+    }
+    public function negotiation(){
+        return $this->hasOne(Negotiation::class,'customer_id');
+    }
+
     public function project(){
         return $this->belongsTo(Project::class,'project_id');
-    }
+    } 
     public function sub_project(){
         return $this->belongsTo(SubProject::class,'project_id');
     }

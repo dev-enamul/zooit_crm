@@ -8,6 +8,7 @@
 
     <div class="dropdown-menu dropdown-menu-animated">
         <a class="dropdown-item" href="{{route('customer.profile',encrypt($presentation->customer_id))}}">Customer Profile</a>
+        <a class="dropdown-item" href="#" onclick="sendWhatsapp('{{$presentation->customer->user_id}}')">WhatsApp Message</a>
         @can('presentation-manage')
             <a class="dropdown-item" href="{{route('presentation.edit',$presentation->id)}}">Edit</a>
         @endcan

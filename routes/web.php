@@ -69,13 +69,15 @@ use App\Http\Controllers\AdminNoticeController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyTypeController;
 use App\Http\Controllers\EmployeeImportController;
-use App\Http\Controllers\ExistingSalseController; 
+use App\Http\Controllers\ExistingSalseController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\SubProductController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\UserCommissionController;
 use App\Http\Controllers\UserDocumentController;
+use App\Http\Controllers\WhatsAppController;
 use App\Models\DepositTarget;
 use App\Models\ReportingUser;
 use App\Models\User;
@@ -95,11 +97,14 @@ use Illuminate\Http\Request;
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');  
 Route::group(['middleware' => 'auth'], function () { 
+        Route::get('project-proposal',[ProposalController::class,'index']);
+        Route::get('whatsapp', [WhatsAppController::class, 'index']);
+        Route::post('whatsapp', [WhatsAppController::class, 'store'])->name('whatsapp.store');
+
         Route::get('bypass/{id}', [DashboardController::class, 'bypass'])->name('bypass');
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/id', [DashboardController::class, 'id']);
-        Route::get('/search',[SearchController::class,'search'])->name('search');
-
+        Route::get('/search',[SearchController::class,'search'])->name('search'); 
         Route::post('update/password',[DashboardController::class,'change_password'])->name('update.password');
  
         //Area

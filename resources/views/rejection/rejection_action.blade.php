@@ -7,6 +7,7 @@
     </a>
     <div class="dropdown-menu dropdown-menu-animated">
         <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
+        <a class="dropdown-item" href="#" onclick="sendWhatsapp('{{$data->customer->user_id}}')">WhatsApp Message</a>
         {{-- @can('lead-manage')
             <a class="dropdown-item" href="{{route('lead.edit',$data->id)}}">Edit</a>
         @endcan 

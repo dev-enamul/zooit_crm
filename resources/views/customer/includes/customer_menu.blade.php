@@ -10,7 +10,7 @@
  </div>
 
  <div class="row">
-     <div class="col-md-4"> 
+     <div class="col-md-6"> 
          <div class="card">
              <div class="card-body">
                  <div class="d-flex">
@@ -23,13 +23,14 @@
                      </div>
                      <div class="flex-grow-1 ms-3">
                          <p class="text-muted fw-medium mb-2">Purchase Possibility</p>
-                         <h4 class="mb-0">0%</h4>
+                         <h4 class="mb-0">{{$customer->purchase_possibility}}</h4>
                      </div>
                  </div>
              </div>
          </div>
      </div>
-     <div class="col-md-4"> 
+    
+     <div class="col-md-6"> 
          <div class="card">
              <div class="card-body">
                  <div class="d-flex">
@@ -41,27 +42,28 @@
                          </div>
                      </div>
                      <div class="flex-grow-1 ms-3">
-                         <p class="text-muted fw-medium mb-2">Purchase Date</p>
-                         <h4 class="mb-0">2/2/2</h4>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
-     <div class="col-md-4"> 
-         <div class="card">
-             <div class="card-body">
-                 <div class="d-flex">
-                     <div class="flex-shrink-0 align-self-center">
-                         <div class="avatar-sm rounded bg-info-subtle text-info d-flex align-items-center justify-content-center">
-                             <span class="avatar-title">
-                                 <i class="mdi mdi-chart-line fs-24"></i> 
-                             </span>
-                         </div>
-                     </div>
-                     <div class="flex-grow-1 ms-3">
-                         <p class="text-muted fw-medium mb-2">Complete </p>
-                         <h4 class="mb-0">Followup</h4>
+                         <p class="text-muted fw-medium mb-2">Complete Step</p>
+                         <h4 class="mb-0">
+                            @if($customer->last_stpe==1 || $customer->last_stpe==null)
+                                Customer Entry
+                            @elseif($customer->last_stpe==2)
+                                Prospecting
+                            @elseif($customer->last_stpe==3)
+                                Cold Calling
+                            @elseif($customer->last_stpe==4)
+                                Lead
+                            @elseif($customer->last_stpe==5)
+                                Presentation
+                            @elseif($customer->last_stpe==6)
+                                Followup
+                            @elseif($customer->last_stpe==7)
+                                Negotiation
+                            @elseif($customer->last_stpe==8)
+                                Rejection
+                            @elseif($customer->last_stpe==9)
+                                Sales 
+                            @endif
+                         </h4>
                      </div>
                  </div>
              </div>

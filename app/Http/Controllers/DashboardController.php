@@ -40,104 +40,122 @@ class DashboardController extends Controller
 
 
 
-    public function index(){  
-        $user= User::find(Auth::id());
-        if($user->user_type==1){
-            $user->e = $user->employee;
-            $designations = $user->employee->designation_id;
-        }else if($user->user_type==2){
-            $designations = $user->freelancer->designation_id;
-        }  
-       
+    public function index(){   
 
-        $today_tasks = TaskList::whereHas('taskModel',function($q){
+        $todos = TaskList::whereHas('taskModel',function($q){
             $q->where('assign_to',auth()->user()->id);
         }) 
         ->where('status',0)
         ->get();
-                    
-        $field_target = FieldTarget::where('assign_to', auth()->user()->id)
-                    ->whereMonth('month', today())
-                    ->whereYear('month', today())
-                    ->first();  
-        $deposit_target = DepositTarget::where('assign_to', auth()->user()->id)
-            ->whereMonth('month', today())
-            ->whereYear('month', today()) 
-            ->first();
-        if($deposit_target && $deposit_target == null){
-            if($deposit_target->is_project_wise==0){
-                $deposit_target = $deposit_target->project->selectRaw('sum(new_deposit) + sum(existing_deposit) as total_deposit')->total_deposit;
-            }else{
-                $deposit_target = $deposit_target->selectRaw('new_total_deposit + existing_total_deposit as total_deposit')->total_deposit;
-            } 
-        }else{
-            $deposit_target = 0;
+
+        $my_employee = json_decode(Auth::user()->user_employee);
+        if($my_employee==null){
+            $my_employee = [Auth::user()->id];
         }
+
+        $today_tasks = Customer::where(function($data) {
+            $data->whereHas('prospecting', function($e) {
+                $e->where('cold_call_date', '<=', today())->where('status',0);
+            })->orWhereHas('cold_calling', function($e) {
+                $e->where('lead_date', '<=', today())->where('status',0);
+            })->orWhereHas('lead', function($e) {
+                $e->where('presentation_date', '<=', today())->where('status',0);
+            })->orWhereHas('presentation', function($e) {
+                $e->where('followup_date', '<=', today())->where('status',0);
+            })->orWhereHas('followup', function($e) {
+                $e->where('next_followup_date', '<=', today())->where('status',0);
+            })->orWhereHas('negotiation', function($e) {
+                $e->where('sales_date', '<=', today())->where('status',0);
+            });
+        })->get();
+ 
+
+    //     $user= User::find(Auth::id());
+    //     if($user->user_type==1){
+    //         $user->e = $user->employee;
+    //         $designations = $user->employee->designation_id;
+    //     }else if($user->user_type==2){
+    //         $designations = $user->freelancer->designation_id;
+    //     }   
+                    
+    //     $field_target = FieldTarget::where('assign_to', auth()->user()->id)
+    //                 ->whereMonth('month', today())
+    //                 ->whereYear('month', today())
+    //                 ->first();  
+    //     $deposit_target = DepositTarget::where('assign_to', auth()->user()->id)
+    //         ->whereMonth('month', today())
+    //         ->whereYear('month', today()) 
+    //         ->first();
+    //     if($deposit_target && $deposit_target == null){
+    //         if($deposit_target->is_project_wise==0){
+    //             $deposit_target = $deposit_target->project->selectRaw('sum(new_deposit) + sum(existing_deposit) as total_deposit')->total_deposit;
+    //         }else{
+    //             $deposit_target = $deposit_target->selectRaw('new_total_deposit + existing_total_deposit as total_deposit')->total_deposit;
+    //         } 
+    //     }else{
+    //         $deposit_target = 0;
+    //     }
         
                 
-        $total_day = Carbon::now()->daysInMonth; 
-        $today_target['freelancer'] = round($field_target?->freelancer/$total_day??0,1); 
-        $today_target['customer'] = round($field_target?->customer/$total_day??0,1);
-        $today_target['prospecting'] = round($field_target?->prospecting/$total_day??0,1);
-        $today_target['cold_calling'] = round($field_target?->cold_calling/$total_day??0,1);
-        $today_target['lead'] = round($field_target?->lead/$total_day??0,1); 
-        $today_target['deposit'] = round($deposit_target/$total_day??0,1);
- 
-        // achivement
-        $my_all_employee = json_decode(Auth::user()->user_employee); 
+    //     $total_day = Carbon::now()->daysInMonth; 
+    //     $today_target['freelancer'] = round($field_target?->freelancer/$total_day??0,1); 
+    //     $today_target['customer'] = round($field_target?->customer/$total_day??0,1);
+    //     $today_target['prospecting'] = round($field_target?->prospecting/$total_day??0,1);
+    //     $today_target['cold_calling'] = round($field_target?->cold_calling/$total_day??0,1);
+    //     $today_target['lead'] = round($field_target?->lead/$total_day??0,1); 
+    //     $today_target['deposit'] = round($deposit_target/$total_day??0,1); 
+    //     $my_all_employee = json_decode(Auth::user()->user_employee); 
          
-        if (!is_array($my_all_employee)) {
-            $my_all_employee = []; 
-        } 
+    //     if (!is_array($my_all_employee)) {
+    //         $my_all_employee = []; 
+    //     } 
         
-        $date = Carbon::now();
-        $monthly_achive['freelancer'] = $user->freelanecr_achive($date,$my_all_employee);
+    //     $date = Carbon::now();
+    //     $monthly_achive['freelancer'] = $user->freelanecr_achive($date,$my_all_employee);
         
-        $monthly_achive['customer'] = $user->customer_achive($date,$my_all_employee);
+    //     $monthly_achive['customer'] = $user->customer_achive($date,$my_all_employee);
             
-        $monthly_achive['prospecting'] = $user->prospecting_achive($date,$my_all_employee);
+    //     $monthly_achive['prospecting'] = $user->prospecting_achive($date,$my_all_employee);
 
-        $monthly_achive['cold_calling'] = $user->cold_calling_achive($date,$my_all_employee);
+    //     $monthly_achive['cold_calling'] = $user->cold_calling_achive($date,$my_all_employee);
 
-        $monthly_achive['lead'] = $user->lead_achive($date,$my_all_employee); 
+    //     $monthly_achive['lead'] = $user->lead_achive($date,$my_all_employee); 
 
-        $monthly_achive['deposit']= $user->deposit_achive($date,$my_all_employee);
+    //     $monthly_achive['deposit']= $user->deposit_achive($date,$my_all_employee);
 
-        // Daily Achive 
-        $today_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
-            ->where('user_type',2)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
-
-        $today_achive['customer'] = Customer::whereIn('ref_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
-            
-        $today_achive['prospecting'] = Prospecting::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
-
-        $today_achive['cold_calling'] = ColdCalling::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count(); 
-
-        $today_achive['lead'] = Lead::whereIn('employee_id',$my_all_employee)
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();  
-
-        $today_achive['deposit']= Deposit::whereHas('customer',function($q) use($my_all_employee){
-                $q->whereIn('ref_id',$my_all_employee);
-            })
-            ->where('approve_by','!=',null)
-            ->whereDate('created_at',today()) 
-            ->count();
-           
         
+    //     $today_achive['freelancer'] = User::whereIn('ref_id',$my_all_employee)
+    //         ->where('user_type',2)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
+
+    //     $today_achive['customer'] = Customer::whereIn('ref_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
+            
+    //     $today_achive['prospecting'] = Prospecting::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();
+
+    //     $today_achive['cold_calling'] = ColdCalling::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count(); 
+
+    //     $today_achive['lead'] = Lead::whereIn('employee_id',$my_all_employee)
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count();  
+
+    //     $today_achive['deposit']= Deposit::whereHas('customer',function($q) use($my_all_employee){
+    //             $q->whereIn('ref_id',$my_all_employee);
+    //         })
+    //         ->where('approve_by','!=',null)
+    //         ->whereDate('created_at',today()) 
+    //         ->count(); 
     date_default_timezone_set('Asia/Dhaka');
     $hour = date('G'); 
 
@@ -151,15 +169,16 @@ class DashboardController extends Controller
  
                     
         return view('index',compact([
-            'today_tasks', 
-            'field_target',
-            'total_day',
-            'designations',
-            'today_target',
-            'today_achive',
-            'monthly_achive',
-            'deposit_target',
-            'greeting'
+            'todos', 
+            // 'field_target',
+            // 'total_day',
+            // 'designations',
+            // 'today_target',
+            // 'today_achive',
+            // 'monthly_achive',
+            // 'deposit_target',
+            'greeting',
+            'today_tasks'
         ]));
     }
 

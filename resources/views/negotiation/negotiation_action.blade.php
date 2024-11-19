@@ -8,19 +8,23 @@
         </a>
         <div class="dropdown-menu dropdown-menu-animated">
             <a class="dropdown-item" href="{{route('customer.profile',encrypt($negotiation->customer_id))}}">Customer Profile</a>
+            <a class="dropdown-item" href="#" onclick="sendWhatsapp('{{$negotiation->customer->user_id}}')">WhatsApp Message</a>
             @can('negotiation-manage')
                 <a class="dropdown-item" href="{{route('negotiation.edit',$negotiation->id)}}">Edit</a>
-            @endcan
+            @endcan  
 
             @can('negotiation-delete')
                 <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('negotiation.delete',$negotiation->id) }}')">Delete</a>
+            @endcan  
+
+            @can('rejection-manage')
+                <a class="dropdown-item" href="{{route('salse.create',['customer'=> $negotiation->customer->id])}}">Sales</a>
             @endcan
 
-            @if ($negotiation->approve_by!=null && $negotiation->status==0)
-                @can('negotiation-analysis-manage')
-                    <a class="dropdown-item" href="{{route('negotiation-analysis.create',['customer'=>$negotiation->customer->id])}}">Negotiation Analysis</a>
-                @endcan
-            @endif
+            @can('rejection-manage')
+                <a class="dropdown-item" href="{{route('rejection.create',['customer'=> $negotiation->customer->id])}}">Reject</a>
+            @endcan
+
         </div>
     </div>
 </td>

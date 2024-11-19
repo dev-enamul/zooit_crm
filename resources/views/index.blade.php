@@ -21,7 +21,7 @@
             </div> 
             <div class="row">  
                 <div class="col-xxl-9">  
-                    @if ($designations>=15) 
+                    {{-- @if ($designations>=15) 
                     <div class="mb-3"> 
                         <div class="accordion" id="accordionExample-general"> 
                             <div class="accordion-item"> 
@@ -292,16 +292,14 @@
                             </div> 
                         </div>
                     </div> 
-                    @endif 
+                    @endif  --}}
 
                    
-  
-                    <div class="row">
-                         
+                    <div class="row"> 
                         <div class="col-12">   
                             <div class="card"> 
                                 <div class="card-body"> 
-                                    <h5>Pending Task</h5>
+                                    <h5>Today Task</h5>
                                     
                                     <div class="table-box">
                                         <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -318,7 +316,76 @@
                                                 </tr>
                                             </thead>
                                             <tbody> 
-                                                @foreach($today_tasks as $key => $data)
+                                            @foreach($today_tasks as $key => $data)
+                                                <tr> 
+                                                    <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
+                                                        <div class="dropdown">
+                                                            <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-animated">
+                                                                <a class="dropdown-item" href="{{route('submit.task',$data->id)}}">Viwe Profile</a>
+                                                                @if($data->last_stpe==2)
+                                                                    <a class="dropdown-item" href="{{route('submit.task',$data->id)}}">Cold Calling</a>
+                                                                @elseif($data->last_stpe==3) 
+                                                                    <a class="dropdown-item" href="{{route('submit.task',$data->id)}}">Lead</a>
+                                                                @elseif($data->last_stpe==4) 
+                                                                    <a class="dropdown-item" href="{{route('submit.task',$data->id)}}">Presentation</a>
+                                                                @elseif($data->last_stpe==5) 
+                                                                    <a class="dropdown-item" href="{{route('submit.task',$data->id)}}">Followup</a>
+                                                                @elseif($data->last_stpe==6) 
+                                                                    <a class="dropdown-item" href="{{route('submit.task',$data->id)}}">Negotiation</a>
+                                                                @elseif($data->last_stpe==7) 
+                                                                    <a class="dropdown-item" href="{{route('submit.task',$data->id)}}">Sales</a>
+                                                                @endif
+                                                            </div>
+                                                        </div> 
+                                                       
+                                                    </td>  
+                                                    <td>{{$key+1}}</td>
+                                                    <td>{{get_date($data->created_at)}} <span class="badge badge-primary">{{get_date($data->time,'g:i A')}}</span></td>  
+                                                    <td>{{@$data->taskModel->assigner->name}} [{{@$data->taskModel->assigner->user_id}}]</td>
+                                                    <td>{{$data->task}}</td>
+                                                    <td>
+                                                        @if($data->status==0)
+                                                            <span class="badge badge-warning">Pending</span>
+                                                        @else  
+                                                            <span  class="badge badge-success">Completed</span>
+                                                        @endif
+                                                    </td>
+                                                    {{-- <td></td>
+                                                    <td></td>  --}}
+                                                </tr>   
+                                                @endforeach  
+                                            </tbody>  
+                                        </table> 
+                                    </div>
+                                </div> 
+                            </div> 
+                        </div> 
+                    </div>
+
+  
+                    <div class="row"> 
+                        <div class="col-12">   
+                            <div class="card"> 
+                                <div class="card-body"> 
+                                    <h5>Todo List Task</h5>
+                                    
+                                    <div class="table-box">
+                                        <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    @can('village-manage')
+                                                    <th>Action</th>
+                                                    @endcan
+                                                    <th>S/N</th> 
+                                                    <th>Date & Time</th>
+                                                    <th>Assign By</th> 
+                                                    <th>Particulars</th> 
+                                                    <th>Status</th>       
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                @foreach($todos as $key => $data)
                                                 <tr> 
                                                     <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                         @if ($data->status==0)
