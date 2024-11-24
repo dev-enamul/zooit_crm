@@ -156,11 +156,11 @@ class CustomerController extends Controller {
                     'designation_id' => $request->designation_id,
                     'phone'          => get_phone($request->phone),
                     'created_at'     => now(),
-                ]);  
-                
+                ]);
+
                 $user->userAddress->update([ 
                     'address'  => $request->address,
-                ]);  
+                ]);
 
                 $user->customer->update([ 
                     'name'          => $request->contact_person_name ?? $request->full_name,
@@ -171,8 +171,8 @@ class CustomerController extends Controller {
                     'remark'        => $request->remark,
                     'status'        => 0, 
                     'created_by'    => auth()->user()->id,
-                ]);  
-
+                ]); 
+                
             }else{
                 $user = User::create([
                     'name'           => $request->full_name,
