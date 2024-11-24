@@ -11,8 +11,8 @@
 
         @can('customer-delete')
             <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',encrypt($data->id)) }}')">Delete</a>
-        @endcan  
-
+        @endcan   
+        <a class="dropdown-item" href="{{ route('customer.edit',encrypt($data->id)) }}">Edit</a>  
         @can('prospecting')
             @if ($data->approve_by!=null && $data->status==0)
                 <a class="dropdown-item" href="{{ route('prospecting.create', ['customer' => $data->id]) }}">Prospecting</a>

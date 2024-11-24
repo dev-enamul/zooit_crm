@@ -138,9 +138,7 @@ class LeadController extends Controller {
         $customers       = Customer::whereIn('ref_id', $my_all_employee)->get(); 
         $purchase_possibilitys      = $this->priority();
         $lead            = Lead::find($id);
-        $selected_data['customer'] = $lead->customer;
- 
-
+        $selected_data['customer'] = $lead->customer; 
         return view('lead.lead_save', compact('selected_data','customers', 'purchase_possibilitys', 'title', 'lead'));
     }
 

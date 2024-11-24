@@ -29,12 +29,17 @@ class CustomersDataTable extends DataTable {
                 static $serial = 0;
                 return ++$serial;
             })  
-            ->addColumn('project', function ($data) { 
-                return $data->project->name??"-";
-            })
-            ->addColumn('sub_project', function ($data) { 
-                return $data->sub_project->name??"-";
-            })   
+            ->addColumn('service', function ($data) { 
+                return $data->service->service??"-";
+            }) 
+            ->addColumn('name', function ($data) {  
+                if($data->user->userContact->type==2){
+                    $name = $data->user->userContact->name." (". $data->user->name .") ";
+                }else{
+                    $name = $data->name;
+                }
+                return $name;
+            }) 
             ->addColumn('created_by', function ($data) { 
                 if(isset($data->created_by) && $data->created_by!=null){
                     $user = user_info($data->created_by);
@@ -119,10 +124,9 @@ class CustomersDataTable extends DataTable {
                 ->addClass('text-center'),
             Column::make('serial')->title('S/L'),
             Column::make('customer_id')->title('Provable CUS ID')->searchable(true),
-            Column::make('user.name')->title('Company Name')->searchable(true),
+            Column::make('name')->title('Name')->searchable(true),
             Column::make('user.phone')->title('Phone Number')->searchable(true),  
-            Column::make('project')->title('Product'), 
-            Column::make('sub_project')->title('Sub Product'), 
+            Column::make('service')->title('Service'),  
             Column::make('created_by')->title('Created By'), 
         ];
     }

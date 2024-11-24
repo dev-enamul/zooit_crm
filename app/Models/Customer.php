@@ -11,11 +11,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Customer extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [ 'customer_id', 'user_id','name', 'ref_id', 'serivce_id', 'find_media_id', 'type', 'company_dob', 'last_stpe', 'purchase_possibility', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'deleted_at', 'created_at', 'updated_at'];
+    protected $fillable = [ 'customer_id', 'user_id','name', 'ref_id', 'service_id', 'find_media_id', 'type', 'company_dob', 'last_stpe', 'purchase_possibility', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'deleted_at', 'created_at', 'updated_at'];
  
     public function prospecting(){
         return $this->hasOne(Prospecting::class,'customer_id');
     }
+
+    public function service(){
+        return $this->belongsTo(Service::class,'service_id');
+    }
+
     public function cold_calling(){
         return $this->hasOne(ColdCalling::class,'customer_id');
     }

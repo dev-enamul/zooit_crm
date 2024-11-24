@@ -71,17 +71,14 @@
                     <li>
                         <a href="javascript: void(0);" class="has-arrow">
                             <i class="fas fa-handshake"></i>
-                            <span>Customer Data</span>
+                            <span>Lead</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             @can('customer-manage')
-                                <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Entry</a></li> 
+                                <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead Entry</a></li> 
                             @endcan
-                            <li class="{{ Route::is('customer.save', 'customer.delete','customer.search','customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Probable Customer List</a></li> 
-                            
-                            @if (!empty($approve_setting['customer']) )
-                                <li><a href="{{route('customer.approve')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Customer Approve</a></li>
-                            @endif 
+                            <li class="{{ Route::is('customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead List</a></li> 
+                    
                         </ul>
                     </li> 
                     @endcan

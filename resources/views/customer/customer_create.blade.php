@@ -21,14 +21,17 @@
                     <div class="card"> 
                         <div class="card-body">
                             <form action="{{route('customer.save')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
-                                @csrf
+                                @csrf 
+                                @if (isset($user)  && !empty($user))
+                                    <input type="hidden" name="id" value="{{$user->id}}">
+                                @endif                                
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="company_type" class="form-label">Customer Type</label>
                                             <select class="form-select select2" name="company_type" id="company_type"> 
-                                                 <option value="1">Person</option>
-                                                 <option value="2" selected>Company</option>
+                                                 <option {{old("company_type",@$user->customer->type)==1?"selected":""}} value="1">Person</option>
+                                                 <option {{old("company_type",@$user->customer->type)==2?"selected":""}} value="2">Company</option>
                                             </select>  
                                         </div>
                                     </div>
@@ -38,7 +41,7 @@
                                             <label for="find_media_id" class="form-label">How find us</label>
                                             <select class="form-select select2" search name="find_media_id" id="find_media_id"> 
                                                 @foreach ($find_medias as $find_media)
-                                                    <option value="{{$find_media->id}}">{{$find_media->name}}</option>
+                                                    <option {{old("find_media_id",@$user->customer->find_media_id)==$find_media->id?"selected":""}} value="{{$find_media->id}}">{{$find_media->name}}</option>
                                                 @endforeach
                                             </select>  
                                         </div>
@@ -47,7 +50,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="full_name" class="form-label"><span id="company_name_label">Company Name</span><span class="text-danger">*</span></label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="Full name" value="{{old('full_name')}}" required>
+                                            <input type="text" name="full_name" class="form-control" id="full_name" value="{{old("full_name",@$user->name)}}" placeholder="Full name" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -57,7 +60,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="contact_person_name" class="form-label">Contact Person Name </label>
-                                            <input type="text" name="contact_person_name" class="form-control" id="contact_person_name" placeholder="Contact Person Name" value="{{old('contact_person_name')}}">
+                                            <input type="text" name="contact_person_name" value="{{old("contact_person_name",@$user->userContact->name)}}" class="form-control" id="contact_person_name" placeholder="Contact Person Name">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -69,7 +72,7 @@
                                             <label for="designation_id" class="form-label">Contact Person Designation</label>
                                             <select class="form-select select2" search name="designation_id" id="designation_id"> 
                                                 @foreach ($designations as $designation)
-                                                    <option value="{{$designation->id}}">{{$designation->title}}</option>
+                                                    <option {{old("designation_id",@$user->userContact->designation_id)==$designation->id?"selected":""}} value="{{$designation->id}}">{{$designation->title}}</option>
                                                 @endforeach
                                             </select>  
                                         </div>
@@ -78,39 +81,36 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Mobile Number <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone" class="form-control" id="phone" maxlength="15" placeholder="Phone Number" value="{{ old('phone') }}" required>
+                                            <input type="text" name="phone" class="form-control" id="phone" maxlength="15" placeholder="Phone Number" value="{{ old('phone',@$user->phone) }}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>  
-
-                                   
+                                    </div>   
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="serivce_id" class="form-label">Service</label>
-                                            <select class="form-select select2" search name="serivce_id" id="serivce_id">
+                                            <label for="service_id" class="form-label">Service</label>
+                                            <select class="form-select select2" search name="service_id" id="service_id">
                                                 <option value="">Select a Service</option> 
                                                 @foreach ($services as $service)
-                                                    <option value="{{$service->id}}">{{$service->service}}</option>
+                                                    <option {{old("service_id",@$user->customer->service_id)==$service->id?"selected":""}} value="{{$service->id}}">{{$service->service}}</option>
                                                 @endforeach
                                             </select>  
                                         </div>
-                                    </div>
- 
+                                    </div> 
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
-                                            <textarea class="form-control" id="remark" rows="1" name="remark" placeholder="Remark">{{old('remark')}}</textarea> 
+                                            <textarea class="form-control" id="remark" rows="1" name="remark" placeholder="Remark">{{old('remark',@$user->customer->remark)}}</textarea> 
                                         </div>
                                     </div>   
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="2" name="address" placeholder="address">{{old('address')}}</textarea> 
+                                            <textarea class="form-control" id="address" rows="2" name="address" placeholder="address">{{old('address',@$user->userAddress->address)}}</textarea> 
                                         </div>
                                     </div>  
 
@@ -135,10 +135,17 @@
 @endsection  
  
     @section('script2')  
-        <script> 
-
+        <script>  
             $("#company_type").on("change",function(){
-                var id = $(this).val();
+                changeType();
+            }); 
+
+            $(document).ready(function(){
+                changeType();
+            })
+
+            function changeType(){
+                var id = $("#company_type").val();
                 if(id==1){
                     $('#company_name_label').text("Full Name");
                     $('#full_name').attr("placeholder","Full Name");
@@ -155,7 +162,7 @@
                     $('#designation_id').closest('.col-md-6').show();
                     $("#image_label").text("Logo"); 
                 }
-            });
+            }
   
         
 
