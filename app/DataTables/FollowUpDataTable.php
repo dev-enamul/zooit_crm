@@ -37,6 +37,15 @@ class FollowUpDataTable extends DataTable {
 
             ->addColumn('followup_date', function ($followUp) {
                 return get_date($followUp->next_followup_date);
+            }) 
+
+            ->addColumn('name', function ($followUp) {
+                if($followUp->customer->user->userContact->type==2){
+                    $name = $followUp->customer->user->userContact->name." (". $followUp->customer->user->name .") ";
+                }else{
+                    $name = $followUp->customer->user->name;
+                }
+                return $name;
             })
  
             ->addColumn('serial', function () {
@@ -127,7 +136,7 @@ class FollowUpDataTable extends DataTable {
                 ->sortable(false),
             Column::make('serial')->title('S/L')->sortable(false),
             Column::make('customer.customer_id')->title('Provable Cus ID')->sortable(false),
-            Column::make('customer.name')->title('Customer Name')->sortable(false),
+            Column::make('name')->title('Name')->sortable(false),
             Column::make('customer.user.phone')->title('Mobile Number')->sortable(false), 
             Column::make('created_by')->title('Employee')->sortable(false), 
             Column::make('followup_date')->title('Next Followup')->sortable(false), 

@@ -42,6 +42,7 @@ class FollowupController extends Controller {
 
     public function create(Request $request) {
         $title        = 'Follow Up Entry';
+        
         $user_id      = Auth::user()->id;  
         $purchase_possibilitys = $this->priority();
         $units      = Unit::select('id', 'title')->get();
@@ -94,26 +95,8 @@ class FollowupController extends Controller {
             $follow->purchase_possibility  = $request->purchase_possibility; 
             $follow->negotiation_amount = $request->input('negotiation_amount');
             $follow->next_followup_date = $request->next_followup_date;
-            $follow->remark             = $request->remark;
-
-            $approve_setting = ApproveSetting::where('name', 'follow_up')->first();
-            $is_admin        = Auth::user()->hasPermission('admin');
-            if ($approve_setting?->status == 0 || $is_admin) {
-                $follow->approve_by = auth()->user()->id;
-            } else {
-                $follow->approve_by = null;
-                $employee           = User::find($request->employee);
-                if (!empty($employee) && count(json_decode($employee->user_reporting)) > 1) {
-                    Notification::store([
-                        'title'      => 'Follow up approve request',
-                        'content'    => auth()->user()->name . ' has created a follow up please approve as soon as possible',
-                        'link'       => route('followUp.approve'),
-                        'created_by' => auth()->user()->id,
-                        'user_id'    => [json_decode($employee->user_reporting)[1]],
-                    ]);
-                }
-            }
-
+            $follow->remark             = $request->remark; 
+            $follow->approve_by = auth()->user()->id; 
             $follow->created_by = auth()->id();
             $follow->created_at = now();
             $follow->status     = 0;
@@ -183,7 +166,8 @@ class FollowupController extends Controller {
     public function select2_customer(Request $request) {
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);
+        ]); 
+
         $my_all_employee = json_decode(Auth::user()->user_employee);
         $is_admin        = Auth::user()->hasPermission('admin');
         $results         = [
@@ -192,22 +176,27 @@ class FollowupController extends Controller {
 
         if ($is_admin) {
             $users = Customer::query()
-                ->where(function ($query) use ($request) {
-                    $term = $request->term;
-                    $query->where('customer_id', 'like', "%{$term}%")
-                        ->orWhere('name', 'like', "%{$term}%");
-                })
-                ->whereDoesntHave('salse')
-                ->select('id', 'name', 'customer_id')
-                ->limit(10)
-                ->get();
-
-            foreach ($users as $user) {
+            ->where(function ($query) use ($request) {
+                $term = $request->term;
+                $query->where('customer_id', 'like', "%{$term}%")
+                ->where('visitor_id', 'like', "%{$term}%")
+                    ->orWhereHas('user', function ($subQuery) use ($term) {
+                        $subQuery->where('name', 'like', "%{$term}%");
+                    });
+            })
+            ->with('user:id,name')  
+            ->select('id', 'user_id', 'visitor_id')  
+            ->limit(10)
+            ->get();
+        
+            $results = [];
+            foreach ($users as $customer) {
                 $results[] = [
-                    'id'   => $user->id,
-                    'text' => "{$user->name} [{$user->customer_id}]",
+                    'id'   => $customer->id,
+                    'text' => "{$customer->user->name} [{$customer->visitor_id}]",
                 ];
             }
+        
         } else {
             $users = Presentation::where('status', 0)->where('approve_by', '!=', null)
                 ->whereHas('customer', function ($q) use ($my_all_employee, $request) {
@@ -215,7 +204,10 @@ class FollowupController extends Controller {
                         ->where(function ($query) use ($request) {
                             $term = $request->term;
                             $query->where('customer_id', 'like', "%{$term}%")
-                                ->orWhere('name', 'like', "%{$term}%");
+                            ->where('visitor_id', 'like', "%{$term}%")
+                                ->orWhereHas('user', function ($subQuery) use ($term) {
+                                    $subQuery->where('name', 'like', "%{$term}%");
+                                });
                         });
                 })->get();
             foreach ($users as $user) {

@@ -14,16 +14,14 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0"> Lead List</h4>
-
+                            <h4 class="mb-sm-0"> Lead List</h4> 
                             <div class="page-title-right">
                                 <div class="btn-group flex-wrap mb-2">
-                                    <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                    {{-- <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
                                         <span><i class="fas fa-filter"></i> Filter</span>
-                                    </button>
+                                    </button> --}}
                                 </div>
-                            </div>
-
+                            </div> 
                         </div>
                     </div>
                 </div>

@@ -11,7 +11,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Customer extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [ 'customer_id', 'user_id','name', 'ref_id', 'service_id', 'find_media_id', 'type', 'company_dob', 'last_stpe', 'purchase_possibility', 'approve_by', 'status', 'created_by', 'updated_by', 'deleted_by', 'deleted_at', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'customer_id',
+        'visitor_id',
+        'user_id', 
+        'ref_id',
+        'service_id',
+        'find_media_id',
+        'type',
+        'remark',
+        'company_dob',
+        'last_stpe',
+        'purchase_possibility',
+        'approve_by',
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+     
+    
  
     public function prospecting(){
         return $this->hasOne(Prospecting::class,'customer_id');
@@ -41,7 +60,7 @@ class Customer extends Model {
     }
 
     public function project(){
-        return $this->belongsTo(Project::class,'project_id');
+        return $this->hasOne(Project::class,'customer_id');
     } 
     public function sub_project(){
         return $this->belongsTo(SubProject::class,'project_id');
@@ -57,15 +76,7 @@ class Customer extends Model {
 
     public function profession() {
         return $this->belongsTo(Profession::class, 'profession_id');
-    }
-
-    public function salse() {
-        return $this->hasOne(Salse::class, 'customer_id');
-    }
-
-    public function deposits() {
-        return $this->hasMany(Deposit::class, 'customer_id');
-    }
+    } 
 
     public function createdBy(){
         return $this->belongsTo(User::class,'created_by');

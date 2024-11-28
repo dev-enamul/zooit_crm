@@ -205,33 +205,29 @@ class RejectionController extends Controller
     public function select2_customer(Request $request) {
         $request->validate([
             'term' => ['nullable', 'string'],
-        ]);
-
-        $my_all_employee = json_decode(Auth::user()->user_employee);
-        if($my_all_employee==null){
-            $my_all_employee = [Auth::user()->id];
-        }
+        ]);  
+        
         $users = Customer::query()
-            ->where(function ($query) use ($request) {
-                $term = $request->term;
-                $query->where('customer_id', 'like', "%{$term}%")
-                    ->orWhere('name', 'like', "%{$term}%");
-            })
-            ->whereIn('ref_id', $my_all_employee)
-            ->select('id', 'name', 'customer_id')
-            ->limit(10)
-            ->get();
-
-        $results = [
-            ['id' => '', 'text' => 'Select Product'],
-        ];
-        foreach ($users as $user) {
+        ->where(function ($query) use ($request) {
+            $term = $request->term;
+            $query->where('customer_id', 'like', "%{$term}%")
+                ->orWhereHas('user', function ($subQuery) use ($term) {
+                    $subQuery->where('name', 'like', "%{$term}%");
+                });
+        })
+        ->with('user:id,name')  
+        ->select('id', 'user_id', 'customer_id')  
+        ->limit(10)
+        ->get();
+    
+        $results = [];
+        foreach ($users as $customer) {
             $results[] = [
-                'id'   => $user->id,
-                'text' => "{$user->name} ($user->customer_id)",
+                'id'   => $customer->id,
+                'text' => "{$customer->user->name} [{$customer->customer_id}]",
             ];
-
         }
+
         return response()->json([
             'results' => $results,
         ]);

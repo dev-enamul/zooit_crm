@@ -12,21 +12,14 @@
             
             @can('follow-up-manage')
                 <a class="dropdown-item" href="{{route('followup.edit',$followUp->id)}}">Edit</a>
-            @endcan 
-            
-            @can('follow-up-delete')
-                <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followUp.delete',$followUp->id) }}')">Delete</a>
-            @endcan
+            @endcan  
+
             @if ($followUp->statis==0)
                 <a class="dropdown-item" href="{{route('followup.create',['customer' => $followUp->customer_id])}}">Follow Up Again</a>
-            @endif
-
-
-            @if ($followUp->approve_by!=null && $followUp->status==0)
-                @can('negotiation')
-                <a class="dropdown-item" href="{{route('negotiation.create',['customer'=>$followUp->customer->id])}}">Negotiation</a>
-                @endcan
-            @endif
+            @endif   
+            <a class="dropdown-item" href="{{route('salse.create',['customer'=>$followUp->customer->id])}}">Salse</a>
+            <a class="dropdown-item" href="{{route('rejection.create',['customer'=>$followUp->customer->id])}}">Rejection</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('followUp.delete',$followUp->id) }}')">Delete</a>
         </div>
     </div>
 </td>

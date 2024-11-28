@@ -43,7 +43,7 @@
                                                 </option>
                                                 @isset($selected_data['customer'])
                                                     <option value="{{ $selected_data['customer']->id }}" selected>
-                                                        {{ $selected_data['customer']->name }} ({{ $selected_data['customer']->customer_id }})
+                                                        {{ $selected_data['customer']->user->name }} ({{ $selected_data['customer']->customer_id }})
                                                     </option>
                                                 @endisset
                                             </select>
@@ -73,7 +73,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="negotiation_amount" class="form-label"> Negotiation Amount <span class="text-danger">*</span></label>
+                                            <label for="negotiation_amount" class="form-label">Amount <span class="text-danger">*</span></label>
                                              <input type="number" placeholder="Negotiation Amount" class="form-control" name="negotiation_amount" id="negotiation_amount" value="{{isset($follow) ? $follow->negotiation_amount : old('negotiation_amount')}}" required>
                                         </div>
                                     </div>

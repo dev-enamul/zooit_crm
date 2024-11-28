@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_payment_installments', function (Blueprint $table) {
+        Schema::create('installment_plans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->index();  
             $table->foreignId('project_id')->index();  
@@ -22,7 +22,6 @@ return new class extends Migration
                   ->comment('0=Unpaid, 1=Paid');  
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_payment_installments');
+        Schema::dropIfExists('installment_plans');
     }
 };

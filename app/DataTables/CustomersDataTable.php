@@ -36,7 +36,7 @@ class CustomersDataTable extends DataTable {
                 if($data->user->userContact->type==2){
                     $name = $data->user->userContact->name." (". $data->user->name .") ";
                 }else{
-                    $name = $data->name;
+                    $name = $data->user->name;
                 }
                 return $name;
             }) 
@@ -123,7 +123,8 @@ class CustomersDataTable extends DataTable {
                 ->width(60)
                 ->addClass('text-center'),
             Column::make('serial')->title('S/L'),
-            Column::make('customer_id')->title('Provable CUS ID')->searchable(true),
+            Column::make('visitor_id')->title('Visitor ID')->searchable(true),
+            Column::make('customer_id')->title('Customer ID')->searchable(true),
             Column::make('name')->title('Name')->searchable(true),
             Column::make('user.phone')->title('Phone Number')->searchable(true),  
             Column::make('service')->title('Service'),  

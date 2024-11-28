@@ -104,7 +104,7 @@ class CustomerController extends Controller {
         $find_medias = FindMedia::where('status',1)->get();
         $designations = Designation::where('status',1)->get();
         $countries = Country::get();
-        $user = Customer::find($id);
+        $user = Customer::find($id); 
 
         return view('customer.customer_create', compact(
             'title',
@@ -134,10 +134,11 @@ class CustomerController extends Controller {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }  
         DB::beginTransaction(); 
-        try {  
+        try { 
             if(isset($request->id)  && $request->id != null){
                 $id = $request->id;
-                $user = User::find($id); 
+                $customer = Customer::find($id); 
+                $user = $customer->user;
             }  
 
             if(isset($request->phone) && $request->phone ==null){
@@ -154,25 +155,20 @@ class CustomerController extends Controller {
                     'name'           => $request->contact_person_name ?? $request->full_name,
                     'type'           => $request->company_type,
                     'designation_id' => $request->designation_id,
-                    'phone'          => get_phone($request->phone),
-                    'created_at'     => now(),
+                    'phone'          => get_phone($request->phone), 
                 ]);
 
                 $user->userAddress->update([ 
                     'address'  => $request->address,
-                ]);
+                ]);  
 
-                $user->customer->update([ 
-                    'name'          => $request->contact_person_name ?? $request->full_name,
-                    'ref_id'        => Auth::user()->id,
+                $customer->update([  
                     'service_id'    => $request->service_id,
                     'find_media_id' => $request->find_media_id,
                     'type'          => $request->company_type,
-                    'remark'        => $request->remark,
-                    'status'        => 0, 
-                    'created_by'    => auth()->user()->id,
-                ]); 
-                
+                    'remark'        => $request->remark, 
+                ]);
+
             }else{
                 $user = User::create([
                     'name'           => $request->full_name,
@@ -198,16 +194,15 @@ class CustomerController extends Controller {
                 ]);
          
                 Customer::create([
-                    'customer_id'   => User::generateNextCustomerId(),
-                    'user_id'       => $user->id,
-                    'name'          => $request->contact_person_name ?? $request->full_name,
+                    'visitor_id'   => User::generateNextVisitorId(),
+                    'user_id'       => $user->id, 
                     'ref_id'        => Auth::user()->id,
                     'service_id'    => $request->service_id,
                     'find_media_id' => $request->find_media_id,
                     'type'          => $request->company_type,
                     'remark'        => $request->remark,
                     'status'        => 0, 
-                    'created_by'    => auth()->user()->id,
+                    'created_by'    => auth()->user()->id, 
                 ]);
 
             }  
