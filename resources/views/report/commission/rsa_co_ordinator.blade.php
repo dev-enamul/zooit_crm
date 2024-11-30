@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-12"> 
                     <div class="text-center">
-                        <h4 class="mb-sm-0">Way Housing Pvt. Ltd</h4> 
+                        <h4 class="mb-sm-0">Zoom IT</h4> 
                         <p class="m-0">Area Wise Commission</p>
                         <p><strong>Period: </strong>1st, December-2023 to 30th, December-2023</p>
                     </div>

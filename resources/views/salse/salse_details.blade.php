@@ -41,7 +41,7 @@
                     <div class="card"> 
                         <div class="card-header text-center flex-column pb-0">
                             <img src="../assets//images/logo-dark.png" alt="" class="page_header_logo">
-                            <h3 class="mb-0">Way Housing Pvt. Ltd</h3>
+                            <h3 class="mb-0">Zoom IT</h3>
                             <p class="m-0">Project Note Sheet</p> 
                             <p class="m-0 fs-16 mt-1"><strong>Customer Details</strong></p>
                         </div>

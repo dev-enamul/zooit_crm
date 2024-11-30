@@ -235,7 +235,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header text-center flex-column">
-                <h3>Way Housing Pvt. Ltd</h3>
+                <h3>Zoom IT</h3>
                 <p class="m-0"><small>House 37, Level 02, Khan ABC Tradeplex, Dhanmondi 02, Dhaka- 1205</small></p>
                 <p class="m-0"><strong>Attendane Sheet (Project Visit Purpose)</strong></p>
             </div>
