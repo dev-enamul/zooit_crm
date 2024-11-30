@@ -36,6 +36,14 @@ class RejectionDataTable extends DataTable
         ->addColumn('date', function ($data) {
             return get_date($data->created_at);
         }) 
+        ->addColumn('name', function ($followUp) {
+            if($followUp->customer->user->userContact->type==2){
+                $name = $followUp->customer->user->userContact->name." (". $followUp->customer->user->name .") ";
+            }else{
+                $name = $followUp->customer->user->name;
+            }
+            return $name;
+        })
         ->addColumn('phone', function ($data) {
             return $data->customer->user->phone ?? "-";
         }) 
@@ -72,6 +80,7 @@ class RejectionDataTable extends DataTable
             $my_employee = [Auth::user()->id];
         }
         return $model->newQuery()
+        ->where('status',0)
         ->with('customer.user.userAddress', 'customer.reference', 'customer.profession')
         ->whereHas('customer', function ($q) use ($my_employee) {
             $q->whereIn('ref_id', $my_employee);
@@ -113,8 +122,8 @@ class RejectionDataTable extends DataTable
                 ->width(60)
                 ->addClass('text-center'),
             Column::make('serial')->title('S/N'),
-            Column::make('customer.customer_id')->title('Provable Cus ID'),
-            Column::make('customer.name')->title('Customer Name'),
+            Column::make('customer.visitor_id')->title('Visitor ID'),
+            Column::make('name')->title('Name'),
             Column::make('phone')->title('Phone'), 
             Column::make('reject_reason')->title('Reject Reason'), 
         ];

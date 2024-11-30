@@ -39,7 +39,7 @@
                                                 </option>
                                                 @isset($selected_data['customer'])
                                                     <option value="{{ $selected_data['customer']->id }}" selected>
-                                                        {{ $selected_data['customer']->name }} [{{ $selected_data['customer']->customer_id }}]
+                                                        {{ $selected_data['customer']->user->name }} [{{ $selected_data['customer']->visitor_id }}]
                                                     </option>
                                                 @endisset
                                             </select>

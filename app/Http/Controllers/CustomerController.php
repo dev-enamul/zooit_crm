@@ -17,10 +17,13 @@ use App\Models\Customer;
 use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\FindMedia;
+use App\Models\FollowUp;
 use App\Models\Lead;
+use App\Models\Meeting;
 use App\Models\Notification;
 use App\Models\Profession;
 use App\Models\Project;
+use App\Models\Rejection;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -318,7 +321,21 @@ class CustomerController extends Controller {
     public function customerDelete($id) {
         $id = decrypt($id);
         try {
+            $followup = FollowUp::where('customer_id',$id)->first();
+            if($followup){
+                $followup->delete();
+            } 
+            $rejection = Rejection::where('customer_id',$id)->first();
+            if($rejection){
+                $rejection->delete();
+            } 
+
+            $meeting = Meeting::where('customer_id',$id)->first();
+            if($meeting){
+                $meeting->delete();
+            }
             $data = Customer::find($id);
+            
             $data->delete();
             return response()->json(['success' => 'Customer Deleted'], 200);
         } catch (Exception $e) {

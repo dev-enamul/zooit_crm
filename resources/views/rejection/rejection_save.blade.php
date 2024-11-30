@@ -40,7 +40,7 @@
                                             <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">  Select a customer </option> 
                                                 @if (isset($selected_data['customer']))
-                                                    <option selected value="{{ $selected_data['customer']->id }}" > {{$selected_data['customer']->user->name}} [ {{$selected_data['customer']->customer_id}} ]</option>
+                                                    <option selected value="{{ $selected_data['customer']->id }}" > {{$selected_data['customer']->user->name}} [ {{$selected_data['customer']->visitor_id}} ]</option>
                                                 @endif 
                                             </select>
                                             <div class="invalid-feedback">
@@ -130,7 +130,7 @@
             placeholder: "Select Customer",
             allowClear: true,
             ajax: {
-                url: '{{ route('select2.rejection.customer') }}',
+                url: '{{ route('select2.followup.customer') }}',
                 dataType: 'json',
                 data: function (params) {
                     var query = {

@@ -39,8 +39,7 @@
                                         <th>S/N</th>
                                         <th>Profession Name</th> 
                                         <th>Designation Type</th>
-                                        <th>Total Employee</th>
-                                        <th>Commission</th> 
+                                        <th>Total Employee</th> 
                                     </tr>
                                 </thead>
                                 <tbody> 
@@ -69,8 +68,8 @@
                                         <td>
                                             <a href="{{route('freelancer.index',['designation'=>$data->id])}}" class="btn btn-primary btn-sm">{{$data->freelancers->count()}}</a>
                                         </td>  
-                                        @endif 
-                                        <th>{{@$data->commission->commission}}%</th> 
+                                        @endif   
+                                        
                                     </tr> 
                                     @endforeach 
                                 </tbody>

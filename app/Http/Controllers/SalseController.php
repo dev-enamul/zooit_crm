@@ -13,6 +13,7 @@ use App\Models\Notification;
 use App\Models\Project;
 use App\Models\ProjectProposal;
 use App\Models\ProjectUnit;
+use App\Models\Rejection;
 use App\Models\Salse;
 use App\Models\Unit;
 use App\Models\UnitCategory;
@@ -38,10 +39,12 @@ class SalseController extends Controller
 
     public function create(Request $request)
     {
-        $title              = 'Sales Entry';
-        
-
-        return view('salse.salse_save');
+        $title  = 'Sales Entry'; 
+        $selected_data = [];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = Customer::find($request->customer);
+        } 
+        return view('salse.salse_save',compact('selected_data'));
     }
 
     public function store(Request $request)
@@ -67,8 +70,7 @@ class SalseController extends Controller
         foreach($followups as $followup){
             $followup->status = 1;
             $followup->save();
-        } 
-        
+        }  
 
         $project = new Project();
         $project->customer_id = $customer->id;
@@ -79,7 +81,22 @@ class SalseController extends Controller
         $project->project_status = 0;
         $project->status = 1;
         $project->remark = $request->remark; 
-        $project->save(); 
+        $project->save();  
+
+         // update table data 
+         if($project){
+            $customer = Customer::find($request->customer);
+            $customer->status =1;
+            $customer->save(); 
+            $followups = FollowUp::where('customer_id', $customer->id)->get(); 
+            foreach($followups as $followup){
+                $followup->status=1;
+                $followup->save();
+            }   
+            $rejection = Rejection::where('customer_id', $customer->id)->first();
+            $rejection->status = 1;
+            $rejection->save(); 
+        }
 
         return redirect()->route('salse.index')->with('success', 'Project created successfully.');
     }

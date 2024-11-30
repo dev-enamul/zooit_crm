@@ -138,8 +138,8 @@ class User extends Authenticatable
     }
 
     public static function generateNextVisitorId(){
-        $largest_user_id = Customer::where('customer_id', 'like', 'VIS-%') 
-        ->pluck('customer_id')
+        $largest_user_id = Customer::where('visitor_id', 'like', 'VIS-%') 
+        ->pluck('visitor_id')
                 ->map(function ($id) {
                         return preg_replace("/[^0-9]/", "", $id);
                 }) 

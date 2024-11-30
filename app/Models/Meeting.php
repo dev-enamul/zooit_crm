@@ -8,7 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Meeting extends Model
 {
     use HasFactory; 
-    protected $fillable = ['title', 'date_time', 'agenda', 'status', 'created_by'];
+    protected $fillable = [
+        'customer_id',
+        'title',
+        'date_time',
+        'agenda',
+        'status',
+        'created_by',
+    ];  
+    
+    public function customer(){
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 
     public function createdBy()
     {

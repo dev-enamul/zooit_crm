@@ -75,16 +75,9 @@ class CustomersDataTable extends DataTable {
 
         if (!is_array($my_employee)) {
             $my_employee = [Auth::user()->id]; 
-        } 
+        }   
 
-        if(isset($request->status)){
-            if($request->status != 2){
-                $model =  $model->where('status', $request->status);
-            } 
-        }else{
-            $model = $model->where('status', 0);
-        }
-
+        $model = $model->where('status', 0); 
         return $model->newQuery()
             ->whereIn('ref_id', $my_employee) 
             ->with(['reference', 'user', 'profession', 'user.userAddress.village', 'user.userAddress.union', 'user.userAddress.upazila']);
@@ -124,7 +117,7 @@ class CustomersDataTable extends DataTable {
                 ->addClass('text-center'),
             Column::make('serial')->title('S/L'),
             Column::make('visitor_id')->title('Visitor ID')->searchable(true),
-            Column::make('customer_id')->title('Customer ID')->searchable(true),
+            // Column::make('customer_id')->title('Customer ID')->searchable(true),
             Column::make('name')->title('Name')->searchable(true),
             Column::make('user.phone')->title('Phone Number')->searchable(true),  
             Column::make('service')->title('Service'),  

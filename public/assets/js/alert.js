@@ -74,7 +74,7 @@ function approveItem(url) {
 
     SwalMixinButtons.fire({
         title: "Are you sure?",
-        text: "This user completed all training?",
+        text: "This user completed?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

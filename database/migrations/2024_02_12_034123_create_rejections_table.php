@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('competitor_information')->nullable(); // If reason is Preference for Competitor  
 
             $table->foreignId('approve_by')->nullable()->constrained('users'); 
-            $table->tinyInteger('status')->default(1)->comment('1= Active, 0= Inactive');
+            $table->tinyInteger('status')->default(1)->comment('0= Active, 1= Inactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

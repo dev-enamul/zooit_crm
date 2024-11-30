@@ -2,21 +2,21 @@
 /* rgba(27,65,99,255) */
 /* #1b4163 */
 
-*{
-    --primary: rgb(132 204 22); 
-    --primary-hover:rgb(147 209 41);
-    --secondary: rgba(27 65 99);
-    --secondary-hover:rgba(27 65 99 .8); 
-    --bs-list-group-active-border-color: rgba(27 65 99);
-    --bs-list-group-active-bg: rgba(27 65 99); 
+* {
+  --primary: #92278F;  
+  --primary-hover: rgba(146, 39, 143, 0.8);  
+  --secondary: #72BF44;  
+  --secondary-hover: #86D054;  
+  --bs-list-group-active-border-color: #92278F;  
+  --bs-list-group-active-bg: #92278F; 
 }
 
 :root {
-    --bs-primary: rgb(132, 204, 22);
-    --bs-success: rgba(27, 65, 99, 1);
-    --bs-form-valid-border-color:var(--bs-primary); 
- 
-  }
+  --bs-primary: #72BF44; /* Vibrant green */
+  --bs-success: #92278F; /* Deep purple */
+  --bs-form-valid-border-color: var(--bs-primary); /* Vibrant green for valid form border */
+}
+
   
 .row_success td{
     background-color: rgba(65,195,169,.15);

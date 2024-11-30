@@ -11,6 +11,7 @@ use App\Models\Notification;
 use App\Models\Presentation;
 use App\Models\Project;
 use App\Models\ProjectUnit;
+use App\Models\Rejection;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\VisitAnalysis;
@@ -100,13 +101,17 @@ class FollowupController extends Controller {
             $follow->created_by = auth()->id();
             $follow->created_at = now();
             $follow->status     = 0;
-            $follow->save(); 
-            if ($follow) {
-                Presentation::where('customer_id', $request->customer)->update(['status' => 1]);  
+            $follow->save();   
+            if ($follow) { 
                 $customer = Customer::find($request->customer);
-                $customer->purchase_possibility = $request->purchase_possibility;
-                $customer->last_stpe = 6; 
-                $customer->save();
+                $customer->status =1;
+                $customer->save(); 
+                $rejection = Rejection::where('customer_id',$request->customer)->first();
+                if($rejection){
+                    $rejection->status = 1;
+                    $rejection->save(); 
+                }
+                
             } 
             return redirect()->route('followup.index')->with('success', 'Follow Up create successfully');
         }
@@ -184,6 +189,7 @@ class FollowupController extends Controller {
                         $subQuery->where('name', 'like', "%{$term}%");
                     });
             })
+            ->where('customer_id',null)
             ->with('user:id,name')  
             ->select('id', 'user_id', 'visitor_id')  
             ->limit(10)

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -39,6 +40,10 @@ class FollowUpDataTable extends DataTable {
                 return get_date($followUp->next_followup_date);
             }) 
 
+            ->addColumn('purchase_possibility', function ($followUp) {
+                return $followUp->purchase_possibility."%";
+            })  
+
             ->addColumn('name', function ($followUp) {
                 if($followUp->customer->user->userContact->type==2){
                     $name = $followUp->customer->user->userContact->name." (". $followUp->customer->user->name .") ";
@@ -60,47 +65,55 @@ class FollowUpDataTable extends DataTable {
      * @param \App\Models\FollowUp $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(FollowUp $model, Request $request): QueryBuilder {
-        if (isset($request->employee) && !empty($request->employee)) {
-            $user_id = (int) $request->employee;
-        } else {
-            $user_id = Auth::user()->id;
-        }
-        if (isset($request->date)) {
-            $date       = explode(' - ', $request->date);
-            $start_date = date('Y-m-d', strtotime($date[0]));
-            $end_date   = date('Y-m-d', strtotime($date[1]));
-        } else {
-            $start_date = date('Y-m-01');
-            $end_date   = date('Y-m-t');
-        }
-        $user          = User::find($user_id);
-        $user_employee = json_decode($user->user_employee);
-        if($user_employee==null){
-            $user_employee = [Auth::user()->id];
+    
+     public function query(FollowUp $model, Request $request): QueryBuilder
+        {
+            if (isset($request->employee) && !empty($request->employee)) {
+                $user_id = (int) $request->employee;
+            } else {
+                $user_id = Auth::user()->id;
+            }
+
+            if (isset($request->date)) {
+                $date       = explode(' - ', $request->date);
+                $start_date = date('Y-m-d', strtotime($date[0]));
+                $end_date   = date('Y-m-d', strtotime($date[1]));
+            } else {
+                $start_date = date('Y-m-01');
+                $end_date   = date('Y-m-t');
+            }
+
+            $user          = User::find($user_id);
+            $user_employee = json_decode($user->user_employee);
+            if ($user_employee == null) {
+                $user_employee = [Auth::user()->id];
+            } 
+            $datas = $model
+                ->select('follow_ups.*')
+                ->where('status',0)
+                ->where(function ($q) {
+                    $q->where('approve_by', '!=', null)
+                        ->orWhere('employee_id', Auth::user()->id)
+                        ->orWhere('created_by', Auth::user()->id);
+                })
+                ->whereHas('customer', function ($q) use ($user_employee) {
+                    $q->whereIn('ref_id', $user_employee);
+                })
+                ->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
+                ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession'])
+                ->join(
+                    DB::raw('(SELECT MAX(id) as latest_id FROM follow_ups GROUP BY customer_id) latest'),
+                    'follow_ups.id',
+                    '=',
+                    DB::raw('latest.latest_id')
+                )
+                ->orderBy('next_followup_date', 'asc')  
+                ->newQuery();
+
+            $datas->user_reporting = $user->user_reporting;
+            return $datas;
         }
 
-        if(isset($request->status) && $request->status != 2){
-            $model->where('status', $request->status);
-        }    
-
-        $datas = $model->where(function ($q) {
-            $q->where('approve_by', '!=', null)
-                ->orWhere('employee_id', Auth::user()->id)
-                ->orWhere('created_by', Auth::user()->id);
-        })
-            ->whereHas('customer', function ($q) use ($user_employee) {
-                $q->whereIn('ref_id', $user_employee);
-            })
-            ->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']) 
-            ->with('customer.reference')
-            ->with('customer.user.userAddress')
-            ->with('customer.profession')
-            ->newQuery();
-
-        $datas->user_reporting = $user->user_reporting;
-        return $datas;
-    }
 
     /**
      * Optional method if you want to use html builder.
@@ -135,11 +148,12 @@ class FollowUpDataTable extends DataTable {
                 ->addClass('text-center')
                 ->sortable(false),
             Column::make('serial')->title('S/L')->sortable(false),
-            Column::make('customer.customer_id')->title('Provable Cus ID')->sortable(false),
+            Column::make('customer.visitor_id')->title('Visitor')->sortable(false),
             Column::make('name')->title('Name')->sortable(false),
-            Column::make('customer.user.phone')->title('Mobile Number')->sortable(false), 
-            Column::make('created_by')->title('Employee')->sortable(false), 
+            Column::make('customer.user.phone')->title('Phone')->sortable(false), 
+            // Column::make('created_by')->title('Employee')->sortable(false), 
             Column::make('followup_date')->title('Next Followup')->sortable(false), 
+            Column::make('purchase_possibility')->title('Possibility')->sortable(false), 
         ];
     }
 

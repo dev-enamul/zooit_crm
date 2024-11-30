@@ -70,8 +70,10 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyTypeController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
+use App\Http\Controllers\LeadSourceController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\SalseApproveController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\SubProductController;
 use App\Http\Controllers\UpazilaController;
@@ -268,7 +270,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('get-negotiation-analysis-data', [SalseController::class, 'customer_data'])->name('get.negotiation.analysis.data');
         Route::get('salse-details/{id}', [SalseController::class, 'salse_details'])->name('salse.details');
         Route::get('get-salse-info', [SalseController::class, 'get_salse_info'])->name('get.salse.info');
-        Route::get('existing-salse', [ExistingSalseController::class, 'create'])->name('existing.salse');
+        Route::get('existing-salse', [ExistingSalseController::class, 'create'])->name('existing.salse'); 
 
         // Deposit
         Route::resource('deposit', DepositController::class);
@@ -403,7 +405,11 @@ Route::group(['middleware' => 'auth'], function () {
  
         // Meeting  
         Route::resource('meeting', MeetingController::class);
-        Route::get('attend-status/{id}', [MeetingController::class, 'attend_status'])->name('meeting.attendance.status');
+        Route::get('meeting-complete/{id}', [MeetingController::class, 'complete'])->name('meeting.complete');
+
+        // Service 
+        Route::resource('service', ServiceController::class);
+        Route::resource('lead-source', LeadSourceController::class);
 
         // Header Route 
         Route::get('notification', [NotificationController::class, 'index'])->name('notification.index');

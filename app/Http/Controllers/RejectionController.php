@@ -97,37 +97,20 @@ class RejectionController extends Controller
             $rejection->remark = $request->remark;
             $rejection->created_by = auth()->id();
             $rejection->created_at = now();
-            $rejection->status = 1;
+            $rejection->status = 0;
+            $rejection->approve_by = Auth::user()->id;
             $rejection->save();  
-                
               
             // update table data 
             if($rejection){
-                if(Customer::where('id',$request->customer)->where('status',0)->count() > 0){
-                    $datas = Customer::where('id',$request->customer)->where('status',0)->get(); 
-                    $this->rejectData($datas);
-                }elseif(Prospecting::where('customer_id',$request->customer)->where('status',0)->count() > 0){
-                    $datas = Prospecting::where('customer_id',$request->customer)->where('status',0)->get(); 
-                    $this->rejectData($datas); 
-                }elseif(ColdCalling::where('customer_id',$request->customer)->where('status',0)->count() > 0){
-                    $datas = ColdCalling::where('customer_id',$request->customer)->where('status',0)->get(); 
-                    $this->rejectData($datas);   
-                }elseif(Lead::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                    $datas = Lead::where('customer_id',$request->customer)->where('status',0)->get(); 
-                    $this->rejectData($datas);    
-                }elseif(Presentation::where('customer_id',$request->customer)->where('status',0)->count() > 0){
-                    $datas = Presentation::where('customer_id',$request->customer)->where('status',0)->get(); 
-                    $this->rejectData($datas);  
-                }elseif(FollowUp::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                    $datas = FollowUp::where('customer_id',$request->customer)->where('status',0)->get(); 
-                    $this->rejectData($datas);  
-                }elseif(Negotiation::where('customer_id',$request->customer)->where('status',0)->count() > 0){ 
-                    $datas = Negotiation::where('customer_id',$request->customer)->where('status',0)->get(); 
-                    $this->rejectData($datas); 
-                } 
-                $customer = Customer::find($request->customer); 
-                $customer->last_stpe = 8; 
-                $customer->save();
+                $customer = Customer::find($request->customer);
+                $customer->status =1;
+                $customer->save(); 
+                $followups = FollowUp::where('customer_id', $customer->id)->get(); 
+                foreach($followups as $followup){
+                    $followup->status  =1;
+                    $followup->save();
+                }   
             }
 
             return redirect()->route('rejection.index')->with('success','Rejection create successfully');

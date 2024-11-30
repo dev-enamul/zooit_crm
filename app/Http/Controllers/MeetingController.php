@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\MeetingDataTable;
+use App\Models\Customer;
 use App\Models\Meeting;
 use App\Models\MeetingAttendance;
 use App\Models\Notification;
@@ -17,46 +19,37 @@ class MeetingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(MeetingDataTable $dataTable, Request $request)
     {
-        if(isset($request->month)){
-            $month =  Carbon::parse($request->month)->format('m');
-            $year =  Carbon::parse($request->month)->format('Y'); 
-            $date = Carbon::parse($request->month)->format('Y-m');
-        }else{
-            $month =  Carbon::now()->format('m');
-            $year =  Carbon::now()->format('Y');
-            $date = Carbon::now()->format('Y-m');
-        }
-
-        $reporting_user = json_decode(auth()->user()->user_reporting);
-        $reporting_employee = json_decode(auth()->user()->user_employee); 
-        $all_reporting = array_merge($reporting_user,$reporting_employee);
-        $datas = Meeting::whereMonth('date_time',$month)
-            ->whereYear('date_time',$year)
-            ->whereIn('created_by',$all_reporting)
-            ->get();
-
-        return view('meeting.meeting_list',compact('datas','date'));
+        $title      = 'Meeting Schedule';
+        $date       = $request->date ?? null;
+        $status     = $request->status ?? 0;
+        $start_date = Carbon::parse($date ? explode(' - ', $date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d');
+        if (isset($request->employee) && $request->employee != null) {
+            $employee = User::find($request->employee);
+        } else {
+            $employee = User::find(auth()->user()->id);
+        } 
+ 
+        return $dataTable->render('meeting.meeting_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+ 
+    public function create(Request $request)
     {
-        return view('meeting.meeting_create');
-    }
+        $selected_data = [];
+        if ($request->has('customer')) {
+            $selected_data['customer'] = Customer::find($request->customer);
+        } 
+        $title = "Meeting Schedule Create";
+        return view('meeting.meeting_create',compact('selected_data','title'));
+    }  
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     { 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [ 
             'title' => 'required|string|max:255',
-            'employee' => 'required|array',
-            'employee.*' => 'exists:users,id',
+            'customer_id' => 'required', 
             'date' => 'required|date',
             'time' => 'required|date_format:H:i',
             'agenda' => 'nullable|string',
@@ -66,30 +59,25 @@ class MeetingController extends Controller
             return redirect()->back()->with('error', $validator->errors()->first());
         }
 
-        $meeting = new Meeting();
+        if(isset($request->meeting_id) && $request->meeting_id!=null){
+            $meeting = Meeting::find($request->meeting_id);
+        }else{
+            $meeting = new Meeting();
+        } 
+        
         $meeting->title = $request->title;
+        $meeting->customer_id = $request->customer_id;
         $meeting->date_time = $request->date . ' ' . $request->time;
         $meeting->agenda = $request->agenda;
         $meeting->created_by = auth()->id();
-        $meeting->save();
+        $meeting->save(); 
 
-        if(isset($request->employee) && count($request->employee) > 0) {
-           foreach($request->employee as $employee) {
-               $attendance = new MeetingAttendance();
-               $attendance->meeting_id = $meeting->id;
-               $attendance->user_id = $employee;
-               $attendance->save();
-           }  
-        }
-
-        Notification::store([
-            'title' => 'Meeting Schedule',
-            'content' => Auth::user()->name.' You have been invited to a meeting',
-            'user_id' => $request->employee,
-            'link'  => route('meeting.show', encrypt($meeting->id)),
-          ]);
-
-          return redirect()->route('meeting.index')->with('success', 'Meeting scheduled successfully');
+        if(isset($request->meeting_id) && $request->meeting_id!=null){ 
+            return redirect()->route('meeting.index')->with('success', 'Meeting scheduled updated');
+        }else{
+            return redirect()->route('meeting.index')->with('success', 'Meeting scheduled successfully');
+        } 
+       
             
     }
 
@@ -120,9 +108,11 @@ class MeetingController extends Controller
      */
     public function edit(string $id)
     {
+        $title = "Meeting Schedule Edit";
         $id = decrypt($id);
-        $data = Meeting::with('attendance')->find($id);
-        return view('meeting.meeting_edit',compact('data'));
+        $meeting = Meeting::with('attendance')->find($id);
+        $selected_data['customer'] = Customer::find($meeting->customer_id);
+        return view('meeting.meeting_create',compact('meeting','title','selected_data'));
     }
 
     /**
@@ -178,15 +168,12 @@ class MeetingController extends Controller
         }
     } 
 
-    public function attend_status($id){
-        try{
-            $id = decrypt($id);
-            $attendance = MeetingAttendance::find($id);
-            $attendance->is_present = !$attendance->is_present;
-            $attendance->save();
-            return redirect()->back()->with('success', 'Attendance updated successfully');
-        }catch(Exception $e){
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+    public function complete($id){  
+        $meeting = Meeting::find($id); 
+        $meeting->status = 1;
+        $meeting->save();
+        return response()->json(['success' => 'Meeting completed successfully']);
     }
+
+    
 }
