@@ -86,16 +86,22 @@ class SalseController extends Controller
          // update table data 
          if($project){
             $customer = Customer::find($request->customer);
-            $customer->status =1;
-            $customer->save(); 
+            if($customer){
+                $customer->status =1;
+                $customer->save(); 
+            }
+            
             $followups = FollowUp::where('customer_id', $customer->id)->get(); 
             foreach($followups as $followup){
                 $followup->status=1;
                 $followup->save();
             }   
+
             $rejection = Rejection::where('customer_id', $customer->id)->first();
-            $rejection->status = 1;
-            $rejection->save(); 
+            if($rejection){
+                $rejection->status = 1;
+                $rejection->save(); 
+            } 
         }
 
         return redirect()->route('salse.index')->with('success', 'Project created successfully.');

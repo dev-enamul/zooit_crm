@@ -68,8 +68,11 @@ use App\Events\UserCreatedEvent;
 use App\Http\Controllers\AdminNoticeController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyTypeController;
+use App\Http\Controllers\DailyJobController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
+use App\Http\Controllers\InstallmentPlanController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadSourceController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\SalseApproveController;
@@ -99,6 +102,7 @@ use Illuminate\Http\Request;
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');  
 Route::group(['middleware' => 'auth'], function () { 
+        Route::get('daily-job',DailyJobController::class);
         Route::get('project-proposal',[ProposalController::class,'index']);
         Route::get('whatsapp', [WhatsAppController::class, 'index']);
         Route::post('whatsapp', [WhatsAppController::class, 'store'])->name('whatsapp.store');
@@ -270,7 +274,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('get-negotiation-analysis-data', [SalseController::class, 'customer_data'])->name('get.negotiation.analysis.data');
         Route::get('salse-details/{id}', [SalseController::class, 'salse_details'])->name('salse.details');
         Route::get('get-salse-info', [SalseController::class, 'get_salse_info'])->name('get.salse.info');
-        Route::get('existing-salse', [ExistingSalseController::class, 'create'])->name('existing.salse'); 
+        Route::get('existing-salse', [ExistingSalseController::class, 'create'])->name('existing.salse');  
+
+        // Payment 
+        Route::get('install-payment/{id}',[InstallmentPlanController::class,'create'])->name('install.payment');
+        Route::post('install-payment-store',[InstallmentPlanController::class,'store'])->name('install.payment.store');
+        Route::get('install-payment-edit/{id}',[InstallmentPlanController::class,'edit'])->name('install.payment.edit');
+
+        // Invoice 
+        Route::resource('invoice',InvoiceController::class);
 
         // Deposit
         Route::resource('deposit', DepositController::class);

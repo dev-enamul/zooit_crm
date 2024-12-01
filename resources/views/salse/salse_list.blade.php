@@ -53,7 +53,9 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-animated">
                                                         <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
-                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a>
+                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a> 
+                                                        <a class="dropdown-item" href="{{route('install.payment',encrypt($data->id))}}">Install Payment</a>
+                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Service Payment</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -90,7 +92,7 @@
     <div class="offcanvas-body">
         <form action="" method="get">
             <div class="row">
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <select class="select2" id="status" name="status">
@@ -98,7 +100,7 @@
                             <option value = "0" >Present</option>
                         </select>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-md-12">
                     <div class="mb-3">
