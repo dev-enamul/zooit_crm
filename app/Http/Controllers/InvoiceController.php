@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\InvoiceDataTable;
+use App\Models\Invoice;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
@@ -49,7 +51,10 @@ class InvoiceController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $id = decrypt($id);
+        $invoice = Invoice::find($id);
+        return view('invoice.invoice_details',compact('invoice'));
+        
     }
 
     /**
@@ -57,22 +62,54 @@ class InvoiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $id = decrypt($id);
+        $invoice = Invoice::find($id);
+        return view('invoice.invoice_edit',compact('invoice'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
-    }
+    { 
+        $validator = Validator::make($request->all(), [
+            'invoice_date' => 'required|date',
+            'due_date' => 'required|date',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string', 
+            'tax_amount' => 'required|numeric|min:0',
+            'discount_amount' => 'required|numeric|min:0',
+        ]); 
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
+        }  
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
+        $invoice = Invoice::findOrFail($id); 
+        $invoice->update([
+            'invoice_date' => $request->invoice_date,
+            'due_date' => $request->due_date,
+            'title' => $request->title,
+            'description' => $request->description, 
+            'tax_amount' => $request->tax_amount,
+            'discount_amount' => $request->discount_amount,
+            'total_amount' => $invoice->amount + ($request->tax_amount - $request->discount_amount),
+            'due_amount' => $invoice->amount + ($request->tax_amount - $request->discount_amount),  
+        ]);
+    
+        return redirect()->route('invoice.show', encrypt($invoice->id))
+                         ->with('success', 'Invoice updated successfully!');
+    }  
+
     public function destroy(string $id)
     {
-        //
+        
+    } 
+
+
+    public function share($id){
+        $id = decrypt($id);
+        $invoice = Invoice::find($id);
+        return view('invoice.share_invoice',compact('invoice'));
     }
 }

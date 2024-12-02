@@ -174,9 +174,7 @@
                         </div> 
                     </div>
                 </form>
-            </div> 
-
-            <!-- <div class="modal-footer"><button class="btn btn-primary">Submit</button> <button class="btn btn-outline-danger">Reset</button></div> -->
+            </div>  
         </div>
     </div>
 </div>

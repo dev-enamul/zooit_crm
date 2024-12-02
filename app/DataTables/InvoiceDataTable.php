@@ -53,9 +53,11 @@ class InvoiceDataTable extends DataTable
             }) 
             ->addColumn('status', function ($data) { 
                 if ($data->status == 0) {
-                    return '<span class="badge badge-warning">Unpaid</span>';
-                } else {
+                    return '<span class="badge badge-warning">Unpaid</span>'; 
+                } elseif($data->status == 1) {
                     return '<span class="badge badge-success">Paid</span>';
+                }else{
+                    return '<span class="badge badge-info">Partial</span>';
                 }
             })->rawColumns(['status','action']) 
             ->setRowId('id');

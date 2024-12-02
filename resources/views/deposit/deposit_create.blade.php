@@ -8,12 +8,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Deposit Entry</h4>
-
+                        <h4 class="mb-sm-0">Invoice Payment</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Deposit Entry </li>
+                                <li class="breadcrumb-item active">Invoice Payment </li>
                             </ol>
                         </div>
 
@@ -27,83 +26,35 @@
                     <div class="card"> 
                         <div class="card-body">
                             <form class="needs-validation" method="post" action="{{route('deposit.store')}}" novalidate>
-                                @csrf
+                                @csrf  
                                 <div class="row"> 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="deposit_category_id" class="form-label">Deposit Category <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" name="deposit_category_id" id="deposit_category_id" required>
-                                                @foreach($deposit_categories as $data)
-                                                    <option {{$data->id==1?"selected":""}} value="{{$data->id}}"> {{$data->name}} </option>
-                                                @endforeach 
+                                            <label for="invoice_id" class="form-label">Invoice <span class="text-danger">*</span></label>
+                                            <select class="form-select select2" search name="invoice_id" id="invoice_id" required @if ($invoice) disabled @endif>
+                                                <option value="{{@$invoice->id}}"> INVOICE# {{@$invoice->id}} </option>
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div> 
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" search name="customer_id" id="customer_id" required>
-                                             
-                                            </select>    
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
                                     </div>  
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employee_id" class="form-label">Employee <span class="text-danger">*</span></label>
-                                            <select class="select2" search name="employee_id" id="employee_id" required>
-                                                <option data-display="Select a employee *" value="">
-                                                    Select a employee
-                                                </option>
-                                                @isset($employees)
-                                                @foreach ($employees as $employee)
-                                                    <option value="{{ $employee->id }}" {{ (old('employee_id') == $employee->id) || (auth()->id() == $employee->id) ? 'selected' : '' }}>
-                                                        {{ $employee->name }} ({{ $employee->user_id}})
-                                                    </option>
-                                                @endforeach
-                                                @endisset
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div> 
                 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Amount <span class="text-danger">*</span></label>
                                             <input type="number" name="amount" id="amount" class="form-control" min="1" placeholder="0" required> 
                                         </div>
-                                    </div>   
+                                    </div>    
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="date" class="form-label">Deposit Date <span class="text-danger">*</span></label>
                                             <input type="date" name="date" class="form-control" id="date" required> 
                                         </div>
                                     </div> 
-                                </div>
-                                <div class="row" id="down_payment_due_section">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="down_payment_due" class="form-label">Down Payment Due</label>
-                                            <input type="number" name="down_payment_due" id="down_payment_due" class="form-control" min="0" placeholder="0" readonly> 
-                                        </div>
-                                    </div>    
+                                </div>  
 
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="rest_down_payment_date" class="form-label">Due Payment Date </label>
-                                            <input type="date" name="rest_down_payment_date" class="form-control" id="rest_down_payment_date"> 
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="row"> 
                                     <div class="col-md-6">
                                         <div class="mb-3">

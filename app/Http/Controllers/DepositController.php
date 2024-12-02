@@ -9,6 +9,7 @@ use App\Models\Deposit;
 use App\Models\DepositCategory;
 use App\Models\DepositCommission;
 use App\Models\Designation;
+use App\Models\Invoice;
 use App\Models\Salse;
 use App\Models\User;
 use Carbon\Carbon;
@@ -19,10 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class DepositController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
+{ 
     public function index(Request $request)
     {       
         $designations = Designation::where('status',1)->get();
@@ -41,13 +39,17 @@ class DepositController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    { 
-        $customers = Customer::where('status',1)->get();
-        $deposit_categories =  DepositCategory::where('status',1)->get();
-        $banks = Bank::where('status',1)->get();
-        $employees = User::where('status',1)->select('id','user_id','name')->where('user_type',1)->get();
-        return view('deposit.deposit_create',compact('deposit_categories','customers','banks','employees'));
+    public function create(Request $request)
+    {  
+        if(isset($request->invoice_id)){
+            $invoice_id = decrypt($request->invoice_id); 
+            $invoice = Invoice::find($invoice_id);  
+        }else{
+            $invoice = null;
+        }
+        
+        $banks = Bank::where('status',1)->get(); 
+        return view('deposit.deposit_create',compact('invoice','banks'));
     }
 
     /**

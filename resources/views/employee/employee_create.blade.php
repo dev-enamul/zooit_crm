@@ -161,7 +161,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="phone1" class="form-label">Mobile Number 1 <span class="text-danger">*</span></label>
+                                            <label for="phone1" class="form-label">Office Phone <span class="text-danger">*</span></label>
                                             <input type="text" name="phone1" class="form-control" id="phone1" maxlength="15" placeholder="Phone 1 Number" value="{{ old('phone1') }}" required>
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -171,7 +171,7 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="phone2" class="form-label">Mobile Number 2 </label>
+                                            <label for="phone2" class="form-label">Personal Phone </label>
                                             <input type="text" name="phone2" class="form-control" maxlength="15" id="phone2" placeholder="Phone 2 Number" value="{{ old('phone2') }}">
                                         </div>
                                     </div>
@@ -413,27 +413,10 @@
                                     </div>
 
                                     <h6 class="text-primary"> <i class="mdi mdi-check-all"></i> Official Information</h6>
-                                    <hr>
+                                    <hr> 
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="designations" class="form-label">Designations <span class="text-danger">*</span></label>
-                                        <select class="form-select select2" search multiple name="designations[]" id="designations" required>
-                                            <option value=""> Select a Designation</option>
-                                            @isset($designations)
-                                                @foreach ($designations as $designation)
-                                                    <option value="{{ $designation->id }}" {{ in_array($designation->id, (array) old('designations')) ? 'selected' : '' }}>
-                                                        {{ $designation->title }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            This field is required.
-                                        </div> 
-                                    </div> 
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="designation" class="form-label">Commission Designation <span class="text-danger">*</span></label>
+                                        <label for="designation" class="form-label">Designation <span class="text-danger">*</span></label>
                                         <select class="form-select select2" search name="designation" id="designation" required>
                                             <option value=""> Select a Designation</option>
                                             @isset($designations)
@@ -464,56 +447,7 @@
                                         <div class="invalid-feedback">
                                             This field is required.
                                         </div> 
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="serial" class="form-label">Serial <span class="text-danger">*</span></label>
-                                            <input type="number" name="serial" id="serial" class="form-control" step="any" placeholder="Enter Serial" value="{{old('serial')}}" required> 
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="zone" class="form-label">Zone</label>
-                                        <select class="form-select select2" search name="zone" id="zone">
-                                            <option data-display="Select a Zone" value=""> Select a Zone</option>
-                                            @isset($zones)
-                                                @foreach ($zones as $zone)
-                                                    <option  value="{{ $zone->id }}" {{ old('zone') == $zone->id ? 'selected' : '' }}>
-                                                        {{ $zone->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select> 
-                                        @if ($errors->has('zone'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('zone') }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="area" class="form-label">Area</label>
-                                        <select class="form-select select2" search name="area" id="area">
-                                            <option data-display="Select a Area *" value="">
-                                                Select a Area
-                                            </option>
-                                            @isset($areas)
-                                                @foreach ($areas as $area)
-                                                    <option value="{{ $area->id }}" {{ old('area') == $area->id ? 'selected' : '' }}>
-                                                        {{ $area->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select> 
-                                        
-                                        @if ($errors->has('area'))
-                                            <span class="text-danger" role="alert">
-                                                {{ $errors->first('area') }}
-                                            </span>
-                                        @endif
-                                    </div>
+                                    </div>   
 
                                 </div>
                                   

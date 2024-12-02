@@ -29,48 +29,48 @@
                     <div class="card">
                         <div class="card-body">
                            <div class="table-box" style="overflow-x: scroll;">
-                            <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>  
-                                        <th>Serial</th> 
-                                        <th>CUS ID</th>
-                                        <th>Name</th>
-                                        <th>Phone</th>
-                                        <th>Service</th>
-                                        <th>Price</th>
-                                        <th>Paid</th>
-                                        <th>Submit Date</th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($datas as $key => $data)
+                                <table id="datatable" class="table table-hover table-bordered table-striped dt-responsive nowrap fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
                                         <tr>
-                                            <td class="text-center" data-bs-toggle="tooltip" title="Action">
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"> 
-                                                        <img class="rounded avatar-2xs p-0" src="{{@$data->user->image()}}">
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-animated">
-                                                        <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
-                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a> 
-                                                        <a class="dropdown-item" href="{{route('install.payment',encrypt($data->id))}}">Install Payment</a>
-                                                        <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Service Payment</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{$key+1}}</td> 
-                                            <td>{{@$data->customer_id}}</td>
-                                            <td>{{@$data->user->name}}</td>
-                                            <td>{{@$data->user->phone}}</td>
-                                            <td>{{@$data->service->service}}</td>
-                                            <td>{{get_price(@$data->project->price)}}</td>
-                                            <td>{{get_price(@$data->project->paid)}}</td>
-                                            <td>{{get_date(@$data->project->submit_date)}}</td> 
+                                            <th>Action</th>  
+                                            <th>Serial</th> 
+                                            <th>CUS ID</th>
+                                            <th>Name</th>
+                                            <th>Phone</th>
+                                            <th>Service</th>
+                                            <th>Price</th>
+                                            <th>Paid</th>
+                                            <th>Submit Date</th> 
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($datas as $key => $data)
+                                            <tr>
+                                                <td class="text-center" data-bs-toggle="tooltip" title="Action">
+                                                    <div class="dropdown">
+                                                        <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"> 
+                                                            <img class="rounded avatar-2xs p-0" src="{{@$data->user->image()}}">
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-animated">
+                                                            <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
+                                                            <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a> 
+                                                            <a class="dropdown-item" href="{{route('install.payment',encrypt($data->id))}}">Install Payment</a>
+                                                            <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Service Payment</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{$key+1}}</td> 
+                                                <td>{{@$data->customer_id}}</td>
+                                                <td>{{@$data->user->name}}</td>
+                                                <td>{{@$data->user->phone}}</td>
+                                                <td>{{@$data->service->service}}</td>
+                                                <td>{{get_price(@$data->project->price)}}</td>
+                                                <td>{{get_price(@$data->project->paid)}}</td>
+                                                <td>{{get_date(@$data->project->submit_date)}}</td> 
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

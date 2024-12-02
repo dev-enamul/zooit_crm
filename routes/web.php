@@ -283,11 +283,14 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Invoice 
         Route::resource('invoice',InvoiceController::class);
+        Route::get('invoice-share/{id}',[InvoiceController::class,'share'])->name('invoice.share');
 
-        // Deposit
+         // Deposit 
         Route::resource('deposit', DepositController::class);
         Route::get('get-customer-form-deposit-type', [DepositController::class, 'getCustomerFormDepositType'])->name('get.customer.form.deposit.category');
         Route::get('get-customer-due',[DepositController::class,'get_customer_due'])->name('get.customer.due');
+
+       
 
         // Rejection
         Route::resource('rejection', RejectionController::class);

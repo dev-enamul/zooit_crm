@@ -114,9 +114,7 @@ class EmployeeController extends Controller
             'upazila'                   => 'required|numeric|exists:upazilas,id',
             'union'                     => 'required|numeric|exists:unions,id',
             'village'                   => 'nullable|numeric|exists:villages,id',
-            'address'                   => 'nullable|string',
-            'zone'                      => 'nullable|numeric|exists:zones,id',
-            'area'                      => 'nullable|numeric|exists:areas,id',
+            'address'                   => 'nullable|string', 
             'father_name'               => 'required|string',
             'father_phone'              => 'nullable|string|max:15',
             'mother_name'               => 'required|string',
@@ -165,8 +163,7 @@ class EmployeeController extends Controller
                 'status'        => 1,
                 'created_by'    => auth()->user()->id,
                 'approve_by'    => auth()->user()->id,
-                'ref_id'        => auth()->user()->id,
-                'serial'        => $request->serial,
+                'ref_id'        => auth()->user()->id, 
             ]);
 
             if ($request->hasFile('profile_image')) {
@@ -182,9 +179,7 @@ class EmployeeController extends Controller
                 'upazila_id'    => $request->upazila,
                 'union_id'      => $request->union,
                 'village_id'    => $request->village,
-                'address'       => $request->address,
-                'zone_id'       => $request->zone,
-                'area_id'       => $request->area,
+                'address'       => $request->address, 
                 'created_at'    => now(),
             ]);
 
@@ -256,7 +251,6 @@ class EmployeeController extends Controller
             $employee_data = [
                 'user_id'       => $user->id,
                 'designation_id'=> $request->designation,
-                'designations'  => json_encode($request->designations),
                 'status'        => 1,
                 'created_at'    => now(),
             ];

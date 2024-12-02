@@ -37,20 +37,8 @@ class EmployeesDataTable extends DataTable
                 return $employee->userContact->office_email??$employee->userContact->personal_email??"-";
             }) 
             ->addColumn('designation', function($employee){
-                $designations = json_decode($employee->employee->designations);
-                $des = '';
-                if(isset($designations) && is_array($designations) && count($designations)>0){ 
-                    foreach($designations as $key => $des_id){
-                        $designation = Designation::find($des_id);
-                        if(isset($designation) && $designation != null){
-                            if($key > 0)
-                                $des .= ', '.$designation->title;
-                            else
-                                $des = $designation->title;
-                        } 
-                    } 
-                } 
-                return $des;
+                 
+                return $employee->employee->designation->title??"-";
             })
             ->addColumn('area', function($employee){
                 return  $employee?->userAddress?->area?->name??"-";
@@ -134,8 +122,7 @@ class EmployeesDataTable extends DataTable
                 Column::make('name')->title('Name')->searchable(true), 
                 Column::make('phone')->searchable(true),
                 Column::make('email'),
-                Column::make('designation'), 
-                Column::make('area'),
+                Column::make('designation'),  
                 Column::make('reporting')->title('Reporting Name & ID'),
             ];
         }

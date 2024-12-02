@@ -22,8 +22,7 @@
                                 @can('employee-manage')
                                     <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
                                 @endcan
-                                <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li> 
-                                {{-- <li><a href="{{route('employees.tree')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employee Tree</a></li>   --}}
+                                <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li>  
                             </ul>
                         </li>  
                     @endcan   
@@ -91,83 +90,91 @@
                         </ul>
                     </li> 
                     @endcan  
+                  
+                    @can('meeting')
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow ">
+                                <i class="mdi mdi-teach"></i>
+                                <span>Meeting</span>
+                            </a> 
+                            <ul class="sub-menu" aria-expanded="false"> 
+                                <li>
+                                    <a href="{{route('meeting.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Create</a>
+                                </li>  
+                                <li>
+                                    <a href="{{route('meeting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Schedule</a>
+                                </li>
+                            </ul>
+                        </li>  
+                    @endcan
                     
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="mdi mdi-teach"></i>
-                            <span>Meeting</span>
-                        </a> 
-                        <ul class="sub-menu" aria-expanded="false"> 
-                            <li>
-                                <a href="{{route('meeting.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Create</a>
-                            </li>  
-                            <li>
-                                <a href="{{route('meeting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Schedule</a>
-                            </li>
-                        </ul>
-                    </li>  
+                    @can('invoice')
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow ">
+                                <i class="mdi mdi-teach"></i>
+                                <span>Invoice</span>
+                            </a> 
+                            <ul class="sub-menu" aria-expanded="false"> 
+                                <li>
+                                    <a href="{{route('invoice.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Invoice Create</a>
+                                </li>  
+                                <li>
+                                    <a href="{{route('invoice.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Invoice List</a>
+                                </li>
+                            </ul>
+                        </li> 
+                    @endcan
                     
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow ">
-                            <i class="mdi mdi-teach"></i>
-                            <span>Invoice</span>
-                        </a> 
-                        <ul class="sub-menu" aria-expanded="false"> 
-                            <li>
-                                <a href="{{route('invoice.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Invoice Create</a>
-                            </li>  
-                            <li>
-                                <a href="{{route('invoice.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Invoice List</a>
-                            </li>
-                        </ul>
-                    </li> 
 
-                    <div class="">
-                        <div class="menu-title-box"  data-bs-toggle="collapse" data-bs-target="#Setting" aria-expanded="false" aria-controls="collapseExample">
-                            <h3 class="menu-title">Setting</h3>
-                            <div class="card-addon me-3">
-                                <button class="btn btn-label-info btn-sm btn-icon">
-                                    <i class="fa fa-angle-down"></i>
-                                </button>
+                    @can('setting')
+                        <div class="">
+                            <div class="menu-title-box" data-bs-toggle="collapse" data-bs-target="#Setting" aria-expanded="false" aria-controls="collapseExample">
+                                <h3 class="menu-title">Setting</h3>
+                                <div class="card-addon me-3">
+                                    <button class="btn btn-label-info btn-sm btn-icon">
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>  
-                        <div class="collapse" id="Setting"> 
-        
-
-                            @can('designation')
-                                <li>
-                                    <a href="{{route('designation.index')}}" class="">
-                                        <i class="fas fa-desktop"></i>
-                                        <span>Designation</span>
-                                    </a>
-                                </li> 
-                            @endcan 
-                            
-                            @can('bank')
-                                <li>
-                                    <a href="{{route('bank.index')}}" class="">
-                                        <i class="fas fa-desktop"></i>
-                                        <span>Bank</span>
-                                    </a>
-                                </li> 
-                            @endcan   
-                            
-                            <li>
-                                <a href="{{route('service.index')}}" class="">
-                                    <i class="fas fa-desktop"></i>
-                                    <span>Service</span>
-                                </a>
-                            </li> 
-
-                            <li>
-                                <a href="{{route('lead-source.index')}}" class="">
-                                    <i class="fas fa-desktop"></i>
-                                    <span>Lead Find Media</span>
-                                </a>
-                            </li> 
-
-                        </div>
-                    </div>   
+                            <div class="collapse" id="Setting">
+                                @can('designation-setting')
+                                    <li>
+                                        <a href="{{route('designation.index')}}" class="">
+                                            <i class="fas fa-user-tag"></i> <!-- Icon for Designation -->
+                                            <span>Designation</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                        
+                                @can('bank-setting')
+                                    <li>
+                                        <a href="{{route('bank.index')}}" class="">
+                                            <i class="fas fa-university"></i> <!-- Icon for Bank -->
+                                            <span>Bank</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                        
+                                @can('service-setting')
+                                    <li>
+                                        <a href="{{route('service.index')}}" class="">
+                                            <i class="fas fa-concierge-bell"></i> <!-- Icon for Service -->
+                                            <span>Service</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                        
+                                @can('lead-source-setting')
+                                    <li>
+                                        <a href="{{route('lead-source.index')}}" class="">
+                                            <i class="fas fa-bullhorn"></i> <!-- Icon for Lead Find Media -->
+                                            <span>Lead Find Media</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
+                        </div> 
+                    @endcan  
             </ul>
         </div> 
     </div>
