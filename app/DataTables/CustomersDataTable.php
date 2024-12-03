@@ -81,7 +81,7 @@ class CustomersDataTable extends DataTable {
         return $model->newQuery()
             ->whereIn('ref_id', $my_employee) 
             ->with(['reference', 'user', 'profession', 'user.userAddress.village', 'user.userAddress.union', 'user.userAddress.upazila'])
-            ->orderBy('id', 'asc');
+            ->orderBy('id', 'desc');
     }
 
     /**
