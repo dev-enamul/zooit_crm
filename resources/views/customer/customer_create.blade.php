@@ -81,7 +81,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Mobile Number <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone" class="form-control" id="phone" maxlength="15" placeholder="Phone Number" value="{{ old('phone',@$user->user->phone) }}">
+                                            <input type="text" name="phone" class="form-control" id="phone" maxlength="25" placeholder="Phone Number" value="{{ old('phone',@$user->user->phone) }}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
