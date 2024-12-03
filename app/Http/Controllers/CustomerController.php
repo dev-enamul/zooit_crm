@@ -151,7 +151,8 @@ class CustomerController extends Controller {
 
             if(isset($user)){
                 $user->update([
-                    'name'           => $request->full_name,  
+                    'name'          => $request->full_name,  
+                    'phone'         =>  get_phone($request->phone),
                 ]);  
 
                 $user->userContact->update([
