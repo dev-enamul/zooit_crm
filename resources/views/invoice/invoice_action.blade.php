@@ -4,21 +4,15 @@
     </a> 
     <div class="dropdown-menu dropdown-menu-animated">
         <a class="dropdown-item" href="{{ route('invoice.show', encrypt($data->id)) }}">Details</a> 
-        @if ($data->status==0 || $data->status==2)
+        @if ($data->status==0)
             <a class="dropdown-item" href="{{ route('invoice.edit', encrypt($data->id)) }}">Edit</a> 
         @endif 
         <a href="javascript:void(0)"  class="dropdown-item"  onclick="shareLink('{{ encrypt($data->id) }}', '{{ $data->user->phone }}')">Share</a>
-        <a class="dropdown-item" href="{{ route('deposit.create', ['invoice_id'=> encrypt($data->id)]) }}">Make Payment</a> 
-
-
-        {{-- <a class="dropdown-item" href="{{route('salse.create',['customer'=>$data->id])}}">Salse</a>  
-        <a class="dropdown-item" href="{{route('meeting.create',['customer'=>$data->id])}}">Meeting</a>
-        <a class="dropdown-item" href="#" onclick="sendWhatsapp('{{$data->user_id}}')">WhatsApp Message</a>
-        <a class="dropdown-item" href="{{ route('customer.edit',encrypt($data->id)) }}">Edit</a> 
-        <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->id))}}">View Profile</a>  
-        <a class="dropdown-item" href="{{route('rejection.create',['customer'=>$data->id])}}">Rejection</a>
-        @if ($data->customer_id==null)
-            <a class="dropdown-item" href="#"  onclick="deleteItem('{{ route('customer.delete',encrypt($data->id)) }}')">Delete</a>  
-        @endif  --}}
+        
+        @can('deposit')
+            @if ($data->status != 1)
+                <a class="dropdown-item" href="{{ route('deposit.create', ['invoice_id'=> encrypt($data->id)]) }}">Make Payment</a> 
+            @endif 
+        @endcan  
     </div>
 </div>

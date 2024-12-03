@@ -128,6 +128,13 @@
                         <p>{{@$invoice->user->userAddress->address}}</p>
                     </div>
                 </div>
+                <div>
+                    @if ($invoice->status==0)
+                    <img src="https://t3.ftcdn.net/jpg/04/87/13/44/360_F_487134492_svhGzEgDXKyQuuPXQrs7prKoBYWCEJdw.jpg" alt="" width="100px">
+                    @else 
+                    <img src="https://png.pngtree.com/png-vector/20230208/ourmid/pngtree-paid-stamp-vector-illustration-png-image_6585127.png" alt="" width="100px">
+                    @endif
+                </div>
 
                 <div> 
                     <div class="invoice_info">

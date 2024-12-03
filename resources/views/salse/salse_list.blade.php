@@ -55,7 +55,7 @@
                                                             <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
                                                             <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a> 
                                                             <a class="dropdown-item" href="{{route('install.payment',encrypt($data->id))}}">Install Payment</a>
-                                                            <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Service Payment</a>
+                                                            <a class="dropdown-item" href="{{route('service.payment',encrypt($data->id))}}">Service Payment</a>
                                                         </div>
                                                     </div>
                                                 </td>

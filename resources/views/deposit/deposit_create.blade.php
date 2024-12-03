@@ -31,8 +31,10 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="invoice_id" class="form-label">Invoice <span class="text-danger">*</span></label>
-                                            <select class="form-select select2" search name="invoice_id" id="invoice_id" required @if ($invoice) disabled @endif>
-                                                <option value="{{@$invoice->id}}"> INVOICE# {{@$invoice->id}} </option>
+                                            <select class="form-select select2" search name="invoice_id" id="invoice_id" required @if ($selected_invoice) readonly @endif>
+                                                @foreach ($invoices as $invoice)
+                                                    <option {{@$selected_invoice->id==$invoice->id?"selected":""}} value="{{@$invoice->id}}"> INVOICE# {{@$invoice->id}} </option> 
+                                                @endforeach
                                             </select> 
                                             <div class="invalid-feedback">
                                                 This field is required.
@@ -43,14 +45,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Amount <span class="text-danger">*</span></label>
-                                            <input type="number" name="amount" id="amount" class="form-control" min="1" placeholder="0" required> 
+                                            <input type="number" name="amount" id="amount" class="form-control" min="1" required> 
                                         </div>
                                     </div>    
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="date" class="form-label">Deposit Date <span class="text-danger">*</span></label>
-                                            <input type="date" name="date" class="form-control" id="date" required> 
+                                            <input type="date" name="date" value="{{date('Y-m-d');}}" class="form-control" id="date" required> 
                                         </div>
                                     </div> 
                                 </div>  
@@ -108,86 +110,25 @@
     <script>
         var due = 0;
         $(document).ready(function(){ 
-            getCustomer();
-            $("#deposit_category_id").on('change',function(){
-                getCustomer();
-            });
-
-            $("#customer_id").on('change',function(){
+            getDue();
+            $("#invoice_id").on('change',function(){
                 getDue();
-            });  
-            $("#down_payment_due_section").hide(); 
-            $("#amount").on('keyup input change', function(){  
-                var amount = parseFloat($(this).val()); 
-                var deposit_category_id = $("#deposit_category_id").val(); 
-                if(deposit_category_id == 2){  
-                    if(!isNaN(amount) && amount < due){ 
-                        console.log("Condition met:", deposit_category_id, amount, due);
-                        $("#down_payment_due_section").show();
-                        $("#down_payment_due").val(due - amount);
-                    } else { 
-                        $("#down_payment_due_section").hide();
-                    }
-                }
-            });
-        });
+            });   
+        }); 
 
-        function getCustomer(){
+        function getDue(){ 
             var formData = {
-                deposit_category: $("#deposit_category_id").val(),
+                invoice_id: $("#invoice_id").val(), 
             }; 
             $.ajax({
                 type: "GET",
                 data: formData,
                 dataType: "json",
-                url: "{{ route('get.customer.form.deposit.category') }}", 
-                success: function(data) {
-                    $("#customer_id").empty();  
-
-                    if (data.customers.length) {
-                        $.each(data.customers, function(i, customer) {
-                            $("#customer_id").append(
-                                $("<option>", {
-                                    value: customer.id,
-                                    text: customer.name+" ["+customer.customer_id+"]", 
-                                })
-                            );
-                        });
-                    }   
-                    $('#customer_id').trigger('change');
-                    getDue(); 
-                },
-                error: function(data) {
-                    console.log('Error:', data);
-                },
-            });
-        }
-
-        function getDue(){
-            var deposit_category_id = $("#deposit_category_id").val();
-            var formData = {
-                customer_id: $("#customer_id").val(),
-                deposit_category_id: deposit_category_id,
-            }; 
-            $.ajax({
-                type: "GET",
-                data: formData,
-                dataType: "json",
-                url: "{{ route('get.customer.due') }}", 
-                success: function(data) {   
-                    $("#amount").val(data.due);  
-                    $("#date").val(data.payment_date);
-
-                    if(deposit_category_id==1||deposit_category_id==3){
-                        $("#amount").attr('readonly',true);
-                    }else{
-                        $("#amount").attr('readonly',false); 
-                    }
-                    due = data.due; 
-                },
-                error: function(data) {
-                    console.log('Error:', data);
-                },
+                url: "{{ route('get.invoice.due') }}", 
+                success: function(data) { 
+                    $("#amount").val(data.due); 
+                    $("#amount").attr('max',data.due); 
+                }, 
             });
         }
     </script>

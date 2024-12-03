@@ -1,279 +1,136 @@
 @extends('layouts.dashboard')
-@section('title',"Deposit Report for ASM and DSM")
-@section('content') 
-<div class="main-content">
-    <div class="page-content">
-        <div class="container-fluid">
+@section('title',"Deposit List")
+ @section('style')
+    <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    
+ @endsection
+@section('content')
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
 
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">  
-                    <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Deposit List</h4> 
-                        <p class="d-none">Employee: {{auth()->user()->name}}</p> 
-                        <input type="hidden" id="hideExport" value=":nth-child(1),:nth-child(2)"> 
-                        <input type="hidden" id="pageSize" value="a3">
-                        <input type="hidden" id="fontSize" value="8">
-                        <div class="page-title-right">
-                            <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                <span><i class="fas fa-filter"></i> Filter</span>
-                            </button> 
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <!-- end page title -->
-
-         
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card"> 
-                        <div class="card-body"> 
-                           <div class="table-box" style="overflow-x: scroll;">
-                                <table id="datatable"  class="table table-hover align-middle text-center table-bordered table-striped dt-responsive fs-10" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                    <thead>
-                                        <tr class="align-middle"> 
-                                            <th>SL.</th>
-                                            <th>CUS ID</th>
-                                            <th>Customer Name</th>
-                                            <th>Booking Date</th>
-                                            <th>Project Name</th>
-                                            <th>Unit Name</th>
-                                            <th>Unit Qty</th>
-                                            <th>Deposit Type</th>
-                                            @foreach ($designations as $designation)
-                                                <th>{{$designation->title}}</th>
-                                            @endforeach 
-                                        
-                                            <th>Declaration Price</th>
-                                            <th>Discount Amount</th>
-                                            <th>Sales Value </th>
-                                            <th>Deposit Amount</th>
-                                            <th>Total Deposit Amount</th>
-                                            <th>Total Due Amount</th>  
-                                        </tr>
-                                    </thead>
-                                    <tbody> 
-                                        @foreach ($datas as $key => $data)
-                                            <tr class=""> 
-                                                <td>{{$key +1}}</td>
-                                                <td>{{@$data->customer->customer_id}}</td>
-                                                <td>{{@$data->customer->name}}</td>
-                                                <td>{{get_date(@$data->salse->created_at)}}</td>
-                                                <td>{{$data->salse->project->name??'-'}}</td>
-                                                <td>{{$data->salse->unit->title??'-'}}</td>
-                                                <td>{{$data->salse->unit_qty??'-'}}</td> 
-                                                <td>{{$data->depositCategory->name}}</td>
-                                                @foreach ($designations as $designation)    
-                                                    <th>-</th>
-                                                @endforeach  
-                                                <td>{{get_price(@$data->salse->regular_amount)}}</td>
-                                                <td>{{get_price(@$data->salse->regular_amount-@$data->salse->sold_value)}}</td>
-                                                <td>{{get_price(@$data->salse->sold_value)}}</td>
-                                                <td>{{get_price($data->amount)}}</td>
-                                                <td>{{get_price(@$data->salse->total_deposit)}}</td>
-                                                <td>{{get_price(@$data->salse->sold_value-@$data->salse->total_deposit)}}</td>  
-                                            </tr>  
-                                        @endforeach 
-                                    </tbody>
-                                </table>
-                           </div>
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0"> Deposit List</h4> 
+                            <div class="page-title-right">
+                                <div class="btn-group flex-wrap mb-2">
+                                    <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+                                        <span><i class="fas fa-filter"></i> Filter</span>
+                                    </button>
+                                </div>
+                            </div> 
                         </div>
                     </div>
-                </div> <!-- end col -->
-            </div>
-            <!-- end row -->
-        </div> <!-- container-fluid -->
-    </div> 
-
-    @include('includes.footer')
-
-</div> 
-
-<div class="offcanvas offcanvas-end" id="offcanvas">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Select Filter Item</h5>
-        <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
-            <i class="fa fa-times"></i>
-        </button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row">   
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="duration" class="form-label">Duration </label>
-                    <input class="form-control" id="duration" name="duration" default="This Month" type="text" value="" />   
                 </div>
-            </div> 
+                <!-- end page title -->
 
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="zone" class="form-label">Zone </label>
-                    <select class="select2" name="zone" id="zone" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-box">
+                                    {{ $dataTable->table(['class' => 'table table-hover table-bordered table-striped dt-responsive nowrap fs-10']) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
                 </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="area" class="form-label">Area </label>
-                    <select class="select2" name="area" id="area" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div> 
-
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="project" class="form-label">Project </label>
-                    <select class="select2" name="project" id="project" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="unit" class="form-label">Unit </label>
-                    <select class="select2" name="unit" id="unit" >
-                        <option value="">All</option>
-                        <option value="1">Shop</option>
-                        <option value="2">Flat</option> 
-                    </select>  
-                </div>
-            </div>
-            
-            <div class="col-md-12">
-                <div class="mb-3">
-                    <label for="employee_hierachy" class="form-label">Employee Hierachy</label>
-                    <select class="select2" name="employee_hierachy" id="employee_hierachy" > 
-                        <option value="1">Marketing Executive</option>
-                        <option value="2">Salse Executive</option>
-                        <option value="3">ASM</option>
-                        <option value="4">DSM</option> 
-                    </select>  
-                </div>
-            </div>
-
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="division" class="form-label">Division </label>
-                    <select class="select2" name="division" id="division" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="district" class="form-label">District </label>
-                    <select class="select2" name="district" id="district" >
-                        <option value="">All</option>
-                        <option value="1">Dhaka</option>
-                        <option value="2">Chittagong</option>
-                        <option value="3">Khulna</option>
-                        <option value="4">Rajshahi</option>
-                        <option value="5">Barisal</option>
-                        <option value="6">Sylhet</option>
-                        <option value="7">Rangpur</option>
-                        <option value="8">Mymensingh</option>
-                        <option value="9">Jessore</option>
-                        <option value="10">Comilla</option> 
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="upazila" class="form-label">Thana/Upazila </label>
-                    <select class="select2" name="upazila" id="upazila">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="union" class="form-label">Union </label>
-                    <select class="select2" name="union" id="union">
-                        <option value="">All</option>
-                        <option value="">Dhaka </option>
-                        <option value="">Chittagong </option> 
-                        <option value="">Rajshahi</option> 
-                        <option value="">Khulna </option> 
-                        <option value="">Barishal </option> 
-                        <option value="">Sylhet</option> 
-                        <option value="">Rangpur</option> 
-                        <option value="">Mymensingh</option>  
-                    </select>  
-                </div>
-            </div> 
-            <div class="text-end ">
-                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button> <button class="btn btn-outline-danger"><i class="mdi mdi-refresh"></i> Reset</button>
-            </div> 
-
+                <!-- end row -->
+            </div> <!-- container-fluid -->
         </div>
     </div>
-</div>
-@endsection  
+    <div class="offcanvas offcanvas-end" id="offcanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Select Filter Item</h5>
+            <button class="btn btn-label-danger btn-icon" data-bs-dismiss="offcanvas">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="offcanvas-body">
+        <form action="" method="get">
+            <div class="row">
+                {{-- <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="select2" id="status" name="status">
+                            <option value = "2" {{$status==2?"selected":""}}>All</option>
+                            <option value = "1" {{$status==1?"selected":""}}>Approved</option>
+                            <option value = "0" {{$status==0?"selected":""}}>Unapproved</option>
+                        </select>
+                    </div>
+                </div> --}}
 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="date_range" class="form-label">Date</label>
+                        <input class="form-control" start="{{$start_date}}" end="{{$end_date}}" id="date_range" name="date" default="This Month" type="text" value="" />
+                    </div>
+                </div>
+
+                {{-- <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="service" class="form-label">Services</label>
+                        <select class="select2" search id="service" name="service">
+                            <option {{$selected_service == 0 ? "selected" : ""}} value="0">All</option>
+                            @foreach ($services as $service)
+                                <option {{$selected_service == $service->id ? "selected" : ""}} value="{{$service->id}}">{{$service->service}}</option>
+                            @endforeach 
+                        </select>
+                    </div>
+                </div>  --}}
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="employee" class="form-label">Employee</label>
+                        <select class="select2" search id="employee" name="employee">
+                            <option value = "{{$employee->id}}" selected="selected">{{$employee->name}} [{{$employee->user_id}}]</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" data-bs-dismiss="offcanvas">Filter</button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+@endsection
 @section('script')
-@include('includes.data_table')
-    <script>
-        getDateRange('duration') 
-    </script>
+<script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js')}}"></script>
+{{-- <script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js')}}"></script> --}}
+<script src="/vendor/datatables/buttons.server-side.js"></script>
+{!! $dataTable->scripts() !!}
+
+<script>
+    $(document).ready(function() {
+            $('#employee').select2({
+                placeholder: "Select Employee",
+                allowClear: true,
+                dropdownParent: $('#offcanvas'),
+                ajax: {
+                    url: '{{ route('select2.employee.freelancer') }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            term: params.term
+                        }
+                        return query;
+                    }
+                }
+            });
+        });
+
+    getDateRange('date_range');
+</script>
+
+<script>
+     getDateRange('date_range');
+</script>
 @endsection

@@ -27,23 +27,18 @@
                         </li>  
                     @endcan   
     
-                    @can('customer')
+                    @can('lead')
                     <li>
                         <a href="javascript: void(0);" class="has-arrow">
                             <i class="fas fa-handshake"></i>
                             <span>Lead</span>
                         </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            @can('customer-manage')
-                                <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead Entry</a></li> 
-                            @endcan
-                            <li class="{{ Route::is('customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead List</a></li> 
-                    
+                        <ul class="sub-menu" aria-expanded="false"> 
+                            <li><a href="{{route('customer.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead Entry</a></li>                            
+                            <li class="{{ Route::is('customer.edit') ? 'mm-active' : '' }}"><a href="{{route('customer.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Lead List</a></li>                     
                         </ul>
                     </li> 
-                    @endcan
-     
-       
+                    @endcan 
      
                     @can('follow-up')
                     <li>
@@ -89,41 +84,59 @@
                             <li><a href="{{route('salse.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Sales</a></li>  
                         </ul>
                     </li> 
-                    @endcan  
-                  
+                    @endcan   
+
                     @can('meeting')
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="mdi mdi-teach"></i>
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <i class="mdi mdi-calendar-check"></i>
                                 <span>Meeting</span>
                             </a> 
                             <ul class="sub-menu" aria-expanded="false"> 
                                 <li>
-                                    <a href="{{route('meeting.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Create</a>
+                                    <a href="{{route('meeting.create')}}"> 
+                                        <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Create
+                                    </a>
                                 </li>  
                                 <li>
-                                    <a href="{{route('meeting.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Schedule</a>
+                                    <a href="{{route('meeting.index')}}">
+                                        <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Meeting Schedule
+                                    </a>
                                 </li>
                             </ul>
                         </li>  
                     @endcan
-                    
-                    @can('invoice')
+
+                    @can('invoice') 
+                    <li>
+                        <a href="{{route('invoice.index')}}" class="">
+                            <i class="mdi mdi-file-document"></i>
+                            <span>Invoice</span>
+                        </a>
+                    </li>  
+                    @endcan 
+
+                    @can('deposit')
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow ">
-                                <i class="mdi mdi-teach"></i>
-                                <span>Invoice</span>
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <i class="mdi mdi-bank-transfer"></i>
+                                <span>Deposit</span>
                             </a> 
                             <ul class="sub-menu" aria-expanded="false"> 
                                 <li>
-                                    <a href="{{route('invoice.create')}}"> <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Invoice Create</a>
+                                    <a href="{{route('deposit.create')}}"> 
+                                        <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit Create
+                                    </a>
                                 </li>  
                                 <li>
-                                    <a href="{{route('invoice.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Invoice List</a>
+                                    <a href="{{route('deposit.index')}}">
+                                        <i class="mdi mdi-checkbox-blank-circle align-middle"></i>Deposit List
+                                    </a>
                                 </li>
                             </ul>
                         </li> 
                     @endcan
+
                     
 
                     @can('setting')
@@ -171,6 +184,25 @@
                                             <span>Lead Find Media</span>
                                         </a>
                                     </li>
+                                @endcan 
+
+                                @can('location-setting')
+                                    <li>
+                                        <a href="javascript: void(0);" class="has-arrow ">
+                                            <i class="mdi mdi-chart-bar"></i>
+                                            <span>Location</span>
+                                        </a> 
+                                        <ul class="sub-menu" aria-expanded="false"> 
+                                            <li>
+                                                <a href="{{route('upazila.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Thana</a>
+                                            </li>  
+                                            <li>
+                                                <a href="{{route('union.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Union</a>
+                                            </li>  
+                                            <li><a href="{{route('village.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Village</a></li> 
+                                            
+                                        </ul>
+                                    </li> 
                                 @endcan
                             </div>
                         </div> 

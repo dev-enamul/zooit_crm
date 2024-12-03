@@ -16,9 +16,11 @@ return new class extends Migration
             $table->foreignId('customer_id');  
             $table->foreignId('project_proposal_id')->nullable();  
             $table->foreignId('team_leader_id')->nullable();
+            $table->string('title')->nullable();
             $table->foreignId('sales_by')->nullable();
          
-            $table->decimal('price', 10, 2)->nullable(); 
+            $table->string('currency', 10, 2)->nullable(); 
+            $table->decimal('price', 10, 2)->nullable();  
             $table->decimal('paid', 10, 2)->nullable(); 
             $table->date('submit_date')->nullable();
             $table->unsignedInteger('project_status')

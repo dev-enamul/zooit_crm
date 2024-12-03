@@ -124,7 +124,7 @@ class CustomerController extends Controller {
     public function save(Request $request) {
         $validator = Validator::make($request->all(), [
             'full_name'           => 'required|string|max:255',
-            'phone'               => 'required|string|max:15',
+            'phone'               => 'required|string|max:25',
             'company_type'        => 'required|in:1,2',
             'find_media_id'       => 'nullable|integer',
             'contact_person_name' => 'nullable|string|max:255',

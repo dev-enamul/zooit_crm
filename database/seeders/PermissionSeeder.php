@@ -39,11 +39,12 @@ class PermissionSeeder extends Seeder
             ['slug' => 'invoice-manage', 'name' => 'Invoice Manage', 'status' => 1],
             ['slug' => 'invoice-delete', 'name' => 'Invoice Delete', 'status' => 1], 
             ['slug' => 'setting', 'name' => 'Setting', 'status' => 1], 
-            ['slug' => 'designation-setting', 'name' => 'Lead Setting', 'status' => 1], 
-            ['slug' => 'bank-setting', 'name' => 'Bank Setting', 'status' => 1],  
-            
+            ['slug' => 'designation-setting', 'name' => 'Lead Setting', 'status' => 1],
+
+            ['slug' => 'bank-setting', 'name' => 'Bank Setting', 'status' => 1],   
             ['slug' => 'service-setting', 'name' => 'Service Setting', 'status' => 1],
             ['slug' => 'lead-source-setting', 'name' => 'Lead Source Setting', 'status' => 1],
+            ['slug' => 'location-setting', 'name' => 'Location Setting', 'status' => 1],
         ];
 
         DB::table('permissions')->insert($permissions);

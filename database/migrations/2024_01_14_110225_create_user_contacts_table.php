@@ -20,13 +20,13 @@ return new class extends Migration
             $table->tinyInteger('gender')->nullable();
             $table->tinyInteger('religion')->nullable();
             $table->date('dob')->nullable();
-            $table->string('phone', 15)->nullable();
-            $table->string('personal_phone', 15)->nullable();
+            $table->string('phone', 25)->nullable();
+            $table->string('personal_phone', 25)->nullable();
             $table->string('preferred_contact_method')->nullable();
             $table->string('preferred_contact_time')->nullable();
             $table->string('email', 45)->nullable();
             $table->string('personal_email', 45)->nullable();
-            $table->string('imo_number', 15)->nullable();
+            $table->string('imo_number', 25)->nullable();
             $table->string('facebook_id', 100)->nullable(); 
             $table->string('linkedin_id', 100)->nullable(); 
             $table->string('twiter_id', 100)->nullable(); 

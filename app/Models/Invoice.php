@@ -11,6 +11,7 @@ class Invoice extends Model
     protected $fillable = [
         'user_id',
         'customer_id',
+        'project_id',
         'title',
         'description',
         'invoice_date',
@@ -29,6 +30,10 @@ class Invoice extends Model
 
     public function customer() {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function project() {
+        return $this->belongsTo(Project::class, 'project_id');
     }
     
 }

@@ -11,17 +11,13 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(FindMediaSeeder::class);
-        // $this->call(ProjectSeeder::class);
-        // $this->call(SubProductSeeder::class); 
-        $this->call(RejectReasonSeeder::class);
-        $this->call(CommissionSeeder::class);
+        $this->call(FindMediaSeeder::class); 
+        $this->call(RejectReasonSeeder::class); 
         $this->call(DesignationSeeder::class);
         $this->call(UsersSeeder::class);
         $this->call(CountriesSeeder::class);
         $this->call(BankSeeder::class);
-        $this->call(SpecialCommissionSeeder::class);
-        $this->call(CommissionSpecialCommissionSeeder::class);
+        $this->call(SpecialCommissionSeeder::class); 
         $this->call(CommissionDeductedSettingSeeder::class);
         $this->call(TrainingCategorySeeder::class);
         $this->call(UnitSeeder::class);

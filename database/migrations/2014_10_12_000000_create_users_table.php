@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_id')->nullable()->unique();  
             $table->string('name');
-            $table->string('phone', 15)->unique();
+            $table->string('phone', 25)->unique();
             $table->string('password');
             $table->tinyInteger('user_type')->nullable()->comment('1= Employee, 2= Freelancer, 3= Customer');
             $table->string('profile_image')->nullable();  

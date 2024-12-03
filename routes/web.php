@@ -77,6 +77,7 @@ use App\Http\Controllers\LeadSourceController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ServicePaymentController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\SubProductController;
 use App\Http\Controllers\UpazilaController;
@@ -281,6 +282,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('install-payment-store',[InstallmentPlanController::class,'store'])->name('install.payment.store');
         Route::get('install-payment-edit/{id}',[InstallmentPlanController::class,'edit'])->name('install.payment.edit');
 
+        Route::get('service-payment/{id}',[ServicePaymentController::class,'create'])->name('service.payment');
+        Route::post('service-payment-store',[ServicePaymentController::class,'store'])->name('service.payment.store');
+        Route::get('service-payment-edit/{id}',[ServicePaymentController::class,'edit'])->name('service.payment.edit');
+
         // Invoice 
         Route::resource('invoice',InvoiceController::class);
         Route::get('invoice-share/{id}',[InvoiceController::class,'share'])->name('invoice.share');
@@ -288,7 +293,7 @@ Route::group(['middleware' => 'auth'], function () {
          // Deposit 
         Route::resource('deposit', DepositController::class);
         Route::get('get-customer-form-deposit-type', [DepositController::class, 'getCustomerFormDepositType'])->name('get.customer.form.deposit.category');
-        Route::get('get-customer-due',[DepositController::class,'get_customer_due'])->name('get.customer.due');
+        Route::get('get-invoice-due',[DepositController::class,'get_invoice_due'])->name('get.invoice.due');
 
        
 

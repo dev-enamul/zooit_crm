@@ -31,12 +31,10 @@
                         <div class="card-body">
 
                             <div class="d-flex justify-content-between"> 
-                                <div class=""> 
-                                    @can('village-manage')
+                                <div class="">  
                                         <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#create_modal">
                                             <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Union</span>
-                                        </button> 
-                                    @endcan
+                                        </button>  
                                 </div>
 
                                 <div class="">
@@ -56,10 +54,8 @@
 
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
-                                    <tr>
-                                        @can('village-manage')
-                                        <th>Action</th>
-                                        @endcan
+                                    <tr> 
+                                        <th>Action</th> 
                                         <th>S/N</th> 
                                         <th>Union</th> 
                                         <th>Upazilla</th> 
@@ -69,8 +65,7 @@
                                 </thead>
                                 <tbody> 
                                     @foreach($datas as $key => $item)
-                                    <tr>
-                                        @can('village-manage')
+                                    <tr> 
                                         <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                             <div class="dropdown">
                                                 <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
@@ -79,8 +74,7 @@
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('union.destroy',$item->id) }}')" >Delete</a>  
                                                 </div>
                                             </div> 
-                                        </td> 
-                                        @endcan
+                                        </td>  
                                         <td>{{$key+1}}</td>
                                         <td>{{$item->name}}</td>  
                                         <td>{{@$item->upazilla->name}}</td>

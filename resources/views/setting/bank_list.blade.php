@@ -9,16 +9,14 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Unions</h4>
-                        @can('bank-manage') 
+                        <h4 class="mb-sm-0">Unions</h4> 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#create_modal">
                                     <span><i class="mdi mdi-clipboard-plus-outline"></i> Add Bank</span>
                                 </button> 
                             </ol>
-                        </div> 
-                        @endcan
+                        </div>  
                     </div>
                 </div>
             </div> 
@@ -31,10 +29,8 @@
 
                             <table id=" " class="table table-hover table-bordered table-striped dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
-                                    <tr>
-                                        @can('bank-manage')
-                                        <th>Action</th>
-                                        @endcan
+                                    <tr> 
+                                        <th>Action</th> 
                                         <th>S/N</th> 
                                         <th>Bank Name</th> 
                                         <th>Type</th> 
@@ -43,8 +39,7 @@
                                 </thead>
                                 <tbody> 
                                     @foreach ($datas as $key => $data)
-                                        <tr>
-                                            @can('bank-manage')
+                                        <tr> 
                                             <td class="text-center" data-bs-toggle="tooltip" title="Action"> 
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v align-middle ms-2 cursor-pointer"></i></a>
@@ -53,8 +48,7 @@
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="deleteItem('{{ route('bank.destroy',$data->id) }}')">Delete</a>    
                                                     </div>
                                                 </div> 
-                                            </td> 
-                                            @endcan
+                                            </td>  
                                             <td>{{$key+1}}</td>
                                             <td>{{$data->name}}</td>
                                             <td>

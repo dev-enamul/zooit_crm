@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\DepositDataTable;
 use App\Models\Bank;
 use App\Models\Commission;
 use App\Models\Customer;
@@ -11,6 +12,8 @@ use App\Models\DepositCommission;
 use App\Models\Designation;
 use App\Models\Invoice;
 use App\Models\Salse;
+use App\Models\Service;
+use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -21,19 +24,22 @@ use Illuminate\Support\Facades\Validator;
 
 class DepositController extends Controller
 { 
-    public function index(Request $request)
+    public function index(DepositDataTable $dataTable, Request $request)
     {       
-        $designations = Designation::where('status',1)->get();
-        $datas = Deposit::where('approve_by','!=',null);
-        if(isset($request->date) && !empty($request->date)){ 
-            $datas = $datas->whereDate('date',date('Y-m-d',strtotime($request->date)));
-        }else{
-            $start_date = date('Y-m-01'); 
-            $end_date = date('Y-m-t'); 
-            $datas = $datas->whereBetween('date',[$start_date,$end_date]);
-        }
-        $datas = $datas->get();
-        return view('deposit.deposit_list',compact('datas','designations'));
+        $title      = 'Prospecting List';
+        $date       = $request->date ?? null;
+        $status     = $request->status ?? 0;
+        $start_date = Carbon::parse($date ? explode(' - ', $date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d');
+        if (isset($request->employee) && $request->employee != null) {
+            $employee = User::find($request->employee);
+        } else {
+            $employee = User::find(auth()->user()->id);
+        }  
+        $services = Service::get();
+        $selected_service = $request->service ?? 0; 
+ 
+        return $dataTable->render('deposit.deposit_list', compact('title', 'employee', 'status', 'start_date', 'end_date','services','selected_service'));
     }
 
     /**
@@ -43,13 +49,13 @@ class DepositController extends Controller
     {  
         if(isset($request->invoice_id)){
             $invoice_id = decrypt($request->invoice_id); 
-            $invoice = Invoice::find($invoice_id);  
+            $selected_invoice = Invoice::find($invoice_id); 
         }else{
-            $invoice = null;
+            $selected_invoice = null;
         }
-        
+        $invoices = Invoice::where('status','!=',1)->get(); 
         $banks = Bank::where('status',1)->get(); 
-        return view('deposit.deposit_create',compact('invoice','banks'));
+        return view('deposit.deposit_create',compact('selected_invoice','banks','invoices'));
     }
 
     /**
@@ -60,14 +66,12 @@ class DepositController extends Controller
        
          
         $validator = Validator::make($request->all(), [
-            'customer_id' => 'required',
-            'employee_id' => 'required',
-            'deposit_category_id' => 'required',
-            'amount' => 'required|min:1|numeric',
-            'date' => 'required', 
-            'bank_id' => 'required',
-            'cheque_no' => 'nullable | string',
-            'branch_name' => 'nullable | string',
+            'invoice_id' => 'required|exists:invoices,id', 
+            'amount' => 'required|numeric|min:1', 
+            'date' => 'required|date|before_or_equal:today', 
+            'bank_id' => 'required|exists:banks,id', 
+            'tnx_id' => 'nullable|string|max:255', 
+            'remark' => 'nullable|string|max:1000',
         ]);
     
         if ($validator->fails()) {
@@ -77,33 +81,34 @@ class DepositController extends Controller
         DB::beginTransaction();
         try{
             $input = $request->all(); 
-            $input['created_by'] = auth()->id();
+            $invoice = Invoice::find($request->invoice_id);
+            $input['user_id'] = $invoice->user_id;
+            $input['customer_id'] = $invoice->customer_id;
+            $input['project_id'] = $invoice->project_id;
+            $input['created_by'] = auth()->id(); 
+            $input['date'] = date('Y-m-d',strtotime($request->date));   
+            $deposit = Deposit::create($input); 
+            if($deposit){
+                $due_amount = $invoice->due_amount-$request->amount;
+                $invoice->due_amount = $due_amount;
+                if($due_amount <= 0){ 
+                    $invoice->status = 1;
+                }else{
+                    $invoice->status = 2;
+                }   
 
-            $input['date'] = date('Y-m-d',strtotime($request->date)); 
-            $input['customer_user_id'] = Customer::find($request->customer_id)->user_id;
-            $deposit = Deposit::create($input);  
-           
-            if($deposit->deposit_category_id==2){
-                $salse = Salse::where('customer_id',$request->customer_id)->first();
-                if(isset($salse) && !empty($salse) && $salse->down_payment_due > 0 && isset($request->rest_down_payment_date)){
-                    $salse->rest_down_payment_date = date('Y-m-d', strtotime($request->rest_down_payment_date));
-                } 
-                $salse->save(); 
-            }
+                $invoice->project->paid =  $invoice->project->paid+$request->amount;
+                $invoice->save();
+                $invoice->project->save();
 
-            if($deposit->deposit_category_id==1 || $deposit->deposit_category_id==2 || $deposit->deposit_category_id==3){
-                $salse = Salse::where('customer_id',$deposit->customer_id)->first();
-                if(isset($salse) && !empty($salse)){ 
-                    $deposit->salse_id = $salse->id;
-                    $deposit->project_id = $salse->project_id; 
-                }  
-                $salse->save();
-            } 
-            $deposit->save();
+                $transaction = new Transaction();
+                $transaction->user_id = $invoice->user_id;
+                $transaction->bank_id = $request->bank_id;
+                $transaction->type = 1;
+                $transaction->amount = $request->amount;
+                $transaction->save();
+            }   
 
-            if(Auth::user()->hasPermission('approve-deposit')){
-                $this->approve_deposit($deposit->id); 
-            }
             DB::commit();
             return redirect()->route('deposit.index')->with('success','Deposit created successfully');
         }catch(Exception $e){
@@ -112,37 +117,7 @@ class DepositController extends Controller
         } 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 
     public function getCustomerFormDepositType(Request $request){
         try{
@@ -179,128 +154,14 @@ class DepositController extends Controller
         
     }
 
-    public function get_customer_due(Request $request){
-        $customer_id = $request->customer_id;
-        $customer = Customer::find($customer_id); 
-        $deposit_categgory_id = $request->deposit_category_id;
-        $due = 0;
-        $datas = [];
-        
-        if($deposit_categgory_id == 1){
-            $salse = Salse::where('customer_id',$customer_id)->first();
-            if(isset($salse) && !empty($salse)){
-                $due = $salse->installment_value; 
-                $payment_date = $customer->next_payment_date(); 
-            }
-        }elseif($deposit_categgory_id == 2){ 
-            $salse = Salse::where('customer_id',$customer_id)->first();
-            if(isset($salse) && !empty($salse)){
-                $due = $salse->down_payment_due;
-                $payment_date = Carbon::now()->toDateString();
-            } 
-        }elseif($deposit_categgory_id == 3){
-            $salse = Salse::where('customer_id',$customer_id)->first();
-            $due = $salse->booking_due; 
-            $payment_date = Carbon::now()->toDateString(); 
-        }  
-        // dd($due);
+    public function get_invoice_due(Request $request){
+        $invoice_id = $request->invoice_id; 
+        $invoice = Invoice::find($invoice_id);
         return response()->json([
             'status'=>true,
-            'due'=>$due,
-            'payment_date'=>$payment_date]); 
+            'due'=>$invoice->due_amount
+        ]);   
     } 
 
-    public function approve_deposit($id){
-        $deposit = Deposit::find($id);
-        $deposit->approve_by = auth()->id();
-        $deposit->save();
-        if($deposit->deposit_category_id==1 || $deposit->deposit_category_id==2 || $deposit->deposit_category_id==3){
-            $salse = Salse::where('customer_id',$deposit->customer_id)->first();
-            if(isset($salse) && !empty($salse)){
-                $salse->total_deposit = Deposit::where('salse_id',$salse->id)->sum('amount');
-                if($deposit->deposit_category_id==2){
-                    $down_payment_pay = $deposit->amount;
-                    $down_payment_due =  $salse->down_payment_due - $down_payment_pay;
-                    if($down_payment_due <= 0){
-                        $down_payment_due = 0;
-                    }else{
-                        $down_payment_due = $down_payment_due;
-                    } 
-                    $salse->down_payment_due = $down_payment_due;
-                }  
-    
-                if($deposit->deposit_category_id==3){
-                    $booking_pay = $deposit->amount;
-                    $booking_due =  $salse->booking_due - $booking_pay;
-                    if($booking_due <= 0){
-                        $booking_due = 0;
-                    }else{
-                        $booking_due = $down_payment_due;
-                    } 
-                    $salse->booking_due = $booking_due;
-                }  
-                $salse->save();
-                $this->deposit_commission($deposit->id);
-            } 
-        } 
-    }
-
-    public function deposit_commission($id){
-        $deposit = Deposit::find($id);
-        $customer = Customer::find($deposit->customer_id);
-        $salse = Salse::where('customer_id',$deposit->customer_id)->first();
-        $all_employees = user_reporting($customer->ref_id);  
-        $commissions = Commission::where('status',1)->get(); 
-  
-        $user = User::whereIn('id',$all_employees); 
-        $datas = [];  
-
-        // Employee Commission 
-        foreach($commissions as $commission){   
-            $designations =  $commission->designations->pluck('id')->toArray();
-            $loopUser = clone $user; 
-            $commission_user = $loopUser->whereHas('employee',function($query) use($designations){
-                $query->whereIn('designation_id',$designations);
-            })->select('id')
-            ->get(); 
-            if($commission_user->count() > 0){
-                $datas[$commission->id] =  $commission_user;
-            } 
-        } 
-
-        // Freelancer Commission
-        foreach($commissions as $commission){   
-            $designations =  $commission->designations->pluck('id')->toArray();
-            $loopUser = clone $user; 
-            $commission_user = $loopUser->whereHas('freelancer',function($query) use($designations){
-                $query->whereIn('designation_id',$designations);
-            })->select('id','user_id','name')
-            ->get(); 
-            if($commission_user->count() > 0){
-                $datas[$commission->id] =  $commission_user;
-            } 
-        } 
-
-        foreach($datas as $key=>$data){ 
-            $commission = Commission::find($key);
-            $total_employee = count($data);
-            $total_commission =  ($deposit->amount * $commission->commission) / 100; 
-            $each_employee_commission = $total_commission / $total_employee;
-
-            foreach($data as $employee){    
-                $deposit_commission = new DepositCommission();
-                $deposit_commission->user_id = $employee->id;
-                $deposit_commission->designation_id = $employee->employee?$employee->employee->designation_id:$employee->freelancer->designation_id;
-                $deposit_commission->salse_id = $salse->id;
-                $deposit_commission->deposit_id = $deposit->id;
-                $deposit_commission->project_id = $salse->project_id;
-                $deposit_commission->commission_id = $commission->id;
-                $deposit_commission->share_ids = json_encode($data->pluck('id')->toArray()); 
-                $deposit_commission->commission_percent = $commission->commission;
-                $deposit_commission->amount = $each_employee_commission;
-                $deposit_commission->save();
-            }
-        } 
-     
-    }
+   
 }
