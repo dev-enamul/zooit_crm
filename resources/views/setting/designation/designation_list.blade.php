@@ -91,34 +91,7 @@
                     <div class="form-group mb-2">
                         <label for="title">Position Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="title" name="title" required>
-                    </div> 
-
-                    <div class="form-group mb-2">
-                        <label for="commission_id">Commission <span class="text-danger">*</span></label>
-                        <select id="commission_id" class="select2" name="commission_id" required>
-                            @foreach ($commissions as $item)
-                                <option value="{{$item->id}}">{{$item->title}} - {{$item->commission}}%</option>
-                            @endforeach
-                                
-                        </select> 
-                    </div> 
-
-                    <div class="form-group mb-2">
-                        <label for="working_place">Working Space <span class="text-danger">*</span></label>
-                        <select id="working_place" class="select2" name="working_place" required> 
-                            <option value="1">Zone</option> 
-                            <option value="2">Area</option>  
-                            <option value="3">Head Office</option>
-                        </select> 
                     </div>  
-
-                    <div class="form-group mb-2">
-                        <label for="designation_type">Designation Type <span class="text-danger">*</span></label>
-                        <select id="designation_type" class="select2" name="designation_type" required> 
-                            <option value="1">Employee</option> 
-                            <option value="2">Freelancer</option>   
-                        </select> 
-                    </div>
                 </div> 
                 <div class="modal-footer">
                     <div class="text-end">

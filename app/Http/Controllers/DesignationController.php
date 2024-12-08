@@ -36,9 +36,7 @@ class DesignationController extends Controller
     public function update(Request $request)
     {   
         $request->validate([
-            'title' => 'required:max:45',
-            'commission_id' => 'required', 
-            'working_place' => 'required',
+            'title' => 'required:max:45', 
         ]);
  
         try{
