@@ -16,7 +16,7 @@ class DesignationPermissionSeeder extends Seeder
         $permissions = Permission::all();
  
         //permission for 	D.G.M  to MD
-        for($i=4; $i>=1;$i--){
+        for($i=1; $i>=1;$i--){
             foreach ($permissions as $permission){
                 DesignationPermission::create([
                     'designation_id'=> $i, 
