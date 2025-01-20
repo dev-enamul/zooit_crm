@@ -126,7 +126,7 @@
             placeholder: "Select Customer",
             allowClear: true,
             ajax: {
-                url: '{{ route('select2_customer') }}',
+                url: '{{ route('select2.followup.customer') }}',
                 dataType: 'json',
                 data: function (params) {
                     var query = {
