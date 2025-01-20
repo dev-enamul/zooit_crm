@@ -30,7 +30,7 @@
                             <form class="needs-validation" action="{{route('meeting.store')}}" method="post" novalidate>
                                 @csrf
                                 <div class="row">   
-                                    <input type="hidden" name="meeting_id" value="{{$meeting->id}}">
+                                    <input type="hidden" name="meeting_id" value="{{@$meeting->id}}">
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Customer</label>
