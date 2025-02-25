@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Api\LeadStoreController;
+use App\Http\Controllers\CustomerController; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('api-contact-save',[CustomerController::class,'apiSave']);
+Route::get('services',[LeadStoreController::class,'services']);
+Route::post('lead-save',[LeadStoreController::class,'saveLead']); 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+ 

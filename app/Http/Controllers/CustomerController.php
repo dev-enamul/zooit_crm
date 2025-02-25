@@ -406,41 +406,7 @@ class CustomerController extends Controller {
         return view('customer.customer_details', compact('customer', 'user'));
     }
 
-    public function apiSave(Request $request){
-        $user = User::create([
-            'name'           => $request->name,
-            'phone'          => get_phone($request->phone),
-            'password'       => bcrypt('123456'), 
-            'user_type'      => 3,  
-            'status'         => 1,
-            'created_by'     => 1,
-        ]);
-
-        UserContact::create([
-            'user_id'        => $user->id,
-            'name'           =>  $request->name,
-            'type'           => 1, 
-            'phone'          => get_phone($request->phone),
-            'created_at'     => now(),
-        ]);
-
-        UserAddress::create([
-            'user_id' => $user->id,
-        ]);
  
-        Customer::create([
-            'visitor_id'   => User::generateNextVisitorId(),
-            'user_id'       => $user->id, 
-            'ref_id'        => 1,
-            'service_id'    => 1,
-            'find_media_id' => 1,
-            'type'          => 1,
-            'remark'        => $request->message,
-            'status'        => 0, 
-            'created_by'    => 1, 
-        ]);
-    }
-
     
 
 }
