@@ -32,13 +32,8 @@ class CustomersDataTable extends DataTable {
             ->addColumn('service', function ($data) { 
                 return $data->service->service??"-";
             }) 
-            ->addColumn('name', function ($data) {  
-                if($data->user->userContact->type==2){
-                    $name = $data->user->userContact->name." (". $data->user->name .") ";
-                }else{
-                    $name = $data->user->name;
-                }
-                return $name;
+            ->addColumn('name', function ($data) {   
+                return $data->user->name;
             }) 
             ->addColumn('created_by', function ($data) { 
                 if(isset($data->created_by) && $data->created_by!=null){

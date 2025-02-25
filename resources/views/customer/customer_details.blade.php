@@ -54,6 +54,12 @@
                                         </div>
                                     </div>  
 
+                                    @php
+                                        $customer_id = $customer->customer_id;
+                                        if($customer_id==null){
+                                            $customer_id = $customer->visitory_id
+                                        }
+                                    @endphp
                                     <div class="col-3">
                                         <div class="mb-3">
                                             <label class="form-label">Customer ID </label>

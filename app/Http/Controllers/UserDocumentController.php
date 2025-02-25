@@ -18,7 +18,7 @@ class UserDocumentController extends Controller
         return view('profile.document',compact('user','datas'));
     }
 
-    public function store(Request $request){ 
+    public function store(Request $request){
       
         $file = $request->file('file');
         $fileType = $file->getClientMimeType();

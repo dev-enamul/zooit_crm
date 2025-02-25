@@ -199,9 +199,9 @@ class User extends Authenticatable
         return $this->hasOne(UserAddress::class);
     }
 
-    public function userContact()
+    public function userContacts()
     {
-        return $this->hasOne(UserContact::class);
+        return $this->hasMany(UserContact::class);
     }
 
     public  function userFamily()

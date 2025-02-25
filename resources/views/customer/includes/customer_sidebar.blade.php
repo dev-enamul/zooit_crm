@@ -10,9 +10,14 @@
         <div class="card-body">
             <div class="list-group"> 
                 @foreach ($customer->user->customer as $single_customer)
-                <a href="{{route('customer.profile',encrypt($single_customer->id))}}" class="list-group-item list-group-item-action {{$customer->id==$single_customer->id?"active":""}}">{{$single_customer->customer_id}}</a> 
-                @endforeach
-               
+                @php
+                    $customer_id = $single_customer->customer_id;
+                    if($customer_id==null){
+                        $customer_id = $single_customer->visitor_id;
+                    }
+                @endphp
+                <a href="{{route('customer.profile',encrypt($single_customer->id))}}" class="list-group-item list-group-item-action {{$customer->id==$single_customer->id?"active":""}}">{{$customer_id}}</a> 
+                @endforeach 
             </div>
         </div>
     </div> 

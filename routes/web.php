@@ -82,6 +82,7 @@ use App\Http\Controllers\settings\LastSubmitTimeSettingController;
 use App\Http\Controllers\SubProductController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\UserCommissionController;
+use App\Http\Controllers\UserContactController;
 use App\Http\Controllers\UserDocumentController;
 use App\Http\Controllers\WhatsAppController;
 use App\Models\DepositTarget;
@@ -131,6 +132,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('profile-wallet/{id}', [ProfileController::class, 'wallet'])->name('profile.wallet');
         Route::get('profile-document/{id}', [UserDocumentController::class, 'index'])->name('profile.document');
         Route::post('profile-document', [UserDocumentController::class, 'store'])->name('profile.document.store');
+        Route::post('contact-create',[UserContactController::class,'store'])->name('contact.store');
+        Route::put('contact-update',[UserContactController::class,'update'])->name('contact.update');
+        Route::get('contact-delete/{id}',[UserContactController::class,'destroy'])->name('contact.delete');
 
         // Employee 
         Route::resource('employee', EmployeeController::class);
@@ -202,13 +206,11 @@ Route::group(['middleware' => 'auth'], function () {
         // Customer 
         Route::resource('customer', CustomerController::class);
         
-        Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save'); 
+        Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save');
         Route::get('customer-approve', [CustomerController::class, 'customer_approve'])->name('customer.approve');
         Route::post('customer-approve-save', [CustomerController::class, 'customer_approve_save'])->name('customer.approve.save');
        
-        Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile');
-        Route::get('customer-profile-contact/{id}', [CustomerProfileController::class, 'contact_list'])->name('customer.profile.contact');
-        Route::get('customer-profile-about/{id}', [CustomerProfileController::class, 'about'])->name('customer.profile.about');
+        Route::get('customer-profile/{id}', [CustomerProfileController::class, 'index'])->name('customer.profile'); 
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
         Route::get('customer-details/{id}', [CustomerController::class, "customerDetails"])->name('customer.details');
 

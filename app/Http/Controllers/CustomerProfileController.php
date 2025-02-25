@@ -7,6 +7,7 @@ use App\Events\Notice;
 use App\Models\ColdCalling;
 use App\Models\Customer;
 use App\Models\Deposit;
+use App\Models\Designation;
 use App\Models\FollowUp;
 use App\Models\FollowUpAnalysis;
 use App\Models\Lead;
@@ -46,33 +47,18 @@ class CustomerProfileController extends Controller
             $message = "Customer Profile Viewed";
             $user->notify(new NewMessageNotification($message));  
 
+            $contacts = UserContact::where('user_id',$customer->user_id)->get();
+            $designations = Designation::where('status',1)->get();
             return view('customer.customer_profile',compact([
-                'customer',     
+                'designations',
+                'customer',    
+                'contacts',
                 'communication' 
             ]));
-        }catch(Exception $e){
-            dd($e->getMessage());
+        }catch(Exception $e){ 
             return redirect()->back()->with('error',$e->getMessage());
         }
     } 
 
-    public function contact_list($id){
-        $id = decrypt($id); 
-        $customer = Customer::find($id); 
-        $contact_persons = UserContact::where('user_id',$customer->user_id)->get(); 
-        return view('customer.customer_contacts',compact([
-            'customer',
-            'contact_persons'
-        ])); 
-    }
-
-    public function about($id){
-        $id = decrypt($id);
-        try{
-            $customer = Customer::find($id);
-            return view('customer.customer_about',compact('customer'));
-        }catch(Exception $e){
-            return redirect()->back()->with("success",$e->getMessage());
-        }
-    }
+ 
 }

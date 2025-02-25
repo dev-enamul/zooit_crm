@@ -27,6 +27,9 @@ if (!function_exists('getSlug')) {
 if (!function_exists('get_date')) {
     function get_date($inputDate, $format = 'j M, Y', $timezone = 'Asia/Dhaka') {
         try {
+            if($inputDate==null){
+                return "-";
+            }
             $date = new DateTime($inputDate);
             // $date->setTimezone(new DateTimeZone($timezone));
             return $date->format($format);
