@@ -12,6 +12,7 @@ use App\Models\Presentation;
 use App\Models\Project;
 use App\Models\ProjectUnit;
 use App\Models\Rejection;
+use App\Models\Service;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\VisitAnalysis;
@@ -34,7 +35,8 @@ class FollowupController extends Controller {
         $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d');
         $employee   = $request->employee ?? null;
         $employee   = $employee ? User::find($employee) ?? User::find(auth()->user()->id) : User::find(auth()->user()->id);
-        return $dataTable->render('followup.followup_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
+        $services = Service::get();
+        return $dataTable->render('followup.followup_list', compact('title', 'employee', 'status', 'start_date', 'end_date','services'));
     }
 
     public function priority() {

@@ -64,6 +64,7 @@ class FollowUpDataTable extends DataTable {
     
      public function query(FollowUp $model, Request $request): QueryBuilder
         {
+            $service = $request->service??null;
             if (isset($request->employee) && !empty($request->employee)) {
                 $user_id = (int) $request->employee;
             } else {
@@ -90,8 +91,11 @@ class FollowUpDataTable extends DataTable {
                         ->orWhere('employee_id', Auth::user()->id)
                         ->orWhere('created_by', Auth::user()->id);
                 })
-                ->whereHas('customer', function ($q) use ($user_employee) {
-                    $q->whereIn('ref_id', $user_employee);
+                ->whereHas('customer', function ($q) use ($user_employee, $service) {
+                    $q->whereIn('ref_id', $user_employee)
+                    ->when(!empty($service), function ($q) use ($service) {
+                        $q->where('service_id', $service);
+                    });                     
                 }) 
                 ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession'])
                 ->join(

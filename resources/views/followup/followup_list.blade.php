@@ -65,6 +65,18 @@
                         </select>
                     </div>
                 </div>  
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="service" class="form-label">Employee</label>
+                        <select class="select2" id="service" name="service">
+                            @foreach ($services as $service)
+                                <option value = "{{$service->id}}" selected="selected">{{$service->service}} </option>
+                            @endforeach 
+                        </select>
+                    </div>
+                </div>  
+
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label for="date_range" class="form-label">Next Followup Date</label>
