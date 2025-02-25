@@ -64,7 +64,7 @@ class FollowUpDataTable extends DataTable {
     
      public function query(FollowUp $model, Request $request): QueryBuilder
         {
-            $service = $request->service??null;
+            $service = $request->service;
             if (isset($request->employee) && !empty($request->employee)) {
                 $user_id = (int) $request->employee;
             } else {
@@ -75,9 +75,10 @@ class FollowUpDataTable extends DataTable {
                 $date       = explode(' - ', $request->date);
                 $start_date = date('Y-m-d', strtotime($date[0]));
                 $end_date   = date('Y-m-d', strtotime($date[1]));
-                $model = $model->whereBetween('next_followup_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
-            } 
-
+            } else {
+                $start_date = date('Y-m-01');
+                $end_date   = date('Y-m-t');
+            }
             $user          = User::find($user_id);
             $user_employee = json_decode($user->user_employee);
             if ($user_employee == null) {
@@ -93,10 +94,11 @@ class FollowUpDataTable extends DataTable {
                 })
                 ->whereHas('customer', function ($q) use ($user_employee, $service) {
                     $q->whereIn('ref_id', $user_employee)
-                    ->when(!empty($service), function ($q) use ($service) {
+                    ->when($service, function ($q) use ($service) {
                         $q->where('service_id', $service);
-                    });                     
-                }) 
+                    });
+                })
+                ->whereBetween('next_followup_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
                 ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession'])
                 ->join(
                     DB::raw('(SELECT MAX(id) as latest_id FROM follow_ups GROUP BY customer_id) latest'),

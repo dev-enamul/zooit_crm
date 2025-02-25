@@ -71,7 +71,7 @@
                         <label for="service" class="form-label">Employee</label>
                         <select class="select2" id="service" name="service">
                             @foreach ($services as $service)
-                                <option value = "{{$service->id}}" selected="selected">{{$service->service}} </option>
+                                <option value = "{{$service->id}}">{{$service->service}} </option>
                             @endforeach 
                         </select>
                     </div>
