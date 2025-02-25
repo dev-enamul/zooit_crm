@@ -30,8 +30,8 @@
                                         <div class="mb-3">
                                             <label for="company_type" class="form-label">Customer Type</label>
                                             <select class="form-select select2" name="company_type" id="company_type"> 
-                                                 <option {{old("company_type",@$user->type)==1?"selected":""}} value="1">Person</option>
-                                                 <option {{old("company_type",@$user->type)==2?"selected":""}} value="2">Company</option>
+                                                <option {{old("company_type",@$user->type)==2?"selected":""}} value="2">Company</option>
+                                                 <option {{old("company_type",@$user->type)==1?"selected":""}} value="1">Person</option> 
                                             </select>  
                                         </div>
                                     </div>
