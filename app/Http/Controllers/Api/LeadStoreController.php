@@ -46,6 +46,7 @@ class LeadStoreController extends Controller
             'password'       => bcrypt('123456'), 
             'user_type'      => 3, 
             'status'         => 1,
+            'created_by'     => 2,
         ]);
  
         UserContact::create([
@@ -53,7 +54,7 @@ class LeadStoreController extends Controller
             'name'           => $request->name, 
             'phone'          => get_phone($request->phone),
             'email'          => $request->email,
-            'created_at'     => now(),
+            'created_at'     => now(), 
         ]);  
 
         Customer::create([
@@ -62,7 +63,8 @@ class LeadStoreController extends Controller
             'service_id'     => $request->service_id,
             'find_media_id'  => 4, 
             'remark'         => $request->message,
-            'status'         => 0
+            'status'         => 0,
+            'created_by'     => 2,
         ]);
  
         return response()->json([
