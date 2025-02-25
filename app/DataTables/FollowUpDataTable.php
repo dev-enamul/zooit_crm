@@ -45,11 +45,7 @@ class FollowUpDataTable extends DataTable {
             })  
 
             ->addColumn('name', function ($followUp) {
-                if($followUp->customer->user->userContact->type==2){
-                    $name = $followUp->customer->user->userContact->name." (". $followUp->customer->user->name .") ";
-                }else{
-                    $name = $followUp->customer->user->name;
-                }
+                $name = @$followUp->customer->user->name??"";
                 return $name;
             })
  
