@@ -74,10 +74,8 @@ class FollowUpDataTable extends DataTable {
                 $date       = explode(' - ', $request->date);
                 $start_date = date('Y-m-d', strtotime($date[0]));
                 $end_date   = date('Y-m-d', strtotime($date[1]));
-            } else {
-                $start_date = date('Y-m-01');
-                $end_date   = date('Y-m-t');
-            }
+                $model = $model->whereBetween('next_followup_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
+            } 
 
             $user          = User::find($user_id);
             $user_employee = json_decode($user->user_employee);
@@ -94,8 +92,7 @@ class FollowUpDataTable extends DataTable {
                 })
                 ->whereHas('customer', function ($q) use ($user_employee) {
                     $q->whereIn('ref_id', $user_employee);
-                })
-                ->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
+                }) 
                 ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession'])
                 ->join(
                     DB::raw('(SELECT MAX(id) as latest_id FROM follow_ups GROUP BY customer_id) latest'),
@@ -103,7 +100,7 @@ class FollowUpDataTable extends DataTable {
                     '=',
                     DB::raw('latest.latest_id')
                 )
-                ->orderBy('next_followup_date', 'asc')  
+                ->orderBy('next_followup_date', 'desc') 
                 ->newQuery();
 
             $datas->user_reporting = $user->user_reporting;
