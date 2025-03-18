@@ -120,7 +120,22 @@
                    }
                }
            });
-       });
+       }); 
+
+       $(document).ready(function() { 
+        $('body').on('click', '.copy-phone', function() {
+            var phone = $(this).data('phone');
+             
+            var tempInput = $('<input>');
+            $('body').append(tempInput);
+            tempInput.val(phone).select();
+            document.execCommand('copy');
+            tempInput.remove();
+ 
+            Toast.fire({ icon: "success", title: 'Phone number copied to clipboard!' });  
+        });
+    });
+
 </script>
 @endsection
 

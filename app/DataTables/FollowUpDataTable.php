@@ -48,11 +48,36 @@ class FollowUpDataTable extends DataTable {
                 $name = @$followUp->customer->user->name??"";
                 return $name;
             })
- 
+
+            ->addColumn('contact', function ($followUp) {
+                $phone = @$followUp->customer->user->phone ?? "";
+                
+                if ($phone) {
+                    return $phone .'
+                            <a href="tel:' . $phone . '" class="btn btn-primary btn-sm ms-2" style="margin-right: 5px;">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                             
+                            <button class="btn btn-secondary btn-sm copy-phone" data-phone="' . $phone . '" style="margin-right: 5px;">
+                                <i class="fas fa-copy"></i>
+                            </button>  
+
+                             <a target="blank" href="https://api.whatsapp.com/send/?phone=' . preg_replace('/[^0-9]/', '', $phone) . '" class="btn btn-primary btn-sm" style="margin-right: 5px;">
+                                <i class="fab fa-whatsapp"></i>
+                            </a> 
+                    ';
+                }
+                return $phone;
+            })
+            
+            
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
-            });
+            })->rawColumns(['contact','action']) 
+            ->setRowId('id');
+            
+            
     }
 
     /**
@@ -149,7 +174,7 @@ class FollowUpDataTable extends DataTable {
             Column::make('serial')->title('S/L')->sortable(false),
             Column::make('customer.visitor_id')->title('Visitor')->sortable(false),
             Column::make('name')->title('Name')->sortable(false),
-            Column::make('customer.user.phone')->title('Phone')->sortable(false), 
+            Column::make('contact')->title('Contact')->sortable(false), 
             // Column::make('created_by')->title('Employee')->sortable(false), 
             Column::make('followup_date')->title('Next Followup')->sortable(false), 
             Column::make('purchase_possibility')->title('Possibility')->sortable(false), 

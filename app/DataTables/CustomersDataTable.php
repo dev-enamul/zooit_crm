@@ -115,7 +115,7 @@ class CustomersDataTable extends DataTable {
             Column::make('visitor_id')->title('Visitor ID')->searchable(true),
             // Column::make('customer_id')->title('Customer ID')->searchable(true),
             Column::make('name')->title('Name')->searchable(true),
-            Column::make('user.phone')->title('Phone Number')->searchable(true),  
+            Column::make('user.phone')->title('Phone Number')->searchable(true),
             Column::make('service')->title('Service'),  
             Column::make('created_by')->title('Created By'), 
         ];
