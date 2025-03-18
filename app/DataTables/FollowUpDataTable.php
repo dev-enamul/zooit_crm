@@ -131,7 +131,7 @@ class FollowUpDataTable extends DataTable {
                     '=',
                     DB::raw('latest.latest_id')
                 )
-                ->orderBy('next_followup_date', 'desc') 
+                ->orderBy('next_followup_date', 'asc') 
                 ->newQuery();
 
             $datas->user_reporting = $user->user_reporting;
