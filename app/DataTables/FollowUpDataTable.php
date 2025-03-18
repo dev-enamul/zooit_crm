@@ -62,7 +62,7 @@ class FollowUpDataTable extends DataTable {
                                 <i class="fas fa-copy"></i>
                             </button>  
 
-                             <a target="blank" href="https://api.whatsapp.com/send/?phone=' . preg_replace('/[^0-9]/', '', $phone) . '" class="btn btn-primary btn-sm" style="margin-right: 5px;">
+                             <a target="blank" href="https://api.whatsapp.com/send/?phone=' . preg_replace('/[^0-9]/', '', $phone) . '" class="btn btn-success btn-sm" style="margin-right: 5px;">
                                 <i class="fab fa-whatsapp"></i>
                             </a> 
                     ';
