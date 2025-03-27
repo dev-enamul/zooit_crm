@@ -38,7 +38,7 @@
                             <div class="timeline timeline-zigzag">
 
                                 {{-- Customer  --}}
-                                 @if (isset($customer) && $customer != null)
+                                 {{-- @if (isset($customer) && $customer != null)
                                     <div class="timeline-item">
                                         <div class="timeline-pin">
                                             <i class="marker marker-circle text-danger"></i>
@@ -49,7 +49,7 @@
                                                 
                                         </div>
                                     </div>
-                                 @endif
+                                 @endif --}}
                                 
                                 
 

@@ -37,7 +37,7 @@ class CustomerProfileController extends Controller
             $communication['cold_calling'] = ColdCalling::where('customer_id', $id)->first();
             $communication['lead'] = Lead::where('customer_id', $id)->first(); 
             $communication['presentation'] = Presentation::where('customer_id', $id)->first(); 
-            $communication['follow_up'] = FollowUp::where('customer_id', $id)->get(); 
+            $communication['follow_up'] = FollowUp::where('customer_id', $id)->latest()->get(); 
             $communication['negotiation'] = Negotiation::where('customer_id', $id)->first(); 
             $communication['rejection'] = Rejection::where('customer_id', $id)->first(); 
             $communication['salse_return'] = SalseReturn::where('customer_id', $id)->first();  
