@@ -51,9 +51,8 @@ class SearchController extends Controller
             ->orWhere('phone','like','%'.$key.'%')
             ->orWhere('user_id','like','%'.$key.'%')
             ->whereHas('userContacts',function($q) use($key){
-                $q->orWhere('office_phone','like','%'.$key.'%')
-                ->orWhere('personal_phone','like','%'.$key.'%')
-                ->orWhere('office_email','like','%'.$key.'%')
+                $q->orWhere('personal_phone','like','%'.$key.'%')  
+                ->orWhere('email','like','%'.$key.'%')
                 ->orWhere('personal_email','like','%'.$key.'%');
             })
             ->whereHas('userId',function($q) use($key){
