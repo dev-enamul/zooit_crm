@@ -141,7 +141,7 @@
                                 <div class="rich-list rich-list-bordered rich-list-action">
                                     @foreach ($contacts as $contact)
                                     <div class="d-flex justify-content-between">
-                                        <h5>{{$contact->designation->title}}</h5>
+                                        <h5>{{@$contact->designation->title}}</h5>
                                         <div>
                                             <a href="javascript:void(0)" class="update_contact btn btn-primary" data-contact="{{ json_encode($contact) }}"> 
                                                 <i class="mdi mdi-pencil align-middle"></i>
