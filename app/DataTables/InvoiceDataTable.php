@@ -32,11 +32,7 @@ class InvoiceDataTable extends DataTable
                 return "INV-".$data->id;
             })
             ->addColumn('name', function ($data) {  
-                if($data->user->userContact->type==2){
-                    $name = $data->user->userContact->name." (". $data->user->name .") ";
-                }else{
-                    $name = $data->user->name;
-                }
+                $name = $data->user->name ." ".$data?->user?->userContact?->name??'' ." ";
                 return $name." [".$data->customer->customer_id."]";
             }) 
             ->addColumn('total_amount', function ($data) {
@@ -82,7 +78,8 @@ class InvoiceDataTable extends DataTable
             $user_id = (int) $request->employee;
         } else {
             $user_id = auth()->user()->id;
-        }
+        } 
+        
         $user        = User::find($user_id);
         $my_employee = json_decode($user->user_employee);   
         if($my_employee == null){
@@ -90,7 +87,7 @@ class InvoiceDataTable extends DataTable
         }
 
         if (isset($request->status)) {
-            if ($request->status == "unpaid") { 
+            if ($request->status == "unpaid") {
                 $model = $model->where('status', 0); 
 
             } elseif ($request->status == "partial") { 

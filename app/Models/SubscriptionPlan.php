@@ -11,8 +11,7 @@ class SubscriptionPlan extends Model
     protected $fillable = [
         'user_id',
         'customer_id',
-        'project_id',
-        'reason',
+        'project_id', 
         'package_type',
         'amount',
         'next_payment_date',
@@ -22,14 +21,22 @@ class SubscriptionPlan extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    } 
+    }  
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
-    } 
+    }  
+
     public function project()
     {
         return $this->belongsTo(Project::class);
+    } 
+
+    public function details()
+    {
+        return $this->hasMany(SubscriptionPlanDetails::class);
     }
+
 
 }

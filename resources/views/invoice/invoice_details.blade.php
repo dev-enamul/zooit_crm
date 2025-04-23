@@ -87,44 +87,45 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <img src="{{asset('assets/images/logo-dark.png')}}" alt="logo-dark" height="40px">
-                                        <div class="company_info">
-                                            <p>24/ A1-, A-2, Bosila Rd, Mohammadpur, Dhaka</p>
-                                            <p>1711432284</p>
-                                            <p>info@thezoomit.com</p>
-                                        </div> 
-                                        <div class="bill_to">
-                                            <h6 class="text-primary">BILL TO </h6>
-                                            <h6>{{@$invoice->user->name}}</h6>
-                                            <p>{{@$invoice->user->userAddress->address}}</p> 
-                                        </div>  
-                                    </div> 
-
-                                    <div class="col-md-4 text-center">
-                                        @if ($invoice->status==0)
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td>
+                                            <img src="{{asset('assets/images/logo-dark.png')}}" alt="logo-dark" height="40px">
+                                            <div class="company_info">
+                                                <p>24/ A1-, A-2, Bosila Rd, Mohammadpur, Dhaka</p>
+                                                <p>1711432284</p>
+                                                <p>info@thezoomit.com</p>
+                                            </div> 
+                                            <div class="bill_to">
+                                                <h6 class="text-primary">BILL TO </h6>
+                                                <h6>{{@$invoice->user->name}}</h6>
+                                                <p>{{@$invoice->user->userAddress->address}}</p> 
+                                            </div>  
+                                        </td>
+                                        <td style="padding:0px 50px">
+                                            @if ($invoice->status==0)
                                             <img src="https://t3.ftcdn.net/jpg/04/87/13/44/360_F_487134492_svhGzEgDXKyQuuPXQrs7prKoBYWCEJdw.jpg" alt="" width="100px">
-                                        @else 
-                                        <img src="https://png.pngtree.com/png-vector/20230208/ourmid/pngtree-paid-stamp-vector-illustration-png-image_6585127.png" alt="" width="100px">
+                                            <br><a href="" class="btn btn-lg btn-secondary">Pay Now</a>
+                                            @else 
+                                            <img src="https://png.pngtree.com/png-vector/20230208/ourmid/pngtree-paid-stamp-vector-illustration-png-image_6585127.png" alt="" width="100px">
                                         @endif
-                                        
-                                    </div> 
-
-                                    <div class="col-md-4">
-                                        <h1 class="text-primary">INVOICE</h1>
-                                        <div class="invoice_info">
-                                            <h6 class="text-primary m-0 p-0">INVOICE# {{$invoice->id}} </h6> 
-                                            <p><b>Issue Date</b> {{get_date($invoice->invoice_date)}}</p>
-                                            <p><b>Due Date</b> {{get_date($invoice->due_date)}}</p>
-                                        </div>
-
-                                        <div class="invoice_reason">
-                                            <h6 class="text-primary">FOR </h6> 
-                                            <h6>{{@$invoice->title}} </h6> 
-                                        </div>
-                                    </div>
-                                </div>  
+                                        </td>
+                                        <td>
+                                            <h1 class="text-primary">INVOICE</h1>
+                                            <div class="invoice_info">
+                                                <h6 class="text-primary m-0 p-0">INVOICE# {{$invoice->id}} </h6> 
+                                                <p><b>Issue Date</b> {{get_date($invoice->invoice_date)}}</p>
+                                                <p><b>Due Date</b> {{get_date($invoice->due_date)}}</p>
+                                            </div>
+    
+                                            <div class="invoice_reason">
+                                                <h6 class="text-primary">FOR </h6> 
+                                                <h6>{{@$invoice->title}} </h6> 
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            
 
                                 <table id="datatable" class="table  dt-responsive nowrap fs-14" >
                                     <thead>
@@ -134,10 +135,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>{{$invoice->description}} </td>
-                                            <td>{{get_price($invoice->amount)}}</td>
-                                        </tr>
+                                        @if ($invoice->description!=null)
+                                            <tr>
+                                                <td>{{$invoice->description}} </td>
+                                                <td>{{get_price($invoice->amount)}}</td>
+                                            </tr> 
+                                        @else 
+                                            @php
+                                                $details = $invoice->details;
+                                            @endphp
+                                            @if (isset($details) && count($details)>0)
+                                                @foreach ($details as $detail)
+                                                    <tr>
+                                                        <td>{{$detail->reason}} </td>
+                                                        <td>{{get_price($detail->amount)}}</td>
+                                                    </tr> 
+                                                @endforeach
+                                            @endif
+                                        @endif
+                                        
+
                                         <tr>
                                             <td><h6>TOTAL</h6></td>
                                             <td><h6>{{get_price($invoice->amount)}}</h6></td>
@@ -169,20 +186,28 @@
                                     </tbody>
                                 </table>
 
-                                <div class="invoice_footer">
-                                    <p><b>Please paid the bill before Due Date</b></p>
-                                    <p>Grand Total is excluded from vat & tax</p>
-                                    <p>If you have any questions concerning this invoice, <b>Shiblee Mozumder | +8801711432284 |</b></p>
-                                    <a href="mailto:thezoomit@gmail.com">thezoomit@gmail.com</a>
-                                </div>
-
-                                <div class="bank_info">
-                                    <h5 class="m-0">Bank Details</h5>
-                                    <img src="https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/feature/images/united_commercial_bank.jpg" alt="" width="70px">
-                                    <p><b>Ac Name </b>ZOOM IT</p>
-                                    <p><b>AC NO </b>1782112000003115</p>
-                                    <p><b>UCB bank Ati Bazar Branch</b></p>
-                                </div>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div class="invoice_footer">
+                                                <p><b>Please paid the bill before Due Date</b></p>
+                                                <p>Grand Total is excluded from vat & tax</p>
+                                                <p>If you have any questions concerning this invoice, <b>Shiblee Mozumder | +8801711432284 |</b></p>
+                                                <a href="mailto:thezoomit@gmail.com">thezoomit@gmail.com</a>
+                                            </div>
+            
+                                            <div class="bank_info">
+                                                <h5 class="m-0">Bank Details</h5>
+                                                <img src="https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/feature/images/united_commercial_bank.jpg" alt="" width="70px">
+                                                <p><b>Ac Name </b>ZOOM IT</p>
+                                                <p><b>AC NO </b>1782112000003115</p>
+                                                <p><b>UCB bank Ati Bazar Branch</b></p>
+                                            </div>
+                                        </td>
+                                        
+                                    </tr>
+                                   
+                                </table>
 
                             </div>
                         </div>

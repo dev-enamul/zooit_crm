@@ -26,23 +26,7 @@
                             <form class="needs-validation" action="{{ route('service.payment.store') }}" novalidate method="post">
                                 @csrf  
                                 <input type="hidden" name="customer_id" value="{{$customer->id}}">
-                                <div class="row">
-                                    <!-- Reason Field -->
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="reason" class="form-label">Reason <span class="text-danger">*</span></label>
-                                            <input 
-                                                type="text" 
-                                                name="reason" 
-                                                class="form-control" 
-                                                id="reason" 
-                                                placeholder="What for this payment" 
-                                                value="{{ old('reason', isset($payment) ? $payment->reason : '') }}">
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="row"> 
                             
                                     <!-- Payment Type Field -->
                                     <div class="col-md-6">
@@ -53,24 +37,7 @@
                                                 <option value="2" {{ old('package_type', isset($payment) && $payment->package_type == 2 ? 'selected' : '') }}>Monthly</option>
                                             </select>
                                         </div>
-                                    </div>
-                            
-                                    <!-- Amount Field -->
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="amount" class="form-label">Amount <span class="text-danger">*</span></label>
-                                            <input 
-                                                type="number" 
-                                                name="amount" 
-                                                class="form-control" 
-                                                id="amount" 
-                                                placeholder="Enter the amount" 
-                                                value="{{ old('amount', isset($payment) ? $payment->amount : '') }}">
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> 
                             
                                     <!-- Start From Field -->
                                     <div class="col-md-6">
@@ -88,18 +55,100 @@
                                         </div>
                                     </div>
                             
-                                    <!-- Remark Field -->
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <label for="remark" class="form-label">Remark</label>
-                                            <textarea 
-                                                class="form-control" 
-                                                id="remark" 
-                                                rows="3" 
-                                                name="remark" 
-                                                placeholder="Enter Remark">{{ old('remark', isset($payment) ? $payment->remark : '') }}</textarea>
+                                    @php
+                                        $details = $payment->details;
+                                    @endphp 
+                                    @if (isset($details) && count($details)>0)
+                                        @foreach ($details as $detail) 
+                                            <div id="payment-fields">
+                                                <!-- Reason and Amount Input Template -->
+                                                <div class="row payment-field-row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="reason" class="form-label">Reason <span class="text-danger">*</span></label>
+                                                            <input 
+                                                                value="{{$detail->reason}}"
+                                                                type="text" 
+                                                                name="reason[]" 
+                                                                class="form-control" 
+                                                                placeholder="What for this payment">
+                                                            <div class="invalid-feedback">
+                                                                This field is required.
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="amount" class="form-label">Amount <span class="text-danger">*</span></label>
+                                                            <input 
+                                                                value="{{$detail->amount}}"
+                                                                type="number" 
+                                                                name="amount[]" 
+                                                                class="form-control" 
+                                                                placeholder="Enter the amount">
+                                                            <div class="invalid-feedback">
+                                                                This field is required.
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="col-md-12 text-end">
+                                                        <button type="button" class="btn btn-danger remove-payment-field">
+                                                            <i class="fas fa-trash"></i> Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>  
+
+                                            <div class="col-md-12 mb-3 text-center">
+                                                <button type="button" class="btn btn-primary" id="add-payment-field">
+                                                    <i class="fas fa-plus"></i> Add Another Payment
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    @else 
+                                        <div id="payment-fields">
+                                            <!-- Reason and Amount Input Template -->
+                                            <div class="row payment-field-row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="reason" class="form-label">Reason <span class="text-danger">*</span></label>
+                                                        <input 
+                                                            type="text" 
+                                                            name="reason[]" 
+                                                            class="form-control" 
+                                                            placeholder="What for this payment">
+                                                        <div class="invalid-feedback">
+                                                            This field is required.
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="amount" class="form-label">Amount <span class="text-danger">*</span></label>
+                                                        <input 
+                                                            type="number" 
+                                                            name="amount[]" 
+                                                            class="form-control" 
+                                                            placeholder="Enter the amount">
+                                                        <div class="invalid-feedback">
+                                                            This field is required.
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="col-md-12 text-end">
+                                                    <button type="button" class="btn btn-danger remove-payment-field">
+                                                        <i class="fas fa-trash"></i> Remove
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                 
+                                        <div class="col-md-12 mb-3 text-center">
+                                            <button type="button" class="btn btn-primary" id="add-payment-field">
+                                                <i class="fas fa-plus"></i> Add Another Payment
+                                            </button>
+                                        </div>
+                                    @endif
                                 </div>
                             
                                 <!-- Submit Button -->
@@ -108,7 +157,8 @@
                                         <i class="fas fa-save"></i> {{ isset($payment) ? 'Update' : 'Submit' }}
                                     </button>
                                 </div>
-                            </form>
+                            </form> 
+                            
                             
                         </div>
                     </div>
@@ -125,25 +175,53 @@
 @endsection 
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () { 
-        $('#add_installment').on('click', function () { 
-            const $installmentSection = $('.installment_section').first(); 
-            const $newSection = $installmentSection.clone(); 
-            $newSection.find('input').val('');  
-
-            $('#installment_container').append($newSection); 
-            $newSection.find('.remove_installment').on('click', function () {
-                $(this).closest('.installment_section').remove();
-            });
-        }); 
-        $(document).on('click', '.remove_installment', function () {
-            $(this).closest('.installment_section').remove();
+    $(document).ready(function () {
+        // Add a new set of reason and amount fields
+        $('#add-payment-field').on('click', function () {
+            var newFields = `
+                <div class="row payment-field-row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason <span class="text-danger">*</span></label>
+                            <input 
+                                type="text" 
+                                name="reason[]" 
+                                class="form-control" 
+                                placeholder="What for this payment">
+                            <div class="invalid-feedback">
+                                This field is required.
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount <span class="text-danger">*</span></label>
+                            <input 
+                                type="number" 
+                                name="amount[]" 
+                                class="form-control" 
+                                placeholder="Enter the amount">
+                            <div class="invalid-feedback">
+                                This field is required.
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-danger remove-payment-field">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+            $('#payment-fields').append(newFields);
         });
-    });  
- 
-</script> 
 
-
+        // Remove a payment field row
+        $(document).on('click', '.remove-payment-field', function () {
+            $(this).closest('.payment-field-row').remove();
+        });
+    });
+</script>
 @endsection
- 

@@ -124,11 +124,26 @@
                                             <th><h6 class="text-primary">Amount</h6></th>  
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="text" name="description" id="description" value="{{@$invoice->description}}"> </td>
-                                            <td>{{get_price($invoice->amount)}}</td>
-                                        </tr> 
+                                    <tbody> 
+                                        @if ($invoice->description!=null)
+                                            <tr>
+                                                <td><input type="text" name="description" id="description" value="{{@$invoice->description}}"> </td>
+                                                <td>{{get_price($invoice->amount)}}</td>
+                                            </tr> 
+                                        @else 
+                                            @php
+                                                $details = $invoice->details;
+                                            @endphp
+                                            @if (isset($details) && count($details)>0)
+                                                @foreach ($details as $detail)
+                                                    <tr>
+                                                        <td>{{$detail->reason}} </td>
+                                                        <td>{{get_price($detail->amount)}}</td>
+                                                    </tr> 
+                                                @endforeach
+                                            @endif
+                                        @endif 
+                                        
                                         <tr>
                                             <td> 
                                                 <h6>TOTAL</h6>

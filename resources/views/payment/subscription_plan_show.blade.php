@@ -25,27 +25,10 @@
                         <div class="card-body">
                             <form class="needs-validation"novalidate method="post"> 
                                 <input type="hidden" name="customer_id" value="{{$customer->id}}">
-                                <div class="row">
-                                    <!-- Reason Field -->
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="reason" class="form-label">Reason <span class="text-danger">*</span></label>
-                                            <input 
-                                                disabled
-                                                type="text" 
-                                                name="reason" 
-                                                class="form-control" 
-                                                id="reason" 
-                                                placeholder="What for this payment" 
-                                                value="{{ old('reason', isset($payment) ? $payment->reason : '') }}">
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <!-- Payment Type Field -->
-                                    <div class="col-md-6">
+                                <div class="row"> 
+
+                                     <!-- Payment Type Field -->
+                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="package_type" class="form-label">Payment Type</label>
                                             <select disabled class="form-select select2" name="package_type" id="package_type">
@@ -53,28 +36,10 @@
                                                 <option value="2" {{ old('package_type', isset($payment) && $payment->package_type == 2 ? 'selected' : '') }}>Monthly</option>
                                             </select>
                                         </div>
-                                    </div>
-                            
-                                    <!-- Amount Field -->
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="amount" class="form-label">Amount <span class="text-danger">*</span></label>
-                                            <input 
-                                                disabled
-                                                type="number" 
-                                                name="amount" 
-                                                class="form-control" 
-                                                id="amount" 
-                                                placeholder="Enter the amount" 
-                                                value="{{ old('amount', isset($payment) ? $payment->amount : '') }}">
-                                            <div class="invalid-feedback">
-                                                This field is required.
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <!-- Start From Field -->
-                                    <div class="col-md-6">
+                                    </div> 
+
+                                     <!-- Start From Field -->
+                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="start_from" class="form-label">Start From <span class="text-danger">*</span></label>
                                             <input 
@@ -88,10 +53,48 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>
-                            
+                                    </div> 
+                                    <!-- Reason Field -->
+                                    @php
+                                        $details = $payment->details;
+                                    @endphp 
+                                    @if (isset($details) && count($details)>0) 
+                                        @foreach ($details as $detail)
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="reason" class="form-label">Reason <span class="text-danger">*</span></label>
+                                                    <input 
+                                                        disabled
+                                                        type="text" 
+                                                        name="reason" 
+                                                        class="form-control" 
+                                                        id="reason" 
+                                                        placeholder="What for this payment" 
+                                                        value="{{ $detail->reason}}"> 
+                                                </div>
+                                            </div> 
+                                    
+                                            <!-- Amount Field -->
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="amount" class="form-label">Amount <span class="text-danger">*</span></label>
+                                                    <input 
+                                                        disabled
+                                                        type="number" 
+                                                        name="amount" 
+                                                        class="form-control" 
+                                                        id="amount" 
+                                                        placeholder="Enter the amount" 
+                                                        value="{{ $detail->amount}}">
+                                                    <div class="invalid-feedback">
+                                                        This field is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach 
+                                    @endif  
                                     <!-- Remark Field -->
-                                    <div class="col-md-12">
+                                    {{-- <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
                                             <textarea 
@@ -102,7 +105,7 @@
                                                 name="remark" 
                                                 placeholder="Enter Remark">{{ old('remark', isset($payment) ? $payment->remark : '') }}</textarea>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div> 
                             </form>
                             

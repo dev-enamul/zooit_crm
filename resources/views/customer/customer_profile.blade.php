@@ -7,8 +7,7 @@
             <div class="row"> 
                 <div class="col-md-3"> 
                     @include('customer.includes.customer_sidebar')
-                </div>  
-
+                </div>
                 @php
                     $customer_id = $customer->customer_id;
                     if($customer_id==null){

@@ -85,6 +85,47 @@
             margin: 0px; 
         }
 
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.375rem;
+            transition: color 0.15s ease-in-out,
+                        background-color 0.15s ease-in-out,
+                        border-color 0.15s ease-in-out,
+                        box-shadow 0.15s ease-in-out;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #69B33A;       /* Main color */
+            border-color: #69B33A;
+        }
+
+        .btn-secondary:hover {
+            color: #fff;
+            background-color: #5ca232;       /* Slightly darker shade for hover */
+            border-color: #51942c;
+        }
+
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 1.25rem;
+            border-radius: 0.5rem;
+        }
+
+
+
+
+
+
         @media print {
             @page {
                 margin: 0.50in;
@@ -130,9 +171,10 @@
                 </div>
                 <div>
                     @if ($invoice->status==0)
-                    <img src="https://t3.ftcdn.net/jpg/04/87/13/44/360_F_487134492_svhGzEgDXKyQuuPXQrs7prKoBYWCEJdw.jpg" alt="" width="100px">
+                        <img src="https://t3.ftcdn.net/jpg/04/87/13/44/360_F_487134492_svhGzEgDXKyQuuPXQrs7prKoBYWCEJdw.jpg" alt="" width="100px">
+                        <br><a href="{{route('invoice.payment',encrypt($invoice->id))}}" class="btn btn-lg btn-secondary">Pay Now</a>
                     @else 
-                    <img src="https://png.pngtree.com/png-vector/20230208/ourmid/pngtree-paid-stamp-vector-illustration-png-image_6585127.png" alt="" width="100px">
+                        <img src="https://png.pngtree.com/png-vector/20230208/ourmid/pngtree-paid-stamp-vector-illustration-png-image_6585127.png" alt="" width="100px">
                     @endif
                 </div>
 
@@ -159,10 +201,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{$invoice->description}}</td>
-                        <td>{{get_price($invoice->amount)}}</td>
-                    </tr>
+                    @if ($invoice->description!=null)
+                        <tr>
+                            <td>{{$invoice->description}} </td>
+                            <td>{{get_price($invoice->amount)}}</td>
+                        </tr> 
+                    @else 
+                        @php
+                            $details = $invoice->details;
+                        @endphp
+                        @if (isset($details) && count($details)>0)
+                            @foreach ($details as $detail)
+                                <tr>
+                                    <td>{{$detail->reason}} </td>
+                                    <td>{{get_price($detail->amount)}}</td>
+                                </tr> 
+                            @endforeach
+                        @endif
+                    @endif
                     <tr>
                         <td>
                             @if ($invoice->tax_amount>0)

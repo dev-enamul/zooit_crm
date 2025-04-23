@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index(InvoiceDataTable $dataTable, Request $request)
     {
         $title      = 'Prospecting List';
@@ -30,22 +28,7 @@ class InvoiceController extends Controller
         return $dataTable->render('invoice.invoice_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
+    
     /**
      * Display the specified resource.
      */
@@ -76,7 +59,7 @@ class InvoiceController extends Controller
             'invoice_date' => 'required|date',
             'due_date' => 'required|date',
             'title' => 'required|string|max:255',
-            'description' => 'required|string', 
+            'description' => 'nullable|string', 
             'tax_amount' => 'required|numeric|min:0',
             'discount_amount' => 'required|numeric|min:0',
         ]); 
@@ -111,5 +94,6 @@ class InvoiceController extends Controller
         $id = decrypt($id);
         $invoice = Invoice::find($id);
         return view('invoice.share_invoice',compact('invoice'));
-    }
+    } 
+    
 }

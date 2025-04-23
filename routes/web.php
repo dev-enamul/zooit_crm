@@ -74,6 +74,7 @@ use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\InstallmentPlanController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadSourceController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\ServiceController;
@@ -89,6 +90,7 @@ use App\Models\DepositTarget;
 use App\Models\ReportingUser;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Twilio\Rest\Api\V2010\Account\Call\PaymentContext;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,8 +105,7 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');  
-Route::group(['middleware' => 'auth'], function () { 
-        Route::get('daily-job',DailyJobController::class);
+Route::group(['middleware' => 'auth'], function () {  
         Route::get('project-proposal',[ProposalController::class,'index']);
         Route::get('whatsapp', [WhatsAppController::class, 'index']);
         Route::post('whatsapp', [WhatsAppController::class, 'store'])->name('whatsapp.store');
@@ -285,12 +286,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('install-payment-edit/{id}',[InstallmentPlanController::class,'edit'])->name('install.payment.edit');
 
         Route::get('service-payment/{id}',[ServicePaymentController::class,'create'])->name('service.payment');
-        Route::post('service-payment-store',[ServicePaymentController::class,'store'])->name('service.payment.store');
+        Route::post('service-payment-store',[ServicePaymentController::class,'storeOrUpdate'])->name('service.payment.store');
         Route::get('service-payment-edit/{id}',[ServicePaymentController::class,'edit'])->name('service.payment.edit');
 
         // Invoice 
-        Route::resource('invoice',InvoiceController::class);
-        Route::get('invoice-share/{id}',[InvoiceController::class,'share'])->name('invoice.share');
+        Route::resource('invoice',InvoiceController::class); 
 
          // Deposit 
         Route::resource('deposit', DepositController::class);
@@ -438,8 +438,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('notification-read/{id}', [NotificationController::class, 'read'])->name('notification.read');
         Route::get('notification-details/{id}', [NotificationController::class, 'details'])->name('notification.details');
         Route::resource('admin-notice', AdminNoticeController::class); 
-});
-        Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
+}); 
+
+Route::get('daily-job',DailyJobController::class);
+Route::get('invoice-share/{id}',[InvoiceController::class,'share'])->name('invoice.share');
+Route::get('invoice-payment/{id}',[PaymentController::class,'payment'])->name('invoice.payment');
+
+Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
 
 Route::get('function_test', function () { 
         UserCreatedEvent::dispatch(auth()->user()->id); 

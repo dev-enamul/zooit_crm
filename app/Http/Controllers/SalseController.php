@@ -25,17 +25,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class SalseController extends Controller
-{
-   
-
+{ 
     public function index()
     {
         $my_all_employee = json_decode(Auth::user()->user_employee);
         $datas = Customer::whereNotNull('customer_id')->get(); 
         return view('salse.salse_list',compact('datas'));
-    }
-
-
+    } 
 
     public function create(Request $request)
     {

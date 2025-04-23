@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('customer_id')->constrained();
             $table->foreignId('project_id')->constrained();
-            $table->string('title')->nullable()->comment('Reason for invoice'); 
+            $table->string('title')->nullable()->comment('Reason for invoice');
             $table->text('description')->nullable()->comment('Description');  
             $table->date('invoice_date');
             $table->date('due_date')->nullable();
