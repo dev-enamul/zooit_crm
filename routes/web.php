@@ -89,6 +89,7 @@ use App\Http\Controllers\WhatsAppController;
 use App\Models\DepositTarget;
 use App\Models\ReportingUser;
 use App\Models\User;
+use App\Services\PhoneMessageService;
 use Illuminate\Http\Request;
 use Twilio\Rest\Api\V2010\Account\Call\PaymentContext;
 
@@ -441,7 +442,7 @@ Route::group(['middleware' => 'auth'], function () {
 }); 
 
 Route::get('daily-job',DailyJobController::class);
-Route::get('invoice-share/{id}',[InvoiceController::class,'share'])->name('invoice.share');
+Route::get('bill/{id}',[InvoiceController::class,'share'])->name('invoice.share');
 Route::get('invoice-payment/{id}',[PaymentController::class,'payment'])->name('invoice.payment');
 
 Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
@@ -451,9 +452,12 @@ Route::get('function_test', function () {
 });
 
 // test
-Route::get('/messae', function () {
-        return view('message');
-    });
+Route::get('/message', function () {
+        $messageService = new PhoneMessageService;
+        $message = "Test";
+        return $messageService->sendMessage(+8801796351081, $message);
+    }); 
+    
     Route::post('send-message',function (Request $request){
         event(new Message($request->username, $request->message));
         return ['success' => true];

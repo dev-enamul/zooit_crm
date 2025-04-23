@@ -318,4 +318,19 @@ if (!function_exists('my_all_employee')) {
         }
     } 
 
+    if (!function_exists('customEncrypt')) {
+        function customEncrypt($id) {
+            $key = 123456;  
+            return base_convert($id ^ $key, 10, 36);  
+        }
+    }
+    
+    if (!function_exists('customDecrypt')) {
+        function customDecrypt($code) {
+            $key = 123456;  
+            return base_convert($code, 36, 10) ^ $key;  
+        }
+    }    
+    
+
 }

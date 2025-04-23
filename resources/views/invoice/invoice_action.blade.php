@@ -7,7 +7,7 @@
         @if ($data->status==0)
             <a class="dropdown-item" href="{{ route('invoice.edit', encrypt($data->id)) }}">Edit</a> 
         @endif 
-        <a href="javascript:void(0)"  class="dropdown-item"  onclick="shareLink('{{ encrypt($data->id) }}', '{{ $data->user->phone }}')">Share</a>
+        <a href="javascript:void(0)"  class="dropdown-item"  onclick="shareLink('{{ customEncrypt($data->id) }}', '{{ $data->user->phone }}')">Share</a>
         
         @can('deposit')
             @if ($data->status != 1)

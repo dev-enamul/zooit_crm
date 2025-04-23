@@ -62,7 +62,8 @@ class InvoiceController extends Controller
             'description' => 'nullable|string', 
             'tax_amount' => 'required|numeric|min:0',
             'discount_amount' => 'required|numeric|min:0',
-        ]); 
+        ]);  
+        
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }  
@@ -82,16 +83,10 @@ class InvoiceController extends Controller
     
         return redirect()->route('invoice.show', encrypt($invoice->id))
                          ->with('success', 'Invoice updated successfully!');
-    }  
-
-    public function destroy(string $id)
-    {
-        
-    } 
-
+    }   
 
     public function share($id){
-        $id = decrypt($id);
+        $id = customDecrypt($id);
         $invoice = Invoice::find($id);
         return view('invoice.share_invoice',compact('invoice'));
     } 
