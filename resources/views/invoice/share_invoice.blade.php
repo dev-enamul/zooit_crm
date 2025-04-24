@@ -172,7 +172,7 @@
                 <div>
                     @if ($invoice->status==0)
                         <img src="https://t3.ftcdn.net/jpg/04/87/13/44/360_F_487134492_svhGzEgDXKyQuuPXQrs7prKoBYWCEJdw.jpg" alt="" width="100px">
-                        <br><a href="{{route('invoice.payment',encrypt($invoice->id))}}" class="btn btn-lg btn-secondary">Pay Now</a>
+                        {{-- <br><a href="{{route('invoice.payment',encrypt($invoice->id))}}" class="btn btn-lg btn-secondary">Pay Now</a> --}}
                     @else 
                         <img src="https://png.pngtree.com/png-vector/20230208/ourmid/pngtree-paid-stamp-vector-illustration-png-image_6585127.png" alt="" width="100px">
                     @endif

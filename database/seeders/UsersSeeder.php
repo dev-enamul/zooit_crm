@@ -23,8 +23,8 @@ class UsersSeeder extends Seeder
             [
                 'user_id' => "EMP-001",
                 'name' => "Super Admin",
-                'phone' => "01700000000",
-                'password' => bcrypt('123456'),
+                'phone' => "01711432284",
+                'password' => bcrypt('1A2B3C'),
                 'user_type' => 1,
                 'profile_image' => "", 
                 'created_by' => 1, 

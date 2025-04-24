@@ -56,7 +56,7 @@
                                     </div>
                             
                                     @php
-                                        $details = $payment->details;
+                                        $details = @$payment->details;
                                     @endphp 
                                     @if (isset($details) && count($details)>0)
                                         @foreach ($details as $detail) 

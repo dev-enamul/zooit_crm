@@ -20,12 +20,11 @@ class DailyJobController extends Controller
         DB::beginTransaction();
 
         try { 
-            $installment_plans = InstallmentPlan::whereDate('payment_date','<=', today())->get();
+            $installment_plans = InstallmentPlan::whereDate('payment_date','<=', today())->where('is_invoiced',0)->get();
     
             if ($installment_plans->isNotEmpty()) {
                 foreach ($installment_plans as $installment_plan) {
-                    $customer = Customer::find($installment_plan->customer_id); 
-                  
+                    $customer = Customer::find($installment_plan->customer_id);  
     
                     $invoice = new Invoice();
                     $invoice->user_id = $customer->user_id;
@@ -33,12 +32,15 @@ class DailyJobController extends Controller
                     $invoice->project_id = $installment_plan->project_id;
                     $invoice->title = "Project Bill";
                     $invoice->description = $customer->service->service ?? 'No service description available';
-                    $invoice->invoice_date = $installment_plan->next_payment_date;
+                    $invoice->invoice_date = $installment_plan->payment_date;
                     $invoice->due_date = now()->addDays(10);
                     $invoice->amount = $installment_plan->amount;
                     $invoice->total_amount = $installment_plan->amount;
                     $invoice->due_amount = $installment_plan->amount;
                     $invoice->save();
+
+                    $installment_plan->is_invoiced = 1;
+                    $installment_plan->save();
                 }
             }
     

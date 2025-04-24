@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\InstallmentPlan;
 use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class InstallmentPlanController extends Controller
@@ -54,7 +55,14 @@ class InstallmentPlanController extends Controller
                 'payment_date' => $request->installment_date[$index],
                 'amount' => $amount, 
             ]);
+
+            if (Carbon::parse($request->installment_date[$index])->isSameDay(today())) {
+                app(DailyJobController::class)();
+            }
         } 
+
+      
+
         return redirect()->route('install.payment',encrypt($customerId))->with('success', 'Installments saved successfully.');
     }
 }

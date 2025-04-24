@@ -61,7 +61,7 @@ class ServicePaymentController extends Controller
                     'reason' => $reason,
                     'amount' => $request->amount[$index],
                 ]);
-            }
+            } 
 
             DB::commit();
  
