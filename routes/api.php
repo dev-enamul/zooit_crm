@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ApiLoginController;
+use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\LeadStoreController;
 use App\Http\Controllers\CustomerController; 
 use Illuminate\Http\Request;
@@ -17,8 +19,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('services',[LeadStoreController::class,'services']);
-Route::post('lead-save',[LeadStoreController::class,'saveLead']); 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('lead-save',[LeadStoreController::class,'saveLead']);
+Route::post('login',[ApiLoginController::class,"login"]);
+
+
+
+Route::middleware('auth:sanctum')->group(function () { 
+    Route::get('users', [ApiUserController::class, 'users']); 
+    Route::post('users-find', [ApiUserController::class, 'findUser']); 
+    Route::post('save-user', [ApiUserController::class, 'save']); 
+    Route::post('followup', [ApiUserController::class, 'followupSave']); 
+    Route::get('followup', [ApiUserController::class, 'followup']); 
 });
  

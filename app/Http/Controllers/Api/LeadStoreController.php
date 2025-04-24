@@ -15,9 +15,10 @@ class LeadStoreController extends Controller
 {
     public function services()
     { 
-        $services = Service::select('id', 'service as title')->get();
+        $services = Service::select('id', 'service as title')->get(); 
         return response()->json([
-            'status' => 'success',
+            'success' => true,
+            'message' => 'User list retrieved successfully',
             'data' => $services
         ]);
     }
