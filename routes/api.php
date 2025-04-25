@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\ApiEmployeeWorktingTimeController;
 use App\Http\Controllers\Api\ApiLoginController;
+use App\Http\Controllers\Api\ApiTaskController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\LeadStoreController;
-use App\Http\Controllers\CustomerController; 
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeWorktingTimeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +33,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('save-user', [ApiUserController::class, 'save']); 
     Route::post('followup', [ApiUserController::class, 'followupSave']); 
     Route::get('followup', [ApiUserController::class, 'followup']); 
+
+    // Projects 
+    Route::get('projects',[ApiTaskController::class,'projects']);
+    Route::get('start-work',[ApiEmployeeWorktingTimeController::class,'startWork']);
+    Route::get('end-work',[ApiEmployeeWorktingTimeController::class,'endWork']);
+    Route::post('work-screenshort-upload',[ApiEmployeeWorktingTimeController::class,'UploadScreenshort']);
+
 });
  
