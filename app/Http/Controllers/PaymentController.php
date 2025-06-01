@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     public function payment($id){
-        $id = decrypt($id);
+        $id = customDecrypt($id);
         $invoice = Invoice::find($id);
         if(!$invoice){
             return redirect()->back('error',"Invalid Invoice");

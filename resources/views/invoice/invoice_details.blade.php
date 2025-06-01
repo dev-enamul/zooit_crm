@@ -202,6 +202,9 @@
                                                 <p><b>Ac Name </b>ZOOM IT</p>
                                                 <p><b>AC NO </b>1782112000003115</p>
                                                 <p><b>UCB bank Ati Bazar Branch</b></p>
+
+                                                <img src="https://logos-world.net/wp-content/uploads/2024/10/Bkash-Logo.jpg" alt="" width="70px"> 
+                                                <p><b>AC NO </b>+880 1711-432284 (Personal)</p>
                                             </div>
                                         </td>
                                         
