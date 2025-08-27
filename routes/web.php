@@ -72,9 +72,11 @@ use App\Http\Controllers\DailyJobController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\InstallmentPlanController;
+use App\Http\Controllers\InstantInvoiceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadSourceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProjectTeamController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\ServiceController;
@@ -107,6 +109,12 @@ use Twilio\Rest\Api\V2010\Account\Call\PaymentContext;
 Auth::routes();
 Route::post('login', [LoginController::class, 'login'])->name('login');  
 Route::group(['middleware' => 'auth'], function () {  
+        // ProjectTeam 
+        Route::resource('project-team', ProjectTeamController::class);
+
+
+
+
         Route::get('project-proposal',[ProposalController::class,'index']);
         Route::get('whatsapp', [WhatsAppController::class, 'index']);
         Route::post('whatsapp', [WhatsAppController::class, 'store'])->name('whatsapp.store');
@@ -292,6 +300,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Invoice 
         Route::resource('invoice',InvoiceController::class); 
+        Route::get('instant-invoice/{customerId}',[InstantInvoiceController::class,'index'])->name('instant.invoice');
+        Route::post('instant-invoice',[InstantInvoiceController::class,'store'])->name('instant.invoice.store');
 
          // Deposit 
         Route::resource('deposit', DepositController::class);

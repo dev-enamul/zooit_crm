@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->integer('invoice_type')->default(1)->comment('1= one time, 2= recurring');
             $table->foreignId('customer_id')->constrained();
             $table->foreignId('project_id')->constrained();
             $table->string('title')->nullable()->comment('Reason for invoice');
@@ -27,10 +28,11 @@ return new class extends Migration
             $table->decimal('total_amount', 15, 2);
             $table->decimal('due_amount', 15, 2)->default(0);
             $table->integer('status')->default(0)->comment('0= Unpaid, 1= Paid, 2 = Parsial');   
-            $table->timestamps(); 
+            $table->timestamps();
         });
      
         DB::statement('ALTER TABLE invoices AUTO_INCREMENT = 2500;');
+        DB::statement('ALTER TABLE invoices AUTO_INCREMENT_INCREMENT = 13;');
     }
     
 

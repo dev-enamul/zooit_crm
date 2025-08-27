@@ -28,6 +28,8 @@ Route::post('login',[ApiLoginController::class,"login"]);
 
 
 Route::middleware('auth:sanctum')->group(function () { 
+    Route::post('/logout', [ApiLoginController::class, 'logout']);
+
     Route::get('users', [ApiUserController::class, 'users']); 
     Route::post('users-find', [ApiUserController::class, 'findUser']); 
     Route::post('save-user', [ApiUserController::class, 'save']); 
@@ -36,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Projects 
     Route::get('projects',[ApiTaskController::class,'projects']);
+    Route::resource('tasks',ApiTaskController::class); 
     Route::get('start-work',[ApiEmployeeWorktingTimeController::class,'startWork']);
     Route::get('end-work',[ApiEmployeeWorktingTimeController::class,'endWork']);
     Route::post('work-screenshort-upload',[ApiEmployeeWorktingTimeController::class,'UploadScreenshort']);

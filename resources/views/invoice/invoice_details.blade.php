@@ -72,11 +72,12 @@
                                 <button class="btn btn-secondary" id="printButton">
                                     <i class="fas fa-print"></i> Print
                                 </button>
+                                <a href="javascript:void(0)"   class="btn btn-dark"  onclick="shareLink('{{ customEncrypt($invoice->id) }}')">Share</a>
                                 @if ($invoice->status==0 || $invoice->status==2)
                                     <a href="{{ route('invoice.edit', encrypt($invoice->id)) }}" class="btn btn-primary">
                                         <i class="fas fa-edit"></i> Edit
                                     </a> 
-                                @endif 
+                                @endif   
                             </h4>  
                         </div>
                     </div>
@@ -219,7 +220,35 @@
                 <!-- end row -->
             </div> <!-- container-fluid -->
         </div>
+    </div> 
+
+      <div class="modal fade" id="edit_modal">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header"> 
+                    <h5 class="modal-title">Share Invoice </h5>
+                    <button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
+                </div>
+    
+                <div class="modal-body">
+                    <form action="{{route('village.update')}}" method="post"> 
+                        @csrf  
+                        <label for="word_no">Invoice Link <span class="text-danger">Copy and share with your customer.</span></label>
+                        <input id="invoice-link" class="form-control" type="text" value="" readonly> 
+                    </form>
+                </div>  
+    
+                <div class="modal-footer">
+                    <div class="text-end">
+                        <a  id="prevButton"  href="" target="blank" class="btn btn-primary"><i class="fas fa-eye"></i> Preview</a>
+                        <button class="btn btn-primary" id="copyLinkButton"><i class="fas fa-link"></i> Copy Link</button>
+                        {{-- <a id="whatsAppButton" href="" target="blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Send WhatsApp</a> --}}
+                    </div>                     
+                </div>
+            </div>
+        </div>
     </div>
+
  
 @endsection
 @section('script') 
@@ -229,5 +258,28 @@
             window.print();
         });
     });
+</script> 
+
+<script>
+    function shareLink(id){
+        var link = "{{ route('invoice.share', ':id') }}".replace(':id', id); 
+        $('#invoice-link').val(link);
+        $('#prevButton').attr('href',link);
+        // var whatsappLink = "https://api.whatsapp.com/send/?phone=+88"+phone+"&text="+link;
+        // $("#whatsAppButton").attr('href',whatsappLink);
+        $('#edit_modal').modal('show');
+    }
+    $(document).ready(function() { 
+        $('#copyLinkButton').click(function() {
+            var copyText = $('#invoice-link');
+            copyText.select();
+            copyText[0].setSelectionRange(0, 99999);  
+            document.execCommand('copy'); 
+            Toast.fire({ icon: "success", title: 'Invoice link copied to clipboard!' });  
+        });
+
+        
+    });
 </script>
+
 @endsection

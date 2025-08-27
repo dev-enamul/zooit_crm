@@ -16,7 +16,7 @@ class WhatsAppController extends Controller
     } 
 
     public function store(Request $request) 
-    {  
+    {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|integer|exists:users,id',  
             'message' => 'required|string|max:1000',  

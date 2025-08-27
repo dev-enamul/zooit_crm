@@ -29,7 +29,7 @@ class SalseController extends Controller
     public function index()
     {
         $my_all_employee = json_decode(Auth::user()->user_employee);
-        $datas = Customer::whereNotNull('customer_id')->get(); 
+        $datas = Customer::whereNotNull('customer_id')->get();
         return view('salse.salse_list',compact('datas'));
     } 
 
@@ -95,7 +95,7 @@ class SalseController extends Controller
 
             $rejection = Rejection::where('customer_id', $customer->id)->first();
             if($rejection){
-                $rejection->status = 1;
+                $rejection->status = 0;
                 $rejection->save(); 
             } 
         }

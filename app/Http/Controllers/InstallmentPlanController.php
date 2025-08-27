@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 class InstallmentPlanController extends Controller
 {
     public function create($id){
-        $id = decrypt($id); 
+        $id = decrypt($id);
         $customer = Customer::find($id);
-        $installments = InstallmentPlan::where('customer_id',$customer->id)->get(); 
+        $installments = InstallmentPlan::where('customer_id',$customer->id)->get();
 
         if(count($installments)>0){
             return view('payment.installment_plan_show',compact('customer','installments'));

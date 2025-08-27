@@ -17,11 +17,9 @@ class DailyJobController extends Controller
 {
     public function __invoke()
     {
-        DB::beginTransaction();
-
+        DB::beginTransaction(); 
         try { 
-            $installment_plans = InstallmentPlan::whereDate('payment_date','<=', today())->where('is_invoiced',0)->get();
-    
+            $installment_plans = InstallmentPlan::whereDate('payment_date','<=', today())->where('is_invoiced',0)->get(); 
             if ($installment_plans->isNotEmpty()) {
                 foreach ($installment_plans as $installment_plan) {
                     $customer = Customer::find($installment_plan->customer_id);  
@@ -29,6 +27,7 @@ class DailyJobController extends Controller
                     $invoice = new Invoice();
                     $invoice->user_id = $customer->user_id;
                     $invoice->customer_id = $customer->id;
+                    $invoice->invoice_type = 1; // Assuming one-time invoice for installment plans
                     $invoice->project_id = $installment_plan->project_id;
                     $invoice->title = "Project Bill";
                     $invoice->description = $customer->service->service ?? 'No service description available';
@@ -66,6 +65,7 @@ class DailyJobController extends Controller
 
                 $invoice = new Invoice();
                 $invoice->user_id = $subscription_plan->user_id;
+                $invoice->invoice_type = 1;
                 $invoice->customer_id = $subscription_plan->customer_id;
                 $invoice->project_id = $subscription_plan->project_id;
                 $invoice->title = $title ?? 'No service description available';

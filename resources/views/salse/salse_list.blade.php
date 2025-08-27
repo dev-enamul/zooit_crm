@@ -54,8 +54,10 @@
                                                         <div class="dropdown-menu dropdown-menu-animated">
                                                             <a class="dropdown-item" href="{{route('customer.profile',encrypt($data->customer_id))}}">Customer Profile</a>
                                                             <a class="dropdown-item" href="{{route('salse.details',encrypt($data->id))}}">Salse Details</a> 
-                                                            <a class="dropdown-item" href="{{route('install.payment',encrypt($data->id))}}">Install Payment</a>
+                                                            <a class="dropdown-item" href="{{route('install.payment',encrypt($data->id))}}">Schedulr Payment</a>
                                                             <a class="dropdown-item" href="{{route('service.payment',encrypt($data->id))}}">Service Payment</a>
+                                                            <a class="dropdown-item" href="{{route('instant.invoice',encrypt($data->id))}}">Instant Invoice</a>
+                                                            <a class="dropdown-item" href="{{ url('project-team', ['project_id' => encrypt($data->id)]) }}">Team</a>
                                                         </div>
                                                     </div>
                                                 </td>

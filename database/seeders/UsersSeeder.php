@@ -29,7 +29,8 @@ class UsersSeeder extends Seeder
                 'profile_image' => "", 
                 'created_by' => 1, 
                 'updated_by' => 1,
-            ],
+            ], 
+            
             // [
             //     'user_id' => "EMP-002",
             //     'name' => "General Manager",

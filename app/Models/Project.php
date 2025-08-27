@@ -9,27 +9,52 @@ use Illuminate\Support\Facades\Storage;
 
 class Project extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes; 
 
-    protected $fillable = [
-        'name',
+     protected $fillable = [
+        'customer_id',
+        'project_proposal_id',
+        'team_leader_id',
+        'title',
+        'sales_by',
+        'currency',
         'price',
-        'description'
+        'paid',
+        'submit_date',
+        'project_status',
+        'status',
+        'remark',
     ];
 
-    public function image(){
-        $image = $this?->images()?->first()?->name;
-        $imagePath = 'public/'.$image;  
-        if($image != null && $image != '' && Storage::exists($imagePath)){
-           return asset('storage/'.$image);
-        }else{
-           return asset('../assets/images/users/avatar-6.png');
-        }
-   } 
-    
-
-    public function images()
+ 
+    public function customer()
     {
-        return $this->hasMany(ProjectImage::class, 'project_id');
-    }  
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+ 
+    public function proposal()
+    {
+        return $this->belongsTo(ProjectProposal::class, 'project_proposal_id');
+    }
+ 
+    public function teamLeader()
+    {
+        return $this->belongsTo(User::class, 'team_leader_id');
+    }
+ 
+    public function salesBy()
+    {
+        return $this->belongsTo(User::class, 'sales_by');
+    }
+ 
+    public function projectTeams()
+    {
+        return $this->hasMany(ProjectTeam::class, 'project_id');
+    }
+ 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'project_id');
+    }
+
 }
