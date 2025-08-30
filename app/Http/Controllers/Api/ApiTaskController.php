@@ -12,29 +12,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiTaskController extends Controller
 {
-    public function projects()
-    {
-        $my_projects = ProjectTeam::with(['project.customer.user'])
-            ->where('user_id', Auth::user()->id)
-            ->get()
-            ->map(function($team) {
-                $project = $team->project;
-                if (!$project) return null;
+     
 
-                return [
-                    'project_id'     => $project->id,
-                    'customer_name'  => $project->customer->user->name ?? null,
-                    'project_status' => $project->project_status == 0 ? 'Running' : 'Complete',
-                    'submit_date'    => $project->submit_date ?? null, 
-                ];
-            })
-            ->filter();
-
-        return response()->json([
-            'success' => true,
-            'data'    => $my_projects
-        ]);
-    }
 
     public function index(Request $request)
     {

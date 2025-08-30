@@ -11,13 +11,25 @@ class WorkTime extends Model
 
     protected $fillable = [
         'user_id',
+        'project_id',
+        'task_id',
+        'note',
         'start_time',
         'end_time',
+        'duration'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
     }
 
 }

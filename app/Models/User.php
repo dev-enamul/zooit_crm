@@ -32,6 +32,11 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
  
+    public function workTimes()
+    {
+        return $this->hasMany(WorkTime::class);
+    }
+
     public function image(){
         $image = $this->profile_image;
         $imagePath = 'public/'.$image;  

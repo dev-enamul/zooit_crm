@@ -57,4 +57,10 @@ class Project extends Model
         return $this->hasMany(Task::class, 'project_id');
     }
 
+    public function workTimes()
+    {
+        return $this->hasMany(WorkTime::class, 'project_id');
+    }
+
+
 }

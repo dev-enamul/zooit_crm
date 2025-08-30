@@ -36,6 +36,8 @@ class Task extends Model
         return $this->belongsTo(User::class, 'assign_by');
     }
 
-
-
+    public function workTimes()
+    {
+        return $this->hasMany(WorkTime::class);
+    }
 }
