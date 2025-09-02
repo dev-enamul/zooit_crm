@@ -39,12 +39,8 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
-        // if($request->draw && $request->action === 'pdf'){
-        //     $request->dd();
-        //     need to write your pdf logic here
-        // }
-        $dataTable = app(EmployeesDataTable::class);
-        // dd($dataTable);
+       
+        $dataTable = app(EmployeesDataTable::class); 
         return $dataTable->render('employee.employee_list');
     }
 

@@ -6,6 +6,7 @@ use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\ReportingUser;
 use App\Models\User;
+use App\Models\WorkTime;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -32,10 +33,11 @@ class EmployeesDataTable extends DataTable
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
-            }) 
-            ->addColumn('email', function($employee){
-                return $employee->userContact->office_email??$employee->userContact->personal_email??"-";
-            }) 
+            })
+            ->addColumn('employee', function ($employee) {
+                $name = $employee->name.' ['.$employee->user_id.']';
+                return $name;
+            })  
             ->addColumn('designation', function($employee){
                  
                 return $employee->employee->designation->title??"-";
@@ -43,6 +45,24 @@ class EmployeesDataTable extends DataTable
             ->addColumn('area', function($employee){
                 return  $employee?->userAddress?->area?->name??"-";
             })
+            ->addColumn('working', function($employee) {
+                $workTime = WorkTime::where('user_id', $employee->id)
+                            ->whereDate('created_at', date('Y-m-d'))
+                            ->whereNull('end_time')
+                            ->latest()
+                            ->first();
+
+                if ($workTime) {
+                    $taskTitle = $workTime->task->title ?? 'Unknown Task';
+                    $projectTitle = $workTime->project->title ?? 'Unknown Project'; 
+                    return '<i class="fas fa-check-circle text-success"></i> ' . "{$taskTitle} [{$projectTitle}]";
+                }
+
+                // Red cross icon for not working
+                return '<i class="fas fa-times-circle text-danger"></i> Free now';
+            })
+
+
             ->addColumn('reporting', function($employee){ 
                 if($employee->id==187){
                     return "-";
@@ -61,7 +81,8 @@ class EmployeesDataTable extends DataTable
                     return "-";
                 }
                 return $data->id??"-";
-            });
+            })
+            ->rawColumns(['working', 'action']);;
             
     }
 
@@ -87,7 +108,7 @@ class EmployeesDataTable extends DataTable
 
             return $model->newQuery()
             ->where('user_type', 1)
-            ->with('userContact','employee')
+            ->with('employee')
             ->where('status', 1)
             ->orderBy('serial', 'asc');
         }
@@ -117,11 +138,10 @@ class EmployeesDataTable extends DataTable
                     ->printable(false)
                     ->width(60)
                     ->addClass('text-center'),
-                Column::make('serial')->title('S/N')->exportable(true), 
-                Column::make('user_id')->title('Emp ID')->searchable(true),
-                Column::make('name')->title('Name')->searchable(true), 
-                Column::make('phone')->searchable(true),
-                Column::make('email'),
+                Column::make('serial')->title('S/N')->exportable(true),  
+                Column::make('employee')->title('Employee')->searchable(true), 
+                Column::make('phone')->searchable(true), 
+                Column::make('working')->searchable(true),
                 Column::make('designation'),  
                 Column::make('reporting')->title('Reporting Name & ID'),
             ];

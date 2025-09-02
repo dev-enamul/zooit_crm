@@ -18,6 +18,8 @@
                 @endphp
                 <a href="{{route('customer.profile',encrypt($single_customer->id))}}" class="list-group-item list-group-item-action {{$customer->id==$single_customer->id?"active":""}}">{{$customer_id}}</a> 
                 @endforeach 
+
+                <a href="{{route('profile.document',encrypt($customer->user_id))}}" class="list-group-item list-group-item-action {{Route::is('profile.document')?"active":""}}">Document</a> 
             </div>
         </div>
     </div> 

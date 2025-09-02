@@ -47,7 +47,7 @@ class ProfileController extends Controller
         return view('profile.hierarchy_tree',compact('user_id','user','my_emplyees','employee')); 
     }
 
-    public function profile($id){  
+    public function profile($id){
         $user_id = decrypt($id); 
         $user = User::find($user_id); 
         $my_all_employee = json_decode(Auth::user()->user_employee);

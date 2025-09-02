@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectTeam;
 use App\Models\WorkTime;
+use App\Services\ProjectService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ApiProjectController extends Controller
 {
@@ -31,75 +33,17 @@ class ApiProjectController extends Controller
 
         return success_response($my_projects, 'Projects fetched successfully.');
         
-    }
-    
-    public function projectDetails($id)
+    } 
+
+    public function projectDetails($id, ProjectService $service)
     {
-        $project = Project::with(['customer', 'tasks.workTimes'])->findOrFail($id);
+        $project = Project::with(['tasks.workTimes', 'projectTeams', 'customer'])->findOrFail($id);
+        $data = $service->getProjectDetailsForCharts($project);
 
-        $totalTasks = $project->tasks->count();
-        $completedTasks = $project->tasks->where('status', 1)->count();
-        $remainingTasks = $totalTasks - $completedTasks;
-        $completionPercent = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100, 2) : 0;
-
-        // Total estimated & spent in hours
-        $totalEstimated = $project->tasks->sum('estimated_time'); // if DB in minutes, divide by 60
-        $totalSpent = $project->tasks->sum('time_spent');         // if DB in minutes, divide by 60
-
-        // Convert minutes to hours if necessary
-        $totalEstimated = $totalEstimated / 60;
-        $totalSpent = $totalSpent / 60;
-
-        $extraTimeUsed = $totalSpent - $totalEstimated;
-
-        $remainingEstimated = $project->tasks->where('status', '!=', 1)->sum('estimated_time') / 60;
-        $daysLeft = $project->submit_date ? now()->diffInDays($project->submit_date, false) : 0;
-
-        // Last 7 days actual worked hours
-        $last7Minutes = $project->workTimes()
-            ->where('start_time', '>=', now()->subDays(7))
-            ->sum('duration'); // minutes
-        $avgHoursPerDay = ($last7Minutes / 60) / 7;
-
-        $possibleWorkHours = $avgHoursPerDay * $daysLeft;
-        $forecastExtraTimeNeeded = $possibleWorkHours < $remainingEstimated
-            ? $remainingEstimated - $possibleWorkHours
-            : 0;
-
-        // Progress tracking
-        $daysPassed = now()->diffInDays($project->created_at);
-        $totalDays = $project->submit_date ? $project->created_at->diffInDays($project->submit_date) : null;
-        $expectedProgress = $totalDays > 0 ? round(($daysPassed / $totalDays) * 100, 2) : null;
-
-        $possibleToCoverBacklog = ($avgHoursPerDay > 0 && $daysLeft > 0)
-            ? ($avgHoursPerDay * $daysLeft >= $remainingEstimated)
-            : null;
-
-        $projectInfo = [
-            'customer_name' => $project->customer->name ?? null,
-            'project_title' => $project->title,
-            'created_date' => $project->created_at->toDateString(),
-            'submit_date' => $project->submit_date,
-            'project_status' => $project->project_status == 0 ? 'Running' : 'Completed',
-            'remark' => $project->remark,
-
-            'total_tasks' => $totalTasks,
-            'completed_tasks' => $completedTasks,
-            'remaining_tasks' => $remainingTasks,
-            'task_completion_percent' => $completionPercent,
-
-            'total_estimated_hours' => round($totalEstimated, 2),
-            'total_spent_hours' => round($totalSpent, 2),
-            'extra_time_used' => round($extraTimeUsed, 2),
-            'forecast_extra_time_needed' => round($forecastExtraTimeNeeded, 2),
-
-            'expected_progress_till_today' => $expectedProgress,
-            'on_track' => $expectedProgress ? $completionPercent >= $expectedProgress : null,
-            'forecast_completion_possible' => $possibleToCoverBacklog,
-        ];
-
-        return success_response($projectInfo, 'Project details fetched successfully.'); 
+        return success_response($data, 'Project details fetched successfully.');
     }
+
+
 
     // ---------------- Team Summary ----------------
     public function projectTeamDetails($id)

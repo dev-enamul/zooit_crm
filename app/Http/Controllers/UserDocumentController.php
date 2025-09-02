@@ -14,12 +14,11 @@ class UserDocumentController extends Controller
     public function index($id){
         $user_id = decrypt($id);
         $user = User::find($user_id);
-        $datas = UserDocument::where('user_id',Auth::user()->id)->get(); 
+        $datas = UserDocument::where('user_id',$user_id)->get(); 
         return view('profile.document',compact('user','datas'));
     }
 
-    public function store(Request $request){
-      
+    public function store(Request $request){ 
         $file = $request->file('file');
         $fileType = $file->getClientMimeType();
         if ($request->hasFile('file')) {
