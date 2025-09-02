@@ -18,4 +18,10 @@ trait ImageUploadTrait
         }
         return null;
     }
+    public function deleteImage($filePath, $disk = 'public')
+    {
+        if (Storage::disk($disk)->exists($filePath)) {
+            Storage::disk($disk)->delete($filePath);
+        }
+    }
 }

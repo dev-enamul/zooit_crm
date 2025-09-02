@@ -142,6 +142,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('profile-wallet/{id}', [ProfileController::class, 'wallet'])->name('profile.wallet');
         Route::get('profile-document/{id}', [UserDocumentController::class, 'index'])->name('profile.document');
         Route::post('profile-document', [UserDocumentController::class, 'store'])->name('profile.document.store');
+        Route::get('profile-document-delete/{id}', [UserDocumentController::class, 'destroy'])->name('profile.document.delete');
         Route::post('contact-create',[UserContactController::class,'store'])->name('contact.store');
         Route::put('contact-update',[UserContactController::class,'update'])->name('contact.update');
         Route::get('contact-delete/{id}',[UserContactController::class,'destroy'])->name('contact.delete');

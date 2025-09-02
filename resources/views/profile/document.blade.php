@@ -43,7 +43,8 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-Pricing-{{ $loop->index }}" aria-expanded="true" aria-controls="collapseOne-Pricing-{{ $loop->index }}">
-                                        <i class="fas {{ $isImage ? 'fa-file-image' : 'fa-file' }} text-primary"></i>  &nbsp; {{$data->title}}
+                                        <i class="fas {{ $isImage ? 'fa-file-image' : 'fa-file' }} text-primary"></i>  &nbsp; {{$data->title}} 
+                                        <a class="text-danger ms-4" href="{{ route('profile.document.delete', encrypt($data->id)) }}"><i class="fas fa-trash"></i></a>
                                     </button>
                                 </h2>
                                 <div id="collapseOne-Pricing-{{ $loop->index }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample-Pricing">

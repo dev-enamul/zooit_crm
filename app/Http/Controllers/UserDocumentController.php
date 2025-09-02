@@ -31,5 +31,16 @@ class UserDocumentController extends Controller
         $user_document->type = $fileType;
         $user_document->save();
         return redirect()->back()->with('success','Document Added Successfully');
+    } 
+
+    public function destroy($id){
+        $id = decrypt($id);
+        $data = UserDocument::find($id);
+        if($data){ 
+            $this->deleteImage($data->file,'public');
+            $data->delete();
+            return redirect()->back()->with('success','Document Deleted Successfully');
+        }
+        return redirect()->back()->with('error','Document Not Found');
     }
 }
