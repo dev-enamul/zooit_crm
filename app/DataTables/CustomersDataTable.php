@@ -20,31 +20,61 @@ class CustomersDataTable extends DataTable {
      * @param QueryBuilder $query Results from query() method.
      * @return \Yajra\DataTables\EloquentDataTable
      */
-    public function dataTable(QueryBuilder $query): EloquentDataTable {
-        return (new EloquentDataTable($query))
-            ->addColumn('action', function ($data) {
-                return view('customer.customer_action', compact('data'))->render();
-            })
-            ->addColumn('serial', function () {
-                static $serial = 0;
-                return ++$serial;
-            })  
-            ->addColumn('service', function ($data) { 
-                return $data->service->service??"-";
-            }) 
-            ->addColumn('name', function ($data) {   
-                return $data->user->name;
-            }) 
-            ->addColumn('created_by', function ($data) { 
-                if(isset($data->created_by) && $data->created_by!=null){
-                    $user = user_info($data->created_by);
-                    return $user->name.' ['.$user->user_id.']';
-                }else{
-                    return "-";
-                }
-            })      
-            ->setRowId('id');
-    }
+   public function dataTable(QueryBuilder $query): EloquentDataTable {
+    return (new EloquentDataTable($query))
+        ->addColumn('action', function ($data) {
+            return view('customer.customer_action', compact('data'))->render();
+        })
+        ->addColumn('serial', function () {
+            static $serial = 0;
+            return ++$serial;
+        })  
+        ->addColumn('service', function ($data) { 
+            return $data->service->service ?? "-";
+        }) 
+        ->addColumn('name', function ($data) {   
+            $customerName = '';
+            if (isset($data->user)) {
+                $customerName = $data->user->name . ' [' . ($data->visitor_id ?? '-') . ']';
+            }
+
+            $url = route('customer.profile', encrypt($data->id));
+
+            return '<a class="text-primary" href="' . $url . '">' . e($customerName) . '</a>';
+        })
+        ->addColumn('contact', function ($data) {
+            $phone = $data->user->phone ?? "";
+
+            if ($phone) {
+                return $phone . '
+                    <a href="tel:' . $phone . '" class="btn btn-primary btn-sm ms-2" style="margin-right: 5px;">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                    
+                    <button class="btn btn-secondary btn-sm copy-phone" data-phone="' . $phone . '" style="margin-right: 5px;">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    
+                    <a target="_blank" href="https://api.whatsapp.com/send/?phone=' . preg_replace('/[^0-9]/', '', $phone) . '" class="btn btn-success btn-sm" style="margin-right: 5px;">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                ';
+            }
+
+            return $phone;
+        })
+        ->addColumn('created_by', function ($data) { 
+            if(isset($data->created_by) && $data->created_by != null){
+                $user = user_info($data->created_by);
+                return $user->name . ' [' . $user->user_id . ']';
+            } else {
+                return "-";
+            }
+        })
+        ->rawColumns(['name','contact','action'])
+        ->setRowId('id');
+}
+
 
     /**
      * Get query source of dataTable.
@@ -110,12 +140,9 @@ class CustomersDataTable extends DataTable {
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                ->addClass('text-center'),
-            Column::make('serial')->title('S/L'),
-            Column::make('visitor_id')->title('Visitor ID')->searchable(true),
-            // Column::make('customer_id')->title('Customer ID')->searchable(true),
+                ->addClass('text-center'), 
             Column::make('name')->title('Name')->searchable(true),
-            Column::make('user.phone')->title('Phone Number')->searchable(true),
+            Column::make('contact')->title('Contact')->searchable(true),
             Column::make('service')->title('Service'),  
             Column::make('created_by')->title('Created By'), 
         ];

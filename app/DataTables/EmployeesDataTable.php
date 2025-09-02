@@ -138,7 +138,7 @@ class EmployeesDataTable extends DataTable
                     ->printable(false)
                     ->width(60)
                     ->addClass('text-center'),
-                Column::make('serial')->title('S/N')->exportable(true),  
+                // Column::make('serial')->title('S/N')->exportable(true),  
                 Column::make('employee')->title('Employee')->searchable(true), 
                 Column::make('phone')->searchable(true), 
                 Column::make('working')->searchable(true),

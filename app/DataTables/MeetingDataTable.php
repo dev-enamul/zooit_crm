@@ -33,10 +33,10 @@ class MeetingDataTable extends DataTable
                 return ++$serial;
             }) 
             ->addColumn('name', function ($data) {
-                if($data->customer->user->userContact->type==2){
+                if(@$data->customer->user->userContact->type==2){
                     $name = $data->customer->user->userContact->name." (". $data->customer->user->name .") ";
                 }else{
-                    $name = $data->customer->user->name;
+                    $name = @$data->customer->user->name;
                 }
                 return $name;
             })

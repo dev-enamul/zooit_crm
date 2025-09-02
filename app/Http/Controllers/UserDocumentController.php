@@ -39,8 +39,8 @@ class UserDocumentController extends Controller
         if($data){ 
             $this->deleteImage($data->file,'public');
             $data->delete();
-            return redirect()->back()->with('success','Document Deleted Successfully');
+            return response()->json(['success'=>'Document Deleted Successfully']);
         }
-        return redirect()->back()->with('error','Document Not Found');
+        return response()->json(['error'=>'Document Not Found']); 
     }
 }

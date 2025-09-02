@@ -147,6 +147,7 @@ class EmployeeController extends Controller
                 'user_id'       => User::generateNextEmployeeId(),
                 'name'          => $request->full_name,
                 'phone'         => get_phone($request->phone1),
+                'email'         => $request->email??$request->office_email,
                 'password'      => bcrypt('123456'),
                 'user_type'     => 1,
                 'marital_status'=> $request->marital_status,
@@ -403,6 +404,7 @@ class EmployeeController extends Controller
             $user->update([
                 'name'          => $request->full_name,
                 'phone'         => get_phone($request->phone1),
+                'email'         => $request->email??$request->office_email,
                 'marital_status'=> $request->marital_status,
                 'dob'           => date('Y-m-d', strtotime($request->dob)),
                 'finger_id'     => $request->card_id,

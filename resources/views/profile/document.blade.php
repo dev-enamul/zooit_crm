@@ -65,8 +65,10 @@
                                         <div style="margin-top: 10px;">
                                             <a href="{{ asset($filePath) }}" download class="btn btn-primary"> 
                                                 <i class="fas fa-download"></i> Download {{$data->title}}
-                                            </a>
-                                             <a class="btn btn-danger ms-1" href="{{ route('profile.document.delete', encrypt($data->id)) }}"><i class="fas fa-trash"></i> Delete</a>
+                                            </a> 
+                                            <button type="button" class="btn btn-danger" onclick="deleteItem('{{ route('profile.document.delete', encrypt($data->id)) }}')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -44,10 +44,17 @@ class FollowUpDataTable extends DataTable {
                 return $followUp->purchase_possibility."%";
             })  
 
-            ->addColumn('name', function ($followUp) {
-                $name = @$followUp->customer->user->name??"";
-                return $name;
+            ->addColumn('name', function ($followUp) { 
+                $customerName = '';
+                if (isset($followUp->customer) && isset($followUp->customer->user)) {
+                    $customerName = $followUp->customer->user->name. ' ['. $followUp->customer->visitor_id .']';
+                }
+ 
+                $url = route('customer.profile', encrypt($followUp->customer_id));
+ 
+                return '<a class="text-primary" href="'.$url.'">'.e($customerName).'</a>';
             })
+
 
             ->addColumn('contact', function ($followUp) {
                 $phone = @$followUp->customer->user->phone ?? "";
@@ -74,7 +81,7 @@ class FollowUpDataTable extends DataTable {
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
-            })->rawColumns(['contact','action']) 
+            })->rawColumns(['name','contact','action']) 
             ->setRowId('id');
             
             
@@ -172,7 +179,7 @@ class FollowUpDataTable extends DataTable {
                 ->addClass('text-center')
                 ->sortable(false),
             Column::make('serial')->title('S/L')->sortable(false),
-            Column::make('customer.visitor_id')->title('Visitor')->sortable(false),
+            // Column::make('customer.visitor_id')->title('Visitor')->sortable(false),
             Column::make('name')->title('Name')->sortable(false),
             Column::make('contact')->title('Contact')->sortable(false), 
             // Column::make('created_by')->title('Employee')->sortable(false), 

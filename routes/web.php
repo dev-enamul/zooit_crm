@@ -68,6 +68,7 @@ use App\Events\UserCreatedEvent;
 use App\Http\Controllers\AdminNoticeController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyTypeController;
+use App\Http\Controllers\DailyActivitiesController;
 use App\Http\Controllers\DailyJobController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
@@ -142,7 +143,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('profile-wallet/{id}', [ProfileController::class, 'wallet'])->name('profile.wallet');
         Route::get('profile-document/{id}', [UserDocumentController::class, 'index'])->name('profile.document');
         Route::post('profile-document', [UserDocumentController::class, 'store'])->name('profile.document.store');
-        Route::get('profile-document-delete/{id}', [UserDocumentController::class, 'destroy'])->name('profile.document.delete');
+        Route::delete('profile-document-delete/{id}', [UserDocumentController::class, 'destroy'])->name('profile.document.delete');
         Route::post('contact-create',[UserContactController::class,'store'])->name('contact.store');
         Route::put('contact-update',[UserContactController::class,'update'])->name('contact.update');
         Route::get('contact-delete/{id}',[UserContactController::class,'destroy'])->name('contact.delete');
@@ -454,22 +455,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('daily-job',DailyJobController::class);
 Route::get('bill/{id}',[InvoiceController::class,'share'])->name('invoice.share');
-Route::get('invoice-payment/{id}',[PaymentController::class,'payment'])->name('invoice.payment');
+Route::get('invoice-payment/{id}',[PaymentController::class,'payment'])->name('invoice.payment');  
 
-Route::get('/migrate-refresh', [DashboardController::class, 'migrate_fresh']);
+Route::get('/send-today-activities-email/{key}', [DailyActivitiesController::class, 'sendTodayActivitiesEmail'])
+    ->name('send.today.activities.email'); 
+Route::get('/send-nextday-activities-email/{key}', [DailyActivitiesController::class, 'sendNextDayActivitiesEmail'])
+    ->name('send.nextday.activities.email');
 
-Route::get('function_test', function () { 
-        UserCreatedEvent::dispatch(auth()->user()->id); 
-});
 
-// test
-Route::get('/message', function () {
-        $messageService = new PhoneMessageService;
-        $message = "Test";
-        return $messageService->sendMessage(+8801796351081, $message);
-    }); 
-    
-    Route::post('send-message',function (Request $request){
-        event(new Message($request->username, $request->message));
-        return ['success' => true];
-    });
+ 

@@ -15,10 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class MeetingController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
+{ 
     public function index(MeetingDataTable $dataTable, Request $request)
     {
         $title      = 'Meeting Schedule';
