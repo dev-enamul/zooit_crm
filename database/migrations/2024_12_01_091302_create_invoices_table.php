@@ -27,14 +27,13 @@ return new class extends Migration
             $table->decimal('discount_amount', 15, 2)->default(0);
             $table->decimal('total_amount', 15, 2);
             $table->decimal('due_amount', 15, 2)->default(0);
-            $table->integer('status')->default(0)->comment('0= Unpaid, 1= Paid, 2 = Parsial');   
+            $table->integer('status')->default(0)->comment('0= Unpaid, 1= Paid, 2= Partial');   
             $table->timestamps();
         });
-     
+
+        // Set the starting AUTO_INCREMENT value
         DB::statement('ALTER TABLE invoices AUTO_INCREMENT = 2500;');
-        DB::statement('ALTER TABLE invoices AUTO_INCREMENT_INCREMENT = 13;');
-    }
-    
+    } 
 
     /**
      * Reverse the migrations.
