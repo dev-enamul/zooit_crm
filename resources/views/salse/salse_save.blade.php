@@ -51,6 +51,14 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label for="title" class="form-label">Project Title</label>
+                                            <input class="form-control" type="text" name="title" id="title" value="{{old('title',@$salse->title)}}" placeholder="Project Title">
+        
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
                                             <label for="price" class="form-label"><span id="company_name_label">Price</span><span class="text-danger">*</span></label>
                                             <input type="number" name="price" class="form-control" id="price" value="{{old("price",@$salse->price)}}" placeholder="Enter Price" required>
                                             <div class="invalid-feedback">
@@ -59,7 +67,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="submit_date" class="form-label"><span id="submit_date">Submit Date</span><span class="text-danger">*</span></label>
                                             <input type="date" name="submit_date" class="form-control" id="submit_date" value="{{old("submit_date",@$salse->submit_date)}}" placeholder="Select Date" required>
@@ -70,7 +78,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
                                             <textarea class="form-control" id="remark" rows="1" name="remark" placeholder="Remark">{{old('remark',@$user->remark)}}</textarea> 

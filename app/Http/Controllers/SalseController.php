@@ -47,6 +47,7 @@ class SalseController extends Controller
     {
         $rules = [
             'customer' => 'required|exists:customers,id', 
+            'title' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'submit_date' => 'required|date', 
             'remark' => 'nullable|string|max:255',
@@ -69,6 +70,7 @@ class SalseController extends Controller
         }  
 
         $project = new Project();
+        $project->title = $request->title;
         $project->customer_id = $customer->id;
         $project->project_proposal_id = $project_proposal->id??null;
         $project->sales_by = Auth::user()->id;
