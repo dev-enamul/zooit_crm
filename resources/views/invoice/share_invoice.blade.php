@@ -204,7 +204,7 @@
                     @if ($invoice->description!=null)
                         <tr>
                             <td>{{$invoice->description}} </td>
-                            <td>{{get_price($invoice->amount)}}</td>
+                            <td>{{get_price($invoice->amount,@$invoice->project->currency)}}</td>
                         </tr> 
                     @else 
                         @php
@@ -214,7 +214,7 @@
                             @foreach ($details as $detail)
                                 <tr>
                                     <td>{{$detail->reason}} </td>
-                                    <td>{{get_price($detail->amount)}}</td>
+                                    <td>{{get_price($detail->amount,@$invoice->project->currency)}}</td>
                                 </tr> 
                             @endforeach
                         @endif
@@ -235,13 +235,24 @@
                             @endif 
 
                             @if ($invoice->discount_amount>0)
-                                <p class="table_inrow">-{{get_price($invoice->discount_amount)}}</p>
+                                <p class="table_inrow">-{{get_price($invoice->discount_amount,@$invoice->project->currency)}}</p>
                             @endif  
                         </td>
                     </tr> 
                     <tr>
                         <td><b>GRAND TOTAL</b></td>
-                        <td><b>{{get_price($invoice->total_amount)}}</b></td>
+                        @php 
+                            $currency = @$invoice->project->currency ?? 'bdt'; 
+                            if($currency == 'usd'){
+                                $price = get_price($invoice->total_amount_usd, $currency) 
+                                        . ' = (' . $invoice->total_amount_usd 
+                                        . ' x ' . $invoice->usd_rate 
+                                        . ') ' . get_price($invoice->total_amount);
+                            } else {
+                                $price = get_price($invoice->total_amount);
+                            }  
+                        @endphp
+                        <td><h6>{{ $price }} </h6></td>
                     </tr>
                 </tbody>
             </table>

@@ -45,7 +45,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="customer" class="form-label">Amount <span class="text-danger">*</span></label>
-                                            <input type="number" name="amount" id="amount" class="form-control" min="1" required> 
+                                            <input type="number" name="amount" id="amount" class="form-control" min=".1" step=".1" required> 
                                         </div>
                                     </div>    
 

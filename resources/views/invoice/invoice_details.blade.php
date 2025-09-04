@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
-@section('title',"Invoice Details")
+@section('title',"Invoice Details") 
+ 
  @section('style')
     <style>
         .company_info{
@@ -135,11 +136,11 @@
                                             <th><h6 class="text-primary">Amount</h6></th>  
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody> 
                                         @if ($invoice->description!=null)
                                             <tr>
                                                 <td>{{$invoice->description}} </td>
-                                                <td>{{get_price($invoice->amount)}}</td>
+                                                <td>{{get_price($invoice->amount,$invoice->project->currency)}}</td>
                                             </tr> 
                                         @else 
                                             @php
@@ -149,7 +150,7 @@
                                                 @foreach ($details as $detail)
                                                     <tr>
                                                         <td>{{$detail->reason}} </td>
-                                                        <td>{{get_price($detail->amount)}}</td>
+                                                        <td>{{get_price($detail->amount,$invoice->project->currency)}}</td>
                                                     </tr> 
                                                 @endforeach
                                             @endif
@@ -158,7 +159,7 @@
 
                                         <tr>
                                             <td><h6>TOTAL</h6></td>
-                                            <td><h6>{{get_price($invoice->amount)}}</h6></td>
+                                            <td><h6>{{get_price($invoice->amount,$invoice->project->currency)}}</h6></td>
                                         </tr>
 
                                         <tr>
@@ -172,18 +173,29 @@
                                             </td>
                                             <td>
                                                 @if ($invoice->tax_amount>0)
-                                                    <p class="mb-2">{{get_price(@$invoice->tax_amount)}}</p> 
+                                                    <p class="mb-2">{{get_price(@$invoice->tax_amount,$invoice->project->currency)}}</p> 
                                                 @endif 
                                                 @if ($invoice->discount_amount>0)
-                                                    <p>-{{get_price(@$invoice->discount_amount)}}</p> 
+                                                    <p>-{{get_price(@$invoice->discount_amount,$invoice->project->currency)}}</p> 
                                                 @endif 
                                             </td>
-                                        </tr> 
-
+                                        </tr>  
                                         <tr>
                                             <td><h6>GRAND TOTAL</h6></td>
-                                            <td><h6>{{get_price($invoice->total_amount)}}</h6></td>
-                                        </tr>
+                                                @php 
+                                                    $currency = @$invoice->project->currency ?? 'bdt'; 
+                                                    if($currency == 'usd'){
+                                                        $price = get_price($invoice->total_amount_usd, $currency) 
+                                                                . ' = (' . $invoice->total_amount_usd 
+                                                                . ' x ' . $invoice->usd_rate 
+                                                                . ') ' . get_price($invoice->total_amount);
+                                                    } else {
+                                                        $price = get_price($invoice->total_amount);
+                                                    }  
+                                                @endphp
+                                                <td><h6>{{ $price }} </h6></td>
+                                            </tr>
+
                                     </tbody>
                                 </table>
 

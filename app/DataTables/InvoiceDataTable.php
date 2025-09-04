@@ -15,13 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 use Illuminate\Http\Request;
 
 class InvoiceDataTable extends DataTable
-{
-    /**
-     * Build DataTable class.
-     *
-     * @param QueryBuilder $query Results from query() method.
-     * @return \Yajra\DataTables\EloquentDataTable
-     */
+{ 
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -29,18 +23,48 @@ class InvoiceDataTable extends DataTable
                 return view('invoice.invoice_action', compact('data'))->render();
             })
             ->addColumn('invoice_id', function ($data) {
-                return "INV-".$data->id;
+                return '<a href="'.route('invoice.show', encrypt($data->id)).'" class="text-primary">INV-'.$data->id.'</a>';
             })
             ->addColumn('name', function ($data) {  
-                $name = $data->user->name ." ".$data?->user?->userContact?->name??'' ." ";
-                return $name." [".$data->customer->customer_id."]";
-            }) 
-            ->addColumn('total_amount', function ($data) {
-                return get_price($data->total_amount);
+                $name = $data->user->name ." ".$data?->user?->userContact?->name??''; 
+                $customerLink = '<a href="'.route('customer.profile', encrypt($data->customer->id)).'">'.$name.' ['.$data->customer->customer_id.']</a>';
+                return $customerLink;
             })
+            ->addColumn('total_amount', function ($data) {
+                $currency = @$data->project->currency ?? 'bdt'; 
+                if($currency == 'usd'){
+                    $price = get_price($data->total_amount_usd, $currency) 
+                            . ' = ' . $data->total_amount_usd 
+                            . ' x ' . $data->usd_rate 
+                            . ' = ' . get_price($data->total_amount);
+                } else {
+                    $price = get_price($data->total_amount);
+                }
+
+                return $price;
+            })
+
             ->addColumn('due_amount', function ($data) { 
                 return get_price($data->due_amount);
-            }) 
+            })
+
+            ->addColumn('notify', function ($data) { 
+                if ($data->due_amount <= 0) {
+                    return "-";
+                }
+
+                if ($data->notification_count > 0) {
+                    $date = $data->last_notification_date 
+                        ? \Carbon\Carbon::parse($data->last_notification_date)->diffForHumans()
+                        : '-';
+                    return $date . ' (' . $data->notification_count . ')';
+                }
+
+                return "No";
+            })
+
+
+
             ->addColumn('invoice_date', function ($data) { 
                 return get_date($data->invoice_date);
             }) 
@@ -55,7 +79,7 @@ class InvoiceDataTable extends DataTable
                 }else{
                     return '<span class="badge badge-info">Partial</span>';
                 }
-            })->rawColumns(['status','action']) 
+            })->rawColumns(['name','invoice_id','status','action']) 
             ->setRowId('id');
     }
 
@@ -74,17 +98,7 @@ class InvoiceDataTable extends DataTable
             $model      = $model->whereBetween('created_at', [$start_date . ' 00:00:00', $end_date . ' 23:59:59']);
         }
 
-        if (isset($request->employee)) {
-            $user_id = (int) $request->employee;
-        } else {
-            $user_id = auth()->user()->id;
-        } 
-        
-        $user        = User::find($user_id);
-        $my_employee = json_decode($user->user_employee);   
-        if($my_employee == null){
-            $my_employee = [Auth::user()->id];
-        }
+       
 
         if (isset($request->status)) {
             if ($request->status == "unpaid") {
@@ -104,11 +118,12 @@ class InvoiceDataTable extends DataTable
                                
             }
         } 
+
+        if(isset($request->project_id) && $request->project_id != null){
+            $model = $model->where('project_id', $request->project_id);
+        }
        
-        return $model->newQuery() 
-        ->whereHas('customer', function ($q) use ($my_employee) {
-            $q->whereIn('ref_id', $my_employee);
-        });
+        return $model->latest()->newQuery();
     }
 
     /**
@@ -148,7 +163,8 @@ class InvoiceDataTable extends DataTable
                   ->printable(false)
                   ->width(60)
                   ->addClass('text-center'),
-            Column::make('invoice_id'),  
+            Column::make('invoice_id'),
+            Column::make('notify'), 
             Column::make('name')->title("Customer"), 
             Column::make('total_amount'),
             Column::make('due_amount'), 

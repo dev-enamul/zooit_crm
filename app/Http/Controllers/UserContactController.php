@@ -113,4 +113,18 @@ class UserContactController extends Controller
         $contact->delete();
         return redirect()->back()->with('success', 'Contact deleted successfully.');
     }
+
+    public function getContactsByUserId($userId)
+    {
+        $contacts = UserContact::where('user_id', $userId)
+            ->where(function ($query) {
+                $query->whereNotNull('email')
+                    ->orWhereNotNull('personal_email');
+            })
+            ->selectRaw('COALESCE(email, personal_email) as email')
+            ->pluck('email');
+
+        return response()->json($contacts);
+    }
+
 }

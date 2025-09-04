@@ -18,26 +18,15 @@ class InvoiceController extends Controller
         $date       = $request->date ?? null;
         $status     = $request->status ?? 0;
         $start_date = Carbon::parse($date ? explode(' - ', $date)[0] : date('Y-m-01'))->format('Y-m-d');
-        $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d');
-        if (isset($request->employee) && $request->employee != null) {
-            $employee = User::find($request->employee);
-        } else {
-            $employee = User::find(auth()->user()->id);
-        }   
-
-        return $dataTable->render('invoice.invoice_list', compact('title', 'employee', 'status', 'start_date', 'end_date'));
+        $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        return $dataTable->render('invoice.invoice_list', compact('title','status', 'start_date', 'end_date'));
     }
-
-    
-    /**
-     * Display the specified resource.
-     */
+ 
     public function show(string $id)
     {
         $id = decrypt($id);
         $invoice = Invoice::find($id);
-        return view('invoice.invoice_details',compact('invoice'));
-        
+        return view('invoice.invoice_details',compact('invoice')); 
     }
 
     /**
@@ -89,6 +78,20 @@ class InvoiceController extends Controller
         $id = customDecrypt($id);
         $invoice = Invoice::find($id);
         return view('invoice.share_invoice',compact('invoice'));
+    } 
+
+    public function getUnpaidInvoicesByCustomer($customerId)
+    {
+        $invoices = Invoice::where('user_id', $customerId)
+                            ->whereIn('status', [0, 2]) // 0=Unpaid, 2=Partial
+                            ->get(['id', 'due_amount', 'due_date']);
+
+        // Encrypt the ID for the share link
+        $invoices->each(function ($invoice) {
+            $invoice->encrypted_id = customEncrypt($invoice->id);
+        });
+
+        return response()->json($invoices);
     } 
     
 }

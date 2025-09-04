@@ -16,4 +16,12 @@ class InstallmentPlan extends Model
         'is_invoiced',
     ];  
 
+    public function customer() {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+    public function project() {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
+    
+
 }

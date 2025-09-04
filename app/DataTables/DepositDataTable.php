@@ -35,7 +35,7 @@ class DepositDataTable extends DataTable
             }) 
 
             ->addColumn('name', function ($data) {
-                if($data->user->userContact->type==2){
+                if(@$data->user->userContact->type==2){
                     $name = $data->user->userContact->name." (". $data->user->name .") ";
                 }else{
                     $name = $data->user->name;

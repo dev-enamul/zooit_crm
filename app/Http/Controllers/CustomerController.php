@@ -153,14 +153,7 @@ class CustomerController extends Controller {
                 $user->update([
                     'name'          => $request->full_name,  
                     'phone'         =>  get_phone($request->phone),
-                ]);  
-
-                $user->userContact->update([
-                    'name'           => $request->contact_person_name ?? $request->full_name,
-                    'type'           => $request->company_type,
-                    'designation_id' => $request->designation_id,
-                    'phone'          => get_phone($request->phone), 
-                ]);
+                ]);   
 
                 $user->userAddress->update([ 
                     'address'  => $request->address,

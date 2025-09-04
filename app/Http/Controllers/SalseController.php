@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\SalesDataTable;
 use App\Enums\Priority;
 use App\Enums\UnitFacility;
 use App\Models\ApproveSetting;
@@ -19,6 +20,7 @@ use App\Models\Unit;
 use App\Models\UnitCategory;
 use App\Models\UnitPrice;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,11 +28,16 @@ use Illuminate\Support\Facades\Validator;
 
 class SalseController extends Controller
 { 
-    public function index()
-    {
-        $my_all_employee = json_decode(Auth::user()->user_employee);
-        $datas = Customer::whereNotNull('customer_id')->get();
-        return view('salse.salse_list',compact('datas'));
+    public function index(SalesDataTable $dataTable, Request $request)
+    { 
+        $employee_id = $request->employee??Auth::user()->id;
+        $user = User::find($employee_id);
+        $my_all_employee = json_decode($user->user_employee);
+        $title      = 'Sales List';
+        $date       = $request->date ?? null; 
+        $start_date = Carbon::parse($date ? explode(' - ', $date)[0] : date('Y-m-01'))->format('Y-m-d');
+        $end_date   = Carbon::parse($date ? explode(' - ', $date)[1] : date('Y-m-t'))->format('Y-m-d'); 
+        return $dataTable->render('salse.salse_list', compact('title', 'start_date', 'end_date'));
     } 
 
     public function create(Request $request)
@@ -48,6 +55,7 @@ class SalseController extends Controller
         $rules = [
             'customer' => 'required|exists:customers,id', 
             'title' => 'nullable|string|max:255',
+            'currency' => 'nullable|string|max:10',
             'price' => 'required|numeric|min:0',
             'submit_date' => 'required|date', 
             'remark' => 'nullable|string|max:255',
@@ -67,13 +75,14 @@ class SalseController extends Controller
         foreach($followups as $followup){
             $followup->status = 1;
             $followup->save();
-        }  
+        }
 
         $project = new Project();
         $project->title = $request->title;
         $project->customer_id = $customer->id;
         $project->project_proposal_id = $project_proposal->id??null;
         $project->sales_by = Auth::user()->id;
+        $project->currency = $request->currency;
         $project->price = $request->price;
         $project->submit_date = $request->submit_date;  
         $project->project_status = 0;

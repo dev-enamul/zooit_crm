@@ -40,10 +40,30 @@ if (!function_exists('get_date')) {
 }
 
 if (!function_exists('get_price')) {
-    function get_price($amount, $decimal = 0) {
-        return '৳'.number_format($amount, $decimal, '.', ',') ;
+    function get_price($amount, $currency = 'bdt', $decimal = 0) {
+        $icon = $currency === 'usd' ? '$' : '৳';
+        return $icon . number_format($amount, $decimal, '.', ',');
     }
 }
+
+
+if (!function_exists('usd_to_bdt_rate')) {
+    function usd_to_bdt_rate() { 
+        $api_url = 'https://api.exchangerate-api.com/v4/latest/USD';
+        $response = file_get_contents($api_url);
+        $data = json_decode($response, true);
+
+        if (isset($data['rates']['BDT'])) {
+            $usd_to_bdt_rate = $data['rates']['BDT'];
+        } else {
+            $usd_to_bdt_rate = 120;  
+        }
+        return $usd_to_bdt_rate;
+    }
+}
+
+
+
 
 if (!function_exists('districts')) {
     function districts(int $division_id = null) {

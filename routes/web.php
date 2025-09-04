@@ -4,9 +4,7 @@ use App\Http\Controllers\ApproveFreelancerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BankController;
-use App\Http\Controllers\BankDayController;
-use App\Http\Controllers\ColdCallingController;
-use App\Http\Controllers\ComissionReportController;
+use App\Http\Controllers\BankDayController;  
 use App\Http\Controllers\CommissionControler;
 use App\Http\Controllers\CommissionDeductedController;
 use App\Http\Controllers\CommissionReportController;
@@ -77,9 +75,11 @@ use App\Http\Controllers\InstantInvoiceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadSourceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTeamController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\SalseApproveController;
+use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServicePaymentController;
 use App\Http\Controllers\settings\LastSubmitTimeSettingController;
@@ -112,13 +112,24 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::group(['middleware' => 'auth'], function () {  
         // ProjectTeam 
         Route::resource('project-team', ProjectTeamController::class);
-
-
+        Route::get('select2-employee', [EmployeeController::class, 'select2_employee'])->name('select2.employee');
+        Route::get('select2-employee-freelancer', [EmployeeController::class, 'select2_employee_freelancer'])->name('select2.employee.freelancer');
+        Route::get('select2-employee-encode', [EmployeeController::class, 'select2_employee_encode'])->name('select2-employee-encode');
+        Route::get('select2-reporting-user', [EmployeeEditController::class, 'select2_reporting_user'])->name('select2.reporting.user');
+        Route::get('select2-lead-customer', [LeadController::class, 'select2_customer'])->name('select2.lead.customer');
+        Route::get('select2-presentation-customer', [PresentationController::class, 'select2_customer'])->name('select2.presentation.customer');
+        Route::get('select2-followup-customer', [FollowupController::class, 'select2_customer'])->name('select2.followup.customer'); 
+        Route::get('select2-negotiation-customer', [NegotiationController::class, 'select2_customer'])->name('select2.negotiation.customer');
+        Route::get('select2-salse-customer', [SalseController::class, 'select2_customer'])->name('select2.salse.customer');
+        Route::get('select2-rejection-customer', [RejectionController::class, 'select2_customer'])->name('select2.rejection.customer');
+        Route::get('select2-project', [ProjectController::class, 'select2_project'])->name('select2.project');
 
 
         Route::get('project-proposal',[ProposalController::class,'index']);
         Route::get('whatsapp', [WhatsAppController::class, 'index']);
         Route::post('whatsapp', [WhatsAppController::class, 'store'])->name('whatsapp.store');
+        Route::get('send-mail', [SendMailController::class, 'sendMail'])->name('send.mail');
+        Route::post('send-mail', [SendMailController::class, 'store'])->name('send.mail.store'); 
 
         Route::get('bypass/{id}', [DashboardController::class, 'bypass'])->name('bypass');
         Route::get('/', [DashboardController::class, 'index'])->name('index');
@@ -147,12 +158,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('contact-create',[UserContactController::class,'store'])->name('contact.store');
         Route::put('contact-update',[UserContactController::class,'update'])->name('contact.update');
         Route::get('contact-delete/{id}',[UserContactController::class,'destroy'])->name('contact.delete');
+        Route::get('/users/{userId}/contacts', [UserContactController::class, 'getContactsByUserId'])->name('users.contacts'); 
 
         // Employee 
-        Route::resource('employee', EmployeeController::class);
-        Route::get('select2-employee', [EmployeeController::class, 'select2_employee'])->name('select2.employee');
-        Route::get('select2-employee-freelancer', [EmployeeController::class, 'select2_employee_freelancer'])->name('select2.employee.freelancer');
-        Route::get('select2-employee-encode', [EmployeeController::class, 'select2_employee_encode'])->name('select2-employee-encode');
+        Route::resource('employee', EmployeeController::class); 
         Route::get('all-employee', [CommonController::class, 'all_employee'])->name('all.employee');
         Route::get('import', [EmployeeImportController::class, 'index'])->name('import');
         Route::post('employee-import', [EmployeeImportController::class, 'import'])->name('employee.import');
@@ -160,8 +169,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('refresh-password/{id}',[ResetPasswordController::class,'fresh'])->name('refresh.password');
          
         Route::get('reporting/user/edit/{id}', [EmployeeEditController::class, 'reporting_edit'])->name('reporting.user.edit');
-        Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update');
-        Route::get('select2-reporting-user', [EmployeeEditController::class, 'select2_reporting_user'])->name('select2.reporting.user');
+        Route::post('reporting/user/update/{id}', [EmployeeEditController::class, 'reporting_update'])->name('reporting.user.update'); 
         
         Route::get('area/user/edit/{id}', [EmployeeEditController::class, 'area_edit'])->name('user.area.edit');
         Route::post('area/user/update/{id}', [EmployeeEditController::class, 'area_update'])->name('user.area.update');
@@ -179,19 +187,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('employees/tree', [EmployeeTreeController::class, 'tree'])->name('employees.tree');
         Route::get('employees-hierarchy', [EmployeeTreeController::class, 'hierarchy'])->name('employees.hierarchy');
         Route::get('employees-hierarchy-2', [EmployeeTreeController::class, 'hierarchy2'])->name('employees.hierarchy2');
-
-        #Product  
-        Route::resource('product', ProductController::class);
-        Route::post('product-save/{id?}', [ProductController::class, 'save'])->name('product.save'); 
-        Route::get('/product-approve', [ProductController::class, 'product_approve'])->name('product.approve');
-        Route::post('/product-approve', [ProductController::class, 'productApprove'])->name('product.approve.save'); 
-        Route::any('product-delete/{id}', [ProductController::class, "productDelete"])->name('product.delete');
-
-        Route::resource('sub-product', SubProductController::class);
-        Route::get('project-get-subproject',[SubProductController::class,"get_subproject"])->name('project-get-subproject');
-
-         
-
+ 
+     
         // Freelancer 
         Route::resource('freelancer', FreelancerController::class); 
         Route::resource('approve-freelancer', ApproveFreelancerController::class);
@@ -226,25 +223,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('customer-delete/{id}', [CustomerController::class, "customerDelete"])->name('customer.delete');
         Route::get('customer-details/{id}', [CustomerController::class, "customerDetails"])->name('customer.details');
 
-        // Prospecting a
-        Route::resource('prospecting', ProspectingController::class);
-        Route::get('select2-prospecting-customer', [ProspectingController::class, 'select2_customer'])->name('select2.prospecting.customer');
-        Route::post('prospecting-save/{id?}', [ProspectingController::class, 'save'])->name('prospecting.save');
-        Route::any('prospecting-delete/{id}', [ProspectingController::class, "prospectingDelete"])->name('prospecting.delete');
-        Route::get('prospecting-approve', [ProspectingController::class, 'prospecting_approve'])->name('prospecting.approve'); 
-        Route::post('product-approve-save', [ProspectingController::class, 'prospectingApprove'])->name('prospecting.approve.save');
-
-        // Cold Calling 
-        Route::resource('cold-calling', ColdCallingController::class); 
-        Route::get('select2-cold-calling-customer', [ColdCallingController::class, 'select2_customer'])->name('select2.cold_calling.customer');
-        Route::post('cold-calling-save/{id?}', [ColdCallingController::class, 'save'])->name('cold_calling.save');
-        Route::any('cold-calling-delete/{id}', [ColdCallingController::class, "colCallingDelete"])->name('cold_calling.delete');
-        Route::get('cold-calling-approve', [ColdCallingController::class, 'coldCallingApprove'])->name('cold-calling.approve');
-        Route::post('cold-calling-approve-save', [ColdCallingController::class, 'coldCallingApproveSave'])->name('cold-calling.approve.save');
+          
 
         // Lead 
-        Route::resource('lead', LeadController::class);
-        Route::get('select2-lead-customer', [LeadController::class, 'select2_customer'])->name('select2.lead.customer');
+        Route::resource('lead', LeadController::class); 
         Route::post('lead-save/{id?}', [LeadController::class, 'save'])->name('lead.save');
         Route::get('get-cold-calling-data', [LeadController::class, 'customer_data'])->name('get.cold.calling.data');
         Route::any('lead-delete/{id}', [LeadController::class, "leadDelete"])->name('lead.delete');
@@ -253,8 +235,7 @@ Route::group(['middleware' => 'auth'], function () {
  
 
         // Presentation
-        Route::resource('presentation', PresentationController::class);
-        Route::get('select2-presentation-customer', [PresentationController::class, 'select2_customer'])->name('select2.presentation.customer');
+        Route::resource('presentation', PresentationController::class); 
         Route::get('get-lead-analysis-data', [PresentationController::class, 'customer_data'])->name('get.lead.analysis.data');
         Route::post('presentation-save/{id?}', [PresentationController::class, 'save'])->name('presentation.save');
         Route::any('presentation-delete/{id}', [PresentationController::class, "presentationDelete"])->name('presentation.delete');
@@ -263,8 +244,7 @@ Route::group(['middleware' => 'auth'], function () {
 
           
         // Follow Up
-        Route::resource('followup', FollowupController::class);
-        Route::get('select2-followup-customer', [FollowupController::class, 'select2_customer'])->name('select2.followup.customer'); 
+        Route::resource('followup', FollowupController::class); 
         Route::post('follow-up-save/{id?}', [FollowupController::class, 'save'])->name('follow-up.save');
         Route::any('follow-up-delete/{id}', [FollowupController::class, "followUpDelete"])->name('followUp.delete');
         Route::get('follow-up-approve', [FollowupController::class, 'followUpApprove'])->name('followUp.approve');
@@ -272,8 +252,7 @@ Route::group(['middleware' => 'auth'], function () {
         
  
         // Negotation
-        Route::resource('negotiation', NegotiationController::class);
-        Route::get('select2-negotiation-customer', [NegotiationController::class, 'select2_customer'])->name('select2.negotiation.customer');
+        Route::resource('negotiation', NegotiationController::class); 
         Route::get('get-follow-up-analysis-data', [NegotiationController::class, 'customer_data'])->name('get.follow.up.analysis.data');
         Route::post('negotiation-save/{id?}', [NegotiationController::class, 'save'])->name('negotiation.save');
         Route::any('negotiation-delete/{id}', [NegotiationController::class, "negotiationDelete"])->name('negotiation.delete');
@@ -282,8 +261,7 @@ Route::group(['middleware' => 'auth'], function () {
  
 
         // Salse
-        Route::resource('salse', SalseController::class);
-        Route::get('select2-salse-customer', [SalseController::class, 'select2_customer'])->name('select2.salse.customer');
+        Route::resource('salse', SalseController::class); 
         Route::get('salse-approve', [SalseApproveController::class, 'salse_approve'])->name('salse.approve');
         Route::get('salse-approve-save/{id}', [SalseApproveController::class, 'salse_approve_save'])->name('salse.approve.save');
         Route::get('get-negotiation-analysis-data', [SalseController::class, 'customer_data'])->name('get.negotiation.analysis.data');
@@ -313,8 +291,7 @@ Route::group(['middleware' => 'auth'], function () {
        
 
         // Rejection
-        Route::resource('rejection', RejectionController::class);
-        Route::get('select2-rejection-customer', [RejectionController::class, 'select2_customer'])->name('select2.rejection.customer');
+        Route::resource('rejection', RejectionController::class); 
         Route::post('rejection-save/{id?}', [RejectionController::class, 'save'])->name('rejection.save');
         Route::any('rejection-delete/{id}', [RejectionController::class, "rejectionDelete"])->name('rejection.delete');
         Route::get('rejection-approve', [RejectionController::class, 'rejectionApprove'])->name('rejection.approve');
@@ -451,6 +428,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('notification-read/{id}', [NotificationController::class, 'read'])->name('notification.read');
         Route::get('notification-details/{id}', [NotificationController::class, 'details'])->name('notification.details');
         Route::resource('admin-notice', AdminNoticeController::class); 
+
+        Route::get('/customers/{customerId}/unpaid-invoices', [InvoiceController::class, 'getUnpaidInvoicesByCustomer'])->name('customers.unpaid-invoices'); 
+
+        // User Contacts
+        
 }); 
 
 Route::get('daily-job',DailyJobController::class);
@@ -461,6 +443,10 @@ Route::get('/send-today-activities-email/{key}', [DailyActivitiesController::cla
     ->name('send.today.activities.email'); 
 Route::get('/send-nextday-activities-email/{key}', [DailyActivitiesController::class, 'sendNextDayActivitiesEmail'])
     ->name('send.nextday.activities.email');
+
+    Route::get('/test-usd', function () {
+        dd(usd_to_bdt_rate());
+    });
 
 
  

@@ -20,9 +20,18 @@ class Invoice extends Model
         'amount',
         'tax_amount',
         'discount_amount',
+        'total_amount_usd',
+        'usd_rate',
         'total_amount',
         'due_amount',
         'status',
+        'notification_count',
+        'last_notification_date',
+    ];
+
+    protected $casts = [
+        'invoice_date' => 'date',
+        'due_date' => 'date',
     ];
 
     public function user() {

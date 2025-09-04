@@ -62,12 +62,10 @@ class DepositController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {  
-       
-         
+    {   
         $validator = Validator::make($request->all(), [
             'invoice_id' => 'required|exists:invoices,id', 
-            'amount' => 'required|numeric|min:1', 
+            'amount' => 'required|numeric|min:.1', 
             'date' => 'required|date|before_or_equal:today', 
             'bank_id' => 'required|exists:banks,id', 
             'tnx_id' => 'nullable|string|max:255', 

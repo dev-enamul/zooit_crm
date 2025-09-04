@@ -32,7 +32,12 @@
                                 <div class="row">  
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="freelancer" class="form-label">Customer <span class="text-danger">*</span></label>
+                                            <label for="freelancer" class="form-label d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    Customer <span class="text-danger">*</span>
+                                                </div>
+                                                 <a title="Add Customer" href="{{route('customer.create')}}" class="btn btn-primary">+</a>
+                                            </label>
                                             <select class="select2" search name="customer" id="customer" required>
                                                 <option data-display="Select a coustomer *" value="">
                                                     Select a customer
@@ -47,17 +52,30 @@
                                                 This field is required.
                                             </div>
                                         </div>
-                                    </div>  
+                                    </div>   
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="title" class="form-label">Project Title</label>
                                             <input class="form-control" type="text" name="title" id="title" value="{{old('title',@$salse->title)}}" placeholder="Project Title">
-        
                                         </div>
-                                    </div>  
+                                    </div>   
 
-                                    <div class="col-md-4">
+                                     <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="currency" class="form-label">Currency <span class="text-danger">*</span></label>
+                                            <select class="select2" name="currency" id="currency" required> 
+                                                <option value="bdt" {{ old('currency', $selected_data['currency'] ?? '') == 'bdt' ? 'selected' : '' }}>BDT</option>
+                                                <option value="usd" {{ old('currency', $selected_data['currency'] ?? '') == 'usd' ? 'selected' : '' }}>USD</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="price" class="form-label"><span id="company_name_label">Price</span><span class="text-danger">*</span></label>
                                             <input type="number" name="price" class="form-control" id="price" value="{{old("price",@$salse->price)}}" placeholder="Enter Price" required>
@@ -67,7 +85,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="submit_date" class="form-label"><span id="submit_date">Submit Date</span><span class="text-danger">*</span></label>
                                             <input type="date" name="submit_date" class="form-control" id="submit_date" value="{{old("submit_date",@$salse->submit_date)}}" placeholder="Select Date" required>
@@ -78,7 +96,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="remark" class="form-label">Remark</label>
                                             <textarea class="form-control" id="remark" rows="1" name="remark" placeholder="Remark">{{old('remark',@$user->remark)}}</textarea> 

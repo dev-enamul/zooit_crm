@@ -25,9 +25,13 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->decimal('tax_amount', 15, 2)->default(0);
             $table->decimal('discount_amount', 15, 2)->default(0);
-            $table->decimal('total_amount', 15, 2);
+            $table->decimal('total_amount_usd', 15, 2)->nullable();
+            $table->decimal('usd_rate', 15, 2)->nullable();
+            $table->decimal('total_amount', 15, 2); 
             $table->decimal('due_amount', 15, 2)->default(0);
-            $table->integer('status')->default(0)->comment('0= Unpaid, 1= Paid, 2= Partial');   
+            $table->integer('status')->default(0)->comment('0= Unpaid, 1= Paid, 2= Partial'); 
+            $table->integer('notification_count')->default(0);
+            $table->date('last_notification_date')->nullable();
             $table->timestamps();
         });
 
