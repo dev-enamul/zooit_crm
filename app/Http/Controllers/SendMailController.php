@@ -1,60 +1,67 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Mail;
 
-use App\Mail\GenericInvoiceMail;
-use App\Models\Invoice;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
-class SendMailController extends Controller
+class GenericInvoiceMail extends Mailable
 {
-    public function sendMail(Request $request)
+    use Queueable, SerializesModels;
+
+    public $custom_subject;
+    public $intro_message;
+    public $invoices;
+    public $attachmentPath;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct($subject, $intro_message, Collection $invoices, $attachmentPath = null)
     {
-        return view('emails.send-mail-form');
+        $this->custom_subject = $subject;
+        $this->intro_message = $intro_message;
+        $this->invoices = $invoices;
+        $this->attachmentPath = $attachmentPath;
     }
 
-    public function store(Request $request)
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
     {
-        $request->validate([
-            'to' => 'required|array',
-            'to.*' => 'email',
-            'cc' => 'nullable|array',
-            'cc.*' => 'email',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string',
-            'invoice_ids' => 'nullable|array',
-            'invoice_ids.*' => 'exists:invoices,id',
-            'attachment' => 'nullable|string',
-        ]);
+        return new Envelope(
+            subject: $this->custom_subject,
+        );
+    }
 
-        $toEmails = $request->to;
-        $ccEmails = $request->cc ?? [];
-        
-        $invoices = collect();
-        if ($request->has('invoice_ids')) {
-            $invoices = Invoice::find($request->invoice_ids);
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'emails.generic_invoice',
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        if ($this->attachmentPath) {
+            return [
+                \Illuminate\Mail\Mailables\Attachment::fromPath(storage_path('app/public/' . $this->attachmentPath)),
+            ];
         }
-
-        $attachmentPath = $request->attachment;
-
-        try {
-            Mail::to($toEmails)
-                ->cc($ccEmails)
-                ->send(new GenericInvoiceMail($request->subject, $request->message, $invoices, $attachmentPath));
-            
-            if ($invoices->isNotEmpty()) {
-                foreach ($invoices as $invoice) {
-                    $invoice->increment('notification_count');
-                    $invoice->last_notification_date = now();
-                    $invoice->save();
-                }
-            }
-            return back()->with('success', 'Mail sent successfully!');
-        } catch (\Exception $e) { 
-            Log::error('Mail sending failed: ' . $e->getMessage());
-            return back()->with('error', 'Failed to send email. Please check your mail configuration and try again.');
-        }
+        return [];
     }
 }

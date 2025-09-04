@@ -57,11 +57,21 @@ class GenericInvoiceMail extends Mailable
      */
     public function attachments(): array
     {
+        $attachments = [];
+
+        // যদি user-uploaded attachment থাকে
         if ($this->attachmentPath) {
-            return [
-                \Illuminate\Mail\Mailables\Attachment::fromPath(storage_path('app/public/' . $this->attachmentPath)),
-            ];
+            $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromPath(
+                storage_path('app/public/' . $this->attachmentPath)
+            );
         }
-        return [];
+
+        // Inline logo embed
+        $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromPath(
+            public_path('assets/images/logo-dark.png')
+        )->as('logo-dark.png')->withMime('image/png')->inline();
+
+        return $attachments;
     }
+
 }

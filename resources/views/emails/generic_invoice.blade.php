@@ -127,7 +127,7 @@
             <img src="https://crm.zoomdigital.net/assets/images/logo-dark.png" alt="{{ config('app.name') }} Logo" width="100"><br>
             © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.<br>
             <em>Thank you for being a valued part of our journey. Together, we grow!</em>
-        </div>
+        </div> 
     </div>
 </body>
 </html>
