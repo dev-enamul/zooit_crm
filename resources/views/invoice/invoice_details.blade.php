@@ -154,8 +154,7 @@
                                                     </tr> 
                                                 @endforeach
                                             @endif
-                                        @endif
-                                        
+                                        @endif 
 
                                         <tr>
                                             <td><h6>TOTAL</h6></td>
@@ -193,7 +192,7 @@
                                                         $price = get_price($invoice->total_amount);
                                                     }  
                                                 @endphp
-                                                <td><h6>{{ $price }} </h6></td>
+                                                <td><h5 class="m-0 p-0">{{ $price }} </h5></td>
                                             </tr>
 
                                     </tbody>

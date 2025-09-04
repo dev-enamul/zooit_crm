@@ -23,7 +23,7 @@ class InvoiceDataTable extends DataTable
                 return view('invoice.invoice_action', compact('data'))->render();
             })
             ->addColumn('invoice_id', function ($data) {
-                return '<a href="'.route('invoice.show', encrypt($data->id)).'" class="text-primary">INV-'.$data->id.'</a>';
+                return '<a target="_blank" href="'.route('invoice.show', encrypt($data->id)).'" class="text-primary">INV-'.$data->id.'</a>';
             })
             ->addColumn('name', function ($data) {  
                 $name = $data->user->name ." ".$data?->user?->userContact?->name??''; 

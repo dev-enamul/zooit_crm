@@ -252,7 +252,7 @@
                                 $price = get_price($invoice->total_amount);
                             }  
                         @endphp
-                        <td><h6>{{ $price }} </h6></td>
+                        <td><h4 style="margin:0;padding:0">{{ $price }} </h4></td>
                     </tr>
                 </tbody>
             </table>

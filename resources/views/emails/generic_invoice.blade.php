@@ -108,7 +108,9 @@
                 </tr>
             </tbody>
         </table>
- 
+
+        {{-- <div class="panel">We’re committed to serving you with care, quality, and excellence. ✨ ✨ </div> --}}
+
         @endif
 
         <p style="margin-top:15px; line-height:1.5; font-family: Arial, sans-serif; font-size:14px;">
@@ -116,15 +118,16 @@
         <strong>{{ auth()->user()->name ?? 'Your Name' }}</strong><br>
         {{ auth()->user()->designation ?? 'CEO' }}<br>
         {{ config('app.name')  }}<br>
-        {{-- Web: <a href="http://www.thezoomit.com" style="color:#0d6efd; text-decoration:none;">www.thezoomit.com</a><br>
-        Phone: <a href="tel:+880 1711432284" style="color:#0d6efd; text-decoration:none;">880 1711432284</a> <a href="tel:+880 1977222457" style="color:#0d6efd; text-decoration:none;">880 1977222457</a><br>
-        Email: <a href="mailto:thezoomit@gmail.com" style="color:#0d6efd; text-decoration:none;">thezoomit@gmail.com</a> <a href="mailto:info@thezoomit.com" style="color:#0d6efd; text-decoration:none;">info@thezoomit.com</a><br> --}}
-    </p>  
-        {{-- <div class="footer">
+        {{-- Web: <a href="#" style="color:#0d6efd; text-decoration:none;">www.thezoomit.com</a><br> --}}
+        Phone: <a href="tel:+880 1711432284" style="color:#0d6efd; text-decoration:none;">880 1711432284, </a> <a href="tel:+880 1977222457" style="color:#0d6efd; text-decoration:none;">880 1977222457</a><br>
+        Email: <a href="mailto:thezoomit@gmail.com" style="color:#0d6efd; text-decoration:none;">thezoomit@gmail.com, </a> <a href="mailto:info@thezoomit.com" style="color:#0d6efd; text-decoration:none;">info@thezoomit.com</a>
+    </p> 
+        <hr style="margin-top:20px; margin-bottom:20px; border-color:#e0e0e0;">   
+        <div class="footer">
             <img src="{{ url('assets/images/logo-dark.png') }}" alt="{{ config('app.name') }} Logo" width="100"><br>
             © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.<br>
             <em>Thank you for being a valued part of our journey. Together, we grow!</em>
-        </div> --}}
+        </div>
     </div>
 </body>
 </html>
