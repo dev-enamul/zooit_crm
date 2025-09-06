@@ -125,6 +125,7 @@ class CustomerController extends Controller {
         $validator = Validator::make($request->all(), [
             'full_name'           => 'required|string|max:255',
             'phone'               => 'required|string|max:25',
+            'email'               => 'nullable|email|max:255',
             'company_type'        => 'required|in:1,2',
             'find_media_id'       => 'nullable|integer',
             'contact_person_name' => 'nullable|string|max:255',
@@ -153,6 +154,7 @@ class CustomerController extends Controller {
                 $user->update([
                     'name'          => $request->full_name,  
                     'phone'         =>  get_phone($request->phone),
+                    'email'         =>  $request->email,
                 ]);   
 
                 $user->userAddress->update([ 
@@ -179,6 +181,7 @@ class CustomerController extends Controller {
                 UserContact::create([
                     'user_id'        => $user->id,
                     'name'           => $request->contact_person_name ?? $request->full_name,
+                    'email'          => $request->email,
                     'type'           => $request->company_type,
                     'designation_id' => $request->designation_id,
                     'phone'          => get_phone($request->phone),

@@ -85,6 +85,16 @@
                                         </div>
                                     </div>  
 
+                                     <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                            <input type="text" name="email" class="form-control" id="email" maxlength="15" placeholder="Email address" value="{{ old('email') }}" required>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+                                        </div>
+                                    </div>  
+
                                    
 
                                     <div class="col-md-6">
