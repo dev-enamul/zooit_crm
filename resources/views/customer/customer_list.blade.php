@@ -17,9 +17,7 @@
                             <h4 class="mb-sm-0"> Lead List</h4> 
                             <div class="page-title-right">
                                 <div class="btn-group flex-wrap mb-2">
-                                    {{-- <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-                                        <span><i class="fas fa-filter"></i> Filter</span>
-                                    </button> --}}
+                                
                                 </div>
                             </div> 
                         </div>
@@ -85,6 +83,7 @@
         </form>
         </div>
     </div>
+@include('includes._send_mail_modal')
 @endsection
 @section('script')
 <script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
@@ -120,5 +119,82 @@
 
 <script>
      getDateRange('date_range');
+
+    function openSendMailModalCustomer(userId) {
+        const toField = $('#to_modal');
+        const ccField = $('#cc_modal');
+        const subjectField = $('#subject_modal');
+        const messageField = $('#message_modal');
+        const modal = $('#send-mail-modal');
+        const mailForm = $('#send-mail-form');
+
+        // Clear previous data
+        mailForm.find('input[name="invoice_ids[]"]').remove();
+        toField.empty().trigger('change');
+        ccField.empty().trigger('change');
+        subjectField.val('');
+        messageField.val('');
+
+        // Fetch contacts via AJAX
+        $.ajax({
+            url: `/users/${userId}/contacts`,
+            type: 'GET',
+            beforeSend: function() {
+                // You can add a loading spinner here
+            },
+            success: function(emails) {
+                toField.empty();
+                ccField.empty();
+
+                if (emails && emails.length > 0) {
+                    emails.forEach(function(email) {
+                        toField.append(new Option(email, email, false, false));
+                        ccField.append(new Option(email, email, false, false));
+                    });
+
+                    toField.val([emails[0]]).trigger('change');
+                    if (emails.length > 1) {
+                        ccField.val(emails.slice(1)).trigger('change');
+                    }
+                }
+
+                modal.modal('show');
+            },
+            error: function() {
+                alert('Failed to load user contacts.');
+            }
+        });
+    }
+
+    $(document).ready(function() { 
+        const toField = $('#to_modal');
+        const ccField = $('#cc_modal');
+
+        $('.select2-tags-modal').select2({
+            tags: true,
+            tokenSeparators: [ ',', ' ' ],
+            dropdownParent: $('#send-mail-modal')
+        });
+
+        toField.on('change', function () {
+            let toValues = $(this).val() || [];
+            let ccValues = ccField.val() || [];
+            let newCcValues = ccValues.filter(v => !toValues.includes(v));
+
+            if (newCcValues.length < ccValues.length) {
+                ccField.val(newCcValues).trigger('change');
+            }
+        });
+
+        ccField.on('change', function () {
+            let ccValues = $(this).val() || [];
+            let toValues = toField.val() || [];
+            let newToValues = toValues.filter(v => !ccValues.includes(v));
+
+            if (newToValues.length < toValues.length) {
+                toField.val(newToValues).trigger('change');
+            }
+        });
+    });
 </script>
 @endsection

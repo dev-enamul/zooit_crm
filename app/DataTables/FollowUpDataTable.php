@@ -44,6 +44,11 @@ class FollowUpDataTable extends DataTable {
                 return $followUp->purchase_possibility."%";
             })  
 
+             ->addColumn('email', function ($followUp) { 
+                $email = $followUp->customer?->user?->userContacts->first()->email ?? '';
+                return $email . '<button class="btn btn-primary btn-sm ms-2" onclick="openSendMailModalCustomer(' . $followUp->customer->user_id . ')"><i class="fas fa-paper-plane"></i></button>';
+            })
+            
             ->addColumn('name', function ($followUp) { 
                 $customerName = '';
                 if (isset($followUp->customer) && isset($followUp->customer->user)) {
@@ -53,9 +58,8 @@ class FollowUpDataTable extends DataTable {
                 $url = route('customer.profile', encrypt($followUp->customer_id));
  
                 return '<a class="text-primary" href="'.$url.'">'.e($customerName).'</a>';
-            })
-
-
+            }) 
+           
             ->addColumn('contact', function ($followUp) {
                 $phone = @$followUp->customer->user->phone ?? "";
                 
@@ -81,7 +85,7 @@ class FollowUpDataTable extends DataTable {
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
-            })->rawColumns(['name','contact','action']) 
+            })->rawColumns(['name','contact','action','email']) 
             ->setRowId('id');
             
             
@@ -131,7 +135,7 @@ class FollowUpDataTable extends DataTable {
                     });
                 })
                 ->whereBetween('next_followup_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
-                ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession'])
+                ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession', 'customer.user.userContacts'])
                 ->join(
                     DB::raw('(SELECT MAX(id) as latest_id FROM follow_ups GROUP BY customer_id) latest'),
                     'follow_ups.id',
@@ -182,6 +186,7 @@ class FollowUpDataTable extends DataTable {
             // Column::make('customer.visitor_id')->title('Visitor')->sortable(false),
             Column::make('name')->title('Name')->sortable(false),
             Column::make('contact')->title('Contact')->sortable(false), 
+            Column::make('email')->title('Email')->sortable(false),
             // Column::make('created_by')->title('Employee')->sortable(false), 
             Column::make('followup_date')->title('Next Followup')->sortable(false), 
             Column::make('purchase_possibility')->title('Possibility')->sortable(false), 

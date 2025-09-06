@@ -42,6 +42,10 @@ class CustomersDataTable extends DataTable {
 
             return '<a class="text-primary" href="' . $url . '">' . e($customerName) . '</a>';
         })
+        ->addColumn('email', function ($data) {
+            $email = $data->user?->userContacts->first()->email ?? '';
+            return $email . '<button class="btn btn-primary btn-sm ms-2" onclick="openSendMailModalCustomer(' . $data->user_id . ')"><i class="fas fa-paper-plane"></i></button>';
+        })
         ->addColumn('contact', function ($data) {
             $phone = $data->user->phone ?? "";
 
@@ -71,7 +75,7 @@ class CustomersDataTable extends DataTable {
                 return "-";
             }
         })
-        ->rawColumns(['name','contact','action'])
+        ->rawColumns(['name','contact','action','email'])
         ->setRowId('id');
 }
 
@@ -105,7 +109,7 @@ class CustomersDataTable extends DataTable {
         $model = $model->where('status', 0); 
         return $model->newQuery()
             ->whereIn('ref_id', $my_employee) 
-            ->with(['reference', 'user', 'profession', 'user.userAddress.village', 'user.userAddress.union', 'user.userAddress.upazila'])
+            ->with(['reference', 'user', 'profession', 'user.userAddress.village', 'user.userAddress.union', 'user.userAddress.upazila', 'user.userContacts'])
             ->orderBy('id', 'desc');
     }
 
@@ -141,8 +145,9 @@ class CustomersDataTable extends DataTable {
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'), 
-            Column::make('name')->title('Name')->searchable(true),
+            Column::make('name')->title('Name')->searchable(true), 
             Column::make('contact')->title('Contact')->searchable(true),
+            Column::make('email')->title('Email'),
             Column::make('service')->title('Service'),  
             Column::make('created_by')->title('Created By'), 
         ];
