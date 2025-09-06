@@ -117,10 +117,10 @@
                                         </div>
                                     </div>   
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control" id="address" rows="2" name="address" placeholder="address">{{old('address',@$user->user->userAddress->address)}}</textarea> 
+                                            <textarea class="form-control" id="address" rows="1" name="address" placeholder="address">{{old('address',@$user->user->userAddress->address)}}</textarea> 
                                         </div>
                                     </div>  
 
