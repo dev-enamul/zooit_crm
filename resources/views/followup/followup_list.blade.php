@@ -136,7 +136,7 @@
         });
     });
 
-    function openSendMailModalCustomer(userId) {
+    function openSendMailModalCustomer(userId, $name='') {
         const toField = $('#to_modal');
         const ccField = $('#cc_modal');
         const subjectField = $('#subject_modal');
@@ -148,8 +148,17 @@
         mailForm.find('input[name="invoice_ids[]"]').remove();
         toField.empty().trigger('change');
         ccField.empty().trigger('change');
-        subjectField.val('');
-        messageField.val('');
+        subjectField.val('Interview Invitation – MERN Stack Developer Intern');
+        messageField.val(`Dear ${name},
+
+We have reviewed your CV and are pleased to invite you for an interview for the MERN Stack Developer Intern position. 
+
+📍 Address: 24/A-1, A-2 Bosila Road, Mohammadpur, Dhaka-1207
+🗺️ Google Map: https://maps.app.goo.gl/tiBpS5kD9jJKgDdX9
+
+🕙 Time: 10:00 AM, [Insert Date]
+🆔 Interview ID: ${userId} (Please remember this ID for a smooth interview process)`);
+
 
         // Fetch contacts via AJAX
         $.ajax({

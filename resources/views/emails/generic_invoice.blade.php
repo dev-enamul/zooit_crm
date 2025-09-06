@@ -111,8 +111,7 @@
 
         {{-- <div class="panel">We’re committed to serving you with care, quality, and excellence. ✨ ✨ </div> --}}
 
-        @endif
-
+        @endif 
         <p style="margin-top:15px; line-height:1.5; font-family: Arial, sans-serif; font-size:14px;">
         Best Regards,<br>
         <strong>{{ auth()->user()->name ?? 'Your Name' }}</strong><br>
