@@ -38,12 +38,14 @@ class LoginController extends Controller
         ]);
     
         $credentials = $request->only('phone', 'password');
+        $remember = $request->has('remember');
+
         $user = User::where('phone', $request->phone)->first();
         if($user->user_type!=1){
             return redirect()->route('login')->with('error', 'This user is not allowed to login here.');
         }
     
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             return redirect()->route('index');
         }
     
