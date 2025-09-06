@@ -69,7 +69,7 @@ class GenericInvoiceMail extends Mailable
         // Inline logo embed
         $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromPath(
             public_path('assets/images/logo-dark.png')
-        )->as('logo-dark.png')->withMime('image/png')->inline();
+        )->as('logo-dark.png')->withMime('image/png');
 
         return $attachments;
     }

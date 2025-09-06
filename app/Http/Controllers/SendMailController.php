@@ -1,67 +1,54 @@
 <?php
 
-namespace App\Mail;
+namespace App\Http\Controllers;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
+use App\Mail\GenericInvoiceMail;
+use App\Models\Invoice;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
-class GenericInvoiceMail extends Mailable
+class SendMailController extends Controller
 {
-    use Queueable, SerializesModels;
-
-    public $custom_subject;
-    public $intro_message;
-    public $invoices;
-    public $attachmentPath;
-
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($subject, $intro_message, Collection $invoices, $attachmentPath = null)
+    public function store(Request $request)
     {
-        $this->custom_subject = $subject;
-        $this->intro_message = $intro_message;
-        $this->invoices = $invoices;
-        $this->attachmentPath = $attachmentPath;
-    }
+        $request->validate([
+            'to' => 'required|array',
+            'to.*' => 'email',
+            'cc' => 'nullable|array',
+            'cc.*' => 'email',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+            'invoice_ids' => 'nullable|array',
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
+        ]);
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: $this->custom_subject,
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            markdown: 'emails.generic_invoice',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        if ($this->attachmentPath) {
-            return [
-                \Illuminate\Mail\Mailables\Attachment::fromPath(storage_path('app/public/' . $this->attachmentPath)),
-            ];
+        $invoices = collect();
+        if ($request->has('invoice_ids')) {
+            $invoices = Invoice::whereIn('id', $request->invoice_ids)->get();
         }
-        return [];
+
+        $attachmentPath = null;
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('mail-attachments', 'public');
+        }
+
+        $mail = new GenericInvoiceMail(
+            $request->subject,
+            $request->message,
+            $invoices,
+            $attachmentPath
+        );
+
+        Mail::to($request->to)
+            ->cc($request->cc ?? [])
+            ->send($mail);
+
+        // Clean up the attachment after sending
+        if ($attachmentPath) {
+            Storage::disk('public')->delete($attachmentPath);
+        }
+
+        return back()->with('success', 'Email sent successfully!');
     }
 }
