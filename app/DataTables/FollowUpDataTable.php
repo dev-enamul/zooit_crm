@@ -42,17 +42,12 @@ class FollowUpDataTable extends DataTable {
 
             ->addColumn('purchase_possibility', function ($followUp) {
                 return $followUp->purchase_possibility."%";
-            })  
-
-             ->addColumn('email', function ($followUp) {
-                    $email = $followUp->customer?->user?->userContacts->first()->email ?? '';
-                    $name = $followUp->customer?->user?->name;
-                    $userId = $followUp->customer?->user_id;
-
-                    return $email . ' <button class="btn btn-primary btn-sm ms-2" onclick="openSendMailModalCustomer(' . $userId . ', \'' . addslashes($name) . '\')"><i class="fas fa-paper-plane"></i></button>';
-                })
-
-
+            })   
+             ->addColumn('email', function ($followUp) { 
+                $email = $followUp->customer?->user?->userContacts->first()->email ?? '';
+                return $email . '<button class="btn btn-primary btn-sm ms-2" onclick="openSendMailModalCustomer(' . $followUp->customer->user_id . ')"><i class="fas fa-paper-plane"></i></button>';
+            })
+            
             ->addColumn('name', function ($followUp) { 
                 $customerName = '';
                 if (isset($followUp->customer) && isset($followUp->customer->user)) {

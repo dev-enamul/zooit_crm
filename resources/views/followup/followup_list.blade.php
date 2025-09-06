@@ -136,7 +136,7 @@
         });
     });
 
-    function openSendMailModalCustomer(userId, $name='') {
+    function openSendMailModalCustomer(userId) {
         const toField = $('#to_modal');
         const ccField = $('#cc_modal');
         const subjectField = $('#subject_modal');
@@ -149,7 +149,7 @@
         toField.empty().trigger('change');
         ccField.empty().trigger('change');
         subjectField.val('Interview Invitation – MERN Stack Developer Intern');
-        messageField.val(`Dear ${name},
+        messageField.val(`Dear Candidate,
 
 We have reviewed your CV and are pleased to invite you for an interview for the MERN Stack Developer Intern position. 
 
