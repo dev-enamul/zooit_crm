@@ -90,8 +90,8 @@
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                                            <input type="text" name="email" class="form-control" id="email" maxlength="15" placeholder="Email address" value="{{ old('email') }}" required>
+                                            <label for="email" class="form-label">Email Address </label>
+                                            <input type="text" name="email" class="form-control" id="email" maxlength="15" placeholder="Email address" value="{{ old('email') }}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -122,10 +122,8 @@
                                             <label for="address" class="form-label">Address</label>
                                             <textarea class="form-control" id="address" rows="1" name="address" placeholder="address">{{old('address',@$user->user->userAddress->address)}}</textarea> 
                                         </div>
-                                    </div>  
-
-                                </div>
-                                  
+                                    </div>   
+                                </div> 
                                 <div>
                                     <button class="btn btn-primary" type="submit">Submit</button>
                                 </div>
