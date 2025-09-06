@@ -81,7 +81,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Mobile Number <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone" class="form-control" id="phone" maxlength="25" placeholder="Phone Number" value="{{ old('phone',@$user->user->phone) }}">
+                                            <input type="text" name="phone" class="form-control" id="phone"  placeholder="Phone Number" value="{{ old('phone',@$user->user->phone) }}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
@@ -91,7 +91,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Email Address </label>
-                                            <input type="text" name="email" class="form-control" id="email" maxlength="15" placeholder="Email address" value="{{ old('email') }}">
+                                            <input type="text" name="email" class="form-control" id="email" placeholder="Email address" value="{{ old('email') }}">
                                             <div class="invalid-feedback">
                                                 This field is required.
                                             </div>
