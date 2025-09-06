@@ -156,7 +156,7 @@ We have reviewed your CV and are pleased to invite you for an interview for the 
 📍 Address: 24/A-1, A-2 Bosila Road, Mohammadpur, Dhaka-1207
 🗺️ Google Map: https://maps.app.goo.gl/tiBpS5kD9jJKgDdX9
 
-🕙 Time: 10:00 AM, [Insert Date]
+🕙 Time: 8 August (Monday), 10:00 AM
 🆔 Interview ID: ${userId} (Please remember this ID for a smooth interview process)`);
 
 
