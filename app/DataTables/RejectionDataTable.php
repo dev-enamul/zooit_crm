@@ -36,14 +36,16 @@ class RejectionDataTable extends DataTable
         ->addColumn('date', function ($data) {
             return get_date($data->created_at);
         }) 
-        ->addColumn('name', function ($followUp) {
-            if($followUp->customer->user->userContact->type==2){
-                $name = $followUp->customer->user->userContact->name." (". $followUp->customer->user->name .") ";
-            }else{
-                $name = $followUp->customer->user->name;
+        ->addColumn('name', function ($followUp) { 
+            $customerName = '';
+            if (isset($followUp->customer) && isset($followUp->customer->user)) {
+                $customerName = $followUp->customer->user->name. ' ['. $followUp->customer->visitor_id .']';
             }
-            return $name;
-        })
+
+            $url = route('customer.profile', encrypt($followUp->customer_id));
+
+            return '<a class="text-primary" href="'.$url.'">'.e($customerName).'</a>';
+        }) 
         ->addColumn('phone', function ($data) {
             return $data->customer->user->phone ?? "-";
         }) 
