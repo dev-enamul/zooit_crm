@@ -44,7 +44,7 @@ class FollowUpDataTable extends DataTable {
                 return $followUp->purchase_possibility."%";
             })   
              ->addColumn('email', function ($followUp) { 
-                $email = $followUp->customer?->user?->email ?? '';
+                $email = $followUp->customer?->user?->userContacts->first()->email ?? '';
                 return $email . '<button class="btn btn-primary btn-sm ms-2" onclick="openSendMailModalCustomer(' . $followUp->customer->user_id . ')"><i class="fas fa-paper-plane"></i></button>';
             })
             
@@ -84,11 +84,7 @@ class FollowUpDataTable extends DataTable {
             ->addColumn('serial', function () {
                 static $serial = 0;
                 return ++$serial;
-            })
-            ->orderColumn('name', 'users.name $1')
-            ->orderColumn('email', 'users.email $1')
-            ->orderColumn('contact', 'users.phone $1')
-            ->rawColumns(['name','contact','action','email']) 
+            })->rawColumns(['name','contact','action','email']) 
             ->setRowId('id');
             
             
@@ -125,13 +121,11 @@ class FollowUpDataTable extends DataTable {
             } 
             $datas = $model
                 ->select('follow_ups.*')
-                ->join('customers', 'follow_ups.customer_id', '=', 'customers.id')
-                ->join('users', 'customers.user_id', '=', 'users.id')
-                ->where('follow_ups.status',0)
+                ->where('status',0)
                 ->where(function ($q) {
-                    $q->where('follow_ups.approve_by', '!=', null)
-                        ->orWhere('follow_ups.employee_id', Auth::user()->id)
-                        ->orWhere('follow_ups.created_by', Auth::user()->id);
+                    $q->where('approve_by', '!=', null)
+                        ->orWhere('employee_id', Auth::user()->id)
+                        ->orWhere('created_by', Auth::user()->id);
                 })
                 ->whereHas('customer', function ($q) use ($user_employee, $service) {
                     $q->whereIn('ref_id', $user_employee)
@@ -141,17 +135,6 @@ class FollowUpDataTable extends DataTable {
                 })
                 ->whereBetween('next_followup_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
                 ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession', 'customer.user.userContacts'])
-                ->when($this->request->search['value'] ?? false, function ($query, $search) {
-                    $query->where(function ($q) use ($search) {
-                        $q->orWhereHas('customer.user', function ($q) use ($search) {
-                            $q->where('name', 'like', "%{$search}%")
-                                ->orWhere('phone', 'like', "%{$search}%");
-                        })
-                        ->orWhereHas('customer.user.userContacts', function ($q) use ($search) {
-                            $q->where('email', 'like', "%{$search}%");
-                        });
-                    });
-                })
                 ->join(
                     DB::raw('(SELECT MAX(id) as latest_id FROM follow_ups GROUP BY customer_id) latest'),
                     'follow_ups.id',
@@ -175,10 +158,7 @@ class FollowUpDataTable extends DataTable {
         return $this->builder()
             ->setTableId('leadanalysis-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(
-                "",
-                "data.employee = $('#employee').val(); data.service = $('#service').val(); data.date = $('#date_range').val();",
-            )
+            ->minifiedAjax()
             ->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()
@@ -203,9 +183,9 @@ class FollowUpDataTable extends DataTable {
                 ->sortable(false),
             Column::make('serial')->title('S/L')->sortable(false),
             // Column::make('customer.visitor_id')->title('Visitor')->sortable(false),
-            Column::make('name')->title('Name')->orderable(true),
-            Column::make('contact')->title('Contact')->orderable(true), 
-            Column::make('email')->title('Email')->orderable(true),
+            Column::make('name')->title('Name')->sortable(false),
+            Column::make('contact')->title('Contact')->sortable(false), 
+            Column::make('email')->title('Email')->sortable(false),
             // Column::make('created_by')->title('Employee')->sortable(false), 
             Column::make('followup_date')->title('Next Followup')->sortable(false), 
             Column::make('purchase_possibility')->title('Possibility')->sortable(false), 
