@@ -141,17 +141,17 @@ class FollowUpDataTable extends DataTable {
                 })
                 ->whereBetween('next_followup_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
                 ->with(['customer.reference', 'customer.user.userAddress', 'customer.profession', 'customer.user.userContacts'])
-                ->when($this->request->search['value'] ?? false, function ($query, $search) {
-                    $query->where(function ($q) use ($search) {
-                        $q->orWhereHas('customer.user', function ($q) use ($search) {
-                            $q->where('name', 'like', "%{$search}%")
-                                ->orWhere('phone', 'like', "%{$search}%");
-                        })
-                        ->orWhereHas('customer.user.userContacts', function ($q) use ($search) {
-                            $q->where('email', 'like', "%{$search}%");
-                        });
-                    });
-                })
+                // ->when($this->request->search['value'] ?? false, function ($query, $search) {
+                //     $query->where(function ($q) use ($search) {
+                //         $q->orWhereHas('customer.user', function ($q) use ($search) {
+                //             $q->where('name', 'like', "%{$search}%")
+                //                 ->orWhere('phone', 'like', "%{$search}%");
+                //         })
+                //         ->orWhereHas('customer.user.userContacts', function ($q) use ($search) {
+                //             $q->where('email', 'like', "%{$search}%");
+                //         });
+                //     });
+                // })
                 ->join(
                     DB::raw('(SELECT MAX(id) as latest_id FROM follow_ups GROUP BY customer_id) latest'),
                     'follow_ups.id',
