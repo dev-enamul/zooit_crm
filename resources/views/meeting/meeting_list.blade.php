@@ -121,4 +121,115 @@
 <script>
      getDateRange('date_range');
 </script>
+
+@include('includes._send_mail_modal')
+
+<script>
+    function openSendMailModalMeeting(userId, title, meeting_date, customer_name) {
+        const toField = $('#to_modal');
+        const ccField = $('#cc_modal');
+        const subjectField = $('#subject_modal');
+        const messageField = $('#message_modal');
+        const modal = $('#send-mail-modal');
+        const mailForm = $('#send-mail-form');
+
+        // Clear previous data
+        mailForm.find('input[name="invoice_ids[]"]').remove();
+        toField.empty().trigger('change');
+        ccField.empty().trigger('change');
+        
+        subjectField.val('Interview for MERN Stack Developer (Intern)');
+
+        let message = '';
+        if (title.toLowerCase().includes('online')) {
+            message = `Dear ${customer_name},
+
+We are pleased to inform you that after reviewing your CV, you have been shortlisted for an interview for the **MERN Stack Developer (Intern)** position.
+
+Your online interview is scheduled for ${meeting_date}.
+
+The interview will be held via Google Meet. You can join using the following link:
+https://meet.google.com/hjs-zaxa-hjx
+
+To ensure a smooth and timely start for all participants, we kindly request that you join the meeting at the exact scheduled time.
+
+We look forward to speaking with you.`;
+        } else {
+            message = `Dear ${customer_name},
+
+We are pleased to inform you that after reviewing your CV, you have been shortlisted for an interview for the **MERN Stack Developer (Intern)** position.
+
+Your interview is scheduled for ${meeting_date} at our office.
+
+To ensure a smooth and timely start, we kindly request that you arrive at the exact scheduled time.
+
+Address: 24/A-1, A-2 Bosila Road, Mohammadpur, Dhaka-1207
+Google Map: https://maps.app.goo.gl/tiBpS5kD9jJKgDdX9
+
+We look forward to meeting you.`;
+        }
+        messageField.val(message);
+
+        // Fetch contacts via AJAX
+        $.ajax({
+            url: `/users/${userId}/contacts`,
+            type: 'GET',
+            beforeSend: function() {
+                // You can add a loading spinner here
+            },
+            success: function(emails) {
+                toField.empty();
+                ccField.empty();
+
+                if (emails && emails.length > 0) {
+                    emails.forEach(function(email) {
+                        toField.append(new Option(email, email, false, false));
+                        ccField.append(new Option(email, email, false, false));
+                    });
+
+                    toField.val([emails[0]]).trigger('change');
+                    if (emails.length > 1) {
+                        ccField.val(emails.slice(1)).trigger('change');
+                    }
+                }
+
+                modal.modal('show');
+            },
+            error: function() {
+                alert('Failed to load user contacts.');
+            }
+        });
+    }
+
+    $(document).ready(function() { 
+        const toField = $('#to_modal');
+        const ccField = $('#cc_modal');
+
+        $('.select2-tags-modal').select2({
+            tags: true,
+            tokenSeparators: [ ',', ' ' ],
+            dropdownParent: $('#send-mail-modal')
+        });
+
+        toField.on('change', function () {
+            let toValues = $(this).val() || [];
+            let ccValues = ccField.val() || [];
+            let newCcValues = ccValues.filter(v => !toValues.includes(v));
+
+            if (newCcValues.length < ccValues.length) {
+                ccField.val(newCcValues).trigger('change');
+            }
+        });
+
+        ccField.on('change', function () {
+            let ccValues = $(this).val() || [];
+            let toValues = toField.val() || [];
+            let newToValues = toValues.filter(v => !ccValues.includes(v));
+
+            if (newToValues.length < toValues.length) {
+                toField.val(newToValues).trigger('change');
+            }
+        });
+    });
+</script>
 @endsection
