@@ -42,8 +42,8 @@ class TaskController extends Controller
       
 
         return view('task.my_task',compact('today_tasks','old_tasks','selected_date'));
-    }
-
+    }  
+    
     public function task_complete(Request $request){
         $datas = new ModelsTask;
         if(isset($request->date) && $request->date != ''){
