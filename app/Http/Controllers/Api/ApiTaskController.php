@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectTeam;
 use App\Models\Task;
 use App\Models\User;
+use App\Traits\PaginateTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiTaskController extends Controller
 { 
+    use PaginateTrait;
+
     public function index(Request $request)
     {
-        $userId = Auth::user()->id; 
+        $userId = Auth::id(); 
+
         $query = Task::with('project.projectTeams')
             ->select(
                 'tasks.id',
@@ -28,19 +32,21 @@ class ApiTaskController extends Controller
                 'tasks.time_spent',
                 'tasks.assign_by',
                 'tasks.assign_to',
-                'tasks.status'
+                'tasks.status',
+                'tasks.submit_time'
             )
             ->where(function($q) use ($userId) { 
                 $q->where('assign_to', $userId) 
-                ->orWhere('assign_by', $userId) 
-                ->orWhereHas('project', function($projectQuery) use ($userId) {
-                    $projectQuery->whereHas('projectTeams', function($teamQuery) use ($userId) {
-                        $teamQuery->where('user_id', $userId)
+                  ->orWhere('assign_by', $userId) 
+                  ->orWhereHas('project', function($projectQuery) use ($userId) {
+                      $projectQuery->whereHas('projectTeams', function($teamQuery) use ($userId) {
+                          $teamQuery->where('user_id', $userId)
                                     ->where('is_leader', true);
-                    });
-                });
+                      });
+                  });
             });
- 
+
+        // 🔹 Filter by project
         if ($request->has('project_filter')) {
             if ($request->project_filter === 'without_project') {
                 $query->whereNull('project_id');
@@ -49,17 +55,20 @@ class ApiTaskController extends Controller
             } 
         }
 
+        // 🔹 Select only fields for dropdown
         if ($request->has('select_field') && $request->select_field) {
             $tasks = $query->select('id', 'title')
-                        ->where('status', 0)
+                        ->whereIn('status', [0,2])
                         ->get(); 
             return success_response($tasks, 'Tasks fetched successfully.');
         }
- 
+
+        // 🔹 Filter by status
         if ($request->has('status') && $request->status !== null) {
             $query->where('status', $request->status);
         }
- 
+
+        // 🔹 Filter by assign_by
         if ($request->has('assign_by') && $request->assign_by !== null) {
             if ($request->assign_by === 'myself') {
                 $query->where('assign_by', $userId);
@@ -67,58 +76,65 @@ class ApiTaskController extends Controller
                 $query->where('assign_by', $request->assign_by);
             }
         }
- 
+
+        // 🔹 Keyword search
         if ($request->has('keyword') && !empty($request->keyword)) {
             $keyword = $request->keyword;
             $query->where(function($q2) use ($keyword) {
                 $q2->where('title', 'LIKE', "%{$keyword}%")
-                ->orWhere('description', 'LIKE', "%{$keyword}%");
+                   ->orWhere('description', 'LIKE', "%{$keyword}%");
             });
         }
 
-        $tasks = $query->orderByDesc('priority')->get()
-            ->map(function($task) use ($userId) { 
-                $priorityMap = [
-                    0 => 'Low',
-                    1 => 'Medium',
-                    2 => 'High',
-                    3 => 'Urgent',
-                    4 => 'Fire Urgent',
-                ];
+        // ✅ Pagination
+        $paginated = $this->paginateQuery($query->orderByDesc('priority'), $request);
 
-                $statusMap = [
-                    0 => 'Pending',
-                    1 => 'Completed',
-                    2 => 'In Progress',
-                ];
+        // Transform data
+        $data = collect($paginated['data'])->map(function($task) use ($userId) { 
+            $priorityMap = [
+                0 => 'Low',
+                1 => 'Medium',
+                2 => 'High',
+                3 => 'Urgent',
+                4 => 'Fire Urgent',
+            ];
 
-                // চেক ইউজার কি টিম লিডার ওই প্রজেক্টে
-                 $canManage = ($task->project 
-                        && $task->project->projectTeams
-                            ->where('user_id', $userId)
-                            ->where('is_leader', true)
-                            ->count() > 0)
-                     || $task->assign_by == $userId;
+            $statusMap = [
+                0 => 'Pending',
+                1 => 'Completed',
+                2 => 'In Progress',
+            ];
 
-                return [
-                    'id'             => $task->id,
-                    'project_id'     => $task->project_id,
-                    'project'        => $task->project ? $task->project->title : null,
-                    'title'          => $task->title,
-                    'description'    => $task->description,
-                    'priority'       => $priorityMap[$task->priority] ?? 'Unknown',
-                    'priority_id'   => $task->priority,
-                    'estimated_time' => $task->estimated_time,
-                    'time_spent'     => $task->time_spent,
-                    'assign_by'      => $task->assign_by,
-                    'assign_to'      => $task->assign_to,
-                    'submit_time'    => $task->submit_time,
-                    'status'         => $statusMap[$task->status] ?? 'Unknown',
-                    'canManage'   => $canManage,
-                ];
-            });
+            // চেক ইউজার কি টিম লিডার ওই প্রজেক্টে
+            $canManage = ($task->project 
+                    && $task->project->projectTeams
+                        ->where('user_id', $userId)
+                        ->where('is_leader', true)
+                        ->count() > 0)
+                || $task->assign_by == $userId;
 
-        return success_response($tasks, 'Tasks fetched successfully.');
+            return [
+                'id'             => $task->id,
+                'project_id'     => $task->project_id,
+                'project'        => $task->project ? $task->project->title : null,
+                'title'          => $task->title,
+                'description'    => $task->description,
+                'priority'       => $priorityMap[$task->priority] ?? 'Unknown',
+                'priority_id'    => $task->priority,
+                'estimated_time' => $task->estimated_time,
+                'time_spent'     => $task->time_spent,
+                'assign_by'      => $task->assign_by,
+                'assign_to'      => $task->assign_to,
+                'submit_time'    => $task->submit_time,
+                'status'         => $statusMap[$task->status] ?? 'Unknown',
+                'canManage'      => $canManage,
+            ];
+        })->values();
+
+        return success_response([
+            'data' => $data,
+            'meta' => $paginated['meta']
+        ], 'Tasks fetched successfully.');
     }
 
  

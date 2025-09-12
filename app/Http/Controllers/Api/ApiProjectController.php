@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectTeam;
 use App\Models\WorkTime;
 use App\Services\ProjectService;
+use App\Traits\PaginateTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,50 +15,79 @@ use Illuminate\Support\Facades\DB;
 
 class ApiProjectController extends Controller
 {
-    public function projects()
+    use PaginateTrait; 
+    public function projects(Request $request)
     {
-        $my_projects = ProjectTeam::with(['project.customer.user', 'project.tasks'])
-            ->where('user_id', Auth::user()->id)
-            ->get()
-            ->map(function($team) {
-                $project = $team->project;
-                if (!$project) return null;
+        $query = ProjectTeam::with(['project.customer.user', 'project.tasks'])
+            ->where('user_id', Auth::id());
 
-                $tasks = $project->tasks;
- 
-                $totalEstimated = $tasks->sum('estimated_time') / 60; // convert minutes to hours
- 
-                $completedHours = $tasks->where('status', 1)->sum('estimated_time') / 60;
- 
-                $actualProgress = $totalEstimated > 0 ? ($completedHours / $totalEstimated) * 100 : 0;
- 
-                $start = Carbon::parse($project->created_at);
-                $end   = Carbon::parse($project->submit_date ?? now());
-                $totalDays = max($start->diffInDays($end), 1);
-                $daysPassed = $start->diffInDays(now());
-                $expectedProgress = ($daysPassed / $totalDays) * 100;
+        // 🔎 Keyword filter
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->whereHas('project', function ($q) use ($keyword) {
+                $q->where('title', 'like', "%{$keyword}%")
+                  ->orWhereHas('customer.user', function ($q2) use ($keyword) {
+                      $q2->where('name', 'like', "%{$keyword}%");
+                  });
+            });
+        }
+        if ($request->has('select_field') && $request->select_field) {
+            $projects = $query->whereHas('project', function($q) {
+                            $q->where('project_status', 0)
+                            ->where('status', 1);
+                        })
+                        ->get()
+                        ->map(function($team) {
+                            return [
+                                'id'    => $team->project->id,
+                                'title' => $team->project->title,
+                            ];
+                        });
+            return success_response($projects, 'Projects fetched successfully.');
+        }
 
-                // Clamp values between 0-100
-                $actualProgress = min(max($actualProgress, 0), 100);
-                $expectedProgress = min(max($expectedProgress, 0), 100);
 
-                return [
-                    'project_id'           => $project->id,
-                    'title'                => $project->title,
-                    'customer_name'        => $project->customer->user->name ?? null,
-                    'project_status'       => $project->project_status == 0 ? 'Running' : 'Complete',
-                    'submit_date'          => get_date($project->submit_date),
-                    'created_at'           => get_date($project->created_at),
-                    'is_leader'            => $team->is_leader, 
-                    'completed_hours'      => round($completedHours),
-                    'estimated_hour'      => round($totalEstimated),
-                    'actual_progress'      => round($actualProgress, 2),
-                    'expected_progress'    => round($expectedProgress, 2),
-                ];
-            })
-            ->filter();
 
-        return success_response($my_projects, 'Projects fetched successfully.');
+        $paginated = $this->paginateQuery($query, $request);
+
+        // Data Transform
+        $data = collect($paginated['data'])->map(function($team) {
+            $project = $team->project;
+            if (!$project) return null;
+
+            $tasks = $project->tasks; 
+            $totalEstimated = $tasks->sum('estimated_time') / 60;   
+            $completedHours = $tasks->where('status', 1)->sum('estimated_time') / 60; 
+            $actualProgress = $totalEstimated > 0 ? ($completedHours / $totalEstimated) * 100 : 0; 
+            
+            $start = Carbon::parse($project->created_at);
+            $end   = Carbon::parse($project->submit_date ?? now());
+            $totalDays = max($start->diffInDays($end), 1);
+            $daysPassed = $start->diffInDays(now());
+            $expectedProgress = ($daysPassed / $totalDays) * 100;
+
+            $actualProgress = min(max($actualProgress, 0), 100);
+            $expectedProgress = min(max($expectedProgress, 0), 100);
+
+            return [
+                'project_id'        => $project->id,
+                'title'             => $project->title,
+                'customer_name'     => $project->customer->user->name ?? null,
+                'project_status'    => $project->project_status == 0 ? 'Running' : 'Complete',
+                'submit_date'       => get_date($project->submit_date),
+                'created_at'        => get_date($project->created_at),
+                'is_leader'         => $team->is_leader, 
+                'completed_hours'   => round($completedHours),
+                'estimated_hour'    => round($totalEstimated),
+                'actual_progress'   => round($actualProgress, 2),
+                'expected_progress' => round($expectedProgress, 2),
+            ];
+        })->filter()->values();
+
+        return success_response([
+            'data' => $data,
+            'meta' => $paginated['meta']
+        ], 'Projects fetched successfully.');
     }
 
     public function projectDetails($id, ProjectService $service)
