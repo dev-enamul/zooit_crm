@@ -48,15 +48,38 @@ class ApiEmployeeWorktingTimeController extends Controller
 
     public function UploadScreenshort(Request $request)
     {
-        $userId = Auth::user()->id; 
-        $path = $request->file('image')->store('screenshots', 'public'); 
-        $fullUrl = asset('storage/' . $path);
+        $user = Auth::user();
+        $userId = $user->id;
+        $userName = strtolower(str_replace(' ', '_', $user->name)); 
 
+        // তারিখ অনুযায়ী year/month/day ফোল্ডার
+        $year = now()->format('Y');
+        $month = now()->format('m');
+        $day = now()->format('d');
+
+        // ফোল্ডার স্ট্রাকচার
+        $folderPath = "screenshots/{$year}/{$month}/{$day}/{$userName}_{$userId}";
+
+        // ফাইলের এক্সটেনশন
+        $extension = $request->file('image')->getClientOriginalExtension();
+
+        // কাস্টম ফাইল নাম (timestamp.extension)
+        $fileName = time() . '.' . $extension;
+
+        // ফাইল সেভ
+        $path = $request->file('image')->storeAs($folderPath, $fileName, 'public');
+
+        // শুধু relative path সেভ হবে (domain ছাড়া)
+        // $path example: screenshots/2025/09/16/enamul_1/1694871234.png
+
+        // ডাটাবেজে সেভ
         $screenshot = EmployeeScreenShort::create([
             'user_id' => $userId,
-            'image' => $fullUrl,
+            'image' => $path, // শুধু relative path
         ]);
 
         return success_response(null, 'Screenshot uploaded successfully'); 
     }
+
+
 }
