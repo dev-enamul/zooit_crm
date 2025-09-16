@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class ApiLoginController extends Controller
 {
@@ -75,5 +77,28 @@ class ApiLoginController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required|string',
+            'password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|same:password'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::find(Auth::user()->id);
+
+        if (!Hash::check($request->old_password, $user->password)) {
+            return error_response(null,404,'Old password does not match.');
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return success_response('Password changed successfully.'); 
     }
 }

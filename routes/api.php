@@ -64,5 +64,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('card-data',[ApiDashboardController::class,'cardData']);
     Route::get('work-summary',[ApiDashboardController::class,'workSummary']);
 
+    Route::post('change-password', [ApiLoginController::class, 'changePassword']);
 });
  
