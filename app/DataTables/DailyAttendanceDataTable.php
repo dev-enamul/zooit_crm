@@ -57,8 +57,10 @@ class DailyAttendanceDataTable extends DataTable
             })
             ->addColumn('end_time', function ($row) {
                 $workTimes = $row['workTimes'];
-                if ($workTimes->isEmpty()) return null;
-                return Carbon::parse($workTimes->sortByDesc('end_time')->first()->end_time)->format('h:i A');
+                if ($workTimes->isEmpty()) return 'continue';
+                $lastEndTime = $workTimes->sortByDesc('end_time')->first()->end_time;
+                if ($lastEndTime === null) return 'continue';
+                return Carbon::parse($lastEndTime)->format('h:i A');
             })
             ->addColumn('duration', function ($row) {
                 $workTimes = $row['workTimes'];
@@ -92,9 +94,8 @@ class DailyAttendanceDataTable extends DataTable
             })
             ->setRowClass(function ($row) {
                 $workTimes = $row['workTimes'];
-                if ($workTimes->isEmpty()) return '';
-
-                $lastEndTime = $workTimes->sortByDesc('end_time')->first()->end_time;
+                $lastWorkTimeEntry = $workTimes->sortByDesc('start_time')->first();
+                $lastEndTime = $lastWorkTimeEntry ? $lastWorkTimeEntry->end_time : null;
 
                 if ($lastEndTime === null) {
                     return 'highlight-row';
