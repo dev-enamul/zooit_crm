@@ -23,6 +23,9 @@
                                     <li><a href="{{route('employee.create')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Join Employee</a></li> 
                                 @endcan
                                 <li><a href="{{route('employee.index')}}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Employiees</a></li>  
+                                <li><a href="{{ url('employee/attendance-summary') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Attendance Summary</a></li>  
+                                <li><a href="{{ url('employee/daily-attendance') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i> Daily Attendance</a></li>  
+
                             </ul>
                         </li>  
                     @endcan   

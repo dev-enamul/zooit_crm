@@ -68,6 +68,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyTypeController;
 use App\Http\Controllers\DailyActivitiesController;
 use App\Http\Controllers\DailyJobController;
+use App\Http\Controllers\EmployeeActivityController;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExistingSalseController;
 use App\Http\Controllers\InstallmentPlanController;
@@ -161,7 +162,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/users/{userId}/contacts', [UserContactController::class, 'getContactsByUserId'])->name('users.contacts'); 
 
         // Employee 
-        Route::resource('employee', EmployeeController::class); 
+        Route::resource('employee', EmployeeController::class)->except(['show']); 
+        Route::get('employee/attendance-summary',[EmployeeActivityController::class,'attendanceSummary']);
+        Route::get('employee/daily-attendance',[EmployeeActivityController::class,'dailyAttendance']);
+        Route::get('employee/work-logs', [EmployeeActivityController::class, 'getWorkLogs'])->name('employee.work_logs');
         Route::get('all-employee', [CommonController::class, 'all_employee'])->name('all.employee');
         Route::get('import', [EmployeeImportController::class, 'index'])->name('import');
         Route::post('employee-import', [EmployeeImportController::class, 'import'])->name('employee.import');
