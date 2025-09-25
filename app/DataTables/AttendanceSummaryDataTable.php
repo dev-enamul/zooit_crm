@@ -17,14 +17,14 @@ class AttendanceSummaryDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('total_working_hour', function ($user) {
                 // মোট কাজের সময় যোগ
-                return $user->workTimes->sum('duration');
+                return gmdate('H:i', $user->workTimes->sum('duration') * 60);
             })
             ->addColumn('highest_hour', function ($user) {
                 // একদিনে সর্বোচ্চ কাজের ঘণ্টা
                 return $user->workTimes->groupBy(function($wt) {
                     return Carbon::parse($wt->start_time)->toDateString();
                 })->map(function($daily) {
-                    return $daily->sum('duration');
+                    return gmdate('H:i', $daily->sum('duration') * 60);
                 })->max();
             })
             ->addColumn('lowest_hour', function ($user) {
@@ -32,7 +32,7 @@ class AttendanceSummaryDataTable extends DataTable
                 return $user->workTimes->groupBy(function($wt) {
                     return Carbon::parse($wt->start_time)->toDateString();
                 })->map(function($daily) {
-                    return $daily->sum('duration');
+                    return gmdate('H:i', $daily->sum('duration') * 60);
                 })->min();
             })
             ->addColumn('total_working_day', function ($user) {

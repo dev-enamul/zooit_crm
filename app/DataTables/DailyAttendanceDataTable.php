@@ -53,17 +53,19 @@ class DailyAttendanceDataTable extends DataTable
             ->addColumn('start_time', function ($row) {
                 $workTimes = $row['workTimes'];
                 if ($workTimes->isEmpty()) return null;
-                return $workTimes->sortBy('start_time')->first()->start_time;
+                return Carbon::parse($workTimes->sortBy('start_time')->first()->start_time)->format('h:i A');
             })
             ->addColumn('end_time', function ($row) {
                 $workTimes = $row['workTimes'];
                 if ($workTimes->isEmpty()) return null;
-                return $workTimes->sortByDesc('end_time')->first()->end_time;
+                return Carbon::parse($workTimes->sortByDesc('end_time')->first()->end_time)->format('h:i A');
             })
             ->addColumn('duration', function ($row) {
                 $workTimes = $row['workTimes'];
                 if ($workTimes->isEmpty()) return 0;
-                return $workTimes->sum('duration');
+                $durationInMinutes = $workTimes->sum('duration');
+                $durationInHours = $durationInMinutes / 60;
+                return number_format($durationInHours, 2) . ' hours';
             })
             ->addColumn('status', function ($row) {
                 $workTimes = $row['workTimes'];
