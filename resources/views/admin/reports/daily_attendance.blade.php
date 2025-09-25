@@ -3,6 +3,11 @@
 @section('style')
     <link href="{{asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')}}" rel="stylesheet" type="text/css" />
+    <style>
+        .highlight-row {
+            background-color: #ffe0e0 !important; /* Light red background */
+        }
+    </style>
 @endsection
 
 @section('content')

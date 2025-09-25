@@ -89,6 +89,17 @@ class DailyAttendanceDataTable extends DataTable
             })
             ->setRowId(function ($row) {
                 return $row['user']->id . '_' . $row['date'];
+            })
+            ->setRowClass(function ($row) {
+                $workTimes = $row['workTimes'];
+                if ($workTimes->isEmpty()) return '';
+
+                $lastEndTime = $workTimes->sortByDesc('end_time')->first()->end_time;
+
+                if ($lastEndTime === null) {
+                    return 'highlight-row';
+                }
+                return '';
             });
     }
 
