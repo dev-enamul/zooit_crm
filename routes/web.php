@@ -79,6 +79,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTeamController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\ProposalEditorController;
 use App\Http\Controllers\SalseApproveController;
 use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\ServiceController;
@@ -125,8 +126,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('select2-rejection-customer', [RejectionController::class, 'select2_customer'])->name('select2.rejection.customer');
         Route::get('select2-project', [ProjectController::class, 'select2_project'])->name('select2.project');
 
-
-        Route::get('project-proposal',[ProposalController::class,'index']);
+ 
+        Route::get('/proposal/{id}', [ProposalController::class, 'index'])->name('proposal.show');
+        Route::post('/proposal/update-field', [ProposalController::class, 'updateField'])->name('proposal.update-field'); 
         Route::get('whatsapp', [WhatsAppController::class, 'index']);
         Route::post('whatsapp', [WhatsAppController::class, 'store'])->name('whatsapp.store');
         Route::get('send-mail', [SendMailController::class, 'sendMail'])->name('send.mail');

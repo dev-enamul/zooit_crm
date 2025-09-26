@@ -20,10 +20,10 @@ class CustomerFactory extends Factory
         return [
             'customer_id' => User::generateNextCustomerId(),
             'user_id' => 22,
-            'profession_id' => $this->faker->numberBetween(1, 6),
-            'name' => $this->faker->name,
-            'ref_id' => $this->faker->numberBetween(5, 12),
-            'approve_by' => $this->faker->numberBetween(5, 12),
+
+
+            'ref_id' => User::factory(),
+
             'status' => 0,
             'created_by' => 1,
         ];
