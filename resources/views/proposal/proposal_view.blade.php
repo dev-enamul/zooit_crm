@@ -6,6 +6,13 @@
     <title>{{ $proposal->title }}</title>
     <link href="{{ asset('assets/css/project_proposal.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .list-actions,
+        .table-actions,
+        .timeline-actions {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     @csrf
@@ -135,7 +142,6 @@
                             <th contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="core_features_headers.frontend_price">Frontend Price</th>
                             <th contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="core_features_headers.backend_price">Backend Price</th>
                             <th contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="core_features_headers.note">Note</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,17 +151,12 @@
                                 <td contenteditable="true" class="editable-field price-highlight" data-model="section" data-id="{{ $section->id }}" data-field="core_features.{{ $index }}.frontend_price">{{ $feature['frontend_price'] ?? '' }}</td>
                                 <td contenteditable="true" class="editable-field price-highlight" data-model="section" data-id="{{ $section->id }}" data-field="core_features.{{ $index }}.backend_price">{{ $feature['backend_price'] ?? '' }}</td>
                                 <td contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="core_features.{{ $index }}.note">{{ $feature['note'] ?? '' }}</td>
-                                <td class="table-actions">
-                                    <i class="fas fa-plus add-row" title="Add Row"></i>
-                                    <i class="fas fa-trash remove-row" title="Remove Row"></i>
-                                </td>
                             </tr>
                         @endforeach
                         <tr class="total">
                             <td contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="core_features_total_label"><strong>Total</strong></td>
                             <td contenteditable="true" class="editable-field price-highlight" data-model="section" data-id="{{ $section->id }}" data-field="core_features_total_frontend"><strong>{{ $section->value['core_features_total_frontend'] }}</strong></td>
                             <td contenteditable="true" class="editable-field price-highlight" data-model="section" data-id="{{ $section->id }}" data-field="core_features_total_backend"><strong>{{ $section->value['core_features_total_backend'] }}</strong></td>
-                            <td></td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -173,7 +174,6 @@
                             <th contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="additional_modules_headers.frontend_price">Frontend Price</th>
                             <th contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="additional_modules_headers.backend_price">Backend Price</th>
                             <th contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="additional_modules_headers.note">Note</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -183,10 +183,6 @@
                                 <td contenteditable="true" class="editable-field price-highlight" data-model="section" data-id="{{ $section->id }}" data-field="additional_modules.{{ $index }}.frontend_price">{{ $module['frontend_price'] ?? '' }}</td>
                                 <td contenteditable="true" class="editable-field price-highlight" data-model="section" data-id="{{ $section->id }}" data-field="additional_modules.{{ $index }}.backend_price">{{ $module['backend_price'] ?? '' }}</td>
                                 <td contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="additional_modules.{{ $index }}.note">{{ $module['note'] ?? '' }}</td>
-                                <td class="table-actions">
-                                    <i class="fas fa-plus add-row" title="Add Row"></i>
-                                    <i class="fas fa-trash remove-row" title="Remove Row"></i>
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -501,13 +497,13 @@
 
             // Update timeline in backend
             function updateTimeline($timeline) {
-                var sectionId = $timeline.find('.editable-field').data('id');
+                var sectionId = $timeline.find('.editable-field').first().data('id');
                 var field = 'timeline';
                 var items = [];
                 $timeline.find('.timeline-item').each(function() {
                     items.push({
                         date: $(this).find('.timeline-date').html(),
-                        description: $(this).find('p').html()
+                        description: $(this).find('p.editable-field').html()
                     });
                 });
 
@@ -527,7 +523,7 @@
                         // Reindex data-field attributes
                         $timeline.find('.timeline-item').each(function(index) {
                             $(this).find('.timeline-date').attr('data-field', `timeline.${index}.date`);
-                            $(this).find('p').attr('data-field', `timeline.${index}.description`);
+                            $(this).find('p.editable-field').attr('data-field', `timeline.${index}.description`);
                         });
                     },
                     error: function(xhr) {
@@ -536,6 +532,148 @@
                     }
                 });
             }
+
+            // Keyboard shortcuts
+            $(document).on('keydown', function(e) {
+                var $activeElement = $(document.activeElement);
+
+                // Shift + Arrow Key navigation
+                if (e.shiftKey) {
+                    var $listItem = $activeElement.closest('.list-item');
+                    var $tableCell = $activeElement.closest('td');
+                    var $timelineItem = $activeElement.closest('.timeline-item');
+
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if ($listItem.length) {
+                            $listItem.next().find('.editable-field').focus();
+                        } else if ($timelineItem.length) {
+                            $timelineItem.next().find('.editable-field').first().focus();
+                        } else if ($tableCell.length) {
+                            var colIndex = $tableCell.index();
+                            var $nextRow = $tableCell.closest('tr').next();
+                            if ($nextRow.length) {
+                                var $targetCell = $nextRow.find('td').eq(colIndex);
+                                if ($targetCell.hasClass('editable-field')) {
+                                    $targetCell.focus();
+                                }
+                            }
+                        }
+                    }
+
+                    if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if ($listItem.length) {
+                            $listItem.prev().find('.editable-field').focus();
+                        } else if ($timelineItem.length) {
+                            $timelineItem.prev().find('.editable-field').first().focus();
+                        } else if ($tableCell.length) {
+                            var colIndex = $tableCell.index();
+                            var $prevRow = $tableCell.closest('tr').prev();
+                            if ($prevRow.length) {
+                                var $targetCell = $prevRow.find('td').eq(colIndex);
+                                if ($targetCell.hasClass('editable-field')) {
+                                    $targetCell.focus();
+                                }
+                            }
+                        }
+                    }
+
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        if ($tableCell.length) {
+                            $tableCell.next('.editable-field').focus();
+                        }
+                    }
+
+                    if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        if ($tableCell.length) {
+                            $tableCell.prev('.editable-field').focus();
+                        }
+                    }
+                    return; // End here if it was a shift-key combo
+                }
+
+                // Ctrl + Key shortcuts
+                if (e.ctrlKey) {
+                    var $listItem = $activeElement.closest('.list-item');
+                    var $tableRow = $activeElement.closest('.table-row');
+                    var $timelineItem = $activeElement.closest('.timeline-item');
+
+                    // Ctrl + Delete
+                    if (e.key === 'Delete') {
+                        e.preventDefault();
+                        if ($listItem.length) {
+                            const $prevItem = $listItem.prev();
+                            $listItem.find('.remove-item').click();
+                            if ($prevItem.length) {
+                                $prevItem.find('.editable-field').focus();
+                            }
+                        } else if ($tableRow.length) {
+                            const $prevRow = $tableRow.prev();
+                            const $table = $tableRow.closest('.editable-table');
+                            $tableRow.remove();
+                            updateTable($table);
+                            if ($prevRow.length) {
+                                $prevRow.find('.editable-field').first().focus();
+                            }
+                        } else if ($timelineItem.length) {
+                            const $prevItem = $timelineItem.prev();
+                            $timelineItem.find('.remove-timeline-item').click();
+                            if ($prevItem.length) {
+                                $prevItem.find('.editable-field').first().focus();
+                            }
+                        }
+                    }
+
+                    // Ctrl + ArrowDown
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if ($listItem.length) {
+                            $listItem.find('.add-item').click();
+                            $listItem.next().find('.editable-field').focus();
+                        } else if ($tableRow.length) {
+                            var $table = $tableRow.closest('.editable-table');
+                            var $newRow = $tableRow.clone();
+                            $newRow.find('td.editable-field').html(''); // Clear content
+                            $tableRow.after($newRow);
+                            updateTable($table);
+                            $newRow.find('td.editable-field').first().focus();
+                        } else if ($timelineItem.length) {
+                            $timelineItem.find('.add-timeline-item').click();
+                            $timelineItem.next().find('.editable-field').first().focus();
+                        }
+                    }
+
+                    // Ctrl + ArrowUp
+                    if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if ($listItem.length) {
+                            var $list = $listItem.closest('.editable-list');
+                            var $newItem = $listItem.clone();
+                            $newItem.find('.editable-field').html('New Item');
+                            $listItem.before($newItem);
+                            updateList($list);
+                            $newItem.find('.editable-field').focus();
+                        } else if ($tableRow.length) {
+                            var $table = $tableRow.closest('.editable-table');
+                            var $newRow = $tableRow.clone();
+                            $newRow.find('.editable-field').html('');
+                            $tableRow.before($newRow);
+                            updateTable($table);
+                            $newRow.find('.editable-field').first().focus();
+                        } else if ($timelineItem.length) {
+                            var $timeline = $timelineItem.closest('.timeline');
+                            var $newItem = $timelineItem.clone();
+                            $newItem.find('.editable-field').html('New Item');
+                            $timelineItem.before($newItem);
+                            updateTimeline($timeline);
+                            $newItem.find('.editable-field').first().focus();
+                        }
+                    }
+                }
+            });
         });
     </script>
 </body>
