@@ -101,7 +101,7 @@
             @endif
 
             @if(isset($section->value['timeline']) && is_array($section->value['timeline']))
-                <h2 contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="timeline_title">Timeline (5–6 Months)</h2>
+                <h2 contenteditable="true" class="editable-field" data-model="section" data-id="{{ $section->id }}" data-field="timeline_title">Timeline</h2>
                 <div class="timeline">
                     @foreach($section->value['timeline'] as $index => $item)
                         <div class="timeline-item">
