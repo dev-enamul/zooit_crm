@@ -15,7 +15,9 @@ class ProposalController extends Controller
         $proposal = ProjectProposal::with(['customer', 'user', 'sections'])
             ->findOrFail($id);
 
-        return view('proposal.proposal_view', compact('proposal'));
+        $proposalJson = $proposal->toJson();
+
+        return view('proposal.proposal_view', compact('proposal', 'proposalJson'));
     }
 
     public function updateField(Request $request)
@@ -83,6 +85,98 @@ class ProposalController extends Controller
                 'exception' => $e
             ]);
             return response()->json(['error' => 'Failed to update field: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function askAi(Request $request)
+    {
+        $proposalData = $request->input('proposal_data');
+        $prompt = $request->input('prompt');
+
+        if (!$proposalData || !$prompt) {
+            return response()->json(['error' => 'Missing proposal data or prompt'], 400);
+        }
+
+        $apiKey = env('GEMINI_API_KEY');
+        if (!$apiKey) {
+            return response()->json(['error' => 'GEMINI_API_KEY is not set in the .env file.'], 500);
+        }
+
+        try {
+            $client = \Illuminate\Support\Facades\Http::withToken($apiKey)
+                ->withHeaders(['Content-Type' => 'application/json']);
+
+            $system_prompt = <<<'EOT'
+            You are an expert proposal editor. You will be given a JSON object representing a project proposal. 
+            The user will provide a prompt with instructions on what to change.
+            Your task is to modify the JSON data according to the user's prompt and return ONLY the modified sections in the exact same JSON format.
+            Do not return sections that were not changed. Do not add new top-level keys. Preserve the original structure and keys of each section.
+            If the user asks to add a new item to a list (like 'items' or 'core_features'), add it. If they ask to remove one, remove it. If they ask to change text, change it.
+            Your response must be a valid JSON object containing only the 'sections' that you have modified.
+            Example Input:
+            {
+                "prompt": "Change the title of the introduction to 'Welcome' and add a new item to its list.",
+                "proposal": { ... proposal data ... },
+                "customer": { ... customer data ... },
+                "sections": [
+                    { "id": 1, "title": "Introduction", "value": { "content": "...", "items": ["Item 1"] } },
+                    { "id": 2, "title": "Pricing", "value": { ... } }
+                ]
+            }
+            Example Output (JSON only):
+            {
+                "sections": [
+                    { "id": 1, "title": "Welcome", "value": { "content": "...", "items": ["Item 1", "New Item"] } }
+                ]
+            }
+EOT;
+
+            $response = $client->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent', [
+                'contents' => [
+                    [
+                        'parts' => [
+                            ['text' => $system_prompt],
+                            ['text' => "Here is the proposal data and the user prompt: " . json_encode($proposalData)],
+                        ]
+                    ]
+                ]
+            ]);
+
+            if ($response->failed()) {
+                Log::error('Gemini API request failed', ['response' => $response->json()]);
+                return response()->json(['error' => 'Failed to communicate with AI service.', 'details' => $response->body()], 500);
+            }
+
+            $result = $response->json();
+            $jsonString = $result['candidates'][0]['content']['parts'][0]['text'];
+            $jsonString = str_replace(['```json', '```'], '', $jsonString);
+            $updatedData = json_decode(trim($jsonString), true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::error('Failed to decode JSON from Gemini API', ['response' => $jsonString, 'error' => json_last_error_msg()]);
+                return response()->json(['error' => 'AI returned invalid data format.', 'details' => $jsonString], 500);
+            }
+
+            if (isset($updatedData['sections'])) {
+                foreach ($updatedData['sections'] as $sectionData) {
+                    $section = ProjectProposalSection::find($sectionData['id']);
+                    if ($section) {
+                        if (isset($sectionData['title'])) {
+                            $section->title = $sectionData['title'];
+                        }
+                        if (isset($sectionData['value'])) {
+                            $section->value = $sectionData['value'];
+                        }
+                        $section->save();
+                    }
+                }
+            }
+
+            return response()->json(['success' => true, 'message' => 'Proposal updated by AI.']);
+
+        } catch (\Exception $e) {
+            Log::error('Error in askAi method', ['exception' => $e]);
+            return response()->json(['error' => 'An internal error occurred: ' . $e->getMessage()], 500);
         }
     }
 

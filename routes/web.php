@@ -128,7 +128,8 @@ Route::group(['middleware' => 'auth'], function () {
 
  
         Route::get('/proposal/{id}', [ProposalController::class, 'index'])->name('proposal.show');
-        Route::post('/proposal/update-field', [ProposalController::class, 'updateField'])->name('proposal.update-field'); 
+        Route::post('/proposal/update-field', [ProposalController::class, 'updateField'])->name('proposal.update-field');
+        Route::post('/proposal/ask-ai', [ProposalController::class, 'askAi'])->name('proposal.ask-ai'); 
         Route::get('whatsapp', [WhatsAppController::class, 'index']);
         Route::post('whatsapp', [WhatsAppController::class, 'store'])->name('whatsapp.store');
         Route::get('send-mail', [SendMailController::class, 'sendMail'])->name('send.mail');
