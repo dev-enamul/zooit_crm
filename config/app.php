@@ -173,6 +173,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Yajra\DataTables\ButtonsServiceProvider::class, 
         Barryvdh\Snappy\ServiceProvider::class, 
+        App\Providers\TelescopeServiceProvider::class,
 
     ])->toArray(),
 

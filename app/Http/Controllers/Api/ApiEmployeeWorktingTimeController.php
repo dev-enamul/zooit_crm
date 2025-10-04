@@ -60,17 +60,12 @@ class ApiEmployeeWorktingTimeController extends Controller
 
         // ফাইলের এক্সটেনশন
         $extension = $request->file('image')->getClientOriginalExtension();
-
-        // কাস্টম ফাইল নাম (timestamp.extension)
+ 
         $fileName = time() . '.' . $extension;
-
-        // ফাইল সেভ
+ 
         $path = $request->file('image')->storeAs($folderPath, $fileName, 'public');
 
-        // শুধু relative path সেভ হবে (domain ছাড়া)
-        // $path example: screenshots/2025/09/16/enamul_1/1694871234.png
-
-        // ডাটাবেজে সেভ
+     
         $screenshot = EmployeeScreenShort::create([
             'user_id' => $userId,
             'image' => $path, // শুধু relative path
