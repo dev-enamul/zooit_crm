@@ -31,23 +31,18 @@ class ApiEmployeeWorktingTimeController extends Controller
     }
 
     public function endWork(Request $request)
-    {
-        $userId = Auth::id();
-        $workTime = WorkTime::where('user_id', $userId)
-                            ->whereNull('end_time')
-                            ->latest()
-                            ->first();
-        if(!$workTime){
-            return success_response(null, 'Work ended successfully');   
-        }
+    { 
+        $save_work = $this->endWorkSave($request->note);
 
-        $workTime->update([
-            'note' => $request->note,
-            'end_time' => now(),
-            'duration' => now()->diffInMinutes($workTime->start_time),
-        ]); 
-        return success_response(null, 'Work ended successfully');   
+        if($save_work){
+            return success_response(null, 'Work ended successfully');
+        } else {
+            return error_response('Work end fail');
+        }
     }
+
+   
+
 
     public function UploadScreenshort(Request $request)
     {
@@ -81,7 +76,31 @@ class ApiEmployeeWorktingTimeController extends Controller
             'image' => $path, // শুধু relative path
         ]);
 
+        $this->endWorkSave();
         return success_response(null, 'Screenshot uploaded successfully'); 
+    }
+
+
+
+    public function endWorkSave($note = null)
+    {
+        $userId = Auth::id();
+
+        $workTime = WorkTime::where('user_id', $userId)
+                            ->latest()
+                            ->first();
+
+        if(!$workTime){
+            return false;  
+        }
+
+        $updated = $workTime->update([
+            'note' => $note ?? $workTime->note,
+            'end_time' => now(),
+            'duration' => now()->diffInMinutes($workTime->start_time),
+        ]);
+
+        return $updated;  
     }
 
 
