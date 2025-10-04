@@ -76,7 +76,8 @@
                                 </li>
                             @endforeach
                         </ul>
-                    @endif
+                    @endif 
+                    
                     @if(isset($sub_section['sub_sections']))
                         @foreach($sub_section['sub_sections'] as $sub_sub_index => $sub_sub_section)
                             <h3>

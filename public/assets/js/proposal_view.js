@@ -322,13 +322,47 @@ $(document).ready(function() {
     $(document).on('keydown', function(e) {
         var $activeElement = $(document.activeElement);
 
-        // Shift + Arrow Key navigation
-        if (e.shiftKey) {
-            var $listItem = $activeElement.closest('.list-item');
-            var $tableCell = $activeElement.closest('td');
-            var $timelineItem = $activeElement.closest('.timeline-item');
+        // --- MS Word Style Shortcuts ---
 
-            if (e.key === 'ArrowDown') {
+        // Enter to add a new list item
+        if (e.key === 'Enter' && !e.shiftKey) {
+            var $listItem = $activeElement.closest('.list-item');
+            if ($listItem.length) {
+                e.preventDefault();
+                $listItem.find('.add-item').click();
+                $listItem.next().find('.editable-field').focus();
+                return;
+            }
+        }
+
+        // Backspace to remove an empty list item
+        if (e.key === 'Backspace') {
+            var $listItem = $activeElement.closest('.list-item');
+            if ($listItem.length && $activeElement.text().trim() === '' && isCursorAtStart($activeElement[0])) {
+                e.preventDefault();
+                var $prevItem = $listItem.prev();
+                $listItem.find('.remove-item').click();
+                if ($prevItem.length) {
+                    $prevItem.find('.editable-field').focus();
+                }
+                return;
+            }
+        }
+
+        // Ctrl+B for Bold, Ctrl+I for Italic, Ctrl+U for Underline
+        if (e.ctrlKey) {
+            if (e.key === 'b') { e.preventDefault(); document.execCommand('bold'); return; }
+            if (e.key === 'i') { e.preventDefault(); document.execCommand('italic'); return; }
+            if (e.key === 'u') { e.preventDefault(); document.execCommand('underline'); return; }
+        }
+
+        // --- Arrow Key Navigation ---
+        var $listItem = $activeElement.closest('.list-item');
+        var $tableCell = $activeElement.closest('td');
+        var $timelineItem = $activeElement.closest('.timeline-item');
+
+        if (e.key === 'ArrowDown') {
+            if (isCursorAtEnd($activeElement[0])) {
                 e.preventDefault();
                 if ($listItem.length) {
                     $listItem.next().find('.editable-field').focus();
@@ -338,15 +372,14 @@ $(document).ready(function() {
                     var colIndex = $tableCell.index();
                     var $nextRow = $tableCell.closest('tr').next();
                     if ($nextRow.length) {
-                        var $targetCell = $nextRow.find('td').eq(colIndex);
-                        if ($targetCell.hasClass('editable-field')) {
-                            $targetCell.focus();
-                        }
+                        $nextRow.find('td').eq(colIndex).focus();
                     }
                 }
             }
+        }
 
-            if (e.key === 'ArrowUp') {
+        if (e.key === 'ArrowUp') {
+            if (isCursorAtStart($activeElement[0])) {
                 e.preventDefault();
                 if ($listItem.length) {
                     $listItem.prev().find('.editable-field').focus();
@@ -356,42 +389,56 @@ $(document).ready(function() {
                     var colIndex = $tableCell.index();
                     var $prevRow = $tableCell.closest('tr').prev();
                     if ($prevRow.length) {
-                        var $targetCell = $prevRow.find('td').eq(colIndex);
-                        if ($targetCell.hasClass('editable-field')) {
-                            $targetCell.focus();
-                        }
+                        $prevRow.find('td').eq(colIndex).focus();
                     }
                 }
             }
-            return; // End here if it was a shift-key combo
         }
 
-        // Ctrl + Key shortcuts
+        if (e.key === 'ArrowLeft') {
+            if (isCursorAtStart($activeElement[0])) {
+                if ($tableCell.length) {
+                    e.preventDefault();
+                    $tableCell.prev().focus();
+                }
+            }
+        }
+
+        if (e.key === 'ArrowRight') {
+            if (isCursorAtEnd($activeElement[0])) {
+                if ($tableCell.length) {
+                    e.preventDefault();
+                    $tableCell.next().focus();
+                }
+            }
+        }
+
+        // --- Original Ctrl Key shortcuts ---
         if (e.ctrlKey) {
-            var $listItem = $activeElement.closest('.list-item');
-            var $tableRow = $activeElement.closest('.table-row');
-            var $timelineItem = $activeElement.closest('.timeline-item');
+            var $ctrlListItem = $activeElement.closest('.list-item');
+            var $ctrlTableRow = $activeElement.closest('.table-row');
+            var $ctrlTimelineItem = $activeElement.closest('.timeline-item');
 
             // Ctrl + Delete
             if (e.key === 'Delete') {
                 e.preventDefault();
-                if ($listItem.length) {
-                    const $prevItem = $listItem.prev();
-                    $listItem.find('.remove-item').click();
+                if ($ctrlListItem.length) {
+                    const $prevItem = $ctrlListItem.prev();
+                    $ctrlListItem.find('.remove-item').click();
                     if ($prevItem.length) {
                         $prevItem.find('.editable-field').focus();
                     }
-                } else if ($tableRow.length) {
-                    const $prevRow = $tableRow.prev();
-                    const $table = $tableRow.closest('.editable-table');
-                    $tableRow.remove();
+                } else if ($ctrlTableRow.length) {
+                    const $prevRow = $ctrlTableRow.prev();
+                    const $table = $ctrlTableRow.closest('.editable-table');
+                    $ctrlTableRow.remove();
                     updateTable($table);
                     if ($prevRow.length) {
                         $prevRow.find('.editable-field').first().focus();
                     }
-                } else if ($timelineItem.length) {
-                    const $prevItem = $timelineItem.prev();
-                    $timelineItem.find('.remove-timeline-item').click();
+                } else if ($ctrlTimelineItem.length) {
+                    const $prevItem = $ctrlTimelineItem.prev();
+                    $ctrlTimelineItem.find('.remove-timeline-item').click();
                     if ($prevItem.length) {
                         $prevItem.find('.editable-field').first().focus();
                     }
@@ -401,42 +448,42 @@ $(document).ready(function() {
             // Ctrl + ArrowDown
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
-                if ($listItem.length) {
-                    $listItem.find('.add-item').click();
-                    $listItem.next().find('.editable-field').focus();
-                } else if ($tableRow.length) {
-                    var $table = $tableRow.closest('.editable-table');
-                    var $newRow = $tableRow.clone();
+                if ($ctrlListItem.length) {
+                    $ctrlListItem.find('.add-item').click();
+                    $ctrlListItem.next().find('.editable-field').focus();
+                } else if ($ctrlTableRow.length) {
+                    var $table = $ctrlTableRow.closest('.editable-table');
+                    var $newRow = $ctrlTableRow.clone();
                     $newRow.find('td.editable-field').html(''); // Clear content
-                    $tableRow.after($newRow);
+                    $ctrlTableRow.after($newRow);
                     updateTable($table);
                     $newRow.find('td.editable-field').first().focus();
-                } else if ($timelineItem.length) {
-                    $timelineItem.find('.add-timeline-item').click();
-                    $timelineItem.next().find('.editable-field').first().focus();
+                } else if ($ctrlTimelineItem.length) {
+                    $ctrlTimelineItem.find('.add-timeline-item').click();
+                    $ctrlTimelineItem.next().find('.editable-field').first().focus();
                 }
             }
 
             // Ctrl + ArrowUp
             if (e.key === 'ArrowUp') {
                 e.preventDefault();
-                if ($listItem.length) {
-                    var $list = $listItem.closest('.editable-list');
-                    var $newItem = $listItem.clone();
+                if ($ctrlListItem.length) {
+                    var $list = $ctrlListItem.closest('.editable-list');
+                    var $newItem = $ctrlListItem.clone();
                     $newItem.find('.editable-field').html('New Item');
-                    $listItem.before($newItem);
+                    $ctrlListItem.before($newItem);
                     updateList($list);
                     $newItem.find('.editable-field').focus();
-                } else if ($tableRow.length) {
-                    var $table = $tableRow.closest('.editable-table');
-                    var $newRow = $tableRow.clone();
+                } else if ($ctrlTableRow.length) {
+                    var $table = $ctrlTableRow.closest('.editable-table');
+                    var $newRow = $ctrlTableRow.clone();
                     $newRow.find('.editable-field').html('');
-                    $tableRow.before($newRow);
+                    $ctrlTableRow.before($newRow);
                     updateTable($table);
                     $newRow.find('.editable-field').first().focus();
-                } else if ($timelineItem.length) {
-                    var $timeline = $timelineItem.closest('.timeline');
-                    var $newItem = $timelineItem.clone();
+                } else if ($ctrlTimelineItem.length) {
+                    var $timeline = $ctrlTimelineItem.closest('.timeline');
+                    var $newItem = $ctrlTimelineItem.clone();
                     $newItem.find('.editable-field').html('New Item');
                     $timelineItem.before($newItem);
                     updateTimeline($timeline);
@@ -445,4 +492,30 @@ $(document).ready(function() {
             }
         }
     });
+
+    function getCursorPosition(element) {
+        var selection = window.getSelection();
+        if (selection.rangeCount === 0) return 0;
+        var range = selection.getRangeAt(0);
+        var preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        return preCaretRange.toString().length;
+    }
+
+    function isCursorAtStart(element) {
+        if (element.textContent.length === 0) return true;
+        return getCursorPosition(element) === 0;
+    }
+
+    function isCursorAtEnd(element) {
+        if (element.textContent.length === 0) return true;
+        var selection = window.getSelection();
+        if (selection.rangeCount === 0) return false;
+        var range = selection.getRangeAt(0);
+        var preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        return preCaretRange.toString().length === element.textContent.length;
+    }
 });

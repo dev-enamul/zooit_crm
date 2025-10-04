@@ -37,6 +37,9 @@ class ApiEmployeeWorktingTimeController extends Controller
                             ->whereNull('end_time')
                             ->latest()
                             ->first();
+        if(!$workTime){
+            return success_response(null, 'Work ended successfully');   
+        }
 
         $workTime->update([
             'note' => $request->note,

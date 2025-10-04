@@ -70,11 +70,12 @@ class ApiTaskController extends Controller
 
         // 🔹 Filter by assign_by
         if ($request->has('assign_by') && $request->assign_by !== null) {
-            if ($request->assign_by === 'myself') {
-                $query->where('assign_by', $userId);
-            } else {
-                $query->where('assign_by', $request->assign_by);
-            }
+            $query->where('assign_by', $request->assign_by);
+        } 
+
+        // 🔹 Filter by assign_to
+        if ($request->has('assign_to') && $request->assign_to !== null) {
+            $query->where('assign_to', $request->assign_to);
         }
 
         // 🔹 Keyword search
