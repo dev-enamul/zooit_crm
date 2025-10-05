@@ -115,7 +115,7 @@
                                         <td>
                                             <h1 class="text-primary">INVOICE</h1>
                                             <div class="invoice_info">
-                                                <h6 class="text-primary m-0 p-0">INVOICE# {{$invoice->id}} </h6> 
+                                                <h6 class="text-primary m-0 p-0">INVOICE# s{{$invoice->id}} </h6> 
                                                 <p><b>Issue Date</b> {{get_date($invoice->invoice_date)}}</p>
                                                 <p><b>Due Date</b> {{get_date($invoice->due_date)}}</p>
                                             </div>
