@@ -100,7 +100,7 @@
                                             </div> 
                                             <div class="bill_to">
                                                 <h6 class="text-primary">BILL TO </h6>
-                                                <h6>{{@$invoice->user->name}}</h6>
+                                                <h6>{{@$invoice->customer->user->name}}</h6>
                                                 <p>{{@$invoice->user->userAddress->address}}</p> 
                                             </div>  
                                         </td>
