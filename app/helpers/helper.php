@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Village;
 use function Laravel\Prompts\select;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 if (!function_exists('getSlug')) {
     function getSlug($model, $title, $column = 'slug', $separator = '-') {
@@ -48,17 +50,23 @@ if (!function_exists('get_price')) {
 
 
 if (!function_exists('usd_to_bdt_rate')) {
-    function usd_to_bdt_rate() { 
+    function usd_to_bdt_rate() {
         $api_url = 'https://api.exchangerate-api.com/v4/latest/USD';
-        $response = file_get_contents($api_url);
-        $data = json_decode($response, true);
+        
+        try {
+            $response = Http::timeout(5)->get($api_url);
 
-        if (isset($data['rates']['BDT'])) {
-            $usd_to_bdt_rate = $data['rates']['BDT'];
-        } else {
-            $usd_to_bdt_rate = 120;  
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data['rates']['BDT'] ?? 120;  
+            }
+ 
+            return 120;
+
+        } catch (\Exception $e) {
+            Log::warning('USD to BDT rate fetch failed: ' . $e->getMessage());
+            return 120; 
         }
-        return $usd_to_bdt_rate;
     }
 }
 
