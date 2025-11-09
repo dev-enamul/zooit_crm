@@ -58,7 +58,7 @@ if (!function_exists('usd_to_bdt_rate')) {
 
             if ($response->successful()) {
                 $data = $response->json();
-                return $data['rates']['BDT'] ?? 120;  
+                return $data['rates']['BDT'] ?? 122;  
             }
  
             return 120;
