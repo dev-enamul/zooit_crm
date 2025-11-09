@@ -311,11 +311,11 @@
                                         </tr>
                                         <tr class="total-row">
                                             <td><strong>Paid</strong></td>
-                                            <td class="amount-column"><strong>{{get_price(($invoice->total_amount-$invoice->due_amount),$invoice->project->currency)}}</strong></td>
+                                            <td class="amount-column"><strong>{{get_price(($invoice->total_amount-$invoice->due_amount),'bdt')}}</strong></td>
                                         </tr> 
                                         <tr class="total-row">
                                             <td><strong>Payble</strong></td>
-                                            <td class="amount-column"><strong>{{get_price($invoice->due_amount,$invoice->project->currency)}}</strong></td>
+                                            <td class="amount-column"><strong>{{get_price($invoice->due_amount,'bdt')}}</strong></td>
                                         </tr> 
                                     </tbody>
                                 </table>
