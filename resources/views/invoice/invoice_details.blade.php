@@ -216,7 +216,7 @@
                                             <img src="{{asset('assets/images/logo-dark.png')}}" alt="logo-dark" height="40px">
                                             <div class="company_info">
                                                 <p>24/ A1-, A-2, Bosila Rd, Mohammadpur, Dhaka</p>
-                                                <p>1711432284</p>
+                                                <p>+8801711432284</p>
                                                 <p>info@thezoomit.com</p>
                                             </div> 
                                             <div class="bill_to">

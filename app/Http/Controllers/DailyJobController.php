@@ -117,7 +117,7 @@ class DailyJobController extends Controller
                     'project_id'   => $plan->project_id,
                     'title'        => $title,
                     'invoice_date' => $invoiceDate,
-                    'due_date'     => $invoiceDate->addDays(7),
+                    'due_date'     => $invoiceDate->copy()->addDays(7),
                     'amount'       => $total_amount,
                 ], $details->map(function ($detail) {
                     return [

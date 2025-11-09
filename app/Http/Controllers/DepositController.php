@@ -102,8 +102,10 @@ class DepositController extends Controller
                 $transaction = new Transaction();
                 $transaction->user_id = $invoice->user_id;
                 $transaction->bank_id = $request->bank_id;
+                $transaction->invoice_id = $invoice->id;
+                $transaction->invoice_id = $invoice->id;
                 $transaction->type = 1;
-                $transaction->amount = $request->amount;
+                $transaction->due_after_transaction = $due_amount;
                 $transaction->save();
             }   
 
