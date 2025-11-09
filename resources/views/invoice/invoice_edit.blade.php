@@ -117,91 +117,216 @@
                                     </div>
                                 </div>  
 
-                                <table id="datatable" class="table  dt-responsive nowrap fs-14" >
-                                    <thead>
-                                        <tr>
-                                            <th><h6 class="text-primary">Description</h6></th>
-                                            <th><h6 class="text-primary">Amount</h6></th>  
-                                        </tr>
-                                    </thead>
-                                    <tbody> 
-                                        @if ($invoice->description!=null)
-                                            <tr>
-                                                <td><input type="text" name="description" id="description" value="{{@$invoice->description}}"> </td>
-                                                <td>{{get_price($invoice->amount)}}</td>
-                                            </tr> 
-                                        @else 
-                                            @php
-                                                $details = $invoice->details;
-                                            @endphp
-                                            @if (isset($details) && count($details)>0)
-                                                @foreach ($details as $detail)
-                                                    <tr>
-                                                        <td>{{$detail->reason}} </td>
-                                                        <td>{{get_price($detail->amount)}}</td>
-                                                    </tr> 
-                                                @endforeach
-                                            @endif
-                                        @endif 
-                                        
-                                        <tr>
-                                            <td> 
-                                                <h6>TOTAL</h6>
-                                            </td>
-                                            <td> 
-                                                <h6>{{get_price($invoice->amount)}}</h6>
-                                            </td>
-                                        </tr> 
+                                                                <table id="datatable" class="table dt-responsive nowrap fs-14">
 
-                                        <tr>
-                                            <td>
-                                                <p class="mb-2">Vat & Tax</p>
-                                                <p>Discount</p>
-                                            </td>
-                                            <td>
-                                                <input class="mb-2" type="number" min="0" name="tax_amount" id="tax_amount" value="{{@$invoice->tax_amount}}"> <br>
-                                                <input type="number" min="0" name="discount_amount" id="discount_amount" value="{{@$invoice->discount_amount}}"> 
-                                            </td>
-                                        </tr> 
+                                                                    <thead>
 
-                                        <tr>
-                                            <td><h6>GRAND TOTAL</h6></td>
-                                            <td><h6 id="grand_total">{{get_price($invoice->total_amount)}}</h6></td>
-                                        </tr>
-                                    </tbody>
-                                </table> 
+                                                                        <tr>
 
-                                <button class="btn btn-primary">Update</button>
-                               </form>
+                                                                            <th><h6 class="text-primary">Description</h6></th>
 
-                            </div>
-                        </div>
-                    </div> <!-- end col -->
-                </div>
-                <!-- end row -->
-            </div> <!-- container-fluid -->
-        </div>
-    </div>
- 
-@endsection
-@section('script') 
+                                                                            <th><h6 class="text-primary">Amount</h6></th>
 
-<script>
-    $(document).ready(function () {
-        function calculateTotal() { 
-            let baseAmount = parseFloat("{{ @$invoice->amount }}") || 0;
-     
-            let taxAmount = parseFloat($("#tax_amount").val()) || 0;
-            let discountAmount = parseFloat($("#discount_amount").val()) || 0;
-            
-            let grandTotal = baseAmount + taxAmount - discountAmount; 
-            $('#grand_total').text(`৳${grandTotal.toFixed(2)}`); 
-        }
-     
-        $("#tax_amount, #discount_amount").on("keyup change", calculateTotal);
-     
-        calculateTotal();
-    });
-    </script>
+                                                                            <th><h6 class="text-primary">Action</h6></th>
 
-@endsection
+                                                                        </tr>
+
+                                                                    </thead>
+
+                                                                    <tbody id="invoice-items">
+
+                                                                        @if ($invoice->description != null)
+
+                                                                            <tr>
+
+                                                                                <td><input type="text" name="reason[]" class="form-control" value="{{ $invoice->description }}"></td>
+
+                                                                                <td><input type="number" name="amount[]" class="form-control amount" value="{{ $invoice->amount }}"></td>
+
+                                                                                <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
+
+                                                                            </tr>
+
+                                                                        @else
+
+                                                                            @php
+
+                                                                                $details = $invoice->details;
+
+                                                                            @endphp
+
+                                                                            @if (isset($details) && count($details) > 0)
+
+                                                                                @foreach ($details as $detail)
+
+                                                                                    <tr>
+
+                                                                                        <td><input type="text" name="reason[]" class="form-control" value="{{ $detail->reason }}"></td>
+
+                                                                                        <td><input type="number" name="amount[]" class="form-control amount" value="{{ $detail->amount }}"></td>
+
+                                                                                        <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
+
+                                                                                    </tr>
+
+                                                                                @endforeach
+
+                                                                            @endif
+
+                                                                        @endif
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                                <button type="button" id="add-item" class="btn btn-primary btn-sm">Add New Item</button>
+
+                                
+
+                                                                <div class="row mt-4">
+
+                                                                    <div class="col-md-6">
+
+                                                                        <p class="mb-2">Vat & Tax</p>
+
+                                                                        <p>Discount</p>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-6 text-end">
+
+                                                                        <input class="mb-2 form-control" type="number" min="0" name="tax_amount" id="tax_amount" value="{{ @$invoice->tax_amount }}">
+
+                                                                        <input type="number" min="0" name="discount_amount" id="discount_amount" class="form-control" value="{{ @$invoice->discount_amount }}">
+
+                                                                    </div>
+
+                                                                </div>
+
+                                
+
+                                                                <div class="row mt-4">
+
+                                                                    <div class="col-md-6"><h6>TOTAL</h6></div>
+
+                                                                    <div class="col-md-6 text-end"><h6 id="total_amount">{{ get_price($invoice->amount) }}</h6></div>
+
+                                                                </div>
+
+                                
+
+                                                                <div class="row mt-2">
+
+                                                                    <div class="col-md-6"><h6>GRAND TOTAL</h6></div>
+
+                                                                    <div class="col-md-6 text-end"><h6 id="grand_total">{{ get_price($invoice->total_amount) }}</h6></div>
+
+                                                                </div>
+
+                                
+
+                                                                <button class="btn btn-primary mt-3">Update</button>
+
+                                                               </form>
+
+                                
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div> <!-- end col -->
+
+                                                </div>
+
+                                                <!-- end row -->
+
+                                            </div> <!-- container-fluid -->
+
+                                        </div>
+
+                                    </div>
+
+                                @endsection
+
+                                @section('script')
+
+                                <script>
+
+                                    $(document).ready(function () {
+
+                                        function calculateTotal() {
+
+                                            let totalAmount = 0;
+
+                                            $('.amount').each(function () {
+
+                                                totalAmount += parseFloat($(this).val()) || 0;
+
+                                            });
+
+                                            $('#total_amount').text(`৳${totalAmount.toFixed(2)}`);
+
+                                
+
+                                            let taxAmount = parseFloat($("#tax_amount").val()) || 0;
+
+                                            let discountAmount = parseFloat($("#discount_amount").val()) || 0;
+
+                                            
+
+                                            let grandTotal = totalAmount + taxAmount - discountAmount;
+
+                                            $('#grand_total').text(`৳${grandTotal.toFixed(2)}`);
+
+                                        }
+
+                                
+
+                                        $('#add-item').on('click', function () {
+
+                                            $('#invoice-items').append(`
+
+                                                <tr>
+
+                                                    <td><input type="text" name="reason[]" class="form-control" placeholder="Enter Description"></td>
+
+                                                    <td><input type="number" name="amount[]" class="form-control amount" placeholder="Enter Amount"></td>
+
+                                                    <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
+
+                                                </tr>
+
+                                            `);
+
+                                            calculateTotal();
+
+                                        });
+
+                                
+
+                                        $(document).on('click', '.remove-item', function () {
+
+                                            $(this).closest('tr').remove();
+
+                                            calculateTotal();
+
+                                        });
+
+                                
+
+                                        $(document).on('keyup change', '.amount, #tax_amount, #discount_amount', function() {
+
+                                            calculateTotal();
+
+                                        });
+
+                                
+
+                                        calculateTotal();
+
+                                    });
+
+                                </script>
+
+                                @endsection

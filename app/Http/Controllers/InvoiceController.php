@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
@@ -40,36 +41,63 @@ class InvoiceController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    { 
+    {
         $validator = Validator::make($request->all(), [
             'invoice_date' => 'required|date',
             'due_date' => 'required|date',
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string', 
+            'reason' => 'required|array',
+            'reason.*' => 'required|string',
+            'amount' => 'required|array',
+            'amount.*' => 'required|numeric|min:0',
             'tax_amount' => 'required|numeric|min:0',
             'discount_amount' => 'required|numeric|min:0',
-        ]);  
-        
+            'usd_rate' => 'nullable|numeric|min:0',
+        ]);
+
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
-        }  
+        }
 
-    
-        $invoice = Invoice::findOrFail($id); 
-        $invoice->update([
-            'invoice_date' => $request->invoice_date,
-            'due_date' => $request->due_date,
-            'title' => $request->title,
-            'description' => $request->description, 
-            'tax_amount' => $request->tax_amount,
-            'discount_amount' => $request->discount_amount,
-            'total_amount' => $invoice->amount + ($request->tax_amount - $request->discount_amount),
-            'due_amount' => $invoice->amount + ($request->tax_amount - $request->discount_amount),  
-        ]);
-    
-        return redirect()->route('invoice.show', encrypt($invoice->id))
-                         ->with('success', 'Invoice updated successfully!');
-    }   
+        $invoice = Invoice::findOrFail($id);
+
+        DB::beginTransaction();
+        try {
+            $totalAmount = array_sum($request->amount);
+            $totalAmountWithTaxAndDiscount = $totalAmount + $request->tax_amount - $request->discount_amount;
+
+            $invoice->update([
+                'invoice_date' => $request->invoice_date,
+                'due_date' => $request->due_date,
+                'title' => $request->title,
+                'description' => null,
+                'amount' => $totalAmount,
+                'tax_amount' => $request->tax_amount,
+                'discount_amount' => $request->discount_amount,
+                'total_amount' => $totalAmountWithTaxAndDiscount,
+                'due_amount' => $totalAmountWithTaxAndDiscount,
+                'usd_rate' => $request->usd_rate,
+                'total_amount_usd' => $request->usd_rate ? $totalAmountWithTaxAndDiscount / $request->usd_rate : null,
+            ]);
+
+            $invoice->details()->delete();
+
+            foreach ($request->reason as $key => $reason) {
+                $invoice->details()->create([
+                    'reason' => $reason,
+                    'amount' => $request->amount[$key],
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('invoice.show', encrypt($invoice->id))
+                ->with('success', 'Invoice updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An error occurred while updating the invoice. Please try again.');
+        }
+    }
 
     public function share($id){
         $id = customDecrypt($id);

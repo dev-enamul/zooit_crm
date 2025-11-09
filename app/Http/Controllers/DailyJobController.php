@@ -56,7 +56,7 @@ class DailyJobController extends Controller
                 'user_id'      => $customer->user_id,
                 'customer_id'  => $customer->id,
                 'project_id'   => $plan->project_id,
-                'title'        => 'Project Bill',
+                'title'        => $project->title,
                 'description'  => $customer->service->service ?? 'No service description available',
                 'invoice_date' => $plan->payment_date,
                 'due_date'     => now()->addDays(10),
@@ -81,33 +81,31 @@ class DailyJobController extends Controller
                 if (!$customer || !$project) {
                     DB::rollBack();
                     continue;
-                }
- 
-                $serviceName = optional($customer->service)->service ?? 'No service description available';
+                } 
  
                 $nextPaymentDate = Carbon::parse($plan->next_payment_date);
                 $invoiceDate     = $nextPaymentDate->copy(); 
  
-                if ($plan->package_type == 1) {  
+                if ($plan->package_type == 1) {
                     if ($plan->payment_timing == 'start') {
-                        $title = $serviceName . " # " . get_date($invoiceDate, "Y");
+                        $title = get_date($invoiceDate, "Y");
                     } else {
-                        $title = $serviceName . " # " . get_date($invoiceDate->copy()->subYear(), "Y");
+                        $title =  get_date($invoiceDate->copy()->subYear(), "Y");
                     }
 
                     $plan->next_payment_date = $nextPaymentDate->copy()->addYear();
 
                 } elseif ($plan->package_type == 2) {  
                     if ($plan->payment_timing == 'start') {
-                        $title = $serviceName . " # " . get_date($invoiceDate, "M-Y");
+                        $title =  get_date($invoiceDate, "M-Y");
                     } else {
-                        $title = $serviceName . " # " . get_date($invoiceDate->copy()->subMonth(), "M-Y");
+                        $title =  get_date($invoiceDate->copy()->subMonth(), "M-Y");
                     }
 
                     $plan->next_payment_date = $nextPaymentDate->copy()->addMonth();
 
                 } else {
-                    $title = $serviceName;
+                    $title = $project->title;
                 }
  
                 $details = SubscriptionPlanDetails::where('subscription_plan_id', $plan->id)->get();

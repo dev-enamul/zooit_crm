@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0"> Invoice List</h4> 
+                            <h4 class="mb-sm-0"> Project List</h4> 
                             <div class="page-title-right">
                                 <div class="btn-group flex-wrap mb-2">
                                     <button class="btn btn-secondary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
@@ -75,33 +75,7 @@
         </form>
         </div>
     </div> 
-
-    <div class="modal fade" id="edit_modal">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header"> 
-                    <h5 class="modal-title">Share Invoice </h5>
-                    <button type="button" class="btn btn-sm btn-label-danger btn-icon" data-bs-dismiss="modal"><i class="mdi mdi-close"></i></button>
-                </div>
-    
-                <div class="modal-body">
-                    <form action="{{route('village.update')}}" method="post"> 
-                        @csrf  
-                        <label for="word_no">Invoice Link <span class="text-danger">Copy and share with your customer.</span></label>
-                        <input id="invoice-link" class="form-control" type="text" value="" readonly> 
-                    </form>
-                </div>  
-    
-                <div class="modal-footer">
-                    <div class="text-end">
-                        <a  id="prevButton"  href="" target="blank" class="btn btn-primary"><i class="fas fa-eye"></i> Preview</a>
-                        <button class="btn btn-primary" id="copyLinkButton"><i class="fas fa-link"></i> Copy Link</button>
-                        {{-- <a id="whatsAppButton" href="" target="blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Send WhatsApp</a> --}}
-                    </div>                     
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 
 @endsection
 @section('script')
