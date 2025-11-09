@@ -14,14 +14,18 @@ class InvoiceService
         $project = Project::find($data['project_id']);
         
         $totalAmount     = $data['amount'] ?? 0;
-        $totalAmountBdt  = $totalAmount;
+        $taxAmount       = $data['tax_amount'] ?? 0;
+        $discountAmount  = $data['discount_amount'] ?? 0;
+        $grandTotal      = $totalAmount + $taxAmount - $discountAmount;
+        
+        $totalAmountBdt  = $grandTotal;
         $totalAmountUsd  = null;
         $bdtRate         = null;
 
         if ($project && $project->currency === 'usd') {
             $bdtRate        = usd_to_bdt_rate();
-            $totalAmountUsd = $totalAmount;
-            $totalAmountBdt = $totalAmount * $bdtRate;
+            $totalAmountUsd = $grandTotal; // Grand total in USD
+            $totalAmountBdt = $grandTotal * $bdtRate; // Convert to BDT
         }
 
         // Invoice তৈরি
@@ -35,8 +39,8 @@ class InvoiceService
             'invoice_date'    => $data['invoice_date'] ?? now()->format('Y-m-d'),
             'due_date'        => $data['due_date'] ?? now()->addDays(10),
             'amount'          => $totalAmount,
-            'tax_amount'      => $data['tax_amount'] ?? 0,
-            'discount_amount' => $data['discount_amount'] ?? 0,
+            'tax_amount'      => $taxAmount,
+            'discount_amount' => $discountAmount,
             'total_amount_usd'=> $totalAmountUsd,
             'usd_rate'        => $bdtRate,
             'total_amount'    => round($totalAmountBdt),

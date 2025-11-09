@@ -183,6 +183,25 @@
 
                                 
 
+                                                                @php
+                                                                    $currency = @$invoice->project->currency ?? 'bdt';
+                                                                    $isUsd = $currency === 'usd';
+                                                                @endphp
+                                                                
+                                                                @if($isUsd)
+                                                                <div class="row mt-4">
+                                                                    <div class="col-md-6">
+                                                                        <p class="mb-2">USD Rate (from original invoice)</p>
+                                                                    </div>
+                                                                    <div class="col-md-6 text-end">
+                                                                        <input class="mb-2 form-control" type="number" step="0.01" min="0" name="usd_rate" id="usd_rate" value="{{ @$invoice->usd_rate }}" readonly style="background-color: #e9ecef;">
+                                                                        <small class="text-muted">Rate is preserved from original invoice</small>
+                                                                    </div>
+                                                                </div>
+                                                                @else
+                                                                    <input type="hidden" name="usd_rate" id="usd_rate" value="">
+                                                                @endif
+
                                                                 <div class="row mt-4">
 
                                                                     <div class="col-md-6">
@@ -209,7 +228,7 @@
 
                                                                     <div class="col-md-6"><h6>TOTAL</h6></div>
 
-                                                                    <div class="col-md-6 text-end"><h6 id="total_amount">{{ get_price($invoice->amount) }}</h6></div>
+                                                                    <div class="col-md-6 text-end"><h6 id="total_amount">{{ get_price($invoice->amount, $currency) }}</h6></div>
 
                                                                 </div>
 
@@ -219,7 +238,13 @@
 
                                                                     <div class="col-md-6"><h6>GRAND TOTAL</h6></div>
 
-                                                                    <div class="col-md-6 text-end"><h6 id="grand_total">{{ get_price($invoice->total_amount) }}</h6></div>
+                                                                    <div class="col-md-6 text-end">
+                                                                        @if($isUsd)
+                                                                            <h6 id="grand_total">{{ get_price($invoice->total_amount_usd, $currency) }} = ({{ $invoice->total_amount_usd }} x {{ $invoice->usd_rate }}) {{ get_price($invoice->total_amount) }}</h6>
+                                                                        @else
+                                                                            <h6 id="grand_total">{{ get_price($invoice->total_amount) }}</h6>
+                                                                        @endif
+                                                                    </div>
 
                                                                 </div>
 
@@ -254,77 +279,63 @@
                                 <script>
 
                                     $(document).ready(function () {
+                                        @php
+                                            $currency = @$invoice->project->currency ?? 'bdt';
+                                            $isUsd = $currency === 'usd';
+                                        @endphp
+                                        
+                                        const isUsd = {{ $isUsd ? 'true' : 'false' }};
+                                        const currencySymbol = isUsd ? '$' : '৳';
 
                                         function calculateTotal() {
-
                                             let totalAmount = 0;
 
                                             $('.amount').each(function () {
-
                                                 totalAmount += parseFloat($(this).val()) || 0;
-
                                             });
 
-                                            $('#total_amount').text(`৳${totalAmount.toFixed(2)}`);
-
-                                
+                                            // Display total amount in the correct currency
+                                            $('#total_amount').text(`${currencySymbol}${totalAmount.toFixed(2)}`);
 
                                             let taxAmount = parseFloat($("#tax_amount").val()) || 0;
-
                                             let discountAmount = parseFloat($("#discount_amount").val()) || 0;
-
                                             
-
-                                            let grandTotal = totalAmount + taxAmount - discountAmount;
-
-                                            $('#grand_total').text(`৳${grandTotal.toFixed(2)}`);
-
+                                            let grandTotalUsd = totalAmount + taxAmount - discountAmount;
+                                            
+                                            if (isUsd) {
+                                                let usdRate = parseFloat($("#usd_rate").val()) || 0;
+                                                let grandTotalBdt = grandTotalUsd * usdRate;
+                                                
+                                                // Display: USD amount = (USD x Rate) BDT amount
+                                                $('#grand_total').text(
+                                                    `${currencySymbol}${grandTotalUsd.toFixed(2)} = (${grandTotalUsd.toFixed(2)} x ${usdRate.toFixed(2)}) ৳${grandTotalBdt.toFixed(2)}`
+                                                );
+                                            } else {
+                                                $('#grand_total').text(`${currencySymbol}${grandTotalUsd.toFixed(2)}`);
+                                            }
                                         }
 
-                                
-
                                         $('#add-item').on('click', function () {
-
                                             $('#invoice-items').append(`
-
                                                 <tr>
-
                                                     <td><input type="text" name="reason[]" class="form-control" placeholder="Enter Description"></td>
-
                                                     <td><input type="number" name="amount[]" class="form-control amount" placeholder="Enter Amount"></td>
-
                                                     <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
-
                                                 </tr>
-
                                             `);
-
                                             calculateTotal();
-
                                         });
-
-                                
 
                                         $(document).on('click', '.remove-item', function () {
-
                                             $(this).closest('tr').remove();
-
                                             calculateTotal();
-
                                         });
 
-                                
-
-                                        $(document).on('keyup change', '.amount, #tax_amount, #discount_amount', function() {
-
+                                        $(document).on('keyup change', '.amount, #tax_amount, #discount_amount, #usd_rate', function() {
                                             calculateTotal();
-
                                         });
-
-                                
 
                                         calculateTotal();
-
                                     });
 
                                 </script>

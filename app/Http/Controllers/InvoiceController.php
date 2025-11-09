@@ -33,7 +33,7 @@ class InvoiceController extends Controller
     public function edit(string $id)
     { 
         $id = decrypt($id);
-        $invoice = Invoice::find($id); 
+        $invoice = Invoice::with('project')->find($id); 
         return view('invoice.invoice_edit',compact('invoice'));
     }
 
@@ -66,19 +66,52 @@ class InvoiceController extends Controller
             $totalAmount = array_sum($request->amount);
             $totalAmountWithTaxAndDiscount = $totalAmount + $request->tax_amount - $request->discount_amount;
 
-            $invoice->update([
-                'invoice_date' => $request->invoice_date,
-                'due_date' => $request->due_date,
-                'title' => $request->title,
-                'description' => null,
-                'amount' => $totalAmount,
-                'tax_amount' => $request->tax_amount,
-                'discount_amount' => $request->discount_amount,
-                'total_amount' => $totalAmountWithTaxAndDiscount,
-                'due_amount' => $totalAmountWithTaxAndDiscount,
-                'usd_rate' => $request->usd_rate,
-                'total_amount_usd' => $request->usd_rate ? $totalAmountWithTaxAndDiscount / $request->usd_rate : null,
-            ]);
+            // Check if project currency is USD
+            $currency = $invoice->project->currency ?? 'bdt';
+            $isUsd = $currency === 'usd';
+
+            if ($isUsd) {
+                // When currency is USD, amounts entered are in USD
+                // Use existing rate from database, not from form
+                $usdRate = $invoice->usd_rate ?? $request->usd_rate;
+                
+                if (!$usdRate) {
+                    // If no existing rate, fetch current rate
+                    $usdRate = usd_to_bdt_rate();
+                }
+                
+                $totalAmountUsd = $totalAmountWithTaxAndDiscount;
+                $totalAmountBdt = $totalAmountWithTaxAndDiscount * $usdRate;
+                
+                $invoice->update([
+                    'invoice_date' => $request->invoice_date,
+                    'due_date' => $request->due_date,
+                    'title' => $request->title,
+                    'description' => null,
+                    'amount' => $totalAmount,
+                    'tax_amount' => $request->tax_amount,
+                    'discount_amount' => $request->discount_amount,
+                    'total_amount_usd' => $totalAmountUsd,
+                    'usd_rate' => $usdRate, // Keep existing rate
+                    'total_amount' => round($totalAmountBdt),
+                    'due_amount' => round($totalAmountBdt),
+                ]);
+            } else {
+                // When currency is BDT, amounts are in BDT
+                $invoice->update([
+                    'invoice_date' => $request->invoice_date,
+                    'due_date' => $request->due_date,
+                    'title' => $request->title,
+                    'description' => null,
+                    'amount' => $totalAmount,
+                    'tax_amount' => $request->tax_amount,
+                    'discount_amount' => $request->discount_amount,
+                    'total_amount' => $totalAmountWithTaxAndDiscount,
+                    'due_amount' => $totalAmountWithTaxAndDiscount,
+                    'usd_rate' => null,
+                    'total_amount_usd' => null,
+                ]);
+            }
 
             $invoice->details()->delete();
 
