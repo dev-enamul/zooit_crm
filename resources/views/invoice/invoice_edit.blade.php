@@ -105,9 +105,9 @@
                                         <div class="invoice_info">
                                             <h6 class="text-primary m-0 p-0">INVOICE# {{$invoice->id}} </h6> 
                                             <p><b>Issue Date</b>
-                                                <input type="date" name="invoice_date" id="" value="{{$invoice->invoice_date}}">
+                                                <input type="date" name="invoice_date" id="" value="{{ date('Y-m-d', strtotime($invoice->invoice_date)) }}">
                                             </p> 
-                                            <p><b>Due Date</b> <input type="date" name="due_date" id="" value="{{$invoice->due_date}}"></p>
+                                            <p><b>Due Date</b> <input type="date" name="due_date" id="" value="{{ date('Y-m-d', strtotime($invoice->due_date)) }}"></p>
                                         </div>
 
                                         <div class="invoice_reason">

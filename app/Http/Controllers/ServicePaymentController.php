@@ -24,12 +24,13 @@ class ServicePaymentController extends Controller
     public function storeOrUpdate(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'package_type' => 'required|in:1,2',
-            'start_from' => 'required|date',
-            'reason' => 'required|array',
-            'reason.*' => 'required|string|max:255',
-            'amount' => 'required|array',
-            'amount.*' => 'required|numeric|min:0.01',
+            'package_type'  => 'required|in:1,2',
+            'payment_timing' => 'required|string|in:start,end', 
+            'start_from'    => 'required|date',
+            'reason'        => 'required|array',
+            'reason.*'      => 'required|string|max:255',
+            'amount'        => 'required|array',
+            'amount.*'      => 'required|numeric|min:0.01',
         ]);
 
         if ($validator->fails()) {
@@ -47,6 +48,7 @@ class ServicePaymentController extends Controller
             $subscription_plan->customer_id = $customer->id;
             $subscription_plan->project_id = $customer->project->id;
             $subscription_plan->package_type = $request->package_type;
+            $subscription_plan->payment_timing = $request->payment_timing;
             $subscription_plan->next_payment_date = $request->start_from;
             $subscription_plan->amount = array_sum($request->amount);
             $subscription_plan->remark = $request->remark;

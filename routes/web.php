@@ -223,6 +223,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('customer', CustomerController::class);
         
         Route::post('customer-save/{id?}', [CustomerController::class, 'save'])->name('customer.save');
+        Route::post('customer-ajax-store', [CustomerController::class, 'ajaxStore'])->name('customer.ajaxStore');
         Route::get('customer-approve', [CustomerController::class, 'customer_approve'])->name('customer.approve');
         Route::post('customer-approve-save', [CustomerController::class, 'customer_approve_save'])->name('customer.approve.save');
        
@@ -292,8 +293,10 @@ Route::group(['middleware' => 'auth'], function () {
 
          // Deposit 
         Route::resource('deposit', DepositController::class);
+        Route::post('deposit-ajax-store', [DepositController::class, 'ajaxStore'])->name('deposit.ajaxStore');
         Route::get('get-customer-form-deposit-type', [DepositController::class, 'getCustomerFormDepositType'])->name('get.customer.form.deposit.category');
         Route::get('get-invoice-due',[DepositController::class,'get_invoice_due'])->name('get.invoice.due');
+        Route::get('deposit/show-payment-form-modal', [DepositController::class, 'showPaymentFormModal'])->name('deposit.showPaymentFormModal');
 
        
 

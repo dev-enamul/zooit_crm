@@ -121,102 +121,249 @@ class CustomerController extends Controller {
     }
     
 
-    public function save(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'full_name'           => 'required|string|max:255',
-            'phone'               => 'required|string|max:25',
-            'email'               => 'nullable|email|max:255',
-            'company_type'        => 'required|in:1,2',
-            'find_media_id'       => 'nullable|integer',
-            'contact_person_name' => 'nullable|string|max:255',
-            'designation_id'      => 'nullable|integer',
-            'service_id'          => 'nullable|integer',
-            'remark'              => 'nullable|string|max:500',
-            'address'             => 'nullable|string',
-        ]); 
-        if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
-        }  
-        DB::beginTransaction(); 
-        try { 
-            if(isset($request->id)  && $request->id != null){
-                $id = $request->id;
-                $customer = Customer::find($id); 
-                $user = $customer->user;
-            }  
+        public function save(Request $request) {
+            $validator = Validator::make($request->all(), [
+                'full_name'           => 'required|string|max:255',
+                'phone'               => 'required|string|max:25',
+                'email'               => 'nullable|email|max:255',
+                'company_type'        => 'required|in:1,2',
+                'find_media_id'       => 'nullable|integer',
+                'contact_person_name' => 'nullable|string|max:255',
+                'designation_id'      => 'nullable|integer',
+                'service_id'          => 'nullable|integer',
+                'remark'              => 'nullable|string|max:500',
+                'address'             => 'nullable|string',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
+            }
+            DB::beginTransaction();
+            try {
+                if(isset($request->id)  && $request->id != null){
+                    $id = $request->id;
+                    $customer = Customer::find($id);
+                    $user = $customer->user;
+                }
+    
+                if(isset($request->phone) && $request->phone ==null){
+                    $phone = get_phone($request->phone);
+                    $user = User::where('phone',$phone)->first();
+                }
+    
+                if(isset($user)){
+                    $user->update([
+                        'name'          => $request->full_name,
+                        'phone'         =>  get_phone($request->phone),
+                        'email'         =>  $request->email,
+                    ]);
+    
+                    $user->userAddress->update([
+                        'address'  => $request->address,
+                    ]);
+    
+                    $customer->update([
+                        'service_id'    => $request->service_id,
+                        'find_media_id' => $request->find_media_id,
+                        'type'          => $request->company_type,
+                        'remark'        => $request->remark,
+                    ]);
+    
+                }else{
+                    $user = User::create([
+                        'name'           => $request->full_name,
+                        'phone'          => get_phone($request->phone),
+                        'password'       => bcrypt('123456'),
+                        'user_type'      => 3,
+                        'status'         => 1,
+                        'created_by'     => auth()->user()->id,
+                    ]);
+    
+                    UserContact::create([
+                        'user_id'        => $user->id,
+                        'name'           => $request->contact_person_name ?? $request->full_name,
+                        'email'          => $request->email,
+                        'type'           => $request->company_type,
+                        'designation_id' => $request->designation_id,
+                        'phone'          => get_phone($request->phone),
+                        'created_at'     => now(),
+                    ]);
+    
+                    UserAddress::create([
+                        'user_id' => $user->id,
+                        'address'  => $request->address,
+                    ]);
+    
+                    Customer::create([
+                        'visitor_id'   => User::generateNextVisitorId(),
+                        'user_id'       => $user->id,
+                        'ref_id'        => Auth::user()->id,
+                        'service_id'    => $request->service_id,
+                        'find_media_id' => $request->find_media_id,
+                        'type'          => $request->company_type,
+                        'remark'        => $request->remark,
+                        'status'        => 0,
+                        'created_by'    => auth()->user()->id,
+                    ]);
+    
+                }
+    
+    
+    
+                DB::commit();
+                return redirect()->route('customer.index')->with('success', 'Customer created successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->with('error', $e->getMessage());
+            }
+        }
+    
+        public function ajaxStore(Request $request) {
+            // Set default values for fields not present in the simplified modal
+            // 'company_type' was 'required', so we provide a default if not present
+            if (!$request->has('company_type')) {
+                $request->merge(['company_type' => 1]); // Default to 'Person'
+            }
+            // Other fields were nullable, so they will just be null if not present
 
-            if(isset($request->phone) && $request->phone ==null){
-                $phone = get_phone($request->phone);
-                $user = User::where('phone',$phone)->first();
+            $validator = Validator::make($request->all(), [
+                'full_name'           => 'required|string|max:255',
+                'phone'               => 'required|string|max:25',
+                'email'               => 'nullable|email|max:255',
+                // Removed validation for 'company_type' as it's now defaulted if missing
+                // Removed validation for 'find_media_id'
+                // Removed validation for 'contact_person_name'
+                // Removed validation for 'designation_id'
+                'service_id'          => 'nullable|integer',
+                'remark'              => 'nullable|string|max:500',
+                // Removed validation for 'address'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
             }
 
-            if(isset($user)){
-                $user->update([
-                    'name'          => $request->full_name,  
-                    'phone'         =>  get_phone($request->phone),
-                    'email'         =>  $request->email,
-                ]);   
+            DB::beginTransaction();
+            try {
+                $user = null;
+                if(isset($request->phone) && $request->phone != null){
+                    $phone = get_phone($request->phone);
+                    $user = User::where('phone',$phone)->first();
+                }
 
-                $user->userAddress->update([ 
-                    'address'  => $request->address,
-                ]);  
+                if(isset($user)){
+                    $customer = Customer::where('user_id', $user->id)->first();
+                    if ($customer) {
+                        $user->update([
+                            'name'          => $request->full_name,
+                            'phone'         => get_phone($request->phone),
+                            'email'         => $request->email,
+                        ]);
 
-                $customer->update([  
-                    'service_id'    => $request->service_id,
-                    'find_media_id' => $request->find_media_id,
-                    'type'          => $request->company_type,
-                    'remark'        => $request->remark, 
-                ]);
+                        // 'address' is removed from modal, so pass null or existing value
+                        $user->userAddress->update([
+                            'address'  => $request->address ?? null, // Use null if not provided
+                        ]);
 
-            }else{
-                $user = User::create([
-                    'name'           => $request->full_name,
-                    'phone'          => get_phone($request->phone),
-                    'password'       => bcrypt('123456'), 
-                    'user_type'      => 3,  
-                    'status'         => 1,
-                    'created_by'     => auth()->user()->id,
-                ]);
+                        $customer->update([
+                            'service_id'    => $request->service_id,
+                            'find_media_id' => $request->find_media_id ?? null, // Use null if not provided
+                            'type'          => $request->company_type,
+                            'remark'        => $request->remark,
+                        ]);
+                    } else {
+                        // This block handles creating a new customer for an existing user
+                        // Fields not in modal will be null
+                        $user = User::create([
+                            'name'           => $request->full_name,
+                            'phone'          => get_phone($request->phone),
+                            'password'       => bcrypt('123456'),
+                            'user_type'      => 3,
+                            'status'         => 1,
+                            'created_by'     => auth()->user()->id,
+                        ]);
 
-                UserContact::create([
-                    'user_id'        => $user->id,
-                    'name'           => $request->contact_person_name ?? $request->full_name,
-                    'email'          => $request->email,
-                    'type'           => $request->company_type,
-                    'designation_id' => $request->designation_id,
-                    'phone'          => get_phone($request->phone),
-                    'created_at'     => now(),
-                ]);
-    
-                UserAddress::create([
-                    'user_id' => $user->id,
-                    'address'  => $request->address,
-                ]);
-         
-                Customer::create([
-                    'visitor_id'   => User::generateNextVisitorId(),
-                    'user_id'       => $user->id, 
-                    'ref_id'        => Auth::user()->id,
-                    'service_id'    => $request->service_id,
-                    'find_media_id' => $request->find_media_id,
-                    'type'          => $request->company_type,
-                    'remark'        => $request->remark,
-                    'status'        => 0, 
-                    'created_by'    => auth()->user()->id, 
-                ]);
+                        UserContact::create([
+                            'user_id'        => $user->id,
+                            'name'           => $request->contact_person_name ?? $request->full_name, // Default if not provided
+                            'email'          => $request->email,
+                            'type'           => $request->company_type,
+                            'designation_id' => $request->designation_id ?? null, // Default if not provided
+                            'phone'          => get_phone($request->phone),
+                            'created_at'     => now(),
+                        ]);
 
-            }  
+                        UserAddress::create([
+                            'user_id' => $user->id,
+                            'address'  => $request->address ?? null, // Default if not provided
+                        ]);
 
-           
-    
-            DB::commit(); 
-            return redirect()->route('customer.index')->with('success', 'Customer created successfully');
-        } catch (Exception $e) {
-            DB::rollback();
-            return redirect()->back()->withInput()->with('error', $e->getMessage());
-        }
-    }
-     
+                        $customer = Customer::create([
+                            'visitor_id'   => User::generateNextVisitorId(),
+                            'user_id'       => $user->id,
+                            'ref_id'        => Auth::user()->id,
+                            'service_id'    => $request->service_id,
+                            'find_media_id' => $request->find_media_id ?? null, // Default if not provided
+                            'type'          => $request->company_type,
+                            'remark'        => $request->remark,
+                            'status'        => 0,
+                            'created_by'    => auth()->user()->id,
+                        ]);
+                    }
+
+                } else {
+                    // Create new user and customer
+                    // Fields not in modal will be null
+                    $user = User::create([
+                        'name'           => $request->full_name,
+                        'phone'          => get_phone($request->phone),
+                        'password'       => bcrypt('123456'),
+                        'user_type'      => 3,
+                        'status'         => 1,
+                        'created_by'     => auth()->user()->id,
+                    ]);
+
+                    UserContact::create([
+                        'user_id'        => $user->id,
+                        'name'           => $request->contact_person_name ?? $request->full_name, // Default if not provided
+                        'email'          => $request->email,
+                        'type'           => $request->company_type,
+                        'designation_id' => $request->designation_id ?? null, // Default if not provided
+                        'phone'          => get_phone($request->phone),
+                        'created_at'     => now(),
+                    ]);
+
+                    UserAddress::create([
+                        'user_id' => $user->id,
+                        'address'  => $request->address ?? null, // Default if not provided
+                    ]);
+
+                    $customer = Customer::create([
+                        'visitor_id'   => User::generateNextVisitorId(),
+                        'user_id'       => $user->id,
+                        'ref_id'        => Auth::user()->id,
+                        'service_id'    => $request->service_id,
+                        'find_media_id' => $request->find_media_id ?? null, // Default if not provided
+                        'type'          => $request->company_type,
+                        'remark'        => $request->remark,
+                        'status'        => 0,
+                        'created_by'    => auth()->user()->id,
+                    ]);
+                }
+
+                DB::commit();
+                return response()->json([
+                    'success' => 'Customer created successfully',
+                    'customer' => [
+                        'id' => $customer->id,
+                        'name' => $user->name
+                    ]
+                ], 201);
+
+            } catch (Exception $e) {
+                DB::rollback();
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        }     
     public function customerSearch(Request $request) {
         $validator = Validator::make($request->all(), [
             'division'   => 'nullable',

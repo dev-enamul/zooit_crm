@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('reason'); 
             $table->tinyInteger('package_type')->comment('1 = Yearly, 2 = Monthly'); 
             $table->decimal('amount', 10, 2); 
-            $table->date('next_payment_date'); 
+            $table->date('next_payment_date');
+            $table->string('payment_timing')->default('start'); //start == start of month or year, end= end of year of month
             $table->text('remark')->nullable();
             $table->timestamps();
         });

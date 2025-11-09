@@ -13,5 +13,13 @@ class Transaction extends Model
         'bank_id',
         'type',
         'amount',
+        'invoice_id',
+        'payment_date',
+        'due_after_transaction',
     ];
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
 }

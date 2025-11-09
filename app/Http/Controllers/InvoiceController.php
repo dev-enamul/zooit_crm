@@ -25,17 +25,14 @@ class InvoiceController extends Controller
     public function show(string $id)
     {
         $id = decrypt($id);
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::with('transactions')->find($id);
         return view('invoice.invoice_details',compact('invoice')); 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
-    {
+    { 
         $id = decrypt($id);
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::find($id); 
         return view('invoice.invoice_edit',compact('invoice'));
     }
 

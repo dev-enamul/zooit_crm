@@ -73,46 +73,69 @@ class DailyJobController extends Controller
         $subscription_plans = SubscriptionPlan::where('next_payment_date', '<=', today())->get();
 
         foreach ($subscription_plans as $plan) {
-            $customer = Customer::find($plan->customer_id);
-            $project  = Project::find($plan->project_id);
+            DB::beginTransaction();
+            try {
+                $customer = Customer::find($plan->customer_id);
+                $project  = Project::find($plan->project_id);
 
-            if (!$customer || !$project) {
-                continue;
+                if (!$customer || !$project) {
+                    DB::rollBack();
+                    continue;
+                }
+ 
+                $serviceName = optional($customer->service)->service ?? 'No service description available';
+ 
+                $nextPaymentDate = Carbon::parse($plan->next_payment_date);
+                $invoiceDate     = $nextPaymentDate->copy(); 
+ 
+                if ($plan->package_type == 1) {  
+                    if ($plan->payment_timing == 'start') {
+                        $title = $serviceName . " # " . get_date($invoiceDate, "Y");
+                    } else {
+                        $title = $serviceName . " # " . get_date($invoiceDate->copy()->subYear(), "Y");
+                    }
+
+                    $plan->next_payment_date = $nextPaymentDate->copy()->addYear();
+
+                } elseif ($plan->package_type == 2) {  
+                    if ($plan->payment_timing == 'start') {
+                        $title = $serviceName . " # " . get_date($invoiceDate, "M-Y");
+                    } else {
+                        $title = $serviceName . " # " . get_date($invoiceDate->copy()->subMonth(), "M-Y");
+                    }
+
+                    $plan->next_payment_date = $nextPaymentDate->copy()->addMonth();
+
+                } else {
+                    $title = $serviceName;
+                }
+ 
+                $details = SubscriptionPlanDetails::where('subscription_plan_id', $plan->id)->get();
+                $total_amount = $details->sum('amount');
+ 
+                $this->invoiceService->createInvoice([
+                    'user_id'      => $plan->user_id,
+                    'customer_id'  => $plan->customer_id,
+                    'project_id'   => $plan->project_id,
+                    'title'        => $title,
+                    'invoice_date' => $invoiceDate,
+                    'due_date'     => $invoiceDate->addDays(7),
+                    'amount'       => $total_amount,
+                ], $details->map(function ($detail) {
+                    return [
+                        'reason' => $detail->reason,
+                        'amount' => $detail->amount,
+                    ];
+                })->toArray());
+
+                $plan->save();
+                DB::commit();
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error("Subscription invoice generation failed for plan #{$plan->id}: " . $e->getMessage());
             }
-
-            // Payment cycle update
-            $nextPaymentDate = Carbon::parse($plan->next_payment_date);
-            if ($plan->package_type == 1) { // yearly
-                $title = $customer->service->service . " # " . get_date($plan->next_payment_date, "Y");
-                $plan->next_payment_date = $nextPaymentDate->addYear();
-            } elseif ($plan->package_type == 2) { // monthly
-                $title = $customer->service->service . " # " . get_date($plan->next_payment_date, "M-Y");
-                $plan->next_payment_date = $nextPaymentDate->addMonth();
-            } else {
-                $title = $customer->service->service ?? 'No service description available';
-            }
-
-            // Subscription invoice তৈরি
-            $details = SubscriptionPlanDetails::where('subscription_plan_id', $plan->id)->get();
-
-            $total_amount = $details->sum('amount');
-
-            $invoice = $this->invoiceService->createInvoice([
-                'user_id'      => $plan->user_id,
-                'customer_id'  => $plan->customer_id,
-                'project_id'   => $plan->project_id,
-                'title'        => $title,
-                'invoice_date' => $plan->next_payment_date,
-                'due_date'     => now()->addDays(10),
-                'amount'       => $total_amount,
-            ], $details->map(function ($detail) {
-                return [
-                    'reason' => $detail->reason,
-                    'amount' => $detail->amount,
-                ];
-            })->toArray());
-
-            $plan->save();
         }
     }
+
 }

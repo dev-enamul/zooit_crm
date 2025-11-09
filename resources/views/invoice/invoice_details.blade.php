@@ -46,18 +46,139 @@
             margin-top: 20px;
         }
 
-        @media print { 
+        /* Enhanced Table Styles */
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .invoice-table thead {
+            background-color: #f8f9fa;
+        }
+        
+        .invoice-table th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .invoice-table td {
+            padding: 5px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .invoice-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .invoice-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .amount-column {
+            text-align: right !important;
+            font-weight: 500;
+        }
+        
+        .total-row {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            text-align: right
+        }
+        
+        .grand-total-row {
+            background-color: #e9ecef;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .payment-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 5px 0;
+            font-size: 14px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .payment-history-table thead {
+            background-color: #f8f9fa;
+        }
+        
+        .payment-history-table th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .payment-history-table td {
+            padding: 5px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .payment-history-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .payment-history-table .due-row {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        @media print {
+            .col-print-12 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            .d-print-block {
+                display: block !important;
+            }
+            .d-print-none {
+                display: none !important;
+            }
             @page {
-                margin: 0.50in;
-            } 
+                size: A4;
+                margin: 0.5in; /* Margin for the printer */
+            }
             body {
                 margin: 0;
                 padding: 0;
+                font-size: 10pt;
             }
-
-            .main-content {
-                padding: 0.50in;
-            } 
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .main-content, .page-content, .container-fluid, .row, .col-12 {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-size: 12pt !important;
+            }
+            .invoice-table th, .invoice-table td,
+            .payment-history-table th, .payment-history-table td {
+                padding: 5px !important;
+            }
+            .company_info, .bill_to, .invoice_info, .invoice_reason, .invoice_footer, .bank_info {
+                margin-top: 15px !important;
+            }
+            .invoice_footer {
+                margin-top: 30px !important;
+            }
+            .table {
+                margin-top: 15px !important;
+            }
         } 
     </style>
  @endsection
@@ -66,9 +187,9 @@
         <div class="page-content">
             <div class="container-fluid">
  
-                <div class="row">
+                <div class="row d-print-none">
                     <div class="col-12">
-                        <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <div class="page-title-box d-flex align-items-center justify-content-between d-print-none">
                             <h4 class="mb-sm-0">
                                 <button class="btn btn-secondary" id="printButton">
                                     <i class="fas fa-print"></i> Print
@@ -104,18 +225,9 @@
                                                 <p>{{@$invoice->user->userAddress->address}}</p> 
                                             </div>  
                                         </td>
-                                        <td style="padding:0px 50px">
-                                            @if ($invoice->status==0)
-                                            <img src="https://t3.ftcdn.net/jpg/04/87/13/44/360_F_487134492_svhGzEgDXKyQuuPXQrs7prKoBYWCEJdw.jpg" alt="" width="100px">
-                                            {{-- <br><a href="" class="btn btn-lg btn-secondary">Pay Now</a> --}}
-                                            @else 
-                                            <img src="https://png.pngtree.com/png-vector/20230208/ourmid/pngtree-paid-stamp-vector-illustration-png-image_6585127.png" alt="" width="100px">
-                                        @endif
-                                        </td>
                                         <td>
-                                            <h1 class="text-primary">INVOICE</h1>
-                                            <div class="invoice_info">
-                                                <h6 class="text-primary m-0 p-0">INVOICE# S{{$invoice->id}} </h6> 
+                                            <h1 class="text-primary">INVOICE #S{{$invoice->id}}</h1>
+                                            <div class="invoice_info"> 
                                                 <p><b>Issue Date</b> {{get_date($invoice->invoice_date)}}</p>
                                                 <p><b>Due Date</b> {{get_date($invoice->due_date)}}</p>
                                             </div>
@@ -128,19 +240,19 @@
                                     </tr>
                                 </table>
                             
-
-                                <table id="datatable" class="table  dt-responsive nowrap fs-14" >
+                                <!-- Enhanced Invoice Items Table -->
+                                <table class="invoice-table">
                                     <thead>
                                         <tr>
-                                            <th><h6 class="text-primary">Description</h6></th>
-                                            <th><h6 class="text-primary">Amount</h6></th>  
+                                            <th>Description</th>
+                                            <th class="amount-column">Amount</th>  
                                         </tr>
                                     </thead>
                                     <tbody> 
                                         @if ($invoice->description!=null)
                                             <tr>
                                                 <td>{{$invoice->description}} </td>
-                                                <td>{{get_price($invoice->amount,$invoice->project->currency)}}</td>
+                                                <td class="amount-column">{{get_price($invoice->amount,$invoice->project->currency)}}</td>
                                             </tr> 
                                         @else 
                                             @php
@@ -150,17 +262,18 @@
                                                 @foreach ($details as $detail)
                                                     <tr>
                                                         <td>{{$detail->reason}} </td>
-                                                        <td>{{get_price($detail->amount,$invoice->project->currency)}}</td>
+                                                        <td class="amount-column">{{get_price($detail->amount,$invoice->project->currency)}}</td>
                                                     </tr> 
                                                 @endforeach
                                             @endif
                                         @endif 
 
-                                        <tr>
-                                            <td><h6>TOTAL</h6></td>
-                                            <td><h6>{{get_price($invoice->amount,$invoice->project->currency)}}</h6></td>
-                                        </tr>
+                                        <tr class="total-row">
+                                            <td><strong>Total</strong></td>
+                                            <td class="amount-column"><strong>{{get_price($invoice->amount,$invoice->project->currency)}}</strong></td>
+                                        </tr> 
 
+                                        @if ($invoice->tax_amount>0 || $invoice->discount_amount>0)
                                         <tr>
                                             <td>  
                                                 @if ($invoice->tax_amount>0)
@@ -170,7 +283,7 @@
                                                     <p>Discount</p>
                                                 @endif  
                                             </td>
-                                            <td>
+                                            <td class="amount-column">
                                                 @if ($invoice->tax_amount>0)
                                                     <p class="mb-2">{{get_price(@$invoice->tax_amount,$invoice->project->currency)}}</p> 
                                                 @endif 
@@ -179,50 +292,82 @@
                                                 @endif 
                                             </td>
                                         </tr>  
-                                        <tr>
-                                            <td><h6>GRAND TOTAL</h6></td>
-                                                @php 
-                                                    $currency = @$invoice->project->currency ?? 'bdt'; 
-                                                    if($currency == 'usd'){
-                                                        $price = get_price($invoice->total_amount_usd, $currency) 
-                                                                . ' = (' . $invoice->total_amount_usd 
-                                                                . ' x ' . $invoice->usd_rate 
-                                                                . ') ' . get_price($invoice->total_amount);
-                                                    } else {
-                                                        $price = get_price($invoice->total_amount);
-                                                    }  
-                                                @endphp
-                                                <td><h5 class="m-0 p-0">{{ $price }} </h5></td>
-                                            </tr>
-
+                                        @endif 
+                                        
+                                        <tr class="total-row">
+                                            <td><strong>Grand Total</strong></td>
+                                            @php 
+                                                $currency = @$invoice->project->currency ?? 'bdt'; 
+                                                if($currency == 'usd'){
+                                                    $price = get_price($invoice->total_amount_usd, $currency) 
+                                                            . ' = (' . $invoice->total_amount_usd 
+                                                            . ' x ' . $invoice->usd_rate 
+                                                            . ') ' . get_price($invoice->total_amount);
+                                                } else {
+                                                    $price = get_price($invoice->total_amount);
+                                                }  
+                                            @endphp
+                                            <td class="amount-column"><strong>{{ $price }}</strong></td>
+                                        </tr>
+                                        <tr class="total-row">
+                                            <td><strong>Paid</strong></td>
+                                            <td class="amount-column"><strong>{{get_price(($invoice->amount-$invoice->due_amount),$invoice->project->currency)}}</strong></td>
+                                        </tr> 
+                                        <tr class="total-row">
+                                            <td><strong>Payble</strong></td>
+                                            <td class="amount-column"><strong>{{get_price($invoice->due_amount,$invoice->project->currency)}}</strong></td>
+                                        </tr> 
                                     </tbody>
                                 </table>
 
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="invoice_footer">
-                                                <p><b>Please paid the bill before Due Date</b></p>
-                                                <p>Grand Total is excluded from vat & tax</p>
-                                                <p>If you have any questions concerning this invoice, <b>Shiblee Mozumder | +8801711432284 |</b></p>
-                                                <a href="mailto:thezoomit@gmail.com">thezoomit@gmail.com</a>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="invoice_footer">
+                                            <p><b>Please paid the bill before Due Date</b></p>
+                                            <p>Grand Total is excluded from vat & tax</p>
+                                            <p>If you have any questions concerning this invoice, <b>Shiblee Mozumder | +8801711432284 |</b></p>
+                                            <a href="mailto:thezoomit@gmail.com">thezoomit@gmail.com</a>
+                                        </div>
             
-                                            <div class="bank_info">
-                                                <h5 class="m-0">Bank Details</h5>
-                                                <img src="https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/feature/images/united_commercial_bank.jpg" alt="" width="70px">
-                                                <p><b>Ac Name </b>ZOOM IT</p>
-                                                <p><b>AC NO </b>1782112000003115</p>
-                                                <p><b>UCB bank Ati Bazar Branch</b></p>
+                                        <div class="bank_info">
+                                            <h5 class="m-0">Bank Details</h5>
+                                            <img src="https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/feature/images/united_commercial_bank.jpg" alt="" width="70px">
+                                            <p><b>Ac Name </b>ZOOM IT</p>
+                                            <p><b>AC NO </b>1782112000003115</p>
+                                            <p><b>UCB bank Ati Bazar Branch</b></p>
 
-                                                <img src="https://logos-world.net/wp-content/uploads/2024/10/Bkash-Logo.jpg" alt="" width="70px"> 
-                                                <p><b>AC NO </b>+880 1711-432284 (Personal)</p>
-                                            </div>
-                                        </td>
-                                        
-                                    </tr>
-                                   
-                                </table>
+                                            <img src="https://logos-world.net/wp-content/uploads/2024/10/Bkash-Logo.jpg" alt="" width="70px"> 
+                                            <p><b>AC NO </b>+880 1711-432284 (Personal)</p>
+                                        </div>
+                                    </div>
+                                     @php
+                                        $transactions = $invoice->transactions;
+                                        $due = $invoice->total_amount;
+                                    @endphp
+                                    @if (isset($transactions) && count($transactions) > 0)
+                                    <div class="col-4">
+                                        <div class="payment_history">
+                                            <h5 class="text-primary">Payment History</h5>
+                                            <table class="payment-history-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Payment Date</th> 
+                                                        <th class="amount-column">Paid Amount</th> 
+                                                    </tr>
+                                                </thead>
+                                                <tbody>  
+                                                        @foreach ($transactions as $transaction)
+                                                            <tr>
+                                                                <td>{{ get_date($transaction->created_at) }}</td> 
+                                                                <td class="amount-column">{{ get_price($transaction->amount, $invoice->project->currency) }}</td>
+                                                            </tr> 
+                                                        @endforeach 
+                                                </tbody>
+                                            </table>
+                                        </div> 
+                                    </div>
+                                    @endif 
+                                </div>
 
                             </div>
                         </div>
@@ -233,7 +378,7 @@
         </div>
     </div> 
 
-      <div class="modal fade" id="edit_modal">
+      <div class="modal fade d-print-none" id="edit_modal">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header"> 
@@ -253,7 +398,6 @@
                     <div class="text-end">
                         <a  id="prevButton"  href="" target="blank" class="btn btn-primary"><i class="fas fa-eye"></i> Preview</a>
                         <button class="btn btn-primary" id="copyLinkButton"><i class="fas fa-link"></i> Copy Link</button>
-                        {{-- <a id="whatsAppButton" href="" target="blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Send WhatsApp</a> --}}
                     </div>                     
                 </div>
             </div>
@@ -276,8 +420,6 @@
         var link = "{{ route('invoice.share', ':id') }}".replace(':id', id); 
         $('#invoice-link').val(link);
         $('#prevButton').attr('href',link);
-        // var whatsappLink = "https://api.whatsapp.com/send/?phone=+88"+phone+"&text="+link;
-        // $("#whatsAppButton").attr('href',whatsappLink);
         $('#edit_modal').modal('show');
     }
     $(document).ready(function() { 
@@ -288,8 +430,6 @@
             document.execCommand('copy'); 
             Toast.fire({ icon: "success", title: 'Invoice link copied to clipboard!' });  
         });
-
-        
     });
 </script>
 

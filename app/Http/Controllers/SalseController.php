@@ -40,16 +40,30 @@ class SalseController extends Controller
         return $dataTable->render('salse.salse_list', compact('title', 'start_date', 'end_date'));
     } 
 
-    public function create(Request $request)
-    {
-        $title  = 'Sales Entry'; 
-        $selected_data = [];
-        if ($request->has('customer')) {
-            $selected_data['customer'] = Customer::find($request->customer);
-        } 
-        return view('salse.salse_save',compact('selected_data'));
-    }
-
+        public function create(Request $request)
+        {
+            $title  = 'Sales Entry';
+            $selected_data = [];
+            if ($request->has('customer')) {
+                $selected_data['customer'] = \App\Models\Customer::find($request->customer);
+            }
+    
+            // Fetch data required for the customer creation modal
+            $services = \App\Models\Service::select('id','service')->get();
+            $company_types = \App\Models\CompanyType::where('status',1)->select('id','name')->get();
+            $find_medias = \App\Models\FindMedia::where('status',1)->get();
+            $designations = \App\Models\Designation::where('status',1)->get();
+            $countries = \App\Models\Country::get(); // Include if needed, though not directly used in modal form
+    
+            return view('salse.salse_save',compact(
+                'selected_data',
+                'services',
+                'company_types',
+                'find_medias',
+                'designations',
+                'countries'
+            ));
+        }
     public function store(Request $request)
     {
         $rules = [
@@ -66,12 +80,13 @@ class SalseController extends Controller
             return redirect()->back()->withInput()->withErrors($validator)->with('error', $validator->errors()->first());
         }
 
-        $customer = Customer::find($request->customer);
-        $followups = FollowUp::where('customer_id',$customer->id)->get();
-        $project_proposal = ProjectProposal::where('customer_id',$customer->id)->where('is_active',true)->first();
+        $customer = Customer::find($request->customer); 
+        $project_proposal = ProjectProposal::where('customer_id',$customer->id)->first();
         $customer->status = 1;
         $customer->customer_id = User::generateNextCustomerId();
         $customer->save();
+
+        $followups = FollowUp::where('customer_id',$customer->id)->get();
         foreach($followups as $followup){
             $followup->status = 1;
             $followup->save();

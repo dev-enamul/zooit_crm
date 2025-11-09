@@ -29,7 +29,7 @@
                                 <div class="row"> 
                             
                                     <!-- Payment Type Field -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="package_type" class="form-label">Payment Type</label>
                                             <select class="form-select select2" name="package_type" id="package_type">
@@ -38,9 +38,24 @@
                                             </select>
                                         </div>
                                     </div> 
+
+                                     <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="payment_timing" class="form-label">Payment Timing</label>
+                                            <select class="form-select select2" name="payment_timing" id="payment_timing">
+                                                <option value="start" {{ old('payment_timing', isset($payment) && $payment->payment_timing == 'start' ? 'selected' : '') }}>
+                                                    Start of Month/Year
+                                                </option>
+                                                <option value="end" {{ old('payment_timing', isset($payment) && $payment->payment_timing == 'end' ? 'selected' : '') }}>
+                                                    End of Month/Year
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                             
                                     <!-- Start From Field -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="start_from" class="form-label">Start From <span class="text-danger">*</span></label>
                                             <input 

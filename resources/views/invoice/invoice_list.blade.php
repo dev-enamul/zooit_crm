@@ -74,9 +74,9 @@
 
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label for="project" class="form-label">Employee</label>
+                        <label for="project" class="form-label">Project</label>
                         <select class="select2" search id="project" name="project_id">
-                            <option value = "" selected="selected">All Employee</option>
+                            <option value = "" selected="selected">All Project</option>
                         </select>
                     </div>
                 </div>

@@ -15,6 +15,7 @@ class SubscriptionPlan extends Model
         'package_type',
         'amount',
         'next_payment_date',
+        'payment_timing',
         'remark',
     ];
 

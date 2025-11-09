@@ -26,7 +26,7 @@ class InvoiceDataTable extends DataTable
                 return '<a target="_blank" href="'.route('invoice.show', encrypt($data->id)).'" class="text-primary">INV-'.$data->id.'</a>';
             })
             ->addColumn('name', function ($data) {  
-                $name = $data->user->name ." ".$data?->user?->userContact?->name??''; 
+                $name = $data->customer->user->name ." ".$data?->user?->userContact?->name??''; 
                 $customerLink = '<a href="'.route('customer.profile', encrypt($data->customer->id)).'">'.$name.' ['.$data->customer->customer_id.']</a>';
                 return $customerLink;
             })
