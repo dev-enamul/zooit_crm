@@ -274,7 +274,7 @@
                                         </tr> 
 
                                         @if ($invoice->tax_amount>0 || $invoice->discount_amount>0)
-                                        <tr>
+                                        <tr class="total-row">
                                             <td>  
                                                 @if ($invoice->tax_amount>0)
                                                     <p class="mb-2">Vat & Tax</p>
@@ -311,7 +311,7 @@
                                         </tr>
                                         <tr class="total-row">
                                             <td><strong>Paid</strong></td>
-                                            <td class="amount-column"><strong>{{get_price(($invoice->amount-$invoice->due_amount),$invoice->project->currency)}}</strong></td>
+                                            <td class="amount-column"><strong>{{get_price(($invoice->total_amount-$invoice->due_amount),$invoice->project->currency)}}</strong></td>
                                         </tr> 
                                         <tr class="total-row">
                                             <td><strong>Payble</strong></td>
