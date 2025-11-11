@@ -73,7 +73,7 @@ class InvoiceController extends Controller
             if ($isUsd) {
                 // When currency is USD, amounts entered are in USD
                 // Use existing rate from database, not from form
-                $usdRate = $invoice->usd_rate ?? $request->usd_rate;
+                $usdRate = $request->usd_rate??$invoice->usd_rate;
                 
                 if (!$usdRate) {
                     // If no existing rate, fetch current rate
@@ -92,7 +92,7 @@ class InvoiceController extends Controller
                     'tax_amount' => $request->tax_amount,
                     'discount_amount' => $request->discount_amount,
                     'total_amount_usd' => $totalAmountUsd,
-                    'usd_rate' => $usdRate, // Keep existing rate
+                    'usd_rate' => $usdRate, 
                     'total_amount' => round($totalAmountBdt),
                     'due_amount' => round($totalAmountBdt),
                 ]);
