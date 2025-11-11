@@ -194,7 +194,7 @@
                                                                         <p class="mb-2">USD Rate (from original invoice)</p>
                                                                     </div>
                                                                     <div class="col-md-6 text-end">
-                                                                        <input class="mb-2 form-control" type="number" step="0.01" min="0" name="usd_rate" id="usd_rate" value="{{ @$invoice->usd_rate }}" readonly style="background-color: #e9ecef;">
+                                                                        <input class="mb-2 form-control" type="number" step="0.01" min="0" name="usd_rate" id="usd_rate" value="{{ @$invoice->usd_rate }}" style="background-color: #e9ecef;">
                                                                         <small class="text-muted">Rate is preserved from original invoice</small>
                                                                     </div>
                                                                 </div>
