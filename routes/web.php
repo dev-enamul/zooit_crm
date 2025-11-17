@@ -92,6 +92,7 @@ use App\Http\Controllers\UserContactController;
 use App\Http\Controllers\UserDocumentController;
 use App\Http\Controllers\WhatsAppController;
 use App\Models\DepositTarget;
+use App\Models\Project;
 use App\Models\ReportingUser;
 use App\Models\User;
 use App\Services\PhoneMessageService;
@@ -447,15 +448,20 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('daily-job',DailyJobController::class);
 Route::get('bill/{id}',[InvoiceController::class,'share'])->name('invoice.share');
-Route::get('invoice-payment/{id}',[PaymentController::class,'payment'])->name('invoice.payment');  
+Route::get('invoice-payment/{id}',[PaymentController::class,'payment'])->name('invoice.payment');
+Route::get('task-report/{slug}', [TaskController::class, 'taskReport'])->name('task.report');  
 
 Route::get('/send-today-activities-email/{key}', [DailyActivitiesController::class, 'sendTodayActivitiesEmail'])
     ->name('send.today.activities.email'); 
 Route::get('/send-nextday-activities-email/{key}', [DailyActivitiesController::class, 'sendNextDayActivitiesEmail'])
     ->name('send.nextday.activities.email');
 
-    Route::get('/test-usd', function () {
-        dd(usd_to_bdt_rate());
+    Route::get('/project-slug', function () {
+        $projects = Project::all();
+        foreach ($projects as $project) {
+            $project->slug = getSlug(Project::class, $project->title);
+            $project->save();
+        }
     });
 
 
