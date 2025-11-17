@@ -28,5 +28,12 @@
                 <i class="fas fa-users me-1"></i> Team
             </a>
         </li>
+        @if($data->project && $data->project->slug)
+        <li>
+            <a class="dropdown-item" href="{{ route('task.report', $data->project->slug) }}" target="_blank">
+                <i class="fas fa-tasks me-1"></i> Task Report
+            </a>
+        </li>
+        @endif
     </ul>
 </div>
