@@ -359,7 +359,7 @@
                                                         @foreach ($transactions as $transaction)
                                                             <tr>
                                                                 <td>{{ get_date($transaction->created_at) }}</td> 
-                                                                <td class="amount-column">{{ get_price($transaction->amount, $invoice->project->currency) }}</td>
+                                                                <td class="amount-column">{{ get_price($transaction->amount, 'bdt') }}</td>
                                                             </tr> 
                                                         @endforeach 
                                                 </tbody>
